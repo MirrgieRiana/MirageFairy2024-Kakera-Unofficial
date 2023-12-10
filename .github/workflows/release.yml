@@ -30,21 +30,11 @@ jobs:
           echo "Mod Version: $mod_version"
           echo "mod_version=$mod_version" >> $GITHUB_ENV
       - name: リリースの作成
-        id: create_release
-        uses: actions/create-release@v1
+        run: >
+          gh release create
+          v${{ env.mod_version }}
+          --verify-tag
+          --title v${{ env.mod_version }}
+          build/libs/MirageFairy2024-${{ env.mod_version }}.jar#MirageFairy2024-${{ env.mod_version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: リリースのアップロード
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/MirageFairy2024-${{ env.mod_version }}.jar
-          asset_name: MirageFairy2024-${{ env.mod_version }}.jar
-          asset_content_type: application/java-archive
