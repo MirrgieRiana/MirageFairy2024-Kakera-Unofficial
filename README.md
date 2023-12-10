@@ -4,6 +4,10 @@ MirageFairy2024: The Minecraft MOD for the MirageFairy project in 2024.
 
 MirageFairy2024: 2024年のMirageFairyプロジェクトのMinecraft MOD
 
+# MirageFairy Official Website
+
+https://miragefairy.notion.site/
+
 # MOD Specifications
 
 The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
