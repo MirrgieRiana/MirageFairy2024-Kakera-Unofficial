@@ -2,6 +2,28 @@
 
 MirageFairy2024: The Minecraft MOD for the MirageFairy project in 2024.
 
+MirageFairy2024: 2024年のMirageFairyプロジェクトのMinecraft MOD
+
+# MOD Specifications
+
+The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
+
+There is currently no comprehensive official documentation explaining the specifications of this MOD at a specific point in time, and the only available resources are unofficial wikis.
+
+The unofficial wikis currently identified are as follows:
+
+- [MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
+
+# MODの仕様
+
+MODの仕様は、公式には[CHANGELOG.md](CHANGELOG.md)上で、日本語においてのみ正式に記述されます。
+
+MODのある時点での仕様を網羅的に記述した公式のドキュメントは存在せず、非公式のWikiのみが存在します。
+
+現在確認されている非公式のWikiは以下です。
+
+- [MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
+
 # License
 
 - Codes (Programs, Data Packs): **Apache License 2.0**
