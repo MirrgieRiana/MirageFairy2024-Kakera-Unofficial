@@ -35,6 +35,6 @@ jobs:
           v${{ env.mod_version }}
           --verify-tag
           --title v${{ env.mod_version }}
-          build/libs/MirageFairy2024-${{ env.mod_version }}.jar#MirageFairy2024-${{ env.mod_version }}.jar
+          build/libs/MirageFairy2024-${{ env.mod_version }}.jar#MirageFairy2024-${{ env.mod_version }}_dummy.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
