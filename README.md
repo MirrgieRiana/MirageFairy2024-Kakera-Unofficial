@@ -8,7 +8,7 @@ MirageFairy2024: 2024年のMirageFairyプロジェクトのMinecraft MOD
 
 https://miragefairy.notion.site/
 
-# MOD Specifications
+# Documentation
 
 The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
 
@@ -18,7 +18,7 @@ The unofficial wikis currently identified are as follows:
 
 - [MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
 
-# MODの仕様
+# ドキュメンテーション
 
 MODの仕様は、公式には[CHANGELOG.md](CHANGELOG.md)上で、日本語においてのみ正式に記述されます。
 
