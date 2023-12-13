@@ -2,6 +2,7 @@ plugins {
     id 'fabric-loom' version '1.4-SNAPSHOT'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm" version "1.9.20"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -124,5 +125,20 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+    }
+}
+
+// https://github.com/modrinth/minotaur
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "miragefairy2024"
+    //versionNumber = project.mod_version
+    versionType = "beta"
+    uploadFile = remapJar
+    //gameVersions = ["1.20.2"]
+    //loaders = ["fabric"]
+    dependencies {
+        required.project "fabric-api"
+        required.project "fabric-language-kotlin"
     }
 }
