@@ -7,6 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+
+      # セットアップ
       - name: リポジトリのチェックアウト
         uses: actions/checkout@v4
       - name: コミットバージョン
@@ -18,6 +20,8 @@ jobs:
         with:
           java-version: 17
           distribution: 'microsoft'
+
+      # ビルド
       - name: プロジェクトのビルド
         uses: gradle/gradle-build-action@v2
         with:
@@ -29,6 +33,8 @@ jobs:
           mod_version=$(echo ${{ github.ref }} | perl -lpE 's|^refs/tags/v||')
           echo "Mod Version: $mod_version"
           echo "mod_version=$mod_version" >> $GITHUB_ENV
+
+      # リリース
       - name: リリースの作成
         run: >
           gh release create
@@ -38,3 +44,5 @@ jobs:
           build/libs/MirageFairy2024-${{ env.mod_version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Modrinthのリリース
+        run: ./gradlew modrinth
