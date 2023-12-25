@@ -71,6 +71,19 @@ enum class MaterialCard(
             .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 20), 0.01F)
             .build(),
     ),
+    HAIMEVISKA_SAP(
+        "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
+        listOf(
+            Poem("Smooth and mellow on the palate", "口福のアナムネシス。"),
+            Description("Gain experience by eating", "食べると経験値を獲得"),
+        ),
+        fuelValue = 200,
+        foodComponent = FoodComponent.Builder()
+            .hunger(1)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
+            .build(),
+    ),
     FAIRY_PLASTIC(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
