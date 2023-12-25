@@ -111,7 +111,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
             val nutrition = traitEffects[TraitEffectKeyCard.NUTRITION.traitEffectKey]
             val environment = traitEffects[TraitEffectKeyCard.ENVIRONMENT.traitEffectKey]
             val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
-            val actualGrowthAmount = world.random.randomInt(nutrition * environment * (1 + growthBoost) * speed)
+            val actualGrowthAmount = world.random.randomInt(0.5 * nutrition * environment * (1 + growthBoost) * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlockState(blockPos, newBlockState, NOTIFY_LISTENERS)
