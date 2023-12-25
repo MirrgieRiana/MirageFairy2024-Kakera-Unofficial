@@ -67,7 +67,10 @@ enum class MaterialCard(
     ),
     VEROPEDA_BERRIES(
         "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
-        listOf(Poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")),
+        listOf(
+            Poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。"),
+            Description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
+        ),
         foodComponent = FoodComponent.Builder()
             .hunger(1)
             .saturationModifier(0.1F)
