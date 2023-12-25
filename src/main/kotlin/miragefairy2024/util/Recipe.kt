@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
+import net.fabricmc.fabric.api.registry.FuelRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.block.ComposterBlock
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
@@ -50,4 +51,9 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, biome: (() -> RegistryKey<Biome
 
 fun Item.registerComposterInput(chance: Float) {
     ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(this, chance)
+}
+
+/** @param ticks coal is `200 * 8 = 1600` */
+fun Item.registerFuel(ticks: Int) {
+    FuelRegistry.INSTANCE.add(this, ticks)
 }
