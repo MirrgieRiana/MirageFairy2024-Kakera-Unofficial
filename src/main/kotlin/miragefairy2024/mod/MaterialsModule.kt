@@ -112,6 +112,15 @@ enum class MaterialCard(
         ),
     ),
 
+    FRACTAL_WISP(
+        "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
+        listOf(
+            Poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精"),
+            Poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
+        ),
+        // TODO 用途
+    ),
+
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
