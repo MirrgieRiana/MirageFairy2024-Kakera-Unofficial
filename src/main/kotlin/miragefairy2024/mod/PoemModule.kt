@@ -27,6 +27,10 @@ fun Poem(key: String, en: String, ja: String) = Poem(key, en, ja, Formatting.DAR
 fun Poem(en: String, ja: String) = Poem("poem", en, ja, Formatting.DARK_AQUA)
 
 
+fun Description(key: String, en: String, ja: String) = Poem(key, en, ja, Formatting.YELLOW)
+
+fun Description(en: String, ja: String) = Poem("description", en, ja, Formatting.YELLOW)
+
 val itemPoemListTable = mutableMapOf<Item, List<Poem>>()
 
 fun Item.registerPoem(poemList: List<Poem>) {
