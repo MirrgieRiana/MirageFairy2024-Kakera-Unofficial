@@ -6,6 +6,7 @@ import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initReiModule
+import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import net.fabricmc.api.ModInitializer
@@ -23,6 +24,7 @@ object MirageFairy2024 : ModInitializer {
         initVanillaModule()
         initReiModule()
         initPoemModule()
+        initStatusEffectModule()
         initMaterialsModule()
         initBlockMaterialsModule()
         initOresModule()
