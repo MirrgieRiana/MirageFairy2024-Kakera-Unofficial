@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miranagite_block",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miranagite"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "miragefairy2024:miranagite_block"
+  },
+  "show_notification": true
+}
