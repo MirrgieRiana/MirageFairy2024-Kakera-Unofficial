@@ -32,11 +32,6 @@ enum class MaterialCard(
     val foodComponent: FoodComponent? = null,
 ) {
 
-    FAIRY_PLASTIC(
-        // TODO add purpose
-        "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
-        listOf(Poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。")),
-    ),
     XARPITE(
         // TODO add purpose
         "xarpite", "Xarpite", "紅天石",
@@ -46,11 +41,6 @@ enum class MaterialCard(
         // TODO add purpose
         "miranagite", "Miranagite", "蒼天石",
         listOf(Poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。")),
-    ),
-    FAIRY_RUBBER(
-        // TODO add purpose
-        "fairy_rubber", "Fairy Rubber", "夜のかけら",
-        listOf(Poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた")),
     ),
 
     MIRAGE_LEAVES(
@@ -78,6 +68,16 @@ enum class MaterialCard(
             .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
             .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 20), 0.01F)
             .build(),
+    ),
+    FAIRY_PLASTIC(
+        // TODO add purpose
+        "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
+        listOf(Poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。")),
+    ),
+    FAIRY_RUBBER(
+        // TODO add purpose
+        "fairy_rubber", "Fairy Rubber", "夜のかけら",
+        listOf(Poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた")),
     ),
 
     TINY_MIRAGE_FLOUR(
