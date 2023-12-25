@@ -8,6 +8,7 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
 import miragefairy2024.util.register
 import miragefairy2024.util.registerComposterInput
+import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
@@ -29,6 +30,7 @@ enum class MaterialCard(
     val enName: String,
     val jaName: String,
     val poemList: List<Poem>,
+    val fuelValue: Int? = null,
     val foodComponent: FoodComponent? = null,
 ) {
 
@@ -138,6 +140,7 @@ fun initMaterialsModule() {
         card.item.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
+        if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
     fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard) = MirageFairy2024DataGenerator.recipeGenerators {
