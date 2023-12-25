@@ -20,12 +20,7 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: (Registerable<T>) -> T): RegistryKey<T> {
     val key = RegistryKey.of(registryKey, identifier)
-    MirageFairy2024DataGenerator.onBuildRegistry += {
-        it.addRegistry(registryKey) { context ->
-            context.register(key, creator(context))
-        }
-    }
-    MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
+    registerDynamicGeneration(registryKey, key, creator)
     return key
 }
 
