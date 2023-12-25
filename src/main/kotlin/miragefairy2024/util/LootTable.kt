@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.util.FortuneEffect.IGNORE
 import miragefairy2024.util.FortuneEffect.ORE
 import miragefairy2024.util.FortuneEffect.UNIFORM
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.data.server.loottable.BlockLootTableGenerator
 import net.minecraft.enchantment.Enchantments
@@ -66,12 +67,12 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 }
 
 
-fun Block.registerLootTableGeneration(initializer: () -> LootTable.Builder) = MirageFairy2024DataGenerator.blockLootTableGenerators {
-    it.addDrop(this, initializer())
+fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = MirageFairy2024DataGenerator.blockLootTableGenerators {
+    it.addDrop(this, initializer(it))
 }
 
-fun Block.registerDefaultLootTableGeneration() = MirageFairy2024DataGenerator.blockLootTableGenerators {
-    it.addDrop(this)
+fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration {
+    it.drops(this)
 }
 
 enum class FortuneEffect {
@@ -80,8 +81,8 @@ enum class FortuneEffect {
     UNIFORM,
 }
 
-fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = ORE) = MirageFairy2024DataGenerator.blockLootTableGenerators {
-    val lootTable = BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
+fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = ORE) = this.registerLootTableGeneration {
+    BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
         if (additionalCount != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             IGNORE -> Unit
@@ -89,5 +90,4 @@ fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloa
             UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
         }
     }))
-    it.addDrop(this, lootTable)
 }
