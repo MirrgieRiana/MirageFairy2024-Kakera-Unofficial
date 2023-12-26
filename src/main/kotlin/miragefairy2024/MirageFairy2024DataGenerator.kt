@@ -23,15 +23,15 @@ import java.util.concurrent.CompletableFuture
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
-    val blockStateModelGenerators = DataGeneratorRegistry<(BlockStateModelGenerator) -> Unit>()
-    val itemModelGenerators = DataGeneratorRegistry<(ItemModelGenerator) -> Unit>()
-    val blockTagGenerators = DataGeneratorRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
-    val itemTagGenerators = DataGeneratorRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
-    val blockLootTableGenerators = DataGeneratorRegistry<(FabricBlockLootTableProvider) -> Unit>()
-    val recipeGenerators = DataGeneratorRegistry<(RecipeExporter) -> Unit>()
+    val blockStateModelGenerators = InitializationEventRegistry<(BlockStateModelGenerator) -> Unit>()
+    val itemModelGenerators = InitializationEventRegistry<(ItemModelGenerator) -> Unit>()
+    val blockTagGenerators = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
+    val itemTagGenerators = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val blockLootTableGenerators = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
+    val recipeGenerators = InitializationEventRegistry<(RecipeExporter) -> Unit>()
     val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
-    val englishTranslationGenerators = DataGeneratorRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val japaneseTranslationGenerators = DataGeneratorRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val englishTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val japaneseTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
 
     val onBuildRegistry = mutableListOf<(RegistryBuilder) -> Unit>()
 
@@ -92,7 +92,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     }
 }
 
-class DataGeneratorRegistry<T> {
+class InitializationEventRegistry<T> {
     val list = mutableListOf<T>()
     var closed = false
 
