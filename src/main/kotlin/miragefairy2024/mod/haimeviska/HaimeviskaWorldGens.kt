@@ -2,6 +2,7 @@ package miragefairy2024.mod.haimeviska
 
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
@@ -11,7 +12,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.PillarBlock
 import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
@@ -45,7 +45,7 @@ val haimeviskaConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = Regis
 
 fun initHaimeviskaWorldGens() {
 
-    Registry.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier, HaimeviskaTreeDecoratorCard.type)
+    HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
     registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, haimeviskaConfiguredFeatureKey) {
         Feature.TREE with TreeFeatureConfig.Builder(

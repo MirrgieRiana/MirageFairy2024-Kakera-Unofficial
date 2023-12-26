@@ -18,6 +18,7 @@ import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.concat
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -32,7 +33,6 @@ import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.sound.BlockSoundGroup
@@ -84,7 +84,7 @@ fun initMirageFlower() {
     run {
         // 妖精の輪Feature
         val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
-        Registry.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"), fairyRingFeature)
+        fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
 
         // 小さな塊
         val mirageClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster")) {

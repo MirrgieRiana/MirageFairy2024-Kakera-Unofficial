@@ -3,12 +3,12 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
+import miragefairy2024.util.register
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.InstantStatusEffect
 import net.minecraft.entity.effect.StatusEffectCategory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier
 val experienceStatusEffect = ExperienceStatusEffect()
 
 fun initStatusEffectModule() {
-    Registry.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"), experienceStatusEffect)
+    experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
     en { experienceStatusEffect.translationKey to "Experience" }
     ja { experienceStatusEffect.translationKey to "経験値獲得" }
 }
