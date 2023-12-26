@@ -93,8 +93,8 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 }
 
 class InitializationEventRegistry<T> {
-    val list = mutableListOf<T>()
-    var closed = false
+    private val list = mutableListOf<T>()
+    private var closed = false
 
     operator fun invoke(listener: T) {
         require(!closed)
