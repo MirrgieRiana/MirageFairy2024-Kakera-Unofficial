@@ -23,15 +23,15 @@ import java.util.concurrent.CompletableFuture
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
-    val blockStateModelGenerators = DataGeneratorRegistry<BlockStateModelGenerator>()
-    val itemModelGenerators = DataGeneratorRegistry<ItemModelGenerator>()
-    val blockTagGenerators = DataGeneratorRegistry<(TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder>()
-    val itemTagGenerators = DataGeneratorRegistry<(TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder>()
-    val blockLootTableGenerators = DataGeneratorRegistry<FabricBlockLootTableProvider>()
-    val recipeGenerators = DataGeneratorRegistry<RecipeExporter>()
+    val blockStateModelGenerators = DataGeneratorRegistry<(BlockStateModelGenerator) -> Unit>()
+    val itemModelGenerators = DataGeneratorRegistry<(ItemModelGenerator) -> Unit>()
+    val blockTagGenerators = DataGeneratorRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
+    val itemTagGenerators = DataGeneratorRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val blockLootTableGenerators = DataGeneratorRegistry<(FabricBlockLootTableProvider) -> Unit>()
+    val recipeGenerators = DataGeneratorRegistry<(RecipeExporter) -> Unit>()
     val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
-    val englishTranslationGenerators = DataGeneratorRegistry<FabricLanguageProvider.TranslationBuilder>()
-    val japaneseTranslationGenerators = DataGeneratorRegistry<FabricLanguageProvider.TranslationBuilder>()
+    val englishTranslationGenerators = DataGeneratorRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val japaneseTranslationGenerators = DataGeneratorRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
 
     val onBuildRegistry = mutableListOf<(RegistryBuilder) -> Unit>()
 
@@ -93,15 +93,15 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 }
 
 class DataGeneratorRegistry<T> {
-    val list = mutableListOf<(T) -> Unit>()
+    val list = mutableListOf<T>()
     var closed = false
 
-    operator fun invoke(listener: (T) -> Unit) {
+    operator fun invoke(listener: T) {
         require(!closed)
         this.list += listener
     }
 
-    fun fire(processor: ((T) -> Unit) -> Unit) {
+    fun fire(processor: (T) -> Unit) {
         closed = true
         this.list.forEach {
             processor(it)
