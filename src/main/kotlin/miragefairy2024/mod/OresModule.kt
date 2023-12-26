@@ -103,40 +103,7 @@ enum class OreCard(
 }
 
 object OreModelCard {
-    val parentModel = Model {
-        jsonObject(
-            "parent" to Identifier("minecraft", "block/block").string.jsonElement,
-            "textures" to jsonObject(
-                TextureKey.PARTICLE.name to TextureKey.BACK.string.jsonElement,
-            ),
-            "elements" to jsonArray(
-                jsonObject(
-                    "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
-                    "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
-                    "faces" to jsonObject(
-                        "down" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
-                        "up" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
-                        "north" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
-                        "south" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
-                        "west" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
-                        "east" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
-                    ),
-                ),
-                jsonObject(
-                    "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
-                    "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
-                    "faces" to jsonObject(
-                        "down" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
-                        "up" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
-                        "north" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
-                        "south" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
-                        "west" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
-                        "east" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
-                    ),
-                ),
-            ),
-        )
-    }
+    val parentModel = createOreModel()
     val identifier = Identifier(MirageFairy2024.modId, "block/ore")
     val model = Model(identifier, TextureKey.BACK, TextureKey.FRONT)
 }
@@ -192,4 +159,39 @@ fun initOresModule() {
     worldGen(OreCard.MIRANAGITE_ORE)
     worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
 
+}
+
+fun createOreModel() = Model {
+    jsonObject(
+        "parent" to Identifier("minecraft", "block/block").string.jsonElement,
+        "textures" to jsonObject(
+            TextureKey.PARTICLE.name to TextureKey.BACK.string.jsonElement,
+        ),
+        "elements" to jsonArray(
+            jsonObject(
+                "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
+                "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
+                "faces" to jsonObject(
+                    "down" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
+                    "up" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
+                    "north" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
+                    "south" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
+                    "west" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
+                    "east" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
+                ),
+            ),
+            jsonObject(
+                "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
+                "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
+                "faces" to jsonObject(
+                    "down" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
+                    "up" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
+                    "north" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
+                    "south" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
+                    "west" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
+                    "east" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
+                ),
+            ),
+        ),
+    )
 }
