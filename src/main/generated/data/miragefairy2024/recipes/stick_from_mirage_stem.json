@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "minecraft:stick",
+  "group": "sticks",
   "key": {
     "#": {
       "item": "miragefairy2024:mirage_stem"
