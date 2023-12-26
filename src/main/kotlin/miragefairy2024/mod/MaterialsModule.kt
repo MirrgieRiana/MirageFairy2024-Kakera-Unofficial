@@ -201,7 +201,7 @@ fun initMaterialsModule() {
         val output = Items.STICK
         ShapedRecipeJsonBuilder
             .create(RecipeCategory.MISC, output, 2)
-            .group("sticks")
+            .group(output)
             .input('#', input)
             .pattern("#")
             .pattern("#")
