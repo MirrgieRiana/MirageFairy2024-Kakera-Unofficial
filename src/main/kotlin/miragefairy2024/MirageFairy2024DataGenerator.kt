@@ -86,8 +86,6 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     }
 
     override fun buildRegistry(registryBuilder: RegistryBuilder) {
-        onBuildRegistry.fire {
-            it(registryBuilder)
-        }
+        onBuildRegistry.fire { it(registryBuilder) }
     }
 }
