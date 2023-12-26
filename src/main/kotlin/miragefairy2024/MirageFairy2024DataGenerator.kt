@@ -94,12 +94,15 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
 class DataGeneratorRegistry<T> {
     val list = mutableListOf<(T) -> Unit>()
+    var closed = false
 
     operator fun invoke(listener: (T) -> Unit) {
+        require(!closed)
         this.list += listener
     }
 
     fun fire(processor: ((T) -> Unit) -> Unit) {
+        closed = true
         this.list.forEach {
             processor(it)
         }
