@@ -1,5 +1,6 @@
 package miragefairy2024
 
+import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initMaterialsModule
@@ -29,5 +30,6 @@ object MirageFairy2024 : ModInitializer {
         initBlockMaterialsModule()
         initOresModule()
         initMagicPlantModule()
+        initHaimeviskaModule()
     }
 }
