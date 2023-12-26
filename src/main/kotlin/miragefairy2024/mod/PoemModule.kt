@@ -9,7 +9,7 @@ import net.minecraft.item.Item
 import net.minecraft.util.Formatting
 
 fun initPoemModule() {
-    MirageFairy2024.onClientInit += {
+    MirageFairy2024.onClientInit {
         it.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
             poemList.forEachIndexed { index, poem ->

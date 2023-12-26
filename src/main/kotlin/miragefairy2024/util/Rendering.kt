@@ -9,12 +9,12 @@ import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 
 fun Block.registerCutoutRenderLayer() {
-    MirageFairy2024.onClientInit += {
+    MirageFairy2024.onClientInit {
         it.registerCutoutRenderLayer(this)
     }
 }
 
-fun Block.registerColorProvider(provider: BlockColorProvider) = MirageFairy2024.onClientInit.plusAssign {
+fun Block.registerColorProvider(provider: BlockColorProvider) = MirageFairy2024.onClientInit {
     it.registerBlockColorProvider(this, provider)
 }
 
@@ -22,7 +22,7 @@ fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockSta
     MirageFairy2024.clientProxy!!.getFoliageBlockColorProvider().invoke(blockState, world, blockPos, tintIndex)
 }
 
-fun Item.registerColorProvider(provider: ItemColorProvider) = MirageFairy2024.onClientInit.plusAssign {
+fun Item.registerColorProvider(provider: ItemColorProvider) = MirageFairy2024.onClientInit {
     it.registerItemColorProvider(this, provider)
 }
 
