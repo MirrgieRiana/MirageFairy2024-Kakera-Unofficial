@@ -30,12 +30,12 @@ enum class BlockMaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
-    val poemList: List<Poem>,
+    val poemList: PoemList,
     mapColor: MapColor,
 ) {
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
-        listOf(Poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。")),
+        PoemList(1).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
         MapColor.LAPIS_BLUE,
     )
     ;

@@ -1,7 +1,7 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.mod.Poem
+import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.magicplants.initMirageFlower
 import miragefairy2024.mod.magicplant.magicplants.initVeropeda
 import miragefairy2024.util.Translation
@@ -53,7 +53,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
     itemPath: String,
     val itemEnName: String,
     val itemJaName: String,
-    val seedPoemList: List<Poem>,
+    val seedPoemList: PoemList,
     blockCreator: () -> B,
     blockEntityCreator: (BlockPos, BlockState) -> BE,
 ) {

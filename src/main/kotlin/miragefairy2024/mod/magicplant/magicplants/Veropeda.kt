@@ -2,7 +2,7 @@ package miragefairy2024.mod.magicplant.magicplants
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.Poem
+import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
@@ -10,6 +10,7 @@ import miragefairy2024.mod.magicplant.TraitCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.initMagicPlant
 import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
+import miragefairy2024.mod.poem
 import miragefairy2024.util.concat
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -48,10 +49,9 @@ import net.minecraft.world.gen.stateprovider.BlockStateProvider
 object VeropedaCard : MagicPlantCard<VeropedaBlock, VeropedaBlockEntity>(
     "veropeda", "Veropeda", "呪草ヴェロペダ",
     "veropeda_bulb", "Veropeda Bulb", "ヴェロペダの球根",
-    listOf(
-        Poem("Contains strong acids made from insects", "毒を喰らい、毒と化す。"),
-        Poem("classification", "Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科"),
-    ),
+    PoemList(1)
+        .poem("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
+        .poem("classification", "Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科"),
     { VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP)) },
     ::VeropedaBlockEntity,
 )

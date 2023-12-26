@@ -30,7 +30,7 @@ enum class MaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
-    val poemList: List<Poem>,
+    val poemList: PoemList,
     val fuelValue: Int? = null,
     val foodComponent: FoodComponent? = null,
 ) {
@@ -38,32 +38,31 @@ enum class MaterialCard(
     XARPITE(
         // TODO add purpose
         "xarpite", "Xarpite", "紅天石",
-        listOf(Poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。")),
+        PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
     ),
     MIRANAGITE(
         // TODO add purpose
         "miranagite", "Miranagite", "蒼天石",
-        listOf(Poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。")),
+        PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
     ),
 
     MIRAGE_LEAVES(
         "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
-        listOf(Poem("Don't cut your fingers!", "刻まれる、記憶の破片。")),
+        PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
     ),
     MIRAGE_STEM(
         "mirage_stem", "Mirage Stem", "ミラージュの茎",
-        listOf(Poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。")),
+        PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
     ),
     VEROPEDA_LEAF(
         "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
-        listOf(Poem("Said to house the soul of a demon", "その身融かされるまでの快楽。")),
+        PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
     ),
     VEROPEDA_BERRIES(
         "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
-        listOf(
-            Poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。"),
-            Description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
-        ),
+        PoemList(1)
+            .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
+            .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
         foodComponent = FoodComponent.Builder()
             .hunger(1)
             .saturationModifier(0.1F)
@@ -74,10 +73,9 @@ enum class MaterialCard(
     ),
     HAIMEVISKA_SAP(
         "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
-        listOf(
-            Poem("Smooth and mellow on the palate", "口福のアナムネシス。"),
-            Description("Gain experience by eating", "食べると経験値を獲得"),
-        ),
+        PoemList(1)
+            .poem("Smooth and mellow on the palate", "口福のアナムネシス。")
+            .description("Gain experience by eating", "食べると経験値を獲得"),
         fuelValue = 200,
         foodComponent = FoodComponent.Builder()
             .hunger(1)
@@ -88,52 +86,50 @@ enum class MaterialCard(
     FAIRY_PLASTIC(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
-        listOf(Poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。")),
+        PoemList(2).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
     ),
     FAIRY_RUBBER(
         // TODO add purpose
         "fairy_rubber", "Fairy Rubber", "夜のかけら",
-        listOf(Poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた")),
+        PoemList(3).poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた"),
     ),
 
     TINY_MIRAGE_FLOUR(
         "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
-        listOf(Poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。")),
+        PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
     ),
     MIRAGE_FLOUR(
         "mirage_flour", "Mirage Flour", "ミラージュの花粉",
-        listOf(Poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。")),
+        PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
     ),
     RARE_MIRAGE_FLOUR(
         "rare_mirage_flour", "Rare Mirage Flour", "高純度ミラージュの花粉",
-        listOf(Poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。")),
+        PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
     ),
     VERY_RARE_MIRAGE_FLOUR(
         "very_rare_mirage_flour", "Very Rare Mirage Flour", "特選高純度ミラージュの花粉",
-        listOf(Poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。")),
+        PoemList(1).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
     ),
     ULTRA_RARE_MIRAGE_FLOUR(
         "ultra_rare_mirage_flour", "Ultra Rare Mirage Flour", "厳選高純度ミラージュの花粉",
-        listOf(Poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。")),
+        PoemList(1).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
     ),
     SUPER_RARE_MIRAGE_FLOUR(
         "super_rare_mirage_flour", "Super Rare Mirage Flour", "激甚高純度ミラージュの花粉",
-        listOf(Poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。")),
+        PoemList(1).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
     ),
     EXTREMELY_RARE_MIRAGE_FLOUR(
         "extremely_rare_mirage_flour", "Extremely Rare Mirage Flour", "極超高純度ミラージュの花粉",
-        listOf(
-            Poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、"),
-            Poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
-        ),
+        PoemList(1)
+            .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
+            .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
     ),
 
     FRACTAL_WISP(
         "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
-        listOf(
-            Poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精"),
-            Poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
-        ),
+        PoemList(1)
+            .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
+            .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
         // TODO 用途
     ),
 

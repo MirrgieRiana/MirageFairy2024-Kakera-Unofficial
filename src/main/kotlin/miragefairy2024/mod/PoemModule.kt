@@ -1,46 +1,73 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.aqua
 import miragefairy2024.util.en
 import miragefairy2024.util.formatted
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
 import net.minecraft.item.Item
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+
+val itemPoemListTable = mutableMapOf<Item, PoemList>()
 
 fun initPoemModule() {
     MirageFairy2024.onClientInit {
         it.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
-            poemList.forEachIndexed { index, poem ->
-                lines.add(1 + index, text { translate("${stack.item.translationKey}.${poem.key}").formatted(poem.color) })
+            val texts = mutableListOf<Text>()
+
+            poemList.poems.filter { it.type == PoemType.POEM }.forEach {
+                texts += text { translate("${stack.item.translationKey}.${it.key}").formatted(it.type.color) }
+            }
+
+            if (poemList.tier != null) {
+                texts += text { "Tier ${poemList.tier}"().aqua }
+            }
+
+            poemList.poems.filter { it.type == PoemType.DESCRIPTION }.forEach {
+                texts += text { translate("${stack.item.translationKey}.${it.key}").formatted(it.type.color) }
+            }
+
+            texts.forEachIndexed { index, it ->
+                lines.add(1 + index, it)
             }
         }
     }
 }
 
 
-class Poem(val key: String, val en: String, val ja: String, val color: Formatting)
+// Poem
 
-fun Poem(key: String, en: String, ja: String) = Poem(key, en, ja, Formatting.DARK_AQUA)
+enum class PoemType(val color: Formatting) {
+    POEM(Formatting.DARK_AQUA),
+    DESCRIPTION(Formatting.YELLOW),
+}
 
-fun Poem(en: String, ja: String) = Poem("poem", en, ja, Formatting.DARK_AQUA)
+class Poem(val type: PoemType, val key: String, val en: String, val ja: String)
 
 
-fun Description(key: String, en: String, ja: String) = Poem(key, en, ja, Formatting.YELLOW)
+// PoemList
 
-fun Description(en: String, ja: String) = Poem("description", en, ja, Formatting.YELLOW)
+class PoemList(val tier: Int?, val poems: List<Poem>)
 
-val itemPoemListTable = mutableMapOf<Item, List<Poem>>()
+fun PoemList(tier: Int?) = PoemList(tier, listOf())
+fun PoemList.poem(key: String, en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.POEM, key, en, ja))
+fun PoemList.poem(en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.POEM, "poem", en, ja))
+fun PoemList.description(key: String, en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.DESCRIPTION, key, en, ja))
+fun PoemList.description(en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.DESCRIPTION, "description", en, ja))
 
-fun Item.registerPoem(poemList: List<Poem>) {
+
+// Util
+
+fun Item.registerPoem(poemList: PoemList) {
     require(this !in itemPoemListTable)
     itemPoemListTable[this] = poemList
 }
 
-
-fun Item.registerPoemGeneration(poemList: List<Poem>) {
-    poemList.forEach {
+fun Item.registerPoemGeneration(poemList: PoemList) {
+    poemList.poems.forEach {
         en { "${this.translationKey}.${it.key}" to it.en }
         ja { "${this.translationKey}.${it.key}" to it.ja }
     }
