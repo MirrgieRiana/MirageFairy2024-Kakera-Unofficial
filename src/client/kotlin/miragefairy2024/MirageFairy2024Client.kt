@@ -61,8 +61,6 @@ object MirageFairy2024Client : ClientModInitializer {
             }
         }
         MirageFairy2024.clientProxy = clientProxy
-        MirageFairy2024.onClientInit.fire {
-            it(clientProxy)
-        }
+        MirageFairy2024.onClientInit.fire { it(clientProxy) }
     }
 }
