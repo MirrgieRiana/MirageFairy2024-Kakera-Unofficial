@@ -60,6 +60,7 @@ import net.minecraft.item.Item
 import net.minecraft.loot.condition.RandomChanceLootCondition
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.server.world.ServerWorld
@@ -229,8 +230,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(card.identifier)
-        card.item.register(card.identifier)
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
 
         // カテゴリ
         card.item.registerItemGroup(mirageFairy2024ItemGroup)

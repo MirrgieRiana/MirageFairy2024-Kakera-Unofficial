@@ -3,7 +3,6 @@ package miragefairy2024.mod.magicplant
 import miragefairy2024.util.bitCount
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
-import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.max
 import net.minecraft.util.Identifier
@@ -11,8 +10,6 @@ import net.minecraft.util.Util
 import net.minecraft.util.math.random.Random
 
 // Trait
-
-fun Trait.register(identifier: Identifier) = this.register(traitRegistry, identifier)
 
 fun Trait.getIdentifier() = traitRegistry.getId(this)!!
 fun Identifier.toTrait() = traitRegistry.get(this)
@@ -44,8 +41,6 @@ fun <T : Any> TraitEffect<T>.getDescription() = this.key.getDescription(this.val
 
 
 // TraitEffectKey
-
-fun TraitEffectKey<*>.register(identifier: Identifier) = this.register(traitEffectKeyRegistry, identifier)
 
 fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getId(this)!!
 fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)

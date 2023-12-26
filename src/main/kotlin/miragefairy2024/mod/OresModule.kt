@@ -28,6 +28,7 @@ import net.minecraft.block.enums.Instrument
 import net.minecraft.data.client.TextureKey
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.sound.BlockSoundGroup
@@ -145,8 +146,8 @@ fun initOresModule() {
     OreModelCard.parentModel.registerModelGeneration(OreModelCard.identifier)
 
     OreCard.entries.forEach { card ->
-        card.block.register(card.identifier)
-        card.item.register(card.identifier)
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroup)
 

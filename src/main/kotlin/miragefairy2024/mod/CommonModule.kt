@@ -8,6 +8,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.minecraft.item.ItemGroup
+import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
@@ -20,7 +21,7 @@ fun initCommonModule() {
         .icon { MaterialCard.FAIRY_PLASTIC.item.createItemStack() }
         .displayName(text { translate("itemGroup.mirageFairy2024") })
         .build()
-    itemGroup.register(mirageFairy2024ItemGroup.value)
+    itemGroup.register(Registries.ITEM_GROUP, mirageFairy2024ItemGroup.value)
 
     en { "itemGroup.mirageFairy2024" to "MirageFairy2024" }
     ja { "itemGroup.mirageFairy2024" to "MirageFairy2024" }

@@ -10,13 +10,14 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.minecraft.block.Block
+import net.minecraft.registry.Registries
 
 fun MagicPlantCard<*, *>.initMagicPlant() {
 
     // 登録
-    block.register(blockIdentifier)
-    blockEntityType.register(blockIdentifier)
-    item.register(itemIdentifier)
+    block.register(Registries.BLOCK, blockIdentifier)
+    blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
+    item.register(Registries.ITEM, itemIdentifier)
 
     // 分類
     item.registerItemGroup(mirageFairy2024ItemGroup)

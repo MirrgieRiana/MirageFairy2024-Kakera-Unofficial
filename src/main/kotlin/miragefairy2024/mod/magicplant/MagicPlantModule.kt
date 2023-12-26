@@ -7,6 +7,7 @@ import miragefairy2024.mod.magicplant.magicplants.initVeropeda
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.register
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -24,12 +25,12 @@ val INVALID_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.invalid
 fun initMagicPlantModule() {
 
     TraitEffectKeyCard.entries.forEach { card ->
-        card.traitEffectKey.register(card.identifier)
+        card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
         card.traitEffectKey.enJa(card.enName, card.jaName)
     }
 
     TraitCard.entries.forEach { card ->
-        card.trait.register(card.identifier)
+        card.trait.register(traitRegistry, card.identifier)
         card.trait.enJa(card.enName, card.jaName)
     }
 

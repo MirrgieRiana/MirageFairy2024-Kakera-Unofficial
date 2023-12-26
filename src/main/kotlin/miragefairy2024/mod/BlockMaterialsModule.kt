@@ -22,6 +22,7 @@ import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 
@@ -50,8 +51,8 @@ enum class BlockMaterialCard(
 
 fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(card.identifier)
-        card.item.register(card.identifier)
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroup)
 

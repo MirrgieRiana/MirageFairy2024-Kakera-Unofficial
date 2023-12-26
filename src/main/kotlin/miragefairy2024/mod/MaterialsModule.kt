@@ -23,6 +23,7 @@ import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 enum class MaterialCard(
@@ -147,7 +148,7 @@ enum class MaterialCard(
 fun initMaterialsModule() {
 
     MaterialCard.entries.forEach { card ->
-        card.item.register(card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroup)
         card.item.registerGeneratedItemModelGeneration()
         card.item.enJa(card.enName, card.jaName)
