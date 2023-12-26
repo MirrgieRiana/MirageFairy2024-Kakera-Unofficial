@@ -21,6 +21,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
 import miragefairy2024.util.propertiesOf
+import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockItemModelGeneration
 import miragefairy2024.util.registerComposterInput
@@ -36,6 +37,7 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.with
+import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -362,21 +364,19 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
         // 消費
         world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultState.with(FACING, direction), Block.NOTIFY_ALL or Block.REDRAW_ON_MAIN_THREAD)
 
+        fun drop(item: Item, count: Double) {
+            val actualCount = world.random.randomInt(count) atMost item.maxCount
+            if (actualCount <= 0) return
+            val itemStack = item.createItemStack(actualCount)
+            val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.offsetX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.offsetZ * 0.65, itemStack)
+            itemEntity.setVelocity(0.05 * direction.offsetX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.offsetZ + world.random.nextDouble() * 0.02)
+            world.spawnEntity(itemEntity)
+        }
+
         // 生産
-        val count = 1 + world.random.nextInt(EnchantmentHelper.getLevel(Enchantments.FORTUNE, toolItemStack) + 1)
-        val itemEntity = ItemEntity(
-            world,
-            pos.x + 0.5 + direction.offsetX * 0.65,
-            pos.y + 0.1,
-            pos.z + 0.5 + direction.offsetZ * 0.65,
-            MaterialCard.HAIMEVISKA_SAP.item.createItemStack(count),
-        )
-        itemEntity.setVelocity(
-            0.05 * direction.offsetX + world.random.nextDouble() * 0.02,
-            0.05,
-            0.05 * direction.offsetZ + world.random.nextDouble() * 0.02,
-        )
-        world.spawnEntity(itemEntity)
+        val fortune = EnchantmentHelper.getLevel(Enchantments.FORTUNE, toolItemStack)
+        drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + fortune) // ハイメヴィスカの樹液
+        drop(MaterialCard.FAIRY_PLASTIC.item, 0.01 + 0.02 * fortune) // 妖精のプラスチック
 
         // エフェクト
         world.playSound(null, pos, SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * world.random.nextFloat())
