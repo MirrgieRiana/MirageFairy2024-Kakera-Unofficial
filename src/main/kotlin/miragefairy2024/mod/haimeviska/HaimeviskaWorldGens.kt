@@ -20,7 +20,6 @@ import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.TreeFeatureConfig
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
@@ -66,7 +65,7 @@ fun initHaimeviskaWorldGens() {
             BiomePlacementModifier.of(),
             PlacedFeatures.wouldSurvive(Blocks.OAK_SAPLING),
         )
-        PlacedFeature(it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey), placementModifiers)
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
     }.also {
         BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, it)
     }
