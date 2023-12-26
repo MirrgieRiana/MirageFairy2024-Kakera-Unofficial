@@ -25,7 +25,7 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, ide
 }
 
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
-    MirageFairy2024DataGenerator.onBuildRegistry += {
+    MirageFairy2024DataGenerator.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
             context.register(key, creator(context))
         }

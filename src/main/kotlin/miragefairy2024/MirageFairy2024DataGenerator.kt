@@ -33,7 +33,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     val englishTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val japaneseTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
 
-    val onBuildRegistry = mutableListOf<(RegistryBuilder) -> Unit>()
+    val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack = fabricDataGenerator.createPack()
@@ -86,7 +86,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     }
 
     override fun buildRegistry(registryBuilder: RegistryBuilder) {
-        onBuildRegistry.forEach {
+        onBuildRegistry.fire {
             it(registryBuilder)
         }
     }
