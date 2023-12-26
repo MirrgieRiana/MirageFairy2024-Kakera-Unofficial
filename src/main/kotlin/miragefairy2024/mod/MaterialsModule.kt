@@ -224,4 +224,19 @@ fun initMaterialsModule() {
     // ヴェロペダの実
     MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
 
+    // ハイメヴィスカの樹液→松明
+    MirageFairy2024DataGenerator.recipeGenerators {
+        val input = MaterialCard.HAIMEVISKA_SAP.item
+        val output = Items.TORCH
+        ShapedRecipeJsonBuilder
+            .create(RecipeCategory.MISC, output, 1)
+            .group(output)
+            .input('#', input)
+            .input('S', Items.STICK)
+            .pattern("#")
+            .pattern("S")
+            .criterion(input)
+            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${output.getIdentifier().path}_from_${input.getIdentifier().path}"))
+    }
+
 }
