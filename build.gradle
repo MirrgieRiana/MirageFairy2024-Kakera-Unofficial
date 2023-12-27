@@ -137,6 +137,7 @@ modrinth {
     uploadFile = remapJar
     //gameVersions = ["1.20.2"]
     //loaders = ["fabric"]
+    syncBodyFrom = rootProject.file("MODRINTH-BODY.md").text
     dependencies {
         required.project "fabric-api"
         required.project "fabric-language-kotlin"
