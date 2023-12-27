@@ -143,3 +143,5 @@ modrinth {
         required.project "fabric-language-kotlin"
     }
 }
+
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
