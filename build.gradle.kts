@@ -43,6 +43,12 @@ loom {
 
             runDir("build/datagen")
         }
+        named("client") {
+            programArgs += listOf("--username", "Player1")
+        }
+        named("server") {
+            runDir = "run_server" // ファイルロックを回避しクライアントと同時に起動可能にする
+        }
     }
 }
 
