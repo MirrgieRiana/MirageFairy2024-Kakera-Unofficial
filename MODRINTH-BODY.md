@@ -61,4 +61,4 @@ There is currently no comprehensive official documentation explaining the specif
 
 ---
 
-Note: This description is automatically updated from GitHub Actions and cannot be changed manually.
+Note: This description is automatically updated from [GitHub Actions](https://github.com/MirageFairy/MirageFairy2024/blob/main/MODRINTH-BODY.md) and cannot be changed manually.
