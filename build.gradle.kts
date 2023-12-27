@@ -13,11 +13,11 @@ base {
 }
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    // ここからアーティファクトを取得するリポジトリを追加します。
+    // Loom は Minecraft とライブラリを自動的にダウンロードするために必須の Maven リポジトリを追加するため、
+    // 他の MOD に依存する場合にのみこれを使用してください。
+    // リポジトリの詳細については、↓を参照してください。
+    // https://docs.gradle.org/current/userguide/declaring_repositories.html
 
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
 
@@ -33,7 +33,7 @@ loom {
         }
     }
     runs {
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagen"
+        // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
         register("datagen") {
             inherit(runs["server"])
             name("Data Generation")
@@ -46,7 +46,7 @@ loom {
     }
 }
 
-// Add the generated resources to the main source set
+// 生成されたリソースをメイン ソース セットに追加します。
 sourceSets {
     main {
         resources {
@@ -57,16 +57,16 @@ sourceSets {
     }
 }
 dependencies {
-    // To change the versions see the gradle.properties file
+    // バージョンを変更するには、gradle.properties ファイルを参照してください。
     "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
     "mappings"("net.fabricmc:yarn:${project.properties["yarn_mappings"] as String}:v2")
     "modImplementation"("net.fabricmc:fabric-loader:${project.properties["loader_version"] as String}")
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
+    // ファブリック API。 これは技術的にはオプションですが、おそらくそれでも必要になるでしょう。
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_version"] as String}")
     "modImplementation"("net.fabricmc:fabric-language-kotlin:${project.properties["fabric_kotlin_version"] as String}")
-    // Uncomment the following line to enable the deprecated Fabric API modules.
-    // These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
+    // 次の行のコメントを解除して、非推奨のファブリック API モジュールを有効にします。
+    // これらは Fabric API の製品版ディストリビューションに含まれており、後で都合の良いときに MOD を最新のモジュールに更新できるようになります。
 
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}")
 
@@ -95,9 +95,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
 }
 
 java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
+    // Loomは自動的にsourcesJarをRemapSourcesJarタスクおよび "build" タスク(存在する場合)に添付します。
+    // この行を削除すると、ソースが生成されません。
     withSourcesJar()
 
     sourceCompatibility = JavaVersion.VERSION_17
@@ -110,7 +109,7 @@ tasks.named<Jar>("jar") {
     }
 }
 
-// configure the maven publication
+// Mavenパブリケーションの構成
 publishing {
     publications {
         register<MavenPublication>("mavenJava") {
@@ -118,12 +117,11 @@ publishing {
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    // 公開の設定方法については、https://docs.gradle.org/current/userguide/publishing_maven.html を参照してください。
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        // ここに公開するリポジトリを追加します。
+        // 注意: このブロックには、最上位のブロックと同じ機能はありません。
+        // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
     }
 }
 
