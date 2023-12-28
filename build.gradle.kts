@@ -25,6 +25,36 @@ sourceSets {
     }
 }
 
+// configurationの追加のためにdependenciesより上にある必要がある
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        register("miragefairy2024") {
+            sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets["client"])
+        }
+    }
+    runs {
+        // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
+        register("datagen") {
+            inherit(runs["server"])
+            name("Data Generation")
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
+            vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
+
+            runDir("build/datagen")
+        }
+        named("client") {
+            programArgs += listOf("--username", "Player1")
+        }
+        named("server") {
+            runDir = "run_server" // ファイルロックを回避しクライアントと同時に起動可能にする
+        }
+    }
+}
+
 repositories {
     // ここからアーティファクトを取得するリポジトリを追加します。
     // Loom は Minecraft とライブラリを自動的にダウンロードするために必須の Maven リポジトリを追加するため、
@@ -90,35 +120,6 @@ base {
 }
 
 tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
-
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        register("miragefairy2024") {
-            sourceSet(sourceSets.main.get())
-            sourceSet(sourceSets["client"])
-        }
-    }
-    runs {
-        // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
-        register("datagen") {
-            inherit(runs["server"])
-            name("Data Generation")
-            vmArg("-Dfabric-api.datagen")
-            vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
-            vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
-
-            runDir("build/datagen")
-        }
-        named("client") {
-            programArgs += listOf("--username", "Player1")
-        }
-        named("server") {
-            runDir = "run_server" // ファイルロックを回避しクライアントと同時に起動可能にする
-        }
-    }
-}
 
 // https://github.com/modrinth/minotaur
 modrinth {
