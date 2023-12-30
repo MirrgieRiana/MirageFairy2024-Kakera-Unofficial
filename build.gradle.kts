@@ -64,6 +64,7 @@ repositories {
 
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
 
+    maven("https://maven.wispforest.io") // owo-lib
 }
 
 dependencies {
@@ -84,6 +85,9 @@ dependencies {
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:13.0.678")
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:13.0.678")
     "modCompileOnly"("me.shedaniel.cloth:basic-math:0.6.1")
+
+    "modImplementation"("io.wispforest:owo-lib:0.11.4+1.20.2")
+    include("io.wispforest:owo-sentinel:0.11.4+1.20.2")
 }
 
 tasks.withType<JavaCompile>().configureEach {
