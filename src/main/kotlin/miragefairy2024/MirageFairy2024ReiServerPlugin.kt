@@ -30,80 +30,86 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-enum class ReiCategoryCard(
+abstract class ReiCategoryCard<D : BasicDisplay>(
     val path: String,
     enName: String,
     jaName: String,
 ) {
-    WORLD_GEN_TRAIT("world_gen_trait", "World Gen Trait", "地形生成特性"),
-    MAGIC_PLANT_CROP("magic_plant_crop", "Magic Plant Crop", "魔法植物収穫物"),
-    ;
+    companion object {
+        val entries = listOf(
+            WorldGenTraitReiCategoryCard,
+            MagicPlantCropReiCategoryCard,
+        )
+    }
 
     val translation = Translation({ "category.rei.${MirageFairy2024.modId}.$path" }, enName, jaName)
+    val identifier: CategoryIdentifier<D> by lazy { CategoryIdentifier.of(MirageFairy2024.modId, "plugins/$path") }
+    abstract val serializer: BasicDisplay.Serializer<D>
 }
 
 @Suppress("unused")
 class MirageFairy2024ReiServerPlugin : REIServerPlugin {
     override fun registerDisplaySerializer(registry: DisplaySerializerRegistry) {
-        registry.register(WorldGenTraitDisplay.IDENTIFIER, WorldGenTraitDisplay.SERIALIZER)
-        registry.register(MagicPlantCropDisplay.IDENTIFIER, MagicPlantCropDisplay.SERIALIZER)
+        ReiCategoryCard.entries.forEach { card ->
+            fun <D : BasicDisplay> f(card: ReiCategoryCard<D>) {
+                registry.register(card.identifier, card.serializer)
+            }
+            f(card)
+        }
     }
 }
 
-
-class WorldGenTraitDisplay(val recipe: WorldGenTraitRecipe) : BasicDisplay(listOf(), recipe.getOutput()) {
-    companion object {
-        val IDENTIFIER: CategoryIdentifier<WorldGenTraitDisplay> by lazy { CategoryIdentifier.of(MirageFairy2024.modId, "plugins/${ReiCategoryCard.WORLD_GEN_TRAIT.path}") }
-        val SERIALIZER: Serializer<WorldGenTraitDisplay> by lazy {
-            Serializer.ofRecipeLess({ _, _, tag ->
-                WorldGenTraitDisplay(
-                    WorldGenTraitRecipe(
-                        tag.getString("Block").toIdentifier().toBlock(),
-                        WorldGenTraitRecipe.Rarity.valueOf(tag.getString("Rarity")),
-                        tag.getString("Trait").toIdentifier().toTrait()!!,
-                        tag.getInt("Level"),
-                        object : WorldGenTraitRecipe.Condition {
-                            override val description get() = Text.Serializer.fromJson(tag.getString("ConditionDescription"))!!
-                            override fun canSpawn(world: World, blockPos: BlockPos) = throw UnsupportedOperationException()
-                        },
-                    )
+object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCard.Display>("world_gen_trait", "World Gen Trait", "地形生成特性") {
+    override val serializer: BasicDisplay.Serializer<Display> by lazy {
+        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+            Display(
+                WorldGenTraitRecipe(
+                    tag.getString("Block").toIdentifier().toBlock(),
+                    WorldGenTraitRecipe.Rarity.valueOf(tag.getString("Rarity")),
+                    tag.getString("Trait").toIdentifier().toTrait()!!,
+                    tag.getInt("Level"),
+                    object : WorldGenTraitRecipe.Condition {
+                        override val description get() = Text.Serializer.fromJson(tag.getString("ConditionDescription"))!!
+                        override fun canSpawn(world: World, blockPos: BlockPos) = throw UnsupportedOperationException()
+                    },
                 )
-            }, { display, tag ->
-                tag.putString("Block", display.recipe.block.getIdentifier().string)
-                tag.putString("Rarity", display.recipe.rarity.name)
-                tag.putString("Trait", display.recipe.trait.getIdentifier().string)
-                tag.putInt("Level", display.recipe.level)
-                tag.putString("ConditionDescription", Text.Serializer.toJson(display.recipe.condition.description))
-            })
-        }
-
-        private fun WorldGenTraitRecipe.getOutput(): List<EntryIngredient> {
-            val trait = TraitStack(this.trait, this.level)
-            val itemStack = this.block.asItem().createItemStack().also { it.setTraitStacks(TraitStacks.of(listOf(trait))) }
-            return listOf(itemStack.toEntryStack().toEntryIngredient())
-        }
+            )
+        }, { display, tag ->
+            tag.putString("Block", display.recipe.block.getIdentifier().string)
+            tag.putString("Rarity", display.recipe.rarity.name)
+            tag.putString("Trait", display.recipe.trait.getIdentifier().string)
+            tag.putInt("Level", display.recipe.level)
+            tag.putString("ConditionDescription", Text.Serializer.toJson(display.recipe.condition.description))
+        })
     }
 
-    override fun getCategoryIdentifier() = IDENTIFIER
+    private fun WorldGenTraitRecipe.getOutput(): List<EntryIngredient> {
+        val trait = TraitStack(this.trait, this.level)
+        val itemStack = this.block.asItem().createItemStack().also { it.setTraitStacks(TraitStacks.of(listOf(trait))) }
+        return listOf(itemStack.toEntryStack().toEntryIngredient())
+    }
+
+    class Display(val recipe: WorldGenTraitRecipe) : BasicDisplay(listOf(), recipe.getOutput()) {
+        override fun getCategoryIdentifier() = identifier
+    }
 }
 
-class MagicPlantCropDisplay(val recipe: MagicPlantCropNotation) : BasicDisplay(listOf(recipe.seed.toEntryStack().toEntryIngredient()), recipe.crops.map { it.toEntryStack().toEntryIngredient() }) {
-    companion object {
-        val IDENTIFIER: CategoryIdentifier<MagicPlantCropDisplay> by lazy { CategoryIdentifier.of(MirageFairy2024.modId, "plugins/${ReiCategoryCard.MAGIC_PLANT_CROP.path}") }
-        val SERIALIZER: Serializer<MagicPlantCropDisplay> by lazy {
-            Serializer.ofRecipeLess({ _, _, tag ->
-                MagicPlantCropDisplay(
-                    MagicPlantCropNotation(
-                        tag.getCompound("Seed").toItemStack(),
-                        tag.getList("Crops", NbtElement.COMPOUND_TYPE.toInt()).map { it.castOrThrow<NbtCompound>().toItemStack() }
-                    )
+object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategoryCard.Display>("magic_plant_crop", "Magic Plant Crop", "魔法植物収穫物") {
+    override val serializer: BasicDisplay.Serializer<Display> by lazy {
+        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+            Display(
+                MagicPlantCropNotation(
+                    tag.getCompound("Seed").toItemStack(),
+                    tag.getList("Crops", NbtElement.COMPOUND_TYPE.toInt()).map { it.castOrThrow<NbtCompound>().toItemStack() }
                 )
-            }, { display, tag ->
-                tag.put("Seed", display.recipe.seed.toNbt())
-                tag.put("Crops", display.recipe.crops.mapTo(NbtList()) { it.toNbt() })
-            })
-        }
+            )
+        }, { display, tag ->
+            tag.put("Seed", display.recipe.seed.toNbt())
+            tag.put("Crops", display.recipe.crops.mapTo(NbtList()) { it.toNbt() })
+        })
     }
 
-    override fun getCategoryIdentifier() = IDENTIFIER
+    class Display(val recipe: MagicPlantCropNotation) : BasicDisplay(listOf(recipe.seed.toEntryStack().toEntryIngredient()), recipe.crops.map { it.toEntryStack().toEntryIngredient() }) {
+        override fun getCategoryIdentifier() = identifier
+    }
 }
