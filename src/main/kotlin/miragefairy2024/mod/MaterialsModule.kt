@@ -2,19 +2,21 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
-import miragefairy2024.util.criterion
 import miragefairy2024.util.enJa
+import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
+import miragefairy2024.util.modId
+import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.registerShapelessRecipeGeneration
 import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.RecipeProvider
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
@@ -153,22 +155,16 @@ fun initMaterialsModule() {
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
-    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard) = MirageFairy2024DataGenerator.recipeGenerators {
-        ShapedRecipeJsonBuilder
-            .create(RecipeCategory.MISC, high.item, 1)
-            .group(high.item)
-            .input('#', low.item)
-            .pattern("###")
-            .pattern("###")
-            .pattern("###")
-            .criterion(low.item)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${high.item.getIdentifier().path}_from_${low.item.getIdentifier().path}"))
-        ShapelessRecipeJsonBuilder
-            .create(RecipeCategory.MISC, low.item, 9)
-            .group(low.item)
-            .input(high.item)
-            .criterion(high.item)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${low.item.getIdentifier().path}_from_${high.item.getIdentifier().path}"))
+    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard) {
+        registerShapedRecipeGeneration(high.item) {
+            pattern("###")
+            pattern("###")
+            pattern("###")
+            input('#', low.item)
+        } on low.item from low.item
+        registerShapelessRecipeGeneration(low.item, 9) {
+            input(high.item)
+        } on high.item from high.item
     }
     registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.RARE_MIRAGE_FLOUR)
@@ -181,29 +177,15 @@ fun initMaterialsModule() {
     MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
 
     // ミラージュの茎
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val input = MaterialCard.MIRAGE_LEAVES.item
-        val output = MaterialCard.MIRAGE_STEM.item
-        ShapelessRecipeJsonBuilder
-            .create(RecipeCategory.MISC, output, 1)
-            .group(output)
-            .input(input)
-            .criterion(input)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, output.getIdentifier().path))
-    }
+    registerShapelessRecipeGeneration(MaterialCard.MIRAGE_STEM.item) {
+        input(MaterialCard.MIRAGE_LEAVES.item)
+    } on MaterialCard.MIRAGE_LEAVES.item
     MaterialCard.MIRAGE_STEM.item.registerComposterInput(0.5F)
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val input = MaterialCard.MIRAGE_STEM.item
-        val output = Items.STICK
-        ShapedRecipeJsonBuilder
-            .create(RecipeCategory.MISC, output, 2)
-            .group(output)
-            .input('#', input)
-            .pattern("#")
-            .pattern("#")
-            .criterion(input)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${output.getIdentifier().path}_from_${input.getIdentifier().path}"))
-    }
+    registerShapedRecipeGeneration(Items.STICK, 2) {
+        pattern("#")
+        pattern("#")
+        input('#', MaterialCard.MIRAGE_STEM.item)
+    } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.modId from MaterialCard.MIRAGE_STEM.item
 
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
@@ -221,18 +203,11 @@ fun initMaterialsModule() {
     MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
 
     // ハイメヴィスカの樹液→松明
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val input = MaterialCard.HAIMEVISKA_SAP.item
-        val output = Items.TORCH
-        ShapedRecipeJsonBuilder
-            .create(RecipeCategory.MISC, output, 1)
-            .group(output)
-            .input('#', input)
-            .input('S', Items.STICK)
-            .pattern("#")
-            .pattern("S")
-            .criterion(input)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${output.getIdentifier().path}_from_${input.getIdentifier().path}"))
-    }
+    registerShapedRecipeGeneration(Items.TORCH) {
+        pattern("#")
+        pattern("S")
+        input('#', MaterialCard.HAIMEVISKA_SAP.item)
+        input('S', Items.STICK)
+    } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
 
 }

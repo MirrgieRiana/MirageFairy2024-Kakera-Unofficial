@@ -17,10 +17,9 @@ import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.criterion
 import miragefairy2024.util.enJa
-import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.group
+import miragefairy2024.util.from
+import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
@@ -34,6 +33,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRedirectColorProvider
+import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -53,7 +53,6 @@ import net.minecraft.block.sapling.SaplingGenerator
 import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.data.server.loottable.BlockLootTableGenerator
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.ItemEntity
@@ -62,7 +61,6 @@ import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.loot.condition.RandomChanceLootCondition
 import net.minecraft.loot.function.ApplyBonusLootFunction
-import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
@@ -313,16 +311,9 @@ fun initHaimeviskaBlocks() {
     // レシピ
     HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
     HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val input = HaimeviskaBlockCard.LOG.item
-        val output = HaimeviskaBlockCard.PLANKS.item
-        ShapelessRecipeJsonBuilder
-            .create(RecipeCategory.MISC, output, 4)
-            .group(output)
-            .input(input)
-            .criterion(input)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${output.getIdentifier().path}_from_${input.getIdentifier().path}"))
-    }
+    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
+        input(HaimeviskaBlockCard.LOG.item)
+    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
 
 }
 
