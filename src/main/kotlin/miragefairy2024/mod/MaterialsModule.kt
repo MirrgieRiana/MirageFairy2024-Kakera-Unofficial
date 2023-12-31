@@ -189,7 +189,7 @@ fun initMaterialsModule() {
 
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
-    MirageFairy2024DataGenerator.recipeGenerators {
+    MirageFairy2024DataGenerator.recipeGenerators { // TODO util
         val input = MaterialCard.VEROPEDA_LEAF.item
         val output = Items.IRON_NUGGET
         CookingRecipeJsonBuilder
