@@ -43,7 +43,12 @@ infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: I
     return this
 }
 
-infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.from(item: Item): RecipeGenerationSettings<T> {
+infix fun <T> RecipeGenerationSettings<T>.modId(modId: String): RecipeGenerationSettings<T> {
+    idModifiers += { Identifier(modId, it.path) }
+    return this
+}
+
+infix fun <T> RecipeGenerationSettings<T>.from(item: Item): RecipeGenerationSettings<T> {
     idModifiers += { it concat "_from_" concat item.getIdentifier().path }
     return this
 }
