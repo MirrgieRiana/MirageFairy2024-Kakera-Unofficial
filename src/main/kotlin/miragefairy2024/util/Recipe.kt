@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.block.ComposterBlock
+import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
@@ -20,6 +21,8 @@ import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.loot.function.ExplosionDecayLootFunction
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
+import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.tag.TagKey
@@ -84,6 +87,27 @@ fun registerShapelessRecipeGeneration(
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::create, item, count, block)
+
+fun registerSmeltingRecipeGeneration(
+    input: Item,
+    output: Item,
+    experience: Double = 0.0,
+    cookingTime: Int = 200,
+    block: CookingRecipeJsonBuilder.() -> Unit = {},
+): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
+    val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
+    MirageFairy2024DataGenerator.recipeGenerators {
+        val builder = CookingRecipeJsonBuilder.create(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime, RecipeSerializer.SMELTING)
+        builder.group(output)
+        settings.listeners.forEach { listener ->
+            listener(builder)
+        }
+        block(builder)
+        val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
+        builder.offerTo(it, identifier)
+    }
+    return settings
+}
 
 
 // Others
