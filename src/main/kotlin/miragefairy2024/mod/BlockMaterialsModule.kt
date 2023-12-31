@@ -1,27 +1,24 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.MirageFairy2024DataGenerator
-import miragefairy2024.util.criterion
 import miragefairy2024.util.enJa
-import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.group
+import miragefairy2024.util.from
+import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.MapColor
 import net.minecraft.data.client.TexturedModel
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
@@ -70,24 +67,14 @@ fun initBlockMaterialsModule() {
         card.block.registerTagGeneration(BlockTags.NEEDS_STONE_TOOL)
     }
 
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val high = BlockMaterialCard.MIRANAGITE_BLOCK.item
-        val low = MaterialCard.MIRANAGITE.item
-        ShapedRecipeJsonBuilder
-            .create(RecipeCategory.MISC, high, 1)
-            .group(high)
-            .input('#', low)
-            .pattern("###")
-            .pattern("###")
-            .pattern("###")
-            .criterion(low)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${high.getIdentifier().path}_from_${low.getIdentifier().path}"))
-        ShapelessRecipeJsonBuilder
-            .create(RecipeCategory.MISC, low, 9)
-            .group(low)
-            .input(high)
-            .criterion(high)
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${low.getIdentifier().path}_from_${high.getIdentifier().path}"))
-    }
+    registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
+        pattern("###")
+        pattern("###")
+        pattern("###")
+        input('#', MaterialCard.MIRANAGITE.item)
+    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+    registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
+        input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
+    } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
 
 }
