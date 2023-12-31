@@ -1,11 +1,8 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
-import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.group
 import miragefairy2024.util.modId
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -15,16 +12,12 @@ import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
-import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
-import net.minecraft.data.server.recipe.RecipeProvider
+import miragefairy2024.util.registerSmeltingRecipeGeneration
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.item.Items
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
@@ -189,15 +182,7 @@ fun initMaterialsModule() {
 
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
-    MirageFairy2024DataGenerator.recipeGenerators { // TODO util
-        val input = MaterialCard.VEROPEDA_LEAF.item
-        val output = Items.IRON_NUGGET
-        CookingRecipeJsonBuilder
-            .create(Ingredient.ofItems(input), RecipeCategory.MISC, output, 0.1F, 200, RecipeSerializer.SMELTING)
-            .group(output)
-            .criterion(RecipeProvider.hasItem(MaterialCard.VEROPEDA_LEAF.item), RecipeProvider.conditionsFromItem(MaterialCard.VEROPEDA_LEAF.item))
-            .offerTo(it, Identifier.of(MirageFairy2024.modId, "${output.getIdentifier().path}_from_${input.getIdentifier().path}"))
-    }
+    registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
 
     // ヴェロペダの実
     MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
