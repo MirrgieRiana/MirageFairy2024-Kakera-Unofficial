@@ -1,16 +1,23 @@
 package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
+import miragefairy2024.util.toIngredient
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
@@ -21,6 +28,9 @@ interface FairyQuestRecipe {
     val title: Text
     val message: Text
     val client: Text
+    val duration: Int
+    val inputs: List<Pair<Ingredient, Int>>
+    val outputs: List<ItemStack>
 }
 
 enum class FairyQuestRecipeCard(
@@ -31,6 +41,9 @@ enum class FairyQuestRecipeCard(
     jaTitle: Text,
     jaMessage: Text,
     jaClient: Text,
+    override val duration: Int,
+    override val inputs: List<Pair<Ingredient, Int>>,
+    override val outputs: List<ItemStack>,
 ) : FairyQuestRecipe {
     IMPROMPTU_FANTASTIC_CARNIVAL(
         "impromptu_fantastic_carnival",
@@ -40,6 +53,9 @@ enum class FairyQuestRecipeCard(
         text { "即席ファンタスティックカーニバル"() },
         text { "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！"() },
         text { "麺麭精ブレアージャ"() },
+        20 * 10,
+        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
+        listOf(Items.CAKE.createItemStack(1)),
     ),
     NEW_PRODUCT_FROM_FRI(
         "new_product_from_fri",
@@ -67,6 +83,9 @@ enum class FairyQuestRecipeCard(
             ).join("\n")()
         },
         text { "妖精研究所\n創製部"() },
+        20 * 10,
+        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
+        listOf(Items.COOKED_BEEF.createItemStack(1)),
     ),
     ;
 

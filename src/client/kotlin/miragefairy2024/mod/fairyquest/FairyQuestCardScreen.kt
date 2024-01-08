@@ -15,7 +15,11 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
 import miragefairy2024.util.ClickableContainer
+import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.GhostItemComponent
 import miragefairy2024.util.inventoryNameLabel
+import miragefairy2024.util.isNotEmpty
+import miragefairy2024.util.orEmpty
 import miragefairy2024.util.slotContainer
 import miragefairy2024.util.text
 import miragefairy2024.util.verticalScroll
@@ -94,6 +98,53 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                         })
 
                     }
+
+                    child(verticalSpace(3))
+
+                    // 取引欄
+                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+
+                        repeat(4) { i ->
+                            child(slotContainer(Containers.stack(Sizing.fixed(16), Sizing.fixed(16)).apply {
+                                val index = 9 + 9 * 3 + i
+                                child(slotAsComponent(index))
+                                val input = handler.recipe.inputs.getOrNull(i)
+                                val inputItemStack = if (input == null) null else input.first.matchingStacks.firstOrNull()?.copyWithCount(input.second)
+                                child(GhostItemComponent(inputItemStack ?: EMPTY_ITEM_STACK).apply {
+                                    onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
+                                    overlayColor = 0x28FF0000
+                                    onScreenUpdate += {
+                                        showOverlay = when {
+                                            input == null -> false
+                                            !input.first.test(handler.getSlot(index).stack) -> true
+                                            handler.getSlot(index).stack.count < input.second -> true
+                                            else -> false
+                                        }
+                                    }
+                                })
+                            }))
+                        }
+
+                        child(FairyQuestProgress().apply {
+                            onScreenUpdate += {
+                                setProgress(handler.progress / handler.recipe.duration.toDouble())
+                            }
+                        }.component)
+
+                        repeat(4) { i ->
+                            child(slotContainer(Containers.stack(Sizing.fixed(16), Sizing.fixed(16)).apply {
+                                val index = 9 + 9 * 3 + 4 + i
+                                child(slotAsComponent(index))
+                                val outputItemStack = handler.recipe.outputs.getOrNull(i)
+                                child(GhostItemComponent(outputItemStack ?: EMPTY_ITEM_STACK).apply {
+                                    onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
+                                    overlayColor = 0x2800FF00
+                                    onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).stack.isEmpty }
+                                })
+                            }))
+                        }
+
+                    })
 
                     child(verticalSpace(3))
 
