@@ -27,6 +27,8 @@ import net.minecraft.util.Identifier
 class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, FairyQuestCardScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
 
+    private val onScreenUpdate = mutableListOf<() -> Unit>()
+
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {
             surface(Surface.VANILLA_TRANSLUCENT)
@@ -118,6 +120,16 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
             })
 
+        }
+        onScreenUpdate.forEach {
+            it()
+        }
+    }
+
+    override fun handledScreenTick() {
+        super.handledScreenTick()
+        onScreenUpdate.forEach {
+            it()
         }
     }
 }
