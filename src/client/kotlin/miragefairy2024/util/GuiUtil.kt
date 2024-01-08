@@ -14,6 +14,7 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
@@ -52,5 +53,14 @@ class ClickableContainer<C : Component>(horizontalSizing: Sizing, verticalSizing
     override fun onMouseDown(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (super.onMouseDown(mouseX, mouseY, button)) return true
         return action()
+    }
+}
+
+inline fun <T> MatrixStack.pushAndPop(block: () -> T): T {
+    this.push()
+    try {
+        return block()
+    } finally {
+        this.pop()
     }
 }
