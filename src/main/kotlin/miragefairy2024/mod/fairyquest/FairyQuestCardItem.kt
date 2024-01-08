@@ -15,11 +15,21 @@ import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
+import net.minecraft.world.World
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -67,6 +77,24 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     override fun getName(stack: ItemStack): Text {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return fairyQuestCardFairyQuestTranslation(recipe.title)
+    }
+
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        val itemStack = user.getStackInHand(hand)
+        val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
+        if (world.isClient) return TypedActionResult.success(itemStack)
+        user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, user.blockPos))
+            }
+
+            override fun getDisplayName() = recipe.title
+
+            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
+                buf.writeString(fairyQuestRecipeRegistry.getId(recipe)!!.string)
+            }
+        })
+        return TypedActionResult.consume(itemStack)
     }
 }
 
