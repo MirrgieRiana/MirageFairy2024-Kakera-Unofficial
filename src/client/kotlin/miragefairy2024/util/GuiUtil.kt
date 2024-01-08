@@ -1,5 +1,7 @@
 package miragefairy2024.util
 
+import com.mojang.blaze3d.systems.RenderSystem
+import io.wispforest.owo.ui.base.BaseComponent
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.Containers
@@ -14,7 +16,10 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
@@ -63,4 +68,26 @@ inline fun <T> MatrixStack.pushAndPop(block: () -> T): T {
     } finally {
         this.pop()
     }
+}
+
+class GhostItemComponent(var itemStack: ItemStack = EMPTY_ITEM_STACK) : BaseComponent() {
+
+    var showItemStack = true
+    var overlayColor: Int = 0x00000000
+    var showOverlay = false
+
+    override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
+        val notSideLit = !MinecraftClient.getInstance().itemRenderer.getModel(itemStack, null, null, 0).isSideLit
+        if (notSideLit) DiffuseLighting.disableGuiDepthLighting()
+        if (showItemStack) context.drawItem(itemStack, x, y) // アイテム本体
+        if (showItemStack) context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x, y) // 個数
+        RenderSystem.disableDepthTest()
+        if (showItemStack) context.drawGradientRect(x, y, width, height, 0x808B8B8B.toInt(), 0x808B8B8B.toInt(), 0x808B8B8B.toInt(), 0x808B8B8B.toInt()) // アイテムを半透明にするやつ
+        if (showOverlay) context.drawGradientRect(x, y, width, height, overlayColor, overlayColor, overlayColor, overlayColor) // オーバーレイ
+        RenderSystem.enableDepthTest()
+        if (notSideLit) DiffuseLighting.enableGuiDepthLighting()
+    }
+
+    override fun determineHorizontalContentSize(sizing: Sizing) = 16
+    override fun determineVerticalContentSize(sizing: Sizing) = 16
 }
