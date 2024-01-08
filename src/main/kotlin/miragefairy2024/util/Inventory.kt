@@ -15,7 +15,7 @@ val Inventory.indices get() = 0 until this.size
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun merge(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): Boolean {
+fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): Boolean {
     when {
         srcInventory[srcSlotIndex].isEmpty -> return true // 元から空なので何もする必要はない
         !destInventory.isValid(destSlotIndex, srcInventory[srcSlotIndex]) -> return false // 宛先にこの種類のアイテムが入らない
@@ -45,9 +45,9 @@ fun merge(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, 
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun merge(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
+fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
     destIndices.forEach { destIndex ->
-        if (merge(srcInventory, srcIndex, destInventory, destIndex)) return true // すべてマージされたのでこれ以降の判定は不要
+        if (mergeInventory(srcInventory, srcIndex, destInventory, destIndex)) return true // すべてマージされたのでこれ以降の判定は不要
     }
     return false
 }
@@ -56,12 +56,12 @@ fun merge(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, dest
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun merge(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
-    return srcIndices.all { srcIndex -> merge(srcInventory, srcIndex, destInventory, destIndices) }
+fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
+    return srcIndices.all { srcIndex -> mergeInventory(srcInventory, srcIndex, destInventory, destIndices) }
 }
 
 /**
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun Inventory.mergeTo(other: Inventory) = merge(this, this.indices, other, other.indices)
+fun Inventory.mergeTo(other: Inventory) = mergeInventory(this, this.indices, other, other.indices)
