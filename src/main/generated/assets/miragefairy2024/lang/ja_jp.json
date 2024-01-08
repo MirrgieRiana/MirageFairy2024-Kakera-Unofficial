@@ -32,7 +32,8 @@
   "item.miragefairy2024.extremely_rare_mirage_flour.poem2": "讃えよ、アーカーシャに眠る自由の頂きを。",
   "item.miragefairy2024.fairy_plastic": "妖精のプラスチック",
   "item.miragefairy2024.fairy_plastic.poem": "凍てつく記憶の宿る石。",
-  "item.miragefairy2024.fairy_quest_card": "フェアリークエストカード",
+  "item.miragefairy2024.fairy_quest_card": "破損したフェアリークエストカード",
+  "item.miragefairy2024.fairy_quest_card.format": "クエスト『%s』",
   "item.miragefairy2024.fairy_rubber": "夜のかけら",
   "item.miragefairy2024.fairy_rubber.poem": "空は怯える夜精に一握りの温かい闇を与えた",
   "item.miragefairy2024.fractal_wisp": "フラクタルウィスプ",
@@ -117,5 +118,11 @@
   "mirageFairy2024.traitEffect.miragefairy2024.natural_abscission": "自然落果",
   "mirageFairy2024.traitEffect.miragefairy2024.nutrition": "栄養値",
   "mirageFairy2024.traitEffect.miragefairy2024.production_boost": "生産能力",
-  "mirageFairy2024.traitEffect.miragefairy2024.seeds_production": "種子生成"
+  "mirageFairy2024.traitEffect.miragefairy2024.seeds_production": "種子生成",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.client": "麺麭精ブレアージャ",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.message": "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.title": "即席ファンタスティックカーニバル",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.client": "妖精研究所\n創製部",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.message": "妖精研究所が誇りを持って贈る新商品、フェアリークエストカードが待望の新登場！異世界や並行世界との通信や物質転送が可能な画期的な通信端末です！\nこれさえあれば、もう雨の日なんて怖くない！専用のカートリッジを装着し、品物のデータを受け取るだけ！あとは内蔵の3Dプリンターが、ほら、この通り！\n\n※インクは専用のカートリッジ（別売り）を装着する必要があります。\n※通信先との取引に伴う紛争について、当研究所は一切の責任を負いません。\n※お子様の手の届かない場所に保管してください。",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.title": "妖精研究所から新商品登場！"
 }

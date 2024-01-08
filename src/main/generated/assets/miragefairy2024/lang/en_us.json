@@ -32,7 +32,8 @@
   "item.miragefairy2024.extremely_rare_mirage_flour.poem2": "capture ether beyond observable universe",
   "item.miragefairy2024.fairy_plastic": "Fairy Plastic",
   "item.miragefairy2024.fairy_plastic.poem": "Thermoplastic organic polymer",
-  "item.miragefairy2024.fairy_quest_card": "Fairy Quest Card",
+  "item.miragefairy2024.fairy_quest_card": "Broken Fairy Quest Card",
+  "item.miragefairy2024.fairy_quest_card.format": "FQ: %s",
   "item.miragefairy2024.fairy_rubber": "Fairy Rubber",
   "item.miragefairy2024.fairy_rubber.poem": "Minimize the risk of losing belongings",
   "item.miragefairy2024.fractal_wisp": "Fractal Wisp",
@@ -117,5 +118,11 @@
   "mirageFairy2024.traitEffect.miragefairy2024.natural_abscission": "NA",
   "mirageFairy2024.traitEffect.miragefairy2024.nutrition": "NTR",
   "mirageFairy2024.traitEffect.miragefairy2024.production_boost": "PRD",
-  "mirageFairy2024.traitEffect.miragefairy2024.seeds_production": "SEED"
+  "mirageFairy2024.traitEffect.miragefairy2024.seeds_production": "SEED",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.client": "Breadia the fairy of bread",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.message": "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
+  "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.title": "Impromptu Fantastic Carnival",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.client": "The Institute of Fairy Research,\nCreation Department",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.message": "Introducing the eagerly awaited new product from The Institute of Fairy Research, the Fairy Quest Card! This groundbreaking communication device allows communication and material transfer with otherworldly and parallel realms!\nNo more fear of rainy days with this innovative gadget! Simply attach the dedicated cartridge, receive the data of your desired item, and let the built-in 3D printer work its magic – just like that!\n\n*Note: Ink requires a dedicated cartridge (sold separately).\n*The Institute of Fairy Research assumes no responsibility for any disputes arising from transactions with communication destinations.\n*Keep out of reach of children.",
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.title": "New product from FRI!"
 }
