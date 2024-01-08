@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "miragefairy2024:item/fairy_quest_card_background",
+    "layer1": "miragefairy2024:item/fairy_quest_card_white",
+    "layer2": "miragefairy2024:item/fairy_quest_card_frame"
+  }
+}
