@@ -17,6 +17,7 @@ import net.minecraft.text.Text
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
     padding(Insets.of(1))
     surface(NinePatchTextureCard.SLOT.surface)
+    allowOverflow(true)
     child(slotComponent)
 }
 
