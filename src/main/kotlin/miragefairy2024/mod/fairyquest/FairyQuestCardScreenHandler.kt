@@ -86,8 +86,9 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         val newItemStack = slots[slot].stack
         val originalItemStack = newItemStack.copy()
 
+        // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
         if (slot < 9 * 4) {
-            if (!insertItem(newItemStack, 9 * 4, slots.size, false)) return EMPTY_ITEM_STACK
+            if (!insertItem(newItemStack, 9 * 4, 9 * 4 + 4, false)) return EMPTY_ITEM_STACK
         } else {
             if (!insertItem(newItemStack, 0, 9 * 4, false)) return EMPTY_ITEM_STACK
         }
