@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.core.Color
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIAdapter
+import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
@@ -15,7 +16,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
 import miragefairy2024.util.ClickableContainer
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.GhostItemComponent
 import miragefairy2024.util.inventoryNameLabel
 import miragefairy2024.util.isNotEmpty
@@ -24,6 +24,8 @@ import miragefairy2024.util.slotContainer
 import miragefairy2024.util.text
 import miragefairy2024.util.verticalScroll
 import miragefairy2024.util.verticalSpace
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -32,6 +34,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
 
     private val onScreenUpdate = mutableListOf<() -> Unit>()
+    private val onDrawTooltip = mutableListOf<(vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float) -> Unit>()
 
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {
@@ -106,11 +109,12 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                         repeat(4) { i ->
                             child(slotContainer(Containers.stack(Sizing.fixed(16), Sizing.fixed(16)).apply {
+                                allowOverflow(true)
                                 val index = 9 + 9 * 3 + i
                                 child(slotAsComponent(index))
                                 val input = handler.recipe.inputs.getOrNull(i)
-                                val inputItemStack = if (input == null) null else input.first.matchingStacks.firstOrNull()?.copyWithCount(input.second)
-                                child(GhostItemComponent(inputItemStack ?: EMPTY_ITEM_STACK).apply {
+                                val inputItemStacks = input?.first?.matchingStacks?.map { it.copyWithCount(input.second) } ?: listOf()
+                                child(GhostItemComponent(inputItemStacks).apply {
                                     onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
                                     overlayColor = 0x20FF0000
                                     onScreenUpdate += {
@@ -120,6 +124,9 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                             handler.getSlot(index).stack.count < input.second -> true
                                             else -> false
                                         }
+                                    }
+                                    onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().lastFrameDuration)
                                     }
                                 })
                             }))
@@ -133,13 +140,17 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                         repeat(4) { i ->
                             child(slotContainer(Containers.stack(Sizing.fixed(16), Sizing.fixed(16)).apply {
+                                allowOverflow(true)
                                 val index = 9 + 9 * 3 + 4 + i
                                 child(slotAsComponent(index))
                                 val outputItemStack = handler.recipe.outputs.getOrNull(i)
-                                child(GhostItemComponent(outputItemStack ?: EMPTY_ITEM_STACK).apply {
+                                child(GhostItemComponent(outputItemStack?.let { listOf(it) } ?: listOf()).apply {
                                     onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
                                     overlayColor = 0x2000FF00
                                     onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).stack.isEmpty }
+                                    onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().lastFrameDuration)
+                                    }
                                 })
                             }))
                         }
@@ -181,6 +192,13 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
         super.handledScreenTick()
         onScreenUpdate.forEach {
             it()
+        }
+    }
+
+    override fun render(vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(vanillaContext, mouseX, mouseY, delta)
+        onDrawTooltip.forEach {
+            it(vanillaContext, mouseX, mouseY, delta)
         }
     }
 }
