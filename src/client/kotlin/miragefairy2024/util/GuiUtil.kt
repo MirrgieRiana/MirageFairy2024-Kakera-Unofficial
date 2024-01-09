@@ -5,12 +5,10 @@ import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
-import io.wispforest.owo.ui.container.WrappingParentComponent
 import io.wispforest.owo.ui.core.Color
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
-import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
@@ -40,20 +38,6 @@ fun <C : Component> verticalScroll(horizontalSizing: Sizing, verticalSizing: Siz
 
 fun <C : Component> horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, configurator: ScrollContainer<C>.() -> Unit, creator: () -> C): ScrollContainer<C> {
     return Containers.horizontalScroll(horizontalSizing, verticalSizing, creator()).also { configurator(it) }
-}
-
-class ClickableContainer<C : Component>(horizontalSizing: Sizing, verticalSizing: Sizing, private val action: () -> Boolean, child: () -> C) : WrappingParentComponent<C>(horizontalSizing, verticalSizing, child()) {
-    override fun canFocus(source: Component.FocusSource) = source == Component.FocusSource.KEYBOARD_CYCLE
-
-    override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
-        super.draw(context, mouseX, mouseY, partialTicks, delta)
-        drawChildren(context, mouseX, mouseY, partialTicks, delta, childView)
-    }
-
-    override fun onMouseDown(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (super.onMouseDown(mouseX, mouseY, button)) return true
-        return action()
-    }
 }
 
 inline fun <T> MatrixStack.pushAndPop(block: () -> T): T {
