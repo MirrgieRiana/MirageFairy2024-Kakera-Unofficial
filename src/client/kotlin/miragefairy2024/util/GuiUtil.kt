@@ -16,11 +16,15 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.tooltip.TooltipComponent
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import kotlin.jvm.optionals.getOrNull
 
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
     padding(Insets.of(1))
@@ -86,6 +90,19 @@ class GhostItemComponent(var itemStack: ItemStack = EMPTY_ITEM_STACK) : BaseComp
         if (showOverlay) context.drawGradientRect(x, y, width, height, overlayColor, overlayColor, overlayColor, overlayColor) // オーバーレイ
         RenderSystem.enableDepthTest()
         if (notSideLit) DiffuseLighting.enableGuiDepthLighting()
+    }
+
+    override fun tooltip(): MutableList<TooltipComponent> {
+        val tooltip = mutableListOf<TooltipComponent>()
+
+        val context = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipContext.ADVANCED else TooltipContext.BASIC
+        val texts = itemStack.getTooltip(MinecraftClient.getInstance().player, context)
+        tooltip += texts.map { TooltipComponent.of(it.asOrderedText()) }
+
+        val data = itemStack.tooltipData.getOrNull()
+        if (data != null) tooltip.add(1, TooltipComponentCallback.EVENT.invoker().getComponent(data) ?: TooltipComponent.of(data))
+
+        return tooltip
     }
 
     override fun determineHorizontalContentSize(sizing: Sizing) = 16
