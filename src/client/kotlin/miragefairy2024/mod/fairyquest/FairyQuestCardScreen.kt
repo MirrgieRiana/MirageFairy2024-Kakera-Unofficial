@@ -112,7 +112,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 val inputItemStack = if (input == null) null else input.first.matchingStacks.firstOrNull()?.copyWithCount(input.second)
                                 child(GhostItemComponent(inputItemStack ?: EMPTY_ITEM_STACK).apply {
                                     onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
-                                    overlayColor = 0x28FF0000
+                                    overlayColor = 0x20FF0000
                                     onScreenUpdate += {
                                         showOverlay = when {
                                             input == null -> false
@@ -138,7 +138,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 val outputItemStack = handler.recipe.outputs.getOrNull(i)
                                 child(GhostItemComponent(outputItemStack ?: EMPTY_ITEM_STACK).apply {
                                     onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
-                                    overlayColor = 0x2800FF00
+                                    overlayColor = 0x2000FF00
                                     onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).stack.isEmpty }
                                 })
                             }))
