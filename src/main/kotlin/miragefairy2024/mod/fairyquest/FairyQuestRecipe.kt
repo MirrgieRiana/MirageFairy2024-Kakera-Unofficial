@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -75,6 +76,15 @@ enum class FairyQuestRecipeCard(
         20 * 10,
         listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
         listOf(Items.COOKED_BEEF.createItemStack(1)),
+    ),
+    VEGETATION_SURVEY(
+        "vegetation_survey", "Vegetation Survey", "植生調査",
+        "The fairy trees...? We should be over a million light-years away from the Habitabilis Zona. I'm curious to divine the past of this star, so would you consider sending me samples of the vegetation?",
+        "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
+        "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
+        20 * 10,
+        listOf(HaimeviskaBlockCard.LOG.item.toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item.toIngredient() to 16),
+        listOf(MaterialCard.MIRANAGITE.item.createItemStack(1)),
     ),
     ;
 

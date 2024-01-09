@@ -124,5 +124,8 @@
   "miragefairy2024.fairyQuestRecipe.impromptu_fantastic_carnival.title": "即席ファンタスティックカーニバル",
   "miragefairy2024.fairyQuestRecipe.new_product_from_fri.client": "妖精研究所\n創製部",
   "miragefairy2024.fairyQuestRecipe.new_product_from_fri.message": "妖精研究所が誇りを持って贈る新商品、フェアリークエストカードが待望の新登場！異世界や並行世界との通信や物質転送が可能な画期的な通信端末です！\nこれさえあれば、もう雨の日なんて怖くない！専用のカートリッジを装着し、品物のデータを受け取るだけ！あとは内蔵の3Dプリンターが、ほら、この通り！\n\n※インクは専用のカートリッジ（別売り）を装着する必要があります。\n※通信先との取引に伴う紛争について、当研究所は一切の責任を負いません。\n※お子様の手の届かない場所に保管してください。",
-  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.title": "妖精研究所から新商品登場！"
+  "miragefairy2024.fairyQuestRecipe.new_product_from_fri.title": "妖精研究所から新商品登場！",
+  "miragefairy2024.fairyQuestRecipe.vegetation_survey.client": "みらなぎ聖騎士団\n東雲占卜院\nるめり",
+  "miragefairy2024.fairyQuestRecipe.vegetation_survey.message": "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
+  "miragefairy2024.fairyQuestRecipe.vegetation_survey.title": "植生調査"
 }
