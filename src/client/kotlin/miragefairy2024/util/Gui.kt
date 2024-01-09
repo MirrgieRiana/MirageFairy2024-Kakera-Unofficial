@@ -12,7 +12,6 @@ import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.surface
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
@@ -38,13 +37,4 @@ fun <C : Component> verticalScroll(horizontalSizing: Sizing, verticalSizing: Siz
 
 fun <C : Component> horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, configurator: ScrollContainer<C>.() -> Unit, creator: () -> C): ScrollContainer<C> {
     return Containers.horizontalScroll(horizontalSizing, verticalSizing, creator()).also { configurator(it) }
-}
-
-inline fun <T> MatrixStack.pushAndPop(block: () -> T): T {
-    this.push()
-    try {
-        return block()
-    } finally {
-        this.pop()
-    }
 }
