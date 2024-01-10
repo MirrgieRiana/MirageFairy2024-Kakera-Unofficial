@@ -1,5 +1,6 @@
-package miragefairy2024.mod.fairyquest
+package miragefairy2024.client.mod.fairyquest
 
+import miragefairy2024.mod.fairyquest.fairyQuestCardScreenHandlerType
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 
 fun initFairyQuestClientModule() {

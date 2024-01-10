@@ -1,5 +1,8 @@
-package miragefairy2024
+package miragefairy2024.client
 
+import miragefairy2024.BlockColorProvider
+import miragefairy2024.ClientProxy
+import miragefairy2024.ItemColorProvider
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry

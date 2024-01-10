@@ -1,4 +1,4 @@
-package miragefairy2024.util
+package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.LabelComponent
@@ -10,8 +10,8 @@ import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
+import miragefairy2024.client.mod.surface
 import miragefairy2024.mod.NinePatchTextureCard
-import miragefairy2024.mod.surface
 import net.minecraft.text.Text
 
 fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {

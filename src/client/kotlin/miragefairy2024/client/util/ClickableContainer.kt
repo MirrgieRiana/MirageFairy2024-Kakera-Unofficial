@@ -1,4 +1,4 @@
-package miragefairy2024.util
+package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.container.WrappingParentComponent
 import io.wispforest.owo.ui.core.Component

@@ -1,4 +1,4 @@
-package miragefairy2024.util
+package miragefairy2024.client.util
 
 import net.minecraft.client.util.math.MatrixStack
 

@@ -1,4 +1,4 @@
-package miragefairy2024
+package miragefairy2024.client
 
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
@@ -11,6 +11,9 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.MagicPlantCropReiCategoryCard
+import miragefairy2024.ReiCategoryCard
+import miragefairy2024.WorldGenTraitReiCategoryCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.getName

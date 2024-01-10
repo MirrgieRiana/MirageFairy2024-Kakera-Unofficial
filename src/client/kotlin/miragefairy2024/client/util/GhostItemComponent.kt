@@ -1,8 +1,9 @@
-package miragefairy2024.util
+package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.base.BaseComponent
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
+import miragefairy2024.util.EMPTY_ITEM_STACK
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen

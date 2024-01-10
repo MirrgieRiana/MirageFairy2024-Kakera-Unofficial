@@ -1,4 +1,4 @@
-package miragefairy2024.mod.fairyquest
+package miragefairy2024.client.mod.fairyquest
 
 import io.wispforest.owo.ui.base.BaseOwoHandledScreen
 import io.wispforest.owo.ui.component.Components
@@ -13,17 +13,18 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.client.mod.surface
+import miragefairy2024.client.util.ClickableContainer
+import miragefairy2024.client.util.GhostItemComponent
+import miragefairy2024.client.util.inventoryNameLabel
+import miragefairy2024.client.util.slotContainer
+import miragefairy2024.client.util.verticalScroll
+import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
-import miragefairy2024.mod.surface
-import miragefairy2024.util.ClickableContainer
-import miragefairy2024.util.GhostItemComponent
-import miragefairy2024.util.inventoryNameLabel
+import miragefairy2024.mod.fairyquest.FairyQuestCardScreenHandler
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.orEmpty
-import miragefairy2024.util.slotContainer
 import miragefairy2024.util.text
-import miragefairy2024.util.verticalScroll
-import miragefairy2024.util.verticalSpace
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerInventory

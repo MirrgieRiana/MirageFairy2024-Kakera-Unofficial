@@ -1,4 +1,4 @@
-package miragefairy2024.mod.fairyquest
+package miragefairy2024.client.mod.fairyquest
 
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.TextureComponent

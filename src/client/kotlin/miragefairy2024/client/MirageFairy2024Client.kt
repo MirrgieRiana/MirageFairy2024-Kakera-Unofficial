@@ -1,6 +1,7 @@
-package miragefairy2024
+package miragefairy2024.client
 
-import miragefairy2024.mod.fairyquest.initFairyQuestClientModule
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
 import net.fabricmc.api.ClientModInitializer
 
 object MirageFairy2024Client : ClientModInitializer {
