@@ -5,7 +5,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.on
 import miragefairy2024.util.register
-import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
@@ -55,7 +54,6 @@ fun initBlockMaterialsModule() {
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
-        card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)
