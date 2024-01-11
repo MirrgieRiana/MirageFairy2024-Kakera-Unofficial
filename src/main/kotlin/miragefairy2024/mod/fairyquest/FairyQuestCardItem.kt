@@ -30,8 +30,6 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import kotlin.random.Random
-import kotlin.random.nextInt
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
@@ -54,17 +52,10 @@ fun initFairyQuestCardItem() {
         }
         card.item.registerItemModelGeneration(createFairyQuestCardModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
-            when (tintIndex) {
-                0 -> {
-                    // TODO
-                    val random = Random(itemStack.count)
-                    repeat(10) {
-                        random.nextInt()
-                    }
-                    (random.nextInt(0x80..0xFF) shl 16) or (random.nextInt(0x80..0xFF) shl 8) or random.nextInt(0x80..0xFF)
-                }
-
-                else -> 0xFFFFFF
+            if (tintIndex == 0) {
+                itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
+            } else {
+                0xFFFFFF
             }
         }
         card.item.enJa(card.enName, card.jaName)
@@ -113,8 +104,7 @@ private fun createFairyQuestCardModel() = Model {
         "parent" to Identifier("item/generated").string.jsonElement,
         "textures" to jsonObject(
             "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_background").string.jsonElement,
-            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_white").string.jsonElement,
-            "layer2" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string.jsonElement,
+            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string.jsonElement,
         ),
     )
 }

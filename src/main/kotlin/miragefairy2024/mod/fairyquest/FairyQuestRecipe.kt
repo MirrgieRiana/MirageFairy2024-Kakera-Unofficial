@@ -25,6 +25,8 @@ val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = Regis
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface FairyQuestRecipe {
+    val color: Int
+    val icon: ItemStack
     val title: Text
     val message: Text
     val client: Text
@@ -35,6 +37,7 @@ interface FairyQuestRecipe {
 
 enum class FairyQuestRecipeCard(
     path: String,
+    override val color: Int,
     enTitle: String,
     jaTitle: String,
     enMessage: String,
@@ -44,9 +47,11 @@ enum class FairyQuestRecipeCard(
     override val duration: Int,
     override val inputs: List<Pair<Ingredient, Int>>,
     override val outputs: List<ItemStack>,
+    override val icon: ItemStack = outputs.first(),
 ) : FairyQuestRecipe {
     IMPROMPTU_FANTASTIC_CARNIVAL(
-        "impromptu_fantastic_carnival", "Impromptu Fantastic Carnival", "即席ファンタスティックカーニバル",
+        "impromptu_fantastic_carnival", 0xFCF5DF,
+        "Impromptu Fantastic Carnival", "即席ファンタスティックカーニバル",
         "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
         "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
         "Breadia the fairy of bread", "麺麭精ブレアージャ",
@@ -55,7 +60,8 @@ enum class FairyQuestRecipeCard(
         listOf(Items.CAKE.createItemStack(1)),
     ),
     NEW_PRODUCT_FROM_FRI(
-        "new_product_from_fri", "New product from FRI!", "妖精研究所から新商品登場！",
+        "new_product_from_fri", 0xAC5BD8,
+        "New product from FRI!", "妖精研究所から新商品登場！",
         listOf(
             "Introducing the eagerly awaited new product from The Institute of Fairy Research, the Fairy Quest Card! This groundbreaking communication device allows communication and material transfer with otherworldly and parallel realms!",
             "No more fear of rainy days with this innovative gadget! Simply attach the dedicated cartridge, receive the data of your desired item, and let the built-in 3D printer work its magic – just like that!",
@@ -78,7 +84,8 @@ enum class FairyQuestRecipeCard(
         listOf(Items.COOKED_BEEF.createItemStack(1)),
     ),
     VEGETATION_SURVEY(
-        "vegetation_survey", "Vegetation Survey", "植生調査",
+        "vegetation_survey", 0x6BAF7C,
+        "Vegetation Survey", "植生調査",
         "The fairy trees...? We should be over a million light-years away from the Habitabilis Zona. I'm curious to divine the past of this star, so would you consider sending me samples of the vegetation?",
         "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
         "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
