@@ -39,6 +39,11 @@ enum class BlockMaterialCard(
         PoemList(1).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
         MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true, listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL),
     ),
+    DRYWALL(
+        "drywall", "Drywall", "石膏ボード",
+        PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
+        MapColor.PALE_YELLOW, 3.0F, 3.0F, requiresTool = false, listOf(BlockTags.PICKAXE_MINEABLE),
+    ),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
