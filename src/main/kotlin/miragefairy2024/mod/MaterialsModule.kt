@@ -34,6 +34,7 @@ enum class MaterialCard(
         // TODO add purpose
         "xarpite", "Xarpite", "紅天石",
         PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
+        // TODO 使えるワード：牢獄
     ),
     MIRANAGITE(
         // TODO add purpose
