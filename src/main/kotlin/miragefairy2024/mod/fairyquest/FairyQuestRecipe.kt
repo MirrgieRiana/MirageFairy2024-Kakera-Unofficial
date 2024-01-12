@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.Translation
@@ -49,6 +50,15 @@ enum class FairyQuestRecipeCard(
     override val duration: Int = 20 * 10,
     override val icon: ItemStack = outputs.first(),
 ) : FairyQuestRecipe {
+    SOLICITING_CERAMIC_BRICKS(
+        "soliciting_ceramic_bricks", 0xFFFAF2,
+        "Soliciting Ceramic Bricks", "セラミックレンガの募集",
+        "In light of the reconstruction project for the vacuum decay furnace, we are actively seeking donations of ceramic bricks. If needed, we will selectively provide reusable materials from the collected building components.",
+        "真空崩壊炉の建て替え工事につき、セラミック製レンガの寄贈を広く募集しております。ご入用であれば、リユース可能な建築資材を選別し、ご提供いたします。",
+        "The Institute of Fairy Research\nCordelia Branch", "妖精研究所\nコーディリア支部",
+        listOf(Items.BRICKS.toIngredient() to 1),
+        listOf(BlockMaterialCard.DRYWALL.item.createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
+    ),
     IMPROMPTU_FANTASTIC_CARNIVAL(
         "impromptu_fantastic_carnival", 0xFCF5DF,
         "Impromptu Fantastic Carnival", "即席ファンタスティックカーニバル",
