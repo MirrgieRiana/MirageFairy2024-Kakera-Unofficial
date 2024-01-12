@@ -87,7 +87,7 @@ enum class FairyQuestRecipeCard(
             "※通信先との取引に伴う紛争について、当研究所は一切の責任を負いません。",
             "※お子様の手の届かない場所に保管してください。",
         ).join("\n"),
-        "The Institute of Fairy Research,\nCreation Department", "妖精研究所\n創製部",
+        "The Institute of Fairy Research\nCreation Department", "妖精研究所\n創製部",
         listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
         listOf(Items.COOKED_BEEF.createItemStack(1)),
     ),
