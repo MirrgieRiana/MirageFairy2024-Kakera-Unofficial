@@ -13,9 +13,11 @@ import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.text
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
@@ -68,6 +70,20 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     override fun getName(stack: ItemStack): Text {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return fairyQuestCardFairyQuestTranslation(recipe.title)
+    }
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        val recipeId = stack.getFairyQuestRecipeId()
+        if (recipeId == null) {
+            tooltip += text { "null"() }
+        } else {
+            if (fairyQuestRecipeRegistry.containsId(recipeId)) {
+                // nop
+            } else {
+                tooltip += text { recipeId.string() }
+            }
+        }
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
