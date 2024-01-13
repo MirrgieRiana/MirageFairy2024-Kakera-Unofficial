@@ -89,15 +89,19 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     }
 }
 
-fun ItemStack.getFairyQuestRecipe(): FairyQuestRecipe? {
+fun ItemStack.getFairyQuestRecipeId(): Identifier? {
     val nbt = this.nbt ?: return null
     val id = nbt.getString("FairyQuestRecipe") ?: return null
-    return fairyQuestRecipeRegistry.get(Identifier(id))
+    return Identifier(id)
 }
 
-fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) {
-    getOrCreateNbt().putString("FairyQuestRecipe", fairyQuestRecipeRegistry.getId(recipe)!!.string)
+fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
+
+fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) {
+    getOrCreateNbt().putString("FairyQuestRecipe", identifier.string)
 }
+
+fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getId(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {
     jsonObject(
