@@ -31,18 +31,20 @@ enum class BlockMaterialCard(
     mapColor: MapColor,
     hardness: Float,
     resistance: Float,
-    requiresTool: Boolean,
-    val mineableTags: List<TagKey<Block>>,
+    requiresTool: Boolean = false,
+    val tags: List<TagKey<Block>> = listOf(),
 ) {
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(1).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
-        MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true, listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL),
+        MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL),
     ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
         PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
-        MapColor.PALE_YELLOW, 3.0F, 3.0F, requiresTool = false, listOf(BlockTags.PICKAXE_MINEABLE),
+        MapColor.PALE_YELLOW, 3.0F, 3.0F,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE),
     ),
     ;
 
@@ -73,7 +75,7 @@ fun initBlockMaterialsModule() {
 
         card.block.registerDefaultLootTableGeneration()
 
-        card.mineableTags.forEach {
+        card.tags.forEach {
             card.block.registerTagGeneration(it)
         }
     }
