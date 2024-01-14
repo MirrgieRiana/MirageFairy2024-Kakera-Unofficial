@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.Model
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.on
@@ -13,17 +14,31 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
+import miragefairy2024.util.string
+import miragefairy2024.util.with
+import mirrg.kotlin.gson.hydrogen.jsonArray
+import mirrg.kotlin.gson.hydrogen.jsonElement
+import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
+import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
+import net.minecraft.data.client.TextureKey
+import net.minecraft.data.client.TextureMap
 import net.minecraft.data.client.TexturedModel
+import net.minecraft.entity.Entity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
+import net.minecraft.util.math.random.Random
+import net.minecraft.world.World
 
 enum class BlockMaterialCard(
     path: String,
@@ -53,6 +68,13 @@ enum class BlockMaterialCard(
         PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
         MapColor.PALE_YELLOW, 3.0F, 3.0F,
         tags = listOf(BlockTags.PICKAXE_MINEABLE),
+    ),
+    LOCAL_VACUUM_DECAY(
+        "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
+        PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
+        MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock,
+        tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
+        model = localVacuumDecayTexturedModel, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
     ),
     ;
 
@@ -106,4 +128,70 @@ fun initBlockMaterialsModule() {
         input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
     } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
 
+}
+
+private val localVacuumDecayTexturedModel = TexturedModel.Factory { block ->
+    Model { textures ->
+        jsonObject(
+            "parent" to Identifier("minecraft", "block/block").string.jsonElement,
+            "textures" to jsonObject(
+                TextureKey.PARTICLE.name to textures.getTexture(TextureKey.BACK).string.jsonElement,
+                TextureKey.BACK.name to textures.getTexture(TextureKey.BACK).string.jsonElement,
+                TextureKey.FRONT.name to textures.getTexture(TextureKey.FRONT).string.jsonElement,
+            ),
+            "elements" to jsonArray(
+                jsonObject(
+                    "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
+                    "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
+                    "faces" to jsonObject(
+                        "down" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
+                        "up" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
+                        "north" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
+                        "south" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
+                        "west" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
+                        "east" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
+                    ),
+                ),
+                jsonObject(
+                    "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
+                    "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
+                    "faces" to jsonObject(
+                        "down" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
+                        "up" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
+                        "north" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
+                        "south" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
+                        "west" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
+                        "east" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
+                    ),
+                ),
+            ),
+        )
+    }.with(
+        TextureKey.BACK to TextureMap.getSubId(block, "_base"),
+        TextureKey.FRONT to TextureMap.getSubId(block, "_spark"),
+    )
+}
+
+@Suppress("OVERRIDE_DEPRECATION")
+class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
+    override fun hasRandomTicks(state: BlockState) = true
+
+    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        super.randomTick(state, world, pos, random)
+
+        val direction = Direction.random(random)
+        val targetBlockPos = pos.offset(direction)
+        val targetBlockState = world.getBlockState(targetBlockPos)
+        if (targetBlockState.isAir) return
+        if (targetBlockState.getHardness(world, targetBlockPos) < 0) return
+        if (targetBlockState.isOf(state.block)) return
+        world.setBlockState(targetBlockPos, state)
+    }
+
+    override fun onSteppedOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
+        if (!entity.bypassesSteppingEffects()) {
+            entity.damage(world.damageSources.magic(), 1.0f)
+        }
+        super.onSteppedOn(world, pos, state, entity)
+    }
 }

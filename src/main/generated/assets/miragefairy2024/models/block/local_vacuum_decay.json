@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#back"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#back"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#back"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#back"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#back"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#back"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#front"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#front"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#front"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#front"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#front"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#front"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "back": "miragefairy2024:block/local_vacuum_decay_base",
+    "front": "miragefairy2024:block/local_vacuum_decay_spark",
+    "particle": "miragefairy2024:block/local_vacuum_decay_base"
+  }
+}
