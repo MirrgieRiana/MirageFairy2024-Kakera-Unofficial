@@ -2,6 +2,8 @@ package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.mergeTo
 import miragefairy2024.util.register
@@ -25,8 +27,11 @@ val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, player
     FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readString()))!!, ScreenHandlerContext.EMPTY)
 }
 
+val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.modId}.fairy_quest_card.fullScreen" }, "Click to full screen", "クリックで全画面表示")
+
 fun initFairyQuestCardScreenHandler() {
     fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+    guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
 class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {

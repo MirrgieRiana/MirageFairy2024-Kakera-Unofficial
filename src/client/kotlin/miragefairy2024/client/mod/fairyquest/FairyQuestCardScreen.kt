@@ -22,9 +22,10 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.fairyquest.FairyQuestCardScreenHandler
+import miragefairy2024.mod.fairyquest.guiFairyQuestCardFullScreenTranslation
+import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.orEmpty
-import miragefairy2024.util.text
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerInventory
@@ -98,7 +99,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                             }
 
                         }.apply {
-                            tooltip(text { "クリックで全画面表示"()/* TODO */ })
+                            tooltip(guiFairyQuestCardFullScreenTranslation())
                         })
 
                     }
