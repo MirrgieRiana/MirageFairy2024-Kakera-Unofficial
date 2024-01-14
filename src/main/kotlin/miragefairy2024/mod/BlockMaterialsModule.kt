@@ -51,6 +51,7 @@ enum class BlockMaterialCard(
     requiresTool: Boolean = false,
     dropsNothing: Boolean = false,
     restrictsSpawning: Boolean = false,
+    velocityMultiplier: Float? = null,
     blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Settings) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
@@ -72,7 +73,7 @@ enum class BlockMaterialCard(
     LOCAL_VACUUM_DECAY(
         "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
         PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
-        MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock,
+        MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
         tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
         model = localVacuumDecayTexturedModel, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
     ),
@@ -85,6 +86,7 @@ enum class BlockMaterialCard(
         if (requiresTool) settings.requiresTool()
         if (dropsNothing) settings.dropsNothing()
         if (restrictsSpawning) settings.allowsSpawning { _, _, _, _ -> false }
+        if (velocityMultiplier != null) settings.velocityMultiplier(velocityMultiplier)
         settings.strength(hardness, resistance)
         if (blockSoundGroup != null) settings.sounds(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
