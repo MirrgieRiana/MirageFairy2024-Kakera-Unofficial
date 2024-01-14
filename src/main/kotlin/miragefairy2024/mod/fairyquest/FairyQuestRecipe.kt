@@ -50,11 +50,20 @@ enum class FairyQuestRecipeCard(
     override val duration: Int = 20 * 10,
     override val icon: ItemStack = outputs.first(),
 ) : FairyQuestRecipe {
-    SOLICITING_CERAMIC_BRICKS(
-        "soliciting_ceramic_bricks", 0xFFFAF2,
-        "Soliciting Ceramic Bricks", "セラミックレンガの募集",
-        "In light of the reconstruction project for the vacuum decay furnace, we are actively seeking donations of ceramic bricks. If needed, we will selectively provide reusable materials from the collected building components.",
-        "真空崩壊炉の建て替え工事につき、セラミック製レンガの寄贈を広く募集しております。ご入用であれば、リユース可能な建築資材を選別し、ご提供いたします。",
+    EMERGENCY_SITUATION(
+        "emergency_situation", 0xFF6900,
+        "Emergency Situation", "非常事態",
+        "Help!!!\n\n!!!!\n\n!!!!!\n\nI'm out of toilet paper!!!!!!",
+        "助けて！！！\n\n！！！！\n\n！！！！！\n\nトイレットペーパーが無いの！！！！！！",
+        "The Institute of Fairy Research\nEthics Department\nTirirknofe Herirmina", "妖精研究所\n倫理部\nティリルクノフェ・ヘリルミーナ",
+        listOf(Items.PAPER.toIngredient() to 24),
+        listOf(Items.EMERALD.createItemStack(1)),
+    ),
+    NOTICE_FOR_CERAMIC_BRICK_DONATIONS(
+        "notice_for_ceramic_brick_donations", 0xFFFAF2,
+        "Notice for Ceramic Brick Donations", "セラミックレンガ募集のお知らせ",
+        "We are actively seeking donations of ceramic bricks for the reconstruction project of the vacuum decay reactor. If you are in need, we will selectively provide reusable building materials.",
+        "真空崩壊炉改修工事に向けてセラミックレンガの寄付を広く募集しております。必要な場合は、リユース可能な建築資材を選別してご提供いたします。",
         "The Institute of Fairy Research\nCordelia Branch", "妖精研究所\nコーディリア支部",
         listOf(Items.BRICKS.toIngredient() to 1),
         listOf(BlockMaterialCard.DRYWALL.item.createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
@@ -65,31 +74,37 @@ enum class FairyQuestRecipeCard(
         "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
         "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
         "Breadia the fairy of bread", "麺麭精ブレアージャ",
-        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
+        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1), // TODO -> ケーキ精
         listOf(Items.CAKE.createItemStack(1)),
     ),
     NEW_PRODUCT_FROM_FRI(
         "new_product_from_fri", 0xAC5BD8,
         "New product from FRI!", "妖精研究所から新商品登場！",
         listOf(
-            "Introducing the eagerly awaited new product from The Institute of Fairy Research, the Fairy Quest Card! This groundbreaking communication device allows communication and material transfer with otherworldly and parallel realms!",
-            "No more fear of rainy days with this innovative gadget! Simply attach the dedicated cartridge, receive the data of your desired item, and let the built-in 3D printer work its magic – just like that!",
+            "The Institute of Fairy Research proudly presents its latest product, the “Fairy Quest Card”! It's an innovative communication device that allows communication and material transfer with different and parallel worlds!",
+            "Have you ever been caught in a sudden thunderstorm while out and about? With this, you won't fear unexpected thunderstorms anymore!",
+            "Simply insert the payment into the “Fairy Quest Card” connected to the stores of parallel worlds, and all you need to do is receive the data for the product. The built-in 3D printer will handle the rest, just like this!",
             "",
-            "*Note: Ink requires a dedicated cartridge (sold separately).",
-            "*The Institute of Fairy Research assumes no responsibility for any disputes arising from transactions with communication destinations.",
+            "*For receiving items containing special elements, a separate cartridge for special elements (sold separately) may be required.",
+            "*For receiving items with low entropy, a separate anti-entropy cartridge (sold separately) may be required.",
+            "*The institute assumes no responsibility for disputes arising from transactions with communication destinations.",
+            "*Please be cautious to avoid trapping your fingers in the portal.",
             "*Keep out of reach of children.",
         ).join("\n"),
         listOf(
-            "妖精研究所が誇りを持って贈る新商品、フェアリークエストカードが待望の新登場！異世界や並行世界との通信や物質転送が可能な画期的な通信端末です！",
-            "これさえあれば、もう雨の日なんて怖くない！専用のカートリッジを装着し、品物のデータを受け取るだけ！あとは内蔵の3Dプリンターが、ほら、この通り！",
+            "妖精研究所が誇りを持ってお届けする新商品、“フェアリークエストカード”が待望の新登場！異世界や並行世界との通信や物質転送が可能な画期的な通信端末です！",
+            "外出先で急に雷雨が降りだしちゃったなんて経験、一度はありませんか？これさえあれば、急な雷なんて怖くない！",
+            "平行世界のストアに接続された“フェアリークエストカード”に代金を投入すれば、あとは商品のデータを受け取るだけで、内蔵の3Dプリンターが、ほら、この通り！",
             "",
-            "※インクは専用のカートリッジ（別売り）を装着する必要があります。",
-            "※通信先との取引に伴う紛争について、当研究所は一切の責任を負いません。",
+            "※特殊な元素を含む物品の受け取りには、特殊元素用カートリッジ（別売り）が必要となる場合がございます。",
+            "※エントロピーの低い物品の受け取りには、反エントロピー用カートリッジ（別売り）が必要となる場合がございます。",
+            "※通信先との取引に伴う紛争については、当研究所は一切の責任を負いません。",
+            "※ポータルに指等を挟まないようご注意ください。",
             "※お子様の手の届かない場所に保管してください。",
         ).join("\n"),
         "The Institute of Fairy Research\nCreation Department", "妖精研究所\n創製部",
-        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1, Items.DIRT.toIngredient() to 1, ItemTags.COALS.toIngredient() to 1),
-        listOf(Items.COOKED_BEEF.createItemStack(1)),
+        listOf(ItemTags.COALS.toIngredient() to 1),
+        listOf(Items.WHITE_BED.createItemStack(1)),
     ),
     VEGETATION_SURVEY(
         "vegetation_survey", 0x6BAF7C,
@@ -99,6 +114,57 @@ enum class FairyQuestRecipeCard(
         "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
         listOf(HaimeviskaBlockCard.LOG.item.toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item.toIngredient() to 16),
         listOf(MaterialCard.MIRANAGITE.item.createItemStack(1)),
+    ),
+    FATAL_ACCIDENT(
+        "fatal_accident", 0x000027,
+        "Fatal Accident", "重大な事故",
+        """
+        I pray that this message reaches some human in a parallel world.
+        No, at this point, it could be fairies, malformed creatures, anything.
+        A catastrophic accident has occurred, and our world is on the verge of ending.
+        The vacuum decay reactor at Cordelia Branch has gone out of control, and an asteroid was swallowed by the vacuum decay.
+        It's not just Cordelia.
+        Europa, Haumea, and even Headquarters are unresponsive.
+        Communication has ceased, and even the Divine Ear is silent.
+        Anti-entropy sludge is leaking from the warp routes, and there's no telling when this place will be disintegrated to zero.
+        Before being engulfed by the vacuum decay, we plan to escape into space with colonization pods.
+        Damn it, the vacuum decay reactor was never something humans should have messed with!
+        If someone is reading this, please understand.
+        The vacuum decay reactor wasn't a safe, environmentally friendly source of energy.
+        One wrong move, and it's a terrifying thing that could wipe out an entire planet.
+        If anyone is in control of the vacuum decay reactor, please stop it now!
+        Before your world ceases to exist!!!
+        """.trimIndent().trim().replace("\n", "\n\n"),
+        """
+        このメッセージが平行世界の人間に届くことを祈る。
+        いや、この際妖精でも奇形生物でも何でもいい。
+        重大な事故が起こって俺の世界が終わろうとしている。
+        コーディリア支部の真空崩壊炉が制御を失い、小惑星ごと真空崩壊に飲み込まれちまった。
+        コーディリアだけじゃない。
+        エウロパも、ハウメアも、本部も応答しない。
+        もう通信も途絶えたし、天耳通も反応しない。
+        アンチエントロピースラッジが縮地路から漏れ出て、ここもいつゼロまで分解されるか分からない。
+        真空崩壊に飲み込まれる前に、俺たちは植民ポッドで宇宙に脱出するつもりだ。
+        クソッ、真空崩壊炉なんて人間が手を出していい代物じゃなかったんだ！
+        もし誰かがこれを見ているなら、理解してくれ。
+        真空崩壊炉は安全で環境に優しいエネルギーなんかじゃなかった。
+        一歩間違えば惑星ごと消し去ってしまうヤバい奴だ。
+        真空崩壊炉を管理している奴がいたら、今すぐそれを止めてくれ！
+        お前たちの世界がまだ生きているうちに！！！
+        """.trimIndent().trim().replace("\n", "\n\n"),
+        "The Institute of Fairy Research\nOphelia Branch\nLibrariania the fairy of librarian", "妖精研究所\nオフィーリア支部\n司書精リブラリアーニャ",
+        listOf(
+            Items.BEDROCK.toIngredient() to 64,
+            Items.BEDROCK.toIngredient() to 64,
+            Items.BEDROCK.toIngredient() to 64,
+            Items.BEDROCK.toIngredient() to 64,
+        ),
+        listOf(
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
+            BlockMaterialCard.MIRANAGITE_BLOCK.item.createItemStack(64),
+        ),
     ),
     ;
 

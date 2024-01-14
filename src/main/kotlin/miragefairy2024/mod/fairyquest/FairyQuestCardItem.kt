@@ -40,7 +40,7 @@ object FairyQuestCardCard {
     val item = FairyQuestCardItem(Item.Settings())
 }
 
-private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "FQ: %s", "クエスト『%s』")
+private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "“%s”", "『%s』")
 
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
