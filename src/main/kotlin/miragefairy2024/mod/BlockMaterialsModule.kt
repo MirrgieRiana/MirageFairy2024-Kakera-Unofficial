@@ -5,6 +5,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
@@ -21,6 +22,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
 
 enum class BlockMaterialCard(
@@ -32,7 +34,13 @@ enum class BlockMaterialCard(
     hardness: Float,
     resistance: Float,
     requiresTool: Boolean = false,
+    dropsNothing: Boolean = false,
+    restrictsSpawning: Boolean = false,
+    blockSoundGroup: BlockSoundGroup? = null,
+    blockCreator: ((AbstractBlock.Settings) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
+    val model: TexturedModel.Factory? = null,
+    val isCutoutRenderLayer: Boolean = false,
 ) {
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
@@ -53,8 +61,11 @@ enum class BlockMaterialCard(
         val settings = AbstractBlock.Settings.create()
         settings.mapColor(mapColor)
         if (requiresTool) settings.requiresTool()
+        if (dropsNothing) settings.dropsNothing()
+        if (restrictsSpawning) settings.allowsSpawning { _, _, _, _ -> false }
         settings.strength(hardness, resistance)
-        Block(settings)
+        if (blockSoundGroup != null) settings.sounds(blockSoundGroup)
+        if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
     val item = BlockItem(block, Item.Settings())
 }
@@ -67,7 +78,12 @@ fun initBlockMaterialsModule() {
         card.item.registerItemGroup(mirageFairy2024ItemGroup)
 
         card.block.registerSingletonBlockStateGeneration()
-        card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+        if (card.model != null) {
+            card.block.registerModelGeneration(card.model)
+        } else {
+            card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+        }
+        if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)
