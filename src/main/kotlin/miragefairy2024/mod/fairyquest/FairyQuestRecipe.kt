@@ -6,16 +6,25 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.placeditem.PlacedItemBlockEntity
+import miragefairy2024.mod.placeditem.PlacedItemCard
+import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
+import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.toIngredient
+import miragefairy2024.util.weightedRandom
+import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.join
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
+import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTables
@@ -28,10 +37,22 @@ import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.dynamic.Codecs
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.MathHelper
+import net.minecraft.world.Heightmap
+import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.feature.DefaultFeatureConfig
+import net.minecraft.world.gen.feature.Feature
+import net.minecraft.world.gen.feature.PlacedFeatures
+import net.minecraft.world.gen.feature.util.FeatureContext
+import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
+import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
+import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 
 val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -199,6 +220,8 @@ enum class FairyQuestRecipeCard(
 
 val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.CODEC)
 
+val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
+
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
 
@@ -255,7 +278,76 @@ fun initFairyQuestRecipe() {
 
     }
 
+    // 地形生成
+    run {
+        val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+            FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
+        }
+        val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+            val placementModifiers = listOf(
+                RarityFilterPlacementModifier.of(64),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
+        }
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
+    }
+
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
+
+    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+
+}
+
+class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<DefaultFeatureConfig>(codec) {
+    override fun generate(context: FeatureContext<DefaultFeatureConfig>): Boolean {
+        val random = context.random
+        val world = context.world
+
+        var count = 0
+        val currentBlockPos = BlockPos.Mutable()
+        repeat(4) {
+            currentBlockPos.set(
+                context.origin,
+                random.nextInt(3) - random.nextInt(3),
+                random.nextInt(3) - random.nextInt(3),
+                random.nextInt(3) - random.nextInt(3),
+            )
+
+            // 座標決定
+            val actualBlockPos = world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
+
+            // 生成環境判定
+            if (!world.getBlockState(actualBlockPos).isReplaceable) return@repeat // 配置先が埋まっている
+
+            // レシピ抽選
+            val table = mutableListOf<Chance<Identifier>>()
+            FairyQuestRecipeCard.entries.forEach { recipe ->
+                when (recipe.lootCategory) {
+                    FairyQuestRecipeCard.LootCategory.NONE -> Unit
+                    FairyQuestRecipeCard.LootCategory.COMMON -> table += Chance(5.0, recipe.identifier)
+                    FairyQuestRecipeCard.LootCategory.RARE -> table += Chance(1.0, recipe.identifier)
+                }
+            }
+            val recipeId = table.weightedRandom(random) ?: return@repeat // 有効なレシピが一つもない
+
+            // 成功
+
+            world.setBlockState(actualBlockPos, PlacedItemCard.block.defaultState, Block.NOTIFY_LISTENERS)
+            val itemStack = FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipeId(recipeId) }
+            val blockEntity = world.getBlockEntity(actualBlockPos) as? PlacedItemBlockEntity ?: return@repeat // ブロックの配置に失敗した
+            blockEntity.itemStack = itemStack
+            blockEntity.itemX = 0.25 + 0.5 * random.nextDouble()
+            blockEntity.itemZ = 0.25 + 0.5 * random.nextDouble()
+            blockEntity.itemRotateY = MathHelper.TAU * random.nextDouble()
+            blockEntity.markDirty()
+
+            count++
+        }
+        return count > 0
+    }
 }
 
 class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions) {
