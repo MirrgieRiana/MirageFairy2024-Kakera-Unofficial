@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairyquest
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
@@ -15,12 +17,19 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.loot.condition.LootCondition
+import net.minecraft.loot.condition.LootConditionTypes
+import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.function.ConditionalLootFunction
+import net.minecraft.loot.function.LootFunctionType
 import net.minecraft.recipe.Ingredient
+import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.dynamic.Codecs
 
 val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -179,11 +188,32 @@ enum class FairyQuestRecipeCard(
     override val client get() = clientTranslation()
 }
 
+val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.CODEC)
+
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
         card.register(fairyQuestRecipeRegistry, card.identifier)
         card.titleTranslation.enJa()
         card.messageTranslation.enJa()
         card.clientTranslation.enJa()
+    }
+
+    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
+}
+
+class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions) {
+    companion object {
+        val CODEC: Codec<SetFairyQuestRecipeLootFunction> = RecordCodecBuilder.create { instance ->
+            instance.group(Codecs.createStrictOptionalFieldCodec(LootConditionTypes.CODEC.listOf(), "conditions", listOf()).forGetter { it.conditions })
+                .and(Identifier.CODEC.fieldOf("id").forGetter { it.recipeId })
+                .apply(instance) { conditions, recipeId -> SetFairyQuestRecipeLootFunction(recipeId, conditions) }
+        }
+    }
+
+    override fun getType() = SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE
+
+    override fun process(stack: ItemStack, context: LootContext): ItemStack {
+        stack.setFairyQuestRecipeId(recipeId)
+        return stack
     }
 }
