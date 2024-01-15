@@ -11,12 +11,14 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.toIngredient
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.loot.LootTables
 import net.minecraft.loot.condition.LootCondition
 import net.minecraft.loot.condition.LootConditionTypes
 import net.minecraft.loot.context.LootContext
@@ -48,6 +50,7 @@ interface FairyQuestRecipe {
 enum class FairyQuestRecipeCard(
     path: String,
     override val color: Int,
+    val lootCategory: LootCategory,
     enTitle: String,
     jaTitle: String,
     enMessage: String,
@@ -60,7 +63,7 @@ enum class FairyQuestRecipeCard(
     override val icon: ItemStack = outputs.first(),
 ) : FairyQuestRecipe {
     EMERGENCY_SITUATION(
-        "emergency_situation", 0xFF6900,
+        "emergency_situation", 0xFF6900, LootCategory.RARE,
         "Emergency Situation", "非常事態",
         "Help!!!\n\n!!!!\n\n!!!!!\n\nI'm out of toilet paper!!!!!!",
         "助けて！！！\n\n！！！！\n\n！！！！！\n\nトイレットペーパーが無いの！！！！！！",
@@ -69,7 +72,7 @@ enum class FairyQuestRecipeCard(
         listOf(Items.EMERALD.createItemStack(1)),
     ),
     NOTICE_FOR_CERAMIC_BRICK_DONATIONS(
-        "notice_for_ceramic_brick_donations", 0xFFFAF2,
+        "notice_for_ceramic_brick_donations", 0xFFFAF2, LootCategory.RARE,
         "Notice for Ceramic Brick Donations", "セラミックレンガ募集のお知らせ",
         "We are actively seeking donations of ceramic bricks for the reconstruction project of the vacuum decay reactor. If you are in need, we will selectively provide reusable building materials.",
         "真空崩壊炉改修工事に向けてセラミックレンガの寄付を広く募集しております。必要な場合は、リユース可能な建築資材を選別してご提供いたします。",
@@ -78,7 +81,7 @@ enum class FairyQuestRecipeCard(
         listOf(BlockMaterialCard.DRYWALL.item.createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
     ),
     IMPROMPTU_FANTASTIC_CARNIVAL(
-        "impromptu_fantastic_carnival", 0xFCF5DF,
+        "impromptu_fantastic_carnival", 0xFCF5DF, LootCategory.RARE,
         "Impromptu Fantastic Carnival", "即席ファンタスティックカーニバル",
         "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
         "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
@@ -87,7 +90,7 @@ enum class FairyQuestRecipeCard(
         listOf(Items.CAKE.createItemStack(1)),
     ),
     NEW_PRODUCT_FROM_FRI(
-        "new_product_from_fri", 0xAC5BD8,
+        "new_product_from_fri", 0xAC5BD8, LootCategory.COMMON,
         "New product from FRI!", "妖精研究所から新商品登場！",
         listOf(
             "The Institute of Fairy Research proudly presents its latest product, the “Fairy Quest Card”! It's an innovative communication device that allows communication and material transfer with different and parallel worlds!",
@@ -116,7 +119,7 @@ enum class FairyQuestRecipeCard(
         listOf(Items.WHITE_BED.createItemStack(1)),
     ),
     VEGETATION_SURVEY(
-        "vegetation_survey", 0x6BAF7C,
+        "vegetation_survey", 0x6BAF7C, LootCategory.RARE,
         "Vegetation Survey", "植生調査",
         "The fairy trees...? We should be over a million light-years away from the Habitabilis Zona. I'm curious to divine the past of this star, so would you consider sending me samples of the vegetation?",
         "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
@@ -125,7 +128,7 @@ enum class FairyQuestRecipeCard(
         listOf(MaterialCard.MIRANAGITE.item.createItemStack(1)),
     ),
     FATAL_ACCIDENT(
-        "fatal_accident", 0x000027,
+        "fatal_accident", 0x000027, LootCategory.RARE,
         "Fatal Accident", "重大な事故",
         """
         I pray that this message reaches some human in a parallel world.
@@ -186,16 +189,67 @@ enum class FairyQuestRecipeCard(
     override val title get() = titleTranslation()
     override val message get() = messageTranslation()
     override val client get() = clientTranslation()
+
+    enum class LootCategory {
+        NONE,
+        COMMON,
+        RARE,
+    }
 }
 
 val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.CODEC)
 
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
+
         card.register(fairyQuestRecipeRegistry, card.identifier)
+
         card.titleTranslation.enJa()
         card.messageTranslation.enJa()
         card.clientTranslation.enJa()
+
+
+        val allVillageChests = listOf(
+            LootTables.VILLAGE_WEAPONSMITH_CHEST,
+            LootTables.VILLAGE_TOOLSMITH_CHEST,
+            LootTables.VILLAGE_ARMORER_CHEST,
+            LootTables.VILLAGE_CARTOGRAPHER_CHEST,
+            LootTables.VILLAGE_MASON_CHEST,
+            LootTables.VILLAGE_SHEPARD_CHEST,
+            LootTables.VILLAGE_BUTCHER_CHEST,
+            LootTables.VILLAGE_FLETCHER_CHEST,
+            LootTables.VILLAGE_FISHER_CHEST,
+            LootTables.VILLAGE_TANNERY_CHEST,
+            LootTables.VILLAGE_TEMPLE_CHEST,
+            LootTables.VILLAGE_DESERT_HOUSE_CHEST,
+            LootTables.VILLAGE_PLAINS_CHEST,
+            LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
+            LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
+            LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+        )
+
+        fun registerChestLoot(lootTableId: Identifier, weight: Int) {
+            FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
+                apply { SetFairyQuestRecipeLootFunction(card.identifier) }
+            }
+        }
+
+        when (card.lootCategory) {
+            FairyQuestRecipeCard.LootCategory.NONE -> Unit
+
+            FairyQuestRecipeCard.LootCategory.COMMON -> {
+                allVillageChests.forEach {
+                    registerChestLoot(it, 10)
+                }
+            }
+
+            FairyQuestRecipeCard.LootCategory.RARE -> {
+                allVillageChests.forEach {
+                    registerChestLoot(it, 1)
+                }
+            }
+        }
+
     }
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
