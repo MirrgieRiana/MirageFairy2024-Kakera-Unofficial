@@ -17,6 +17,7 @@ import net.minecraft.item.Items
 import net.minecraft.loot.condition.LocationCheckLootCondition
 import net.minecraft.loot.condition.MatchToolLootCondition
 import net.minecraft.loot.condition.RandomChanceLootCondition
+import net.minecraft.loot.entry.LeafEntry
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.loot.function.ExplosionDecayLootFunction
 import net.minecraft.predicate.entity.LocationPredicate
@@ -128,6 +129,23 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, biome: (() -> RegistryKey<Biome
                             apply(ExplosionDecayLootFunction.builder())
                         })
                     }))
+                }
+            }
+        }
+    }
+}
+
+fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, block: LeafEntry.Builder<*>.() -> Unit = {}) {
+    LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
+        if (source.isBuiltin) {
+            if (id == lootTableId) {
+                tableBuilder.modifyPools { lootPool ->
+                    lootPool.configure {
+                        with(ItemLootPoolEntry(this@registerChestLoot) {
+                            weight(weight)
+                            block(this)
+                        })
+                    }
                 }
             }
         }
