@@ -2,7 +2,7 @@ package miragefairy2024.client.util
 
 import net.minecraft.client.util.math.MatrixStack
 
-inline fun <T> MatrixStack.pushAndPop(block: () -> T): T {
+inline fun <T> MatrixStack.stack(block: () -> T): T {
     this.push()
     try {
         return block()

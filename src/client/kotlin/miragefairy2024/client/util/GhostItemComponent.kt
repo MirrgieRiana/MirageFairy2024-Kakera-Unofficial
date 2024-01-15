@@ -38,7 +38,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
         // 個数
         if (showItemStack) context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x, y)
 
-        context.matrices.pushAndPop {
+        context.matrices.stack {
             context.matrices.translate(0F, 0F, 200F)
             if (showItemStack) context.drawGradientRect(x, y, width, height, 0x808B8B8B.toInt(), 0x808B8B8B.toInt(), 0x808B8B8B.toInt(), 0x808B8B8B.toInt()) // アイテムを半透明にするやつ
             if (showOverlay) context.drawGradientRect(x, y, width, height, overlayColor, overlayColor, overlayColor, overlayColor) // オーバーレイ
