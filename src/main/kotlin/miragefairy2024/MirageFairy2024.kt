@@ -12,6 +12,7 @@ import miragefairy2024.mod.initReiModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
+import miragefairy2024.mod.placeditem.initPlacedItemModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
@@ -35,6 +36,7 @@ object MirageFairy2024 : ModInitializer {
         initHaimeviskaModule()
         initFairyQuestModule()
         initNinePatchTextureModule()
+        initPlacedItemModule()
     }
 }
 
