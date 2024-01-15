@@ -5,6 +5,10 @@ import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin
+import miragefairy2024.mod.fairyquest.FairyQuestCardCard
+import miragefairy2024.mod.fairyquest.FairyQuestRecipe
+import miragefairy2024.mod.fairyquest.fairyQuestRecipeRegistry
+import miragefairy2024.mod.fairyquest.setFairyQuestRecipe
 import miragefairy2024.mod.magicplant.MagicPlantCropNotation
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.TraitStacks
@@ -39,6 +43,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
         val entries = listOf(
             WorldGenTraitReiCategoryCard,
             MagicPlantCropReiCategoryCard,
+            FairyQuestRecipeReiCategoryCard,
         )
     }
 
@@ -110,6 +115,26 @@ object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategory
     }
 
     class Display(val recipe: MagicPlantCropNotation) : BasicDisplay(listOf(recipe.seed.toEntryStack().toEntryIngredient()), recipe.crops.map { it.toEntryStack().toEntryIngredient() }) {
+        override fun getCategoryIdentifier() = identifier
+    }
+}
+
+object FairyQuestRecipeReiCategoryCard : ReiCategoryCard<FairyQuestRecipeReiCategoryCard.Display>("fairy_quest_recipe", "Fairy Quest", "フェアリークエスト") {
+    override val serializer: BasicDisplay.Serializer<Display> by lazy {
+        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+            Display(fairyQuestRecipeRegistry.get(tag.getString("Id").toIdentifier())!!)
+        }, { display, tag ->
+            fairyQuestRecipeRegistry.getId(display.recipe)?.let { tag.putString("Id", it.string) }
+        })
+    }
+
+    class Display(val recipe: FairyQuestRecipe) : BasicDisplay(
+        listOf(
+            FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(recipe) }.toEntryStack().toEntryIngredient(),
+            *recipe.inputs.map { input -> input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient() }.toTypedArray(),
+        ),
+        recipe.outputs.map { it.toEntryStack().toEntryIngredient() },
+    ) {
         override fun getCategoryIdentifier() = identifier
     }
 }
