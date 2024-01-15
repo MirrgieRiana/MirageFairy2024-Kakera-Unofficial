@@ -3,18 +3,29 @@ package miragefairy2024.client
 import miragefairy2024.BlockColorProvider
 import miragefairy2024.ClientProxy
 import miragefairy2024.ItemColorProvider
+import miragefairy2024.RenderingProxy
+import miragefairy2024.RenderingProxyBlockEntity
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.minecraft.block.Block
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.color.world.BiomeColors
 import net.minecraft.client.color.world.FoliageColors
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.client.render.VertexConsumerProvider
+import net.minecraft.client.render.block.entity.BlockEntityRenderer
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory
+import net.minecraft.client.render.model.json.ModelTransformationMode
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import net.minecraft.util.math.RotationAxis
 import net.minecraft.world.BlockRenderView
 
 class ClientProxyImpl : ClientProxy {
@@ -58,5 +69,35 @@ class ClientProxyImpl : ClientProxy {
         ColorProviderRegistry.ITEM.register({ itemStack, tintIndex ->
             provider(itemStack, tintIndex)
         }, item)
+    }
+
+    override fun <T> registerRenderingProxyBlockEntityRendererFactory(blockEntityType: BlockEntityType<T>) where T : BlockEntity, T : RenderingProxyBlockEntity {
+        BlockEntityRendererFactories.register(blockEntityType, ::RenderingProxyBlockEntityRenderer)
+    }
+}
+
+class RenderingProxyBlockEntityRenderer<T>(
+    @Suppress("UNUSED_PARAMETER") ctx: BlockEntityRendererFactory.Context,
+) : BlockEntityRenderer<T> where T : BlockEntity, T : RenderingProxyBlockEntity {
+    override fun render(blockEntity: T, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
+        val renderingProxy = object : RenderingProxy {
+            override fun stack(block: () -> Unit) {
+                matrices.push()
+                try {
+                    block()
+                } finally {
+                    matrices.pop()
+                }
+            }
+
+            override fun translate(x: Double, y: Double, z: Double) = matrices.translate(x, y, z)
+            override fun scale(x: Float, y: Float, z: Float) = matrices.scale(x, y, z)
+            override fun rotateX(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_X.rotation(rad))
+            override fun rotateY(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Y.rotation(rad))
+            override fun rotateZ(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Z.rotation(rad))
+
+            override fun renderItemStack(itemStack: ItemStack) = MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
+        }
+        blockEntity.render(renderingProxy, tickDelta, light, overlay)
     }
 }
