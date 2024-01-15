@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_quest_card_base",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:fairy_quest_card"
+    }
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_quest_card_base"
+  }
+}

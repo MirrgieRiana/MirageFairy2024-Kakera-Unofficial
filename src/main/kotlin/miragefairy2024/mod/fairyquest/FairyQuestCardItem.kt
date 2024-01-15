@@ -1,17 +1,21 @@
 package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroup
 import miragefairy2024.util.Model
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.from
 import miragefairy2024.util.invoke
+import miragefairy2024.util.on
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
+import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import mirrg.kotlin.gson.hydrogen.jsonElement
@@ -64,6 +68,11 @@ fun initFairyQuestCardItem() {
     }
 
     fairyQuestCardFairyQuestTranslation.enJa()
+
+    registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
+        input(FairyQuestCardCard.item)
+    } on FairyQuestCardCard.item from FairyQuestCardCard.item
+
 }
 
 class FairyQuestCardItem(settings: Settings) : Item(settings) {

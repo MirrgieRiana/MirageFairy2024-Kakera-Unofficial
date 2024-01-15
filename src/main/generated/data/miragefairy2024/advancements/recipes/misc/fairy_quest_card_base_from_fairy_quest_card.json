@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fairy_quest_card": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "miragefairy2024:fairy_quest_card"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:fairy_quest_card_base_from_fairy_quest_card"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fairy_quest_card"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:fairy_quest_card_base_from_fairy_quest_card"
+    ]
+  },
+  "sends_telemetry_event": false
+}
