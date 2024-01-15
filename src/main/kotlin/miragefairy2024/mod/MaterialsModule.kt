@@ -129,6 +129,11 @@ enum class MaterialCard(
         // TODO 用途
     ),
 
+    FAIRY_QUEST_CARD_BASE(
+        "fairy_quest_card_base", "Fairy Quest Card Base", "フェアリークエストカードベース",
+        PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
+    ),
+
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
