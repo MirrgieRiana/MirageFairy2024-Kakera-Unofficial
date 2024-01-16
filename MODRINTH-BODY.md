@@ -36,7 +36,7 @@ The storyline of MirageFairy2024 is set on a planet where plants have become wil
 - Allows manipulation of concepts through processing Erg.
 - Allows transformation between fairies and Erg.
 
-### Fairy Quests(Unavailable)
+### Fairy Quests
 
 - Adds Fairy Quests that tell the story of MirageFairy.
 - They are just card items that simply convert specific fairies into some resources as rewards.
