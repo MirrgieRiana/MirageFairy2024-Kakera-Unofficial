@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "miragefairy2024:item/fairy_skin",
+    "layer1": "miragefairy2024:item/fairy_back",
+    "layer2": "miragefairy2024:item/fairy_front",
+    "layer3": "miragefairy2024:item/fairy_hair",
+    "layer4": "miragefairy2024:item/fairy_dress"
+  }
+}
