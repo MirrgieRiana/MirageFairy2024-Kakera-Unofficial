@@ -5,6 +5,7 @@ import miragefairy2024.mod.BaseStoneType.DEEPSLATE
 import miragefairy2024.mod.BaseStoneType.STONE
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
+import miragefairy2024.util.ModelElementData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.concat
@@ -19,7 +20,6 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.with
-import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
@@ -171,10 +171,10 @@ fun createOreModel() = Model {
             TextureKey.PARTICLE.name to TextureKey.BACK.string,
         ),
         elements = ModelElementsData(
-            jsonObject(
-                "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
-                "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
-                "faces" to jsonObject(
+            ModelElementData(
+                from = listOf(0, 0, 0),
+                to = listOf(16, 16, 16),
+                faces = jsonObject(
                     "down" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
                     "up" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
                     "north" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
@@ -183,10 +183,10 @@ fun createOreModel() = Model {
                     "east" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
                 ),
             ),
-            jsonObject(
-                "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
-                "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),
-                "faces" to jsonObject(
+            ModelElementData(
+                from = listOf(0, 0, 0),
+                to = listOf(16, 16, 16),
+                faces = jsonObject(
                     "down" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
                     "up" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
                     "north" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),

@@ -54,11 +54,23 @@ class ModelTexturesData(val textures: List<Pair<String, String>>) {
 
 fun ModelTexturesData(vararg textures: Pair<String, String>) = ModelTexturesData(textures.toList())
 
-class ModelElementsData(val elements: List<JsonElement>) {
-    fun toJsonElement(): JsonElement = elements.jsonArray
+class ModelElementsData(val elements: List<ModelElementData>) {
+    fun toJsonElement(): JsonElement = elements.map { it.toJsonElement() }.jsonArray
 }
 
-fun ModelElementsData(vararg elements: JsonElement) = ModelElementsData(elements.toList())
+fun ModelElementsData(vararg elements: ModelElementData) = ModelElementsData(elements.toList())
+
+class ModelElementData(
+    val from: List<Number>,
+    val to: List<Number>,
+    val faces: JsonElement,
+) {
+    fun toJsonElement(): JsonElement = jsonObjectNotNull(
+        "from" to from.map { it.jsonElement }.jsonArray,
+        "to" to to.map { it.jsonElement }.jsonArray,
+        "faces" to faces,
+    )
+}
 
 
 fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {
