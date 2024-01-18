@@ -5,6 +5,7 @@ import miragefairy2024.mod.mirageFairy2024ItemGroup
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -12,7 +13,9 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 object FairyCard {
@@ -23,24 +26,38 @@ object FairyCard {
 }
 
 fun initFairyModule() {
+
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroup)
+        card.item.registerItemGroup(mirageFairy2024ItemGroup) {
+            motifRegistry.entrySet.sortedBy { it.key.value }.map {
+                val itemStack = card.item.createItemStack()
+                itemStack.setFairyMotif(it.value)
+                itemStack
+            }
+        }
 
         card.item.registerItemModelGeneration(createFairyModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
+            val motif = itemStack.getFairyMotif() ?: return@registerColorProvider 0xFF00FF
             when (tintIndex) {
-                0 -> 0xFFEEDD // skin
-                1 -> 0xAAAAFF // front
-                2 -> 0xAAAAFF // back
-                3 -> 0x440000 // hair
-                4 -> 0xAA0000 // dress
-                else -> 0x000000
+                0 -> motif.skinColor
+                1 -> motif.frontColor
+                2 -> motif.backColor
+                3 -> motif.hairColor
+                4 -> 0xAA0000
+                else -> 0xFF00FF
             }
         }
 
         card.item.enJa(card.enName, card.jaName)
     }
+
+    MotifCard.entries.forEach { card ->
+        card.register(motifRegistry, card.identifier)
+        card.translation.enJa()
+    }
+
 }
 
 private fun createFairyModel() = Model {
@@ -56,4 +73,20 @@ private fun createFairyModel() = Model {
     )
 }
 
-class FairyItem(settings: Settings) : Item(settings)
+class FairyItem(settings: Settings) : Item(settings) {
+    override fun getName(stack: ItemStack): Text = stack.getFairyMotif()?.displayName ?: super.getName(stack)
+}
+
+fun ItemStack.getFairyMotifId(): Identifier? {
+    val nbt = this.nbt ?: return null
+    val id = nbt.getString("Motif") ?: return null
+    return Identifier(id)
+}
+
+fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
+
+fun ItemStack.setFairyMotifId(identifier: Identifier) {
+    getOrCreateNbt().putString("Motif", identifier.string)
+}
+
+fun ItemStack.setFairyMotif(recipe: Motif) = this.setFairyMotifId(motifRegistry.getId(recipe)!!)
