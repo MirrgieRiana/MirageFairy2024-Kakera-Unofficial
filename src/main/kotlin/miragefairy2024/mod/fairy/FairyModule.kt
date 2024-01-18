@@ -56,6 +56,4 @@ private fun createFairyModel() = Model {
     )
 }
 
-class FairyItem(settings: Settings) : Item(settings) {
-
-}
+class FairyItem(settings: Settings) : Item(settings)
