@@ -20,8 +20,6 @@ import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
-import mirrg.kotlin.gson.hydrogen.jsonElement
-import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
