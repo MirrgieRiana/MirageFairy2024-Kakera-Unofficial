@@ -5,6 +5,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroup
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
+import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -132,9 +133,9 @@ fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuest
 private fun createFairyQuestCardModel() = Model {
     ModelData(
         parent = Identifier("item/generated"),
-        textures = jsonObject(
-            "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_background").string.jsonElement,
-            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string.jsonElement,
+        textures = ModelTexturesData(
+            "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_background").string,
+            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string,
         ),
     )
 }

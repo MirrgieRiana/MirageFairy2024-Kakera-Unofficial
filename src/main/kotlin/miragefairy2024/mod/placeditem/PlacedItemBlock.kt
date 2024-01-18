@@ -6,6 +6,7 @@ import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
+import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.register
@@ -17,8 +18,6 @@ import miragefairy2024.util.string
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
 import mirrg.kotlin.gson.hydrogen.jsonArray
-import mirrg.kotlin.gson.hydrogen.jsonElement
-import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.hydrogen.castOrNull
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -65,8 +64,8 @@ fun initPlacedItemBlock() {
             Model {
                 ModelData(
                     parent = Identifier("minecraft", "block/block"),
-                    textures = jsonObject(
-                        TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string.jsonElement,
+                    textures = ModelTexturesData(
+                        TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
                     ),
                     elements = jsonArray(),
                 )

@@ -37,15 +37,21 @@ fun Model(parent: Identifier, variant: String, vararg textureKeys: TextureKey) =
 
 class ModelData(
     val parent: Identifier,
-    val textures: JsonElement? = null,
+    val textures: ModelTexturesData? = null,
     val elements: JsonElement? = null,
 ) {
     fun toJsonElement(): JsonElement = jsonObjectNotNull(
         "parent" to parent.string.jsonElement,
-        "textures" to textures,
+        "textures" to textures?.toJsonElement(),
         "elements" to elements,
     )
 }
+
+class ModelTexturesData(val textures: List<Pair<String, String>>) {
+    fun toJsonElement(): JsonElement = textures.map { it.first to it.second.jsonElement }.jsonObject
+}
+
+fun ModelTexturesData(vararg textures: Pair<String, String>) = ModelTexturesData(textures.toList())
 
 
 fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {
