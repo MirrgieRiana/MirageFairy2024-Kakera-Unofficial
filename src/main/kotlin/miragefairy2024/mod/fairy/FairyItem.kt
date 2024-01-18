@@ -25,8 +25,7 @@ object FairyCard {
     val item = FairyItem(Item.Settings())
 }
 
-fun initFairyModule() {
-
+fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroup) {
@@ -52,12 +51,6 @@ fun initFairyModule() {
 
         card.item.enJa(card.enName, card.jaName)
     }
-
-    MotifCard.entries.forEach { card ->
-        card.register(motifRegistry, card.identifier)
-        card.translation.enJa()
-    }
-
 }
 
 private fun createFairyModel() = Model {

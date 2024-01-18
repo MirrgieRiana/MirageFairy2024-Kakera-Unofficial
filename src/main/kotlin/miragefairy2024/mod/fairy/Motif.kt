@@ -2,7 +2,9 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
+import miragefairy2024.util.register
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.registry.Registry
@@ -40,4 +42,11 @@ enum class MotifCard(
     val identifier = Identifier(MirageFairy2024.modId, path)
     val translation = Translation({ "miragefairy2024.motif.${identifier.toTranslationKey()}" }, enName, jaName)
     override val displayName = translation()
+}
+
+fun initMotif() {
+    MotifCard.entries.forEach { card ->
+        card.register(motifRegistry, card.identifier)
+        card.translation.enJa()
+    }
 }
