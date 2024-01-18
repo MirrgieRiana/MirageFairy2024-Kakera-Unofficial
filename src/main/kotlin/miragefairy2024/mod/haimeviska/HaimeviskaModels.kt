@@ -2,6 +2,7 @@ package miragefairy2024.mod.haimeviska
 
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
+import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.concat
 import miragefairy2024.util.string
@@ -19,7 +20,7 @@ fun createHaimeviskaLeavesModel(identifier: Identifier) = Model {
             TextureKey.BACK.name to ("block/" concat identifier).string,
             TextureKey.FRONT.name to ("block/" concat identifier concat "_blossom").string,
         ),
-        elements = jsonArray(
+        elements = ModelElementsData(
             jsonObject(
                 "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
                 "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),

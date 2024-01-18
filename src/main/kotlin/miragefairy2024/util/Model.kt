@@ -2,6 +2,7 @@ package miragefairy2024.util
 
 import com.google.gson.JsonElement
 import miragefairy2024.MirageFairy2024DataGenerator
+import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
@@ -38,12 +39,12 @@ fun Model(parent: Identifier, variant: String, vararg textureKeys: TextureKey) =
 class ModelData(
     val parent: Identifier,
     val textures: ModelTexturesData? = null,
-    val elements: JsonElement? = null,
+    val elements: ModelElementsData? = null,
 ) {
     fun toJsonElement(): JsonElement = jsonObjectNotNull(
         "parent" to parent.string.jsonElement,
         "textures" to textures?.toJsonElement(),
-        "elements" to elements,
+        "elements" to elements?.toJsonElement(),
     )
 }
 
@@ -52,6 +53,12 @@ class ModelTexturesData(val textures: List<Pair<String, String>>) {
 }
 
 fun ModelTexturesData(vararg textures: Pair<String, String>) = ModelTexturesData(textures.toList())
+
+class ModelElementsData(val elements: List<JsonElement>) {
+    fun toJsonElement(): JsonElement = elements.jsonArray
+}
+
+fun ModelElementsData(vararg elements: JsonElement) = ModelElementsData(elements.toList())
 
 
 fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {
