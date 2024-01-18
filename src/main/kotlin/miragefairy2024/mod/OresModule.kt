@@ -7,6 +7,7 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
 import miragefairy2024.util.ModelElementsData
+import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.concat
@@ -21,8 +22,6 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.with
-import mirrg.kotlin.gson.hydrogen.jsonElement
-import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -176,24 +175,24 @@ fun createOreModel() = Model {
                 from = listOf(0, 0, 0),
                 to = listOf(16, 16, 16),
                 faces = ModelFacesData(
-                    down = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
-                    up = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
-                    north = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
-                    south = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
-                    west = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
-                    east = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
+                    down = ModelFaceData(texture = TextureKey.BACK.string, cullface = "down"),
+                    up = ModelFaceData(texture = TextureKey.BACK.string, cullface = "up"),
+                    north = ModelFaceData(texture = TextureKey.BACK.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureKey.BACK.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureKey.BACK.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureKey.BACK.string, cullface = "east"),
                 ),
             ),
             ModelElementData(
                 from = listOf(0, 0, 0),
                 to = listOf(16, 16, 16),
                 faces = ModelFacesData(
-                    down = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
-                    up = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
-                    north = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
-                    south = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
-                    west = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
-                    east = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
+                    down = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "down"),
+                    up = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "up"),
+                    north = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "east"),
                 ),
             ),
         ),

@@ -73,20 +73,34 @@ class ModelElementData(
 }
 
 class ModelFacesData(
-    val down: JsonElement?,
-    val up: JsonElement?,
-    val north: JsonElement?,
-    val south: JsonElement?,
-    val west: JsonElement?,
-    val east: JsonElement?,
+    val down: ModelFaceData?,
+    val up: ModelFaceData?,
+    val north: ModelFaceData?,
+    val south: ModelFaceData?,
+    val west: ModelFaceData?,
+    val east: ModelFaceData?,
 ) {
     fun toJsonElement(): JsonElement = jsonObjectNotNull(
-        "down" to down,
-        "up" to up,
-        "north" to north,
-        "south" to south,
-        "west" to west,
-        "east" to east,
+        "down" to down?.toJsonElement(),
+        "up" to up?.toJsonElement(),
+        "north" to north?.toJsonElement(),
+        "south" to south?.toJsonElement(),
+        "west" to west?.toJsonElement(),
+        "east" to east?.toJsonElement(),
+    )
+}
+
+class ModelFaceData(
+    val uv: List<Number>? = null,
+    val texture: String,
+    val tintindex: Int? = null,
+    val cullface: String? = null,
+) {
+    fun toJsonElement(): JsonElement = jsonObjectNotNull(
+        "uv" to uv?.map { it.jsonElement }?.jsonArray,
+        "texture" to texture.jsonElement,
+        "tintindex" to tintindex?.jsonElement,
+        "cullface" to cullface?.jsonElement,
     )
 }
 
