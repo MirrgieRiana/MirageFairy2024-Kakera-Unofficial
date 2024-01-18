@@ -182,6 +182,7 @@ class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
     override fun hasRandomTicks(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        @Suppress("DEPRECATION")
         super.randomTick(state, world, pos, random)
 
         val direction = Direction.random(random)
