@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Model
+import miragefairy2024.util.ModelData
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.on
@@ -134,14 +135,14 @@ fun initBlockMaterialsModule() {
 
 private val localVacuumDecayTexturedModel = TexturedModel.Factory { block ->
     Model { textures ->
-        jsonObject(
-            "parent" to Identifier("minecraft", "block/block").string.jsonElement,
-            "textures" to jsonObject(
+        ModelData(
+            parent = Identifier("minecraft", "block/block"),
+            textures = jsonObject(
                 TextureKey.PARTICLE.name to textures.getTexture(TextureKey.BACK).string.jsonElement,
                 TextureKey.BACK.name to textures.getTexture(TextureKey.BACK).string.jsonElement,
                 TextureKey.FRONT.name to textures.getTexture(TextureKey.FRONT).string.jsonElement,
             ),
-            "elements" to jsonArray(
+            elements = jsonArray(
                 jsonObject(
                     "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
                     "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),

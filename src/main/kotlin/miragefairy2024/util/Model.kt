@@ -24,9 +24,9 @@ import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
 
-fun Model(creator: (TextureMap) -> JsonElement): Model = object : Model(Optional.empty(), Optional.empty()) {
+fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
     override fun upload(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
-        modelCollector.accept(id) { creator(textures) }
+        modelCollector.accept(id) { creator(textures).toJsonElement() }
         return id
     }
 }
@@ -34,6 +34,18 @@ fun Model(creator: (TextureMap) -> JsonElement): Model = object : Model(Optional
 fun Model(parent: Identifier, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.empty(), *textureKeys)
 
 fun Model(parent: Identifier, variant: String, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.of(variant), *textureKeys)
+
+class ModelData(
+    val parent: Identifier,
+    val textures: JsonElement? = null,
+    val elements: JsonElement? = null,
+) {
+    fun toJsonElement(): JsonElement = jsonObjectNotNull(
+        "parent" to parent.string.jsonElement,
+        "textures" to textures,
+        "elements" to elements,
+    )
+}
 
 
 fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {

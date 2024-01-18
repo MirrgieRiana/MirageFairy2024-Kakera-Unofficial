@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.mirageFairy2024ItemGroup
 import miragefairy2024.util.Model
+import miragefairy2024.util.ModelData
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -44,9 +45,9 @@ fun initFairyModule() {
 }
 
 private fun createFairyModel() = Model {
-    jsonObject(
-        "parent" to Identifier("item/generated").string.jsonElement,
-        "textures" to jsonObject(
+    ModelData(
+        parent = Identifier("item/generated"),
+        textures = jsonObject(
             "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_skin").string.jsonElement,
             "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_back").string.jsonElement,
             "layer2" to Identifier(MirageFairy2024.modId, "item/fairy_front").string.jsonElement,

@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BaseStoneType.DEEPSLATE
 import miragefairy2024.mod.BaseStoneType.STONE
 import miragefairy2024.util.Model
+import miragefairy2024.util.ModelData
 import miragefairy2024.util.concat
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -162,12 +163,12 @@ fun initOresModule() {
 }
 
 fun createOreModel() = Model {
-    jsonObject(
-        "parent" to Identifier("minecraft", "block/block").string.jsonElement,
-        "textures" to jsonObject(
+    ModelData(
+        parent = Identifier("minecraft", "block/block"),
+        textures = jsonObject(
             TextureKey.PARTICLE.name to TextureKey.BACK.string.jsonElement,
         ),
-        "elements" to jsonArray(
+        elements = jsonArray(
             jsonObject(
                 "from" to jsonArray(0.jsonElement, 0.jsonElement, 0.jsonElement),
                 "to" to jsonArray(16.jsonElement, 16.jsonElement, 16.jsonElement),

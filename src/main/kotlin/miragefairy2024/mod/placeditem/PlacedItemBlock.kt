@@ -5,6 +5,7 @@ import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Model
+import miragefairy2024.util.ModelData
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.register
@@ -62,12 +63,12 @@ fun initPlacedItemBlock() {
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {
             Model {
-                jsonObject(
-                    "parent" to Identifier("minecraft", "block/block").string.jsonElement,
-                    "textures" to jsonObject(
+                ModelData(
+                    parent = Identifier("minecraft", "block/block"),
+                    textures = jsonObject(
                         TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string.jsonElement,
                     ),
-                    "elements" to jsonArray(),
+                    elements = jsonArray(),
                 )
             }.with()
         }
