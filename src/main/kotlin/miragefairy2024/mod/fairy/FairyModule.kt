@@ -31,8 +31,8 @@ fun initFairyModule() {
         card.item.registerColorProvider { itemStack, tintIndex ->
             when (tintIndex) {
                 0 -> 0xFFEEDD // skin
-                1 -> 0xAAAAFF // back
-                2 -> 0xAAAAFF // front
+                1 -> 0xAAAAFF // front
+                2 -> 0xAAAAFF // back
                 3 -> 0x440000 // hair
                 4 -> 0xAA0000 // dress
                 else -> 0x000000
@@ -48,8 +48,8 @@ private fun createFairyModel() = Model {
         parent = Identifier("item/generated"),
         textures = ModelTexturesData(
             "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_skin").string,
-            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_back").string,
-            "layer2" to Identifier(MirageFairy2024.modId, "item/fairy_front").string,
+            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_front").string,
+            "layer2" to Identifier(MirageFairy2024.modId, "item/fairy_back").string,
             "layer3" to Identifier(MirageFairy2024.modId, "item/fairy_hair").string,
             "layer4" to Identifier(MirageFairy2024.modId, "item/fairy_dress").string,
         ),
