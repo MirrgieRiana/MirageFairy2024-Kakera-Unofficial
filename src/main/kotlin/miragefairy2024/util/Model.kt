@@ -63,12 +63,30 @@ fun ModelElementsData(vararg elements: ModelElementData) = ModelElementsData(ele
 class ModelElementData(
     val from: List<Number>,
     val to: List<Number>,
-    val faces: JsonElement,
+    val faces: ModelFacesData,
 ) {
     fun toJsonElement(): JsonElement = jsonObjectNotNull(
         "from" to from.map { it.jsonElement }.jsonArray,
         "to" to to.map { it.jsonElement }.jsonArray,
-        "faces" to faces,
+        "faces" to faces.toJsonElement(),
+    )
+}
+
+class ModelFacesData(
+    val down: JsonElement?,
+    val up: JsonElement?,
+    val north: JsonElement?,
+    val south: JsonElement?,
+    val west: JsonElement?,
+    val east: JsonElement?,
+) {
+    fun toJsonElement(): JsonElement = jsonObjectNotNull(
+        "down" to down,
+        "up" to up,
+        "north" to north,
+        "south" to south,
+        "west" to west,
+        "east" to east,
     )
 }
 

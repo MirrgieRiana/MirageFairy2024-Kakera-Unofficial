@@ -5,6 +5,7 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
 import miragefairy2024.util.ModelElementsData
+import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -148,25 +149,25 @@ private val localVacuumDecayTexturedModel = TexturedModel.Factory { block ->
                 ModelElementData(
                     from = listOf(0, 0, 0),
                     to = listOf(16, 16, 16),
-                    faces = jsonObject(
-                        "down" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
-                        "up" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
-                        "north" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
-                        "south" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
-                        "west" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
-                        "east" to jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
+                    faces = ModelFacesData(
+                        down = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "down".jsonElement),
+                        up = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "up".jsonElement),
+                        north = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "north".jsonElement),
+                        south = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "south".jsonElement),
+                        west = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "west".jsonElement),
+                        east = jsonObject("texture" to TextureKey.BACK.string.jsonElement, "cullface" to "east".jsonElement),
                     ),
                 ),
                 ModelElementData(
                     from = listOf(0, 0, 0),
                     to = listOf(16, 16, 16),
-                    faces = jsonObject(
-                        "down" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
-                        "up" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
-                        "north" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
-                        "south" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
-                        "west" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
-                        "east" to jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
+                    faces = ModelFacesData(
+                        down = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "down".jsonElement),
+                        up = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "up".jsonElement),
+                        north = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "north".jsonElement),
+                        south = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "south".jsonElement),
+                        west = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "west".jsonElement),
+                        east = jsonObject("texture" to TextureKey.FRONT.string.jsonElement, "cullface" to "east".jsonElement),
                     ),
                 ),
             ),
