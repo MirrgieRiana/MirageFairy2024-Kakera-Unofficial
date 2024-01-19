@@ -28,6 +28,7 @@ enum class MaterialCard(
     val poemList: PoemList,
     val fuelValue: Int? = null,
     val foodComponent: FoodComponent? = null,
+    val creator: (Item.Settings) -> Item = ::Item,
 ) {
 
     XARPITE(
@@ -139,7 +140,7 @@ enum class MaterialCard(
     val identifier = Identifier(MirageFairy2024.modId, path)
     val item = Item.Settings()
         .let { if (foodComponent != null) it.food(foodComponent) else it }
-        .let { Item(it) }
+        .let { creator(it) }
 }
 
 fun initMaterialsModule() {
