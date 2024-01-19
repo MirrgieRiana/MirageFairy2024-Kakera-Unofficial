@@ -80,9 +80,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         addProperties(propertyDelegate)
     }
 
-    override fun canUse(player: PlayerEntity): Boolean {
-        return true
-    }
+    override fun canUse(player: PlayerEntity) = true
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
