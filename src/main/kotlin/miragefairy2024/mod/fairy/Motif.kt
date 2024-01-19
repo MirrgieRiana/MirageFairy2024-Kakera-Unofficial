@@ -21,11 +21,13 @@ interface Motif {
     val frontColor: Int
     val backColor: Int
     val hairColor: Int
+    val rare: Int
 }
 
 
 enum class MotifCard(
     path: String,
+    override val rare: Int,
     enName: String,
     jaName: String,
     override val skinColor: Int,
@@ -34,8 +36,7 @@ enum class MotifCard(
     override val hairColor: Int,
 ) : Motif {
     AIR(
-        "air", "Airia", "空気精アイリャ",
-        0xFFBE80, 0xDEFFFF, 0xDEFFFF, 0xB0FFFF,
+        "air", 0, "Airia", "空気精アイリャ", 0xFFBE80, 0xDEFFFF, 0xDEFFFF, 0xB0FFFF,
     ),
     ;
 

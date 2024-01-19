@@ -5,18 +5,24 @@ import miragefairy2024.mod.mirageFairy2024ItemGroup
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Translation
+import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.text
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.world.World
 
 object FairyCard {
     val enName = "Invalid Fairy"
@@ -24,6 +30,8 @@ object FairyCard {
     val identifier = Identifier(MirageFairy2024.modId, "fairy")
     val item = FairyItem(Item.Settings())
 }
+
+val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
 
 fun initFairyItem() {
     FairyCard.let { card ->
@@ -51,6 +59,8 @@ fun initFairyItem() {
 
         card.item.enJa(card.enName, card.jaName)
     }
+
+    RARE_TRANSLATION.enJa()
 }
 
 private fun createFairyModel() = Model {
@@ -68,6 +78,11 @@ private fun createFairyModel() = Model {
 
 class FairyItem(settings: Settings) : Item(settings) {
     override fun getName(stack: ItemStack): Text = stack.getFairyMotif()?.displayName ?: super.getName(stack)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        val motif = stack.getFairyMotif() ?: return
+        tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
+    }
 }
 
 fun ItemStack.getFairyMotifId(): Identifier? {
