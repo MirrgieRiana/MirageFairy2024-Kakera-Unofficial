@@ -1,8 +1,7 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.fairy
 
-import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
-import miragefairy2024.mod.fairy.MotifTableScreenHandler
-import miragefairy2024.mod.fairy.motifRegistry
+import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
+import miragefairy2024.mod.MIRAGE_FLOUR_DESCRIPTION_TRANSLATION
 import miragefairy2024.util.blue
 import miragefairy2024.util.invoke
 import miragefairy2024.util.string

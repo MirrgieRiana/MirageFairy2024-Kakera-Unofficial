@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.fairy.MirageFlourItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
