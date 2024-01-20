@@ -105,7 +105,7 @@ fun TraitStack.toNbt(): NbtCompound {
 
 class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) {
     companion object {
-        fun of(traitStackList: List<TraitStack>): TraitStacks {
+        fun of(traitStackList: Iterable<TraitStack>): TraitStacks {
             // 同じ特性をまとめて、各レベルをビットORする
             val traitStackMap = traitStackList
                 .groupBy { it.trait }
@@ -117,6 +117,8 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
                 .toSortedMap()
             return TraitStacks(traitStackMap)
         }
+
+        fun of(vararg traitStacks: TraitStack) = of(traitStacks.asIterable())
 
         fun readFromNbt(parent: NbtCompound, key: String = "TraitStacks"): TraitStacks? {
             if (!parent.contains(key, NbtElement.LIST_TYPE.toInt())) return null
