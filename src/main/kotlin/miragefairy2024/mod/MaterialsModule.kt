@@ -110,22 +110,22 @@ enum class MaterialCard(
     ),
     VERY_RARE_MIRAGE_FLOUR(
         "very_rare_mirage_flour", "Very Rare Mirage Flour", "特選高純度ミラージュの花粉",
-        PoemList(1).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
+        PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
         creator = { MirageFlourItem(9.0.pow(2.0), it) },
     ),
     ULTRA_RARE_MIRAGE_FLOUR(
         "ultra_rare_mirage_flour", "Ultra Rare Mirage Flour", "厳選高純度ミラージュの花粉",
-        PoemList(1).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
+        PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
         creator = { MirageFlourItem(9.0.pow(3.0), it) },
     ),
     SUPER_RARE_MIRAGE_FLOUR(
         "super_rare_mirage_flour", "Super Rare Mirage Flour", "激甚高純度ミラージュの花粉",
-        PoemList(1).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
+        PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
         creator = { MirageFlourItem(9.0.pow(4.0), it) },
     ),
     EXTREMELY_RARE_MIRAGE_FLOUR(
         "extremely_rare_mirage_flour", "Extremely Rare Mirage Flour", "極超高純度ミラージュの花粉",
-        PoemList(1)
+        PoemList(3)
             .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
             .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
         creator = { MirageFlourItem(9.0.pow(5.0), it) },
