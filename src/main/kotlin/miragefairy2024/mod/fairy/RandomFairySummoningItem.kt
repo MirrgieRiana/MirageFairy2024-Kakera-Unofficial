@@ -23,7 +23,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.pow
 
-class MirageFlourItem(val appearanceRateBonus: Double, settings: Settings) : Item(settings) {
+class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settings) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }

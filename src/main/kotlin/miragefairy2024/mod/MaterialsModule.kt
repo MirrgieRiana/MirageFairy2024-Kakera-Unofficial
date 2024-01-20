@@ -1,7 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.mod.fairy.MirageFlourItem
+import miragefairy2024.mod.fairy.RandomFairySummoningItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -97,39 +97,39 @@ enum class MaterialCard(
     TINY_MIRAGE_FLOUR(
         "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
         PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
-        creator = { MirageFlourItem(9.0.pow(-1.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
     ),
     MIRAGE_FLOUR(
         "mirage_flour", "Mirage Flour", "ミラージュの花粉",
         PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
-        creator = { MirageFlourItem(9.0.pow(0.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
     ),
     RARE_MIRAGE_FLOUR(
         "rare_mirage_flour", "Rare Mirage Flour", "高純度ミラージュの花粉",
         PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
-        creator = { MirageFlourItem(9.0.pow(1.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
     ),
     VERY_RARE_MIRAGE_FLOUR(
         "very_rare_mirage_flour", "Very Rare Mirage Flour", "特選高純度ミラージュの花粉",
         PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
-        creator = { MirageFlourItem(9.0.pow(2.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
     ),
     ULTRA_RARE_MIRAGE_FLOUR(
         "ultra_rare_mirage_flour", "Ultra Rare Mirage Flour", "厳選高純度ミラージュの花粉",
         PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
-        creator = { MirageFlourItem(9.0.pow(3.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
     ),
     SUPER_RARE_MIRAGE_FLOUR(
         "super_rare_mirage_flour", "Super Rare Mirage Flour", "激甚高純度ミラージュの花粉",
         PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
-        creator = { MirageFlourItem(9.0.pow(4.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
     ),
     EXTREMELY_RARE_MIRAGE_FLOUR(
         "extremely_rare_mirage_flour", "Extremely Rare Mirage Flour", "極超高純度ミラージュの花粉",
         PoemList(3)
             .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
             .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
-        creator = { MirageFlourItem(9.0.pow(5.0), it) },
+        creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
     ),
 
     FRACTAL_WISP(
