@@ -6,7 +6,7 @@ import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
-import miragefairy2024.mod.mirageFairy2024ItemGroup
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
@@ -238,7 +238,7 @@ fun initHaimeviskaBlocks() {
         card.item.register(Registries.ITEM, card.identifier)
 
         // カテゴリ
-        card.item.registerItemGroup(mirageFairy2024ItemGroup)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
         card.block.enJa(card.settings.enName, card.settings.jaName)

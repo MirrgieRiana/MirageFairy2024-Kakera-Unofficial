@@ -5,25 +5,18 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.magicplants.initMirageFlower
 import miragefairy2024.mod.magicplant.magicplants.initVeropeda
+import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.en
 import miragefairy2024.util.enJa
-import miragefairy2024.util.ja
 import miragefairy2024.util.register
-import miragefairy2024.util.text
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
@@ -31,7 +24,9 @@ val TRAIT_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.trait" },
 val CREATIVE_ONLY_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.creativeOnly" }, "Creative Only", "クリエイティブ専用")
 val INVALID_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.invalid" }, "Invalid", "無効")
 
-val magicPlantSeedItemGroup: RegistryKey<ItemGroup> = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier(MirageFairy2024.modId, "magic_plant_seeds"))
+val magicPlantSeedItemGroupCard = ItemGroupCard(
+    Identifier(MirageFairy2024.modId, "magic_plant_seeds"), "Magic Plant Seeds", "魔法植物の種子",
+) { MirageFlowerCard.item.createItemStack() }
 
 fun initMagicPlantModule() {
 
@@ -51,14 +46,7 @@ fun initMagicPlantModule() {
     CREATIVE_ONLY_TRANSLATION.enJa()
     INVALID_TRANSLATION.enJa()
 
-    val itemGroup = FabricItemGroup.builder()
-        .icon { MirageFlowerCard.item.createItemStack() }
-        .displayName(text { translate("itemGroup.magic_plant_seeds") })
-        .build()
-    itemGroup.register(Registries.ITEM_GROUP, magicPlantSeedItemGroup.value)
-
-    en { "itemGroup.magic_plant_seeds" to "Magic Plant Seeds" }
-    ja { "itemGroup.magic_plant_seeds" to "魔法植物の種子" }
+    magicPlantSeedItemGroupCard.init()
 
 
     initMirageFlower()

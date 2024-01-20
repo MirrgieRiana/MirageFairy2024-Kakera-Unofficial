@@ -2,7 +2,7 @@ package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.mirageFairy2024ItemGroup
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -49,7 +49,7 @@ private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCa
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroup) {
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
                 val itemStack = card.item.createItemStack()
                 itemStack.setFairyQuestRecipe(it.value)

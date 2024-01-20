@@ -1,6 +1,6 @@
 package miragefairy2024.mod.magicplant
 
-import miragefairy2024.mod.mirageFairy2024ItemGroup
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.createItemStack
@@ -21,8 +21,8 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
     item.register(Registries.ITEM, itemIdentifier)
 
     // 分類
-    item.registerItemGroup(mirageFairy2024ItemGroup)
-    item.registerItemGroup(magicPlantSeedItemGroup) {
+    item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+    item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
         traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
             (0..3).map { b ->
                 item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }

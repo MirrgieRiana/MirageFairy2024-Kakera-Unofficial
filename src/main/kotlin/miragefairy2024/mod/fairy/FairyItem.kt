@@ -1,7 +1,7 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.mod.mirageFairy2024ItemGroup
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -36,7 +36,7 @@ val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare"
 fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroup) {
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             motifRegistry.entrySet.sortedBy { it.key.value }.map {
                 val itemStack = card.item.createItemStack()
                 itemStack.setFairyMotif(it.value)
