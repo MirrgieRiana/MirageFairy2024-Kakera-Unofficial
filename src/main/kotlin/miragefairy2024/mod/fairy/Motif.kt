@@ -63,6 +63,14 @@ enum class MotifCard(
         "dirt", 1, "Dirtia", "土精ディルチャ", 0xB87440, 0xB9855C, 0x593D29, 0x914A18,
         Recipes().overworld,
     ),
+    IRON(
+        "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
+        Recipes().overworld,
+    ),
+    DIAMOND(
+        "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
+        Recipes().overworld,
+    ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         Recipes().overworld.nether.end,
@@ -73,7 +81,20 @@ enum class MotifCard(
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
-        Recipes(),
+        Recipes().always, // TODO
+    ),
+    MAGENTA_GLAZED_TERRACOTTA(
+        "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ",
+        0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
+        Recipes().always, // TODO
+    ),
+    TIME(
+        "time", 12, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
+        Recipes().always,
+    ),
+    GRAVITY(
+        "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
+        Recipes().always,
     ),
     ;
 
