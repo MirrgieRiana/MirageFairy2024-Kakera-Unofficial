@@ -32,10 +32,18 @@ fun inventoryNameLabel(name: Text, horizontalTextAlignment: HorizontalAlignment?
     color(Color.ofRgb(0x404040))
 }
 
-fun <C : Component> verticalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, configurator: ScrollContainer<C>.() -> Unit, creator: () -> C): ScrollContainer<C> {
-    return Containers.verticalScroll(horizontalSizing, verticalSizing, creator()).also { configurator(it) }
+fun verticalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int): ScrollContainer<FlowLayout> {
+    return Containers.verticalScroll(horizontalSizing, verticalSizing, Containers.verticalFlow(horizontalSizing, Sizing.content()).apply {
+        padding(Insets.of(0, 0, 0, scrollbarThiccness))
+    }).apply {
+        scrollbarThiccness(scrollbarThiccness)
+    }
 }
 
-fun <C : Component> horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, configurator: ScrollContainer<C>.() -> Unit, creator: () -> C): ScrollContainer<C> {
-    return Containers.horizontalScroll(horizontalSizing, verticalSizing, creator()).also { configurator(it) }
+fun horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int): ScrollContainer<FlowLayout> {
+    return Containers.horizontalScroll(horizontalSizing, verticalSizing, Containers.horizontalFlow(Sizing.content(), verticalSizing).apply {
+        padding(Insets.of(0, scrollbarThiccness, 0, 0))
+    }).apply {
+        scrollbarThiccness(scrollbarThiccness)
+    }
 }

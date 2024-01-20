@@ -71,28 +71,20 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 padding(Insets.of(11, 11, 11, 6))
 
                                 // スクロールコンテナ
-                                child(verticalScroll(Sizing.fill(), Sizing.fill(), {
-                                    scrollbarThiccness(5)
-                                }) {
+                                child(verticalScroll(Sizing.fill(), Sizing.fill(), 5).apply {
 
-                                    // スクロールバー回避用パディング設定パネル
-                                    Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
-                                        padding(Insets.of(0, 0, 0, 5))
+                                    // 罫線装飾用パネル
+                                    child().child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
+                                        surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
+                                        padding(Insets.of(0, 1, 0, 0))
 
-                                        // 罫線装飾用パネル
-                                        child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
-                                            surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
-                                            padding(Insets.of(0, 1, 0, 0))
-
-                                            // メッセージテキストラベル
-                                            child(Components.label(handler.recipe.message).apply {
-                                                sizing(Sizing.fill(), Sizing.content())
-                                                color(Color.ofRgb(0x6B472E))
-                                            })
-
+                                        // メッセージテキストラベル
+                                        child(Components.label(handler.recipe.message).apply {
+                                            sizing(Sizing.fill(), Sizing.content())
+                                            color(Color.ofRgb(0x6B472E))
                                         })
 
-                                    }
+                                    })
 
                                 })
 

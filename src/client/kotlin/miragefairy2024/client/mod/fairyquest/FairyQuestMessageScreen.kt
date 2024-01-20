@@ -36,54 +36,46 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
                 padding(Insets.of(0, 0, 10, 0))
 
                 // スクロールコンテナ
-                child(verticalScroll(Sizing.fill(), Sizing.fill(), {
+                child(verticalScroll(Sizing.fill(), Sizing.fill(), 10).apply {
                     scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
-                    scrollbarThiccness(10)
-                }) {
 
-                    // スクロールバー回避用パディング設定パネル
-                    Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
-                        padding(Insets.of(0, 0, 0, 10))
+                    // 外枠装飾用パネル
+                    child().child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
+                        surface(NinePatchTextureCard.FAIRY_QUEST_CARD_MESSAGE.surface)
+                        padding(Insets.of(11))
 
-                        // 外枠装飾用パネル
+                        // タイトル
+                        child(Components.label(fairyQuestTitle).apply {
+                            sizing(Sizing.fill(), Sizing.content())
+                            horizontalTextAlignment(HorizontalAlignment.CENTER)
+                            color(Color.ofRgb(0x6B472E))
+                        })
+
+                        child(verticalSpace(11))
+
+                        // 罫線装飾用パネル
                         child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
-                            surface(NinePatchTextureCard.FAIRY_QUEST_CARD_MESSAGE.surface)
-                            padding(Insets.of(11))
+                            surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
+                            padding(Insets.of(0, 1, 0, 0))
 
-                            // タイトル
-                            child(Components.label(fairyQuestTitle).apply {
+                            // メッセージテキストラベル
+                            child(Components.label(fairyQuestMessage).apply {
                                 sizing(Sizing.fill(), Sizing.content())
-                                horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                color(Color.ofRgb(0x6B472E))
-                            })
-
-                            child(verticalSpace(11))
-
-                            // 罫線装飾用パネル
-                            child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
-                                surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
-                                padding(Insets.of(0, 1, 0, 0))
-
-                                // メッセージテキストラベル
-                                child(Components.label(fairyQuestMessage).apply {
-                                    sizing(Sizing.fill(), Sizing.content())
-                                    color(Color.ofRgb(0x6B472E))
-                                })
-
-                            })
-
-                            child(verticalSpace(11))
-
-                            // 依頼人
-                            child(Components.label(fairyQuestClient).apply {
-                                sizing(Sizing.fill(), Sizing.content())
-                                horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                 color(Color.ofRgb(0x6B472E))
                             })
 
                         })
 
-                    }
+                        child(verticalSpace(11))
+
+                        // 依頼人
+                        child(Components.label(fairyQuestClient).apply {
+                            sizing(Sizing.fill(), Sizing.content())
+                            horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                            color(Color.ofRgb(0x6B472E))
+                        })
+
+                    })
 
                 })
 

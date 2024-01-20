@@ -42,52 +42,47 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                 child(Containers.verticalFlow(Sizing.content(), Sizing.fill()).apply {
 
                     // スクロールパネル
-                    child(verticalScroll(Sizing.content(), Sizing.fill(), {
+                    child(verticalScroll(Sizing.content(), Sizing.fill(), 18).apply {
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
-                        scrollbarThiccness(18)
-                    }, {
-                        Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
-                            padding(Insets.of(0, 0, 0, 18))
 
-                            // スロットパネル
-                            child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
-                                padding(Insets.of(0, 0, 0, 3))
+                        // スロットパネル
+                        child().child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+                            padding(Insets.of(0, 0, 0, 3))
 
-                                handler.table.forEach { (motifId, rate, count) ->
-                                    child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
-                                        verticalAlignment(VerticalAlignment.CENTER)
+                            handler.table.forEach { (motifId, rate, count) ->
+                                child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
+                                    verticalAlignment(VerticalAlignment.CENTER)
 
-                                        val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(motifId) }
-                                        child(Components.item(itemStack).apply {
-                                            padding(Insets.of(1, 1, 0, 0))
-                                            setTooltipFromStack(true)
-                                        })
-                                        child(horizontalSpace(3))
-                                        child(Components.label(itemStack.name).apply {
-                                            sizing(Sizing.fixed(150), Sizing.content())
-                                            horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                            verticalTextAlignment(VerticalAlignment.CENTER)
-                                            color(Color.ofRgb(0x404040))
-                                        })
-                                        child(Components.label(text { (rate * 100 formatAs "%.4f%%")() }).apply {
-                                            sizing(Sizing.fixed(50), Sizing.content())
-                                            horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                            verticalTextAlignment(VerticalAlignment.CENTER)
-                                            color(Color.ofRgb(0x404040))
-                                        })
-                                        child(Components.label(text { "x"() + (count formatAs "%.2f")() }).apply {
-                                            sizing(Sizing.fixed(60), Sizing.content())
-                                            horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                            verticalTextAlignment(VerticalAlignment.CENTER)
-                                            color(Color.ofRgb(0x404040))
-                                        })
-
+                                    val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(motifId) }
+                                    child(Components.item(itemStack).apply {
+                                        padding(Insets.of(1, 1, 0, 0))
+                                        setTooltipFromStack(true)
                                     })
-                                }
-                            })
+                                    child(horizontalSpace(3))
+                                    child(Components.label(itemStack.name).apply {
+                                        sizing(Sizing.fixed(150), Sizing.content())
+                                        horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                        verticalTextAlignment(VerticalAlignment.CENTER)
+                                        color(Color.ofRgb(0x404040))
+                                    })
+                                    child(Components.label(text { (rate * 100 formatAs "%.4f%%")() }).apply {
+                                        sizing(Sizing.fixed(50), Sizing.content())
+                                        horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                        verticalTextAlignment(VerticalAlignment.CENTER)
+                                        color(Color.ofRgb(0x404040))
+                                    })
+                                    child(Components.label(text { "x"() + (count formatAs "%.2f")() }).apply {
+                                        sizing(Sizing.fixed(60), Sizing.content())
+                                        horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                        verticalTextAlignment(VerticalAlignment.CENTER)
+                                        color(Color.ofRgb(0x404040))
+                                    })
 
-                        }
-                    }))
+                                })
+                            }
+                        })
+
+                    })
 
                 })
 
