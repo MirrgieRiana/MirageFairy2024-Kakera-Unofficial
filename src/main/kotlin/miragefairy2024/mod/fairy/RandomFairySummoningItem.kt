@@ -38,7 +38,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         } else {
             if (world.isClient) return TypedActionResult.success(itemStack)
 
-            val chanceTable = getCommonChanceTable(user).compressRate().sortedDescending()
+            val chanceTable = getCommonChanceTable(user).map { MotifChance(it.motif, it.rate * appearanceRateBonus) }.compressRate().sortedDescending()
 
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
