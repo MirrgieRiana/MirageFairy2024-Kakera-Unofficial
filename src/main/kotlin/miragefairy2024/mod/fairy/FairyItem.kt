@@ -9,6 +9,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.green
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -19,6 +20,7 @@ import miragefairy2024.util.text
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtElement
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -81,11 +83,17 @@ private fun createFairyModel() = Model {
 }
 
 class FairyItem(settings: Settings) : Item(settings) {
-    override fun getName(stack: ItemStack): Text = stack.getFairyMotif()?.displayName ?: super.getName(stack)
+    override fun getName(stack: ItemStack): Text {
+        val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
+        val condensation = stack.getFairyCondensation()
+        return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
+    }
+
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         val motif = stack.getFairyMotif() ?: return
         tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
+        tooltip += text { (CONDENSATION_TRANSLATION() + ": ${stack.getFairyCondensation()}"()).green }
     }
 }
 
@@ -102,3 +110,13 @@ fun ItemStack.setFairyMotifId(identifier: Identifier) {
 }
 
 fun ItemStack.setFairyMotif(recipe: Motif) = this.setFairyMotifId(motifRegistry.getId(recipe)!!)
+
+fun ItemStack.getFairyCondensation(): Int {
+    val nbt = this.nbt ?: return 1
+    if (!nbt.contains("FairyCondensation", NbtElement.INT_TYPE.toInt())) return 1
+    return nbt.getInt("FairyCondensation")
+}
+
+fun ItemStack.setFairyCondensation(condensation: Int) {
+    getOrCreateNbt().putInt("FairyCondensation", condensation)
+}
