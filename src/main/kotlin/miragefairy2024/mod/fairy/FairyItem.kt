@@ -32,6 +32,8 @@ object FairyCard {
 }
 
 val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
+val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
+val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
 
 fun initFairyItem() {
     FairyCard.let { card ->
@@ -61,6 +63,8 @@ fun initFairyItem() {
     }
 
     RARE_TRANSLATION.enJa()
+    MANA_TRANSLATION.enJa()
+    CONDENSATION_TRANSLATION.enJa()
 }
 
 private fun createFairyModel() = Model {
