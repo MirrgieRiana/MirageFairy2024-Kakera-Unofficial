@@ -3,7 +3,7 @@ package miragefairy2024.util
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.util.math.random.Random
 
-class Chance<T : Any>(val weight: Double, val item: T) {
+class Chance<out T : Any>(val weight: Double, val item: T) {
     override fun toString() = "${weight formatAs "%8.4f"}: $item"
 }
 
