@@ -68,9 +68,9 @@ fun getCommonChanceTable(player: PlayerEntity): List<MotifChance> {
 
 class CondensedMotifChance(val motifId: Identifier, val rate: Double, val condensation: Double) : Comparable<CondensedMotifChance> {
     override fun compareTo(other: CondensedMotifChance): Int {
-        (motifId cmp other.motifId).let { if (it != 0) return it }
         (rate cmp other.rate).let { if (it != 0) return it }
         (condensation cmp other.condensation).let { if (it != 0) return it }
+        (motifId cmp other.motifId).let { if (it != 0) return it }
         return 0
     }
 }
