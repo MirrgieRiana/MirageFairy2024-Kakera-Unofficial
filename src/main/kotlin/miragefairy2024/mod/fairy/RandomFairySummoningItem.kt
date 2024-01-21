@@ -38,11 +38,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         } else {
             if (world.isClient) return TypedActionResult.success(itemStack)
 
-            val chanceTable = COMMON_MOTIF_RECIPES.filter { it.biome == null || world.getBiome(user.blockPos).isIn(it.biome) }.map { recipe ->
-                val rate = 0.1.pow(recipe.motif.rare / 2.0)
-                val count = 1.0 // TODO
-                CondensedMotifChance(motifRegistry.getId(recipe.motif)!!, rate, count)
-            }
+            val chanceTable = getCommonChanceTable(user)
 
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
@@ -62,6 +58,15 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
             })
             return TypedActionResult.consume(itemStack)
         }
+    }
+}
+
+fun getCommonChanceTable(player: PlayerEntity): List<CondensedMotifChance> {
+    val biome = player.world.getBiome(player.blockPos)
+    return COMMON_MOTIF_RECIPES.filter { it.biome == null || biome.isIn(it.biome) }.map { recipe ->
+        val rate = 0.1.pow(recipe.motif.rare / 2.0)
+        val count = 1.0 // TODO
+        CondensedMotifChance(motifRegistry.getId(recipe.motif)!!, rate, count)
     }
 }
 
