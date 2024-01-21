@@ -87,14 +87,14 @@ class FairyItem(settings: Settings) : Item(settings) {
 
 fun ItemStack.getFairyMotifId(): Identifier? {
     val nbt = this.nbt ?: return null
-    val id = nbt.getString("Motif") ?: return null
+    val id = nbt.getString("FairyMotif") ?: return null
     return Identifier(id)
 }
 
 fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
 
 fun ItemStack.setFairyMotifId(identifier: Identifier) {
-    getOrCreateNbt().putString("Motif", identifier.string)
+    getOrCreateNbt().putString("FairyMotif", identifier.string)
 }
 
 fun ItemStack.setFairyMotif(recipe: Motif) = this.setFairyMotifId(motifRegistry.getId(recipe)!!)
