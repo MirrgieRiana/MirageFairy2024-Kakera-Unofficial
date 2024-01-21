@@ -18,6 +18,8 @@ import net.minecraft.world.biome.Biome
 val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
+fun Motif.getIdentifier() = motifRegistry.getId(this)
+
 interface Motif {
     val displayName: Text
     val skinColor: Int
