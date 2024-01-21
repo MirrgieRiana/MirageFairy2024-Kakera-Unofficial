@@ -15,7 +15,6 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
@@ -41,12 +40,8 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
             val chanceTable = getCommonChanceTable(user)
 
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
-                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return MotifTableScreenHandler(syncId, chanceTable)
-                }
-
+                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = itemStack.name
-
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
