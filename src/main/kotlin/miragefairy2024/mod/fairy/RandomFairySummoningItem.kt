@@ -19,6 +19,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
+import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.pow
@@ -37,25 +38,25 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         } else {
             if (world.isClient) return TypedActionResult.success(itemStack)
 
-            val entries = COMMON_MOTIF_RECIPES.filter { it.biome == null || world.getBiome(user.blockPos).isIn(it.biome) }.map { recipe ->
+            val chanceTable = COMMON_MOTIF_RECIPES.filter { it.biome == null || world.getBiome(user.blockPos).isIn(it.biome) }.map { recipe ->
                 val rate = 0.1.pow(recipe.motif.rare / 2.0)
                 val count = 1.0 // TODO
-                Triple(motifRegistry.getId(recipe.motif)!!, rate, count)
+                CondensedMotifChance(motifRegistry.getId(recipe.motif)!!, rate, count)
             }
 
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return MotifTableScreenHandler(syncId, entries)
+                    return MotifTableScreenHandler(syncId, chanceTable)
                 }
 
                 override fun getDisplayName() = itemStack.name
 
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    buf.writeInt(entries.size)
-                    entries.forEach {
-                        buf.writeString(it.first.string)
-                        buf.writeDouble(it.second)
-                        buf.writeDouble(it.third)
+                    buf.writeInt(chanceTable.size)
+                    chanceTable.forEach {
+                        buf.writeString(it.motifId.string)
+                        buf.writeDouble(it.rate)
+                        buf.writeDouble(it.condensation)
                     }
                 }
             })
@@ -63,3 +64,5 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         }
     }
 }
+
+class CondensedMotifChance(val motifId: Identifier, val rate: Double, val condensation: Double)

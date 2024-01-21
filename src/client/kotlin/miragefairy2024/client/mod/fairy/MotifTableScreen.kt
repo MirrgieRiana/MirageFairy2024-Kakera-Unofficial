@@ -49,11 +49,11 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                         child().child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
                             padding(Insets.of(0, 0, 0, 3))
 
-                            handler.table.forEach { (motifId, rate, count) ->
+                            handler.chanceTable.forEach { chance ->
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(motifId) }
+                                    val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(chance.motifId) }
                                     child(Components.item(itemStack).apply {
                                         padding(Insets.of(1, 1, 0, 0))
                                         setTooltipFromStack(true)
@@ -65,13 +65,13 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
                                     })
-                                    child(Components.label(text { (rate * 100 formatAs "%.4f%%")() }).apply {
+                                    child(Components.label(text { (chance.rate * 100 formatAs "%.4f%%")() }).apply {
                                         sizing(Sizing.fixed(50), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
                                     })
-                                    child(Components.label(text { "x"() + (count formatAs "%.2f")() }).apply {
+                                    child(Components.label(text { "x"() + (chance.condensation formatAs "%.2f")() }).apply {
                                         sizing(Sizing.fixed(60), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)

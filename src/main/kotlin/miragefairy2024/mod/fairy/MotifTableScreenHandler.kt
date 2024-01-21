@@ -12,21 +12,21 @@ import net.minecraft.util.Identifier
 
 val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     val length = buf.readInt()
-    val entries = mutableListOf<Triple<Identifier, Double, Double>>()
+    val chanceTable = mutableListOf<CondensedMotifChance>()
     repeat(length) {
         val motifId = buf.readString()
         val rate = buf.readDouble()
-        val count = buf.readDouble()
-        entries += Triple(motifId.toIdentifier(), rate, count)
+        val condensation = buf.readDouble()
+        chanceTable += CondensedMotifChance(motifId.toIdentifier(), rate, condensation)
     }
-    MotifTableScreenHandler(syncId, entries)
+    MotifTableScreenHandler(syncId, chanceTable)
 }
 
 fun initMotifTableScreenHandler() {
     motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "motif_table"))
 }
 
-class MotifTableScreenHandler(syncId: Int, val table: List<Triple<Identifier, Double, Double>>) : ScreenHandler(motifTableScreenHandlerType, syncId) {
+class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {
     override fun canUse(player: PlayerEntity) = true
     override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
 }
