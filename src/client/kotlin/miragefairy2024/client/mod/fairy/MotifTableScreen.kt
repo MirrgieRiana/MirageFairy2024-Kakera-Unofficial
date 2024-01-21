@@ -72,7 +72,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                         color(Color.ofRgb(0x404040))
                                     })
                                     child(Components.label(text { "x"() + (chance.condensation formatAs "%.2f")() }).apply {
-                                        sizing(Sizing.fixed(60), Sizing.content())
+                                        sizing(Sizing.fixed(80), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
