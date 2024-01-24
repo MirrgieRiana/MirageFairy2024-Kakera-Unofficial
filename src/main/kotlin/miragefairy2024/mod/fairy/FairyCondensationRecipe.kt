@@ -3,7 +3,9 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.enJa
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.register
@@ -30,6 +32,8 @@ enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, Spe
     val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { creator(it, this) }
 }
 
+val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+
 fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
         card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
@@ -37,6 +41,8 @@ fun initFairyCondensationRecipe() {
             ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier)
         }
     }
+
+    CONDENSATION_RECIPE_TRANSLATION.enJa()
 }
 
 private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(category) {
