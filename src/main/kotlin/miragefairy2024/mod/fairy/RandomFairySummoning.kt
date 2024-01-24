@@ -199,7 +199,7 @@ class MotifChance(val motif: Identifier, val rate: Double)
 fun getCommonChanceTable(player: PlayerEntity): List<MotifChance> {
     val biome = player.world.getBiome(player.blockPos)
     return COMMON_MOTIF_RECIPES.filter { it.biome == null || biome.isIn(it.biome) }.map { recipe ->
-        MotifChance(recipe.motif.getIdentifier()!!, 0.1.pow(recipe.motif.rare / 2.0))
+        MotifChance(recipe.motif.getIdentifier()!!, (1.0 / 3.0).pow(recipe.motif.rare - 1)) // 通常花粉・レア度1で100%になる
     }
 }
 
