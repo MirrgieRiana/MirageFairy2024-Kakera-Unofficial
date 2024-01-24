@@ -12,6 +12,7 @@ import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
+import miragefairy2024.util.randomInt
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import miragefairy2024.util.string
@@ -171,26 +172,16 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         // ガチャ
         val condensedMotif = chanceTable.weightedRandom(world.random)?.first ?: return
 
-        // actualCondensation は condensation を超えない最大の2の整数乗
-        // condensation = 5.86 の場合、 actualCondensation = 4
+        // actualCondensation は condensation を超えない最大の3の整数乗
+        // condensation = 11.46 の場合、 actualCondensation = 9
         val actualCondensation = getActualCondensation(condensedMotif.condensation)
 
-        // lowerRate の確率で凝縮数 actualCondensation の妖精が1体
-        // (1 - lowerRate) の確率で凝縮数 actualCondensation の妖精が2体
-        // その期待値は、actualCondensation * (2 - lowerRate) = condensation
-        // このとき、 lowerRate = 2 - condensation / actualCondensation であればよい
-        val lowerRate = 2 - condensedMotif.condensation / actualCondensation
+        // 上の場合、 count ≒ 1.27
+        val count = condensedMotif.condensation / actualCondensation
 
-        val resultItemStack = if (world.random.nextDouble() < lowerRate) {
-            FairyCard.item.createItemStack(1).also {
-                it.setFairyMotifId(condensedMotif.motifId)
-                it.setFairyCondensation(actualCondensation)
-            }
-        } else {
-            FairyCard.item.createItemStack(2).also {
-                it.setFairyMotifId(condensedMotif.motifId)
-                it.setFairyCondensation(actualCondensation)
-            }
+        val resultItemStack = FairyCard.item.createItemStack(world.random.randomInt(count)).also {
+            it.setFairyMotifId(condensedMotif.motifId)
+            it.setFairyCondensation(actualCondensation)
         }
 
         // 入手
@@ -279,9 +270,9 @@ private fun getActualCondensation(value: Double): Int {
 
     var t = 1
     while (true) {
-        val nextT = t shl 1
+        val nextT = t * 3
         if (nextT < 0) return t // overflow
-        if (i < nextT) return t
+        if (nextT > i) return t
         t = nextT
     }
 }
