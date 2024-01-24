@@ -153,7 +153,6 @@ enum class MaterialCard(
         .let { creator(it) }
 }
 
-val MIRAGE_FLOUR_DESCRIPTION_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description" }, "Show loot table when used while sneaking", "スニーク中に使用時、提供割合を表示。")
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 
 fun initMaterialsModule() {
@@ -168,7 +167,6 @@ fun initMaterialsModule() {
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
-    MIRAGE_FLOUR_DESCRIPTION_TRANSLATION.enJa()
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
 
     fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard) {

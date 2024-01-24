@@ -4,4 +4,5 @@ fun initFairyModule() {
     initFairyItem()
     initMotif()
     initMotifTableScreenHandler()
+    initRandomFairySummoning()
 }

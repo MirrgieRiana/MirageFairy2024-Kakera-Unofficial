@@ -1,12 +1,13 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
-import miragefairy2024.mod.MIRAGE_FLOUR_DESCRIPTION_TRANSLATION
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Single
+import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.invoke
@@ -40,11 +41,20 @@ import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import kotlin.math.pow
 
+val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚。")
+val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示。")
+
+fun initRandomFairySummoning() {
+    MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION.enJa()
+    MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION.enJa()
+}
+
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settings) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
-        tooltip += MIRAGE_FLOUR_DESCRIPTION_TRANSLATION().yellow
+        tooltip += MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow
+        tooltip += MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow
     }
 
     override fun getUseAction(stack: ItemStack) = UseAction.BOW
