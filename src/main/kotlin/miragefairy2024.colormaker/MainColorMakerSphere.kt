@@ -1,4 +1,4 @@
-package miragefairy2023.colormaker
+package miragefairy2024.colormaker
 
 object MainColorMakerSphere {
     @JvmStatic

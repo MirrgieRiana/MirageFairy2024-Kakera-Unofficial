@@ -1,4 +1,4 @@
-package miragefairy2023.colormaker
+package miragefairy2024.colormaker
 
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
