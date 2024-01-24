@@ -17,6 +17,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.yellow
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -36,6 +37,7 @@ object FairyCard {
 val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
 val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
 val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
+val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 fun initFairyItem() {
     FairyCard.let { card ->
@@ -67,6 +69,7 @@ fun initFairyItem() {
     RARE_TRANSLATION.enJa()
     MANA_TRANSLATION.enJa()
     CONDENSATION_TRANSLATION.enJa()
+    CONDENSATION_RECIPE_TRANSLATION.enJa()
 }
 
 private fun createFairyModel() = Model {
@@ -94,6 +97,7 @@ class FairyItem(settings: Settings) : Item(settings) {
         val motif = stack.getFairyMotif() ?: return
         tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
         tooltip += text { (CONDENSATION_TRANSLATION() + ": ${stack.getFairyCondensation()}"()).green }
+        tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
     }
 }
 
