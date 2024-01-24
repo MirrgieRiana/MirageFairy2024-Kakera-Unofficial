@@ -174,7 +174,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
         // actualCondensation は condensation を超えない最大の3の整数乗
         // condensation = 11.46 の場合、 actualCondensation = 9
-        val actualCondensation = getActualCondensation(condensedMotif.condensation)
+        val actualCondensation = getNiceCondensation(condensedMotif.condensation).second
 
         // 上の場合、 count ≒ 1.27
         val count = condensedMotif.condensation / actualCondensation
@@ -264,15 +264,19 @@ fun List<MotifChance>.compressRate(): List<CondensedMotifChance> {
     return condensedMotifChanceList
 }
 
-private fun getActualCondensation(value: Double): Int {
-    val i = value.floorToInt()
-    if (i < 1) return 1
+fun getNiceCondensation(value: Double) = getNiceCondensation(value.floorToInt())
 
-    var t = 1
+/** (power, niceCondensation) */
+fun getNiceCondensation(value: Int): Pair<Int, Int> {
+    if (value < 1) return Pair(0, 1)
+
+    var power = 0
+    var t = 1L
     while (true) {
-        val nextT = t * 3
-        if (nextT < 0) return t // overflow
-        if (nextT > i) return t
+        val nextT = t * 3L
+        if (nextT > Integer.MAX_VALUE) return Pair(power, t.toInt()) // overflow
+        if (nextT > value) return Pair(power, t.toInt())
+        power++
         t = nextT
     }
 }
