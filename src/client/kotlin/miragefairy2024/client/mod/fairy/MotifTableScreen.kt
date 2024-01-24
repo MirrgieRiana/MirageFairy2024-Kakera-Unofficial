@@ -17,6 +17,8 @@ import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
+import miragefairy2024.mod.fairy.getNiceCondensation
+import miragefairy2024.mod.fairy.setFairyCondensation
 import miragefairy2024.mod.fairy.setFairyMotifId
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.text
@@ -55,7 +57,10 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(chance.motifId) }
+                                    val itemStack = FairyCard.item.createItemStack().also {
+                                        it.setFairyMotifId(chance.motifId)
+                                        it.setFairyCondensation(getNiceCondensation(chance.condensation).second)
+                                    }
                                     tooltip(ItemComponent.tooltipFromItem(itemStack, MinecraftClient.getInstance().player, null))
 
                                     child(Components.item(itemStack))
