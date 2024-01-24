@@ -26,6 +26,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
+import kotlin.math.roundToInt
 
 object FairyCard {
     val enName = "Invalid Fairy"
@@ -51,14 +52,40 @@ fun initFairyItem() {
 
         card.item.registerItemModelGeneration(createFairyModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
-            val motif = itemStack.getFairyMotif() ?: return@registerColorProvider 0xFF00FF
-            when (tintIndex) {
-                0 -> motif.skinColor
-                1 -> motif.frontColor
-                2 -> motif.backColor
-                3 -> motif.hairColor
-                4 -> 0xAA0000
-                else -> 0xFF00FF
+            if (tintIndex == 4) {
+                val condensation = itemStack.getFairyCondensation()
+                when (getNiceCondensation(condensation).first) {
+                    0 -> 0xFF8E8E // 赤
+                    1 -> 0xB90000
+                    2 -> 0xAAAAFF // 青
+                    3 -> 0x0000FF
+                    4 -> 0x00D100 // 緑
+                    5 -> 0x007A00
+                    6 -> 0xFFFF60 // 黄色
+                    7 -> 0x919100
+                    8 -> 0x00D1D1 // 水色
+                    9 -> 0x009E9E
+                    10 -> 0xFF87FF // マゼンタ
+                    11 -> 0xDB00DB
+                    12 -> 0xFFBB77 // オレンジ
+                    13 -> 0xCE6700
+                    14 -> 0x66FFB2 // 草
+                    15 -> 0x00B758
+                    16 -> 0xD1A3FF // 紫
+                    17 -> 0xA347FF
+                    18 -> 0xCECECE // 灰色
+                    19 -> 0x919191
+                    else -> 0x333333
+                }
+            } else {
+                val motif = itemStack.getFairyMotif() ?: return@registerColorProvider 0xFF00FF
+                when (tintIndex) {
+                    0 -> motif.skinColor
+                    1 -> motif.frontColor
+                    2 -> motif.backColor
+                    3 -> motif.hairColor
+                    else -> 0xFF00FF
+                }
             }
         }
 
@@ -97,6 +124,21 @@ class FairyItem(settings: Settings) : Item(settings) {
         tooltip += text { (CONDENSATION_TRANSLATION() + ": ${stack.getFairyCondensation()}"()).green }
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
     }
+
+    override fun isItemBarVisible(stack: ItemStack): Boolean {
+        val condensation = stack.getFairyCondensation()
+        val niceCondensation = getNiceCondensation(condensation).second
+        return condensation != niceCondensation
+    }
+
+    override fun getItemBarStep(stack: ItemStack): Int {
+        val condensation = stack.getFairyCondensation()
+        val niceCondensation = getNiceCondensation(condensation).second.toLong()
+        val nextNiceCondensation = niceCondensation * 3L
+        return (13.0 * (condensation.toLong() - niceCondensation).toDouble() / (nextNiceCondensation - niceCondensation).toDouble()).roundToInt()
+    }
+
+    override fun getItemBarColor(stack: ItemStack) = 0x00FF00
 }
 
 fun ItemStack.getFairyMotifId(): Identifier? {
