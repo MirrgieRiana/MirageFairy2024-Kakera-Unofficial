@@ -49,6 +49,10 @@ enum class MotifCard(
         "light", 3, "Lightia", "光精リグチャ", 0xFFFFD8, 0xFFFFD8, 0xFFFFC5, 0xFFFF00,
         Recipes().overworld,
     ),
+    VACUUM_DECAY(
+        "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
+        Recipes().always,
+    ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
         Recipes().overworld,
@@ -73,9 +77,17 @@ enum class MotifCard(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
         Recipes().overworld,
     ),
+    PLAYER(
+        "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
+        Recipes().always,
+    ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         Recipes().overworld.nether.end,
+    ),
+    WITHER(
+        "wither", 8, "Witheria", "枯精ウィテーリャ", 0x181818, 0x3C3C3C, 0x141414, 0x557272,
+        Recipes().nether, // TODO
     ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
@@ -90,12 +102,20 @@ enum class MotifCard(
         0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
         Recipes().always, // TODO
     ),
+    BEACON(
+        "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
+        Recipes().always, // TODO
+    ),
     TIME(
         "time", 12, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
         Recipes().always,
     ),
     GRAVITY(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
+        Recipes().always,
+    ),
+    ANTI_ENTROPY(
+        "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
         Recipes().always,
     ),
     ;
