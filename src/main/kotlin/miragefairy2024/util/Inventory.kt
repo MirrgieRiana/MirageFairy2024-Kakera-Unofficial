@@ -8,6 +8,7 @@ operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
 operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, stack)
 val Inventory.size get() = this.size()
 val Inventory.indices get() = 0 until this.size
+val Inventory.itemStacks get() = this.indices.map { this[it] }
 
 // Merge
 
