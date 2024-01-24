@@ -2,6 +2,7 @@ package miragefairy2024.client.mod.fairy
 
 import io.wispforest.owo.ui.base.BaseOwoHandledScreen
 import io.wispforest.owo.ui.component.Components
+import io.wispforest.owo.ui.component.ItemComponent
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
@@ -20,6 +21,7 @@ import miragefairy2024.mod.fairy.setFairyMotifId
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
@@ -54,10 +56,9 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                     verticalAlignment(VerticalAlignment.CENTER)
 
                                     val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotifId(chance.motifId) }
-                                    child(Components.item(itemStack).apply {
-                                        padding(Insets.of(1, 1, 0, 0))
-                                        setTooltipFromStack(true)
-                                    })
+                                    tooltip(ItemComponent.tooltipFromItem(itemStack, MinecraftClient.getInstance().player, null))
+
+                                    child(Components.item(itemStack))
                                     child(horizontalSpace(3))
                                     child(Components.label(itemStack.name).apply {
                                         sizing(Sizing.fixed(150), Sizing.content())
