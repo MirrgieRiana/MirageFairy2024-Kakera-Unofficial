@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "miragefairy2024:rare_mirage_flour",
+  "group": "miragefairy2024:mirage_flour_of_nature",
   "key": {
     "#": {
       "item": "miragefairy2024:mirage_flour"
@@ -13,7 +13,7 @@
     "###"
   ],
   "result": {
-    "item": "miragefairy2024:rare_mirage_flour"
+    "item": "miragefairy2024:mirage_flour_of_nature"
   },
   "show_notification": true
 }

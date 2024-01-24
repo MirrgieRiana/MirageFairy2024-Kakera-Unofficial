@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_mirage_flour": {
+    "has_mirage_flour_of_sky": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:mirage_flour"
+              "miragefairy2024:mirage_flour_of_sky"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:rare_mirage_flour_from_mirage_flour"
+        "recipe": "miragefairy2024:mirage_flour_of_underworld_from_mirage_flour_of_sky"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_mirage_flour"
+      "has_mirage_flour_of_sky"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:rare_mirage_flour_from_mirage_flour"
+      "miragefairy2024:mirage_flour_of_underworld_from_mirage_flour_of_sky"
     ]
   },
   "sends_telemetry_event": false

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:mirage_flour_of_sky",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:mirage_flour_of_universe"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "miragefairy2024:mirage_flour_of_sky"
+  }
+}

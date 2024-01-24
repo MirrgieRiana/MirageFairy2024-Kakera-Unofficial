@@ -1,10 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "miragefairy2024:extremely_rare_mirage_flour",
+  "group": "miragefairy2024:mirage_flour_of_underworld",
   "key": {
     "#": {
-      "item": "miragefairy2024:super_rare_mirage_flour"
+      "item": "miragefairy2024:mirage_flour_of_earth"
     }
   },
   "pattern": [
@@ -13,7 +13,7 @@
     "###"
   ],
   "result": {
-    "item": "miragefairy2024:extremely_rare_mirage_flour"
+    "item": "miragefairy2024:mirage_flour_of_underworld"
   },
   "show_notification": true
 }

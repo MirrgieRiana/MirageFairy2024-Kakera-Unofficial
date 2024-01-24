@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_super_rare_mirage_flour": {
+    "has_mirage_flour_of_earth": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:super_rare_mirage_flour"
+              "miragefairy2024:mirage_flour_of_earth"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:ultra_rare_mirage_flour_from_super_rare_mirage_flour"
+        "recipe": "miragefairy2024:mirage_flour_of_nature_from_mirage_flour_of_earth"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_super_rare_mirage_flour"
+      "has_mirage_flour_of_earth"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:ultra_rare_mirage_flour_from_super_rare_mirage_flour"
+      "miragefairy2024:mirage_flour_of_nature_from_mirage_flour_of_earth"
     ]
   },
   "sends_telemetry_event": false

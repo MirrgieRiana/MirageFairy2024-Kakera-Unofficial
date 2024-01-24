@@ -104,28 +104,28 @@ enum class MaterialCard(
         PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
         creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
     ),
-    RARE_MIRAGE_FLOUR(
-        "rare_mirage_flour", "Rare Mirage Flour", "高純度ミラージュの花粉",
+    MIRAGE_FLOUR_OF_NATURE(
+        "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
         PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
         creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
     ),
-    VERY_RARE_MIRAGE_FLOUR(
-        "very_rare_mirage_flour", "Very Rare Mirage Flour", "特選高純度ミラージュの花粉",
+    MIRAGE_FLOUR_OF_EARTH(
+        "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
         PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
         creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
     ),
-    ULTRA_RARE_MIRAGE_FLOUR(
-        "ultra_rare_mirage_flour", "Ultra Rare Mirage Flour", "厳選高純度ミラージュの花粉",
+    MIRAGE_FLOUR_OF_UNDERWORLD(
+        "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
         PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
         creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
     ),
-    SUPER_RARE_MIRAGE_FLOUR(
-        "super_rare_mirage_flour", "Super Rare Mirage Flour", "激甚高純度ミラージュの花粉",
+    MIRAGE_FLOUR_OF_SKY(
+        "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
         PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
         creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
     ),
-    EXTREMELY_RARE_MIRAGE_FLOUR(
-        "extremely_rare_mirage_flour", "Extremely Rare Mirage Flour", "極超高純度ミラージュの花粉",
+    MIRAGE_FLOUR_OF_UNIVERSE(
+        "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
         PoemList(3)
             .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
             .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
@@ -181,11 +181,11 @@ fun initMaterialsModule() {
         } on high.item from high.item
     }
     registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.RARE_MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.RARE_MIRAGE_FLOUR, MaterialCard.VERY_RARE_MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.VERY_RARE_MIRAGE_FLOUR, MaterialCard.ULTRA_RARE_MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.ULTRA_RARE_MIRAGE_FLOUR, MaterialCard.SUPER_RARE_MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.SUPER_RARE_MIRAGE_FLOUR, MaterialCard.EXTREMELY_RARE_MIRAGE_FLOUR)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE)
 
     // ミラージュの葉
     MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
