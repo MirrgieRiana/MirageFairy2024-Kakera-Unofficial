@@ -131,6 +131,13 @@ enum class MaterialCard(
             .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
         creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
     ),
+    MIRAGE_FLOUR_OF_TIME(
+        "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
+        PoemList(4)
+            .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
+            .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
+        creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
+    ),
 
     FRACTAL_WISP(
         "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
@@ -186,6 +193,7 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME)
 
     // ミラージュの葉
     MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
