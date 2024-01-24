@@ -107,7 +107,7 @@ enum class MotifCard(
         Recipes().always, // TODO
     ),
     TIME(
-        "time", 12, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
+        "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
         Recipes().always,
     ),
     GRAVITY(
