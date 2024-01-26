@@ -2,6 +2,7 @@ package miragefairy2024.util
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Hand
 
 /** @param itemStack 内部でコピーされるため、破壊されません。 */
 fun PlayerEntity.obtain(itemStack: ItemStack) {
@@ -11,3 +12,5 @@ fun PlayerEntity.obtain(itemStack: ItemStack) {
         itemEntity.setOwner(this.uuid)
     }
 }
+
+val Hand.opposite get() = if (this == Hand.MAIN_HAND) Hand.OFF_HAND else Hand.MAIN_HAND
