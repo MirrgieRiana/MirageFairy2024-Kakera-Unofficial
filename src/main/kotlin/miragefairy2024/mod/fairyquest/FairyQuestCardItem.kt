@@ -10,6 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.on
 import miragefairy2024.util.red
@@ -20,6 +21,9 @@ import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
@@ -114,18 +118,10 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): Identifier? {
-    val nbt = this.nbt ?: return null
-    val id = nbt.getString("FairyQuestRecipe") ?: return null
-    return Identifier(id)
-}
-
+fun ItemStack.getFairyQuestRecipeId(): Identifier? = nbt.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
-fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) {
-    getOrCreateNbt().putString("FairyQuestRecipe", identifier.string)
-}
-
+fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyQuestRecipe"].string.set(identifier.string)
 fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getId(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {

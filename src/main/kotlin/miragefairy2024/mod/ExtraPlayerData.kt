@@ -2,7 +2,10 @@ package miragefairy2024.mod
 
 import com.faux.customentitydata.api.playersaves.CustomPlayerSave
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.compound
+import miragefairy2024.util.get
 import miragefairy2024.util.string
+import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
@@ -60,7 +63,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
                     MirageFairy2024.logger.error("Failed to cast: ${value?.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.put(key.value.string, loader.toNbt(player, data))
+                nbt.wrapper[key.value.string].compound.set(loader.toNbt(player, data))
             }
             f(loader)
         }
@@ -71,7 +74,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         map.clear()
         extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
             fun <T> f(loader: ExtraPlayerDataCategory<T>) {
-                map[key.value] = loader.fromNbt(player, nbt.getCompound(key.value.string))
+                map[key.value] = loader.fromNbt(player, nbt.wrapper[key.value.string].compound.get() ?: NbtCompound())
             }
             f(loader)
         }

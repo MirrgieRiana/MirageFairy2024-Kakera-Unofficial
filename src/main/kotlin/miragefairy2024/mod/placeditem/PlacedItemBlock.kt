@@ -8,8 +8,11 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.compound
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.double
+import miragefairy2024.util.get
 import miragefairy2024.util.register
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
@@ -18,6 +21,7 @@ import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
+import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -126,22 +130,22 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
 
     public override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
-        nbt.put("ItemStack", itemStack.toNbt())
-        nbt.putDouble("ItemX", itemX)
-        nbt.putDouble("ItemY", itemY)
-        nbt.putDouble("ItemZ", itemZ)
-        nbt.putDouble("ItemRotateX", itemRotateX)
-        nbt.putDouble("ItemRotateY", itemRotateY)
+        nbt.wrapper["ItemStack"].set(itemStack.toNbt())
+        nbt.wrapper["ItemX"].double.set(itemX)
+        nbt.wrapper["ItemY"].double.set(itemY)
+        nbt.wrapper["ItemZ"].double.set(itemZ)
+        nbt.wrapper["ItemRotateX"].double.set(itemRotateX)
+        nbt.wrapper["ItemRotateY"].double.set(itemRotateY)
     }
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
-        itemStack = ItemStack.fromNbt(nbt.getCompound("ItemStack"))
-        itemX = nbt.getDouble("ItemX")
-        itemY = nbt.getDouble("ItemY")
-        itemZ = nbt.getDouble("ItemZ")
-        itemRotateX = nbt.getDouble("ItemRotateX")
-        itemRotateY = nbt.getDouble("ItemRotateY")
+        itemStack = ItemStack.fromNbt(nbt.wrapper["ItemStack"].compound.get())
+        itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
+        itemY = nbt.wrapper["ItemY"].double.get() ?: 0.0
+        itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0
+        itemRotateX = nbt.wrapper["ItemRotateX"].double.get() ?: 0.0
+        itemRotateY = nbt.wrapper["ItemRotateY"].double.get() ?: 0.0
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound = createNbt()

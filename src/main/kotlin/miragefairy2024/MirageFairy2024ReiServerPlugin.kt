@@ -17,8 +17,11 @@ import miragefairy2024.mod.magicplant.getIdentifier
 import miragefairy2024.mod.magicplant.setTraitStacks
 import miragefairy2024.mod.magicplant.toTrait
 import miragefairy2024.util.Translation
+import miragefairy2024.util.compound
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.list
 import miragefairy2024.util.string
 import miragefairy2024.util.toBlock
 import miragefairy2024.util.toEntryIngredient
@@ -26,9 +29,9 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
+import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrThrow
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtElement
 import net.minecraft.nbt.NbtList
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
@@ -104,13 +107,13 @@ object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategory
         BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 MagicPlantCropNotation(
-                    tag.getCompound("Seed").toItemStack(),
-                    tag.getList("Crops", NbtElement.COMPOUND_TYPE.toInt()).map { it.castOrThrow<NbtCompound>().toItemStack() }
+                    tag.wrapper["Seed"].compound.get()!!.toItemStack(),
+                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack() }
                 )
             )
         }, { display, tag ->
-            tag.put("Seed", display.recipe.seed.toNbt())
-            tag.put("Crops", display.recipe.crops.mapTo(NbtList()) { it.toNbt() })
+            tag.wrapper["Seed"].set(display.recipe.seed.toNbt())
+            tag.wrapper["Crops"].set(display.recipe.crops.mapTo(NbtList()) { it.toNbt() })
         })
     }
 

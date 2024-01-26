@@ -2,8 +2,11 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataContainer
+import miragefairy2024.util.boolean
+import miragefairy2024.util.get
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.wrapper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 
@@ -13,7 +16,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
         val data = FairyDreamContainer()
         nbt.keys.forEach { key ->
             val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
-            data[motif] = nbt.getBoolean(key)
+            data[motif] = nbt.wrapper[key].boolean.get() ?: false
         }
         return data
     }
@@ -21,7 +24,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
     override fun toNbt(player: PlayerEntity, data: FairyDreamContainer): NbtCompound {
         val nbt = NbtCompound()
         data.entries.forEach { motif ->
-            nbt.putBoolean(motif.getIdentifier()!!.string, true)
+            nbt.wrapper[motif.getIdentifier()!!.string].boolean.set(true)
         }
         return nbt
     }

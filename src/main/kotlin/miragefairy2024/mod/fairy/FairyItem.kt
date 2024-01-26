@@ -9,7 +9,9 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.get
 import miragefairy2024.util.green
+import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -17,11 +19,13 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemModelGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
+import mirrg.kotlin.hydrogen.or
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtElement
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -141,26 +145,11 @@ class FairyItem(settings: Settings) : Item(settings) {
     override fun getItemBarColor(stack: ItemStack) = 0x00FF00
 }
 
-fun ItemStack.getFairyMotifId(): Identifier? {
-    val nbt = this.nbt ?: return null
-    val id = nbt.getString("FairyMotif") ?: return null
-    return Identifier(id)
-}
-
+fun ItemStack.getFairyMotifId(): Identifier? = this.nbt.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
 
-fun ItemStack.setFairyMotifId(identifier: Identifier) {
-    getOrCreateNbt().putString("FairyMotif", identifier.string)
-}
-
+fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyMotif"].string.set(identifier.string)
 fun ItemStack.setFairyMotif(recipe: Motif) = this.setFairyMotifId(motifRegistry.getId(recipe)!!)
 
-fun ItemStack.getFairyCondensation(): Int {
-    val nbt = this.nbt ?: return 1
-    if (!nbt.contains("FairyCondensation", NbtElement.INT_TYPE.toInt())) return 1
-    return nbt.getInt("FairyCondensation")
-}
-
-fun ItemStack.setFairyCondensation(condensation: Int) {
-    getOrCreateNbt().putInt("FairyCondensation", condensation)
-}
+fun ItemStack.getFairyCondensation() = this.nbt.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
+fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateNbt().wrapper["FairyCondensation"].int.set(condensation)
