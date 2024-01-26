@@ -65,7 +65,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
 
                                     child(Components.item(itemStack))
                                     child(horizontalSpace(3))
-                                    child(Components.label(itemStack.name).apply {
+                                    child(Components.label(chance.motif.displayName).apply {
                                         sizing(Sizing.fixed(150), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.LEFT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
