@@ -19,7 +19,7 @@ import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.getNiceCondensation
 import miragefairy2024.mod.fairy.setFairyCondensation
-import miragefairy2024.mod.fairy.setFairyMotifId
+import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
@@ -58,7 +58,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                     verticalAlignment(VerticalAlignment.CENTER)
 
                                     val itemStack = FairyCard.item.createItemStack().also {
-                                        it.setFairyMotifId(chance.motifId)
+                                        it.setFairyMotif(chance.motif)
                                         it.setFairyCondensation(getNiceCondensation(chance.condensation).second)
                                     }
                                     tooltip(ItemComponent.tooltipFromItem(itemStack, MinecraftClient.getInstance().player, null))

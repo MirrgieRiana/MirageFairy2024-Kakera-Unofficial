@@ -36,7 +36,6 @@ import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
@@ -72,7 +71,8 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         } else {
             if (world.isClient) return TypedActionResult.success(itemStack)
 
-            val chanceTable = getCommonChanceTable(user).map { MotifChance(it.motif, it.rate * appearanceRateBonus) }.compressRate().sortedDescending()
+            val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
+            val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
@@ -80,7 +80,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
-                        buf.writeString(it.motifId.string)
+                        buf.writeString(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.condensation)
                     }
@@ -165,7 +165,8 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         }
 
         // 提供割合の生成
-        val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = getCommonChanceTable(player).map { MotifChance(it.motif, it.rate * appearanceRateBonus) }.compressRate().map { Chance(it.rate, Single(it)) }.toMutableList()
+        val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.entries
+        val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { Chance(it.rate, Single(it)) }.toMutableList()
         val totalWeight = chanceTable.totalWeight
         if (totalWeight < 1.0) chanceTable += Chance(1.0 - totalWeight, Single(null))
 
@@ -180,7 +181,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         val count = condensedMotif.condensation / actualCondensation
 
         val resultItemStack = FairyCard.item.createItemStack(world.random.randomInt(count)).also {
-            it.setFairyMotifId(condensedMotif.motifId)
+            it.setFairyMotif(condensedMotif.motif)
             it.setFairyCondensation(actualCondensation)
         }
 
@@ -195,26 +196,26 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
     }
 }
 
-class MotifChance(val motif: Identifier, val rate: Double)
-
-fun getCommonChanceTable(player: PlayerEntity): List<MotifChance> {
+fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
     val biome = player.world.getBiome(player.blockPos)
-    return COMMON_MOTIF_RECIPES.filter { it.biome == null || biome.isIn(it.biome) }.map { recipe ->
-        MotifChance(recipe.motif.getIdentifier()!!, (1.0 / 3.0).pow(recipe.motif.rare - 1)) // 通常花粉・レア度1で100%になる
-    }
+    return COMMON_MOTIF_RECIPES.filter { it.biome == null || biome.isIn(it.biome) }.map { it.motif }.toSet()
 }
 
-class CondensedMotifChance(val motifId: Identifier, val rate: Double, val condensation: Double) : Comparable<CondensedMotifChance> {
+class MotifChance(val motif: Motif, val rate: Double)
+
+fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { MotifChance(it, (1.0 / 3.0).pow(it.rare - 1) * amplifier) } // 通常花粉・レア度1で100%になる
+
+class CondensedMotifChance(val motif: Motif, val rate: Double, val condensation: Double) : Comparable<CondensedMotifChance> {
     override fun compareTo(other: CondensedMotifChance): Int {
         (rate cmp other.rate).let { if (it != 0) return it }
         (condensation cmp other.condensation).let { if (it != 0) return it }
-        (motifId cmp other.motifId).let { if (it != 0) return it }
+        (motif.getIdentifier()!! cmp other.motif.getIdentifier()!!).let { if (it != 0) return it }
         return 0
     }
 }
 
 /** 出現率の合計が最大100%になるように出現率の高いものから出現率を切り詰め、失われた出現率を凝縮数に還元します */
-fun List<MotifChance>.compressRate(): List<CondensedMotifChance> {
+fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
     val sortedMotifChanceList = this.sortedByDescending { it.rate } // 確率が大きいものから順に並んでいる
     val condensedMotifChanceList = mutableListOf<CondensedMotifChance>()
 

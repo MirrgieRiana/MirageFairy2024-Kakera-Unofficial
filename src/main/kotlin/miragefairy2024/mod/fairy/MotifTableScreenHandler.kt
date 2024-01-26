@@ -17,7 +17,7 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
         val motifId = buf.readString()
         val rate = buf.readDouble()
         val condensation = buf.readDouble()
-        chanceTable += CondensedMotifChance(motifId.toIdentifier(), rate, condensation)
+        chanceTable += CondensedMotifChance(motifRegistry.get(motifId.toIdentifier())!!, rate, condensation)
     }
     MotifTableScreenHandler(syncId, chanceTable)
 }
