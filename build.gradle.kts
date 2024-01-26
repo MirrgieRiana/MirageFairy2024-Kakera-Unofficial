@@ -64,6 +64,8 @@ repositories {
 
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
 
+    maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
+
     maven("https://maven.wispforest.io") // owo-lib
 }
 
@@ -85,6 +87,8 @@ dependencies {
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:13.0.678")
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:13.0.678")
     "modCompileOnly"("me.shedaniel.cloth:basic-math:0.6.1")
+
+    "modImplementation"("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.20.2:7.0.1")
 
     "modImplementation"("io.wispforest:owo-lib:0.11.4+1.20.2")
     include("io.wispforest:owo-sentinel:0.11.4+1.20.2")
@@ -138,6 +142,7 @@ modrinth {
     dependencies {
         required.project("fabric-api")
         required.project("fabric-language-kotlin")
+        required.project("faux-custom-entity-data")
         required.project("owo-lib")
     }
 }
