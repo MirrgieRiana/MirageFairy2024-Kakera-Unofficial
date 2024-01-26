@@ -3,7 +3,8 @@
   "package": "miragefairy2024.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ExampleMixin"
+    "ExampleMixin",
+    "PlayerEntityMixinContainer"
   ],
   "injectors": {
     "defaultRequire": 1

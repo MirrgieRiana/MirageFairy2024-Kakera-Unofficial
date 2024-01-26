@@ -5,6 +5,7 @@ import miragefairy2024.mod.fairyquest.initFairyQuestModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
+import miragefairy2024.mod.initExtraPlayerData
 import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
@@ -39,6 +40,7 @@ object MirageFairy2024 : ModInitializer {
         initNinePatchTextureModule()
         initPlacedItemModule()
         initFairyModule()
+        initExtraPlayerData()
     }
 }
 
