@@ -13,7 +13,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.data.client.BlockStateModelGenerator
 import net.minecraft.data.client.BlockStateSupplier
 import net.minecraft.data.client.Model
-import net.minecraft.data.client.ModelIds
 import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.data.client.TextureMap
@@ -117,18 +116,14 @@ fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: Textur
 val TextureKey.string get() = this.toString()
 
 
-fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>): TexturedModel = TexturedModel.makeFactory({ TextureMap(*textureEntries) }, this).get(Blocks.AIR)
+infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.makeFactory({ textureMap }, this).get(Blocks.AIR)
+fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with TextureMap(*textureEntries)
 
 
-fun Item.registerItemModelGeneration(model: Model) = MirageFairy2024DataGenerator.itemModelGenerators {
-    it.register(this, model)
-}
-
+fun Item.registerItemModelGeneration(texturedModel: TexturedModel) = texturedModel.registerModelGeneration("item/" concat this.getIdentifier())
+fun Item.registerItemModelGeneration(model: Model) = this.registerItemModelGeneration(model with TextureMap.layer0(this))
 fun Item.registerGeneratedItemModelGeneration() = this.registerItemModelGeneration(Models.GENERATED)
-
-fun Item.registerBlockItemModelGeneration(block: Block) = MirageFairy2024DataGenerator.itemModelGenerators {
-    Models.GENERATED.upload(ModelIds.getItemModelId(this), TextureMap.layer0(block), it.writer)
-}
+fun Item.registerBlockItemModelGeneration(block: Block) = this.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(block))
 
 
 fun TexturedModel.registerModelGeneration(identifier: Identifier) = MirageFairy2024DataGenerator.blockStateModelGenerators {
@@ -136,11 +131,7 @@ fun TexturedModel.registerModelGeneration(identifier: Identifier) = MirageFairy2
 }
 
 fun Model.registerModelGeneration(identifier: Identifier, vararg textureEntries: Pair<TextureKey, Identifier>) = this.with(*textureEntries).registerModelGeneration(identifier)
-
-fun Block.registerModelGeneration(texturedModel: TexturedModel) = MirageFairy2024DataGenerator.blockStateModelGenerators {
-    texturedModel.model.upload("block/" concat this.getIdentifier(), texturedModel.textures, it.modelCollector)
-}
-
+fun Block.registerModelGeneration(texturedModel: TexturedModel) = (texturedModel.model with texturedModel.textures).registerModelGeneration("block/" concat this.getIdentifier())
 fun Block.registerModelGeneration(factory: TexturedModel.Factory) = this.registerModelGeneration(factory.get(this))
 
 
