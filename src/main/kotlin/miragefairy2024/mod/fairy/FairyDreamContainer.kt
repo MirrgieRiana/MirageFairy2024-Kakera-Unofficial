@@ -30,9 +30,12 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
 val PlayerEntity.fairyDreamContainer get() = this.extraPlayerDataContainer[FairyDreamContainerExtraPlayerDataCategory]
 
 class FairyDreamContainer {
+
     private val map = mutableSetOf<Motif>()
 
     operator fun get(motif: Motif) = motif in map
+
+    val entries: Set<Motif> get() = map
 
     operator fun set(motif: Motif, value: Boolean) {
         if (value) {
@@ -42,5 +45,6 @@ class FairyDreamContainer {
         }
     }
 
-    val entries: Set<Motif> get() = map
+    fun clear() = map.clear()
+
 }
