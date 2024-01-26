@@ -130,6 +130,7 @@ val NbtProperty<NbtElement?, NbtElement?>.float get() = NbtProperty<Float?, Floa
 val NbtProperty<NbtElement?, NbtElement?>.double get() = NbtProperty<Double?, Double?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.doubleValue() }, { this.set(it?.let { a -> NbtDouble.of(a) }) })
 val NbtProperty<NbtElement?, NbtElement?>.number get() = NbtProperty<Number?, Number?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.numberValue() }, { this.set(it?.let { a -> NbtDouble.of(a.toDouble()) }) })
 val NbtProperty<NbtElement?, NbtElement?>.string get() = NbtProperty<String?, String?>({ this.get()?.asString() }, { this.set(it?.let { a -> NbtString.of(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.boolean get() = NbtProperty<Boolean?, Boolean?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.byteValue()?.let { it != 0.toByte() } }, { this.set(it?.let { a -> NbtByte.of(a) }) })
 
 val NbtProperty<NbtElement?, NbtElement?>.map
     get() = NbtProperty<Map<String, NbtElement>?, Map<String, NbtElement>?>({
