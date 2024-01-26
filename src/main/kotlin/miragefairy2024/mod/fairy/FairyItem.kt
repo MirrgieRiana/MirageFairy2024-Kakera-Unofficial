@@ -121,7 +121,7 @@ class FairyItem(settings: Settings) : Item(settings) {
         super.appendTooltip(stack, world, tooltip, context)
         val motif = stack.getFairyMotif() ?: return
         tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
-        tooltip += text { (CONDENSATION_TRANSLATION() + ": ${stack.getFairyCondensation()}"()).green }
+        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
     }
 
