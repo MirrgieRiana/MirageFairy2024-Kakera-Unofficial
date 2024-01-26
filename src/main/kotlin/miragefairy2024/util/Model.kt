@@ -24,6 +24,9 @@ import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
 
+
+// Model Builder
+
 fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
     override fun upload(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
         modelCollector.accept(id) { creator(textures).toJsonElement() }
@@ -104,6 +107,8 @@ class ModelFaceData(
 }
 
 
+// Util
+
 fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {
     val textureMap = TextureMap()
     entries.forEach {
@@ -115,25 +120,26 @@ fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: Textur
 
 val TextureKey.string get() = this.toString()
 
-
 infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.makeFactory({ textureMap }, this).get(Blocks.AIR)
 fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with TextureMap(*textureEntries)
 
 
-fun Item.registerItemModelGeneration(texturedModel: TexturedModel) = texturedModel.registerModelGeneration("item/" concat this.getIdentifier())
-fun Item.registerItemModelGeneration(model: Model) = this.registerItemModelGeneration(model with TextureMap.layer0(this))
-fun Item.registerGeneratedItemModelGeneration() = this.registerItemModelGeneration(Models.GENERATED)
-fun Item.registerBlockItemModelGeneration(block: Block) = this.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(block))
-
+// registerModelGeneration
 
 fun TexturedModel.registerModelGeneration(identifier: Identifier) = MirageFairy2024DataGenerator.blockStateModelGenerators {
     this.model.upload(identifier, this.textures, it.modelCollector)
 }
 
 fun Model.registerModelGeneration(identifier: Identifier, vararg textureEntries: Pair<TextureKey, Identifier>) = this.with(*textureEntries).registerModelGeneration(identifier)
+fun Item.registerItemModelGeneration(texturedModel: TexturedModel) = texturedModel.registerModelGeneration("item/" concat this.getIdentifier())
+fun Item.registerItemModelGeneration(model: Model) = this.registerItemModelGeneration(model with TextureMap.layer0(this))
+fun Item.registerGeneratedItemModelGeneration() = this.registerItemModelGeneration(Models.GENERATED)
+fun Item.registerBlockItemModelGeneration(block: Block) = this.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(block))
 fun Block.registerModelGeneration(texturedModel: TexturedModel) = (texturedModel.model with texturedModel.textures).registerModelGeneration("block/" concat this.getIdentifier())
 fun Block.registerModelGeneration(factory: TexturedModel.Factory) = this.registerModelGeneration(factory.get(this))
 
+
+// registerBlockStateGeneration
 
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = MirageFairy2024DataGenerator.blockStateModelGenerators {
     it.blockStateCollector.accept(object : BlockStateSupplier {
