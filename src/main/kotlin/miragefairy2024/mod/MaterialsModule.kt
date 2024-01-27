@@ -15,12 +15,15 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
+import miragefairy2024.util.registerTagGeneration
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import kotlin.math.pow
 
@@ -160,6 +163,8 @@ enum class MaterialCard(
         .let { creator(it) }
 }
 
+val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "wisp"))
+
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 
 fun initMaterialsModule() {
@@ -223,5 +228,8 @@ fun initMaterialsModule() {
         input('#', MaterialCard.HAIMEVISKA_SAP.item)
         input('S', Items.STICK)
     } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
+
+    // フラクタルウィスプ
+    MaterialCard.FRACTAL_WISP.item.registerTagGeneration(WISP_TAG)
 
 }
