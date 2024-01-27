@@ -39,10 +39,10 @@ object FairyCard {
     val item = FairyItem(Item.Settings())
 }
 
-val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
-val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
-val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
-val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+private val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
+private val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
+private val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
+private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 fun initFairyItem() {
     FairyCard.let { card ->
