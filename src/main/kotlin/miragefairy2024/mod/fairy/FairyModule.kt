@@ -7,5 +7,6 @@ fun initFairyModule() {
     initMotifTableScreenHandler()
     initRandomFairySummoning()
     initFairyDream()
+    initFairyDreamContainer()
     initFairyDreamRecipe()
 }

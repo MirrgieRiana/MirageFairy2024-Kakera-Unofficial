@@ -1,9 +1,12 @@
 package miragefairy2024.mod.fairy
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.ExtraPlayerDataCategory
+import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
+import miragefairy2024.util.register
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
@@ -11,6 +14,11 @@ import miragefairy2024.util.wrapper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.Identifier
+
+fun initFairyDreamContainer() {
+    FairyDreamContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_dream"))
+}
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {
     override fun castOrThrow(value: Any?) = value as FairyDreamContainer
