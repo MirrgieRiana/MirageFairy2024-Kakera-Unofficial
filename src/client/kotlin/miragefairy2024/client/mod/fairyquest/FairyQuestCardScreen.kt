@@ -54,7 +54,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                     child(inventoryNameLabel(handler.recipe.title, HorizontalAlignment.CENTER))
 
-                    child(verticalSpace(1))
+                    child(verticalSpace(3))
 
                     // 本文
                     run {
