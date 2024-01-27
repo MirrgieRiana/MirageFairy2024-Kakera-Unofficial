@@ -4,11 +4,13 @@ import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
+import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.network.ServerPlayerEntity
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {
     override fun castOrThrow(value: Any?) = value as FairyDreamContainer
@@ -45,6 +47,13 @@ class FairyDreamContainer {
             map += motif
         } else {
             map.remove(motif)
+        }
+    }
+
+    fun gain(player: ServerPlayerEntity, motifs: Iterable<Motif>) {
+        (motifs - map).forEach { motif ->
+            set(motif, true)
+            GainFairyDreamChannel.sendToClient(player, motif)
         }
     }
 
