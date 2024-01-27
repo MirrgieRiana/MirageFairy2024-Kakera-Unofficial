@@ -8,5 +8,4 @@ fun initFairyModule() {
     initRandomFairySummoning()
     initFairyDream()
     initFairyDreamContainer()
-    initFairyDreamRecipe()
 }
