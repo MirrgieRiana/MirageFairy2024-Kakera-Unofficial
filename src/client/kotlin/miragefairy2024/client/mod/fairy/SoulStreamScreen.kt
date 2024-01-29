@@ -95,4 +95,13 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
     override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
 
+    // キー入力で閉じる
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (soulStreamKey.matchesKey(keyCode, scanCode)) {
+            close()
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
 }
