@@ -35,6 +35,8 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.util.Identifier
 
+var lastMousePositionInInventory: Pair<Double, Double>? = null
+
 fun initFairyClientModule() {
 
     // GUI登録
@@ -90,6 +92,7 @@ fun initFairyClientModule() {
                     // ボタン
                     val buttonTextures = ButtonTextures(Identifier(MirageFairy2024.modId, "soul_stream_button"), Identifier(MirageFairy2024.modId, "soul_stream_button_highlighted"))
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, buttonTextures) {
+                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
                         screen.close()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }))

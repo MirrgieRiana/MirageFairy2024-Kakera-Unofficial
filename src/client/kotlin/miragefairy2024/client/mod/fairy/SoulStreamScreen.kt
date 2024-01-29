@@ -17,10 +17,23 @@ import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
 import miragefairy2024.util.size
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.util.InputUtil
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
 
 class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
+
+    // カーソルをインベントリ画面での位置に戻す
+    private var isFirst = true
+    override fun render(vanillaContext: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
+        if (isFirst) {
+            isFirst = false
+            if (lastMousePositionInInventory != null) {
+                InputUtil.setCursorParameters(this.client!!.window.handle, InputUtil.GLFW_CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
+            }
+        }
+        super.render(vanillaContext, mouseX, mouseY, delta)
+    }
 
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
