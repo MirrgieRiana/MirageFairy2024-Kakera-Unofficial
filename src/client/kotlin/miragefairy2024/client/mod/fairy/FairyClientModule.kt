@@ -2,7 +2,9 @@ package miragefairy2024.client.mod.fairy
 
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.container.Containers
+import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
+import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
@@ -11,24 +13,33 @@ import miragefairy2024.client.util.LimitedLabelComponent
 import miragefairy2024.client.util.createOwoToast
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.registerClientPacketReceiver
+import miragefairy2024.client.util.sendToServer
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.GAIN_FAIRY_DREAM_TRANSLATION
 import miragefairy2024.mod.fairy.GainFairyDreamChannel
+import miragefairy2024.mod.fairy.OpenSoulStreamChannel
 import miragefairy2024.mod.fairy.motifTableScreenHandlerType
 import miragefairy2024.mod.fairy.setFairyMotif
+import miragefairy2024.mod.fairy.soulStreamScreenHandlerType
 import miragefairy2024.util.black
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkBlue
 import miragefairy2024.util.invoke
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ButtonTextures
 import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraft.client.gui.screen.ingame.InventoryScreen
+import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.util.Identifier
 
 fun initFairyClientModule() {
 
     // GUI登録
     HandledScreens.register(motifTableScreenHandlerType) { gui, inventory, title -> MotifTableScreen(gui, inventory, title) }
+    HandledScreens.register(soulStreamScreenHandlerType) { gui, inventory, title -> SoulStreamScreen(gui, inventory, title) }
 
     // パケットハンドラ登録
     GainFairyDreamChannel.registerClientPacketReceiver { motif ->
@@ -46,6 +57,55 @@ fun initFairyClientModule() {
             })
         }
         MinecraftClient.getInstance().toastManager.add(createOwoToast(component))
+    }
+
+    // インベントリ画面にソウルストリームのボタンを設置
+    ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
+        if (screen is InventoryScreen) {
+
+            val onMouseClick = mutableListOf<() -> Unit>()
+
+            // 中央揃えコンテナ
+            val uiAdapter = OwoUIAdapter.create(screen, Containers::stack)
+            uiAdapter.rootComponent.apply {
+                alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER)
+
+                // 位置決定用パネル
+                child(Containers.stack(Sizing.content(), Sizing.content()).apply {
+                    alignment(HorizontalAlignment.RIGHT, VerticalAlignment.TOP)
+
+                    fun updatePosition() {
+                        if (!screen.recipeBookWidget.isOpen) {
+                            sizing(Sizing.fixed(146), Sizing.fixed(46))
+                        } else {
+                            sizing(Sizing.fixed(300), Sizing.fixed(46))
+                        }
+                    }
+                    updatePosition()
+                    onMouseClick += {
+                        updatePosition()
+                        uiAdapter.inflateAndMount()
+                    }
+
+                    // ボタン
+                    val buttonTextures = ButtonTextures(Identifier(MirageFairy2024.modId, "soul_stream_button"), Identifier(MirageFairy2024.modId, "soul_stream_button_highlighted"))
+                    child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, buttonTextures) {
+                        screen.close()
+                        OpenSoulStreamChannel.sendToServer(Unit)
+                    }))
+
+                })
+
+            }
+            uiAdapter.inflateAndMount()
+
+            ScreenMouseEvents.afterMouseClick(screen).register { _, _, _, _ ->
+                onMouseClick.forEach {
+                    it()
+                }
+            }
+
+        }
     }
 
 }
