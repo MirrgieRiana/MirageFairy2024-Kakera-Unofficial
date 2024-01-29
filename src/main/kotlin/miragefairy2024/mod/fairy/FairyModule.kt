@@ -8,4 +8,5 @@ fun initFairyModule() {
     initRandomFairySummoning()
     initFairyDream()
     initFairyDreamContainer()
+    initSoulStream()
 }
