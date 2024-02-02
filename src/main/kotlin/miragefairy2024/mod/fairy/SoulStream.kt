@@ -67,18 +67,20 @@ fun initSoulStream() {
 
 object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
     override fun castOrThrow(value: Any?) = value as SoulStream
-    override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): SoulStream {
-        val data = SoulStream()
-        Inventories.readNbt(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.stacks)
-        return data
-    }
+    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
+        override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): SoulStream {
+            val data = SoulStream()
+            Inventories.readNbt(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.stacks)
+            return data
+        }
 
-    override fun toNbt(player: PlayerEntity, data: SoulStream): NbtCompound {
-        val nbt = NbtCompound()
-        nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
-            Inventories.writeNbt(it, data.stacks)
-        })
-        return nbt
+        override fun toNbt(player: PlayerEntity, data: SoulStream): NbtCompound {
+            val nbt = NbtCompound()
+            nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
+                Inventories.writeNbt(it, data.stacks)
+            })
+            return nbt
+        }
     }
 }
 

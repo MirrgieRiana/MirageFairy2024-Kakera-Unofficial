@@ -22,8 +22,12 @@ val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = Fabr
 
 interface ExtraPlayerDataCategory<T> {
     fun castOrThrow(value: Any?): T
-    fun toNbt(player: PlayerEntity, data: T): NbtCompound
-    fun fromNbt(player: PlayerEntity, nbt: NbtCompound): T
+    val ioHandler: IoHandler<T>? get() = null
+
+    interface IoHandler<T> {
+        fun toNbt(player: PlayerEntity, data: T): NbtCompound
+        fun fromNbt(player: PlayerEntity, nbt: NbtCompound): T
+    }
 }
 
 
@@ -55,6 +59,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         val nbt = NbtCompound()
         extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
             fun <T> f(loader: ExtraPlayerDataCategory<T>) {
+                val ioHandler = loader.ioHandler ?: return
                 if (key.value !in map) return
                 val value = map[key.value]
                 val data = try {
@@ -63,7 +68,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
                     MirageFairy2024.logger.error("Failed to cast: ${value?.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.wrapper[key.value.string].compound.set(loader.toNbt(player, data))
+                nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(player, data))
             }
             f(loader)
         }
@@ -74,7 +79,8 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         map.clear()
         extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
             fun <T> f(loader: ExtraPlayerDataCategory<T>) {
-                map[key.value] = loader.fromNbt(player, nbt.wrapper[key.value.string].compound.get() ?: NbtCompound())
+                val ioHandler = loader.ioHandler ?: return
+                map[key.value] = ioHandler.fromNbt(player, nbt.wrapper[key.value.string].compound.get() ?: NbtCompound())
             }
             f(loader)
         }
