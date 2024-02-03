@@ -2,12 +2,12 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.opposite
 import miragefairy2024.util.registerDebugItem
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.text
-import miragefairy2024.util.toBlockPos
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
@@ -99,7 +99,7 @@ fun initFairyDream() {
                     }
 
                     // 周辺ブロック判定
-                    insertBlockPos(player.eyePos.toBlockPos().add(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
+                    insertBlockPos(player.eyeBlockPos.add(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
 
                 }
 

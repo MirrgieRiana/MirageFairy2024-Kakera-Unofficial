@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
@@ -12,5 +13,7 @@ fun PlayerEntity.obtain(itemStack: ItemStack) {
         itemEntity.setOwner(this.uuid)
     }
 }
+
+val Entity.eyeBlockPos get() = this.eyePos.toBlockPos()
 
 val Hand.opposite get() = if (this == Hand.MAIN_HAND) Hand.OFF_HAND else Hand.MAIN_HAND
