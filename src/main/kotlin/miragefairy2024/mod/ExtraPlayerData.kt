@@ -20,8 +20,9 @@ import net.minecraft.util.Identifier
 val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
-interface ExtraPlayerDataCategory<T> {
-    fun castOrThrow(value: Any?): T
+interface ExtraPlayerDataCategory<T : Any> {
+    fun create(): T
+    fun castOrThrow(value: Any): T
     val ioHandler: IoHandler<T>? get() = null
 
     interface IoHandler<T> {
@@ -49,23 +50,54 @@ fun initExtraPlayerData() {
 // Mixin Impl
 
 class ExtraPlayerDataContainer(private val player: PlayerEntity) {
-    private val map = mutableMapOf<Identifier, Any?>()
+    private val map = mutableMapOf<Identifier, Any>()
 
-    operator fun <T> get(loader: ExtraPlayerDataCategory<T>) = loader.castOrThrow(map[extraPlayerDataCategoryRegistry.getId(loader)])
+    /**
+     * このコンテナに格納されているオブジェクトを取得します。
+     * このコンテナにオブジェクトが格納されていない場合、nullを返します。
+     */
+    operator fun <T : Any> get(loader: ExtraPlayerDataCategory<T>): T? {
+        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!] ?: return null
+        return loader.castOrThrow(value)
+    }
 
-    operator fun <T> set(loader: ExtraPlayerDataCategory<T>, data: T) = map.put(extraPlayerDataCategoryRegistry.getId(loader)!!, data)
+    fun <T : Any> getOrInit(loader: ExtraPlayerDataCategory<T>): T {
+        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!]
+        return if (value != null) {
+            loader.castOrThrow(value)
+        } else {
+            val newValue = loader.create()
+            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = newValue
+            newValue
+        }
+    }
 
+    /**
+     * このコンテナにオブジェクトを代入します。
+     * [data]がnullだった場合、このコンテナに格納されているオブジェクトを削除します。
+     */
+    operator fun <T : Any> set(loader: ExtraPlayerDataCategory<T>, data: T?) {
+        if (data == null) {
+            map.remove(extraPlayerDataCategoryRegistry.getId(loader)!!)
+        } else {
+            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = data
+        }
+    }
+
+    /**
+     * 登録されているすべての拡張プレイヤーデータカテゴリを書き込みます。
+     * このコンテナにオブジェクトが格納されていない場合、データの書き込みはキャンセルされます。
+     */
     fun toNbt(): NbtCompound {
         val nbt = NbtCompound()
         extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
-            fun <T> f(loader: ExtraPlayerDataCategory<T>) {
+            fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                if (key.value !in map) return
-                val value = map[key.value]
+                val value = map[key.value] ?: return
                 val data = try {
                     loader.castOrThrow(value)
                 } catch (e: ClassCastException) {
-                    MirageFairy2024.logger.error("Failed to cast: ${value?.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
+                    MirageFairy2024.logger.error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
                     return
                 }
                 nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(player, data))
@@ -75,12 +107,17 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         return nbt
     }
 
+    /**
+     * 登録されているすべての拡張プレイヤーデータカテゴリを読み取ります。
+     * [nbt]にデータが保存されていない場合、オブジェクトの読み取りはキャンセルされます。
+     */
     fun fromNbt(nbt: NbtCompound) {
         map.clear()
         extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
-            fun <T> f(loader: ExtraPlayerDataCategory<T>) {
+            fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                map[key.value] = ioHandler.fromNbt(player, nbt.wrapper[key.value.string].compound.get() ?: NbtCompound())
+                val data = nbt.wrapper[key.value.string].compound.get() ?: return
+                map[key.value] = ioHandler.fromNbt(player, data)
             }
             f(loader)
         }

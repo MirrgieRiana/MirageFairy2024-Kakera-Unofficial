@@ -21,7 +21,8 @@ fun initFairyDreamContainer() {
 }
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {
-    override fun castOrThrow(value: Any?) = value as FairyDreamContainer
+    override fun create() = FairyDreamContainer()
+    override fun castOrThrow(value: Any) = value as FairyDreamContainer
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyDreamContainer> {
         override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): FairyDreamContainer {
             val data = FairyDreamContainer()
@@ -42,7 +43,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
     }
 }
 
-val PlayerEntity.fairyDreamContainer get() = this.extraPlayerDataContainer[FairyDreamContainerExtraPlayerDataCategory]
+val PlayerEntity.fairyDreamContainer get() = this.extraPlayerDataContainer.getOrInit(FairyDreamContainerExtraPlayerDataCategory)
 
 class FairyDreamContainer {
 

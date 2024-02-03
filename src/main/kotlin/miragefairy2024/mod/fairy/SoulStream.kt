@@ -66,7 +66,8 @@ fun initSoulStream() {
 // 拡張プレイヤーデータ
 
 object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
-    override fun castOrThrow(value: Any?) = value as SoulStream
+    override fun create() = SoulStream()
+    override fun castOrThrow(value: Any) = value as SoulStream
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
         override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): SoulStream {
             val data = SoulStream()
@@ -84,7 +85,7 @@ object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
     }
 }
 
-val PlayerEntity.soulStream get() = this.extraPlayerDataContainer[SoulStreamExtraPlayerDataCategory]
+val PlayerEntity.soulStream get() = this.extraPlayerDataContainer.getOrInit(SoulStreamExtraPlayerDataCategory)
 
 class SoulStream : SimpleInventory(SLOT_COUNT) {
     companion object {
