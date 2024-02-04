@@ -72,6 +72,8 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         }
     }
 
+    val entries: Set<Map.Entry<Identifier, Any>> get() = map.entries
+
     /**
      * このコンテナにオブジェクトを代入します。
      * [data]がnullだった場合、このコンテナに格納されているオブジェクトを削除します。
