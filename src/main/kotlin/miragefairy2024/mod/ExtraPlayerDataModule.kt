@@ -31,8 +31,8 @@ interface ExtraPlayerDataCategory<T : Any> {
     val ioHandler: IoHandler<T>? get() = null
 
     interface IoHandler<T> {
-        fun toNbt(player: PlayerEntity, data: T): NbtCompound
-        fun fromNbt(player: PlayerEntity, nbt: NbtCompound): T
+        fun toNbt(data: T): NbtCompound
+        fun fromNbt(nbt: NbtCompound): T
     }
 }
 
@@ -60,21 +60,21 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
 }
 
 object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(Identifier(MirageFairy2024.modId, "extra_player_data_synchronization")) {
-    override fun writeToBuf(buf: PacketByteBuf, player: PlayerEntity, packet: ExtraPlayerDataSynchronizationPacket<*>) {
+    override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
         buf.writeString(extraPlayerDataCategoryRegistry.getId(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
             buf.writeBoolean(packet.value != null)
-            if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(player, packet.value))
+            if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(packet.value))
         }
         f(packet)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf, player: PlayerEntity): ExtraPlayerDataSynchronizationPacket<*> {
+    override fun readFromBuf(buf: PacketByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
         val identifier = buf.readString().toIdentifier()
         val category = extraPlayerDataCategoryRegistry[identifier]!!
         fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
             val hasValue = buf.readBoolean()
-            val value = if (hasValue) category.ioHandler!!.fromNbt(player, buf.readNbt()!!) else null
+            val value = if (hasValue) category.ioHandler!!.fromNbt(buf.readNbt()!!) else null
             return ExtraPlayerDataSynchronizationPacket(category, value)
         }
         return f(category)
@@ -139,7 +139,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
                     MirageFairy2024.logger.error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(player, data))
+                nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(data))
             }
             f(loader)
         }
@@ -156,7 +156,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
                 val data = nbt.wrapper[key.value.string].compound.get() ?: return
-                map[key.value] = ioHandler.fromNbt(player, data)
+                map[key.value] = ioHandler.fromNbt(data)
             }
             f(loader)
         }

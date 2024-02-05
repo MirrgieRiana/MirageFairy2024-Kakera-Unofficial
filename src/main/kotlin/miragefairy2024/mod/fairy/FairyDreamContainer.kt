@@ -24,7 +24,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
     override fun create() = FairyDreamContainer()
     override fun castOrThrow(value: Any) = value as FairyDreamContainer
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyDreamContainer> {
-        override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): FairyDreamContainer {
+        override fun fromNbt(nbt: NbtCompound): FairyDreamContainer {
             val data = FairyDreamContainer()
             nbt.keys.forEach { key ->
                 val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
@@ -33,7 +33,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
             return data
         }
 
-        override fun toNbt(player: PlayerEntity, data: FairyDreamContainer): NbtCompound {
+        override fun toNbt(data: FairyDreamContainer): NbtCompound {
             val nbt = NbtCompound()
             data.entries.forEach { motif ->
                 nbt.wrapper[motif.getIdentifier()!!.string].boolean.set(true)

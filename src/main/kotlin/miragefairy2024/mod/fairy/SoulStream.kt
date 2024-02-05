@@ -76,13 +76,13 @@ object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
     override fun create() = SoulStream()
     override fun castOrThrow(value: Any) = value as SoulStream
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
-        override fun fromNbt(player: PlayerEntity, nbt: NbtCompound): SoulStream {
+        override fun fromNbt(nbt: NbtCompound): SoulStream {
             val data = SoulStream()
             Inventories.readNbt(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.stacks)
             return data
         }
 
-        override fun toNbt(player: PlayerEntity, data: SoulStream): NbtCompound {
+        override fun toNbt(data: SoulStream): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
                 Inventories.writeNbt(it, data.stacks)
@@ -104,8 +104,8 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 // ソウルストリームを開く要求パケット
 
 object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "open_soul_stream")) {
-    override fun writeToBuf(buf: PacketByteBuf, player: PlayerEntity, packet: Unit) = Unit
-    override fun readFromBuf(buf: PacketByteBuf, player: PlayerEntity) = Unit
+    override fun writeToBuf(buf: PacketByteBuf, packet: Unit) = Unit
+    override fun readFromBuf(buf: PacketByteBuf) = Unit
 }
 
 
