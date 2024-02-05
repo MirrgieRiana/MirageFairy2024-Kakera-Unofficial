@@ -126,9 +126,16 @@ class FairyItem(settings: Settings) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         val motif = stack.getFairyMotif() ?: return
+
+        // レア
         tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
+
+        // 凝縮数
         tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
+
+        // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
+
     }
 
     override fun isItemBarVisible(stack: ItemStack): Boolean {
