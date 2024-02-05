@@ -40,7 +40,7 @@ fun initSoulStream() {
     // 拡張プレイヤーデータ
     SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
 
-    // パケット
+    // ソウルストリームを開く要求パケット
     OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
         player.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
@@ -94,7 +94,7 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 }
 
 
-// パケット
+// ソウルストリームを開く要求パケット
 
 object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "open_soul_stream")) {
     override fun writeToBuf(buf: PacketByteBuf, player: PlayerEntity, packet: Unit) = Unit
