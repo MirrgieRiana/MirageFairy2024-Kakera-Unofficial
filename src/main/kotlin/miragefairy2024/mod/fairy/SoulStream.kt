@@ -97,8 +97,8 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 // パケット
 
 object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "open_soul_stream")) {
-    override fun writeToBuf(buf: PacketByteBuf, packet: Unit) = Unit
-    override fun readFromBuf(buf: PacketByteBuf) = Unit
+    override fun writeToBuf(buf: PacketByteBuf, player: PlayerEntity, packet: Unit) = Unit
+    override fun readFromBuf(buf: PacketByteBuf, player: PlayerEntity) = Unit
 }
 
 
