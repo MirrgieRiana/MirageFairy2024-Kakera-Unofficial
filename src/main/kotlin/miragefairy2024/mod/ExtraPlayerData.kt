@@ -2,16 +2,21 @@ package miragefairy2024.mod
 
 import com.faux.customentitydata.api.playersaves.CustomPlayerSave
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.Channel
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
+import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
+import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
 
@@ -45,6 +50,38 @@ fun initExtraPlayerData() {
         override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
     }
 }
+
+
+// サーバーからクライアントへの同期
+
+fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
+    val value = player.extraPlayerDataContainer[this]
+    ExtraPlayerDataSynchronizationChannel.sendToClient(player, ExtraPlayerDataSynchronizationPacket(this, value))
+}
+
+object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(Identifier(MirageFairy2024.modId, "extra_player_data_synchronization")) {
+    override fun writeToBuf(buf: PacketByteBuf, player: PlayerEntity, packet: ExtraPlayerDataSynchronizationPacket<*>) {
+        buf.writeString(extraPlayerDataCategoryRegistry.getId(packet.category)!!.string)
+        fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
+            buf.writeBoolean(packet.value != null)
+            if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(player, packet.value))
+        }
+        f(packet)
+    }
+
+    override fun readFromBuf(buf: PacketByteBuf, player: PlayerEntity): ExtraPlayerDataSynchronizationPacket<*> {
+        val identifier = buf.readString().toIdentifier()
+        val category = extraPlayerDataCategoryRegistry[identifier]!!
+        fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
+            val hasValue = buf.readBoolean()
+            val value = if (hasValue) category.ioHandler!!.fromNbt(player, buf.readNbt()!!) else null
+            return ExtraPlayerDataSynchronizationPacket(category, value)
+        }
+        return f(category)
+    }
+}
+
+class ExtraPlayerDataSynchronizationPacket<T : Any>(val category: ExtraPlayerDataCategory<T>, val value: T?)
 
 
 // Mixin Impl
