@@ -44,7 +44,7 @@ val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (thi
 
 // Init
 
-fun initExtraPlayerData() {
+fun initExtraPlayerDataModule() {
     object : CustomPlayerSave(Identifier(MirageFairy2024.modId, "extra_player_data")) {
         override fun savePlayer(player: PlayerEntity) = player.extraPlayerDataContainer.toNbt()
         override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
