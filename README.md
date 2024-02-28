@@ -31,7 +31,7 @@ MODのある時点での仕様を網羅的に記述した公式のドキュメ�
 # License
 
 - Codes (Programs, Data Packs): **Apache License 2.0**
-- Media Files (Images, Models, Sounds, Translation Files): **[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)** or **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**
+- Media Files (Images, Models, Sounds, Translation Files): **Apache License 2.0** or **[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)** or **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**
 
 Author: Fairy Rubber
 
