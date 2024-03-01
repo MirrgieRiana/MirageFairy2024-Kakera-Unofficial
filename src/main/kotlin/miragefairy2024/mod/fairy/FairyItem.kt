@@ -22,6 +22,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
+import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.or
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
@@ -30,6 +31,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
+import kotlin.math.log
 import kotlin.math.roundToInt
 
 object FairyCard {
@@ -132,6 +134,10 @@ class FairyItem(settings: Settings) : Item(settings) {
 
         // 凝縮数
         tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
+
+        // 魔力
+        val mana = motif.rare.toDouble() * 10.0 + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0) * 10.0
+        tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.0f"}"()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
