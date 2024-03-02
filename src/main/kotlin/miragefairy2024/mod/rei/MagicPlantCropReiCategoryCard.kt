@@ -20,7 +20,7 @@ object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategory
             Display(
                 MagicPlantCropNotation(
                     tag.wrapper["Seed"].compound.get()!!.toItemStack(),
-                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack() }
+                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack() },
                 )
             )
         }, { display, tag ->
