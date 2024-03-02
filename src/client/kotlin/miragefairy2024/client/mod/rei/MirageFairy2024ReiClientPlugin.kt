@@ -5,7 +5,7 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
-import miragefairy2024.ReiCategoryCard
+import miragefairy2024.mod.rei.ReiCategoryCard
 
 abstract class ClientReiCategoryCard<D : BasicDisplay>(val parent: ReiCategoryCard<D>) {
     companion object {

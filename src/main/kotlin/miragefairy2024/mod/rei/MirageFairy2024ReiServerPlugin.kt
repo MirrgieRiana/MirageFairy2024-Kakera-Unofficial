@@ -1,10 +1,11 @@
-package miragefairy2024
+package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.fairyquest.FairyQuestRecipe
 import miragefairy2024.mod.fairyquest.fairyQuestRecipeRegistry

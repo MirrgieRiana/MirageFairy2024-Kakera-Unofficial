@@ -35,7 +35,7 @@
     ],
     "rei_server": [
       {
-        "value": "miragefairy2024.MirageFairy2024ReiServerPlugin",
+        "value": "miragefairy2024.mod.rei.MirageFairy2024ReiServerPlugin",
         "adapter": "kotlin"
       }
     ],

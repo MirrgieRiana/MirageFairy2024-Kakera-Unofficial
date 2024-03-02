@@ -8,11 +8,11 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.entry.EntryIngredient
-import miragefairy2024.FairyQuestRecipeReiCategoryCard
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.fairyquest.FairyQuestRecipeCard
 import miragefairy2024.mod.fairyquest.fairyQuestRecipeRegistry
 import miragefairy2024.mod.fairyquest.setFairyQuestRecipe
+import miragefairy2024.mod.rei.FairyQuestRecipeReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
