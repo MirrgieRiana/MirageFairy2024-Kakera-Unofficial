@@ -16,6 +16,7 @@ import net.minecraft.world.World
 
 fun initPassiveSkillModule() {
     initPassiveSkillEffects()
+    initPassiveSkillExecution()
 }
 
 interface PassiveSkillProvider {
