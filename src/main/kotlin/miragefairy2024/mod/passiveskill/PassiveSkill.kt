@@ -1,15 +1,21 @@
 package miragefairy2024.mod.passiveskill
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.join
 import miragefairy2024.util.text
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
+import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 fun initPassiveSkillModule() {
-
+    initPassiveSkillEffects()
 }
 
 interface PassiveSkillProvider {
@@ -29,6 +35,9 @@ interface PassiveSkillCondition {
     val text: Text
     fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double): Boolean
 }
+
+val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "passive_skill_effect"))
+val passiveSkillEffectRegistry: Registry<PassiveSkillEffect<*>> = FabricRegistryBuilder.createSimple(passiveSkillEffectRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface PassiveSkillEffect<T> {
     val isPreprocessor: Boolean
