@@ -40,15 +40,15 @@ object FairyQuestRecipeClientReiCategoryCard : ClientReiCategoryCard<FairyQuestR
                 Widgets.createSlot(p + Point(18 * 0, 18 * 0)).entries(display.inputEntries.getOrNull(0) ?: EntryIngredient.empty()).disableBackground().markInput(), // フェアリークエストカード
                 Widgets.createLabel(p + Point(18 * 1 + 2, 18 * 0 + 9 - 5), display.recipe.title).color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow().leftAligned(),
 
-                Widgets.createSlot(p + Point(18 * 0, 18 * 1)).entries(display.inputEntries.getOrNull(1) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
-                Widgets.createSlot(p + Point(18 * 1, 18 * 1)).entries(display.inputEntries.getOrNull(2) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
-                Widgets.createSlot(p + Point(18 * 2, 18 * 1)).entries(display.inputEntries.getOrNull(3) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
-                Widgets.createSlot(p + Point(18 * 3, 18 * 1)).entries(display.inputEntries.getOrNull(4) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 0, 1 + 18 * 1)).entries(display.inputEntries.getOrNull(1) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 1, 1 + 18 * 1)).entries(display.inputEntries.getOrNull(2) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 2, 1 + 18 * 1)).entries(display.inputEntries.getOrNull(3) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 3, 1 + 18 * 1)).entries(display.inputEntries.getOrNull(4) ?: EntryIngredient.empty()).markInput(), // 入力アイテム
 
-                Widgets.createSlot(p + Point(18 * 5, 18 * 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
-                Widgets.createSlot(p + Point(18 * 6, 18 * 1)).entries(display.outputEntries.getOrNull(1) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
-                Widgets.createSlot(p + Point(18 * 7, 18 * 1)).entries(display.outputEntries.getOrNull(2) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
-                Widgets.createSlot(p + Point(18 * 8, 18 * 1)).entries(display.outputEntries.getOrNull(3) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 5, 1 + 18 * 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 6, 1 + 18 * 1)).entries(display.outputEntries.getOrNull(1) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 7, 1 + 18 * 1)).entries(display.outputEntries.getOrNull(2) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
+                Widgets.createSlot(p + Point(1 + 18 * 8, 1 + 18 * 1)).entries(display.outputEntries.getOrNull(3) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
             )
         }
     }
