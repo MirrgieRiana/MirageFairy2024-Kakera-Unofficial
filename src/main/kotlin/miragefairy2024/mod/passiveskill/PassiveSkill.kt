@@ -19,11 +19,14 @@ fun initPassiveSkillModule() {
     initPassiveSkillExecution()
 }
 
+
 interface PassiveSkillProvider {
     fun getPassiveSkill(itemStack: ItemStack): PassiveSkill?
 }
 
+
 class PassiveSkill(val itemStackMana: Double, val specifications: List<PassiveSkillSpecification<*>>)
+
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
 
@@ -32,10 +35,12 @@ fun <T> PassiveSkillSpecification<T>.getText(baseMana: Double, additionalMana: D
         if (this@getText.conditions.isNotEmpty()) " ["() + this@getText.conditions.map { it.text }.join(","()) + "]"() else empty()
 }
 
+
 interface PassiveSkillCondition {
     val text: Text
     fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double): Boolean
 }
+
 
 val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "passive_skill_effect"))
 val passiveSkillEffectRegistry: Registry<PassiveSkillEffect<*>> = FabricRegistryBuilder.createSimple(passiveSkillEffectRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
