@@ -13,6 +13,7 @@ abstract class ClientReiCategoryCard<D : BasicDisplay>(val parent: ReiCategoryCa
             WorldGenTraitClientReiCategoryCard,
             MagicPlantCropClientReiCategoryCard,
             FairyQuestRecipeClientReiCategoryCard,
+            CommonMotifRecipeClientReiCategoryCard,
         )
     }
 

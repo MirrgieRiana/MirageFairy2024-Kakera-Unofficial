@@ -17,6 +17,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
             WorldGenTraitReiCategoryCard,
             MagicPlantCropReiCategoryCard,
             FairyQuestRecipeReiCategoryCard,
+            CommonMotifRecipeReiCategoryCard,
         )
     }
 
