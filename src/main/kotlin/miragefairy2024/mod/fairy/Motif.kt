@@ -159,7 +159,7 @@ enum class MotifCard(
 }
 
 
-// MotifCard.Recipes Util
+// レシピ
 
 class MotifCardRecipes {
     val recipes = mutableListOf<(MotifCard) -> Unit>()
@@ -189,7 +189,7 @@ private operator fun MotifCardRecipes.plus(tag: TagKey<Block>) = this.onInit { F
 private operator fun MotifCardRecipes.plus(tag: TagKey<EntityType<*>>) = this.onInit { FairyDreamRecipes.ENTITY_TYPE.registerFromTag(tag, it) }
 
 
-// PassiveSkillBuilder
+// パッシブスキル
 
 private class PassiveSkillBuilder {
     val specifications = mutableListOf<PassiveSkillSpecification<*>>()
