@@ -3,7 +3,11 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.passiveskill.PassiveSkill
+import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillProvider
+import miragefairy2024.mod.passiveskill.PassiveSkillResult
+import miragefairy2024.mod.passiveskill.collect
+import miragefairy2024.mod.passiveskill.getPassiveSkills
 import miragefairy2024.mod.passiveskill.getText
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -145,7 +149,16 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
 
         // 魔力
-        val mana = motif.rare.toDouble() * 10.0 + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0) * 10.0
+        val itemStackMana = motif.rare.toDouble() * 10.0 + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0) * 10.0
+        val additionalMana = if (player != null) {
+            val passiveSkills = player.getPassiveSkills()
+            val result = PassiveSkillResult()
+            result.collect(passiveSkills, player, 0.0, true) // 先行判定
+            result[PassiveSkillEffectCard.MANA]
+        } else {
+            0.0
+        }
+        val mana = itemStackMana + additionalMana
         tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.0f"}"()).green }
 
         // 機能説明
@@ -159,7 +172,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             tooltip += text { PASSIVE_SKILL_TRANSLATION() + ":"() }
             motif.passiveSkillSpecifications.forEach { specification ->
                 val available = player != null && specification.conditions.all { it.test(player.world, player.eyeBlockPos, player, mana) }
-                tooltip += text { " "() + specification.getText(mana).formatted(if (available) Formatting.GOLD else Formatting.GRAY) }
+                tooltip += text { " "() + specification.getText(itemStackMana, additionalMana).formatted(if (available) Formatting.GOLD else Formatting.GRAY) }
             }
         }
     }

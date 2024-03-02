@@ -27,8 +27,8 @@ class PassiveSkill(val itemStackMana: Double, val specifications: List<PassiveSk
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
 
-fun <T> PassiveSkillSpecification<T>.getText(mana: Double) = text {
-    this@getText.effect.getText(this@getText.valueProvider(mana)) +
+fun <T> PassiveSkillSpecification<T>.getText(baseMana: Double, additionalMana: Double) = text {
+    this@getText.effect.getText(this@getText.valueProvider(if (this@getText.effect.isPreprocessor) baseMana else baseMana + additionalMana)) +
         if (this@getText.conditions.isNotEmpty()) " ["() + this@getText.conditions.map { it.text }.join(","()) + "]"() else empty()
 }
 
