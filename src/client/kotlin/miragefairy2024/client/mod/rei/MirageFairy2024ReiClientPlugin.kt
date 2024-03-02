@@ -1,4 +1,4 @@
-package miragefairy2024.client
+package miragefairy2024.client.mod.rei
 
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
