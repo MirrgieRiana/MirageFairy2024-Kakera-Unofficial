@@ -1,6 +1,5 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.rei
 
-import miragefairy2024.mod.rei.ReiCategoryCard
 import miragefairy2024.util.enJa
 
 fun initReiModule() {

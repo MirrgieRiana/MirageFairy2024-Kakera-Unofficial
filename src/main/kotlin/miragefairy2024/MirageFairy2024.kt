@@ -10,12 +10,12 @@ import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initPoemModule
-import miragefairy2024.mod.initReiModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule
+import miragefairy2024.mod.rei.initReiModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
