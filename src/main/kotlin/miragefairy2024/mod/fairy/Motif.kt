@@ -155,7 +155,6 @@ enum class MotifCard(
     val translation = Translation({ "miragefairy2024.motif.${identifier.toTranslationKey()}" }, enName, jaName)
     override val displayName = translation()
     override val passiveSkillSpecifications = passiveSkillBuilder.specifications
-
 }
 
 
