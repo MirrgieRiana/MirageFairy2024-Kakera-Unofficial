@@ -2,6 +2,9 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.mod.passiveskill.PassiveSkill
+import miragefairy2024.mod.passiveskill.PassiveSkillProvider
+import miragefairy2024.mod.passiveskill.getText
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -9,6 +12,8 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.formatted
 import miragefairy2024.util.get
 import miragefairy2024.util.green
 import miragefairy2024.util.int
@@ -29,6 +34,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.log
@@ -45,6 +51,7 @@ private val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }
 private val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
 private val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
 private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+private val PASSIVE_SKILL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
 
 fun initFairyItem() {
     FairyCard.let { card ->
@@ -103,6 +110,7 @@ fun initFairyItem() {
     MANA_TRANSLATION.enJa()
     CONDENSATION_TRANSLATION.enJa()
     CONDENSATION_RECIPE_TRANSLATION.enJa()
+    PASSIVE_SKILL_TRANSLATION.enJa()
 }
 
 private fun createFairyModel() = Model {
@@ -118,7 +126,7 @@ private fun createFairyModel() = Model {
     )
 }
 
-class FairyItem(settings: Settings) : Item(settings) {
+class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
     override fun getName(stack: ItemStack): Text {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()
@@ -127,6 +135,7 @@ class FairyItem(settings: Settings) : Item(settings) {
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
+        val player = MirageFairy2024.clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
         // レア
@@ -142,6 +151,17 @@ class FairyItem(settings: Settings) : Item(settings) {
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
 
+        // パッシブスキル
+        if (motif.passiveSkillSpecifications.isNotEmpty()) {
+
+            tooltip += text { empty() }
+
+            tooltip += text { PASSIVE_SKILL_TRANSLATION() + ":"() }
+            motif.passiveSkillSpecifications.forEach { specification ->
+                val available = player != null && specification.conditions.all { it.test(player.world, player.eyeBlockPos, player, mana) }
+                tooltip += text { " "() + specification.getText(mana).formatted(if (available) Formatting.GOLD else Formatting.GRAY) }
+            }
+        }
     }
 
     override fun isItemBarVisible(stack: ItemStack): Boolean {
@@ -158,6 +178,12 @@ class FairyItem(settings: Settings) : Item(settings) {
     }
 
     override fun getItemBarColor(stack: ItemStack) = 0x00FF00
+
+    override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
+        val motif = itemStack.getFairyMotif() ?: return null
+        val itemStackMana = motif.rare.toDouble() * 10.0 + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0) * 10.0
+        return PassiveSkill(itemStackMana, motif.passiveSkillSpecifications)
+    }
 }
 
 fun ItemStack.getFairyMotifId(): Identifier? = this.nbt.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
