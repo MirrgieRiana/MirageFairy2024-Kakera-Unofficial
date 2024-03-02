@@ -182,13 +182,13 @@ private operator fun MotifCardRecipes.plus(item: Item) = this.onInit { FairyDrea
 private operator fun MotifCardRecipes.plus(block: Block) = this.onInit { FairyDreamRecipes.BLOCK.register(block, it) }
 private operator fun MotifCardRecipes.plus(entityType: EntityType<*>) = this.onInit { FairyDreamRecipes.ENTITY_TYPE.register(entityType, it) }
 
-@JvmName("plusItem")
+@JvmName("plusItemTag")
 private operator fun MotifCardRecipes.plus(tag: TagKey<Item>) = this.onInit { FairyDreamRecipes.ITEM.registerFromTag(tag, it) }
 
-@JvmName("plusBlock")
+@JvmName("plusBlockTag")
 private operator fun MotifCardRecipes.plus(tag: TagKey<Block>) = this.onInit { FairyDreamRecipes.BLOCK.registerFromTag(tag, it) }
 
-@JvmName("plusEntityType")
+@JvmName("plusEntityTypeTag")
 private operator fun MotifCardRecipes.plus(tag: TagKey<EntityType<*>>) = this.onInit { FairyDreamRecipes.ENTITY_TYPE.registerFromTag(tag, it) }
 
 
