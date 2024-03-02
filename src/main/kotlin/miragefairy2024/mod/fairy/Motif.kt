@@ -169,10 +169,7 @@ class MotifCardRecipes {
     }
 }
 
-private fun MotifCardRecipes.common(biome: TagKey<Biome>? = null) = this.onInit { card ->
-    COMMON_MOTIF_RECIPES += CommonMotifRecipe(card, biome)
-}
-
+private fun MotifCardRecipes.common(biome: TagKey<Biome>? = null) = this.onInit { COMMON_MOTIF_RECIPES += CommonMotifRecipe(it, biome) }
 private val MotifCardRecipes.always get() = this.common()
 private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags.IN_OVERWORLD)
 private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IN_NETHER)
