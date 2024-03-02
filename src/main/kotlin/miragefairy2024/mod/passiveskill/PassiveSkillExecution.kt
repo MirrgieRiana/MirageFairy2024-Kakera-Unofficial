@@ -9,12 +9,36 @@ import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.register
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 
 fun initPassiveSkillExecution() {
+
+    // イベント処理
+    ServerTickEvents.END_SERVER_TICK.register { server ->
+        if (server.ticks % 20 == 0) {
+            server.playerManager.playerList.forEach { player ->
+
+                // 現在装備しているパッシブスキルの列挙
+                val passiveSkills = player.getPassiveSkills()
+
+                // 現在発動しているパッシブスキル効果の計算
+                val result = PassiveSkillResult()
+                result.collect(passiveSkills, player, 0.0, true) // 先行判定
+                val additionalMana = result[PassiveSkillEffectCard.MANA]
+                result.collect(passiveSkills, player, additionalMana, false) // 後行判定
+
+                // 効果
+                result.update(player)
+
+            }
+        }
+    }
+
     // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
     PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
+
 }
 
 fun PlayerEntity.getPassiveSkills(): List<PassiveSkill> {
