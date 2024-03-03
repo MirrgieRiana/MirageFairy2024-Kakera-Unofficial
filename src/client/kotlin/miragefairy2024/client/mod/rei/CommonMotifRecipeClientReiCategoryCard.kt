@@ -7,7 +7,6 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
@@ -46,7 +45,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
                     }
                     .noShadow()
                     .leftAligned(),
-                Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(), // 出力アイテム
+                Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries[0]).markOutput(), // 出力アイテム
             )
         }
     }
