@@ -1,13 +1,12 @@
 package miragefairy2024.mod.fairy
 
-import mirrg.kotlin.hydrogen.or
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.tag.TagKey
-import kotlin.jvm.optionals.getOrNull
+import kotlin.jvm.optionals.getOrElse
 
 object FairyDreamRecipes {
     val ITEM = FairyDreamTable<Item>(Registries.ITEM)
@@ -23,8 +22,8 @@ class FairyDreamTable<T>(val registry: Registry<T>) {
     }
 
     fun registerFromTag(tag: TagKey<T>, motif: Motif) {
-        this.registry.getEntryList(tag).getOrNull()?.map { it.value() }.or { listOf() }.forEach {
-            this.register(it, motif)
+        registry.getEntryList(tag).getOrElse { return }.map { it.value() }.forEach {
+            register(it, motif)
         }
     }
 
