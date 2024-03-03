@@ -5,6 +5,7 @@ import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.toNbtList
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.or
@@ -134,7 +135,7 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
         }
     }
 
-    val traitStackList by lazy { traitStackMap.entries.map { TraitStack(it.key, it.value) } }
+    val traitStackList by lazy { traitStackMap.map { TraitStack(it.key, it.value) } }
 }
 
 fun NbtList.toTraitStacks(): TraitStacks {
@@ -144,10 +145,4 @@ fun NbtList.toTraitStacks(): TraitStacks {
     return TraitStacks.of(traitStackList)
 }
 
-fun TraitStacks.toNbt(): NbtList {
-    val nbt = NbtList()
-    this.traitStackMap.forEach {
-        nbt.add(TraitStack(it.key, it.value).toNbt())
-    }
-    return nbt
-}
+fun TraitStacks.toNbt() = this.traitStackMap.map { TraitStack(it.key, it.value).toNbt() }.toNbtList()

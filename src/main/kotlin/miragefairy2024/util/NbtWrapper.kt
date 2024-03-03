@@ -129,7 +129,7 @@ val NbtProperty<NbtElement?, NbtElement?>.long get() = NbtProperty<Long?, Long?>
 val NbtProperty<NbtElement?, NbtElement?>.float get() = NbtProperty<Float?, Float?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.floatValue() }, { this.set(it?.let { a -> NbtFloat.of(a) }) })
 val NbtProperty<NbtElement?, NbtElement?>.double get() = NbtProperty<Double?, Double?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.doubleValue() }, { this.set(it?.let { a -> NbtDouble.of(a) }) })
 val NbtProperty<NbtElement?, NbtElement?>.number get() = NbtProperty<Number?, Number?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.numberValue() }, { this.set(it?.let { a -> NbtDouble.of(a.toDouble()) }) })
-val NbtProperty<NbtElement?, NbtElement?>.string get() = NbtProperty<String?, String?>({ this.get()?.castOrNull<NbtString>()?.asString() }, { this.set(it?.let { a -> NbtString.of(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.string get() = NbtProperty<String?, String?>({ this.get()?.castOrNull<NbtString>()?.asString() }, { this.set(it?.toNbtString()) })
 val NbtProperty<NbtElement?, NbtElement?>.boolean get() = NbtProperty<Boolean?, Boolean?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.byteValue()?.let { it != 0.toByte() } }, { this.set(it?.let { a -> NbtByte.of(a) }) })
 
 @get:JvmName("listGetter")
