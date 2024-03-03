@@ -22,11 +22,11 @@ class FairyDreamTable<T>(val registry: Registry<T>) {
         map.getOrPut(key) { mutableSetOf() } += motif
     }
 
-    fun test(key: T): Set<Motif> = map.getOrElse(key) { setOf() }
-}
-
-fun <T> FairyDreamTable<T>.registerFromTag(tag: TagKey<T>, motif: Motif) {
-    this.registry.getEntryList(tag).getOrNull()?.map { it.value() }.or { listOf() }.forEach {
-        this.register(it, motif)
+    fun registerFromTag(tag: TagKey<T>, motif: Motif) {
+        this.registry.getEntryList(tag).getOrNull()?.map { it.value() }.or { listOf() }.forEach {
+            this.register(it, motif)
+        }
     }
+
+    fun test(key: T): Set<Motif> = map.getOrElse(key) { setOf() }
 }
