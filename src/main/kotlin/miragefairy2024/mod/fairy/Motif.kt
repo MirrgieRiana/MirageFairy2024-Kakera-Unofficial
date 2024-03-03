@@ -29,6 +29,7 @@ val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(Iden
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 fun Motif.getIdentifier() = motifRegistry.getId(this)
+fun Identifier.toFairyMotif() = motifRegistry.get(this)
 
 interface Motif {
     val displayName: Text
