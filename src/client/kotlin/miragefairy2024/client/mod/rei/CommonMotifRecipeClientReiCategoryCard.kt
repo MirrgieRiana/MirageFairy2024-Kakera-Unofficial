@@ -11,6 +11,7 @@ import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.setFairyMotif
+import miragefairy2024.mod.rei.COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION
 import miragefairy2024.mod.rei.CommonMotifRecipeReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
@@ -37,7 +38,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             val p = bounds.location + Point(5, 5)
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createLabel(p + Point(0, 5), text { display.recipe.biome?.let { it.id.path() } ?: "Always"() }) // TODO translate
+                Widgets.createLabel(p + Point(0, 5), text { display.recipe.biome?.let { it.id.path() } ?: COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() })
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
                         val biome = display.recipe.biome
