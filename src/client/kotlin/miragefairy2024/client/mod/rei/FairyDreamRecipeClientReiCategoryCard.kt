@@ -1,0 +1,132 @@
+package miragefairy2024.client.mod.rei
+
+import me.shedaniel.math.Point
+import me.shedaniel.math.Rectangle
+import me.shedaniel.rei.api.client.gui.Renderer
+import me.shedaniel.rei.api.client.gui.widgets.Widget
+import me.shedaniel.rei.api.client.gui.widgets.Widgets
+import me.shedaniel.rei.api.client.registry.display.DisplayCategory
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import me.shedaniel.rei.api.common.display.basic.BasicDisplay
+import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.mod.fairy.FairyCard
+import miragefairy2024.mod.fairy.FairyDreamRecipes
+import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.mod.fairy.setFairyMotif
+import miragefairy2024.mod.rei.BlockFairyDreamRecipeReiCategoryCard
+import miragefairy2024.mod.rei.EntityTypeFairyDreamRecipeReiCategoryCard
+import miragefairy2024.mod.rei.ItemFairyDreamRecipeReiCategoryCard
+import miragefairy2024.mod.rei.ReiCategoryCard
+import miragefairy2024.util.createItemStack
+import miragefairy2024.util.invoke
+import miragefairy2024.util.join
+import miragefairy2024.util.plus
+import miragefairy2024.util.text
+import miragefairy2024.util.toEntryIngredient
+import miragefairy2024.util.toEntryStack
+import net.minecraft.block.Block
+import net.minecraft.entity.EntityType
+import net.minecraft.item.Item
+import net.minecraft.registry.Registries
+import net.minecraft.text.Text
+import kotlin.jvm.optionals.getOrElse
+
+abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
+
+object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Item, ItemFairyDreamRecipeReiCategoryCard.Display>(ItemFairyDreamRecipeReiCategoryCard) {
+    override fun registerDisplays(registry: DisplayRegistry) {
+        FairyDreamRecipes.ITEM.getDisplayMap().forEach { (item, motif) ->
+            registry.add(ItemFairyDreamRecipeReiCategoryCard.Display(listOf(item), motif))
+        }
+        FairyDreamRecipes.ITEM.getDisplayTagMap().forEach { (itemTag, motif) ->
+            val itemList = Registries.ITEM.getEntryList(itemTag).getOrElse { return@forEach }.map { it.value() }
+            registry.add(ItemFairyDreamRecipeReiCategoryCard.Display(itemList, motif))
+        }
+    }
+
+    override fun createCategory() = object : DisplayCategory<ItemFairyDreamRecipeReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = ItemFairyDreamRecipeReiCategoryCard.identifier
+        override fun getTitle(): Text = ItemFairyDreamRecipeReiCategoryCard.translation()
+        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) }.toEntryStack()
+        override fun getDisplayWidth(display: ItemFairyDreamRecipeReiCategoryCard.Display) = 160
+        override fun getDisplayHeight() = 28
+        override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+            val p = bounds.location + Point(5, 5)
+            return listOf(
+                Widgets.createRecipeBase(bounds),
+                Widgets.createSlot(p + Point(1, 1)).entries(display.inputEntries[0]).disableBackground(),
+                Widgets.createLabel(p + Point(21, 5), text { display.items[0].name })
+                    .leftAligned()
+                    .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
+                    .noShadow()
+                    .tooltip(display.items.map { it.name }.join(text { "\n"() })),
+                Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
+            )
+        }
+    }
+}
+
+object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Block, BlockFairyDreamRecipeReiCategoryCard.Display>(BlockFairyDreamRecipeReiCategoryCard) {
+    override fun registerDisplays(registry: DisplayRegistry) {
+        FairyDreamRecipes.BLOCK.getDisplayMap().forEach { (block, motif) ->
+            registry.add(BlockFairyDreamRecipeReiCategoryCard.Display(listOf(block), motif))
+        }
+        FairyDreamRecipes.BLOCK.getDisplayTagMap().forEach { (blockTag, motif) ->
+            val blockList = Registries.BLOCK.getEntryList(blockTag).getOrElse { return@forEach }.map { it.value() }
+            registry.add(BlockFairyDreamRecipeReiCategoryCard.Display(blockList, motif))
+        }
+    }
+
+    override fun createCategory() = object : DisplayCategory<BlockFairyDreamRecipeReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = BlockFairyDreamRecipeReiCategoryCard.identifier
+        override fun getTitle(): Text = BlockFairyDreamRecipeReiCategoryCard.translation()
+        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) }.toEntryStack()
+        override fun getDisplayWidth(display: BlockFairyDreamRecipeReiCategoryCard.Display) = 160
+        override fun getDisplayHeight() = 28
+        override fun setupDisplay(display: BlockFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+            val p = bounds.location + Point(5, 5)
+            return listOf(
+                Widgets.createRecipeBase(bounds),
+                Widgets.createSlot(p + Point(1, 1)).entries(display.blocks[0].asItem().createItemStack().toEntryStack().toEntryIngredient()).disableBackground(),
+                Widgets.createLabel(p + Point(21, 5), text { display.blocks[0].name })
+                    .leftAligned()
+                    .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
+                    .noShadow()
+                    .tooltip(display.blocks.map { it.name }.join(text { "\n"() })),
+                Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
+            )
+        }
+    }
+}
+
+object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<EntityType<*>, EntityTypeFairyDreamRecipeReiCategoryCard.Display>(EntityTypeFairyDreamRecipeReiCategoryCard) {
+    override fun registerDisplays(registry: DisplayRegistry) {
+        FairyDreamRecipes.ENTITY_TYPE.getDisplayMap().forEach { (entityType, motif) ->
+            registry.add(EntityTypeFairyDreamRecipeReiCategoryCard.Display(listOf(entityType), motif))
+        }
+        FairyDreamRecipes.ENTITY_TYPE.getDisplayTagMap().forEach { (entityTypeTag, motif) ->
+            val entityTypeList = Registries.ENTITY_TYPE.getEntryList(entityTypeTag).getOrElse { return@forEach }.map { it.value() }
+            registry.add(EntityTypeFairyDreamRecipeReiCategoryCard.Display(entityTypeList, motif))
+        }
+    }
+
+    override fun createCategory() = object : DisplayCategory<EntityTypeFairyDreamRecipeReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = EntityTypeFairyDreamRecipeReiCategoryCard.identifier
+        override fun getTitle(): Text = EntityTypeFairyDreamRecipeReiCategoryCard.translation()
+        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) }.toEntryStack()
+        override fun getDisplayWidth(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display) = 160
+        override fun getDisplayHeight() = 28
+        override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+            val p = bounds.location + Point(5, 5)
+            return listOf(
+                Widgets.createRecipeBase(bounds),
+                Widgets.createLabel(p + Point(2, 5), text { display.entityTypes[0].name })
+                    .leftAligned()
+                    .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
+                    .noShadow()
+                    .tooltip(display.entityTypes.map { it.name }.join(text { "\n"() })),
+                Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
+            )
+        }
+    }
+}

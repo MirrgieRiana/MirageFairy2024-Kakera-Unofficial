@@ -12,6 +12,9 @@ abstract class ClientReiCategoryCard<D : BasicDisplay>(val parent: ReiCategoryCa
             MagicPlantCropClientReiCategoryCard,
             FairyQuestRecipeClientReiCategoryCard,
             CommonMotifRecipeClientReiCategoryCard,
+            ItemFairyDreamRecipeClientReiCategoryCard,
+            BlockFairyDreamRecipeClientReiCategoryCard,
+            EntityTypeFairyDreamRecipeClientReiCategoryCard,
         )
     }
 
