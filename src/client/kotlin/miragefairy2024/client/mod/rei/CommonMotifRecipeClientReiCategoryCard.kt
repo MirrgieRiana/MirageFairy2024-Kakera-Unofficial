@@ -38,7 +38,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             val p = bounds.location + Point(5, 5)
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createLabel(p + Point(0, 6), text { display.recipe.biome?.let { it.id.path() } ?: "Always"() }) // TODO translate
+                Widgets.createLabel(p + Point(0, 5), text { display.recipe.biome?.let { it.id.path() } ?: "Always"() }) // TODO translate
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
                         val biome = display.recipe.biome
