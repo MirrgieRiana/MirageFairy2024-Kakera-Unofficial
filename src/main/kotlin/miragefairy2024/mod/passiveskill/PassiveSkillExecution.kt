@@ -6,6 +6,8 @@ import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.soulStream
+import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.register
@@ -13,6 +15,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 
+val PASSIVE_SKILL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
 fun initPassiveSkillExecution() {
 
     // イベント処理
@@ -38,6 +41,9 @@ fun initPassiveSkillExecution() {
 
     // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
     PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
+
+    // 翻訳
+    PASSIVE_SKILL_TRANSLATION.enJa()
 
 }
 
