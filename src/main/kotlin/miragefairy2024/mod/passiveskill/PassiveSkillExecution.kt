@@ -6,9 +6,6 @@ import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.soulStream
-import miragefairy2024.mod.passiveskill.PassiveSkillStatus.DISABLED
-import miragefairy2024.mod.passiveskill.PassiveSkillStatus.DUPLICATED
-import miragefairy2024.mod.passiveskill.PassiveSkillStatus.EFFECTIVE
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
@@ -72,9 +69,9 @@ enum class PassiveSkillStatus {
 
 val PassiveSkillStatus.description
     get() = when (this) {
-        DISABLED -> PASSIVE_SKILL_DISABLED_TRANSLATION()
-        DUPLICATED -> PASSIVE_SKILL_DUPLICATED_TRANSLATION()
-        EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
+        PassiveSkillStatus.DISABLED -> PASSIVE_SKILL_DISABLED_TRANSLATION()
+        PassiveSkillStatus.DUPLICATED -> PASSIVE_SKILL_DUPLICATED_TRANSLATION()
+        PassiveSkillStatus.EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
     }
 
 class PassiveSkillProviders(val providers: List<Pair<ItemStack, PassiveSkillStatus>>, val passiveSkills: List<PassiveSkill>)
@@ -91,10 +88,10 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
             val passiveSkill = item.getPassiveSkill(itemStack)
             if (passiveSkill != null) {
                 if (passiveSkill.providerId in acceptedProviderIds) {
-                    providers += Pair(itemStack, DUPLICATED)
+                    providers += Pair(itemStack, PassiveSkillStatus.DUPLICATED)
                 } else {
                     acceptedProviderIds += passiveSkill.providerId
-                    providers += Pair(itemStack, EFFECTIVE)
+                    providers += Pair(itemStack, PassiveSkillStatus.EFFECTIVE)
                     passiveSkills += passiveSkill
                 }
             }
