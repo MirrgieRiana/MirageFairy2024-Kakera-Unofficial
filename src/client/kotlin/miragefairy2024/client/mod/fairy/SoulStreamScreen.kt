@@ -10,6 +10,7 @@ import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
+import miragefairy2024.client.util.SlotType
 import miragefairy2024.client.util.inventoryNameLabel
 import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.verticalScroll
@@ -54,9 +55,18 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(3))
 
-                    child(verticalScroll(Sizing.fill(), Sizing.fixed(18 * 6), 18).apply {
+                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                        repeat(9) { index ->
+                            child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = SlotType.FAIRY))
+                        }
+                    })
+
+                    child(verticalSpace(4))
+
+                    child(verticalScroll(Sizing.fill(), Sizing.fixed(18 * 5), 18).apply {
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
-                        (0 until handler.soulStream.size).chunked(9).forEach { indices ->
+                        scrollStep(18)
+                        (9 until handler.soulStream.size).chunked(9).forEach { indices ->
                             child().child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
                                 indices.forEach { index ->
                                     child(slotContainer(slotAsComponent(9 * 3 + 9 + index)))
