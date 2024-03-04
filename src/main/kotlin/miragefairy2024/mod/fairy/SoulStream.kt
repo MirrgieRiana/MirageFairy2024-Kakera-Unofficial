@@ -113,7 +113,7 @@ object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "
 // GUI
 
 val soulStreamScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
-    SoulStreamScreenHandler(syncId, playerInventory, SimpleInventory(SoulStream.SLOT_COUNT))
+    SoulStreamScreenHandler(syncId, playerInventory, MirageFairy2024.clientProxy!!.getClientPlayer()!!.soulStream)
 }
 
 class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val soulStream: Inventory) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
@@ -129,9 +129,6 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         repeat(soulStream.size) { i ->
             addSlot(object : Slot(soulStream, i, 0, 0) {
                 override fun canInsert(stack: ItemStack) = stack.isOf(FairyCard.item) || stack.isIn(WISP_TAG)
-                override fun markDirty() {
-                    if (!playerInventory.player.world.isClient) SoulStreamExtraPlayerDataCategory.sync(playerInventory.player as ServerPlayerEntity)
-                }
             })
         }
     }
