@@ -26,7 +26,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
         val entries = mutableListOf<PassiveSkillEffectCard<*>>()
         private operator fun <T> PassiveSkillEffectCard<T>.unaryPlus() = this.also { entries += it }
 
-        val MANA = +ManaPassiveSkillEffect("mana")
+        val MANA = +ManaPassiveSkillEffect
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
@@ -34,7 +34,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
 }
 
 // TODO 条件付き魔力パッシブ
-class ManaPassiveSkillEffect(path: String) : PassiveSkillEffectCard<Double>(path) {
+object ManaPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana") {
     override val isPreprocessor = true
     override fun getText(value: Double) = text { translation() + " ${value formatAs "%+.0f"}"() }
     override val unit = 0.0
