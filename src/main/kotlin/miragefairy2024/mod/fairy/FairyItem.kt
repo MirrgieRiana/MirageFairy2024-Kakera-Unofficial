@@ -154,7 +154,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
 
         // 魔力
-        val itemStackMana = motif.rare.toDouble() * 10.0 + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0) * 10.0
+        val itemStackMana = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
         val (additionalMana, status) = if (player != null) {
             val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
@@ -165,7 +165,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = itemStackMana + additionalMana
-        tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.0f"}"()).green }
+        tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.1f"}"()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
@@ -222,7 +222,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
-        val itemStackMana = motif.rare.toDouble() * 10.0 + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0) * 10.0
+        val itemStackMana = motif.rare.toDouble() + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0)
         return PassiveSkill("fairy/" concat motif.getIdentifier()!!, itemStackMana, motif.passiveSkillSpecifications)
     }
 }

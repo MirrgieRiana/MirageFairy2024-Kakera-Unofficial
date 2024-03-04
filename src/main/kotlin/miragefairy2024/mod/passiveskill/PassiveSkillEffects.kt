@@ -42,7 +42,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
 // TODO 条件付き魔力パッシブ
 object ManaPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana") {
     override val isPreprocessor = true
-    override fun getText(value: Double) = text { translation() + " ${value formatAs "%+.0f"}"() }
+    override fun getText(value: Double) = text { translation() + " ${value formatAs "%+.1f"}"() }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
