@@ -151,7 +151,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
 
         // 凝縮数
-        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"()).green }
+        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
 
         // 魔力
         val itemStackMana = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
