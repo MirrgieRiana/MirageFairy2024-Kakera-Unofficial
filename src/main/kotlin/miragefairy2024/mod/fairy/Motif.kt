@@ -42,6 +42,7 @@ interface Motif {
 }
 
 
+// TODO 妖精の系統関係
 enum class MotifCard(
     path: String,
     override val rare: Int,
