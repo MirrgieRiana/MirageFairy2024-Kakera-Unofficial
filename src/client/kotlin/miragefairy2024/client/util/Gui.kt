@@ -10,15 +10,22 @@ import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
-import miragefairy2024.client.mod.surface
-import miragefairy2024.mod.NinePatchTextureCard
+import io.wispforest.owo.ui.core.Surface
+import miragefairy2024.MirageFairy2024
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 
-fun slotContainer(slotComponent: Component): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
-    padding(Insets.of(1))
-    surface(NinePatchTextureCard.SLOT.surface)
-    allowOverflow(true)
-    child(slotComponent)
+enum class SlotType(val texture: Identifier) {
+    NORMAL(Identifier(MirageFairy2024.modId, "textures/gui/slot.png")),
+}
+
+fun slotContainer(slotComponent: Component, type: SlotType = SlotType.NORMAL): FlowLayout {
+    return Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+        padding(Insets.of(1))
+        surface(Surface.tiled(type.texture, 18, 18))
+        allowOverflow(true)
+        child(slotComponent)
+    }
 }
 
 fun horizontalSpace(width: Int): FlowLayout = Containers.verticalFlow(Sizing.fixed(width), Sizing.content())
