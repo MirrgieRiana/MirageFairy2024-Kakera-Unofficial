@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier
 
 enum class SlotType(val texture: Identifier) {
     NORMAL(Identifier(MirageFairy2024.modId, "textures/gui/slot.png")),
+    FAIRY(Identifier(MirageFairy2024.modId, "textures/gui/fairy_slot.png")),
 }
 
 fun slotContainer(slotComponent: Component, type: SlotType = SlotType.NORMAL): FlowLayout {
