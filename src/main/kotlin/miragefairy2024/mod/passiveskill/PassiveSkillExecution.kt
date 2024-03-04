@@ -6,16 +6,25 @@ import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.soulStream
+import miragefairy2024.mod.passiveskill.PassiveSkillStatus.DISABLED
+import miragefairy2024.mod.passiveskill.PassiveSkillStatus.DUPLICATED
+import miragefairy2024.mod.passiveskill.PassiveSkillStatus.EFFECTIVE
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
+import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 
 val PASSIVE_SKILL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
+val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.disabled" }, "Outside target slot", "対象スロット外")
+val PASSIVE_SKILL_DUPLICATED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.duplicated" }, "Duplicate items!", "アイテムが重複！")
+val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.effective" }, "Effective", "発動中")
+
 fun initPassiveSkillExecution() {
 
     // イベント処理
@@ -24,13 +33,13 @@ fun initPassiveSkillExecution() {
             server.playerManager.playerList.forEach { player ->
 
                 // 現在装備しているパッシブスキルの列挙
-                val passiveSkills = player.getPassiveSkills()
+                val passiveSkillProviders = player.findPassiveSkillProviders()
 
                 // 現在発動しているパッシブスキル効果の計算
                 val result = PassiveSkillResult()
-                result.collect(passiveSkills, player, 0.0, true) // 先行判定
+                result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
                 val additionalMana = result[PassiveSkillEffectCard.MANA]
-                result.collect(passiveSkills, player, additionalMana, false) // 後行判定
+                result.collect(passiveSkillProviders.passiveSkills, player, additionalMana, false) // 後行判定
 
                 // 効果
                 result.update(player)
@@ -44,21 +53,54 @@ fun initPassiveSkillExecution() {
 
     // 翻訳
     PASSIVE_SKILL_TRANSLATION.enJa()
+    PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
+    PASSIVE_SKILL_DUPLICATED_TRANSLATION.enJa()
+    PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
 
 }
 
-fun PlayerEntity.getPassiveSkills(): List<PassiveSkill> {
+enum class PassiveSkillStatus {
+    /** アイテムが有効なスロットにありません。 */
+    DISABLED,
+
+    /** 同種のアイテムが既に存在します。 */
+    DUPLICATED,
+
+    /** パッシブスキルは有効です。 */
+    EFFECTIVE,
+}
+
+val PassiveSkillStatus.description
+    get() = when (this) {
+        DISABLED -> PASSIVE_SKILL_DISABLED_TRANSLATION()
+        DUPLICATED -> PASSIVE_SKILL_DUPLICATED_TRANSLATION()
+        EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
+    }
+
+class PassiveSkillProviders(val providers: List<Pair<ItemStack, PassiveSkillStatus>>, val passiveSkills: List<PassiveSkill>)
+
+fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
+    val providers = mutableListOf<Pair<ItemStack, PassiveSkillStatus>>()
     val passiveSkills = mutableListOf<PassiveSkill>()
+    val acceptedProviderIds = mutableSetOf<Identifier>()
     val soulStream = this.soulStream
     SoulStream.PASSIVE_SKILL_SLOT_INDICES.forEach { slotIndex ->
         val itemStack = soulStream[slotIndex]
         val item = itemStack.item
         if (item is PassiveSkillProvider) {
             val passiveSkill = item.getPassiveSkill(itemStack)
-            if (passiveSkill != null) passiveSkills += passiveSkill
+            if (passiveSkill != null) {
+                if (passiveSkill.providerId in acceptedProviderIds) {
+                    providers += Pair(itemStack, DUPLICATED)
+                } else {
+                    acceptedProviderIds += passiveSkill.providerId
+                    providers += Pair(itemStack, EFFECTIVE)
+                    passiveSkills += passiveSkill
+                }
+            }
         }
     }
-    return passiveSkills.toList()
+    return PassiveSkillProviders(providers.toList(), passiveSkills.toList())
 }
 
 fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, additionalMana: Double, isPreprocessing: Boolean) {

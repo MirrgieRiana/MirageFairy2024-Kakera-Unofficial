@@ -7,14 +7,17 @@ import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillProvider
 import miragefairy2024.mod.passiveskill.PassiveSkillResult
+import miragefairy2024.mod.passiveskill.PassiveSkillStatus
 import miragefairy2024.mod.passiveskill.collect
-import miragefairy2024.mod.passiveskill.getPassiveSkills
+import miragefairy2024.mod.passiveskill.description
+import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
 import miragefairy2024.mod.passiveskill.getText
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
+import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
@@ -149,13 +152,14 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
         // 魔力
         val itemStackMana = motif.rare.toDouble() * 10.0 + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0) * 10.0
-        val additionalMana = if (player != null) {
-            val passiveSkills = player.getPassiveSkills()
+        val (additionalMana, status) = if (player != null) {
+            val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
-            result.collect(passiveSkills, player, 0.0, true) // 先行判定
-            result[PassiveSkillEffectCard.MANA]
+            result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
+            val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
+            Pair(result[PassiveSkillEffectCard.MANA], status)
         } else {
-            0.0
+            Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = itemStackMana + additionalMana
         tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.0f"}"()).green }
@@ -168,7 +172,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
             tooltip += text { empty() }
 
-            tooltip += text { PASSIVE_SKILL_TRANSLATION() + ":"() }
+            tooltip += text { PASSIVE_SKILL_TRANSLATION() + ": "() + status.description }
             motif.passiveSkillSpecifications.forEach { specification ->
                 val available = player != null && specification.conditions.all { it.test(player.world, player.eyeBlockPos, player, mana) }
                 tooltip += text { " "() + specification.getText(itemStackMana, additionalMana).formatted(if (available) Formatting.GOLD else Formatting.GRAY) }
@@ -194,7 +198,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
         val itemStackMana = motif.rare.toDouble() * 10.0 + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0) * 10.0
-        return PassiveSkill(itemStackMana, motif.passiveSkillSpecifications)
+        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, itemStackMana, motif.passiveSkillSpecifications)
     }
 }
 

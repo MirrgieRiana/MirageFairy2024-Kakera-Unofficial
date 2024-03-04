@@ -26,7 +26,7 @@ interface PassiveSkillProvider {
 }
 
 
-class PassiveSkill(val itemStackMana: Double, val specifications: List<PassiveSkillSpecification<*>>)
+class PassiveSkill(val providerId: Identifier, val itemStackMana: Double, val specifications: List<PassiveSkillSpecification<*>>)
 
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
