@@ -7,11 +7,11 @@ import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillProvider
 import miragefairy2024.mod.passiveskill.PassiveSkillResult
+import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.PassiveSkillStatus
 import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
-import miragefairy2024.mod.passiveskill.getText
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -19,13 +19,17 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.darkGray
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
-import miragefairy2024.util.formatted
 import miragefairy2024.util.get
+import miragefairy2024.util.gold
+import miragefairy2024.util.gray
 import miragefairy2024.util.green
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
+import miragefairy2024.util.join
+import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
@@ -42,7 +46,6 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.log
@@ -172,10 +175,32 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
             tooltip += text { empty() }
 
-            tooltip += text { PASSIVE_SKILL_TRANSLATION() + ": "() + status.description }
+            val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE
+            tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (status != PassiveSkillStatus.EFFECTIVE) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             motif.passiveSkillSpecifications.forEach { specification ->
-                val available = player != null && specification.conditions.all { it.test(player.world, player.eyeBlockPos, player, mana) }
-                tooltip += text { " "() + specification.getText(itemStackMana, additionalMana).formatted(if (available) Formatting.GOLD else Formatting.GRAY) }
+                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
+                    val texts = mutableListOf<Text>()
+
+                    texts += text { " "() }
+
+                    texts += text { specification.effect.getText(specification.valueProvider(if (specification.effect.isPreprocessor) itemStackMana else itemStackMana + additionalMana)) }
+
+                    val conditionValidityList = specification.conditions.map { Pair(it, player != null && it.test(player.world, player.eyeBlockPos, player, mana)) }
+                    if (conditionValidityList.isNotEmpty()) {
+                        texts += text { " ["() }
+
+                        conditionValidityList.forEachIndexed { index, (condition, isValidCondition) ->
+                            if (index != 0) texts += text { ","() }
+                            texts += text { condition.text }.let { if (!isValidCondition) it.red else it }
+                        }
+
+                        texts += text { "]"() }
+                    }
+
+                    val isAvailableSpecification = conditionValidityList.all { it.second }
+                    return texts.join().let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
+                }
+                tooltip += getSpecificationText(specification)
             }
         }
     }

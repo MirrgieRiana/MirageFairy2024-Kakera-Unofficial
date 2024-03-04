@@ -1,8 +1,6 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.util.join
-import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
@@ -30,11 +28,6 @@ class PassiveSkill(val providerId: Identifier, val itemStackMana: Double, val sp
 
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
-
-fun <T> PassiveSkillSpecification<T>.getText(baseMana: Double, additionalMana: Double) = text {
-    this@getText.effect.getText(this@getText.valueProvider(if (this@getText.effect.isPreprocessor) baseMana else baseMana + additionalMana)) +
-        if (this@getText.conditions.isNotEmpty()) " ["() + this@getText.conditions.map { it.text }.join(","()) + "]"() else empty()
-}
 
 
 interface PassiveSkillCondition {
