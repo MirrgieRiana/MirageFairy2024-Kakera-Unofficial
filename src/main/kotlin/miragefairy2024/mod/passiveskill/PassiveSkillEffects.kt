@@ -33,6 +33,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
     abstract val translations: List<Translation>
 }
 
+// TODO 条件付き魔力パッシブ
 class ManaPassiveSkillEffect(path: String) : PassiveSkillEffectCard<Double>(path) {
     override val isPreprocessor = true
     override fun getText(value: Double) = text { translation() + " ${value formatAs "%+.0f"}"() }
