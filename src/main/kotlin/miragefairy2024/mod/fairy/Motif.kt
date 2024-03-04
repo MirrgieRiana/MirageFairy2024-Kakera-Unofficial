@@ -68,7 +68,7 @@ enum class MotifCard(
     VACUUM_DECAY(
         "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
         PassiveSkillBuilder(), // TODO
-        MotifCardRecipes().always + BlockMaterialCard.LOCAL_VACUUM_DECAY.block,
+        MotifCardRecipes().end + BlockMaterialCard.LOCAL_VACUUM_DECAY.block,
     ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
@@ -123,18 +123,18 @@ enum class MotifCard(
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
         PassiveSkillBuilder(), // TODO
-        MotifCardRecipes().always + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
+        MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
     MAGENTA_GLAZED_TERRACOTTA(
         "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ",
         0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
         PassiveSkillBuilder(), // TODO
-        MotifCardRecipes().always + Blocks.MAGENTA_GLAZED_TERRACOTTA,
+        MotifCardRecipes() + Blocks.MAGENTA_GLAZED_TERRACOTTA,
     ),
     BEACON(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
         PassiveSkillBuilder(), // TODO
-        MotifCardRecipes().always + Blocks.BEACON,
+        MotifCardRecipes() + Blocks.BEACON,
     ),
     TIME(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
@@ -144,7 +144,7 @@ enum class MotifCard(
     GRAVITY(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
         PassiveSkillBuilder(), // TODO
-        MotifCardRecipes().always + Items.APPLE,
+        MotifCardRecipes() + Items.APPLE,
     ),
     ANTI_ENTROPY(
         "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
