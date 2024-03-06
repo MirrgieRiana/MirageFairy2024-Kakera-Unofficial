@@ -11,6 +11,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
@@ -27,6 +28,8 @@ fun initPassiveSkillEffects() {
             it.enJa()
         }
     }
+
+    EntityAttributePassiveSkillEffect.formatters[EntityAttributes.GENERIC_MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
 }
 
 abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
@@ -56,6 +59,8 @@ object ManaPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana") {
 }
 
 object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
+    val formatters = mutableMapOf<EntityAttribute, (Double) -> String>()
+    private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
     val uuid = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
 
     class Value(val map: Map<EntityAttribute, Double>)
@@ -63,7 +68,7 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
     override val isPreprocessor = false
     override fun getText(value: Value): Text {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.translationKey) + " ${value formatAs "%+.1f"}"() }
+            text { translate(attribute.translationKey) + " ${formatters.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 
