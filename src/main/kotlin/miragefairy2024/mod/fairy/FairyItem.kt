@@ -17,6 +17,7 @@ import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
+import miragefairy2024.util.buildText
 import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkGray
@@ -28,7 +29,6 @@ import miragefairy2024.util.gray
 import miragefairy2024.util.green
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
-import miragefairy2024.util.join
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -179,26 +179,21 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (status != PassiveSkillStatus.EFFECTIVE) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
-                    val texts = mutableListOf<Text>()
-
-                    texts += text { " "() }
-
-                    texts += text { specification.effect.getText(specification.valueProvider(if (specification.effect.isPreprocessor) itemStackMana else itemStackMana + additionalMana)) }
-
+                    val actualMana = if (specification.effect.isPreprocessor) itemStackMana else itemStackMana + additionalMana
                     val conditionValidityList = specification.conditions.map { Pair(it, player != null && it.test(player.world, player.eyeBlockPos, player, mana)) }
-                    if (conditionValidityList.isNotEmpty()) {
-                        texts += text { " ["() }
-
-                        conditionValidityList.forEachIndexed { index, (condition, isValidCondition) ->
-                            if (index != 0) texts += text { ","() }
-                            texts += text { condition.text }.let { if (!isValidCondition) it.red else it }
-                        }
-
-                        texts += text { "]"() }
-                    }
-
                     val isAvailableSpecification = conditionValidityList.all { it.second }
-                    return texts.join().let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
+                    return buildText {
+                        !text { " "() }
+                        !text { specification.effect.getText(specification.valueProvider(actualMana)) }
+                        if (conditionValidityList.isNotEmpty()) {
+                            !text { " ["() }
+                            conditionValidityList.forEachIndexed { index, (condition, isValidCondition) ->
+                                if (index != 0) !text { ","() }
+                                !text { condition.text }.let { if (!isValidCondition) it.red else it }
+                            }
+                            !text { "]"() }
+                        }
+                    }.let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
                 }
                 tooltip += getSpecificationText(specification)
             }
