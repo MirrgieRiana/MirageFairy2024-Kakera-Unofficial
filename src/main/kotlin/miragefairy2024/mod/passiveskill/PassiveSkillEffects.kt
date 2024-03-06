@@ -2,6 +2,7 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Translation
+import miragefairy2024.util.buildText
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -10,6 +11,8 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.effect.StatusEffect
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -33,6 +36,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
 
         val MANA = +ManaPassiveSkillEffect
         val ENTITY_ATTRIBUTE = +EntityAttributePassiveSkillEffect
+        val STATUS_EFFECT = +StatusEffectPassiveSkillEffect
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
@@ -97,6 +101,42 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
             }
         }
 
+    }
+
+    override val translations = listOf<Translation>()
+}
+
+object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassiveSkillEffect.Value>("status_effect") {
+    class Value(val map: Map<StatusEffect, Entry>)
+    class Entry(val level: Int, val additionalSeconds: Int)
+
+    override val isPreprocessor = false
+    override fun getText(value: Value): Text {
+        return value.map.map { (statusEffect, entry) ->
+            buildText {
+                !statusEffect.name
+                if (entry.level in 2..10) !(" "() + translate("enchantment.level.${entry.level}"))
+            }
+        }.join(text { ","() })
+    }
+
+    override val unit = Value(mapOf())
+    override fun castOrThrow(value: Any?) = value as Value
+    override fun combine(a: Value, b: Value): Value {
+        val map = a.map.toMutableMap()
+        b.map.forEach { (statusEffect, bEntry) ->
+            val aEntry = map[statusEffect]
+            if (aEntry == null || aEntry.level < bEntry.level || aEntry.additionalSeconds < bEntry.additionalSeconds) {
+                map[statusEffect] = bEntry
+            }
+        }
+        return Value(map)
+    }
+
+    override fun update(world: World, blockPos: BlockPos, player: PlayerEntity, oldValue: Value, newValue: Value) {
+        newValue.map.forEach { (statusEffect, entry) ->
+            player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
+        }
     }
 
     override val translations = listOf<Translation>()
