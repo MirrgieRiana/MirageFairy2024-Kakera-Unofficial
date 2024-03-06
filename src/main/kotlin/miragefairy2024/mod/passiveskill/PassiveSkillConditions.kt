@@ -28,12 +28,8 @@ abstract class PassiveSkillConditionCard(path: String) : PassiveSkillCondition {
         val entries = mutableListOf<PassiveSkillConditionCard>()
         private operator fun PassiveSkillConditionCard.unaryPlus() = this.also { entries += it }
 
-        val OUTDOOR = +object : SimplePassiveSkillCondition("outdoor", "Outdoor", "屋外") {
-            override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) = isOutdoor(player)
-        }
-        val INDOOR = +object : SimplePassiveSkillCondition("indoor", "Indoor", "屋内") {
-            override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) = isIndoor(player)
-        }
+        val OUTDOOR = +SimplePassiveSkillCondition("outdoor", "Outdoor", "屋外") { _, _, player, _ -> isOutdoor(player) }
+        val INDOOR = +SimplePassiveSkillCondition("indoor", "Indoor", "屋内") { _, _, player, _ -> isIndoor(player) }
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
@@ -44,4 +40,10 @@ private abstract class SimplePassiveSkillCondition(path: String, enName: String,
     val translation = Translation({ "miragefairy2024.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
     override val text = translation()
     override val translations = listOf(translation)
+}
+
+private fun SimplePassiveSkillCondition(path: String, enName: String, jaName: String, block: (world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) -> Boolean): SimplePassiveSkillCondition {
+    return object : SimplePassiveSkillCondition(path, enName, jaName) {
+        override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) = block(world, blockPos, player, mana)
+    }
 }
