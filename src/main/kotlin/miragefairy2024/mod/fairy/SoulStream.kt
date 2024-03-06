@@ -143,7 +143,7 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         val originalItemStack = newItemStack.copy()
 
         if (slot < 9 * 4) {
-            if (!insertItem(newItemStack, 9 * 4, 9 * 4 + SoulStream.SLOT_COUNT, false)) return EMPTY_ITEM_STACK
+            if (!insertItem(newItemStack, 9 * 4 + 9, 9 * 4 + SoulStream.SLOT_COUNT, false)) return EMPTY_ITEM_STACK
         } else {
             if (!insertItem(newItemStack, 0, 9 * 4, true)) return EMPTY_ITEM_STACK
         }
