@@ -61,7 +61,7 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost"
 object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
     val formatters = mutableMapOf<EntityAttribute, (Double) -> String>()
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
-    val uuid = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
+    private val uuid: UUID = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
 
     class Value(val map: Map<EntityAttribute, Double>)
 
