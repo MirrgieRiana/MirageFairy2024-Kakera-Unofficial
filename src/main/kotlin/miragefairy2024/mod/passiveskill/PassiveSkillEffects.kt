@@ -37,7 +37,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
         val entries = mutableListOf<PassiveSkillEffectCard<*>>()
         private operator fun <T> PassiveSkillEffectCard<T>.unaryPlus() = this.also { entries += it }
 
-        val MANA = +ManaPassiveSkillEffect
+        val MANA_BOOST = +ManaBoostPassiveSkillEffect
         val ENTITY_ATTRIBUTE = +EntityAttributePassiveSkillEffect
         val STATUS_EFFECT = +StatusEffectPassiveSkillEffect
     }
@@ -47,9 +47,9 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
 }
 
 // TODO 条件付き魔力パッシブ
-object ManaPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana") {
+object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost") {
     override val isPreprocessor = true
-    override fun getText(value: Double) = text { translation() + " ${value formatAs "%+.1f"}"() }
+    override fun getText(value: Double) = text { translation() + " ${value * 100 formatAs "%+.0f%%"}"() }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b

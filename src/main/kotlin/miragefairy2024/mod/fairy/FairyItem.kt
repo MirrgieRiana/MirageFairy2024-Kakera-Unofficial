@@ -155,16 +155,16 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
         // 魔力
         val itemStackMana = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
-        val (additionalMana, status) = if (player != null) {
+        val (manaBoost, status) = if (player != null) {
             val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
             result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
             val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
-            Pair(result[PassiveSkillEffectCard.MANA], status)
+            Pair(result[PassiveSkillEffectCard.MANA_BOOST], status)
         } else {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
-        val mana = itemStackMana + additionalMana
+        val mana = itemStackMana * (1.0 + manaBoost)
         tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.1f"}"()).green }
 
         // 機能説明
@@ -179,7 +179,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (status != PassiveSkillStatus.EFFECTIVE) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
-                    val actualMana = if (specification.effect.isPreprocessor) itemStackMana else itemStackMana + additionalMana
+                    val actualMana = if (specification.effect.isPreprocessor) itemStackMana else itemStackMana * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, player != null && it.test(player.world, player.eyeBlockPos, player, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
                     return buildText {

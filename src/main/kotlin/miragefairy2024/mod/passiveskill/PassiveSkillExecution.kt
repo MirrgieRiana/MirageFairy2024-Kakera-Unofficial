@@ -35,8 +35,8 @@ fun initPassiveSkillExecution() {
                 // 現在発動しているパッシブスキル効果の計算
                 val result = PassiveSkillResult()
                 result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
-                val additionalMana = result[PassiveSkillEffectCard.MANA]
-                result.collect(passiveSkillProviders.passiveSkills, player, additionalMana, false) // 後行判定
+                val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST]
+                result.collect(passiveSkillProviders.passiveSkills, player, manaBoost, false) // 後行判定
 
                 // 効果
                 result.update(player)
@@ -100,12 +100,12 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     return PassiveSkillProviders(providers.toList(), passiveSkills.toList())
 }
 
-fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, additionalMana: Double, isPreprocessing: Boolean) {
+fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoost: Double, isPreprocessing: Boolean) {
     val world = player.world
     val blockPos = player.eyeBlockPos
 
     passiveSkills.forEach { passiveSkill ->
-        val mana = passiveSkill.itemStackMana + additionalMana
+        val mana = passiveSkill.itemStackMana * (1.0 + manaBoost)
         passiveSkill.specifications.forEach { specification ->
             fun <T> f(specification: PassiveSkillSpecification<T>) {
                 if (specification.effect.isPreprocessor == isPreprocessing) {
