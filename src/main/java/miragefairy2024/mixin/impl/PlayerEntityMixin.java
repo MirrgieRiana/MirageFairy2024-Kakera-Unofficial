@@ -1,4 +1,4 @@
-package miragefairy2024.mixin;
+package miragefairy2024.mixin.impl;
 
 import miragefairy2024.mod.ExtraPlayerDataContainer;
 import miragefairy2024.mod.ExtraPlayerDataContainerGetter;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixinContainer implements ExtraPlayerDataContainerGetter {
+public abstract class PlayerEntityMixin implements ExtraPlayerDataContainerGetter {
     @Unique
     private final ExtraPlayerDataContainer mirageFairy2024$extraPlayerDataContainer = new ExtraPlayerDataContainer((PlayerEntity) (Object) this);
 
