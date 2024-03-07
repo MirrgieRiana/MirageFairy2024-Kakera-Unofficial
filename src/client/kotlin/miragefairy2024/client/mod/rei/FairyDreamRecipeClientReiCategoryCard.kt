@@ -12,12 +12,14 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.FairyDreamRecipes
 import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.mod.fairy.fairyDreamContainer
 import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.rei.BlockFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.EntityTypeFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.ItemFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.ReiCategoryCard
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.darkRed
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -25,6 +27,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import net.minecraft.block.Block
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
@@ -52,10 +55,11 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
+            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createSlot(p + Point(1, 1)).entries(display.inputEntries[0]).disableBackground(),
-                Widgets.createLabel(p + Point(21, 5), text { display.items[0].name })
+                Widgets.createLabel(p + Point(21, 5), text { display.items[0].name }.let { if (!gained) it.darkRed else it })
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
@@ -85,10 +89,11 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: BlockFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
+            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createSlot(p + Point(1, 1)).entries(display.blocks[0].asItem().createItemStack().toEntryStack().toEntryIngredient()).disableBackground(),
-                Widgets.createLabel(p + Point(21, 5), text { display.blocks[0].name })
+                Widgets.createLabel(p + Point(21, 5), text { display.blocks[0].name }.let { if (!gained) it.darkRed else it })
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
@@ -118,9 +123,10 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
+            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createLabel(p + Point(2, 5), text { display.entityTypes[0].name })
+                Widgets.createLabel(p + Point(2, 5), text { display.entityTypes[0].name }.let { if (!gained) it.darkRed else it })
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
