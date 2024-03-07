@@ -2,9 +2,15 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.FoodPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.IndoorPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.OutdoorPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
+import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
+import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillEffect
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -15,6 +21,10 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.effect.StatusEffect
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registry
@@ -199,6 +209,20 @@ private class PassiveSkillBuilder {
 private operator fun <T> PassiveSkillEffect<T>.invoke(valueProvider: (mana: Double) -> T) = PassiveSkillSpecification(listOf(), this, valueProvider)
 private operator fun <T> PassiveSkillSpecification<T>.times(condition: PassiveSkillCondition) = PassiveSkillSpecification(this.conditions + condition, this.effect, this.valueProvider)
 private operator fun PassiveSkillBuilder.plus(specification: PassiveSkillSpecification<*>) = this.also { it.specifications += specification }
+
+private val indoor get() = IndoorPassiveSkillCondition
+private val outdoor get() = OutdoorPassiveSkillCondition
+private fun food(item: Item) = FoodPassiveSkillCondition(item)
+
+private fun mana(factor: Double) = PassiveSkillEffectCard.MANA_BOOST { it * factor * 0.02 }
+private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
+private fun attack(factor: Double) = attribute(EntityAttributes.GENERIC_ATTACK_DAMAGE, factor * 0.1)
+private fun speed(factor: Double) = attribute(EntityAttributes.GENERIC_MOVEMENT_SPEED, factor * 0.002)
+private fun health(factor: Double) = attribute(EntityAttributes.GENERIC_MAX_HEALTH, factor * 0.4)
+private fun luck(factor: Double) = attribute(EntityAttributes.GENERIC_LUCK, factor * 0.1)
+private operator fun StatusEffect.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
+    return PassiveSkillEffectCard.STATUS_EFFECT { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
+}
 
 
 fun initMotif() {
