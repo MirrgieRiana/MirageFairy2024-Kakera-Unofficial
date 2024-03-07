@@ -1,11 +1,15 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.lastFood
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
+import miragefairy2024.util.orEmpty
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.Heightmap
@@ -38,3 +42,9 @@ private fun isIndoor(player: PlayerEntity) = !isOutdoor(player)
 
 val OutdoorPassiveSkillCondition = simple("outdoor", "Outdoor", "屋外") { _, _, player, _ -> isOutdoor(player) }
 val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { _, _, player, _ -> isIndoor(player) }
+
+// TODO タグによる料理素材判定
+class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
+    override val text: Text get() = item.name
+    override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) = player.lastFood.itemStack.orEmpty.isOf(item)
+}
