@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
+import miragefairy2024.mod.sync
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
 import miragefairy2024.util.register
@@ -62,10 +63,12 @@ class FairyDreamContainer {
     }
 
     fun gain(player: ServerPlayerEntity, motifs: Iterable<Motif>) {
-        (motifs - map).forEach { motif ->
+        val actualAdditionalMotifs = motifs - map
+        actualAdditionalMotifs.forEach { motif ->
             set(motif, true)
             GainFairyDreamChannel.sendToClient(player, motif)
         }
+        if (actualAdditionalMotifs.isNotEmpty()) FairyDreamContainerExtraPlayerDataCategory.sync(player)
     }
 
     fun clear() = map.clear()
