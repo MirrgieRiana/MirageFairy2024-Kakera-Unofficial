@@ -5,7 +5,6 @@ import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.WISP_TAG
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
-import miragefairy2024.mod.sync
 import miragefairy2024.util.Channel
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
@@ -17,7 +16,6 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerServerPacketReceiver
 import miragefairy2024.util.size
 import miragefairy2024.util.wrapper
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.entity.player.PlayerEntity
@@ -41,11 +39,6 @@ fun initSoulStream() {
 
     // 拡張プレイヤーデータ
     SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
-
-    // ログイン時、自動的にソウルストリームを同期
-    ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-        SoulStreamExtraPlayerDataCategory.sync(handler.player)
-    }
 
     // ソウルストリームを開く要求パケット
     OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->

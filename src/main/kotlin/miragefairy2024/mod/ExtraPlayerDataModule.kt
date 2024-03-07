@@ -9,6 +9,9 @@ import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
@@ -45,10 +48,37 @@ val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (thi
 // Init
 
 fun initExtraPlayerDataModule() {
+
+    // インスタンス再生成時（死亡・一部のディメンション移動）にデータを維持
+    ServerPlayerEvents.COPY_FROM.register { oldPlayer, newPlayer, _ ->
+        newPlayer.extraPlayerDataContainer.fromNbt(oldPlayer.extraPlayerDataContainer.toNbt())
+    }
+
+    // ディメンション移動時、データ同期を要求
+    ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register { player, _, _ ->
+        player.extraPlayerDataContainer.isDirty = true
+    }
+
+    // ログイン時およびdirtyにされたとき、プレイヤーデータを同期
+    ServerTickEvents.END_SERVER_TICK.register { server ->
+        server.playerManager.playerList.forEach { player ->
+            if (player.extraPlayerDataContainer.isDirty) {
+                player.extraPlayerDataContainer.isDirty = false
+                extraPlayerDataCategoryRegistry.forEach { category ->
+                    if (category.ioHandler != null) {
+                        category.sync(player)
+                    }
+                }
+            }
+        }
+    }
+
+    // セーブ・ロードイベント登録
     object : CustomPlayerSave(Identifier(MirageFairy2024.modId, "extra_player_data")) {
         override fun savePlayer(player: PlayerEntity) = player.extraPlayerDataContainer.toNbt()
         override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
     }
+
 }
 
 
@@ -161,6 +191,8 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
             f(loader)
         }
     }
+
+    var isDirty = true
 }
 
 interface ExtraPlayerDataContainerGetter {
