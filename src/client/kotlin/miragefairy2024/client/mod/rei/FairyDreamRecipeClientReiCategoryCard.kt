@@ -50,7 +50,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
     override fun createCategory() = object : DisplayCategory<ItemFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = ItemFairyDreamRecipeReiCategoryCard.identifier
         override fun getTitle(): Text = ItemFairyDreamRecipeReiCategoryCard.translation()
-        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) }.toEntryStack()
+        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.CARROT) }.toEntryStack()
         override fun getDisplayWidth(display: ItemFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
@@ -118,7 +118,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
     override fun createCategory() = object : DisplayCategory<EntityTypeFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = EntityTypeFairyDreamRecipeReiCategoryCard.identifier
         override fun getTitle(): Text = EntityTypeFairyDreamRecipeReiCategoryCard.translation()
-        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) }.toEntryStack()
+        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.ENDERMAN) }.toEntryStack()
         override fun getDisplayWidth(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
