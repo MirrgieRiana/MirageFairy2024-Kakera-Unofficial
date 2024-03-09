@@ -241,6 +241,10 @@ private operator fun StatusEffect.invoke(level: Int = 1, additionalSeconds: Int 
     return PassiveSkillEffectCard.STATUS_EFFECT { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
 }
 
+private val ignition get() = PassiveSkillEffectCard.IGNITION { true }
+private fun experience(factor: Double) = PassiveSkillEffectCard.EXPERIENCE { it * factor * 0.005 }
+private fun regeneration(factor: Double) = PassiveSkillEffectCard.REGENERATION { it * factor * 0.01 }
+
 
 fun initMotif() {
     MotifCard.entries.forEach { card ->

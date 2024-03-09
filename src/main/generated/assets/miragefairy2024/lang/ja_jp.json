@@ -199,5 +199,8 @@
   "miragefairy2024.passive_skill_condition.miragefairy2024.sky_visible": "空が見える",
   "miragefairy2024.passive_skill_condition.miragefairy2024.thundering": "雷雨",
   "miragefairy2024.passive_skill_condition.miragefairy2024.underwater": "水中",
-  "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "魔力"
+  "miragefairy2024.passive_skill_type.miragefairy2024.experience": "経験値獲得: %s/秒",
+  "miragefairy2024.passive_skill_type.miragefairy2024.ignition": "発火",
+  "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "魔力",
+  "miragefairy2024.passive_skill_type.miragefairy2024.regeneration": "持続回復: %s/秒"
 }

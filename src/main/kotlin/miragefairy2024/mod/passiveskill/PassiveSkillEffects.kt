@@ -8,8 +8,10 @@ import miragefairy2024.util.buildText
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
+import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.text
+import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -37,6 +39,9 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
         val MANA_BOOST = +ManaBoostPassiveSkillEffect
         val ENTITY_ATTRIBUTE = +EntityAttributePassiveSkillEffect
         val STATUS_EFFECT = +StatusEffectPassiveSkillEffect
+        val IGNITION = +IgnitionPassiveSkillEffect
+        val EXPERIENCE = +ExperiencePassiveSkillEffect
+        val REGENERATION = +RegenerationPassiveSkillEffect
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
@@ -139,5 +144,62 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
         newValue.map.forEach { (statusEffect, entry) ->
             context.player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
+    }
+}
+
+object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") {
+    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Ignition", "発火")
+    override fun getText(value: Boolean) = text { if (value) translation() else empty() }
+    override val unit = false
+    override fun castOrThrow(value: Any?) = value as Boolean
+    override fun combine(a: Boolean, b: Boolean) = a || b
+    override fun update(context: PassiveSkillContext, oldValue: Boolean, newValue: Boolean) {
+        if (newValue) {
+            if (context.player.isWet || context.player.inPowderSnow || context.player.wasInPowderSnow) return
+            context.player.fireTicks = 30 atLeast context.player.fireTicks
+        }
+    }
+
+    override fun init() {
+        translation.enJa()
+    }
+}
+
+object ExperiencePassiveSkillEffect : PassiveSkillEffectCard<Double>("experience") {
+    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
+    override fun getText(value: Double) = text { translation(value formatAs "%+.2f") }
+    override val unit = 0.0
+    override fun castOrThrow(value: Any?) = value as Double
+    override fun combine(a: Double, b: Double) = a + b
+    override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
+        if (newValue > 0.0) {
+            val actualAmount = context.world.random.randomInt(newValue)
+            if (actualAmount > 0) {
+                context.player.addExperience(actualAmount)
+            }
+        }
+    }
+
+    override fun init() {
+        translation.enJa()
+    }
+}
+
+object RegenerationPassiveSkillEffect : PassiveSkillEffectCard<Double>("regeneration") {
+    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Regeneration: %s/s", "持続回復: %s/秒")
+    override fun getText(value: Double) = text { translation(value formatAs "%+.2f") }
+    override val unit = 0.0
+    override fun castOrThrow(value: Any?) = value as Double
+    override fun combine(a: Double, b: Double) = a + b
+    override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
+        if (newValue > 0.0) {
+            if (context.player.health < context.player.maxHealth) {
+                context.player.heal(newValue.toFloat())
+            }
+        }
+    }
+
+    override fun init() {
+        translation.enJa()
     }
 }
