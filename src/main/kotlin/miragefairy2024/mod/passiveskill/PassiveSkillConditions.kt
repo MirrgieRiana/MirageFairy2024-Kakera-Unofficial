@@ -13,9 +13,11 @@ import miragefairy2024.util.removeTrailingZeros
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.item.Item
+import net.minecraft.registry.tag.FluidTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.Heightmap
+import net.minecraft.world.biome.Biome
 
 fun initPassiveSkillConditions() {
     SimplePassiveSkillConditionCard.entries.forEach { card ->
@@ -27,10 +29,24 @@ fun initPassiveSkillConditions() {
 // simple
 
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.blockPos).y
+private fun biomeCanRain(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitation(context.blockPos) == Biome.Precipitation.RAIN
+private fun isDaytime(context: PassiveSkillContext): Boolean {
+    context.world.calculateAmbientDarkness()
+    return context.world.ambientDarkness < 4
+}
 
 enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName: String, private val function: (context: PassiveSkillContext) -> Boolean) : PassiveSkillCondition {
+    OVERWORLD("overworld", "Overworld", "地上世界", { it.world.dimension.natural }),
     OUTDOOR("outdoor", "Outdoor", "屋外", { isOutdoor(it) }),
     INDOOR("indoor", "Indoor", "屋内", { !isOutdoor(it) }),
+    SKY_VISIBLE("sky_visible", "Sky Visible", "空が見える", { it.world.isSkyVisible(it.blockPos) }),
+    FINE("fine", "Fine", "晴天", { !(it.world.isRaining && biomeCanRain(it)) }),
+    RAINING("raining", "Raining", "雨天", { it.world.isRaining && biomeCanRain(it) }),
+    THUNDERING("thundering", "Thundering", "雷雨", { it.world.isThundering && biomeCanRain(it) }),
+    DAYTIME("daytime", "Daytime", "昼間", { isDaytime(it) }),
+    NIGHT("night", "Night", "夜間", { !isDaytime(it) }),
+    UNDERWATER("underwater", "Underwater", "水中", { it.player.world.getBlockState(it.player.eyeBlockPos).fluidState.isIn(FluidTags.WATER) }),
+    ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)

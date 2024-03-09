@@ -210,8 +210,18 @@ private operator fun <T> PassiveSkillEffect<T>.invoke(valueProvider: (mana: Doub
 private operator fun <T> PassiveSkillSpecification<T>.times(condition: PassiveSkillCondition) = PassiveSkillSpecification(this.conditions + condition, this.effect, this.valueProvider)
 private operator fun PassiveSkillBuilder.plus(specification: PassiveSkillSpecification<*>) = this.also { it.specifications += specification }
 
+private val overworld get() = SimplePassiveSkillConditionCard.OVERWORLD
 private val outdoor get() = SimplePassiveSkillConditionCard.OUTDOOR
 private val indoor get() = SimplePassiveSkillConditionCard.INDOOR
+private val skyVisible get() = SimplePassiveSkillConditionCard.SKY_VISIBLE
+private val fine get() = SimplePassiveSkillConditionCard.FINE
+private val raining get() = SimplePassiveSkillConditionCard.RAINING
+private val thundering get() = SimplePassiveSkillConditionCard.THUNDERING
+private val daytime get() = SimplePassiveSkillConditionCard.DAYTIME
+private val night get() = SimplePassiveSkillConditionCard.NIGHT
+private val underwater get() = SimplePassiveSkillConditionCard.UNDERWATER
+private val onFire get() = SimplePassiveSkillConditionCard.ON_FIRE
+
 private fun food(item: Item) = FoodPassiveSkillCondition(item)
 private fun IntComparisonPassiveSkillCondition.Term.atLeast(threshold: Int) = IntComparisonPassiveSkillCondition(this, true, threshold)
 private fun IntComparisonPassiveSkillCondition.Term.atMost(threshold: Int) = IntComparisonPassiveSkillCondition(this, false, threshold)

@@ -188,7 +188,16 @@
   "miragefairy2024.motif.miragefairy2024.vacuum_decay": "真空崩壊精ヴァツーメデーツャ",
   "miragefairy2024.motif.miragefairy2024.water": "水精ワテーリャ",
   "miragefairy2024.motif.miragefairy2024.wither": "枯精ウィテーリャ",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.daytime": "昼間",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.fine": "晴天",
   "miragefairy2024.passive_skill_condition.miragefairy2024.indoor": "屋内",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.night": "夜間",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.on_fire": "炎上",
   "miragefairy2024.passive_skill_condition.miragefairy2024.outdoor": "屋外",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.overworld": "地上世界",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.raining": "雨天",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.sky_visible": "空が見える",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.thundering": "雷雨",
+  "miragefairy2024.passive_skill_condition.miragefairy2024.underwater": "水中",
   "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "魔力"
 }
