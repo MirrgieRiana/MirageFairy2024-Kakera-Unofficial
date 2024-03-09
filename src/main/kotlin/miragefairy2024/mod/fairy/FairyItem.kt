@@ -149,12 +149,6 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val player = MirageFairy2024.clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
-        // レア
-        tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).aqua }
-
-        // 凝縮数
-        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
-
         // 魔力
         val itemStackMana = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
         val (manaBoost, status) = if (player != null) {
@@ -167,7 +161,13 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = itemStackMana * (1.0 + manaBoost)
-        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).green }
+        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
+
+        // レア
+        tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).green }
+
+        // 凝縮数
+        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
