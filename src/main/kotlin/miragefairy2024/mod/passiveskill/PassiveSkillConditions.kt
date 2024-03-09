@@ -23,6 +23,9 @@ fun initPassiveSkillConditions() {
     }
 }
 
+
+// simple
+
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.blockPos).y
 
 enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName: String, private val function: (context: PassiveSkillContext) -> Boolean) : PassiveSkillCondition {
@@ -40,6 +43,9 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
         translation.enJa()
     }
 }
+
+
+// comparison
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
@@ -71,6 +77,9 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
         return if (isGreaterOrEquals) value >= threshold else value <= threshold
     }
 }
+
+
+// food ingredient
 
 // TODO タグによる料理素材判定
 class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
