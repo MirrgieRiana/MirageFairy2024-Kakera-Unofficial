@@ -1,6 +1,8 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.util.Translation
 import miragefairy2024.util.buildText
 import miragefairy2024.util.enJa
@@ -49,7 +51,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
 // TODO 条件付き魔力パッシブ
 object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost") {
     override val isPreprocessor = true
-    override fun getText(value: Double) = text { translation() + " ${value * 100 formatAs "%+.0f%%"}"() }
+    override fun getText(value: Double) = text { translation() + " "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b

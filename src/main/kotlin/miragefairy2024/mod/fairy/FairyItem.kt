@@ -1,6 +1,8 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
@@ -165,7 +167,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = itemStackMana * (1.0 + manaBoost)
-        tooltip += text { (MANA_TRANSLATION() + ": ${mana formatAs "%.1f"}"()).green }
+        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
