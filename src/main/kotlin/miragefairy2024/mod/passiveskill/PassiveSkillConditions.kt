@@ -40,10 +40,9 @@ private fun simple(path: String, enName: String, jaName: String, block: (context
 }
 
 private fun isOutdoor(context: PassiveSkillContext) = context.player.eyeBlockPos.y >= context.player.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.player.eyeBlockPos).y
-private fun isIndoor(context: PassiveSkillContext) = !isOutdoor(context)
 
 val OutdoorPassiveSkillCondition = simple("outdoor", "Outdoor", "屋外") { context, _ -> isOutdoor(context) }
-val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { context, _ -> isIndoor(context) }
+val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { context, _ -> !isOutdoor(context) }
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
