@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "miragefairy2024:font/emoji.png",
+      "ascent": 7,
+      "chars": [
+        "\uE600\uE601\uE602\uE603\uE604\uE605\uE606\uE607",
+        "\uE608\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+      ]
+    }
+  ]
+}
