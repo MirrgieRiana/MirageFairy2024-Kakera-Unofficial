@@ -1,12 +1,17 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.mod.lastFood
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
+import miragefairy2024.util.removeTrailingZeros
+import miragefairy2024.util.text
+import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.text.Text
@@ -42,6 +47,32 @@ private fun isIndoor(player: PlayerEntity) = !isOutdoor(player)
 
 val OutdoorPassiveSkillCondition = simple("outdoor", "Outdoor", "屋外") { _, _, player, _ -> isOutdoor(player) }
 val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { _, _, player, _ -> isIndoor(player) }
+
+class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
+    class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) -> Int)
+
+    private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
+    override val text: Text get() = text { term.emoji() + format(threshold / term.unit.toDouble())() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
+    override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double): Boolean {
+        val value = term.getValue(world, blockPos, player, mana)
+        return if (isGreaterOrEquals) value >= threshold else value <= threshold
+    }
+}
+
+class DoubleComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Double) : PassiveSkillCondition {
+    class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double) -> Double)
+
+    private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
+    override val text: Text get() = text { term.emoji() + format(threshold / term.unit)() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
+    override fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double): Boolean {
+        val value = term.getValue(world, blockPos, player, mana)
+        return if (isGreaterOrEquals) value >= threshold else value <= threshold
+    }
+}
+
+val ManaTerm = DoubleComparisonPassiveSkillCondition.Term(Emoji.MANA) { _, _, _, mana -> mana }
+val LightLevelTerm = IntComparisonPassiveSkillCondition.Term(Emoji.LIGHT) { _, _, player, _ -> player.world.getLightLevel(player.eyeBlockPos) }
+val FoodLevelTerm = IntComparisonPassiveSkillCondition.Term(Emoji.FOOD, 2) { _, _, player, _ -> player.hungerManager.foodLevel }
 
 // TODO タグによる料理素材判定
 class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {

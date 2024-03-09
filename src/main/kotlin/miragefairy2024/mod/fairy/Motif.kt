@@ -2,9 +2,14 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.FoodLevelTerm
 import miragefairy2024.mod.passiveskill.FoodPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.IndoorPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.IntComparisonPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.LightLevelTerm
+import miragefairy2024.mod.passiveskill.ManaTerm
 import miragefairy2024.mod.passiveskill.OutdoorPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
@@ -213,6 +218,13 @@ private operator fun PassiveSkillBuilder.plus(specification: PassiveSkillSpecifi
 private val indoor get() = IndoorPassiveSkillCondition
 private val outdoor get() = OutdoorPassiveSkillCondition
 private fun food(item: Item) = FoodPassiveSkillCondition(item)
+private fun IntComparisonPassiveSkillCondition.Term.atLeast(threshold: Int) = IntComparisonPassiveSkillCondition(this, true, threshold)
+private fun IntComparisonPassiveSkillCondition.Term.atMost(threshold: Int) = IntComparisonPassiveSkillCondition(this, false, threshold)
+private fun DoubleComparisonPassiveSkillCondition.Term.atLeast(threshold: Double) = DoubleComparisonPassiveSkillCondition(this, true, threshold)
+private fun DoubleComparisonPassiveSkillCondition.Term.atMost(threshold: Double) = DoubleComparisonPassiveSkillCondition(this, false, threshold)
+private val mana get() = ManaTerm
+private val light get() = LightLevelTerm
+private val food get() = FoodLevelTerm
 
 private fun mana(factor: Double) = PassiveSkillEffectCard.MANA_BOOST { it * factor * 0.02 }
 private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
