@@ -67,6 +67,7 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
     companion object {
         val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
         val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _ -> context.player.hungerManager.foodLevel }
+        val LEVEL_TERM = Term(Emoji.LEVEL) { context, _ -> context.player.experienceLevel }
     }
 
     class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, mana: Double) -> Int)
@@ -82,6 +83,7 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
 class DoubleComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Double) : PassiveSkillCondition {
     companion object {
         val MANA_TERM = Term(Emoji.MANA) { _, mana -> mana }
+        val HEALTH_TERM = Term(Emoji.HEART, 2.0) { context, _ -> context.player.health.toDouble() }
     }
 
     class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, mana: Double) -> Double)

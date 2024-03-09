@@ -229,7 +229,9 @@ private fun DoubleComparisonPassiveSkillCondition.Term.atLeast(threshold: Double
 private fun DoubleComparisonPassiveSkillCondition.Term.atMost(threshold: Double) = DoubleComparisonPassiveSkillCondition(this, false, threshold)
 private val light get() = IntComparisonPassiveSkillCondition.LIGHT_LEVEL_TERM
 private val food get() = IntComparisonPassiveSkillCondition.FOOD_LEVEL_TERM
+private val level get() = IntComparisonPassiveSkillCondition.LEVEL_TERM
 private val mana get() = DoubleComparisonPassiveSkillCondition.MANA_TERM
+private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private fun mana(factor: Double) = PassiveSkillEffectCard.MANA_BOOST { it * factor * 0.02 }
 private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
