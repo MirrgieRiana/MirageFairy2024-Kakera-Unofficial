@@ -46,6 +46,11 @@ val OutdoorPassiveSkillCondition = simple("outdoor", "Outdoor", "屋外") { cont
 val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { context, _ -> isIndoor(context) }
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
+    companion object {
+        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
+        val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _ -> context.player.hungerManager.foodLevel }
+    }
+
     class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, mana: Double) -> Int)
 
     private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
@@ -57,6 +62,10 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
 }
 
 class DoubleComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Double) : PassiveSkillCondition {
+    companion object {
+        val MANA_TERM = Term(Emoji.MANA) { _, mana -> mana }
+    }
+
     class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, mana: Double) -> Double)
 
     private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
@@ -66,10 +75,6 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
         return if (isGreaterOrEquals) value >= threshold else value <= threshold
     }
 }
-
-val ManaTerm = DoubleComparisonPassiveSkillCondition.Term(Emoji.MANA) { _, mana -> mana }
-val LightLevelTerm = IntComparisonPassiveSkillCondition.Term(Emoji.LIGHT) { context, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
-val FoodLevelTerm = IntComparisonPassiveSkillCondition.Term(Emoji.FOOD, 2) { context, _ -> context.player.hungerManager.foodLevel }
 
 // TODO タグによる料理素材判定
 class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
