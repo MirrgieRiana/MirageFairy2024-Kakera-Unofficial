@@ -101,15 +101,14 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
 }
 
 fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoost: Double, isPreprocessing: Boolean) {
-    val world = player.world
-    val blockPos = player.eyeBlockPos
+    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
         val mana = passiveSkill.itemStackMana * (1.0 + manaBoost)
         passiveSkill.specifications.forEach { specification ->
             fun <T> f(specification: PassiveSkillSpecification<T>) {
                 if (specification.effect.isPreprocessor == isPreprocessing) {
-                    if (specification.conditions.all { it.test(world, blockPos, player, mana) }) {
+                    if (specification.conditions.all { it.test(context, mana) }) {
                         this.add(specification.effect, specification.valueProvider(mana))
                     }
                 }
@@ -120,8 +119,7 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
 }
 
 fun PassiveSkillResult.update(player: PlayerEntity) {
-    val world = player.world
-    val blockPos = player.eyeBlockPos
+    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
 
     val oldResult = player.passiveSkillResult
     player.passiveSkillResult = this
@@ -130,7 +128,7 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
         fun <T> f(type: PassiveSkillEffect<T>) {
             val oldValue = oldResult[type]
             val newValue = this[type]
-            type.update(world, blockPos, player, oldValue, newValue)
+            type.update(context, oldValue, newValue)
         }
         f(it.value)
     }

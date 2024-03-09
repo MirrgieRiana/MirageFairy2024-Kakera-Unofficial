@@ -6,6 +6,7 @@ import miragefairy2024.mod.invoke
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillProvider
 import miragefairy2024.mod.passiveskill.PassiveSkillResult
@@ -179,10 +180,11 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
             val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE
             tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (status != PassiveSkillStatus.EFFECTIVE) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
+            val passiveSkillContext = player?.let { PassiveSkillContext(it.world, it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
                     val actualMana = if (specification.effect.isPreprocessor) itemStackMana else itemStackMana * (1.0 + manaBoost)
-                    val conditionValidityList = specification.conditions.map { Pair(it, player != null && it.test(player.world, player.eyeBlockPos, player, mana)) }
+                    val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
                     return buildText {
                         !text { " "() }

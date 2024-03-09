@@ -16,11 +16,8 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 import java.util.UUID
 
 fun initPassiveSkillEffects() {
@@ -55,7 +52,7 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost"
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
-    override fun update(world: World, blockPos: BlockPos, player: PlayerEntity, oldValue: Double, newValue: Double) = Unit
+    override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) = Unit
     val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
     override val translations = listOf(translation)
 }
@@ -84,11 +81,11 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
         return Value(map)
     }
 
-    override fun update(world: World, blockPos: BlockPos, player: PlayerEntity, oldValue: Value, newValue: Value) {
+    override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
 
         // 削除するべきものを削除
         oldValue.map.forEach { (attribute, _) ->
-            val customInstance = player.attributes.getCustomInstance(attribute) ?: return@forEach
+            val customInstance = context.player.attributes.getCustomInstance(attribute) ?: return@forEach
             if (attribute !in newValue.map) {
                 customInstance.removeModifier(uuid)
             }
@@ -96,7 +93,7 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
 
         // 追加および変更
         newValue.map.forEach { (attribute, value) ->
-            val customInstance = player.attributes.getCustomInstance(attribute) ?: return@forEach
+            val customInstance = context.player.attributes.getCustomInstance(attribute) ?: return@forEach
             val oldModifier = customInstance.getModifier(uuid)
             if (oldModifier == null) {
                 val modifier = EntityAttributeModifier(uuid, "Fairy Bonus", value, EntityAttributeModifier.Operation.ADDITION)
@@ -140,9 +137,9 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
         return Value(map)
     }
 
-    override fun update(world: World, blockPos: BlockPos, player: PlayerEntity, oldValue: Value, newValue: Value) {
+    override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
         newValue.map.forEach { (statusEffect, entry) ->
-            player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
+            context.player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
     }
 

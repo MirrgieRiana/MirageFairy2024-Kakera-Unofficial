@@ -30,9 +30,12 @@ class PassiveSkill(val providerId: Identifier, val itemStackMana: Double, val sp
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
 
 
+class PassiveSkillContext(val world: World, val blockPos: BlockPos, val player: PlayerEntity)
+
+
 interface PassiveSkillCondition {
     val text: Text
-    fun test(world: World, blockPos: BlockPos, player: PlayerEntity, mana: Double): Boolean
+    fun test(context: PassiveSkillContext, mana: Double): Boolean
 }
 
 
@@ -45,5 +48,5 @@ interface PassiveSkillEffect<T> {
     val unit: T
     fun castOrThrow(value: Any?): T
     fun combine(a: T, b: T): T
-    fun update(world: World, blockPos: BlockPos, player: PlayerEntity, oldValue: T, newValue: T)
+    fun update(context: PassiveSkillContext, oldValue: T, newValue: T)
 }
