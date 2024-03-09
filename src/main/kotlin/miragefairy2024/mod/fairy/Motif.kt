@@ -5,13 +5,12 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
 import miragefairy2024.mod.passiveskill.FoodPassiveSkillCondition
-import miragefairy2024.mod.passiveskill.IndoorPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.IntComparisonPassiveSkillCondition
-import miragefairy2024.mod.passiveskill.OutdoorPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
+import miragefairy2024.mod.passiveskill.SimplePassiveSkillConditionCard
 import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillEffect
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -211,8 +210,8 @@ private operator fun <T> PassiveSkillEffect<T>.invoke(valueProvider: (mana: Doub
 private operator fun <T> PassiveSkillSpecification<T>.times(condition: PassiveSkillCondition) = PassiveSkillSpecification(this.conditions + condition, this.effect, this.valueProvider)
 private operator fun PassiveSkillBuilder.plus(specification: PassiveSkillSpecification<*>) = this.also { it.specifications += specification }
 
-private val indoor get() = IndoorPassiveSkillCondition
-private val outdoor get() = OutdoorPassiveSkillCondition
+private val outdoor get() = SimplePassiveSkillConditionCard.OUTDOOR
+private val indoor get() = SimplePassiveSkillConditionCard.INDOOR
 private fun food(item: Item) = FoodPassiveSkillCondition(item)
 private fun IntComparisonPassiveSkillCondition.Term.atLeast(threshold: Int) = IntComparisonPassiveSkillCondition(this, true, threshold)
 private fun IntComparisonPassiveSkillCondition.Term.atMost(threshold: Int) = IntComparisonPassiveSkillCondition(this, false, threshold)

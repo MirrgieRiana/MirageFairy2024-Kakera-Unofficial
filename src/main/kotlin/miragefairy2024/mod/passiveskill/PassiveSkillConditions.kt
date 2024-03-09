@@ -18,31 +18,28 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.Heightmap
 
 fun initPassiveSkillConditions() {
-    OutdoorPassiveSkillCondition.init()
-    IndoorPassiveSkillCondition.init()
-}
-
-abstract class PassiveSkillConditionCard(path: String) : PassiveSkillCondition {
-    val identifier = Identifier(MirageFairy2024.modId, path)
-    open fun init() = Unit
-}
-
-
-private fun simple(path: String, enName: String, jaName: String, block: (context: PassiveSkillContext, mana: Double) -> Boolean): PassiveSkillConditionCard {
-    return object : PassiveSkillConditionCard(path) {
-        override fun test(context: PassiveSkillContext, mana: Double) = block(context, mana)
-        val translation = Translation({ "miragefairy2024.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
-        override val text = translation()
-        override fun init() {
-            translation.enJa()
-        }
+    SimplePassiveSkillConditionCard.entries.forEach { card ->
+        card.init()
     }
 }
 
-private fun isOutdoor(context: PassiveSkillContext) = context.player.eyeBlockPos.y >= context.player.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.player.eyeBlockPos).y
+private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.blockPos).y
 
-val OutdoorPassiveSkillCondition = simple("outdoor", "Outdoor", "屋外") { context, _ -> isOutdoor(context) }
-val IndoorPassiveSkillCondition = simple("indoor", "Indoor", "屋内") { context, _ -> !isOutdoor(context) }
+enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName: String, private val function: (context: PassiveSkillContext) -> Boolean) : PassiveSkillCondition {
+    OUTDOOR("outdoor", "Outdoor", "屋外", { isOutdoor(it) }),
+    INDOOR("indoor", "Indoor", "屋内", { !isOutdoor(it) }),
+    ;
+
+    val identifier = Identifier(MirageFairy2024.modId, path)
+    val translation = Translation({ "miragefairy2024.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
+
+    override fun test(context: PassiveSkillContext, mana: Double) = function(context)
+    override val text = translation()
+
+    fun init() {
+        translation.enJa()
+    }
+}
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
