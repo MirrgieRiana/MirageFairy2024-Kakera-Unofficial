@@ -23,9 +23,7 @@ import java.util.UUID
 fun initPassiveSkillEffects() {
     PassiveSkillEffectCard.entries.forEach { card ->
         card.register(passiveSkillEffectRegistry, card.identifier)
-        card.translations.forEach {
-            it.enJa()
-        }
+        card.init()
     }
 
     EntityAttributePassiveSkillEffect.formatters[EntityAttributes.GENERIC_MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
@@ -42,19 +40,23 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    abstract val translations: List<Translation>
+    open fun init() = Unit
+
+    override val isPreprocessor = false
 }
 
 // TODO 条件付き魔力パッシブ
 object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost") {
     override val isPreprocessor = true
+    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
     override fun getText(value: Double) = text { translation() + " "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) = Unit
-    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
-    override val translations = listOf(translation)
+    override fun init() {
+        translation.enJa()
+    }
 }
 
 object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
@@ -64,7 +66,6 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
 
     class Value(val map: Map<EntityAttribute, Double>)
 
-    override val isPreprocessor = false
     override fun getText(value: Value): Text {
         return value.map.map { (attribute, value) ->
             text { translate(attribute.translationKey) + " ${formatters.getOrElse(attribute) { defaultFormatter }(value)}"() }
@@ -106,15 +107,12 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
         }
 
     }
-
-    override val translations = listOf<Translation>()
 }
 
 object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<StatusEffect, Entry>)
     class Entry(val level: Int, val additionalSeconds: Int)
 
-    override val isPreprocessor = false
     override fun getText(value: Value): Text {
         return value.map.map { (statusEffect, entry) ->
             buildText {
@@ -142,6 +140,4 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
             context.player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
     }
-
-    override val translations = listOf<Translation>()
 }
