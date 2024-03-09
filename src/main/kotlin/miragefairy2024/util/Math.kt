@@ -20,3 +20,5 @@ val Int.bitCount: Int
         }
         return b
     }
+
+fun String.removeTrailingZeros() = this.replace("""\.?0+$""".toRegex(), "")
