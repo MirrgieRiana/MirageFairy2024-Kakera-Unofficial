@@ -167,7 +167,7 @@ object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") 
 
 object ExperiencePassiveSkillEffect : PassiveSkillEffectCard<Double>("experience") {
     val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
-    override fun getText(value: Double) = text { translation(value formatAs "%+.2f") }
+    override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
@@ -187,7 +187,7 @@ object ExperiencePassiveSkillEffect : PassiveSkillEffectCard<Double>("experience
 
 object RegenerationPassiveSkillEffect : PassiveSkillEffectCard<Double>("regeneration") {
     val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Regeneration: %s/s", "持続回復: %s/秒")
-    override fun getText(value: Double) = text { translation(value formatAs "%+.2f") }
+    override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
