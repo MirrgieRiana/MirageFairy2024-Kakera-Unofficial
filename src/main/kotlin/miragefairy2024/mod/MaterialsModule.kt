@@ -163,6 +163,7 @@ enum class MaterialCard(
         .let { creator(it) }
 }
 
+val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "mirage_flour"))
 val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "wisp"))
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
@@ -228,6 +229,16 @@ fun initMaterialsModule() {
         input('#', MaterialCard.HAIMEVISKA_SAP.item)
         input('S', Items.STICK)
     } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
+
+    // ミラージュの花粉
+    MaterialCard.TINY_MIRAGE_FLOUR.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
 
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerTagGeneration(WISP_TAG)
