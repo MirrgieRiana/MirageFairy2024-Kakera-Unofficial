@@ -9,6 +9,7 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.mod.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.FairyDreamRecipes
 import miragefairy2024.mod.fairy.MotifCard
@@ -26,6 +27,7 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
+import miragefairy2024.util.toIngredient
 import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
@@ -68,6 +70,8 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
             )
         }
     }
+
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Block, BlockFairyDreamRecipeReiCategoryCard.Display>(BlockFairyDreamRecipeReiCategoryCard) {
@@ -102,6 +106,8 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
             )
         }
     }
+
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<EntityType<*>, EntityTypeFairyDreamRecipeReiCategoryCard.Display>(EntityTypeFairyDreamRecipeReiCategoryCard) {
@@ -135,4 +141,6 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
             )
         }
     }
+
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
 }

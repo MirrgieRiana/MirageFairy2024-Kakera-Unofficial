@@ -7,6 +7,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import miragefairy2024.mod.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
@@ -18,7 +19,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
+import miragefairy2024.util.toIngredient
 import net.minecraft.text.Text
 
 object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>(CommonMotifRecipeReiCategoryCard) {
@@ -50,4 +53,6 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             )
         }
     }
+
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
 }
