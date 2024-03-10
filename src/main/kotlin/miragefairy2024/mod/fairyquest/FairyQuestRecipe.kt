@@ -285,7 +285,7 @@ fun initFairyQuestRecipe() {
         }
         val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
             val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(64),
+                RarityFilterPlacementModifier.of(128),
                 SquarePlacementModifier.of(),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of(),
