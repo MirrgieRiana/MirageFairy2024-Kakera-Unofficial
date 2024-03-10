@@ -10,7 +10,9 @@ import miragefairy2024.mod.rei.MirageFairy2024ReiServerPlugin
 class MirageFairy2024ReiClientPlugin : REIClientPlugin {
     override fun registerCategories(registry: CategoryRegistry) {
         ClientReiCategoryCard.entries.forEach { card ->
-            registry.add(card.createCategory())
+            val category = card.createCategory()
+            registry.add(category)
+            registry.addWorkstations(category.categoryIdentifier, *card.getWorkstations().toTypedArray())
         }
     }
 
