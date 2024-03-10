@@ -23,7 +23,7 @@ The storyline of MirageFairy2024 is set on a planet where plants have become wil
 - Adds original crops and their cultivation.
 - Introduces a crop-crossing mechanism that allows improved crop varieties.
 
-### Fairies and Passive Skills(Unavailable)
+### Fairies and Passive Skills
 
 - Adds "fairies," which are symbolic items of this MOD.
 - Fairies have motifs such as fire, stone, chicken, and red-purple glazed terracotta.
