@@ -202,5 +202,12 @@
   "miragefairy2024.passive_skill_type.miragefairy2024.experience": "Gain XP: %s/s",
   "miragefairy2024.passive_skill_type.miragefairy2024.ignition": "Ignition",
   "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "Mana",
-  "miragefairy2024.passive_skill_type.miragefairy2024.regeneration": "Regeneration: %s/s"
+  "miragefairy2024.passive_skill_type.miragefairy2024.regeneration": "Regeneration: %s/s",
+  "miragefairy2024.tool_material.copper_tool": "Copper Tool",
+  "miragefairy2024.tool_material.diamond_tool": "Diamond Tool",
+  "miragefairy2024.tool_material.golden_tool": "Golden Tool",
+  "miragefairy2024.tool_material.iron_tool": "Iron Tool",
+  "miragefairy2024.tool_material.netherite_tool": "Netherite Tool",
+  "miragefairy2024.tool_material.stone_tool": "Stone Tool",
+  "miragefairy2024.tool_material.wooden_tool": "Wooden Tool"
 }
