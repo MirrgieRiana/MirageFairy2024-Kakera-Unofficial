@@ -121,14 +121,19 @@ enum class MotifCard(
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
         PassiveSkillBuilder()
-            + attack(1.0), // TODO ツールパッシブ
+            + attack(0.6)
+            + health(0.4)
+            + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
+            + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * mana.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.IRON_BLOCK + Items.IRON_INGOT,
     ),
     DIAMOND(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
         PassiveSkillBuilder()
             + luck(0.8)
-            + attack(0.4), // TODO ツールパッシブ
+            + attack(0.2)
+            + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
+            + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * mana.atLeast(16.0),
         MotifCardRecipes().overworld + Blocks.DIAMOND_BLOCK + Items.DIAMOND,
     ),
     PLAYER(
