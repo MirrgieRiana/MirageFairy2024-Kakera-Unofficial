@@ -63,6 +63,7 @@ object FairyCard {
 
 private val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")
 private val MANA_TRANSLATION = Translation({ "item.miragefairy2024.fairy.mana" }, "Mana", "魔力")
+private val LEVEL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.level" }, "Level", "レベル")
 private val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
 private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
@@ -121,6 +122,7 @@ fun initFairyItem() {
 
     RARE_TRANSLATION.enJa()
     MANA_TRANSLATION.enJa()
+    LEVEL_TRANSLATION.enJa()
     CONDENSATION_TRANSLATION.enJa()
     CONDENSATION_RECIPE_TRANSLATION.enJa()
 }
@@ -164,11 +166,11 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val mana = level * (1.0 + manaBoost)
         tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
 
-        // レア
-        tooltip += text { (RARE_TRANSLATION() + " ${motif.rare}"()).green }
+        // レベル
+        tooltip += text { (LEVEL_TRANSLATION() + ": "() + Emoji.STAR() + (level formatAs "%.1f")()).green }
 
-        // 凝縮数
-        tooltip += text { (CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
+        // レア・凝縮数
+        tooltip += text { (RARE_TRANSLATION() + ": ${motif.rare}"() + "  "() + CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
