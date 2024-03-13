@@ -124,7 +124,7 @@ enum class MotifCard(
             + health(0.6)
             + attack(0.4)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
-            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * mana.atLeast(14.0),
+            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
         MotifCardRecipes().overworld + Blocks.STONE,
     ),
     COPPER(
@@ -133,7 +133,7 @@ enum class MotifCard(
             + luck(0.6)
             + health(0.4)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
-            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * mana.atLeast(10.0),
+            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.COPPER_BLOCK + Items.COPPER_INGOT,
     ),
     IRON(
@@ -142,7 +142,7 @@ enum class MotifCard(
             + attack(0.6)
             + health(0.4)
             + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
-            + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * mana.atLeast(10.0),
+            + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.IRON_BLOCK + Items.IRON_INGOT,
     ),
     GOLD(
@@ -151,7 +151,7 @@ enum class MotifCard(
             + luck(0.8)
             + health(0.2)
             + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * mana.atLeast(12.0),
+            + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().overworld.nether + Blocks.GOLD_BLOCK + Items.GOLD_INGOT,
     ),
     NETHERITE(
@@ -160,7 +160,7 @@ enum class MotifCard(
             + attack(0.6)
             + luck(0.4)
             + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
-            + StatusEffects.STRENGTH(2) * ToolMaterialCard.NETHERITE() * mana.atLeast(16.0),
+            + StatusEffects.STRENGTH(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes() + Blocks.NETHERITE_BLOCK + Items.NETHERITE_INGOT,
     ),
     DIAMOND(
@@ -169,7 +169,7 @@ enum class MotifCard(
             + luck(0.8)
             + attack(0.2)
             + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
-            + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * mana.atLeast(16.0),
+            + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().overworld + Blocks.DIAMOND_BLOCK + Items.DIAMOND,
     ),
     PLAYER(
@@ -188,10 +188,10 @@ enum class MotifCard(
             + attack(1.0) * food.atMost(6) // TODO 遠距離
             + StatusEffects.SLOW_FALLING() * food.atMost(6)
             + StatusEffects.JUMP_BOOST() * food.atMost(6)
-            + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * mana.atLeast(10.0)
-            + StatusEffects.SLOWNESS(2) * food.atMost(6) * mana.atMost(12.0)
-            + StatusEffects.JUMP_BOOST(3) * food.atMost(6) * mana.atLeast(14.0)
-            + StatusEffects.SLOWNESS() * food.atMost(6) * mana.atMost(16.0),
+            + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(10.0)
+            + StatusEffects.SLOWNESS(2) * food.atMost(6) * fairyLevel.atMost(12.0)
+            + StatusEffects.JUMP_BOOST(3) * food.atMost(6) * fairyLevel.atLeast(14.0)
+            + StatusEffects.SLOWNESS() * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().nether + EntityType.WITHER,
     ),
     CARROT(
@@ -200,7 +200,7 @@ enum class MotifCard(
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT)
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.RABBIT_STEW) // TODO 料理タグでまとめる
-            + regeneration(0.1) * mana.atLeast(10.0),
+            + regeneration(0.1) * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.CARROTS + Items.CARROT,
     ),
     WOOD(
@@ -209,7 +209,7 @@ enum class MotifCard(
             + attack(0.8)
             + health(0.2)
             + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加
-            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * mana.atLeast(12.0),
+            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
     CAKE(
@@ -231,33 +231,33 @@ enum class MotifCard(
             + StatusEffects.JUMP_BOOST() * skyVisible
             + StatusEffects.STRENGTH() * skyVisible
             + StatusEffects.HASTE() * skyVisible
-            + regeneration(0.1) * skyVisible * mana.atLeast(12.0)
-            + StatusEffects.SPEED(2) * skyVisible * mana.atLeast(13.0)
-            + StatusEffects.RESISTANCE(2) * skyVisible * mana.atLeast(14.0)
-            + StatusEffects.JUMP_BOOST(2) * skyVisible * mana.atLeast(15.0)
-            + StatusEffects.STRENGTH(2) * skyVisible * mana.atLeast(16.0)
-            + StatusEffects.HASTE(2) * skyVisible * mana.atLeast(17.0),
+            + regeneration(0.1) * skyVisible * fairyLevel.atLeast(12.0)
+            + StatusEffects.SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
+            + StatusEffects.RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
+            + StatusEffects.JUMP_BOOST(2) * skyVisible * fairyLevel.atLeast(15.0)
+            + StatusEffects.STRENGTH(2) * skyVisible * fairyLevel.atLeast(16.0)
+            + StatusEffects.HASTE(2) * skyVisible * fairyLevel.atLeast(17.0),
         MotifCardRecipes() + Blocks.BEACON,
     ),
     TIME(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
         PassiveSkillBuilder()
             + StatusEffects.SPEED(2)
-            + speed(0.5) * mana.atLeast(16.0),
+            + speed(0.5) * fairyLevel.atLeast(16.0),
         MotifCardRecipes().always,
     ),
     GRAVITY(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING()
-            + attack(0.5) * mana.atLeast(16.0), // TODO 射撃攻撃力
+            + attack(0.5) * fairyLevel.atLeast(16.0), // TODO 射撃攻撃力
         MotifCardRecipes() + Items.APPLE,
     ),
     ANTI_ENTROPY(
         "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
         PassiveSkillBuilder()
             + StatusEffects.LUCK(2)
-            + luck(0.5) * mana.atLeast(16.0),
+            + luck(0.5) * fairyLevel.atLeast(16.0),
         MotifCardRecipes().always,
     ),
     ;
