@@ -118,6 +118,24 @@ enum class MotifCard(
             + regeneration(0.2) * overworld,
         MotifCardRecipes().overworld + BlockTags.DIRT,
     ),
+    STONE(
+        "stone", 2, "Stonia", "石精ストーニャ", 0x333333, 0x8F8F8F, 0x686868, 0x747474,
+        PassiveSkillBuilder()
+            + health(0.6)
+            + attack(0.4)
+            + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
+            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * mana.atLeast(14.0),
+        MotifCardRecipes().overworld + Blocks.STONE,
+    ),
+    COPPER(
+        "copper", 3, "Copperia", "銅精ツォッペーリャ", 0xF69D7F, 0xF77653, 0xF77653, 0x5DC09A,
+        PassiveSkillBuilder()
+            + luck(0.6)
+            + health(0.4)
+            + StatusEffects.RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
+            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * mana.atLeast(10.0),
+        MotifCardRecipes().overworld + Blocks.COPPER_BLOCK + Items.COPPER_INGOT,
+    ),
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
         PassiveSkillBuilder()
@@ -126,6 +144,24 @@ enum class MotifCard(
             + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
             + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * mana.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.IRON_BLOCK + Items.IRON_INGOT,
+    ),
+    GOLD(
+        "gold", 6, "Goldia", "金精ゴルジャ", 0xEFE642, 0xF4CC17, 0xF4CC17, 0xFDB61E,
+        PassiveSkillBuilder()
+            + luck(0.8)
+            + health(0.2)
+            + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
+            + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * mana.atLeast(12.0),
+        MotifCardRecipes().overworld.nether + Blocks.GOLD_BLOCK + Items.GOLD_INGOT,
+    ),
+    NETHERITE(
+        "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
+        PassiveSkillBuilder()
+            + attack(0.6)
+            + luck(0.4)
+            + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
+            + StatusEffects.STRENGTH(2) * ToolMaterialCard.NETHERITE() * mana.atLeast(16.0),
+        MotifCardRecipes() + Blocks.NETHERITE_BLOCK + Items.NETHERITE_INGOT,
     ),
     DIAMOND(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
@@ -166,6 +202,15 @@ enum class MotifCard(
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.RABBIT_STEW) // TODO 料理タグでまとめる
             + regeneration(0.1) * mana.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.CARROTS + Items.CARROT,
+    ),
+    WOOD(
+        "wood", 2, "Woodia", "木精ウォージャ", 0xE7C697, 0xAD8232, 0xAD8232, 0x8B591C,
+        PassiveSkillBuilder()
+            + attack(0.8)
+            + health(0.2)
+            + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加
+            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * mana.atLeast(12.0),
+        MotifCardRecipes().overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
