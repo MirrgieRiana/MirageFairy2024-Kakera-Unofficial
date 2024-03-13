@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
 import miragefairy2024.mod.passiveskill.FoodPassiveSkillCondition
@@ -12,6 +13,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.SimplePassiveSkillConditionCard
 import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.ToolMaterialCardPassiveSkillCondition
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -279,6 +281,8 @@ private val food get() = IntComparisonPassiveSkillCondition.FOOD_LEVEL_TERM
 private val level get() = IntComparisonPassiveSkillCondition.LEVEL_TERM
 private val mana get() = DoubleComparisonPassiveSkillCondition.MANA_TERM
 private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
+
+private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
 
 private fun mana(factor: Double) = PassiveSkillEffectCard.MANA_BOOST { it * factor * 0.02 }
 private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }

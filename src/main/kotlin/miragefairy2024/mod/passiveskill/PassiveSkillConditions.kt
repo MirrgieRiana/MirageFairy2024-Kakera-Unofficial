@@ -2,6 +2,7 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.lastFood
 import miragefairy2024.util.Translation
@@ -104,4 +105,12 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     override val text: Text get() = item.name
     override fun test(context: PassiveSkillContext, mana: Double) = context.player.lastFood.itemStack.orEmpty.isOf(item)
+}
+
+
+// tool material card
+
+class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) : PassiveSkillCondition {
+    override val text: Text get() = card.translation()
+    override fun test(context: PassiveSkillContext, mana: Double) = context.player.mainHandStack.isIn(card.tag)
 }
