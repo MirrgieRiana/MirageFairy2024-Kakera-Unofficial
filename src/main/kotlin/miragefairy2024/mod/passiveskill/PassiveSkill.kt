@@ -24,7 +24,7 @@ interface PassiveSkillProvider {
 }
 
 
-class PassiveSkill(val providerId: Identifier, val itemStackMana: Double, val specifications: List<PassiveSkillSpecification<*>>)
+class PassiveSkill(val providerId: Identifier, val level: Double, val specifications: List<PassiveSkillSpecification<*>>)
 
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
@@ -35,7 +35,7 @@ class PassiveSkillContext(val world: World, val blockPos: BlockPos, val player: 
 
 interface PassiveSkillCondition {
     val text: Text
-    fun test(context: PassiveSkillContext, mana: Double): Boolean
+    fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean
 }
 
 

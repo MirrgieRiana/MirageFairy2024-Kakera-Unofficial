@@ -54,7 +54,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     val identifier = Identifier(MirageFairy2024.modId, path)
     val translation = Translation({ "miragefairy2024.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
 
-    override fun test(context: PassiveSkillContext, mana: Double) = function(context)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
     override val text = translation()
 
     fun init() {
@@ -67,33 +67,33 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
-        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
-        val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _ -> context.player.hungerManager.foodLevel }
-        val LEVEL_TERM = Term(Emoji.LEVEL) { context, _ -> context.player.experienceLevel }
+        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
+        val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _, _ -> context.player.hungerManager.foodLevel }
+        val LEVEL_TERM = Term(Emoji.LEVEL) { context, _, _ -> context.player.experienceLevel }
     }
 
-    class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, mana: Double) -> Int)
+    class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Int)
 
     private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
     override val text: Text get() = text { term.emoji() + format(threshold / term.unit.toDouble())() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
-    override fun test(context: PassiveSkillContext, mana: Double): Boolean {
-        val value = term.getValue(context, mana)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
+        val value = term.getValue(context, level, mana)
         return if (isGreaterOrEquals) value >= threshold else value <= threshold
     }
 }
 
 class DoubleComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Double) : PassiveSkillCondition {
     companion object {
-        val MANA_TERM = Term(Emoji.MANA) { _, mana -> mana }
-        val HEALTH_TERM = Term(Emoji.HEART, 2.0) { context, _ -> context.player.health.toDouble() }
+        val MANA_TERM = Term(Emoji.MANA) { _, _, mana -> mana }
+        val HEALTH_TERM = Term(Emoji.HEART, 2.0) { context, _, _ -> context.player.health.toDouble() }
     }
 
-    class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, mana: Double) -> Double)
+    class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Double)
 
     private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
     override val text: Text get() = text { term.emoji() + format(threshold / term.unit)() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
-    override fun test(context: PassiveSkillContext, mana: Double): Boolean {
-        val value = term.getValue(context, mana)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
+        val value = term.getValue(context, level, mana)
         return if (isGreaterOrEquals) value >= threshold else value <= threshold
     }
 }
@@ -104,7 +104,7 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 // TODO タグによる料理素材判定
 class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     override val text: Text get() = item.name
-    override fun test(context: PassiveSkillContext, mana: Double) = context.player.lastFood.itemStack.orEmpty.isOf(item)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.isOf(item)
 }
 
 
@@ -112,5 +112,5 @@ class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition 
 
 class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) : PassiveSkillCondition {
     override val text: Text get() = card.translation()
-    override fun test(context: PassiveSkillContext, mana: Double) = context.player.mainHandStack.isIn(card.tag)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.mainHandStack.isIn(card.tag)
 }

@@ -104,11 +104,12 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
     val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
-        val mana = passiveSkill.itemStackMana * (1.0 + manaBoost)
+        val level = passiveSkill.level
+        val mana = level * (1.0 + manaBoost)
         passiveSkill.specifications.forEach { specification ->
             fun <T> f(specification: PassiveSkillSpecification<T>) {
                 if (specification.effect.isPreprocessor == isPreprocessing) {
-                    if (specification.conditions.all { it.test(context, mana) }) {
+                    if (specification.conditions.all { it.test(context, level, mana) }) {
                         this.add(specification.effect, specification.valueProvider(mana))
                     }
                 }

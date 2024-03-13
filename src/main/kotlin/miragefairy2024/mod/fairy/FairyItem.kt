@@ -151,7 +151,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val motif = stack.getFairyMotif() ?: return
 
         // 魔力
-        val itemStackMana = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
+        val level = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
         val (manaBoost, status) = if (player != null) {
             val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
@@ -161,7 +161,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         } else {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
-        val mana = itemStackMana * (1.0 + manaBoost)
+        val mana = level * (1.0 + manaBoost)
         tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
 
         // レア
@@ -183,8 +183,8 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             val passiveSkillContext = player?.let { PassiveSkillContext(it.world, it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
-                    val actualMana = if (specification.effect.isPreprocessor) itemStackMana else itemStackMana * (1.0 + manaBoost)
-                    val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, mana)) }
+                    val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
+                    val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
                     return buildText {
                         !text { " "() }
@@ -221,8 +221,8 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
-        val itemStackMana = motif.rare.toDouble() + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0)
-        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, itemStackMana, motif.passiveSkillSpecifications)
+        val level = motif.rare.toDouble() + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0)
+        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, level, motif.passiveSkillSpecifications)
     }
 }
 
