@@ -114,8 +114,8 @@ enum class MotifCard(
     DIRT(
         "dirt", 1, "Dirtia", "土精ディルチャ", 0xB87440, 0xB9855C, 0x593D29, 0x914A18,
         PassiveSkillBuilder()
-            + health(1.0) * overworld * outdoor
-            + regeneration(0.5) * overworld * outdoor,
+            + health(1.0) * overworld
+            + regeneration(0.2) * overworld,
         MotifCardRecipes().overworld + BlockTags.DIRT,
     ),
     IRON(
