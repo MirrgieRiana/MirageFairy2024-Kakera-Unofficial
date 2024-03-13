@@ -329,7 +329,7 @@ private fun DoubleComparisonPassiveSkillCondition.Term.atMost(threshold: Double)
 private val light get() = IntComparisonPassiveSkillCondition.LIGHT_LEVEL_TERM
 private val food get() = IntComparisonPassiveSkillCondition.FOOD_LEVEL_TERM
 private val level get() = IntComparisonPassiveSkillCondition.LEVEL_TERM
-private val mana get() = DoubleComparisonPassiveSkillCondition.MANA_TERM
+private val fairyLevel get() = DoubleComparisonPassiveSkillCondition.FAIRY_LEVEL_TERM
 private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)

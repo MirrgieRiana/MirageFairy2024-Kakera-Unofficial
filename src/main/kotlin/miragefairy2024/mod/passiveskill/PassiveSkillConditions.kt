@@ -84,6 +84,7 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
 
 class DoubleComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Double) : PassiveSkillCondition {
     companion object {
+        val FAIRY_LEVEL_TERM = Term(Emoji.STAR) { _, level, _ -> level }
         val MANA_TERM = Term(Emoji.MANA) { _, _, mana -> mana }
         val HEALTH_TERM = Term(Emoji.HEART, 2.0) { context, _, _ -> context.player.health.toDouble() }
     }
