@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairyquest
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -24,6 +25,8 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.or
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
@@ -31,6 +34,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
@@ -74,9 +78,10 @@ fun initFairyQuestCardItem() {
     fairyQuestCardFairyQuestTranslation.enJa()
 
     registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
-        input(FairyQuestCardCard.item)
+        input(FairyQuestCardIngredient.toVanilla())
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
+    CustomIngredientSerializer.register(FairyQuestCardIngredient.SERIALIZER)
 }
 
 class FairyQuestCardItem(settings: Settings) : Item(settings) {
@@ -132,4 +137,34 @@ private fun createFairyQuestCardModel() = Model {
             "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string,
         ),
     )
+}
+
+object FairyQuestCardIngredient : CustomIngredient {
+    val ID = Identifier(MirageFairy2024.modId, "fairy_quest_card")
+
+    val ALLOW_EMPTY_CODEC = createCodec(Ingredient.ALLOW_EMPTY_CODEC)
+    val DISALLOW_EMPTY_CODEC = createCodec(Ingredient.DISALLOW_EMPTY_CODEC)
+    private fun createCodec(ingredientCodec: Codec<Ingredient>): Codec<FairyQuestCardIngredient> {
+        return Codec.unit(FairyQuestCardIngredient)
+    }
+
+    val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
+        override fun getIdentifier() = ID
+        override fun getCodec(allowEmpty: Boolean) = if (allowEmpty) ALLOW_EMPTY_CODEC else DISALLOW_EMPTY_CODEC
+        override fun read(buf: PacketByteBuf) = FairyQuestCardIngredient
+        override fun write(buf: PacketByteBuf, ingredient: FairyQuestCardIngredient) = Unit
+    }
+
+    override fun requiresTesting() = true
+    override fun test(stack: ItemStack) = stack.isOf(FairyQuestCardCard.item)
+
+    override fun getMatchingStacks(): List<ItemStack> {
+        return fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
+            val itemStack = FairyQuestCardCard.item.createItemStack()
+            itemStack.setFairyQuestRecipe(it.value)
+            itemStack
+        }
+    }
+
+    override fun getSerializer() = SERIALIZER
 }
