@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.registerDebugItem
 import miragefairy2024.util.registerTagGeneration
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
@@ -11,6 +12,7 @@ import net.minecraft.item.Items
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import kotlin.jvm.optionals.getOrElse
 
 enum class ToolMaterialCard(path: String, enName: String, jaName: String) {
     WOOD("wooden_tool", "Wooden Tool", "木ツール"),
@@ -118,4 +120,16 @@ fun initVanillaModule() {
     Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
 
     recipeGroupRegistry[Items.STICK] = "sticks"
+
+
+    registerDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, _, _, _ ->
+        val tags = world.registryManager.get(RegistryKeys.BIOME).streamTags().toList()
+        tags.sortedBy { it.id }.forEach { tag ->
+            println(tag.id)
+            val biomes = world.registryManager.get(RegistryKeys.BIOME).getEntryList(tag).getOrElse { listOf() }.toList()
+            biomes.sortedBy { it.key.get().value }.forEach { biome ->
+                println("  " + biome.key.get().value)
+            }
+        }
+    }
 }
