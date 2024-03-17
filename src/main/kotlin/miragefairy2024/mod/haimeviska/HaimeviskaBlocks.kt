@@ -144,9 +144,9 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(30, 30)
 
     // タグ
-    card.block.registerTagGeneration(BlockTags.LEAVES)
-    card.item.registerTagGeneration(ItemTags.LEAVES)
-    card.block.registerTagGeneration(BlockTags.HOE_MINEABLE)
+    card.block.registerTagGeneration { BlockTags.LEAVES }
+    card.item.registerTagGeneration { ItemTags.LEAVES }
+    card.block.registerTagGeneration { BlockTags.HOE_MINEABLE }
 
 }
 
@@ -161,9 +161,9 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 5)
 
     // タグ
-    card.block.registerTagGeneration(BlockTags.OVERWORLD_NATURAL_LOGS)
-    card.block.registerTagGeneration(BlockTags.LOGS_THAT_BURN)
-    card.item.registerTagGeneration(ItemTags.LOGS_THAT_BURN)
+    card.block.registerTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+    card.block.registerTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.item.registerTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -189,9 +189,9 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 5)
 
     // タグ
-    card.block.registerTagGeneration(BlockTags.OVERWORLD_NATURAL_LOGS)
-    card.block.registerTagGeneration(BlockTags.LOGS_THAT_BURN)
-    card.item.registerTagGeneration(ItemTags.LOGS_THAT_BURN)
+    card.block.registerTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+    card.block.registerTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.item.registerTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -207,8 +207,8 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 20)
 
     // タグ
-    card.block.registerTagGeneration(BlockTags.PLANKS)
-    card.item.registerTagGeneration(ItemTags.PLANKS)
+    card.block.registerTagGeneration { BlockTags.PLANKS }
+    card.item.registerTagGeneration { ItemTags.PLANKS }
 
 }
 
@@ -223,8 +223,8 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerCutoutRenderLayer()
 
     // タグ
-    card.block.registerTagGeneration(BlockTags.SAPLINGS)
-    card.item.registerTagGeneration(ItemTags.SAPLINGS)
+    card.block.registerTagGeneration { BlockTags.SAPLINGS }
+    card.item.registerTagGeneration { ItemTags.SAPLINGS }
 
 }
 

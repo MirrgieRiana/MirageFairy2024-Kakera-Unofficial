@@ -131,8 +131,8 @@ fun initOresModule() {
 
         card.block.registerOreLootTableGeneration(card.dropItem)
 
-        card.block.registerTagGeneration(BlockTags.PICKAXE_MINEABLE)
-        card.block.registerTagGeneration(BlockTags.NEEDS_STONE_TOOL)
+        card.block.registerTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerTagGeneration { BlockTags.NEEDS_STONE_TOOL }
 
     }
 

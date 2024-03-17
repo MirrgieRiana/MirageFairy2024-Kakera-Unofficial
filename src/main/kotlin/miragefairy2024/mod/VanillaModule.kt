@@ -43,7 +43,7 @@ fun initVanillaModule() {
     }
 
 
-    fun register(card: ToolMaterialCard, item: Item) = item.registerTagGeneration(card.tag)
+    fun register(card: ToolMaterialCard, item: Item) = item.registerTagGeneration { card.tag }
 
     // WOOD
     register(ToolMaterialCard.WOOD, Items.WOODEN_SWORD)
@@ -100,22 +100,22 @@ fun initVanillaModule() {
     register(ToolMaterialCard.NETHERITE, Items.NETHERITE_HOE)
 
 
-    Blocks.WHITE_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.ORANGE_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.MAGENTA_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.LIGHT_BLUE_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.YELLOW_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.LIME_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.PINK_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.GRAY_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.LIGHT_GRAY_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.CYAN_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.PURPLE_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.BLUE_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.BROWN_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.GREEN_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.RED_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
-    Blocks.BLACK_CONCRETE.registerTagGeneration(BlockTagCard.CONCRETE.tag)
+    Blocks.WHITE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.ORANGE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.MAGENTA_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIGHT_BLUE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.YELLOW_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIME_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.PINK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.GRAY_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIGHT_GRAY_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.CYAN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.PURPLE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BLUE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BROWN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.GREEN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.RED_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
 
     recipeGroupRegistry[Items.STICK] = "sticks"
 }

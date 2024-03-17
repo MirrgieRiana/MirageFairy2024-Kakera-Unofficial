@@ -231,16 +231,16 @@ fun initMaterialsModule() {
     } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
 
     // ミラージュの花粉
-    MaterialCard.TINY_MIRAGE_FLOUR.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
-    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerTagGeneration(MIRAGE_FLOUR_TAG)
+    MaterialCard.TINY_MIRAGE_FLOUR.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
 
     // フラクタルウィスプ
-    MaterialCard.FRACTAL_WISP.item.registerTagGeneration(WISP_TAG)
+    MaterialCard.FRACTAL_WISP.item.registerTagGeneration { WISP_TAG }
 
 }

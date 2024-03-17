@@ -119,7 +119,7 @@ fun initBlockMaterialsModule() {
         card.block.registerDefaultLootTableGeneration()
 
         card.tags.forEach {
-            card.block.registerTagGeneration(it)
+            card.block.registerTagGeneration { it }
         }
     }
 
