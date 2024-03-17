@@ -13,6 +13,7 @@ import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initStatusEffectModule
+import miragefairy2024.mod.initToolMaterialModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
@@ -47,6 +48,7 @@ object MirageFairy2024 : ModInitializer {
         initPassiveSkillModule()
         initLastFoodModule()
         initFoodIngredientsModule()
+        initToolMaterialModule()
     }
 }
 
