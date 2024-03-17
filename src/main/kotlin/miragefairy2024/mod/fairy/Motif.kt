@@ -2,11 +2,13 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.ToolMaterialCard
+import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
-import miragefairy2024.mod.passiveskill.FoodPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.IntComparisonPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.ItemFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
@@ -198,8 +200,6 @@ enum class MotifCard(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
         PassiveSkillBuilder()
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT)
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.RABBIT_STEW) // TODO 料理タグでまとめる
             + regeneration(0.1) * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.CARROTS + Items.CARROT,
     ),
@@ -322,7 +322,9 @@ private val underwater get() = SimplePassiveSkillConditionCard.UNDERWATER
 private val inTheAir get() = SimplePassiveSkillConditionCard.IN_THE_AIR
 private val onFire get() = SimplePassiveSkillConditionCard.ON_FIRE
 
-private fun food(item: Item) = FoodPassiveSkillCondition(item)
+private fun food(item: Item) = ItemFoodIngredientPassiveSkillCondition(item)
+private fun food(category: FoodIngredientCategoryCard) = CategoryFoodIngredientPassiveSkillCondition(category)
+
 private fun IntComparisonPassiveSkillCondition.Term.atLeast(threshold: Int) = IntComparisonPassiveSkillCondition(this, true, threshold)
 private fun IntComparisonPassiveSkillCondition.Term.atMost(threshold: Int) = IntComparisonPassiveSkillCondition(this, false, threshold)
 private fun DoubleComparisonPassiveSkillCondition.Term.atLeast(threshold: Double) = DoubleComparisonPassiveSkillCondition(this, true, threshold)

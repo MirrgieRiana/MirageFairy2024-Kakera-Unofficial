@@ -2,7 +2,9 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.FoodIngredientCategory
 import miragefairy2024.mod.ToolMaterialCard
+import miragefairy2024.mod.containsAsFoodIngredient
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.lastFood
 import miragefairy2024.util.Translation
@@ -24,6 +26,7 @@ fun initPassiveSkillConditions() {
     SimplePassiveSkillConditionCard.entries.forEach { card ->
         card.init()
     }
+    ItemFoodIngredientPassiveSkillCondition.translation.enJa()
 }
 
 
@@ -103,10 +106,19 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 
 // food ingredient
 
-// TODO タグによる料理素材判定
-class FoodPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
-    override val text: Text get() = item.name
-    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.isOf(item)
+class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
+    companion object {
+        val identifier = Identifier(MirageFairy2024.modId, "food_ingredient")
+        val translation = Translation({ "miragefairy2024.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
+    }
+
+    override val text get() = translation(item.name)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item
+}
+
+class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngredientCategory) : PassiveSkillCondition {
+    override val text get() = ItemFoodIngredientPassiveSkillCondition.translation(category.text)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient category
 }
 
 
