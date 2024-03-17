@@ -5,7 +5,6 @@ import miragefairy2024.util.registerDebugItem
 import miragefairy2024.util.registerTagGeneration
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
-import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
@@ -19,8 +18,6 @@ enum class BlockTagCard(path: String) {
     val identifier = Identifier(MirageFairy2024.modId, path)
     val tag: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, identifier)
 }
-
-val recipeGroupRegistry = mutableMapOf<Item, String>()
 
 fun initVanillaModule() {
 
@@ -40,8 +37,6 @@ fun initVanillaModule() {
     Blocks.GREEN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
     Blocks.RED_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
     Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-
-    recipeGroupRegistry[Items.STICK] = "sticks"
 
 
     registerDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, _, _, _ ->

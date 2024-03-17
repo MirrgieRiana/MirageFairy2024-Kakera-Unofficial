@@ -12,6 +12,7 @@ import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initPoemModule
+import miragefairy2024.mod.initRecipeGroupModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initToolMaterialModule
 import miragefairy2024.mod.initVanillaModule
@@ -49,6 +50,7 @@ object MirageFairy2024 : ModInitializer {
         initLastFoodModule()
         initFoodIngredientsModule()
         initToolMaterialModule()
+        initRecipeGroupModule()
     }
 }
 
