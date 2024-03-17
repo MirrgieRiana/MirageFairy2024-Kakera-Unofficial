@@ -206,10 +206,11 @@ enum class MotifCard(
     WOOD(
         "wood", 2, "Woodia", "木精ウォージャ", 0xE7C697, 0xAD8232, 0xAD8232, 0x8B591C,
         PassiveSkillBuilder()
-            + attack(0.8)
+            + attack(0.4)
             + health(0.2)
             + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加
-            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0),
+            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
+            + mending(1.0) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
     CAKE(
