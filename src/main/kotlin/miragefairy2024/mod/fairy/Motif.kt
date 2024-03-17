@@ -319,6 +319,7 @@ private val thundering get() = SimplePassiveSkillConditionCard.THUNDERING
 private val daytime get() = SimplePassiveSkillConditionCard.DAYTIME
 private val night get() = SimplePassiveSkillConditionCard.NIGHT
 private val underwater get() = SimplePassiveSkillConditionCard.UNDERWATER
+private val inTheAir get() = SimplePassiveSkillConditionCard.IN_THE_AIR
 private val onFire get() = SimplePassiveSkillConditionCard.ON_FIRE
 
 private fun food(item: Item) = FoodPassiveSkillCondition(item)
