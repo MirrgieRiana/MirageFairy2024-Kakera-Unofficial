@@ -181,7 +181,7 @@ enum class MotifCard(
     ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
-        PassiveSkillBuilder(), // TODO 収集
+        PassiveSkillBuilder() + collection(1.0),
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
     ),
     WITHER(
