@@ -2,8 +2,10 @@ package miragefairy2024
 
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.util.string
+import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
+import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -41,6 +43,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     val englishTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val japaneseTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val ninePatchTextureGenerators = InitializationEventRegistry<((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
+    val soundGenerators = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
 
     val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
 
@@ -114,6 +117,33 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                         }
                     }
                     return CompletableFuture.allOf(*futures.toTypedArray())
+                }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput ->
+            object : DataProvider {
+                private val destination = Identifier(MirageFairy2024.modId, "sounds")
+                override fun getName() = "Sounds"
+                override fun run(writer: DataWriter): CompletableFuture<*> {
+
+                    val map = mutableMapOf<String, Pair<String?, List<Identifier>>>()
+                    soundGenerators.fire {
+                        it { path, subtitle, sounds ->
+                            map[path] = Pair(subtitle, sounds)
+                        }
+                    }
+                    if (map.isEmpty()) return CompletableFuture.allOf()
+
+                    val path = output.resolvePath(DataOutput.OutputType.RESOURCE_PACK).resolve(destination.namespace).resolve(destination.path + ".json")
+
+                    val jsonElement = map.map { (path, entry) ->
+                        path to jsonObjectNotNull(
+                            entry.first?.let { "subtitle" to it.jsonElement },
+                            "sounds" to entry.second.map { it.string.jsonElement }.jsonArray,
+                        )
+                    }.jsonObject
+
+                    return DataProvider.writeToPath(writer, jsonElement, path)
                 }
             }
         }
