@@ -36,3 +36,81 @@ fun BlockView.getCrystalErg(blockPos: BlockPos): Double {
         else -> 0.0
     }
 }
+
+enum class NeighborType {
+    FACES,
+    EDGES,
+    VERTICES,
+}
+
+fun blockVisitor(
+    originalBlockPosList: Iterable<BlockPos>,
+    visitOrigins: Boolean = true,
+    maxDistance: Int,
+    maxCount: Int? = null,
+    neighborType: NeighborType = NeighborType.FACES,
+    predicate: (fromBlockPos: BlockPos, toBlockPos: BlockPos) -> Boolean,
+) = sequence {
+    val checkedBlockPosList = mutableSetOf<BlockPos>()
+    var nextBlockPosList = originalBlockPosList.toMutableSet()
+    var count = 0
+
+    if (maxCount == 0) return@sequence
+
+    (0..maxDistance).forEach { distance ->
+        if (nextBlockPosList.isEmpty()) return@sequence
+
+        val currentBlockPosList: Set<BlockPos> = nextBlockPosList
+        nextBlockPosList = mutableSetOf()
+
+        currentBlockPosList.forEach nextCurrentBlockPos@{ fromBlockPos ->
+
+            if (distance > 0 || visitOrigins) {
+                yield(Pair(distance, fromBlockPos))
+                count++
+                if (maxCount != null && count >= maxCount) return@sequence
+            }
+
+            fun check(offsetX: Int, offsetY: Int, offsetZ: Int) {
+                val toBlockPos = fromBlockPos.add(offsetX, offsetY, offsetZ)
+                if (toBlockPos !in checkedBlockPosList && predicate(fromBlockPos, toBlockPos)) {
+                    checkedBlockPosList += toBlockPos
+                    nextBlockPosList += toBlockPos
+                }
+            }
+
+            check(1, 0, 0)
+            check(-1, 0, 0)
+            check(0, 1, 0)
+            check(0, -1, 0)
+            check(0, 0, 1)
+            check(0, 0, -1)
+            if (neighborType != NeighborType.FACES) {
+                check(0, 1, 1)
+                check(0, 1, -1)
+                check(0, -1, 1)
+                check(0, -1, -1)
+                check(1, 0, 1)
+                check(1, 0, -1)
+                check(-1, 0, 1)
+                check(-1, 0, -1)
+                check(1, 1, 0)
+                check(1, -1, 0)
+                check(-1, 1, 0)
+                check(-1, -1, 0)
+                if (neighborType != NeighborType.EDGES) {
+                    check(1, 1, 1)
+                    check(1, 1, -1)
+                    check(1, -1, 1)
+                    check(1, -1, -1)
+                    check(-1, 1, 1)
+                    check(-1, 1, -1)
+                    check(-1, -1, 1)
+                    check(-1, -1, -1)
+                }
+            }
+        }
+
+    }
+
+}
