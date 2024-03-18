@@ -4,7 +4,7 @@ public class FFT {
 
     private Complex[] input;
     private Complex[] output;
-    private boolean inverse;
+    private final boolean inverse;
     private int length;
 
     public FFT(boolean inverse) {
