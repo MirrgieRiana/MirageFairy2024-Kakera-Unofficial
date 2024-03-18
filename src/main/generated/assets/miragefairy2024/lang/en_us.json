@@ -220,5 +220,11 @@
   "miragefairy2024.tool_material.iron_tool": "Iron Tool",
   "miragefairy2024.tool_material.netherite_tool": "Netherite Tool",
   "miragefairy2024.tool_material.stone_tool": "Stone Tool",
-  "miragefairy2024.tool_material.wooden_tool": "Wooden Tool"
+  "miragefairy2024.tool_material.wooden_tool": "Wooden Tool",
+  "subtitles.miragefairy2024.cancel": "TODO",
+  "subtitles.miragefairy2024.collect": "Collect item",
+  "subtitles.miragefairy2024.magic1": "Magic fired",
+  "subtitles.miragefairy2024.magic2": "Magic fired",
+  "subtitles.miragefairy2024.magic3": "Magic fired",
+  "subtitles.miragefairy2024.magic_hit": "Magic hits"
 }

@@ -1,0 +1,38 @@
+{
+  "cancel": {
+    "sounds": [
+      "miragefairy2024:cancel"
+    ],
+    "subtitle": "subtitles.miragefairy2024.cancel"
+  },
+  "collect": {
+    "sounds": [
+      "miragefairy2024:collect"
+    ],
+    "subtitle": "subtitles.miragefairy2024.collect"
+  },
+  "magic1": {
+    "sounds": [
+      "miragefairy2024:magic1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.magic1"
+  },
+  "magic2": {
+    "sounds": [
+      "miragefairy2024:magic2"
+    ],
+    "subtitle": "subtitles.miragefairy2024.magic2"
+  },
+  "magic3": {
+    "sounds": [
+      "miragefairy2024:magic3"
+    ],
+    "subtitle": "subtitles.miragefairy2024.magic3"
+  },
+  "magic_hit": {
+    "sounds": [
+      "miragefairy2024:magic_hit"
+    ],
+    "subtitle": "subtitles.miragefairy2024.magic_hit"
+  }
+}
