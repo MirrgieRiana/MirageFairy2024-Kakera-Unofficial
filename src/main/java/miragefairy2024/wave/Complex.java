@@ -73,8 +73,7 @@ public class Complex {
         if (getClass() != obj.getClass()) return false;
         Complex other = (Complex) obj;
         if (Double.doubleToLongBits(this.im) != Double.doubleToLongBits(other.im)) return false;
-        if (Double.doubleToLongBits(this.re) != Double.doubleToLongBits(other.re)) return false;
-        return true;
+        return Double.doubleToLongBits(this.re) == Double.doubleToLongBits(other.re);
     }
 
 }
