@@ -209,6 +209,7 @@
   "miragefairy2024.passive_skill_condition.miragefairy2024.sky_visible": "Sky Visible",
   "miragefairy2024.passive_skill_condition.miragefairy2024.thundering": "Thundering",
   "miragefairy2024.passive_skill_condition.miragefairy2024.underwater": "Underwater",
+  "miragefairy2024.passive_skill_type.miragefairy2024.collection": "Collection: %s/s",
   "miragefairy2024.passive_skill_type.miragefairy2024.experience": "Gain XP: %s/s",
   "miragefairy2024.passive_skill_type.miragefairy2024.ignition": "Ignition",
   "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "Mana",

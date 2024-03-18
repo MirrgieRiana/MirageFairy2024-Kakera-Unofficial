@@ -352,6 +352,7 @@ private val ignition get() = PassiveSkillEffectCard.IGNITION { true }
 private fun experience(factor: Double) = PassiveSkillEffectCard.EXPERIENCE { it * factor * 0.005 }
 private fun regeneration(factor: Double) = PassiveSkillEffectCard.REGENERATION { it * factor * 0.01 }
 private fun mending(factor: Double) = PassiveSkillEffectCard.MENDING { it * factor * 0.01 }
+private fun collection(factor: Double) = PassiveSkillEffectCard.COLLECTION { it * factor * 0.1 }
 
 
 fun initMotif() {
