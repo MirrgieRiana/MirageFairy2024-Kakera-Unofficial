@@ -174,6 +174,41 @@ enum class MotifCard(
             + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().overworld + Blocks.DIAMOND_BLOCK + Items.DIAMOND,
     ),
+    PIG(
+        "pig", 2, "Pigia", "豚精ピーギャ", 0xDB98A2, 0xF68C87, 0xC76B73, 0xDC94A1,
+        PassiveSkillBuilder()
+            + health(0.8) * food(Items.PORKCHOP)
+            + regeneration(0.1) * food(Items.CARROT)
+            + regeneration(0.1) * food(Items.POTATO)
+            + regeneration(0.1) * food(Items.BEETROOT)
+            + health(0.4) * food.atLeast(12),
+        MotifCardRecipes().overworld + EntityType.PIG,
+    ),
+    COW(
+        "cow", 2, "Cowia", "牛精ツォーウャ", 0x433626, 0x644B37, 0x4A3828, 0xADADAD,
+        PassiveSkillBuilder()
+            + attack(0.8) * food(Items.BEEF)
+            + StatusEffects.STRENGTH() * food(Items.WHEAT)
+            + attack(0.4) * food.atLeast(12),
+        MotifCardRecipes().overworld + EntityType.COW,
+    ),
+    CHICKEN(
+        "chicken", 2, "Chickenia", "鶏精キッケーニャ", 0xF3DE71, 0xEDEDED, 0xEDEDED, 0xD93117,
+        PassiveSkillBuilder()
+            + StatusEffects.SLOW_FALLING() * food(Items.CHICKEN) * fairyLevel.atLeast(11.0)
+            + regeneration(0.2) * food.atLeast(12),
+        MotifCardRecipes().overworld + EntityType.CHICKEN,
+    ),
+    RABBIT(
+        "rabbit", 5, "Rabbitia", "兎精ラッビーチャ", 0x9E866A, 0x8C7A64, 0x8C7962, 0x615345,
+        PassiveSkillBuilder()
+            + StatusEffects.JUMP_BOOST(1) * food(Items.RABBIT)
+            + StatusEffects.JUMP_BOOST(2) * food(Items.RABBIT) * fairyLevel.atLeast(14.0)
+            + StatusEffects.LUCK(1) * food(Items.CARROT)
+            + StatusEffects.LUCK(2) * food(Items.CARROT) * fairyLevel.atLeast(11.0)
+            + luck(0.5) * food.atLeast(12),
+        MotifCardRecipes().overworld + EntityType.RABBIT,
+    ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
         PassiveSkillBuilder() + experience(1.0) * level.atMost(29),
@@ -196,12 +231,58 @@ enum class MotifCard(
             + StatusEffects.SLOWNESS() * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().nether + EntityType.WITHER,
     ),
+    MUSHROOM(
+        "mushroom", 3, "Mushroomia", "茸精ムシュローミャ", 0xDEDBD1, 0xC7C2AF, 0xC7C1AF, 0x8A836E,
+        PassiveSkillBuilder()
+            + health(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
+            + regeneration(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
+            + mana(1.0),
+        MotifCardRecipes().overworld.nether,
+    ),
+    RED_MUSHROOM(
+        "red_mushroom", 3, "Rede Mushroomia", "赤茸精レーデムシュローミャ", 0xE6DBA8, 0xFF0A0A, 0xFF0A0A, 0xBFD7D9,
+        PassiveSkillBuilder()
+            + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
+            + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
+            + health(0.2) * food.atLeast(12),
+        MotifCardRecipes().overworld.nether + Blocks.RED_MUSHROOM + Items.RED_MUSHROOM,
+    ),
+    BROWN_MUSHROOM(
+        "brown_mushroom", 3, "Browne Mushroomia", "茶茸精ブロウネムシュローミャ", 0xDEB6A2, 0xF0AD8B, 0xC28C70, 0xDE9571,
+        PassiveSkillBuilder()
+            + regeneration(1.0) * food(Items.BROWN_MUSHROOM)
+            + regeneration(0.2) * food.atLeast(12),
+        MotifCardRecipes().overworld.nether + Blocks.BROWN_MUSHROOM + Items.BROWN_MUSHROOM,
+    ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
         PassiveSkillBuilder()
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT)
             + regeneration(0.1) * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.CARROTS + Items.CARROT,
+    ),
+    POTATO(
+        "potato", 4, "Potatia", "芋精ポターチャ", 0xEAC278, 0xE7B456, 0xE7B456, 0x248420,
+        PassiveSkillBuilder()
+            + StatusEffects.STRENGTH(1) * food(Items.POTATO)
+            + StatusEffects.STRENGTH(2) * food(Items.POTATO) * fairyLevel.atLeast(14.0)
+            + regeneration(0.1) * food.atLeast(12),
+        MotifCardRecipes().overworld + Blocks.POTATOES + Items.POTATO,
+    ),
+    MELON(
+        "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
+        PassiveSkillBuilder()
+            + experience(0.2) * level.atMost(29) * food(Items.MELON_SLICE)
+            + regeneration(0.4) * food(Items.MELON_SLICE)
+            + regeneration(0.4) * food.atLeast(12),
+        MotifCardRecipes().common(ConventionalBiomeTags.JUNGLE) + Blocks.MELON + Items.MELON_SLICE,
+    ),
+    APPLE(
+        "apple", 4, "Applia", "林檎精アップーリャ", 0xFF755D, 0xFF564E, 0xFF0000, 0x01A900,
+        PassiveSkillBuilder()
+            + experience(0.6) * level.atMost(29) * food(Items.APPLE)
+            + regeneration(0.4) * food.atLeast(12),
+        MotifCardRecipes().overworld + Items.APPLE,
     ),
     WOOD(
         "wood", 2, "Woodia", "木精ウォージャ", 0xE7C697, 0xAD8232, 0xAD8232, 0x8B591C,
@@ -224,6 +305,19 @@ enum class MotifCard(
         PassiveSkillBuilder() + health(0.8) + luck(0.4),
         MotifCardRecipes() + Blocks.MAGENTA_GLAZED_TERRACOTTA,
     ),
+    CHEST(
+        "chest", 2, "Chestia", "箱精ケスチャ", 0xD6982D, 0xB3822E, 0xB3822E, 0x42392C,
+        PassiveSkillBuilder()
+            + collection(1.5) * indoor,
+        MotifCardRecipes() + Blocks.CHEST,
+    ),
+    HOPPER(
+        "hopper", 4, "Hopperia", "漏斗精ホッペーリャ", 0xFFFFFF, 0x797979, 0x646464, 0x5A5A5A,
+        PassiveSkillBuilder()
+            + collection(0.6)
+            + collection(0.6) * indoor,
+        MotifCardRecipes() + Blocks.HOPPER,
+    ),
     BEACON(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
         PassiveSkillBuilder()
@@ -245,6 +339,11 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + StatusEffects.SPEED(2)
             + speed(0.5) * fairyLevel.atLeast(16.0),
+        MotifCardRecipes().always,
+    ),
+    MAGNETISM(
+        "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
+        PassiveSkillBuilder() + collection(1.0),
         MotifCardRecipes().always,
     ),
     GRAVITY(
