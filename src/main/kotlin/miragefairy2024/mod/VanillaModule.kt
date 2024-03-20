@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.registerDebugItem
 import miragefairy2024.util.registerTagGeneration
+import miragefairy2024.util.writeAction
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.item.Items
@@ -39,15 +40,18 @@ fun initVanillaModule() {
     Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
-    registerDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, _, _, _ ->
+    registerDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
+        if (!world.isClient) return@registerDebugItem
         val tags = world.registryManager.get(RegistryKeys.BIOME).streamTags().toList()
+        val sb = StringBuilder()
         tags.sortedBy { it.id }.forEach { tag ->
-            println(tag.id)
+            sb.append("${tag.id}\n")
             val biomes = world.registryManager.get(RegistryKeys.BIOME).getEntryList(tag).getOrElse { listOf() }.toList()
             biomes.sortedBy { it.key.get().value }.forEach { biome ->
-                println("  " + biome.key.get().value)
+                sb.append("  ${biome.key.get().value}\n")
             }
         }
+        writeAction(player, "dump_biome_tags.txt", sb.toString())
     }
 
 }
