@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
@@ -20,6 +21,9 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.registerDebugItem
+import miragefairy2024.util.writeAction
+import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
@@ -461,5 +465,39 @@ fun initMotif() {
         card.recipes.recipes.forEach {
             it(card)
         }
+    }
+
+    registerDebugItem("dump_fairy_motifs", Items.STRING, 0xF200FF) { world, player, _, _ ->
+        if (!world.isClient) return@registerDebugItem
+        val sb = StringBuilder()
+        motifRegistry.sortedBy { if (it is MotifCard) it.ordinal else 99999999 }.forEach { motif ->
+            sb.append("|${motif.displayName.string}|${motif.rare}|")
+            motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
+                fun <T> f(specification: PassiveSkillSpecification<T>) {
+                    if (index > 0) sb.append("&br;")
+                    sb.append(specification.effect.getText(specification.valueProvider(motif.rare.toDouble())).string)
+                }
+                f(specification)
+            }
+            sb.append("|")
+            motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
+                fun <T> f(specification: PassiveSkillSpecification<T>) {
+                    if (index > 0) sb.append("&br;")
+                    sb.append(specification.effect.getText(specification.valueProvider(10.0)).string)
+                }
+                f(specification)
+            }
+            sb.append("|")
+            motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
+                fun <T> f(specification: PassiveSkillSpecification<T>) {
+                    if (index > 0) sb.append("&br;")
+                    sb.append(if (specification.conditions.isNotEmpty()) "[" + specification.conditions.map { it.text.string }.join(",") + "]" else "　")
+                }
+                f(specification)
+            }
+            sb.append("|")
+            sb.append("\n")
+        }
+        writeAction(player, "dump_fairy_motifs.txt", Emoji.entries.fold(sb.toString()) { s, e -> s.replace(e.charCode, e.string) })
     }
 }
