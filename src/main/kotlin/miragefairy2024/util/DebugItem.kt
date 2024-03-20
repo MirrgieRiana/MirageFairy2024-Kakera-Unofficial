@@ -13,6 +13,8 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
+import java.io.File
+import java.io.IOException
 
 fun registerDebugItem(path: String, icon: Item, color: Int, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
     val item = object : Item(Settings()) {
@@ -26,4 +28,15 @@ fun registerDebugItem(path: String, icon: Item, color: Int, action: (World, Play
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
     item.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(icon))
     item.registerColorProvider { _, _ -> color }
+}
+
+fun writeAction(player: PlayerEntity, fileName: String, text: String) {
+    val file = File("debug").resolve(fileName)
+    player.sendMessage(text { "Saved to "() + file() }, false)
+    when {
+        file.parentFile.isDirectory -> Unit
+        file.parentFile.exists() -> throw IOException("Failed to create directory: $file")
+        !file.parentFile.mkdirs() -> throw IOException("Failed to create directory: $file")
+    }
+    file.writeText(text)
 }
