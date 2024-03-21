@@ -92,7 +92,7 @@ enum class MotifCard(
         "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
         PassiveSkillBuilder()
             + StatusEffects.STRENGTH(2)
-            + attack(0.5)
+            + overall.attack(0.5)
             + StatusEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
             + StatusEffects.UNLUCK(3), // TODO MOBドロップを減らす効果
         MotifCardRecipes().end + BlockMaterialCard.LOCAL_VACUUM_DECAY.block,
@@ -100,21 +100,23 @@ enum class MotifCard(
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
         PassiveSkillBuilder()
-            + attack(2.0) * overworld * daytime * fine * skyVisible
+            + melee.attack(2.0) * overworld * daytime * fine * skyVisible
             + regeneration(1.0) * overworld * daytime * fine * skyVisible,
         MotifCardRecipes().overworld,
     ),
     FIRE(
         "fire", 2, "Firia", "火精フィーリャ", 0xFF6C01, 0xF9DFA4, 0xFF7324, 0xFF4000,
         PassiveSkillBuilder()
-            + attack(1.5) * onFire
+            + overall.attack(1.5) * onFire
+            + fire.defence(5.0) * onFire
             + ignition * health.atLeast(6.0),
         MotifCardRecipes().nether + Blocks.FIRE,
     ),
     WATER(
         "water", 1, "Wateria", "水精ワテーリャ", 0x5469F2, 0x5985FF, 0x172AD3, 0x2D40F4,
         PassiveSkillBuilder()
-            + health(0.5) * underwater
+            + overall.attack(0.5) * underwater
+            + overall.defence(0.5) * underwater
             + regeneration(1.0) * underwater, // TODO ネザー以外で消火効果
         MotifCardRecipes().overworld + Blocks.WATER,
     ),
@@ -128,8 +130,7 @@ enum class MotifCard(
     STONE(
         "stone", 2, "Stonia", "石精ストーニャ", 0x333333, 0x8F8F8F, 0x686868, 0x747474,
         PassiveSkillBuilder()
-            + health(0.6)
-            + attack(0.4)
+            + overall.defence(1.0)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
             + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
         MotifCardRecipes().overworld + Blocks.STONE,
@@ -138,7 +139,7 @@ enum class MotifCard(
         "copper", 3, "Copperia", "銅精ツォッペーリャ", 0xF69D7F, 0xF77653, 0xF77653, 0x5DC09A,
         PassiveSkillBuilder()
             + luck(0.6)
-            + health(0.4)
+            + overall.defence(0.6)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
             + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.COPPER_BLOCK + Items.COPPER_INGOT,
@@ -146,8 +147,8 @@ enum class MotifCard(
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
         PassiveSkillBuilder()
-            + attack(0.6)
-            + health(0.4)
+            + melee.attack(0.6)
+            + melee.defence(1.0)
             + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
             + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.IRON_BLOCK + Items.IRON_INGOT,
@@ -156,7 +157,7 @@ enum class MotifCard(
         "gold", 6, "Goldia", "金精ゴルジャ", 0xEFE642, 0xF4CC17, 0xF4CC17, 0xFDB61E,
         PassiveSkillBuilder()
             + luck(0.8)
-            + health(0.2)
+            + magic.defence(1.0)
             + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
             + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().overworld.nether + Blocks.GOLD_BLOCK + Items.GOLD_INGOT,
@@ -164,7 +165,7 @@ enum class MotifCard(
     NETHERITE(
         "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
         PassiveSkillBuilder()
-            + attack(0.6)
+            + melee.attack(0.6)
             + luck(0.4)
             + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
             + StatusEffects.STRENGTH(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
@@ -174,7 +175,7 @@ enum class MotifCard(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
         PassiveSkillBuilder()
             + luck(0.8)
-            + attack(0.2)
+            + melee.attack(0.2)
             + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
             + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().overworld + Blocks.DIAMOND_BLOCK + Items.DIAMOND,
@@ -186,22 +187,22 @@ enum class MotifCard(
             + regeneration(0.1) * food(Items.CARROT)
             + regeneration(0.1) * food(Items.POTATO)
             + regeneration(0.1) * food(Items.BEETROOT)
-            + health(0.4) * food.atLeast(12),
+            + melee.defence(0.6) * food.atLeast(12),
         MotifCardRecipes().overworld + EntityType.PIG,
     ),
     COW(
         "cow", 2, "Cowia", "牛精ツォーウャ", 0x433626, 0x644B37, 0x4A3828, 0xADADAD,
         PassiveSkillBuilder()
-            + attack(0.8) * food(Items.BEEF)
+            + melee.attack(0.8) * food(Items.BEEF)
             + StatusEffects.STRENGTH() * food(Items.WHEAT)
-            + attack(0.4) * food.atLeast(12),
+            + melee.attack(0.4) * food.atLeast(12),
         MotifCardRecipes().overworld + EntityType.COW,
     ),
     CHICKEN(
         "chicken", 2, "Chickenia", "鶏精キッケーニャ", 0xF3DE71, 0xEDEDED, 0xEDEDED, 0xD93117,
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING() * food(Items.CHICKEN) * fairyLevel.atLeast(11.0)
-            + regeneration(0.2) * food.atLeast(12),
+            + fall.defence(3.0) * food.atLeast(12),
         MotifCardRecipes().overworld + EntityType.CHICKEN,
     ),
     RABBIT(
@@ -227,13 +228,11 @@ enum class MotifCard(
     WITHER(
         "wither", 8, "Witheria", "枯精ウィテーリャ", 0x181818, 0x3C3C3C, 0x141414, 0x557272,
         PassiveSkillBuilder()
-            + attack(1.0) * food.atMost(6) // TODO 遠距離
+            + shooting.attack(1.0) * food.atMost(6)
+            + shooting.defence(1.0) * food.atMost(6)
             + StatusEffects.SLOW_FALLING() * food.atMost(6)
-            + StatusEffects.JUMP_BOOST() * food.atMost(6)
-            + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(10.0)
-            + StatusEffects.SLOWNESS(2) * food.atMost(6) * fairyLevel.atMost(12.0)
-            + StatusEffects.JUMP_BOOST(3) * food.atMost(6) * fairyLevel.atLeast(14.0)
-            + StatusEffects.SLOWNESS() * food.atMost(6) * fairyLevel.atMost(16.0),
+            + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
+            + StatusEffects.SLOWNESS(3) * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().nether + EntityType.WITHER,
     ),
     MUSHROOM(
@@ -249,7 +248,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
             + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
-            + health(0.2) * food.atLeast(12),
+            + overall.defence(0.2) * food.atLeast(12),
         MotifCardRecipes().overworld.nether + Blocks.RED_MUSHROOM + Items.RED_MUSHROOM,
     ),
     BROWN_MUSHROOM(
@@ -292,9 +291,8 @@ enum class MotifCard(
     WOOD(
         "wood", 2, "Woodia", "木精ウォージャ", 0xE7C697, 0xAD8232, 0xAD8232, 0x8B591C,
         PassiveSkillBuilder()
-            + attack(0.4)
-            + health(0.2)
-            + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加
+            + shooting.attack(1.0)
+            + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
             + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
             + mending(1.0) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().overworld + BlockTags.LOGS + BlockTags.PLANKS,
@@ -307,7 +305,10 @@ enum class MotifCard(
     MAGENTA_GLAZED_TERRACOTTA(
         "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ",
         0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
-        PassiveSkillBuilder() + health(0.8) + luck(0.4),
+        PassiveSkillBuilder()
+            + shooting.attack(0.4)
+            + shooting.defence(0.4)
+            + luck(0.4),
         MotifCardRecipes() + Blocks.MAGENTA_GLAZED_TERRACOTTA,
     ),
     CHEST(
@@ -355,7 +356,7 @@ enum class MotifCard(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING()
-            + attack(0.5) * fairyLevel.atLeast(16.0), // TODO 射撃攻撃力
+            + overall.attack(0.8) * fairyLevel.atLeast(16.0),
         MotifCardRecipes() + Items.APPLE,
     ),
     ANTI_ENTROPY(
@@ -444,7 +445,6 @@ private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCon
 
 private fun mana(factor: Double) = PassiveSkillEffectCard.MANA_BOOST { it * factor * 0.02 }
 private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
-private fun attack(factor: Double) = attribute(EntityAttributes.GENERIC_ATTACK_DAMAGE, factor * 0.1)
 private fun speed(factor: Double) = attribute(EntityAttributes.GENERIC_MOVEMENT_SPEED, factor * 0.002)
 private fun health(factor: Double) = attribute(EntityAttributes.GENERIC_MAX_HEALTH, factor * 0.4)
 private fun luck(factor: Double) = attribute(EntityAttributes.GENERIC_LUCK, factor * 0.1)
