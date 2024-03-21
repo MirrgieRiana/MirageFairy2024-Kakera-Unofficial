@@ -7,6 +7,7 @@ import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.ElementPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.EntityAttributePassiveSkillEffect
 import miragefairy2024.mod.passiveskill.IntComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.ItemFoodIngredientPassiveSkillCondition
@@ -456,6 +457,15 @@ private fun experience(factor: Double) = PassiveSkillEffectCard.EXPERIENCE { it 
 private fun regeneration(factor: Double) = PassiveSkillEffectCard.REGENERATION { it * factor * 0.01 }
 private fun mending(factor: Double) = PassiveSkillEffectCard.MENDING { it * factor * 0.01 }
 private fun collection(factor: Double) = PassiveSkillEffectCard.COLLECTION { it * factor * 0.1 }
+
+private val overall get() = ElementPassiveSkillEffect.Elements.OVERALL
+private val melee get() = ElementPassiveSkillEffect.Elements.MELEE
+private val shooting get() = ElementPassiveSkillEffect.Elements.SHOOTING
+private val magic get() = ElementPassiveSkillEffect.Elements.MAGIC
+private val fire get() = ElementPassiveSkillEffect.Elements.FIRE
+private val fall get() = ElementPassiveSkillEffect.Elements.FALL
+private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
+private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
 
 
 fun initMotif() {
