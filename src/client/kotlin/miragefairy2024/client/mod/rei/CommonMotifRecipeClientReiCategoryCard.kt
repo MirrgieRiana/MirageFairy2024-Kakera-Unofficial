@@ -8,6 +8,9 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import miragefairy2024.mod.MIRAGE_FLOUR_TAG
+import miragefairy2024.mod.fairy.AlwaysCommonMotifRecipe
+import miragefairy2024.mod.fairy.BiomeCommonMotifRecipe
+import miragefairy2024.mod.fairy.BiomeTagCommonMotifRecipe
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
@@ -26,7 +29,13 @@ import net.minecraft.text.Text
 
 object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>(CommonMotifRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        COMMON_MOTIF_RECIPES.sortedBy { it.biome?.id?.string }.forEach { recipe ->
+        COMMON_MOTIF_RECIPES.sortedBy {
+            when (it) {
+                is AlwaysCommonMotifRecipe -> "always:"
+                is BiomeCommonMotifRecipe -> "biome:" + it.biome.value.string
+                is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.id.string
+            }
+        }.forEach { recipe ->
             registry.add(CommonMotifRecipeReiCategoryCard.Display(recipe))
         }
     }
@@ -41,11 +50,18 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             val p = bounds.location + Point(5, 5)
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createLabel(p + Point(0, 5), text { display.recipe.biome?.let { it.id.path() } ?: COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() })
+                Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
+                    is AlwaysCommonMotifRecipe -> COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION()
+                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toTranslationKey("biome")) }
+                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.id.path() }
+                })
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
-                        val biome = display.recipe.biome
-                        if (biome != null) it.tooltip(text { biome.id.string() }) else it
+                        when (val recipe = display.recipe) {
+                            is AlwaysCommonMotifRecipe -> it
+                            is BiomeCommonMotifRecipe -> it
+                            is BiomeTagCommonMotifRecipe -> it.tooltip(text { recipe.biomeTag.id.string() })
+                        }
                     }
                     .noShadow()
                     .leftAligned(),

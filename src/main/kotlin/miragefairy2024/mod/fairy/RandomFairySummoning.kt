@@ -198,7 +198,13 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
 fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
     val biome = player.world.getBiome(player.blockPos)
-    return COMMON_MOTIF_RECIPES.filter { it.biome == null || biome.isIn(it.biome) }.map { it.motif }.toSet()
+    return COMMON_MOTIF_RECIPES.filter {
+        when (it) {
+            is AlwaysCommonMotifRecipe -> true
+            is BiomeCommonMotifRecipe -> biome.matchesKey(it.biome)
+            is BiomeTagCommonMotifRecipe -> biome.isIn(it.biomeTag)
+        }
+    }.map { it.motif }.toSet()
 }
 
 class MotifChance(val motif: Motif, val rate: Double)

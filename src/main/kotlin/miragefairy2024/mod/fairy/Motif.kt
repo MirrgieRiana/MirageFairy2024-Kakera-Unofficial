@@ -44,6 +44,7 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
+import net.minecraft.world.biome.BiomeKeys
 
 val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -385,7 +386,9 @@ class MotifCardRecipes {
     }
 }
 
-private fun MotifCardRecipes.common(biome: TagKey<Biome>? = null) = this.onInit { COMMON_MOTIF_RECIPES += CommonMotifRecipe(it, biome) }
+private fun MotifCardRecipes.common() = this.onInit { COMMON_MOTIF_RECIPES += AlwaysCommonMotifRecipe(it) }
+private fun MotifCardRecipes.common(biome: RegistryKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
+private fun MotifCardRecipes.common(biomeTag: TagKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeTagCommonMotifRecipe(it, biomeTag) }
 private val MotifCardRecipes.always get() = this.common()
 private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags.IN_OVERWORLD)
 private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IN_NETHER)
