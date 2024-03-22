@@ -317,7 +317,7 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
     enum class Elements(path: String, enName: String, jaName: String, private val predicate: (DamageSource) -> Boolean) : Element {
         OVERALL("overall", "Overall", "全体", { true }),
         MELEE("melee", "Melee", "近接", { it.isOf(DamageTypes.PLAYER_ATTACK) || it.isOf(DamageTypes.MOB_ATTACK) || it.isOf(DamageTypes.MOB_ATTACK_NO_AGGRO) }),
-        SHOOTING("shooting", "Shooting", "射撃", { it.isIn(DamageTypeTags.IS_PROJECTILE) }),
+        SHOOTING("shooting", "Shooting", "射撃", { it.isIn(DamageTypeTags.IS_PROJECTILE) && !it.isIn(DamageTypeTags.BYPASSES_ARMOR) }),
         MAGIC("magic", "Magic", "魔法", { it.isIn(DamageTypeTags.BYPASSES_ARMOR) }),
         FIRE("fire", "Fire", "火属性", { it.isIn(DamageTypeTags.IS_FIRE) }),
         FALL("fall", "Fall", "落下", { it.isIn(DamageTypeTags.IS_FALL) }),
