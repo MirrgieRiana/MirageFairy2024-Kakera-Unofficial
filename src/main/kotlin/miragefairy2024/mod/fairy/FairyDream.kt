@@ -31,7 +31,7 @@ fun initFairyDream() {
         player.fairyDreamContainer.clear()
         player.sendMessage(text { "Cleared fairy dream"() }, true)
     }
-    registerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000FF) { world, player, hand, _ ->
+    registerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
         if (world.isClient) return@registerDebugItem
         if (player !is ServerPlayerEntity) return@registerDebugItem
 
