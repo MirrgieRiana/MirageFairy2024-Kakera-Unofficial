@@ -430,6 +430,8 @@ private val night get() = SimplePassiveSkillConditionCard.NIGHT
 private val underwater get() = SimplePassiveSkillConditionCard.UNDERWATER
 private val inTheAir get() = SimplePassiveSkillConditionCard.IN_THE_AIR
 private val onFire get() = SimplePassiveSkillConditionCard.ON_FIRE
+private val inNether get() = SimplePassiveSkillConditionCard.IN_NETHER
+private val notInNether get() = SimplePassiveSkillConditionCard.NOT_IN_NETHER
 
 private fun food(item: Item) = ItemFoodIngredientPassiveSkillCondition(item)
 private fun food(category: FoodIngredientCategoryCard) = CategoryFoodIngredientPassiveSkillCondition(category)

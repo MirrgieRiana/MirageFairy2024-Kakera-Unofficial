@@ -15,6 +15,7 @@ import miragefairy2024.util.orEmpty
 import miragefairy2024.util.removeTrailingZeros
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.FluidTags
 import net.minecraft.text.Text
@@ -53,6 +54,8 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     UNDERWATER("underwater", "Underwater", "水中", { it.player.world.getBlockState(it.player.eyeBlockPos).fluidState.isIn(FluidTags.WATER) }),
     IN_THE_AIR("in_the_air", "In the Air", "空中", { !it.player.isOnGround }),
     ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
+    IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
+    NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
