@@ -55,6 +55,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
         val IGNITION = +IgnitionPassiveSkillEffect
         val EXPERIENCE = +ExperiencePassiveSkillEffect
         val REGENERATION = +RegenerationPassiveSkillEffect
+        val HUNGER = +HungerPassiveSkillEffect
         val MENDING = +MendingPassiveSkillEffect
         val COLLECTION = +CollectionPassiveSkillEffect
         val ELEMENT = +ElementPassiveSkillEffect
@@ -213,6 +214,19 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
                 context.player.heal(newValue.toFloat())
             }
         }
+    }
+
+    override fun init() {
+        translation.enJa()
+    }
+}
+
+object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
+    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Hunger: %s/s", "空腹: %s/秒")
+    override fun getText(value: Double) = text { translation(-value formatAs "%+.3f") }
+    override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
+        if (newValue <= 0.0) return
+        context.player.addExhaustion(newValue.toFloat() * 4F)
     }
 
     override fun init() {
