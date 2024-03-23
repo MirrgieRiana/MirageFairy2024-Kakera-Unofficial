@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
-import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
@@ -15,6 +14,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillStatus
 import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
+import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -67,10 +67,14 @@ private val LEVEL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.level"
 private val CONDENSATION_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation" }, "Condensation", "凝縮数")
 private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
+val fairiesItemGroupCard = ItemGroupCard(
+    Identifier(MirageFairy2024.modId, "fairies"), "Fairies", "妖精",
+) { FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) } }
+
 fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.entrySet.sortedBy { it.key.value }.map {
                 val itemStack = card.item.createItemStack()
                 itemStack.setFairyMotif(it.value)
@@ -125,6 +129,8 @@ fun initFairyItem() {
     LEVEL_TRANSLATION.enJa()
     CONDENSATION_TRANSLATION.enJa()
     CONDENSATION_RECIPE_TRANSLATION.enJa()
+
+    fairiesItemGroupCard.init()
 }
 
 private fun createFairyModel() = Model {
