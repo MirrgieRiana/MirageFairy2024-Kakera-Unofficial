@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairy
 
+import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
@@ -40,10 +41,11 @@ fun initFairyDream() {
         val motif = fairyItemStack.getFairyMotif() ?: return@registerDebugItem
 
         if (!player.isSneaking) {
-            player.sendMessage(text { "${player.fairyDreamContainer[motif]}"() })
-        } else {
             player.fairyDreamContainer[motif] = true
             GainFairyDreamChannel.sendToClient(player, motif)
+        } else {
+            player.fairyDreamContainer[motif] = false
+            FairyDreamContainerExtraPlayerDataCategory.sync(player)
         }
     }
 
