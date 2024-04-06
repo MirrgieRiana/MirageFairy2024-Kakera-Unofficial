@@ -343,7 +343,7 @@ class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
 class IncisedHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
     override fun hasRandomTicks(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
-        if (random.nextInt(32) == 0) {
+        if (random.nextInt(100) == 0) {
             world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultState.with(FACING, state.get(FACING)), Block.NOTIFY_ALL)
         }
     }
@@ -370,7 +370,7 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
 
         // 生産
         val fortune = EnchantmentHelper.getLevel(Enchantments.FORTUNE, toolItemStack)
-        drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + fortune) // ハイメヴィスカの樹液
+        drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.FAIRY_PLASTIC.item, 0.01 + 0.02 * fortune) // 妖精のプラスチック
 
         // エフェクト
