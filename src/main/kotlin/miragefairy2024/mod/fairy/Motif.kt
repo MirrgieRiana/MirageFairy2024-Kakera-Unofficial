@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
@@ -420,8 +421,8 @@ enum class MotifCard(
         "haimeviska", 3, "Haimeviskia", "精樹精ハイメヴィスキャ", 0x8A4C16, 0xB85CC4, 0x3E5918, 0x3C7A4D,
         PassiveSkillBuilder()
             + mana(0.6)
-            + experience(0.3) * level.atMost(29)
-            + experience(0.1) * level.atMost(39),
+            + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
+            + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item),
         MotifCardRecipes().overworld + HaimeviskaBlockCard.SAPLING.block + HaimeviskaBlockCard.LOG.block,
     ),
     SUGAR(
