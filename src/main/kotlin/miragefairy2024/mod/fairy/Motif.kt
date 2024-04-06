@@ -321,7 +321,8 @@ enum class MotifCard(
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
         PassiveSkillBuilder()
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT)
+            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
+            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT) * fairyLevel.atLeast(10.0)
             + regeneration(0.1) * fairyLevel.atLeast(10.0),
         MotifCardRecipes().overworld + Blocks.CARROTS + Items.CARROT,
     ),
