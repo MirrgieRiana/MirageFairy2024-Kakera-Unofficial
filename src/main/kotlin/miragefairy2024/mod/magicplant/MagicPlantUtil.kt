@@ -10,8 +10,10 @@ import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerTagGeneration
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
+import net.minecraft.registry.tag.BlockTags
 
 fun MagicPlantCard<*, *>.initMagicPlant() {
 
@@ -42,6 +44,7 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
 
     // 性質
     //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
+    block.registerTagGeneration { BlockTags.MAINTAINS_FARMLAND }
 
     // レシピ
     item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
