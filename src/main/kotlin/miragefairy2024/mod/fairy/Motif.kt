@@ -443,7 +443,7 @@ enum class MotifCard(
         MotifCardRecipes() + Items.SHIELD,
     ),
     ARROW(
-        "arrow", 3, "Arrowia", "矢精アッローウャ", 0xAD771F, 0x424242, 0x424242, 0xF2F2F2,
+        "arrow", 3, "Arrowia", "矢精アッローウャ", 0xAD771F, 0xF2F2F2, 0xF2F2F2, 0x424242,
         PassiveSkillBuilder() + shooting.attack(1.2),
         MotifCardRecipes() + Items.ARROW,
     ),
