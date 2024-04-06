@@ -22,6 +22,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
+import java.time.Instant
 
 fun initPassiveSkillConditions() {
     SimplePassiveSkillConditionCard.entries.forEach { card ->
@@ -116,12 +117,22 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveS
     }
 
     override val text get() = translation(item.name)
-    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
+        if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item)) return false
+        val time = context.player.lastFood.time ?: return false
+        val now = Instant.now()
+        return time in now.minusSeconds(3600 * 25)..now
+    }
 }
 
 class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngredientCategory) : PassiveSkillCondition {
     override val text get() = ItemFoodIngredientPassiveSkillCondition.translation(category.text)
-    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient category
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
+        if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient category)) return false
+        val time = context.player.lastFood.time ?: return false
+        val now = Instant.now()
+        return time in now.minusSeconds(3600 * 25)..now
+    }
 }
 
 

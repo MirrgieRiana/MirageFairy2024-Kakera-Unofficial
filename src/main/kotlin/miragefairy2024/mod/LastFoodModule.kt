@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.EatFoodCallback
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
+import miragefairy2024.util.long
 import miragefairy2024.util.register
 import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.world.GameRules
+import java.time.Instant
 
 fun initLastFoodModule() {
 
@@ -28,6 +30,7 @@ fun initLastFoodModule() {
         entity as ServerPlayerEntity
         if (!stack.isFood) return@register
         entity.lastFood.itemStack = stack.copy()
+        entity.lastFood.time = Instant.now()
         LastFoodExtraPlayerDataCategory.sync(entity)
     }
 
@@ -38,6 +41,7 @@ fun initLastFoodModule() {
         if (entity.isSpectator) return@register
         if (entity.world.gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
         entity.lastFood.itemStack = null
+        entity.lastFood.time = null
         LastFoodExtraPlayerDataCategory.sync(entity)
     }
 
@@ -53,17 +57,19 @@ object LastFoodExtraPlayerDataCategory : ExtraPlayerDataCategory<LastFood> {
         override fun fromNbt(nbt: NbtCompound): LastFood {
             val data = LastFood()
             data.itemStack = nbt.wrapper["ItemStack"].compound.get()?.toItemStack()
+            data.time = nbt.wrapper["Time"].long.get()?.let { Instant.ofEpochMilli(it) }
             return data
         }
 
         override fun toNbt(data: LastFood): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["ItemStack"].compound.set(data.itemStack?.toNbt())
+            nbt.wrapper["Time"].long.set(data.time?.toEpochMilli())
             return nbt
         }
     }
 }
 
-class LastFood(var itemStack: ItemStack? = null)
+class LastFood(var itemStack: ItemStack? = null, var time: Instant? = null)
 
 val PlayerEntity.lastFood get() = this.extraPlayerDataContainer.getOrInit(LastFoodExtraPlayerDataCategory)
