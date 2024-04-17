@@ -62,11 +62,11 @@ interface Motif {
     val backColor: Int
     val hairColor: Int
     val rare: Int
+    val parents: List<Motif>
     val passiveSkillSpecifications: List<PassiveSkillSpecification<*>>
 }
 
 
-// TODO 妖精の系統関係
 enum class MotifCard(
     path: String,
     override val rare: Int,
@@ -76,16 +76,19 @@ enum class MotifCard(
     override val frontColor: Int,
     override val backColor: Int,
     override val hairColor: Int,
+    private val parentMotifs: ParentMotifs,
     passiveSkillBuilder: PassiveSkillBuilder,
     val recipes: MotifCardRecipes,
 ) : Motif {
     AIR(
         "air", 0, "Airia", "空気精アイリャ", 0xFFBE80, 0xDEFFFF, 0xDEFFFF, 0xB0FFFF,
+        ParentMotifs(),
         PassiveSkillBuilder() + speed(1.0),
         MotifCardRecipes().always + Blocks.AIR,
     ),
     LIGHT(
         "light", 3, "Lightia", "光精リグチャ", 0xFFFFD8, 0xFFFFD8, 0xFFFFC5, 0xFFFF00,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + speed(0.4) * light.atLeast(15)
             + speed(0.4) * light.atLeast(10)
@@ -94,6 +97,7 @@ enum class MotifCard(
     ),
     VACUUM_DECAY(
         "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.STRENGTH(2)
             + overall.attack(0.5)
@@ -103,6 +107,7 @@ enum class MotifCard(
     ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(2.0) * overworld * daytime * fine * skyVisible
             + regeneration(1.0) * overworld * daytime * fine * skyVisible,
@@ -110,6 +115,7 @@ enum class MotifCard(
     ),
     FIRE(
         "fire", 2, "Firia", "火精フィーリャ", 0xFF6C01, 0xF9DFA4, 0xFF7324, 0xFF4000,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + overall.attack(1.5) * onFire
             + fire.defence(5.0) * onFire
@@ -118,6 +124,7 @@ enum class MotifCard(
     ),
     WATER(
         "water", 1, "Wateria", "水精ワテーリャ", 0x5469F2, 0x5985FF, 0x172AD3, 0x2D40F4,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + overall.attack(0.5) * underwater
             + overall.defence(0.5) * underwater
@@ -126,6 +133,7 @@ enum class MotifCard(
     ),
     DIRT(
         "dirt", 1, "Dirtia", "土精ディルチャ", 0xB87440, 0xB9855C, 0x593D29, 0x914A18,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + health(1.0) * overworld
             + regeneration(0.2) * overworld,
@@ -133,6 +141,7 @@ enum class MotifCard(
     ),
     STONE(
         "stone", 2, "Stonia", "石精ストーニャ", 0x333333, 0x8F8F8F, 0x686868, 0x747474,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + overall.defence(1.0)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
@@ -141,6 +150,7 @@ enum class MotifCard(
     ),
     DRIPSTONE(
         "dripstone", 5, "Dripstonia", "鍾乳石精ドリプストーニャ", 0xB19C7E, 0xA97F6F, 0xA97F6F, 0xAD7069,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.8)
             + overall.defence(0.4),
@@ -148,6 +158,7 @@ enum class MotifCard(
     ),
     COPPER(
         "copper", 3, "Copperia", "銅精ツォッペーリャ", 0xF69D7F, 0xF77653, 0xF77653, 0x5DC09A,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + luck(0.6)
             + overall.defence(0.6)
@@ -157,6 +168,7 @@ enum class MotifCard(
     ),
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + melee.defence(1.0)
@@ -166,6 +178,7 @@ enum class MotifCard(
     ),
     GOLD(
         "gold", 6, "Goldia", "金精ゴルジャ", 0xEFE642, 0xF4CC17, 0xF4CC17, 0xFDB61E,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + luck(0.8)
             + magic.defence(1.0)
@@ -175,6 +188,7 @@ enum class MotifCard(
     ),
     NETHERITE(
         "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + luck(0.4)
@@ -184,6 +198,7 @@ enum class MotifCard(
     ),
     AMETHYST(
         "amethyst", 6, "Amethystia", "紫水晶精アメティスチャ", 0xCAA9FF, 0xA974FF, 0x9D60FF, 0xBC92FF,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.5)
             + magic.defence(0.5)
@@ -192,6 +207,7 @@ enum class MotifCard(
     ),
     DIAMOND(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + luck(0.8)
             + melee.attack(0.2)
@@ -201,12 +217,14 @@ enum class MotifCard(
     ),
     EMERALD(
         "emerald", 6, "Emeraldia", "翠玉精エメラルジャ", 0x9FF9B5, 0x81F99E, 0x17DD62, 0x008A25,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + luck(1.0),
         MotifCardRecipes() + Blocks.EMERALD_BLOCK + Items.EMERALD,
     ),
     PIG(
         "pig", 2, "Pigia", "豚精ピーギャ", 0xDB98A2, 0xF68C87, 0xC76B73, 0xDC94A1,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + health(0.8) * food(Items.PORKCHOP)
             + regeneration(0.1) * food(Items.CARROT)
@@ -217,6 +235,7 @@ enum class MotifCard(
     ),
     COW(
         "cow", 2, "Cowia", "牛精ツォーウャ", 0x433626, 0x644B37, 0x4A3828, 0xADADAD,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.8) * food(Items.BEEF)
             + StatusEffects.STRENGTH() * food(Items.WHEAT)
@@ -225,6 +244,7 @@ enum class MotifCard(
     ),
     CHICKEN(
         "chicken", 2, "Chickenia", "鶏精キッケーニャ", 0xF3DE71, 0xEDEDED, 0xEDEDED, 0xD93117,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING() * food(Items.CHICKEN) * fairyLevel.atLeast(11.0)
             + fall.defence(3.0) * food.atLeast(12),
@@ -232,6 +252,7 @@ enum class MotifCard(
     ),
     RABBIT(
         "rabbit", 5, "Rabbitia", "兎精ラッビーチャ", 0x9E866A, 0x8C7A64, 0x8C7962, 0x615345,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.JUMP_BOOST(1) * food(Items.RABBIT)
             + StatusEffects.JUMP_BOOST(2) * food(Items.RABBIT) * fairyLevel.atLeast(14.0)
@@ -242,6 +263,7 @@ enum class MotifCard(
     ),
     WOLF(
         "wolf", 4, "Wolfia", "狼精ウォルフャ", 0x827165, 0xBFBDBE, 0x9E9A96, 0x3F3E3A,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.4) * food(Items.MUTTON) // TODO 肉全般条件
             + melee.attack(0.4) * food.atLeast(12)
@@ -250,22 +272,26 @@ enum class MotifCard(
     ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
+        ParentMotifs(),
         PassiveSkillBuilder() + experience(1.0) * level.atMost(29),
         MotifCardRecipes().always + EntityType.PLAYER,
     ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
+        ParentMotifs(),
         PassiveSkillBuilder() + collection(1.2) * food.atLeast(12),
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
     ),
     PIGLIN_BRUTE(
         "piglin_brute", 7, "Pigline Brutia", "豚人畜生精ピグリーネブルーチャ", 0xEB9771, 0x403D11, 0x403D11, 0xE0B000,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(2.0) * inNether,
         MotifCardRecipes() + EntityType.PIGLIN_BRUTE,
     ),
     ZOMBIE(
         "zombie", 2, "Zombia", "硬屍精ゾンビャ", 0x2B4219, 0x00AAAA, 0x322976, 0x2B4219,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.6) * food.atMost(6)
             + melee.attack(0.6) * indoor,
@@ -273,6 +299,7 @@ enum class MotifCard(
     ),
     ROTTEN_FLESH(
         "rotten_flesh", 2, "Rottene Fleshia", "腐肉精ロッテーネフレーシャ", 0x846129, 0xBD5B2D, 0xBD5B2D, 0xBD422D,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + overall.attack(1.0) * food(Items.ROTTEN_FLESH)
             + regeneration(0.4) * food.atMost(6)
@@ -281,6 +308,7 @@ enum class MotifCard(
     ),
     SKELETON(
         "skeleton", 2, "Skeletonia", "骸骨精スケレトーニャ", 0xCACACA, 0xCFCFCF, 0xCFCFCF, 0x494949,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.6) * food.atMost(6)
             + shooting.attack(0.6) * indoor,
@@ -288,6 +316,7 @@ enum class MotifCard(
     ),
     WITHER(
         "wither", 8, "Witheria", "枯精ウィテーリャ", 0x181818, 0x3C3C3C, 0x141414, 0x557272,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0) * food.atMost(6)
             + shooting.defence(1.0) * food.atMost(6)
@@ -298,6 +327,7 @@ enum class MotifCard(
     ),
     MUSHROOM(
         "mushroom", 3, "Mushroomia", "茸精ムシュローミャ", 0xDEDBD1, 0xC7C2AF, 0xC7C1AF, 0x8A836E,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + health(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
             + regeneration(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
@@ -306,6 +336,7 @@ enum class MotifCard(
     ),
     RED_MUSHROOM(
         "red_mushroom", 3, "Rede Mushroomia", "赤茸精レーデムシュローミャ", 0xE6DBA8, 0xFF0A0A, 0xFF0A0A, 0xBFD7D9,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
             + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
@@ -314,6 +345,7 @@ enum class MotifCard(
     ),
     BROWN_MUSHROOM(
         "brown_mushroom", 3, "Browne Mushroomia", "茶茸精ブロウネムシュローミャ", 0xDEB6A2, 0xF0AD8B, 0xC28C70, 0xDE9571,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + regeneration(1.0) * food(Items.BROWN_MUSHROOM)
             + regeneration(0.2) * food.atLeast(12),
@@ -321,6 +353,7 @@ enum class MotifCard(
     ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT) * fairyLevel.atLeast(10.0)
@@ -329,6 +362,7 @@ enum class MotifCard(
     ),
     POTATO(
         "potato", 4, "Potatia", "芋精ポターチャ", 0xEAC278, 0xE7B456, 0xE7B456, 0x248420,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.STRENGTH(1) * food(Items.POTATO)
             + StatusEffects.STRENGTH(2) * food(Items.POTATO) * fairyLevel.atLeast(14.0)
@@ -337,6 +371,7 @@ enum class MotifCard(
     ),
     PUMPKIN(
         "pumpkin", 4, "Pumpkinia", "南瓜精プンプキーニャ", 0x792D0F, 0xE48A40, 0xE48A40, 0xDCBE00,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.PUMPKIN) // TODO 魔法攻撃力増加ステータス効果
             + magic.defence(0.6) * food.atLeast(12),
@@ -344,6 +379,7 @@ enum class MotifCard(
     ),
     MELON(
         "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + experience(0.2) * level.atMost(29) * food(Items.MELON_SLICE)
             + regeneration(0.4) * food(Items.MELON_SLICE)
@@ -352,6 +388,7 @@ enum class MotifCard(
     ),
     APPLE(
         "apple", 4, "Applia", "林檎精アップーリャ", 0xFF755D, 0xFF564E, 0xFF0000, 0x01A900,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + experience(0.6) * level.atMost(29) * food(Items.APPLE)
             + regeneration(0.4) * food.atLeast(12),
@@ -359,6 +396,7 @@ enum class MotifCard(
     ),
     SWEET_BERRY(
         "sweet_berry", 6, "Sweete Berria", "甘液果精スウェーテベッリャ", 0xB81D37, 0x4A070A, 0x4A070A, 0x126341,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.6) * food(Items.SWEET_BERRIES) // TODO 射撃攻撃力増加ステータス効果
             + shooting.attack(0.6) * food.atLeast(12)
@@ -367,6 +405,7 @@ enum class MotifCard(
     ),
     GLOW_BERRY(
         "glow_berry", 6, "Glowe Berria", "蛍光液果精グローウェベッリャ", 0xFFB73A, 0x8F650C, 0x8F650C, 0x00841A,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.GLOW_BERRIES) // TODO 魔法攻撃力増加ステータス効果
             + magic.attack(0.6) * food.atLeast(12)
@@ -375,12 +414,14 @@ enum class MotifCard(
     ),
     MIRAGE(
         "mirage", 5, "Miragia", "妖精ミラージャ", 0x6DE3BE, 0x43FAFA, 0x43FAFA, 0x00F5F5,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + mana(1.0),
         MotifCardRecipes().overworld + MirageFlowerCard.block,
     ),
     CACTUS(
         "cactus", 3, "Cactusia", "仙人掌精ツァツトゥーシャ", 0x008200, 0xB0FFAC, 0x00E100, 0x010000,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.6)
             + shooting.attack(0.6) * outdoor
@@ -389,6 +430,7 @@ enum class MotifCard(
     ),
     DEAD_BUSH(
         "dead_bush", 3, "Deade Bushia", "枯木精デアデブーシャ", 0xB38247, 0xA17743, 0xA17743, 0x6E583F,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0)
             + shooting.attack(0.4) * outdoor,
@@ -396,6 +438,7 @@ enum class MotifCard(
     ),
     WOOD(
         "wood", 2, "Woodia", "木精ウォージャ", 0xE7C697, 0xAD8232, 0xAD8232, 0x8B591C,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0)
             + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
@@ -405,6 +448,7 @@ enum class MotifCard(
     ),
     SPRUCE(
         "spruce", 4, "Sprucia", "松精スプルーツァ", 0x795C36, 0x583E1F, 0x23160A, 0x4C784C,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + health(0.6),
@@ -412,6 +456,7 @@ enum class MotifCard(
     ),
     DARK_OAK(
         "dark_oak", 5, "Darke Oakia", "濃樫精ダルケオアキャ", 0x4A361A, 0x478F1B, 0x2A5410, 0x326313,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.4)
             + health(0.6),
@@ -419,6 +464,7 @@ enum class MotifCard(
     ),
     HAIMEVISKA(
         "haimeviska", 3, "Haimeviskia", "精樹精ハイメヴィスキャ", 0x8A4C16, 0xB85CC4, 0x3E5918, 0x3C7A4D,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + mana(0.6)
             + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
@@ -427,6 +473,7 @@ enum class MotifCard(
     ),
     FOOD(
         "food", 3, "Foodia", "食物精フォージャ", 0xF0AD41, 0xB84933, 0xB84933, 0x589C2C,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + mana(1.0)
             + regeneration(0.1) * food.atLeast(12),
@@ -434,6 +481,7 @@ enum class MotifCard(
     ),
     SUGAR(
         "sugar", 2, "Sugaria", "砂糖精スガーリャ", 0xE3E3E3, 0xE3E3E3, 0xCECED8, 0xF7F7F7,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + speed(0.8) * food(Items.SUGAR)
             + speed(0.4),
@@ -441,11 +489,13 @@ enum class MotifCard(
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
+        ParentMotifs(),
         PassiveSkillBuilder() + mana(1.0), // TODO 系統指定
         MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
     SHIELD(
         "shield", 3, "Shieldia", "盾精シエルジャ", 0xFFFFFF, 0xFFC48E, 0x5A5A8E, 0xFFFFFF,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + overall.defence(0.3)
             + shooting.defence(0.8),
@@ -453,11 +503,13 @@ enum class MotifCard(
     ),
     ARROW(
         "arrow", 3, "Arrowia", "矢精アッローウャ", 0xAD771F, 0xF2F2F2, 0xF2F2F2, 0x424242,
+        ParentMotifs(),
         PassiveSkillBuilder() + shooting.attack(1.2),
         MotifCardRecipes() + Items.ARROW,
     ),
     GLASS(
         "glass", 3, "Glassia", "硝子精グラッシャ", 0xFFFFFF, 0xEFF5FF, 0xE8EDF5, 0xADE0E9,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.INVISIBILITY() * health.atMost(1.0) * notInNether
             + StatusEffects.INVISIBILITY() * fairyLevel.atLeast(12.0)
@@ -468,6 +520,7 @@ enum class MotifCard(
     MAGENTA_GLAZED_TERRACOTTA(
         "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ",
         0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + shooting.defence(0.4)
@@ -476,6 +529,7 @@ enum class MotifCard(
     ),
     PURPUR(
         "purpur", 8, "Purpuria", "紫珀精プルプーリャ", 0xCBA8CB, 0xC08AC0, 0xC08AC0, 0xBC68BB,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + collection(0.5)
             + magic.attack(0.2)
@@ -484,12 +538,14 @@ enum class MotifCard(
     ),
     CHEST(
         "chest", 2, "Chestia", "箱精ケスチャ", 0xD6982D, 0xB3822E, 0xB3822E, 0x42392C,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + collection(1.5) * indoor,
         MotifCardRecipes() + Blocks.CHEST,
     ),
     HOPPER(
         "hopper", 4, "Hopperia", "漏斗精ホッペーリャ", 0xFFFFFF, 0x797979, 0x646464, 0x5A5A5A,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + collection(0.6)
             + collection(0.6) * indoor,
@@ -497,6 +553,7 @@ enum class MotifCard(
     ),
     ANVIL(
         "anvil", 4, "Anvilia", "金床精アンヴィーリャ", 0xFFFFFF, 0xA9A9A9, 0x909090, 0xA86F18,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.8) * indoor
             + melee.attack(0.4),
@@ -504,6 +561,7 @@ enum class MotifCard(
     ),
     ENCHANTING_TABLE(
         "enchanting_table", 6, "Enchantinge Tablia", "付魔台精エンキャンティンゲターブリャ", 0x472F65, 0xCE2828, 0xCE2828, 0x7BFFDD,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + experience(0.6) * level.atMost(29) * indoor
             + magic.attack(0.6) * indoor,
@@ -511,6 +569,7 @@ enum class MotifCard(
     ),
     BEACON(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SPEED() * skyVisible
             + StatusEffects.RESISTANCE() * skyVisible
@@ -527,6 +586,7 @@ enum class MotifCard(
     ),
     TIME(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SPEED(2)
             + speed(0.5) * fairyLevel.atLeast(16.0),
@@ -534,11 +594,13 @@ enum class MotifCard(
     ),
     MAGNETISM(
         "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
+        ParentMotifs(),
         PassiveSkillBuilder() + collection(1.0),
         MotifCardRecipes().always,
     ),
     GRAVITY(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING()
             + overall.attack(0.8) * fairyLevel.atLeast(16.0),
@@ -546,6 +608,7 @@ enum class MotifCard(
     ),
     ANTI_ENTROPY(
         "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
+        ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.LUCK(2)
             + luck(0.5) * fairyLevel.atLeast(16.0),
@@ -556,7 +619,20 @@ enum class MotifCard(
     val identifier = Identifier(MirageFairy2024.modId, path)
     val translation = Translation({ "miragefairy2024.motif.${identifier.toTranslationKey()}" }, enName, jaName)
     override val displayName = translation()
+    override val parents get() = parentMotifs.get()
     override val passiveSkillSpecifications = passiveSkillBuilder.specifications
+}
+
+
+class ParentMotifs {
+    private val list = mutableListOf<() -> Motif>()
+    private val compiledList by lazy { list.map { it() } }
+    operator fun plus(motifGetter: () -> Motif): ParentMotifs {
+        list += motifGetter
+        return this
+    }
+
+    fun get() = compiledList
 }
 
 
@@ -656,6 +732,12 @@ private val fire get() = ElementPassiveSkillEffect.Elements.FIRE
 private val fall get() = ElementPassiveSkillEffect.Elements.FALL
 private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
 private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
+
+
+operator fun Motif.contains(child: Motif): Boolean = child == this || child.parents.any { it in this }
+
+@JvmName("nullableContains")
+operator fun Motif?.contains(child: Motif?) = this == null || child != null && child in this
 
 
 fun initMotif() {
