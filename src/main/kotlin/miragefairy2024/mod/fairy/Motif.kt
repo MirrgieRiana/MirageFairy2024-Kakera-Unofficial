@@ -425,6 +425,13 @@ enum class MotifCard(
             + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item),
         MotifCardRecipes().overworld + HaimeviskaBlockCard.SAPLING.block + HaimeviskaBlockCard.LOG.block,
     ),
+    FOOD(
+        "food", 3, "Foodia", "食物精フォージャ", 0xF0AD41, 0xB84933, 0xB84933, 0x589C2C,
+        PassiveSkillBuilder()
+            + mana(1.0)
+            + regeneration(0.1) * food.atLeast(12),
+        MotifCardRecipes(),
+    ),
     SUGAR(
         "sugar", 2, "Sugaria", "砂糖精スガーリャ", 0xE3E3E3, 0xE3E3E3, 0xCECED8, 0xF7F7F7,
         PassiveSkillBuilder()
