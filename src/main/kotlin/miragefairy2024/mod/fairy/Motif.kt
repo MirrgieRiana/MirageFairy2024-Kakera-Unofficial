@@ -332,7 +332,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + health(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
             + regeneration(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
-            + mana(1.0),
+            + mana(5.0) { MUSHROOM },
         MotifCardRecipes().overworld.nether,
     ),
     RED_MUSHROOM(
@@ -476,7 +476,7 @@ enum class MotifCard(
         "food", 3, "Foodia", "食物精フォージャ", 0xF0AD41, 0xB84933, 0xB84933, 0x589C2C,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + mana(1.0)
+            + mana(1.0) { FOOD }
             + regeneration(0.1) * food.atLeast(12),
         MotifCardRecipes(),
     ),
@@ -491,7 +491,7 @@ enum class MotifCard(
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
         ParentMotifs() + { FOOD },
-        PassiveSkillBuilder() + mana(1.0), // TODO 系統指定
+        PassiveSkillBuilder() + mana(1.0) { FOOD },
         MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
     SHIELD(
