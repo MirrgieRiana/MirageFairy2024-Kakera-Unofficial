@@ -230,7 +230,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
         val level = motif.rare.toDouble() + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0)
-        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, level, motif.passiveSkillSpecifications)
+        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, motif, level, motif.passiveSkillSpecifications)
     }
 }
 

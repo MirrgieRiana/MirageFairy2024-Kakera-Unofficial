@@ -1,6 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.fairy.Motif
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
@@ -24,7 +25,7 @@ interface PassiveSkillProvider {
 }
 
 
-class PassiveSkill(val providerId: Identifier, val level: Double, val specifications: List<PassiveSkillSpecification<*>>)
+class PassiveSkill(val providerId: Identifier, val motif: Motif?, val level: Double, val specifications: List<PassiveSkillSpecification<*>>)
 
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
