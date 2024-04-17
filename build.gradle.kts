@@ -47,6 +47,7 @@ loom {
             runDir("build/datagen")
         }
         named("client") {
+            vmArgs += listOf("-Xmx4G")
             programArgs += listOf("--username", "Player1")
         }
         named("server") {
