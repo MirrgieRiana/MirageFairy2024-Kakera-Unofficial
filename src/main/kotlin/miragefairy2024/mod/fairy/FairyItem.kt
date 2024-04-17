@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
+import miragefairy2024.mod.passiveskill.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
@@ -163,9 +164,9 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val (manaBoost, status) = if (player != null) {
             val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
-            result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
+            result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
             val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
-            Pair(result[PassiveSkillEffectCard.MANA_BOOST], status)
+            Pair(result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }, status)
         } else {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }

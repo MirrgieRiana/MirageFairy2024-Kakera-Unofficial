@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.DamageCallback
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.SoundEventCard
+import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.invoke
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
@@ -67,17 +68,32 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
     override val isPreprocessor = false
 }
 
-// TODO 条件付き魔力パッシブ
-object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<Double>("mana_boost") {
+object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
+    class Value(val map: Map<Motif?, Double>)
+
     override val isPreprocessor = true
-    val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
-    override fun getText(value: Double) = text { translation() + " "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() }
-    override val unit = 0.0
-    override fun castOrThrow(value: Any?) = value as Double
-    override fun combine(a: Double, b: Double) = a + b
-    override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) = Unit
+    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
+    private val familyTranslation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}.family" }, "%s Family", "%s系統")
+    override fun getText(value: Value): Text {
+        return value.map.map { (motif, value) ->
+            text { translation() + ": "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() + if (motif != null) " ("() + familyTranslation(motif.displayName) + ")"() else empty() }
+        }.join(text { ","() })
+    }
+
+    override val unit = Value(mapOf())
+    override fun castOrThrow(value: Any?) = value as Value
+    override fun combine(a: Value, b: Value): Value {
+        val map = a.map.toMutableMap()
+        b.map.forEach { (motif, value) ->
+            map[motif] = map.getOrElse(motif) { 0.0 } + value
+        }
+        return Value(map)
+    }
+
+    override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
     override fun init() {
         translation.enJa()
+        familyTranslation.enJa()
     }
 }
 

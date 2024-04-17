@@ -5,6 +5,7 @@ import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
+import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -34,9 +35,9 @@ fun initPassiveSkillExecution() {
 
                 // 現在発動しているパッシブスキル効果の計算
                 val result = PassiveSkillResult()
-                result.collect(passiveSkillProviders.passiveSkills, player, 0.0, true) // 先行判定
-                val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST]
-                result.collect(passiveSkillProviders.passiveSkills, player, manaBoost, false) // 後行判定
+                result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
+                val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
+                result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
 
                 // 効果
                 result.update(player)
@@ -100,12 +101,13 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     return PassiveSkillProviders(providers.toList(), passiveSkills.toList())
 }
 
-fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoost: Double, isPreprocessing: Boolean) {
+fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
     val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
+        val motif = passiveSkill.motif
         val level = passiveSkill.level
-        val mana = level * (1.0 + manaBoost)
+        val mana = level * (1.0 + manaBoostValue.map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 })
         passiveSkill.specifications.forEach { specification ->
             fun <T> f(specification: PassiveSkillSpecification<T>) {
                 if (specification.effect.isPreprocessor == isPreprocessing) {
