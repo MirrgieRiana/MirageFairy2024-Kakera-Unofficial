@@ -518,8 +518,7 @@ enum class MotifCard(
         MotifCardRecipes() + Blocks.GLASS,
     ),
     MAGENTA_GLAZED_TERRACOTTA(
-        "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ",
-        0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
+        "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ", 0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.4)
