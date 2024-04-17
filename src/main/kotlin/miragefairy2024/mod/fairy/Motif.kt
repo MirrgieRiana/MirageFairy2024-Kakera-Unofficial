@@ -124,7 +124,7 @@ enum class MotifCard(
     ),
     WATER(
         "water", 1, "Wateria", "水精ワテーリャ", 0x5469F2, 0x5985FF, 0x172AD3, 0x2D40F4,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + overall.attack(0.5) * underwater
             + overall.defence(0.5) * underwater
@@ -224,7 +224,7 @@ enum class MotifCard(
     ),
     PIG(
         "pig", 2, "Pigia", "豚精ピーギャ", 0xDB98A2, 0xF68C87, 0xC76B73, 0xDC94A1,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + health(0.8) * food(Items.PORKCHOP)
             + regeneration(0.1) * food(Items.CARROT)
@@ -235,7 +235,7 @@ enum class MotifCard(
     ),
     COW(
         "cow", 2, "Cowia", "牛精ツォーウャ", 0x433626, 0x644B37, 0x4A3828, 0xADADAD,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + melee.attack(0.8) * food(Items.BEEF)
             + StatusEffects.STRENGTH() * food(Items.WHEAT)
@@ -244,7 +244,7 @@ enum class MotifCard(
     ),
     CHICKEN(
         "chicken", 2, "Chickenia", "鶏精キッケーニャ", 0xF3DE71, 0xEDEDED, 0xEDEDED, 0xD93117,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING() * food(Items.CHICKEN) * fairyLevel.atLeast(11.0)
             + fall.defence(3.0) * food.atLeast(12),
@@ -252,7 +252,7 @@ enum class MotifCard(
     ),
     RABBIT(
         "rabbit", 5, "Rabbitia", "兎精ラッビーチャ", 0x9E866A, 0x8C7A64, 0x8C7962, 0x615345,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + StatusEffects.JUMP_BOOST(1) * food(Items.RABBIT)
             + StatusEffects.JUMP_BOOST(2) * food(Items.RABBIT) * fairyLevel.atLeast(14.0)
@@ -299,7 +299,7 @@ enum class MotifCard(
     ),
     ROTTEN_FLESH(
         "rotten_flesh", 2, "Rottene Fleshia", "腐肉精ロッテーネフレーシャ", 0x846129, 0xBD5B2D, 0xBD5B2D, 0xBD422D,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + overall.attack(1.0) * food(Items.ROTTEN_FLESH)
             + regeneration(0.4) * food.atMost(6)
@@ -327,7 +327,7 @@ enum class MotifCard(
     ),
     MUSHROOM(
         "mushroom", 3, "Mushroomia", "茸精ムシュローミャ", 0xDEDBD1, 0xC7C2AF, 0xC7C1AF, 0x8A836E,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + health(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
             + regeneration(0.2) * food(FoodIngredientCategoryCard.MUSHROOM)
@@ -336,7 +336,7 @@ enum class MotifCard(
     ),
     RED_MUSHROOM(
         "red_mushroom", 3, "Rede Mushroomia", "赤茸精レーデムシュローミャ", 0xE6DBA8, 0xFF0A0A, 0xFF0A0A, 0xBFD7D9,
-        ParentMotifs(),
+        ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
             + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
             + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
@@ -345,7 +345,7 @@ enum class MotifCard(
     ),
     BROWN_MUSHROOM(
         "brown_mushroom", 3, "Browne Mushroomia", "茶茸精ブロウネムシュローミャ", 0xDEB6A2, 0xF0AD8B, 0xC28C70, 0xDE9571,
-        ParentMotifs(),
+        ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
             + regeneration(1.0) * food(Items.BROWN_MUSHROOM)
             + regeneration(0.2) * food.atLeast(12),
@@ -353,7 +353,7 @@ enum class MotifCard(
     ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT) * fairyLevel.atLeast(10.0)
@@ -362,7 +362,7 @@ enum class MotifCard(
     ),
     POTATO(
         "potato", 4, "Potatia", "芋精ポターチャ", 0xEAC278, 0xE7B456, 0xE7B456, 0x248420,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + StatusEffects.STRENGTH(1) * food(Items.POTATO)
             + StatusEffects.STRENGTH(2) * food(Items.POTATO) * fairyLevel.atLeast(14.0)
@@ -371,7 +371,7 @@ enum class MotifCard(
     ),
     PUMPKIN(
         "pumpkin", 4, "Pumpkinia", "南瓜精プンプキーニャ", 0x792D0F, 0xE48A40, 0xE48A40, 0xDCBE00,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.PUMPKIN) // TODO 魔法攻撃力増加ステータス効果
             + magic.defence(0.6) * food.atLeast(12),
@@ -379,7 +379,7 @@ enum class MotifCard(
     ),
     MELON(
         "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + experience(0.2) * level.atMost(29) * food(Items.MELON_SLICE)
             + regeneration(0.4) * food(Items.MELON_SLICE)
@@ -388,7 +388,7 @@ enum class MotifCard(
     ),
     APPLE(
         "apple", 4, "Applia", "林檎精アップーリャ", 0xFF755D, 0xFF564E, 0xFF0000, 0x01A900,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + experience(0.6) * level.atMost(29) * food(Items.APPLE)
             + regeneration(0.4) * food.atLeast(12),
@@ -396,7 +396,7 @@ enum class MotifCard(
     ),
     SWEET_BERRY(
         "sweet_berry", 6, "Sweete Berria", "甘液果精スウェーテベッリャ", 0xB81D37, 0x4A070A, 0x4A070A, 0x126341,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + shooting.attack(0.6) * food(Items.SWEET_BERRIES) // TODO 射撃攻撃力増加ステータス効果
             + shooting.attack(0.6) * food.atLeast(12)
@@ -405,7 +405,7 @@ enum class MotifCard(
     ),
     GLOW_BERRY(
         "glow_berry", 6, "Glowe Berria", "蛍光液果精グローウェベッリャ", 0xFFB73A, 0x8F650C, 0x8F650C, 0x00841A,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.GLOW_BERRIES) // TODO 魔法攻撃力増加ステータス効果
             + magic.attack(0.6) * food.atLeast(12)
@@ -464,7 +464,7 @@ enum class MotifCard(
     ),
     HAIMEVISKA(
         "haimeviska", 3, "Haimeviskia", "精樹精ハイメヴィスキャ", 0x8A4C16, 0xB85CC4, 0x3E5918, 0x3C7A4D,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + mana(0.6)
             + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
@@ -481,7 +481,7 @@ enum class MotifCard(
     ),
     SUGAR(
         "sugar", 2, "Sugaria", "砂糖精スガーリャ", 0xE3E3E3, 0xE3E3E3, 0xCECED8, 0xF7F7F7,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + speed(0.8) * food(Items.SUGAR)
             + speed(0.4),
@@ -489,7 +489,7 @@ enum class MotifCard(
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
-        ParentMotifs(),
+        ParentMotifs() + { FOOD },
         PassiveSkillBuilder() + mana(1.0), // TODO 系統指定
         MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
