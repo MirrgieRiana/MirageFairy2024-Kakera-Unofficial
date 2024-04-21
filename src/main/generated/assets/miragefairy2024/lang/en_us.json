@@ -263,6 +263,7 @@
   "miragefairy2024.passive_skill_type.miragefairy2024.hunger": "Hunger: %s/s",
   "miragefairy2024.passive_skill_type.miragefairy2024.ignition": "Ignition",
   "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost": "Mana",
+  "miragefairy2024.passive_skill_type.miragefairy2024.mana_boost.family": "%s Family",
   "miragefairy2024.passive_skill_type.miragefairy2024.mending": "Mending: %s/s",
   "miragefairy2024.passive_skill_type.miragefairy2024.regeneration": "Regeneration: %s/s",
   "miragefairy2024.tool_material.copper_tool": "Copper Tool",
