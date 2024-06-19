@@ -18,6 +18,10 @@ The unofficial wikis currently identified are as follows:
 
 - [MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
 
+There is a Japanese database that collects official settings related to the world view.
+
+- [MirageFairy世界観データベース](https://miragefairy.github.io/MirageFairy2024/)
+
 # ドキュメンテーション
 
 MODの仕様は、公式には[CHANGELOG.md](CHANGELOG.md)上で、日本語においてのみ正式に記述されます。
@@ -27,6 +31,10 @@ MODのある時点での仕様を網羅的に記述した公式のドキュメ�
 現在確認されている非公式のWikiは以下です。
 
 - [MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
+
+世界観に関する公式設定を集積した日本語のデータベースがあります。
+
+- [MirageFairy世界観データベース](https://miragefairy.github.io/MirageFairy2024/)
 
 # License
 
