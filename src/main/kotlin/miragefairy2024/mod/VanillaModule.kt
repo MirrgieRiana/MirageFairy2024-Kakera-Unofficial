@@ -1,7 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.util.registerDebugItem
+import miragefairy2024.util.registerClientDebugItem
 import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.writeAction
 import net.minecraft.block.Block
@@ -40,8 +40,7 @@ fun initVanillaModule() {
     Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
-    registerDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
-        if (!world.isClient) return@registerDebugItem
+    registerClientDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
         val tags = world.registryManager.get(RegistryKeys.BIOME).streamTags().toList()
         val sb = StringBuilder()
         tags.sortedBy { it.id }.forEach { tag ->

@@ -6,7 +6,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.opposite
-import miragefairy2024.util.registerDebugItem
+import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -15,7 +15,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.item.Items
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -27,18 +26,14 @@ val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.miragefairy2024.fairy_drea
 fun initFairyDream() {
 
     // デバッグアイテム
-    registerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->
-        if (world.isClient) return@registerDebugItem
+    registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->
         player.fairyDreamContainer.clear()
         player.sendMessage(text { "Cleared fairy dream"() }, true)
     }
-    registerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
-        if (world.isClient) return@registerDebugItem
-        if (player !is ServerPlayerEntity) return@registerDebugItem
-
+    registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
         val fairyItemStack = player.getStackInHand(hand.opposite)
-        if (!fairyItemStack.isOf(FairyCard.item)) return@registerDebugItem
-        val motif = fairyItemStack.getFairyMotif() ?: return@registerDebugItem
+        if (!fairyItemStack.isOf(FairyCard.item)) return@registerServerDebugItem
+        val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
         if (!player.isSneaking) {
             player.fairyDreamContainer[motif] = true
