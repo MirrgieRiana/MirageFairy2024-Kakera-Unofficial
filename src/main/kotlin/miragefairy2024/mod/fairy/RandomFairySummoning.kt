@@ -6,7 +6,6 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Single
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbt
@@ -180,10 +179,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         // 上の場合、 count ≒ 1.27
         val count = condensedMotif.condensation / actualCondensation
 
-        val resultItemStack = FairyCard.item.createItemStack(world.random.randomInt(count)).also {
-            it.setFairyMotif(condensedMotif.motif)
-            it.setFairyCondensation(actualCondensation)
-        }
+        val resultItemStack = condensedMotif.motif.createFairyItemStack(condensation = actualCondensation, count = world.random.randomInt(count))
 
         // 入手
         player.obtain(resultItemStack)

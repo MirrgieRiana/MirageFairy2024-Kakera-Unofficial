@@ -16,16 +16,14 @@ import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.client.util.sendToServer
 import miragefairy2024.client.util.verticalSpace
-import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.GAIN_FAIRY_DREAM_TRANSLATION
 import miragefairy2024.mod.fairy.GainFairyDreamChannel
 import miragefairy2024.mod.fairy.OPEN_SOUL_STREAM_KEY_TRANSLATION
 import miragefairy2024.mod.fairy.OpenSoulStreamChannel
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.motifTableScreenHandlerType
-import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.fairy.soulStreamScreenHandlerType
 import miragefairy2024.util.black
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkBlue
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
@@ -54,7 +52,7 @@ fun initFairyClientModule() {
 
     // パケットハンドラ登録
     GainFairyDreamChannel.registerClientPacketReceiver { motif ->
-        val itemStack = FairyCard.item.createItemStack().also { it.setFairyMotif(motif) }
+        val itemStack = motif.createFairyItemStack()
         val component = Containers.horizontalFlow(Sizing.fixed(160), Sizing.fixed(32)).apply {
             surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_dream_toast.png"), 160, 32))
             padding(Insets.of(0, 0, 8, 8))

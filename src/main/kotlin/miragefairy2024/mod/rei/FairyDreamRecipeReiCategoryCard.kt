@@ -1,10 +1,9 @@
 package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
-import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.Motif
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
-import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.fairy.toFairyMotif
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
@@ -41,9 +40,7 @@ object ItemFairyDreamRecipeReiCategoryCard : ReiCategoryCard<ItemFairyDreamRecip
         })
     }
 
-    class Display(val items: List<Item>, val motif: Motif) : BasicDisplay(listOf(items.map { it.createItemStack().toEntryStack() }.toEntryIngredient()), listOf(FairyCard.item.createItemStack().also {
-        it.setFairyMotif(motif)
-    }).map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val items: List<Item>, val motif: Motif) : BasicDisplay(listOf(items.map { it.createItemStack().toEntryStack() }.toEntryIngredient()), listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() }) {
         override fun getCategoryIdentifier() = identifier
     }
 }
@@ -65,9 +62,7 @@ object BlockFairyDreamRecipeReiCategoryCard : ReiCategoryCard<BlockFairyDreamRec
         })
     }
 
-    class Display(val blocks: List<Block>, val motif: Motif) : BasicDisplay(listOf(blocks.map { it.asItem().createItemStack().toEntryStack() }.toEntryIngredient()), listOf(FairyCard.item.createItemStack().also {
-        it.setFairyMotif(motif)
-    }).map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val blocks: List<Block>, val motif: Motif) : BasicDisplay(listOf(blocks.map { it.asItem().createItemStack().toEntryStack() }.toEntryIngredient()), listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() }) {
         override fun getCategoryIdentifier() = identifier
     }
 }
@@ -89,9 +84,7 @@ object EntityTypeFairyDreamRecipeReiCategoryCard : ReiCategoryCard<EntityTypeFai
         })
     }
 
-    class Display(val entityTypes: List<EntityType<*>>, val motif: Motif) : BasicDisplay(listOf(), listOf(FairyCard.item.createItemStack().also {
-        it.setFairyMotif(motif)
-    }).map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val entityTypes: List<EntityType<*>>, val motif: Motif) : BasicDisplay(listOf(), listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() }) {
         override fun getCategoryIdentifier() = identifier
     }
 }

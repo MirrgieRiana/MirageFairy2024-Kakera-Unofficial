@@ -70,17 +70,13 @@ private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.miragefairy202
 
 val fairiesItemGroupCard = ItemGroupCard(
     Identifier(MirageFairy2024.modId, "fairies"), "Fairies", "妖精",
-) { FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.MAGENTA_GLAZED_TERRACOTTA) } }
+) { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() }
 
 fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
-            motifRegistry.entrySet.sortedBy { it.key.value }.map {
-                val itemStack = card.item.createItemStack()
-                itemStack.setFairyMotif(it.value)
-                itemStack
-            }
+            motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
         }
 
         card.item.registerItemModelGeneration(createFairyModel())

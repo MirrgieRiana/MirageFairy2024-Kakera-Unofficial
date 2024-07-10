@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.util.EMPTY_ITEM_STACK
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.register
@@ -71,10 +70,7 @@ private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card
         if (condensation > Integer.MAX_VALUE.toLong()) return null
 
         return object : MatchResult {
-            override fun craft() = FairyCard.item.createItemStack().also {
-                it.setFairyMotifId(motifId)
-                it.setFairyCondensation(condensation.toInt())
-            }
+            override fun craft() = createFairyItemStack(motifId, condensation = condensation.toInt())
         }
     }
 
@@ -120,18 +116,11 @@ private class FairyDecondensationRecipe(category: CraftingRecipeCategory, val ca
         val dividedCondensation = condensation / division
 
         return object : MatchResult {
-            override fun craft() = FairyCard.item.createItemStack(division).also {
-                it.setFairyMotifId(motifId)
-                it.setFairyCondensation(dividedCondensation)
-            }
-
+            override fun craft() = createFairyItemStack(motifId, condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
                     val list = DefaultedList.ofSize(inventory.size, EMPTY_ITEM_STACK)
-                    list[index] = FairyCard.item.createItemStack().also {
-                        it.setFairyMotifId(motifId)
-                        it.setFairyCondensation(remainingCondensation)
-                    }
+                    list[index] = createFairyItemStack(motifId, condensation = remainingCondensation)
                     list
                 } else {
                     null

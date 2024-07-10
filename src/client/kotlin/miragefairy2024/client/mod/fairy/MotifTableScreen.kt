@@ -15,12 +15,9 @@ import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.verticalScroll
-import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getNiceCondensation
-import miragefairy2024.mod.fairy.setFairyCondensation
-import miragefairy2024.mod.fairy.setFairyMotif
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.MinecraftClient
@@ -57,10 +54,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    val itemStack = FairyCard.item.createItemStack().also {
-                                        it.setFairyMotif(chance.motif)
-                                        it.setFairyCondensation(getNiceCondensation(chance.condensation).second)
-                                    }
+                                    val itemStack = chance.motif.createFairyItemStack(condensation = getNiceCondensation(chance.condensation).second)
                                     tooltip(ItemComponent.tooltipFromItem(itemStack, MinecraftClient.getInstance().player, null))
 
                                     child(Components.item(itemStack))

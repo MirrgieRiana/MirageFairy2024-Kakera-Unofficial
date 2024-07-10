@@ -5,11 +5,9 @@ import miragefairy2024.mod.fairy.AlwaysCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeTagCommonMotifRecipe
 import miragefairy2024.mod.fairy.CommonMotifRecipe
-import miragefairy2024.mod.fairy.FairyCard
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.motifRegistry
-import miragefairy2024.mod.fairy.setFairyMotif
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
@@ -52,9 +50,7 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
         })
     }
 
-    class Display(val recipe: CommonMotifRecipe) : BasicDisplay(listOf(), listOf(FairyCard.item.createItemStack().also {
-        it.setFairyMotif(recipe.motif)
-    }).map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val recipe: CommonMotifRecipe) : BasicDisplay(listOf(), listOf(recipe.motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() }) {
         override fun getCategoryIdentifier() = identifier
     }
 }

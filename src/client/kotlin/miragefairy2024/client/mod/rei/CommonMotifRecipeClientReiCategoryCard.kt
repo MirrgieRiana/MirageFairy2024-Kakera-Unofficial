@@ -12,12 +12,10 @@ import miragefairy2024.mod.fairy.AlwaysCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeTagCommonMotifRecipe
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
-import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
-import miragefairy2024.mod.fairy.setFairyMotif
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.rei.COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION
 import miragefairy2024.mod.rei.CommonMotifRecipeReiCategoryCard
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.string
@@ -43,7 +41,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
     override fun createCategory() = object : DisplayCategory<CommonMotifRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = CommonMotifRecipeReiCategoryCard.identifier
         override fun getTitle(): Text = CommonMotifRecipeReiCategoryCard.translation()
-        override fun getIcon(): Renderer = FairyCard.item.createItemStack().also { it.setFairyMotif(MotifCard.WATER) }.toEntryStack()
+        override fun getIcon(): Renderer = MotifCard.WATER.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: CommonMotifRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 3 + 2 + 18 + 2 + 3
         override fun setupDisplay(display: CommonMotifRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
