@@ -93,6 +93,8 @@ dependencies {
 
     "modImplementation"("io.wispforest:owo-lib:0.11.4+1.20.2")
     include("io.wispforest:owo-sentinel:0.11.4+1.20.2")
+
+    "modApi"("me.shedaniel.cloth:cloth-config:12.0.119")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -145,6 +147,7 @@ modrinth {
         required.project("fabric-language-kotlin")
         required.project("faux-custom-entity-data")
         required.project("owo-lib")
+        required.project("cloth-config")
     }
 }
 
