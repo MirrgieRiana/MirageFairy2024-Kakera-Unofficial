@@ -243,3 +243,14 @@ fun ItemStack.setFairyMotif(recipe: Motif) = this.setFairyMotifId(motifRegistry.
 
 fun ItemStack.getFairyCondensation() = this.nbt.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
 fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateNbt().wrapper["FairyCondensation"].int.set(condensation)
+
+fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+    return createFairyItemStack(motifRegistry.getId(this)!!, condensation = condensation, count = count)
+}
+
+fun createFairyItemStack(motifId: Identifier, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+    val itemStack = FairyCard.item.createItemStack(count)
+    itemStack.setFairyMotifId(motifId)
+    itemStack.setFairyCondensation(condensation)
+    return itemStack
+}
