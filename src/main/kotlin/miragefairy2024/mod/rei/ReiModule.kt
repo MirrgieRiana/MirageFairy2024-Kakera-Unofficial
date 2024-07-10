@@ -20,6 +20,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
             ItemFairyDreamRecipeReiCategoryCard,
             BlockFairyDreamRecipeReiCategoryCard,
             EntityTypeFairyDreamRecipeReiCategoryCard,
+            FairyFamilyReiCategoryCard,
         )
     }
 
