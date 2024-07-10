@@ -49,7 +49,10 @@ object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCa
         return listOf(itemStack.toEntryStack().toEntryIngredient())
     }
 
-    class Display(val recipe: WorldGenTraitRecipe) : BasicDisplay(listOf(), recipe.getOutput()) {
+    class Display(val recipe: WorldGenTraitRecipe) : BasicDisplay(
+        listOf(),
+        recipe.getOutput(),
+    ) {
         override fun getCategoryIdentifier() = identifier
     }
 }

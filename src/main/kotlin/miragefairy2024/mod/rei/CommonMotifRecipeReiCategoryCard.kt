@@ -50,7 +50,10 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
         })
     }
 
-    class Display(val recipe: CommonMotifRecipe) : BasicDisplay(listOf(), listOf(recipe.motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val recipe: CommonMotifRecipe) : BasicDisplay(
+        listOf(),
+        listOf(recipe.motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() },
+    ) {
         override fun getCategoryIdentifier() = identifier
     }
 }

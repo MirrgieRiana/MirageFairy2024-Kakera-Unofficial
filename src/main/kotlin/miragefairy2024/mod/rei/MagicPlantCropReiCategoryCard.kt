@@ -29,7 +29,10 @@ object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategory
         })
     }
 
-    class Display(val recipe: MagicPlantCropNotation) : BasicDisplay(listOf(recipe.seed.toEntryStack().toEntryIngredient()), recipe.crops.map { it.toEntryStack().toEntryIngredient() }) {
+    class Display(val recipe: MagicPlantCropNotation) : BasicDisplay(
+        listOf(recipe.seed.toEntryStack().toEntryIngredient()),
+        recipe.crops.map { it.toEntryStack().toEntryIngredient() },
+    ) {
         override fun getCategoryIdentifier() = identifier
     }
 }
