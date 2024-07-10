@@ -16,7 +16,7 @@ import net.minecraft.world.World
 import java.io.File
 import java.io.IOException
 
-fun registerDebugItem(path: String, icon: Item, color: Int, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
     val item = object : Item(Settings()) {
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
         override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
