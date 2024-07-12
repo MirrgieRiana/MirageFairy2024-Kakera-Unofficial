@@ -60,27 +60,27 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                     run {
 
                         // クリックしたらメッセージを全画面で表示する
-                        child(ClickableContainer(Sizing.fill(), Sizing.fixed(11 * 7 + 5), {
+                        child(ClickableContainer(Sizing.fill(100), Sizing.fixed(11 * 7 + 5), {
                             client!!.setScreen(FairyQuestMessageScreen(this@FairyQuestCardScreen, handler.recipe.title, handler.recipe.message, handler.recipe.client, handler.recipe.title))
                             true
                         }) {
 
                             // 外枠装飾用パネル
-                            Containers.verticalFlow(Sizing.fill(), Sizing.fill()).apply {
+                            Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply {
                                 surface(NinePatchTextureCard.FAIRY_QUEST_CARD_MESSAGE.surface)
                                 padding(Insets.of(11, 11, 11, 6))
 
                                 // スクロールコンテナ
-                                child(verticalScroll(Sizing.fill(), Sizing.fill(), 5).apply {
+                                child(verticalScroll(Sizing.fill(100), Sizing.fill(100), 5).apply {
 
                                     // 罫線装飾用パネル
-                                    child().child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
+                                    child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
                                         surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
                                         padding(Insets.of(0, 1, 0, 0))
 
                                         // メッセージテキストラベル
                                         child(Components.label(handler.recipe.message).apply {
-                                            sizing(Sizing.fill(), Sizing.content())
+                                            sizing(Sizing.fill(100), Sizing.content())
                                             color(Color.ofRgb(0x6B472E))
                                         })
 
@@ -99,7 +99,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                     child(verticalSpace(3))
 
                     // 取引欄
-                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
 
                         repeat(4) { i ->
                             child(slotContainer(Containers.stack(Sizing.fixed(16), Sizing.fixed(16)).apply {
@@ -159,14 +159,14 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                     // プレイヤーインベントリ
                     repeat(3) { r ->
-                        child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                        child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                             repeat(9) { c ->
                                 child(slotContainer(slotAsComponent(9 * r + c)))
                             }
                         })
                     }
                     child(verticalSpace(4))
-                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                         repeat(9) { c ->
                             child(slotContainer(slotAsComponent(9 * 3 + c)))
                         }

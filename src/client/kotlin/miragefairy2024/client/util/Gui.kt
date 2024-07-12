@@ -35,7 +35,7 @@ fun verticalSpace(height: Int): FlowLayout = Containers.verticalFlow(Sizing.cont
 
 fun inventoryNameLabel(name: Text, horizontalTextAlignment: HorizontalAlignment? = HorizontalAlignment.LEFT): LabelComponent = Components.label(name).apply {
     margins(Insets.of(0, 0, 1, 1))
-    sizing(Sizing.fill(), Sizing.content())
+    sizing(Sizing.fill(100), Sizing.content())
     horizontalTextAlignment(horizontalTextAlignment)
     color(Color.ofRgb(0x404040))
 }

@@ -32,21 +32,21 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
             horizontalAlignment(HorizontalAlignment.CENTER)
 
             // 反対側のスクロールバー領域確保用パネル
-            child(Containers.verticalFlow(Sizing.fixed(18 * 15), Sizing.fill()).apply {
+            child(Containers.verticalFlow(Sizing.fixed(18 * 15), Sizing.fill(100)).apply {
                 padding(Insets.of(0, 0, 10, 0))
 
                 // スクロールコンテナ
-                child(verticalScroll(Sizing.fill(), Sizing.fill(), 10).apply {
+                child(verticalScroll(Sizing.fill(100), Sizing.fill(100), 10).apply {
                     scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 
                     // 外枠装飾用パネル
-                    child().child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
+                    child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
                         surface(NinePatchTextureCard.FAIRY_QUEST_CARD_MESSAGE.surface)
                         padding(Insets.of(11))
 
                         // タイトル
                         child(Components.label(fairyQuestTitle).apply {
-                            sizing(Sizing.fill(), Sizing.content())
+                            sizing(Sizing.fill(100), Sizing.content())
                             horizontalTextAlignment(HorizontalAlignment.CENTER)
                             color(Color.ofRgb(0x6B472E))
                         })
@@ -54,13 +54,13 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
                         child(verticalSpace(11))
 
                         // 罫線装飾用パネル
-                        child(Containers.verticalFlow(Sizing.fill(), Sizing.content()).apply {
+                        child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
                             surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
                             padding(Insets.of(0, 1, 0, 0))
 
                             // メッセージテキストラベル
                             child(Components.label(fairyQuestMessage).apply {
-                                sizing(Sizing.fill(), Sizing.content())
+                                sizing(Sizing.fill(100), Sizing.content())
                                 color(Color.ofRgb(0x6B472E))
                             })
 
@@ -70,7 +70,7 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
                         // 依頼人
                         child(Components.label(fairyQuestClient).apply {
-                            sizing(Sizing.fill(), Sizing.content())
+                            sizing(Sizing.fill(100), Sizing.content())
                             horizontalTextAlignment(HorizontalAlignment.RIGHT)
                             color(Color.ofRgb(0x6B472E))
                         })

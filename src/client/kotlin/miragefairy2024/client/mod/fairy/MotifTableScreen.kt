@@ -35,15 +35,15 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
             horizontalAlignment(HorizontalAlignment.CENTER)
 
             // GUIパネル外枠
-            child(Containers.verticalFlow(Sizing.content(), Sizing.fill()).apply {
+            child(Containers.verticalFlow(Sizing.content(), Sizing.fill(100)).apply {
                 surface(Surface.PANEL)
                 padding(Insets.of(7))
 
                 // メインコンテナ
-                child(Containers.verticalFlow(Sizing.content(), Sizing.fill()).apply {
+                child(Containers.verticalFlow(Sizing.content(), Sizing.fill(100)).apply {
 
                     // スクロールパネル
-                    child(verticalScroll(Sizing.content(), Sizing.fill(), 18).apply {
+                    child(verticalScroll(Sizing.content(), Sizing.fill(100), 18).apply {
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
 
                         // スロットパネル

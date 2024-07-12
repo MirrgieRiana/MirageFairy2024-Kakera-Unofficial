@@ -55,7 +55,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(3))
 
-                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                         repeat(9) { index ->
                             child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = SlotType.FAIRY))
                         }
@@ -63,11 +63,11 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(4))
 
-                    child(verticalScroll(Sizing.fill(), Sizing.fixed(18 * 5), 18).apply {
+                    child(verticalScroll(Sizing.fill(100), Sizing.fixed(18 * 5), 18).apply {
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
                         scrollStep(18)
                         (9 until handler.soulStream.size).chunked(9).forEach { indices ->
-                            child().child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                            child().child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                                 indices.forEach { index ->
                                     child(slotContainer(slotAsComponent(9 * 3 + 9 + index)))
                                 }
@@ -83,14 +83,14 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     // プレイヤーインベントリ
                     repeat(3) { r ->
-                        child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                        child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                             repeat(9) { c ->
                                 child(slotContainer(slotAsComponent(9 * r + c)))
                             }
                         })
                     }
                     child(verticalSpace(4))
-                    child(Containers.horizontalFlow(Sizing.fill(), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                         repeat(9) { c ->
                             child(slotContainer(slotAsComponent(9 * 3 + c)))
                         }
