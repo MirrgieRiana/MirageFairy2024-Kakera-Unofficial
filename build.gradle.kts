@@ -1,7 +1,7 @@
 plugins {
     id("fabric-loom") version "1.7-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "2.0.0"
     id("com.modrinth.minotaur") version "2.+"
 }
 
@@ -84,17 +84,17 @@ dependencies {
 
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}")
 
-    "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:13.0.678")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:13.0.678")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:13.0.678")
+    "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:12.1.725")
+    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:12.1.725")
+    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:12.1.725")
     "modCompileOnly"("me.shedaniel.cloth:basic-math:0.6.1")
 
-    "modImplementation"("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.20.2:7.0.1")
+    "modImplementation"("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.20.1:6.0.1")
 
-    "modImplementation"("io.wispforest:owo-lib:0.11.4+1.20.2")
-    include("io.wispforest:owo-sentinel:0.11.4+1.20.2")
+    "modImplementation"("io.wispforest:owo-lib:0.11.2+1.20")
+    include("io.wispforest:owo-sentinel:0.11.2+1.20")
 
-    "modApi"("me.shedaniel.cloth:cloth-config:12.0.119")
+    "modApi"("me.shedaniel.cloth:cloth-config:11.1.118")
 }
 
 tasks.withType<JavaCompile>().configureEach {
