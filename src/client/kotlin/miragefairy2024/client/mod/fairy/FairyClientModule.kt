@@ -31,7 +31,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.ButtonTextures
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
@@ -107,8 +106,8 @@ fun initFairyClientModule() {
                     }
 
                     // ボタン
-                    val buttonTextures = ButtonTextures(Identifier(MirageFairy2024.modId, "soul_stream_button"), Identifier(MirageFairy2024.modId, "soul_stream_button_highlighted"))
-                    child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, buttonTextures) {
+                    val buttonTexture = Identifier(MirageFairy2024.modId, "textures/gui/sprites/soul_stream_button.png")
+                    child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
                         lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
                         screen.close()
                         OpenSoulStreamChannel.sendToServer(Unit)
