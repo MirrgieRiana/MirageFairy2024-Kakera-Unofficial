@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_haimeviska_sap"
+      "has_haimeviska_sap",
+      "has_the_recipe"
     ]
   ],
   "rewards": {

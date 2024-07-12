@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_fairy_quest_card"
+      "has_fairy_quest_card",
+      "has_the_recipe"
     ]
   ],
   "rewards": {

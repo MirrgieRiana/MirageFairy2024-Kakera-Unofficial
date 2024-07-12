@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_mirage_flour"
+      "has_mirage_flour",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
