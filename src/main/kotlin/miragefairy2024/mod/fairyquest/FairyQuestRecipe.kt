@@ -1,7 +1,9 @@
 package miragefairy2024.mod.fairyquest
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializationContext
 import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
@@ -16,9 +18,13 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.string
+import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.with
+import mirrg.kotlin.gson.hydrogen.jsonElement
+import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
@@ -29,7 +35,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTables
 import net.minecraft.loot.condition.LootCondition
-import net.minecraft.loot.condition.LootConditionTypes
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.function.ConditionalLootFunction
 import net.minecraft.loot.function.LootFunctionType
@@ -41,7 +46,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.dynamic.Codecs
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.Heightmap
@@ -218,7 +222,7 @@ enum class FairyQuestRecipeCard(
     }
 }
 
-val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.CODEC)
+val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.SERIALIZER)
 
 val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 
@@ -350,12 +354,18 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<Defaul
     }
 }
 
-class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions) {
+class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
     companion object {
-        val CODEC: Codec<SetFairyQuestRecipeLootFunction> = RecordCodecBuilder.create { instance ->
-            instance.group(Codecs.createStrictOptionalFieldCodec(LootConditionTypes.CODEC.listOf(), "conditions", listOf()).forGetter { it.conditions })
-                .and(Identifier.CODEC.fieldOf("id").forGetter { it.recipeId })
-                .apply(instance) { conditions, recipeId -> SetFairyQuestRecipeLootFunction(recipeId, conditions) }
+        val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
+            override fun toJson(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
+                super.toJson(jsonObject, conditionalLootFunction, jsonSerializationContext);
+                jsonObject.add("id", conditionalLootFunction.recipeId.string.jsonElement)
+            }
+
+            override fun fromJson(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
+                val id = json.toJsonWrapper()["id"].asString().toIdentifier()
+                return SetFairyQuestRecipeLootFunction(id, conditions.toList())
+            }
         }
     }
 
