@@ -1,6 +1,6 @@
 package miragefairy2024.mod.fairyquest
 
-import com.mojang.serialization.Codec
+import com.google.gson.JsonObject
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -34,7 +34,6 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
@@ -141,16 +140,10 @@ private fun createFairyQuestCardModel() = Model {
 
 object FairyQuestCardIngredient : CustomIngredient {
     val ID = Identifier(MirageFairy2024.modId, "fairy_quest_card")
-
-    val ALLOW_EMPTY_CODEC = createCodec(Ingredient.ALLOW_EMPTY_CODEC)
-    val DISALLOW_EMPTY_CODEC = createCodec(Ingredient.DISALLOW_EMPTY_CODEC)
-    private fun createCodec(ingredientCodec: Codec<Ingredient>): Codec<FairyQuestCardIngredient> {
-        return Codec.unit(FairyQuestCardIngredient)
-    }
-
     val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
         override fun getIdentifier() = ID
-        override fun getCodec(allowEmpty: Boolean) = if (allowEmpty) ALLOW_EMPTY_CODEC else DISALLOW_EMPTY_CODEC
+        override fun read(json: JsonObject?) = FairyQuestCardIngredient
+        override fun write(json: JsonObject?, ingredient: FairyQuestCardIngredient?) = Unit
         override fun read(buf: PacketByteBuf) = FairyQuestCardIngredient
         override fun write(buf: PacketByteBuf, ingredient: FairyQuestCardIngredient) = Unit
     }
