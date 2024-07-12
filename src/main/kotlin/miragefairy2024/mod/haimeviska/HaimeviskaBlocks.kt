@@ -321,7 +321,7 @@ fun initHaimeviskaBlocks() {
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (state.get(AXIS) != Direction.Axis.Y) return ActionResult.SUCCESS // 縦方向でなければスルー
+        if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getStackInHand(hand)
         if (!toolItemStack.isIn(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClient) return ActionResult.SUCCESS
