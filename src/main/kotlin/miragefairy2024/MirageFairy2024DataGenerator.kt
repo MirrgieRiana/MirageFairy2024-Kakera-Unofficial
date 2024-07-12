@@ -21,7 +21,7 @@ import net.minecraft.data.DataProvider
 import net.minecraft.data.DataWriter
 import net.minecraft.data.client.BlockStateModelGenerator
 import net.minecraft.data.client.ItemModelGenerator
-import net.minecraft.data.server.recipe.RecipeExporter
+import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.item.Item
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryBuilder
@@ -30,6 +30,7 @@ import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
@@ -38,7 +39,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     val blockTagGenerators = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
     val itemTagGenerators = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
     val blockLootTableGenerators = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
-    val recipeGenerators = InitializationEventRegistry<(RecipeExporter) -> Unit>()
+    val recipeGenerators = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
     val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
     val englishTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val japaneseTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
@@ -72,7 +73,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : FabricRecipeProvider(output) {
-                override fun generate(exporter: RecipeExporter) = recipeGenerators.fire { it(exporter) }
+                override fun generate(exporter: Consumer<RecipeJsonProvider>) = recipeGenerators.fire { it { recipe -> exporter.accept(recipe) } }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->

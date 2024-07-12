@@ -7,6 +7,7 @@ import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.register
 import miragefairy2024.util.size
+import miragefairy2024.util.string
 import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
@@ -26,19 +27,19 @@ enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, Spe
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { creator(it, this) }
+    val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { _, category -> creator(category, this) }
 }
 
 fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
         card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
         MirageFairy2024DataGenerator.recipeGenerators {
-            ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier)
+            ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
         }
     }
 }
 
-private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(category) {
+private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(card.identifier, category) {
 
     private interface MatchResult {
         fun craft(): ItemStack
@@ -80,7 +81,7 @@ private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card
     override fun getSerializer() = card.serializer
 }
 
-private class FairyDecondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(category) {
+private class FairyDecondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(card.identifier, category) {
 
     private interface MatchResult {
         fun craft(): ItemStack
