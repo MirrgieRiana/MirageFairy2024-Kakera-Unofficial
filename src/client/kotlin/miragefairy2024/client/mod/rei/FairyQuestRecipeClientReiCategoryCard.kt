@@ -27,7 +27,7 @@ object FairyQuestRecipeClientReiCategoryCard : ClientReiCategoryCard<FairyQuestR
     }
 
     override fun createCategory() = object : DisplayCategory<FairyQuestRecipeReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = FairyQuestRecipeReiCategoryCard.identifier
+        override fun getCategoryIdentifier() = FairyQuestRecipeReiCategoryCard.identifier.first
         override fun getTitle(): Text = FairyQuestRecipeReiCategoryCard.translation()
         override fun getIcon(): Renderer = FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(FairyQuestRecipeCard.NEW_PRODUCT_FROM_FRI) }.toEntryStack()
         override fun getDisplayWidth(display: FairyQuestRecipeReiCategoryCard.Display) = 18 * 9 + 10

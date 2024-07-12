@@ -37,7 +37,7 @@ object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCa
     }
 
     override fun createCategory() = object : DisplayCategory<FairyFamilyReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = FairyFamilyReiCategoryCard.identifier
+        override fun getCategoryIdentifier() = FairyFamilyReiCategoryCard.identifier.first
         override fun getTitle(): Text = FairyFamilyReiCategoryCard.translation()
         override fun getIcon(): Renderer = MotifCard.IRON.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: FairyFamilyReiCategoryCard.Display) = 18 * 9 + 10

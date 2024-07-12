@@ -28,7 +28,7 @@ object WorldGenTraitClientReiCategoryCard : ClientReiCategoryCard<WorldGenTraitR
     }
 
     override fun createCategory() = object : DisplayCategory<WorldGenTraitReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = WorldGenTraitReiCategoryCard.identifier
+        override fun getCategoryIdentifier() = WorldGenTraitReiCategoryCard.identifier.first
         override fun getTitle(): Text = WorldGenTraitReiCategoryCard.translation()
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: WorldGenTraitReiCategoryCard.Display) = 180

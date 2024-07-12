@@ -5,6 +5,7 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.toFairyMotif
+import miragefairy2024.util.Single
 import miragefairy2024.util.get
 import miragefairy2024.util.list
 import miragefairy2024.util.string
@@ -16,8 +17,8 @@ import miragefairy2024.util.toNbtString
 import miragefairy2024.util.wrapper
 
 object FairyFamilyReiCategoryCard : ReiCategoryCard<FairyFamilyReiCategoryCard.Display>("fairy_family", "Fairy Family", "妖精系統") {
-    override val serializer: BasicDisplay.Serializer<Display> by lazy {
-        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+    override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
+        Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 tag.wrapper["Motif"].string.get()!!.toIdentifier().toFairyMotif()!!,
                 tag.wrapper["Parents"].list.get()!!.map { it.wrapper.string.get()!!.toIdentifier().toFairyMotif()!! },
@@ -27,13 +28,13 @@ object FairyFamilyReiCategoryCard : ReiCategoryCard<FairyFamilyReiCategoryCard.D
             tag.wrapper["Motif"].string.set(display.motif.getIdentifier()!!.string)
             tag.wrapper["Parents"].list.set(display.parents.map { it.getIdentifier()!!.string.toNbtString() }.toNbtList())
             tag.wrapper["Children"].list.set(display.children.map { it.getIdentifier()!!.string.toNbtString() }.toNbtList())
-        })
+        }))
     }
 
     class Display(val motif: Motif, val parents: List<Motif>, val children: List<Motif>) : BasicDisplay(
         listOf(motif).map { it.createFairyItemStack().toEntryStack().toEntryIngredient() },
         (parents + children).map { it.createFairyItemStack().toEntryStack().toEntryIngredient() },
     ) {
-        override fun getCategoryIdentifier() = identifier
+        override fun getCategoryIdentifier() = identifier.first
     }
 }

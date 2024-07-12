@@ -25,7 +25,7 @@ object MagicPlantCropClientReiCategoryCard : ClientReiCategoryCard<MagicPlantCro
     }
 
     override fun createCategory() = object : DisplayCategory<MagicPlantCropReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = MagicPlantCropReiCategoryCard.identifier
+        override fun getCategoryIdentifier() = MagicPlantCropReiCategoryCard.identifier.first
         override fun getTitle(): Text = MagicPlantCropReiCategoryCard.translation()
         override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: MagicPlantCropReiCategoryCard.Display) = 136

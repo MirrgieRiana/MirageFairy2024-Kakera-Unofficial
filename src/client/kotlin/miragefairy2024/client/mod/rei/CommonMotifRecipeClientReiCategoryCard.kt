@@ -39,7 +39,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
     }
 
     override fun createCategory() = object : DisplayCategory<CommonMotifRecipeReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = CommonMotifRecipeReiCategoryCard.identifier
+        override fun getCategoryIdentifier() = CommonMotifRecipeReiCategoryCard.identifier.first
         override fun getTitle(): Text = CommonMotifRecipeReiCategoryCard.translation()
         override fun getIcon(): Renderer = MotifCard.WATER.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: CommonMotifRecipeReiCategoryCard.Display) = 160

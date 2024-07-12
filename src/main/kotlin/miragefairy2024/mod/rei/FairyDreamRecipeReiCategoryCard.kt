@@ -5,6 +5,7 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.toFairyMotif
+import miragefairy2024.util.Single
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
@@ -24,8 +25,8 @@ import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 
 object ItemFairyDreamRecipeReiCategoryCard : ReiCategoryCard<ItemFairyDreamRecipeReiCategoryCard.Display>("item_fairy_dream_recipe", "Fairy Dream: Item", "妖精の夢：アイテム") {
-    override val serializer: BasicDisplay.Serializer<Display> by lazy {
-        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+    override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
+        Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 tag.wrapper["Items"].list.get()!!.map { item ->
                     item.wrapper.string.get()!!.toIdentifier().toItem()
@@ -37,20 +38,20 @@ object ItemFairyDreamRecipeReiCategoryCard : ReiCategoryCard<ItemFairyDreamRecip
                 item.getIdentifier().string.toNbtString()
             }.toNbtList())
             tag.wrapper["Motif"].string.set(display.motif.getIdentifier()!!.string)
-        })
+        }))
     }
 
     class Display(val items: List<Item>, val motif: Motif) : BasicDisplay(
         listOf(items.map { it.createItemStack().toEntryStack() }.toEntryIngredient()),
         listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() },
     ) {
-        override fun getCategoryIdentifier() = identifier
+        override fun getCategoryIdentifier() = identifier.first
     }
 }
 
 object BlockFairyDreamRecipeReiCategoryCard : ReiCategoryCard<BlockFairyDreamRecipeReiCategoryCard.Display>("block_fairy_dream_recipe", "Fairy Dream: Block", "妖精の夢：ブロック") {
-    override val serializer: BasicDisplay.Serializer<Display> by lazy {
-        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+    override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
+        Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 tag.wrapper["Blocks"].list.get()!!.map { block ->
                     block.wrapper.string.get()!!.toIdentifier().toBlock()
@@ -62,20 +63,20 @@ object BlockFairyDreamRecipeReiCategoryCard : ReiCategoryCard<BlockFairyDreamRec
                 block.getIdentifier().string.toNbtString()
             }.toNbtList())
             tag.wrapper["Motif"].string.set(display.motif.getIdentifier()!!.string)
-        })
+        }))
     }
 
     class Display(val blocks: List<Block>, val motif: Motif) : BasicDisplay(
         listOf(blocks.map { it.asItem().createItemStack().toEntryStack() }.toEntryIngredient()),
         listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() },
     ) {
-        override fun getCategoryIdentifier() = identifier
+        override fun getCategoryIdentifier() = identifier.first
     }
 }
 
 object EntityTypeFairyDreamRecipeReiCategoryCard : ReiCategoryCard<EntityTypeFairyDreamRecipeReiCategoryCard.Display>("entity_fairy_dream_recipe", "Fairy Dream: Entity", "妖精の夢：エンティティ") {
-    override val serializer: BasicDisplay.Serializer<Display> by lazy {
-        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+    override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
+        Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 tag.wrapper["EntityTypes"].list.get()!!.map { entityType ->
                     entityType.wrapper.string.get()!!.toIdentifier().toEntityType()
@@ -87,13 +88,13 @@ object EntityTypeFairyDreamRecipeReiCategoryCard : ReiCategoryCard<EntityTypeFai
                 entityType.getIdentifier().string.toNbtString()
             }.toNbtList())
             tag.wrapper["Motif"].string.set(display.motif.getIdentifier()!!.string)
-        })
+        }))
     }
 
     class Display(val entityTypes: List<EntityType<*>>, val motif: Motif) : BasicDisplay(
         listOf(),
         listOf(motif.createFairyItemStack()).map { it.toEntryStack().toEntryIngredient() },
     ) {
-        override fun getCategoryIdentifier() = identifier
+        override fun getCategoryIdentifier() = identifier.first
     }
 }

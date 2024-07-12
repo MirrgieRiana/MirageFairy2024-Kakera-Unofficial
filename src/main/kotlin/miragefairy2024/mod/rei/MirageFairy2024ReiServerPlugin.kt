@@ -14,7 +14,7 @@ class MirageFairy2024ReiServerPlugin : REIServerPlugin {
     override fun registerDisplaySerializer(registry: DisplaySerializerRegistry) {
         ReiCategoryCard.entries.forEach { card ->
             fun <D : BasicDisplay> f(card: ReiCategoryCard<D>) {
-                registry.register(card.identifier, card.serializer)
+                registry.register(card.identifier.first, card.serializer.first)
             }
             f(card)
         }

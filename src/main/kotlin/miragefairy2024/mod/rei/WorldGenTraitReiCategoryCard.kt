@@ -8,6 +8,7 @@ import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.getIdentifier
 import miragefairy2024.mod.magicplant.setTraitStacks
 import miragefairy2024.mod.magicplant.toTrait
+import miragefairy2024.util.Single
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
@@ -20,8 +21,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCard.Display>("world_gen_trait", "World Gen Trait", "地形生成特性") {
-    override val serializer: BasicDisplay.Serializer<Display> by lazy {
-        BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
+    override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
+        Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 WorldGenTraitRecipe(
                     tag.getString("Block").toIdentifier().toBlock(),
@@ -40,7 +41,7 @@ object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCa
             tag.putString("Trait", display.recipe.trait.getIdentifier().string)
             tag.putInt("Level", display.recipe.level)
             tag.putString("ConditionDescription", Text.Serializer.toJson(display.recipe.condition.description))
-        })
+        }))
     }
 
     private fun WorldGenTraitRecipe.getOutput(): List<EntryIngredient> {
@@ -53,6 +54,6 @@ object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCa
         listOf(),
         recipe.getOutput(),
     ) {
-        override fun getCategoryIdentifier() = identifier
+        override fun getCategoryIdentifier() = identifier.first
     }
 }
