@@ -177,6 +177,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
         }
         val lambdaX = x
         val lambdaY = y
+        @Suppress("DEPRECATION")
         context.draw {
             for (i in wrappedText.indices) {
                 val renderText = wrappedText[i]
