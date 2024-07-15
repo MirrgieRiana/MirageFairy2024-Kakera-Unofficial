@@ -247,6 +247,10 @@ fun initMaterialsModule() {
         input('#', MaterialCard.MIRAGE_STEM.item)
     } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.modId from MaterialCard.MIRAGE_STEM.item
 
+    // ミラジウム
+    registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
+
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
     registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.0,
+  "group": "miragefairy2024:miragium_nugget",
+  "ingredient": {
+    "item": "miragefairy2024:mirage_flour_of_nature"
+  },
+  "result": "miragefairy2024:miragium_nugget"
+}

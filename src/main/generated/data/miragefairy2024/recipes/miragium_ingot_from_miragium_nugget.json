@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miragium_ingot",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miragium_nugget"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "miragefairy2024:miragium_ingot"
+  },
+  "show_notification": true
+}

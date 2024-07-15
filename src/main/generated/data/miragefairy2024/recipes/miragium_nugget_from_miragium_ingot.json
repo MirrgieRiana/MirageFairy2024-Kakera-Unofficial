@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:miragium_nugget",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:miragium_ingot"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "miragefairy2024:miragium_nugget"
+  }
+}
