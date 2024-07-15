@@ -9,6 +9,7 @@ import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.item.ToolMaterial
+import net.minecraft.item.ToolMaterials
 import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
@@ -33,14 +34,15 @@ enum class FairyToolMaterials(
     override fun getRepairIngredient() = repairIngredient
 }
 
-enum class ToolMaterialCard(path: String, enName: String, jaName: String) {
-    WOOD("wooden_tool", "Wooden Tool", "木ツール"),
-    STONE("stone_tool", "Stone Tool", "石ツール"),
-    IRON("iron_tool", "Iron Tool", "鉄ツール"),
-    COPPER("copper_tool", "Copper Tool", "銅ツール"),
-    GOLD("golden_tool", "Golden Tool", "金ツール"),
-    DIAMOND("diamond_tool", "Diamond Tool", "ダイヤモンドツール"),
-    NETHERITE("netherite_tool", "Netherite Tool", "ネザライトツール"),
+enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName: String, jaName: String) {
+    WOOD(ToolMaterials.WOOD, "wooden_tool", "Wooden Tool", "木ツール"),
+    STONE(ToolMaterials.STONE, "stone_tool", "Stone Tool", "石ツール"),
+    IRON(ToolMaterials.IRON, "iron_tool", "Iron Tool", "鉄ツール"),
+    GOLD(ToolMaterials.GOLD, "golden_tool", "Golden Tool", "金ツール"),
+    DIAMOND(ToolMaterials.DIAMOND, "diamond_tool", "Diamond Tool", "ダイヤモンドツール"),
+    NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", "Netherite Tool", "ネザライトツール"),
+
+    COPPER(FairyToolMaterials.COPPER, "copper_tool", "Copper Tool", "銅ツール"),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
