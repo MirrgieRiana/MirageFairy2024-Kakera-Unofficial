@@ -50,6 +50,7 @@ enum class MaterialCard(
         // TODO add purpose
         "miranagite", "Miranagite", "蒼天石",
         PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
+        // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
     ),
     CHAOS_STONE(
         "chaos_stone", "Chaos Stone", "混沌の石",
