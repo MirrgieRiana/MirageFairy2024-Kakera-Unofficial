@@ -21,6 +21,7 @@ import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule
 import miragefairy2024.mod.rei.initReiModule
+import miragefairy2024.mod.tool.initToolModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
@@ -53,6 +54,7 @@ object MirageFairy2024 : ModInitializer {
         initToolMaterialModule()
         initRecipeGroupModule()
         initSoundEventModule()
+        initToolModule()
     }
 }
 
