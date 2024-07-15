@@ -80,5 +80,83 @@ class ToolCard<I : Item>(
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
         }.register()
+        val MIRAGIUM_PICKAXE = ToolCard(
+            "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
+            "More durable than gold", "妖精の肉体労働",
+            3, PickaxeType(ToolMaterialCard.MIRAGIUM), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern(" R ")
+                pattern(" R ")
+                input('#', MaterialCard.MIRAGIUM_INGOT.item)
+                input('R', Items.STICK)
+            } on MaterialCard.MIRAGIUM_INGOT.item
+        }.register()
+        val MIRAGIUM_AXE = ToolCard(
+            "miragium_axe", "Miragium Axe", "ミラジウムの斧",
+            "Crack! Squish!", "バキッ！ぐにっ",
+            3, AxeType(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("##")
+                pattern("#R")
+                pattern(" R")
+                input('#', MaterialCard.MIRAGIUM_INGOT.item)
+                input('R', Items.STICK)
+            } on MaterialCard.MIRAGIUM_INGOT.item
+        }.register()
+        val MIRANAGITE_PICKAXE = ToolCard(
+            "miranagite_pickaxe", "Miranagite Pickaxe", "蒼天石のつるはし",
+            "Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。",
+            2, PickaxeType(ToolMaterialCard.MIRANAGITE), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern(" R ")
+                pattern(" R ")
+                input('#', MaterialCard.MIRANAGITE.item)
+                input('R', Items.STICK)
+            } on MaterialCard.MIRANAGITE.item
+        }.register()
+        val XARPITE_PICKAXE = ToolCard(
+            "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
+            "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
+            2, PickaxeType(ToolMaterialCard.XARPITE), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern(" R ")
+                pattern(" R ")
+                input('#', MaterialCard.XARPITE.item)
+                input('R', Items.STICK)
+            } on MaterialCard.XARPITE.item
+        }.register()
+        val XARPITE_AXE = ToolCard(
+            "xarpite_axe", "Xarpite Axe", "紅天石の斧",
+            "Strip the log from the space", "空間にこびりついた丸太の除去に。",
+            2, AxeType(ToolMaterialCard.XARPITE, 6.0F, -3.1F), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("##")
+                pattern("#R")
+                pattern(" R")
+                input('#', MaterialCard.XARPITE.item)
+                input('R', Items.STICK)
+            } on MaterialCard.XARPITE.item
+        }.register()
+        val CHAOS_STONE_PICKAXE = ToolCard(
+            "chaos_stone_pickaxe", "Chaos Stone Pickaxe", "混沌のつるはし",
+            "Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。",
+            4, PickaxeType(ToolMaterialCard.CHAOS_STONE), // TODO 特殊能力
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern(" R ")
+                pattern(" R ")
+                input('#', MaterialCard.CHAOS_STONE.item)
+                input('R', Items.STICK)
+            } on MaterialCard.CHAOS_STONE.item
+        }.register()
     }
 }

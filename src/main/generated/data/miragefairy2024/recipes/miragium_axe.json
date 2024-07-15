@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miragium_axe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miragium_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "##",
+    "#R",
+    " R"
+  ],
+  "result": {
+    "item": "miragefairy2024:miragium_axe"
+  },
+  "show_notification": true
+}

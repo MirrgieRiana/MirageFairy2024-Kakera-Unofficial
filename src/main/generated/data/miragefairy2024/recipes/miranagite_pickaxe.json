@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miranagite_pickaxe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miranagite"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "item": "miragefairy2024:miranagite_pickaxe"
+  },
+  "show_notification": true
+}
