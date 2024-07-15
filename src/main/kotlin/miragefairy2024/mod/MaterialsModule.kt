@@ -69,6 +69,14 @@ enum class MaterialCard(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
         PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
     ),
+    MIRAGIUM_NUGGET(
+        "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
+        PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
+    ),
+    MIRAGIUM_INGOT(
+        "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
+        PoemList(3).poem("Metallic body", "妖精インゴット。"),
+    ),
     VEROPEDA_LEAF(
         "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
         PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
