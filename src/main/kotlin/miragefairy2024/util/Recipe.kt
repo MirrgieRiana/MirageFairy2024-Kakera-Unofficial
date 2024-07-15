@@ -20,6 +20,8 @@ import net.minecraft.loot.condition.RandomChanceLootCondition
 import net.minecraft.loot.entry.LeafEntry
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.loot.function.ExplosionDecayLootFunction
+import net.minecraft.loot.function.SetCountLootFunction
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.recipe.Ingredient
@@ -135,7 +137,7 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, bio
     }
 }
 
-fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, block: LeafEntry.Builder<*>.() -> Unit = {}) {
+fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == lootTableId) {
@@ -143,6 +145,7 @@ fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, block: Lea
                     lootPool.configure {
                         with(ItemLootPoolEntry(this@registerChestLoot) {
                             weight(weight)
+                            if (count != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(count.first.toFloat(), count.last.toFloat())))
                             block(this)
                         })
                     }
