@@ -24,6 +24,7 @@ enum class FairyToolMaterials(
     private val repairIngredient: Ingredient,
 ) : ToolMaterial {
     COPPER(196, 5.0F, 1.0F, MiningLevels.IRON, 18, Items.COPPER_INGOT.toIngredient()),
+    FAIRY_CRYSTAL(235, 5.0F, 1.5F, MiningLevels.IRON, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
     ;
 
     override fun getDurability() = durability
@@ -43,6 +44,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", "Netherite Tool", "ネザライトツール"),
 
     COPPER(FairyToolMaterials.COPPER, "copper_tool", "Copper Tool", "銅ツール"),
+    FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
