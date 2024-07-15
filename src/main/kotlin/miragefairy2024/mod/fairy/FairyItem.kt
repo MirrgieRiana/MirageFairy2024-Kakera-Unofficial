@@ -169,11 +169,11 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val mana = level * (1.0 + manaBoost)
         tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
 
-        // レベル
-        tooltip += text { (LEVEL_TRANSLATION() + ": "() + Emoji.STAR() + (level formatAs "%.1f")()).green }
+        // レベル・凝縮数
+        tooltip += text { (LEVEL_TRANSLATION() + ": "() + Emoji.STAR() + (level formatAs "%.1f")() + "  "() + CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
 
-        // レア・凝縮数
-        tooltip += text { (RARE_TRANSLATION() + ": ${motif.rare}"() + "  "() + CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
+        // レア・ID
+        tooltip += text { (RARE_TRANSLATION() + ": ${motif.rare}"() + "  "() + motif.getIdentifier()!!.path()).green }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
