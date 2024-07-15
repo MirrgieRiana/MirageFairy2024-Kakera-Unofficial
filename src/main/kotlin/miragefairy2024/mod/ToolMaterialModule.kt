@@ -4,11 +4,34 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerTagGeneration
+import miragefairy2024.util.toIngredient
+import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.item.ToolMaterial
+import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+
+enum class FairyToolMaterials(
+    private val durability: Int,
+    private val miningSpeedMultiplier: Float,
+    private val attackDamage: Float,
+    private val miningLevel: Int,
+    private val enchantability: Int,
+    private val repairIngredient: Ingredient,
+) : ToolMaterial {
+    COPPER(196, 5.0F, 1.0F, MiningLevels.IRON, 18, Items.COPPER_INGOT.toIngredient()),
+    ;
+
+    override fun getDurability() = durability
+    override fun getMiningSpeedMultiplier() = miningSpeedMultiplier
+    override fun getAttackDamage() = attackDamage
+    override fun getMiningLevel() = miningLevel
+    override fun getEnchantability() = enchantability
+    override fun getRepairIngredient() = repairIngredient
+}
 
 enum class ToolMaterialCard(path: String, enName: String, jaName: String) {
     WOOD("wooden_tool", "Wooden Tool", "木ツール"),
