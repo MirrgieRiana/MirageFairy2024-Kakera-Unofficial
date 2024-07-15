@@ -48,6 +48,10 @@ enum class MaterialCard(
         "miranagite", "Miranagite", "蒼天石",
         PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
     ),
+    CHAOS_STONE(
+        "chaos_stone", "Chaos Stone", "混沌の石",
+        PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
+    ),
 
     MIRAGE_LEAVES(
         "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
