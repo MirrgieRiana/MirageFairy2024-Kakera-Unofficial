@@ -147,6 +147,7 @@ fun initMirageFlower() {
         registerWorldGenTraitRecipe("..CR", TraitCard.SEEDS_PRODUCTION) // 種子生成
         registerWorldGenTraitRecipe("C.CR", TraitCard.FRUITS_PRODUCTION) // 果実生成
         registerWorldGenTraitRecipe("..CR", TraitCard.LEAVES_PRODUCTION) // 葉面生成
+        registerWorldGenTraitRecipe("C.CR", TraitCard.RARE_PRODUCTION) // 希少品生成
         registerWorldGenTraitRecipe("..CR", TraitCard.FAIRY_BLESSING) // 妖精の祝福
 
         // R特性
@@ -188,7 +189,7 @@ fun initMirageFlower() {
     }
 
     // レシピ
-    registerMagicPlantDropNotation(card.item, MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item)
+    registerMagicPlantDropNotation(card.item, MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
 
 }
 
@@ -208,6 +209,7 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = MirageFlowerBlockEntity(pos, state)
     override fun getFruitDrops(count: Int): List<ItemStack> = listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(count))
     override fun getLeafDrops(count: Int): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
+    override fun getRareDrops(count: Int): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 }
 
 class MirageFlowerBlockEntity(pos: BlockPos, state: BlockState) : MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state)
