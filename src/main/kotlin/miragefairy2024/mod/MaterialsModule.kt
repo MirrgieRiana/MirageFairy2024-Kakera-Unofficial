@@ -57,6 +57,10 @@ enum class MaterialCard(
         "mirage_stem", "Mirage Stem", "ミラージュの茎",
         PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
     ),
+    FAIRY_CRYSTAL(
+        "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
+        PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
+    ),
     VEROPEDA_LEAF(
         "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
         PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
