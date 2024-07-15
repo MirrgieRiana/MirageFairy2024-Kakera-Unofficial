@@ -8,6 +8,7 @@ import miragefairy2024.util.from
 import miragefairy2024.util.modId
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedItemModelGeneration
@@ -21,6 +22,7 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.loot.LootTables
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
@@ -208,6 +210,15 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME)
+
+    // 混沌の石
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.SIMPLE_DUNGEON_CHEST, 10, 3..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ABANDONED_MINESHAFT_CHEST, 5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ANCIENT_CITY_CHEST, 10, 1..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_CHEST, 10)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.VILLAGE_DESERT_HOUSE_CHEST, 3)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_ARCHAEOLOGY, 1)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_WELL_ARCHAEOLOGY, 1)
 
     // ミラージュの葉
     MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
