@@ -358,7 +358,7 @@ class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditio
     companion object {
         val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
             override fun toJson(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
-                super.toJson(jsonObject, conditionalLootFunction, jsonSerializationContext);
+                super.toJson(jsonObject, conditionalLootFunction, jsonSerializationContext)
                 jsonObject.add("id", conditionalLootFunction.recipeId.string.jsonElement)
             }
 
