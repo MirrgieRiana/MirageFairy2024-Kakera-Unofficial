@@ -327,8 +327,8 @@ abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(setti
         return drops
     }
 
-    abstract fun getFruitDrops(count: Int): List<ItemStack>
-    abstract fun getLeafDrops(count: Int): List<ItemStack>
+    open fun getFruitDrops(count: Int): List<ItemStack> = listOf()
+    open fun getLeafDrops(count: Int): List<ItemStack> = listOf()
 
 }
 
