@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_crystal_pickaxe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:fairy_crystal"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_crystal_pickaxe"
+  },
+  "show_notification": true
+}
