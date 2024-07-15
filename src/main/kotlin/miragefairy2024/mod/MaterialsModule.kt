@@ -41,13 +41,11 @@ enum class MaterialCard(
 ) {
 
     XARPITE(
-        // TODO add purpose
         "xarpite", "Xarpite", "紅天石",
         PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
         // TODO 使えるワード：牢獄
     ),
     MIRANAGITE(
-        // TODO add purpose
         "miranagite", "Miranagite", "蒼天石",
         PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
         // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
