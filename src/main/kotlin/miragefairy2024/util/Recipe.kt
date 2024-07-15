@@ -113,7 +113,7 @@ fun registerSmeltingRecipeGeneration(
 
 // Others
 
-fun Item.registerGrassDrop(amount: Float = 1.0F, biome: (() -> RegistryKey<Biome>)? = null) {
+fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == Blocks.GRASS.lootTableId) {
@@ -125,7 +125,7 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, biome: (() -> RegistryKey<Biome
                         alternatively(ItemLootPoolEntry(this@registerGrassDrop) {
                             conditionally(RandomChanceLootCondition.builder(0.125F * amount))
                             if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
-                            apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 2))
+                            apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
                             apply(ExplosionDecayLootFunction.builder())
                         })
                     }))
