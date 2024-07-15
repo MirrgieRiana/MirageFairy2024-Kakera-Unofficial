@@ -44,6 +44,7 @@ enum class TraitCard(
     SEEDS_PRODUCTION("seeds_production", "4production", "Seeds Production", "種子生成", TraitFactors.ALWAYS, TraitEffectKeyCard.SEEDS_PRODUCTION),
     FRUITS_PRODUCTION("fruits_production", "4production", "Fruits Production", "果実生成", TraitFactors.ALWAYS, TraitEffectKeyCard.FRUITS_PRODUCTION),
     LEAVES_PRODUCTION("leaves_production", "4production", "Leaves Production", "葉面生成", TraitFactors.ALWAYS, TraitEffectKeyCard.LEAVES_PRODUCTION),
+    RARE_PRODUCTION("rare_production", "4production", "Rare Production", "希少品生成", TraitFactors.ALWAYS, TraitEffectKeyCard.RARE_PRODUCTION),
     EXPERIENCE_PRODUCTION("experience_production", "4production", "Xp Production", "経験値生成", TraitFactors.ALWAYS, TraitEffectKeyCard.EXPERIENCE_PRODUCTION),
 
     FAIRY_BLESSING("fairy_blessing", "5skill", "Fairy Blessing", "妖精の祝福", TraitFactors.ALWAYS, TraitEffectKeyCard.FORTUNE_FACTOR),
@@ -85,6 +86,7 @@ enum class TraitEffectKeyCard(
     SEEDS_PRODUCTION("seeds_production", "SEED", "種子生成", Formatting.RED, false),
     FRUITS_PRODUCTION("fruits_production", "FRUIT", "果実生成", Formatting.LIGHT_PURPLE, false),
     LEAVES_PRODUCTION("leaves_production", "LEAF", "葉面生成", Formatting.DARK_GREEN, false),
+    RARE_PRODUCTION("rare_production", "RARE", "希少品生成", Formatting.GOLD, false),
     PRODUCTION_BOOST("production_boost", "PRD", "生産能力", Formatting.DARK_RED, false),
     EXPERIENCE_PRODUCTION("experience_production", "XP", "経験値", Formatting.YELLOW, false),
     FORTUNE_FACTOR("fortune_factor", "FTN", "幸運係数", Formatting.DARK_PURPLE, false),
