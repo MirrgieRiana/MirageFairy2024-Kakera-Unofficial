@@ -304,6 +304,7 @@ abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(setti
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]
         val fruitGeneration = traitEffects[TraitEffectKeyCard.FRUITS_PRODUCTION.traitEffectKey]
         val leafGeneration = traitEffects[TraitEffectKeyCard.LEAVES_PRODUCTION.traitEffectKey]
+        val rareGeneration = traitEffects[TraitEffectKeyCard.RARE_PRODUCTION.traitEffectKey]
         val generationBoost = traitEffects[TraitEffectKeyCard.PRODUCTION_BOOST.traitEffectKey]
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
 
@@ -324,11 +325,17 @@ abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(setti
             if (leafCount > 0) drops += getLeafDrops(leafCount)
         }
 
+        if (isMaxAge(blockState)) {
+            val rareCount = world.random.randomInt(0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (rareCount > 0) drops += getRareDrops(rareCount)
+        }
+
         return drops
     }
 
     open fun getFruitDrops(count: Int): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int): List<ItemStack> = listOf()
+    open fun getRareDrops(count: Int): List<ItemStack> = listOf()
 
 }
 
