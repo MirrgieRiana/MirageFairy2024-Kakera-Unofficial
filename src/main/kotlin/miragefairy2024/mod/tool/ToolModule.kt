@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.ToolMaterialCard
@@ -20,7 +21,7 @@ import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
-fun initToolModule() {
+fun initToolModule() = ModEvents.onInitialize {
     ToolCard.entries.forEach {
         it.init()
     }

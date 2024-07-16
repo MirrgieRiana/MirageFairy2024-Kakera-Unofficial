@@ -1,6 +1,8 @@
 package miragefairy2024.mod.haimeviska
 
-fun initHaimeviskaModule() {
+import miragefairy2024.ModEvents
+
+fun initHaimeviskaModule() = ModEvents.onInitialize {
     initHaimeviskaBlocks()
     initHaimeviskaWorldGens()
 }

@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
@@ -97,7 +98,7 @@ enum class BlockMaterialCard(
     val item = BlockItem(block, Item.Settings())
 }
 
-fun initBlockMaterialsModule() {
+fun initBlockMaterialsModule() = ModEvents.onInitialize {
     BlockMaterialCard.entries.forEach { card ->
         card.block.register(Registries.BLOCK, card.identifier)
         card.item.register(Registries.ITEM, card.identifier)

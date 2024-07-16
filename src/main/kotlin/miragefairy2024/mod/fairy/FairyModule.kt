@@ -1,6 +1,8 @@
 package miragefairy2024.mod.fairy
 
-fun initFairyModule() {
+import miragefairy2024.ModEvents
+
+fun initFairyModule() = ModEvents.onInitialize {
     initFairyItem()
     initFairyCondensationRecipe()
     initMotif()

@@ -1,6 +1,8 @@
 package miragefairy2024.mod.fairyquest
 
-fun initFairyQuestModule() {
+import miragefairy2024.ModEvents
+
+fun initFairyQuestModule() = ModEvents.onInitialize {
     initFairyQuestCardScreenHandler()
     initFairyQuestCardItem()
     initFairyQuestRecipe()

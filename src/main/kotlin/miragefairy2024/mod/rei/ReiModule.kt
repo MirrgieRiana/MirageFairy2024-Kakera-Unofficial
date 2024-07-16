@@ -3,6 +3,7 @@ package miragefairy2024.mod.rei
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.util.Single
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -34,7 +35,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
 
 val COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION = Translation({ "gui.miragefairy2024.common_motif_recipe.always" }, "Always", "常時")
 
-fun initReiModule() {
+fun initReiModule() = ModEvents.onInitialize {
     ReiCategoryCard.entries.forEach { card ->
         card.translation.enJa()
     }

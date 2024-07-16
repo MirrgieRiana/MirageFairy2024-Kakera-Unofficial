@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -186,7 +187,7 @@ val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 
-fun initMaterialsModule() {
+fun initMaterialsModule() = ModEvents.onInitialize {
 
     MaterialCard.entries.forEach { card ->
         card.item.register(Registries.ITEM, card.identifier)

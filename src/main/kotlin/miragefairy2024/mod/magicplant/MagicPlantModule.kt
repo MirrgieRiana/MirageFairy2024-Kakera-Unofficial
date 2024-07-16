@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.magicplants.initMirageFlower
@@ -28,7 +29,7 @@ val magicPlantSeedItemGroupCard = ItemGroupCard(
     Identifier(MirageFairy2024.modId, "magic_plant_seeds"), "Magic Plant Seeds", "魔法植物の種子",
 ) { MirageFlowerCard.item.createItemStack() }
 
-fun initMagicPlantModule() {
+fun initMagicPlantModule() = ModEvents.onInitialize {
 
     TraitEffectKeyCard.entries.forEach { card ->
         card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)

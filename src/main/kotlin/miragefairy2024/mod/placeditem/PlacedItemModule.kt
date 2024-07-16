@@ -1,5 +1,7 @@
 package miragefairy2024.mod.placeditem
 
-fun initPlacedItemModule() {
+import miragefairy2024.ModEvents
+
+fun initPlacedItemModule() = ModEvents.onInitialize {
     initPlacedItemBlock()
 }

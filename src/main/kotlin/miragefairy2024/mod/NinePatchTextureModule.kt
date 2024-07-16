@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModEvents
 import miragefairy2024.util.concat
 import net.minecraft.util.Identifier
 
@@ -23,7 +24,7 @@ class NinePatchTextureCard(
     val texture = "textures/gui/" concat identifier concat ".png"
 }
 
-fun initNinePatchTextureModule() {
+fun initNinePatchTextureModule() = ModEvents.onInitialize {
     NinePatchTextureCard.entries.forEach { card ->
         MirageFairy2024DataGenerator.ninePatchTextureGenerators {
             it(card.identifier, card)

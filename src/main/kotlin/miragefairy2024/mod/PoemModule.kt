@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
 import miragefairy2024.util.formatted
@@ -12,7 +13,7 @@ import net.minecraft.util.Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
 
-fun initPoemModule() {
+fun initPoemModule() = ModEvents.onInitialize {
     MirageFairy2024.onClientInit {
         it.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
