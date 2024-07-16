@@ -68,6 +68,8 @@ repositories {
     maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
 
     maven("https://maven.wispforest.io") // owo-lib
+
+    maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
 
 dependencies {
@@ -95,6 +97,8 @@ dependencies {
     include("io.wispforest:owo-sentinel:0.11.2+1.20")
 
     "modApi"("me.shedaniel.cloth:cloth-config:11.1.118")
+
+    "modImplementation"("com.github.glitchfiend:TerraBlender-fabric:1.20.1-3.0.1.7")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -148,6 +152,7 @@ modrinth {
         required.project("faux-custom-entity-data")
         required.project("owo-lib")
         required.project("cloth-config")
+        required.project("terrablender")
     }
 }
 
