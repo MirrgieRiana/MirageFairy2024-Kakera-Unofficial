@@ -26,9 +26,11 @@ import net.minecraft.item.Item
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryBuilder
 import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import net.minecraft.world.biome.Biome
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -38,6 +40,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     val itemModelGenerators = InitializationEventRegistry<(ItemModelGenerator) -> Unit>()
     val blockTagGenerators = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
     val itemTagGenerators = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val biomeTagGenerators = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
     val blockLootTableGenerators = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
     val recipeGenerators = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
     val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
@@ -64,6 +67,11 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
             object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
                 override fun configure(arg: RegistryWrapper.WrapperLookup) = itemTagGenerators.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+            object : FabricTagProvider<Biome>(output, RegistryKeys.BIOME, registriesFuture) {
+                override fun configure(arg: RegistryWrapper.WrapperLookup) = biomeTagGenerators.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput ->
