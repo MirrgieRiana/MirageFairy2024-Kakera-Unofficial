@@ -2,9 +2,12 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.util.registerItemTagGeneration
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.MiningToolItem
@@ -12,6 +15,9 @@ import net.minecraft.item.ToolMaterial
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
 // Sword 3, -2.4
 
@@ -67,5 +73,46 @@ class FairyMiningToolItem(
             itemMiningLevel < MiningLevels.STONE && state.isIn(BlockTags.NEEDS_STONE_TOOL) -> false
             else -> effectiveBlockTags.any { state.isIn(it) }
         }
+    }
+
+    override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+        super.postMine(stack, world, state, pos, miner)/*
+        if (cutAll && !miner.isSneaking) run fail@{
+            if (world.isClient) return@fail
+
+            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
+            if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!state.isIn(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
+
+            // 発動
+
+            val logBlockPosList = mutableListOf<BlockPos>()
+            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, toBlockPos ->
+                world.getBlockState(toBlockPos).block === state.block
+            }.forEach { (_, blockPos) ->
+                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                    stack.damage(1, miner) {
+                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    }
+                    logBlockPosList += blockPos
+                }
+            }
+            blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, toBlockPos ->
+                world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
+            }.forEach { (_, blockPos) ->
+                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                    if (miner.random.nextFloat() < 0.1F) {
+                        stack.damage(1, miner) {
+                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        }
+                    }
+                }
+            }
+        }*/
+        return true
     }
 }
