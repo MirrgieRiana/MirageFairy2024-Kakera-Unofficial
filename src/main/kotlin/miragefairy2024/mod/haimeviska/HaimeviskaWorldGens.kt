@@ -19,6 +19,7 @@ import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
+import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.TreeFeatureConfig
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
@@ -41,11 +42,14 @@ object HaimeviskaTreeDecoratorCard {
 }
 
 val haimeviskaConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
+val haimeviskaPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
 
 fun initHaimeviskaWorldGens() {
 
+    // TreeDecoratorの登録
     HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
+    // ConfiguredFeatureの登録
     registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, haimeviskaConfiguredFeatureKey) {
         Feature.TREE with TreeFeatureConfig.Builder(
             BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
@@ -55,7 +59,9 @@ fun initHaimeviskaWorldGens() {
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
     }
-    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska")) {
+
+    // まばらなPlacedFeature
+    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaPlacedFeatureKey) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(512),
             SquarePlacementModifier.of(),
@@ -65,9 +71,10 @@ fun initHaimeviskaWorldGens() {
             PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
         )
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
-    }.also {
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, it)
     }
+
+    // 平原・森林バイオームに配置
+    BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaPlacedFeatureKey)
 
 }
 
