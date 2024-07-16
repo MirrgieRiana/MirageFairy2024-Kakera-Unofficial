@@ -26,6 +26,7 @@ import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.GenerationSettings
 import net.minecraft.world.biome.SpawnSettings
+import net.minecraft.world.biome.SpawnSettings.SpawnEntry
 import net.minecraft.world.biome.source.util.MultiNoiseUtil
 import net.minecraft.world.biome.source.util.MultiNoiseUtil.ParameterRange
 import net.minecraft.world.gen.GenerationStep
@@ -186,8 +187,6 @@ object FairyForestBiomeCard : BiomeCard(
     }
 }
 
-// TODO 樹海では魔女が多めに出る
-// TODO 魔女が紅天石を落とす
 object DeepFairyForestBiomeCard : BiomeCard(
     "deep_fairy_forest", "Deep Fairy Forest", "妖精の樹海",
     RegionType.OVERWORLD, 1,
@@ -218,6 +217,9 @@ object DeepFairyForestBiomeCard : BiomeCard(
             .spawnSettings(SpawnSettings.Builder().also { spawnSettings ->
 
                 DefaultBiomeFeatures.addBatsAndMonsters(spawnSettings)
+                spawnSettings.spawn(SpawnGroup.MONSTER, SpawnEntry(EntityType.WITCH, 100, 1, 4))
+
+                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnEntry(EntityType.WOLF, 8, 4, 4))
 
                 // River Mobs
                 spawnSettings.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.SQUID, 2, 1, 4))

@@ -12,15 +12,20 @@ import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.enchantment.Enchantments
+import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.LocationCheckLootCondition
 import net.minecraft.loot.condition.MatchToolLootCondition
 import net.minecraft.loot.condition.RandomChanceLootCondition
+import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
 import net.minecraft.loot.entry.LeafEntry
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.loot.function.ExplosionDecayLootFunction
+import net.minecraft.loot.function.LootingEnchantLootFunction
 import net.minecraft.loot.function.SetCountLootFunction
+import net.minecraft.loot.provider.number.LootNumberProvider
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
@@ -131,6 +136,31 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, bio
                             apply(ExplosionDecayLootFunction.builder())
                         })
                     }))
+                }
+            }
+        }
+    }
+}
+
+fun Item.registerMobDrop(
+    entityType: EntityType<*>,
+    onlyKilledByPlayer: Boolean = false,
+    dropRate: Pair<Float, Float>? = null,
+    amount: LootNumberProvider? = null,
+    fortuneFactor: LootNumberProvider? = null,
+) {
+    val lootTableId = entityType.lootTableId
+    LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
+        if (source.isBuiltin) {
+            if (id == lootTableId) {
+                tableBuilder.configure {
+                    pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+                        if (amount != null) apply(SetCountLootFunction.builder(amount, false))
+                        if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
+                    }) {
+                        if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
+                        if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
+                    })
                 }
             }
         }

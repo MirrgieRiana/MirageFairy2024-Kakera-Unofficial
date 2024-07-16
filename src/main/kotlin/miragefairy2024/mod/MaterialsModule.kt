@@ -16,15 +16,18 @@ import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerGrassDrop
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.registerMobDrop
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTables
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
@@ -222,6 +225,7 @@ fun initMaterialsModule() = ModEvents.onInitialize {
 
     // 紅天石
     MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
+    MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0F), fortuneFactor = ConstantLootNumberProvider.create(0.5F))
 
     // 混沌の石
     MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.SIMPLE_DUNGEON_CHEST, 10, 3..5)
