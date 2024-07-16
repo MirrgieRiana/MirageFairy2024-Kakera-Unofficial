@@ -186,6 +186,8 @@ object FairyForestBiomeCard : BiomeCard(
     }
 }
 
+// TODO 樹海では魔女が多めに出る
+// TODO 魔女が紅天石を落とす
 object DeepFairyForestBiomeCard : BiomeCard(
     "deep_fairy_forest", "Deep Fairy Forest", "妖精の樹海",
     RegionType.OVERWORLD, 1,
