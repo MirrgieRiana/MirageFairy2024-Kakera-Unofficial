@@ -34,6 +34,7 @@ import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.sound.BlockSoundGroup
@@ -46,6 +47,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.FeatureConfig
 import net.minecraft.world.gen.feature.PlacedFeature
@@ -69,6 +71,13 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
     ::MirageFlowerBlockEntity,
 )
 
+val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
+val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
+val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
+val mirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
+val netherMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_mirage_cluster"))
+val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
+
 fun initMirageFlower() {
     val card = MirageFlowerCard
     card.initMagicPlant()
@@ -82,24 +91,24 @@ fun initMirageFlower() {
 
     // 地形生成
     run {
-        // 妖精の輪Feature
-        val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
+
+        // Fairy Ring Feature
         fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
 
-        // 小さな塊
-        val mirageClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster")) {
+        // 小さな塊ConfiguredFeature
+        registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
             val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 
-        // 妖精の輪
-        val largeMirageClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster")) {
+        // Fairy Ring ConfiguredFeature
+        registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, largeMirageClusterConfiguredFeatureKey) {
             val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
             fairyRingFeature with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 
-        // 地上とエンド
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster")) {
+        // 地上とエンド用PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, mirageClusterPlacedFeatureKey) {
             val placementModifiers = listOf(
                 RarityFilterPlacementModifier.of(16),
                 SquarePlacementModifier.of(),
@@ -107,25 +116,20 @@ fun initMirageFlower() {
                 BiomePlacementModifier.of(),
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
-        }.also {
-            BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, it)
-            BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd().and(BiomeSelectors.excludeByKey(BiomeKeys.THE_END)), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
-        // ネザー
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_mirage_cluster")) {
+        // ネザー用PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, netherMirageClusterPlacedFeatureKey) {
             val placementModifiers = listOf(
                 RarityFilterPlacementModifier.of(64),
                 CountMultilayerPlacementModifier.of(1),
                 BiomePlacementModifier.of(),
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
-        }.also {
-            BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
-        // 地上の妖精の輪
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster")) {
+        // Fairy Ring PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, largeMirageClusterPlacedFeatureKey) {
             val placementModifiers = listOf(
                 RarityFilterPlacementModifier.of(600),
                 SquarePlacementModifier.of(),
@@ -133,9 +137,18 @@ fun initMirageFlower() {
                 BiomePlacementModifier.of(),
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeMirageClusterConfiguredFeatureKey) with placementModifiers
-        }.also {
-            BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
+
+        // 地上とエンドに配置
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, mirageClusterPlacedFeatureKey)
+        BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd().and(BiomeSelectors.excludeByKey(BiomeKeys.THE_END)), GenerationStep.Feature.VEGETAL_DECORATION, mirageClusterPlacedFeatureKey)
+
+        // ネザーに配置
+        BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, netherMirageClusterPlacedFeatureKey)
+
+        // 地上にFairy Ringを配置
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, largeMirageClusterPlacedFeatureKey)
+
     }
 
     // 特性
