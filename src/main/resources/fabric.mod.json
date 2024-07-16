@@ -44,6 +44,9 @@
         "value": "miragefairy2024.client.mod.rei.MirageFairy2024ReiClientPlugin",
         "adapter": "kotlin"
       }
+    ],
+    "terrablender": [
+      "miragefairy2024.MirageFairy2024TerraBlenderMod"
     ]
   },
   "mixins": [
