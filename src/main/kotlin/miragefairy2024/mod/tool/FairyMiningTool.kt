@@ -1,7 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.mod.ToolMaterialCard
-import miragefairy2024.util.registerTagGeneration
+import miragefairy2024.util.registerItemTagGeneration
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -22,10 +22,10 @@ class PickaxeType(
 ) : ToolType<FairyMiningToolItem> {
     override fun createItem() = FairyMiningToolItem(toolMaterialCard.toolMaterial, 1F, -2.8F, listOf(BlockTags.PICKAXE_MINEABLE), Item.Settings())
     override fun init(card: ToolCard<FairyMiningToolItem>) {
-        card.item.registerTagGeneration { ItemTags.CLUSTER_MAX_HARVESTABLES }
-        card.item.registerTagGeneration { ItemTags.PICKAXES }
+        card.item.registerItemTagGeneration { ItemTags.CLUSTER_MAX_HARVESTABLES }
+        card.item.registerItemTagGeneration { ItemTags.PICKAXES }
 
-        card.item.registerTagGeneration { toolMaterialCard.tag }
+        card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 }
 
@@ -41,9 +41,9 @@ class AxeType(
     override fun createItem() = FairyMiningToolItem(toolMaterialCard.toolMaterial, attackDamage, attackSpeed, listOf(BlockTags.AXE_MINEABLE), Item.Settings())
 
     override fun init(card: ToolCard<FairyMiningToolItem>) {
-        card.item.registerTagGeneration { ItemTags.AXES }
+        card.item.registerItemTagGeneration { ItemTags.AXES }
 
-        card.item.registerTagGeneration { toolMaterialCard.tag }
+        card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 }
 

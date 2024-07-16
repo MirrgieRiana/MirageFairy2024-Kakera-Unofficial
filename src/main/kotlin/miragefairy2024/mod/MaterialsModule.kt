@@ -15,10 +15,10 @@ import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedItemModelGeneration
 import miragefairy2024.util.registerGrassDrop
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
-import miragefairy2024.util.registerTagGeneration
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
@@ -266,16 +266,16 @@ fun initMaterialsModule() = ModEvents.onInitialize {
     } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
 
     // ミラージュの花粉
-    MaterialCard.TINY_MIRAGE_FLOUR.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
 
     // フラクタルウィスプ
-    MaterialCard.FRACTAL_WISP.item.registerTagGeneration { WISP_TAG }
+    MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
 }

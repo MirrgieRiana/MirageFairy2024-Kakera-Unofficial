@@ -13,6 +13,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
@@ -20,7 +21,6 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
-import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.with
 import net.minecraft.block.AbstractBlock
@@ -120,7 +120,7 @@ fun initBlockMaterialsModule() = ModEvents.onInitialize {
         card.block.registerDefaultLootTableGeneration()
 
         card.tags.forEach {
-            card.block.registerTagGeneration { it }
+            card.block.registerBlockTagGeneration { it }
         }
     }
 

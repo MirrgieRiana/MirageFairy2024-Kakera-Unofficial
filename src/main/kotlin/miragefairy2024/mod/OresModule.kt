@@ -14,13 +14,13 @@ import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.concat
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerOreLootTableGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
-import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
@@ -132,8 +132,8 @@ fun initOresModule() = ModEvents.onInitialize {
 
         card.block.registerOreLootTableGeneration(card.dropItem)
 
-        card.block.registerTagGeneration { BlockTags.PICKAXE_MINEABLE }
-        card.block.registerTagGeneration { BlockTags.NEEDS_STONE_TOOL }
+        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
 
     }
 

@@ -14,10 +14,10 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.double
 import miragefairy2024.util.get
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerSingletonBlockStateGeneration
-import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
@@ -77,7 +77,7 @@ fun initPlacedItemBlock() {
         }
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.registerTagGeneration { BlockTags.HOE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
     }
 }
 

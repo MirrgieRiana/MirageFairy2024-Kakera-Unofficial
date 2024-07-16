@@ -24,18 +24,19 @@ import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockItemModelGeneration
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
 import miragefairy2024.util.registerFoliageColorProvider
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRedirectColorProvider
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
-import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atMost
@@ -144,9 +145,9 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(30, 30)
 
     // タグ
-    card.block.registerTagGeneration { BlockTags.LEAVES }
-    card.item.registerTagGeneration { ItemTags.LEAVES }
-    card.block.registerTagGeneration { BlockTags.HOE_MINEABLE }
+    card.block.registerBlockTagGeneration { BlockTags.LEAVES }
+    card.item.registerItemTagGeneration { ItemTags.LEAVES }
+    card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
 
 }
 
@@ -161,9 +162,9 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 5)
 
     // タグ
-    card.block.registerTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerTagGeneration { BlockTags.LOGS_THAT_BURN }
-    card.item.registerTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+    card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -189,9 +190,9 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 5)
 
     // タグ
-    card.block.registerTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerTagGeneration { BlockTags.LOGS_THAT_BURN }
-    card.item.registerTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+    card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -207,8 +208,8 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerFlammable(5, 20)
 
     // タグ
-    card.block.registerTagGeneration { BlockTags.PLANKS }
-    card.item.registerTagGeneration { ItemTags.PLANKS }
+    card.block.registerBlockTagGeneration { BlockTags.PLANKS }
+    card.item.registerItemTagGeneration { ItemTags.PLANKS }
 
 }
 
@@ -223,8 +224,8 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerCutoutRenderLayer()
 
     // タグ
-    card.block.registerTagGeneration { BlockTags.SAPLINGS }
-    card.item.registerTagGeneration { ItemTags.SAPLINGS }
+    card.block.registerBlockTagGeneration { BlockTags.SAPLINGS }
+    card.item.registerItemTagGeneration { ItemTags.SAPLINGS }
 
 }
 

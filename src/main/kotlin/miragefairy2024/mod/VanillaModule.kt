@@ -2,8 +2,8 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
-import miragefairy2024.util.registerTagGeneration
 import miragefairy2024.util.writeAction
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
@@ -23,22 +23,22 @@ enum class BlockTagCard(path: String) {
 
 fun initVanillaModule() = ModEvents.onInitialize {
 
-    Blocks.WHITE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.ORANGE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.MAGENTA_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIGHT_BLUE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.YELLOW_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIME_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.PINK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.GRAY_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIGHT_GRAY_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.CYAN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.PURPLE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BLUE_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BROWN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.GREEN_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.RED_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BLACK_CONCRETE.registerTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.WHITE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.ORANGE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.MAGENTA_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIGHT_BLUE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.YELLOW_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIME_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.PINK_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.GRAY_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.LIGHT_GRAY_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.CYAN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.PURPLE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BLUE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BROWN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.GREEN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.RED_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    Blocks.BLACK_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
     registerClientDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->

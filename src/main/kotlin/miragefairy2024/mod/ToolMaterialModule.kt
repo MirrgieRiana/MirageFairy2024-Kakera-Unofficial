@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import miragefairy2024.util.registerTagGeneration
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.item.Item
@@ -70,7 +70,7 @@ fun initToolMaterialModule() = ModEvents.onInitialize {
     }
 
 
-    fun register(card: ToolMaterialCard, item: Item) = item.registerTagGeneration { card.tag }
+    fun register(card: ToolMaterialCard, item: Item) = item.registerItemTagGeneration { card.tag }
 
     // WOOD
     register(ToolMaterialCard.WOOD, Items.WOODEN_SWORD)
