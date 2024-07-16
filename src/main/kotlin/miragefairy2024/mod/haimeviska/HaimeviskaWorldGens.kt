@@ -43,6 +43,7 @@ object HaimeviskaTreeDecoratorCard {
 
 val haimeviskaConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
 val haimeviskaPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
+val haimeviskaFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest"))
 
 fun initHaimeviskaWorldGens() {
 
@@ -64,6 +65,19 @@ fun initHaimeviskaWorldGens() {
     registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaPlacedFeatureKey) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(512),
+            SquarePlacementModifier.of(),
+            SurfaceWaterDepthFilterPlacementModifier.of(0),
+            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+            BiomePlacementModifier.of(),
+            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
+        )
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+    }
+
+    // 高密度のPlacedFeature
+    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaFairyForestPlacedFeatureKey) {
+        val placementModifiers = listOf(
+            RarityFilterPlacementModifier.of(16),
             SquarePlacementModifier.of(),
             SurfaceWaterDepthFilterPlacementModifier.of(0),
             PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
