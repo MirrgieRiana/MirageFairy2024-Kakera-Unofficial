@@ -59,6 +59,7 @@ abstract class BiomeCard(
     vararg val tags: TagKey<Biome>,
 ) {
     abstract fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome
+    open fun init() = Unit
     val identifier = Identifier(MirageFairy2024.modId, path)
     val registryKey: RegistryKey<Biome> = RegistryKey.of(RegistryKeys.BIOME, identifier)
     val biomeTag: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, identifier)
@@ -84,6 +85,8 @@ fun initBiomeModule() {
 
             // 翻訳生成
             card.translation.enJa()
+
+            card.init()
 
         }
     }
