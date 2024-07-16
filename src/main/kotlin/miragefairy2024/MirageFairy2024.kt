@@ -3,6 +3,7 @@ package miragefairy2024
 import miragefairy2024.mod.fairy.initFairyModule
 import miragefairy2024.mod.fairyquest.initFairyQuestModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
+import miragefairy2024.mod.initBiomeModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initExtraPlayerDataModule
@@ -89,6 +90,7 @@ object Modules {
             initRecipeGroupModule()
             initSoundEventModule()
             initToolModule()
+            initBiomeModule()
         }
     }
 }
