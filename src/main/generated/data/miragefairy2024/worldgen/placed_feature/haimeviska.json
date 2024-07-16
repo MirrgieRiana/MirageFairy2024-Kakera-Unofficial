@@ -24,7 +24,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:oak_sapling",
+          "Name": "miragefairy2024:haimeviska_sapling",
           "Properties": {
             "stage": "0"
           }

@@ -8,7 +8,6 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.Blocks
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.PillarBlock
 import net.minecraft.registry.Registries
@@ -63,7 +62,7 @@ fun initHaimeviskaWorldGens() {
             SurfaceWaterDepthFilterPlacementModifier.of(0),
             PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
             BiomePlacementModifier.of(),
-            PlacedFeatures.wouldSurvive(Blocks.OAK_SAPLING),
+            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
         )
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
     }.also {
