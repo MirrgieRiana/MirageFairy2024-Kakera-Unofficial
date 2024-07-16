@@ -25,6 +25,10 @@ import miragefairy2024.mod.tool.initToolModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
+object ModEvents {
+    val onInitialize = InitializationEventRegistry<() -> Unit>()
+}
+
 object MirageFairy2024 : ModInitializer {
     val modId = "miragefairy2024"
     val logger = LoggerFactory.getLogger("miragefairy2024")
@@ -33,28 +37,8 @@ object MirageFairy2024 : ModInitializer {
     var clientProxy: ClientProxy? = null
 
     override fun onInitialize() {
-        initCommonModule()
-        initVanillaModule()
-        initReiModule()
-        initPoemModule()
-        initStatusEffectModule()
-        initMaterialsModule()
-        initBlockMaterialsModule()
-        initOresModule()
-        initMagicPlantModule()
-        initHaimeviskaModule()
-        initFairyQuestModule()
-        initNinePatchTextureModule()
-        initPlacedItemModule()
-        initFairyModule()
-        initExtraPlayerDataModule()
-        initPassiveSkillModule()
-        initLastFoodModule()
-        initFoodIngredientsModule()
-        initToolMaterialModule()
-        initRecipeGroupModule()
-        initSoundEventModule()
-        initToolModule()
+        Modules.init()
+        ModEvents.onInitialize.fire { it() }
     }
 }
 
@@ -71,6 +55,42 @@ class InitializationEventRegistry<T> {
         closed = true
         this.list.forEach {
             processor(it)
+        }
+    }
+}
+
+object Modules {
+    private val lock = Any()
+    private var initialized = false
+    fun init() {
+        synchronized(lock) {
+            if (initialized) return
+            initialized = true
+
+            ModEvents.onInitialize {
+                initCommonModule()
+                initVanillaModule()
+                initReiModule()
+                initPoemModule()
+                initStatusEffectModule()
+                initMaterialsModule()
+                initBlockMaterialsModule()
+                initOresModule()
+                initMagicPlantModule()
+                initHaimeviskaModule()
+                initFairyQuestModule()
+                initNinePatchTextureModule()
+                initPlacedItemModule()
+                initFairyModule()
+                initExtraPlayerDataModule()
+                initPassiveSkillModule()
+                initLastFoodModule()
+                initFoodIngredientsModule()
+                initToolMaterialModule()
+                initRecipeGroupModule()
+                initSoundEventModule()
+                initToolModule()
+            }
         }
     }
 }
