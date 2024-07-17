@@ -476,7 +476,7 @@ enum class MotifCard(
         "food", 3, "Foodia", "食物精フォージャ", 0xF0AD41, 0xB84933, 0xB84933, 0x589C2C,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + mana(1.0) { FOOD }
+            + mana(3.0) { FOOD }
             + regeneration(0.1) * food.atLeast(12),
         MotifCardRecipes(),
     ),
@@ -491,7 +491,7 @@ enum class MotifCard(
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
         ParentMotifs() + { FOOD },
-        PassiveSkillBuilder() + mana(1.0) { FOOD },
+        PassiveSkillBuilder() + mana(3.0) { FOOD },
         MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
     SHIELD(
