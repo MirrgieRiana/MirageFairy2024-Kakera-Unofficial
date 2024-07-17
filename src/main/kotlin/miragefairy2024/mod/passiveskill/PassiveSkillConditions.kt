@@ -17,7 +17,9 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.FluidTags
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.world.Heightmap
@@ -29,6 +31,9 @@ fun initPassiveSkillConditions() {
         card.init()
     }
     ItemFoodIngredientPassiveSkillCondition.translation.enJa()
+    MainHandConditionCard.entries.forEach { card ->
+        card.translation.enJa()
+    }
 }
 
 
@@ -141,4 +146,20 @@ class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngr
 class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) : PassiveSkillCondition {
     override val text: Text get() = card.translation()
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.mainHandStack.isIn(card.tag)
+}
+
+
+// main hand
+
+enum class MainHandConditionCard(path: String, en: String, ja: String, val predicate: (ItemStack) -> Boolean) {
+    HOE("hoe", "Hoe", "クワ", { it.isIn(ItemTags.HOES) }),
+    SWORD("sword", "Sword", "剣", { it.isIn(ItemTags.SWORDS) }),
+    ;
+
+    val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.main_hand.$path" }, en, ja)
+}
+
+class MainHandPassiveSkillCondition(private val card: MainHandConditionCard) : PassiveSkillCondition {
+    override val text: Text get() = card.translation()
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = card.predicate(context.player.mainHandStack)
 }
