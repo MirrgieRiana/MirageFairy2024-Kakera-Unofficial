@@ -129,7 +129,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.attack(0.5) * underwater
             + overall.defence(0.5) * underwater
-            + regeneration(1.0) * underwater, // TODO ネザー以外で消火効果
+            + regeneration(1.0) * underwater
+            + mana(2.0) { WATER }, // TODO ネザー以外で消火効果
         MotifCardRecipes().overworld + Blocks.WATER,
     ),
     DIRT(
