@@ -125,7 +125,7 @@ enum class MotifCard(
     ),
     WATER(
         "water", 1, "Wateria", "水精ワテーリャ", 0x5469F2, 0x5985FF, 0x172AD3, 0x2D40F4,
-        ParentMotifs() + { FOOD },
+        ParentMotifs() + { FOOD }, // TODO サブ親
         PassiveSkillBuilder()
             + overall.attack(0.5) * underwater
             + overall.defence(0.5) * underwater
