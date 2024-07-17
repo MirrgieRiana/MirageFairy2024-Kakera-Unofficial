@@ -20,7 +20,7 @@ fun initPoemModule() = ModEvents.onInitialize {
             val texts = mutableListOf<Text>()
 
             poemList.poems.filter { it.type == PoemType.POEM }.forEach {
-                texts += text { translate("${stack.item.translationKey}.${it.key}").formatted(it.type.color) }
+                texts += it.getText(stack.item)
             }
 
             if (poemList.tier != null) {
@@ -28,7 +28,7 @@ fun initPoemModule() = ModEvents.onInitialize {
             }
 
             poemList.poems.filter { it.type == PoemType.DESCRIPTION }.forEach {
-                texts += text { translate("${stack.item.translationKey}.${it.key}").formatted(it.type.color) }
+                texts += it.getText(stack.item)
             }
 
             texts.forEachIndexed { index, it ->
@@ -46,7 +46,19 @@ enum class PoemType(val color: Formatting) {
     DESCRIPTION(Formatting.YELLOW),
 }
 
-class Poem(val type: PoemType, val key: String, val en: String, val ja: String)
+interface Poem {
+    val type: PoemType
+    fun getText(item: Item): Text
+    fun init(item: Item) = Unit
+}
+
+class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
+    override fun getText(item: Item) = text { translate("${item.translationKey}.$key").formatted(type.color) }
+    override fun init(item: Item) {
+        en { "${item.translationKey}.$key" to en }
+        ja { "${item.translationKey}.$key" to ja }
+    }
+}
 
 
 // PoemList
@@ -54,10 +66,11 @@ class Poem(val type: PoemType, val key: String, val en: String, val ja: String)
 class PoemList(val tier: Int?, val poems: List<Poem>)
 
 fun PoemList(tier: Int?) = PoemList(tier, listOf())
-fun PoemList.poem(key: String, en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.POEM, key, en, ja))
-fun PoemList.poem(en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.POEM, "poem", en, ja))
-fun PoemList.description(key: String, en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.DESCRIPTION, key, en, ja))
-fun PoemList.description(en: String, ja: String) = PoemList(this.tier, this.poems + Poem(PoemType.DESCRIPTION, "description", en, ja))
+operator fun PoemList.plus(poem: Poem) = PoemList(this.tier, this.poems + poem)
+fun PoemList.poem(key: String, en: String, ja: String) = this + InternalPoem(PoemType.POEM, key, en, ja)
+fun PoemList.poem(en: String, ja: String) = this + InternalPoem(PoemType.POEM, "poem", en, ja)
+fun PoemList.description(key: String, en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, key, en, ja)
+fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
 
 
 // Util
@@ -69,7 +82,6 @@ fun Item.registerPoem(poemList: PoemList) {
 
 fun Item.registerPoemGeneration(poemList: PoemList) {
     poemList.poems.forEach {
-        en { "${this.translationKey}.${it.key}" to it.en }
-        ja { "${this.translationKey}.${it.key}" to it.ja }
+        it.init(this)
     }
 }
