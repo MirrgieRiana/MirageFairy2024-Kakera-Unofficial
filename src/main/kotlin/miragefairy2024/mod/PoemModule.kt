@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
+import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
 import miragefairy2024.util.formatted
@@ -60,6 +61,10 @@ class InternalPoem(override val type: PoemType, private val key: String, private
     }
 }
 
+class ExternalPoem(override val type: PoemType, private val keyGetter: () -> String) : Poem {
+    override fun getText(item: Item) = text { translate(keyGetter()).formatted(type.color) }
+}
+
 
 // PoemList
 
@@ -71,6 +76,7 @@ fun PoemList.poem(key: String, en: String, ja: String) = this + InternalPoem(Poe
 fun PoemList.poem(en: String, ja: String) = this + InternalPoem(PoemType.POEM, "poem", en, ja)
 fun PoemList.description(key: String, en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, key, en, ja)
 fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
+fun PoemList.translation(type: PoemType, translation: Translation) = this + ExternalPoem(type) { translation.keyGetter() }
 
 
 // Util
