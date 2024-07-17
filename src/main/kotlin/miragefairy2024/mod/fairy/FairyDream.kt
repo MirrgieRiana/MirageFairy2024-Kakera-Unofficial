@@ -49,6 +49,7 @@ fun initFairyDream() {
     ServerTickEvents.END_SERVER_TICK.register { server ->
         if (server.ticks % (20 * 5) == 0) {
             server.playerManager.playerList.forEach { player ->
+                if (player.isSpectator) return@forEach
                 val world = player.world
                 val random = world.random
 
