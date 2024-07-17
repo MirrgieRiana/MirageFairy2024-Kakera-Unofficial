@@ -59,7 +59,7 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = Identifier(MirageFairy2024.modId, "fairy")
-    val item = FairyItem(Item.Settings())
+    val item = FairyItem(Item.Settings().fireproof())
 }
 
 private val RARE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.rare" }, "Rare", "レア")

@@ -168,6 +168,7 @@ enum class MaterialCard(
         PoemList(1)
             .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
             .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
+        creator = { Item(it.fireproof()) }
         // TODO 用途
     ),
 
