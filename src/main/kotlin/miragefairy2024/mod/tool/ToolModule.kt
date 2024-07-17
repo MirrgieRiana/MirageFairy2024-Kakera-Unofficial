@@ -71,7 +71,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A transparent brain", "闇を打ち砕く透明な心。",
-            2, PickaxeType(ToolMaterialCard.FAIRY_CRYSTAL), // TODO 特殊能力
+            2, FairyMiningToolType.pickaxe(ToolMaterialCard.FAIRY_CRYSTAL), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -84,7 +84,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_PICKAXE = ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
-            3, PickaxeType(ToolMaterialCard.MIRAGIUM), // TODO 特殊能力
+            3, FairyMiningToolType.pickaxe(ToolMaterialCard.MIRAGIUM), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -97,7 +97,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_AXE = ToolCard(
             "miragium_axe", "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
-            3, AxeType(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F), // TODO 特殊能力
+            3, FairyMiningToolType.axe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
@@ -110,7 +110,7 @@ class ToolCard<I : Item>(
         val MIRANAGITE_PICKAXE = ToolCard(
             "miranagite_pickaxe", "Miranagite Pickaxe", "蒼天石のつるはし",
             "Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。",
-            2, PickaxeType(ToolMaterialCard.MIRANAGITE), // TODO 特殊能力
+            2, FairyMiningToolType.pickaxe(ToolMaterialCard.MIRANAGITE), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -123,7 +123,7 @@ class ToolCard<I : Item>(
         val XARPITE_PICKAXE = ToolCard(
             "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
             "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
-            2, PickaxeType(ToolMaterialCard.XARPITE), // TODO 特殊能力
+            2, FairyMiningToolType.pickaxe(ToolMaterialCard.XARPITE), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -136,7 +136,7 @@ class ToolCard<I : Item>(
         val XARPITE_AXE = ToolCard(
             "xarpite_axe", "Xarpite Axe", "紅天石の斧",
             "Strip the log from the space", "空間にこびりついた丸太の除去に。",
-            2, AxeType(ToolMaterialCard.XARPITE, 6.0F, -3.1F), // TODO 特殊能力
+            2, FairyMiningToolType.axe(ToolMaterialCard.XARPITE, 6.0F, -3.1F), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
@@ -149,7 +149,7 @@ class ToolCard<I : Item>(
         val CHAOS_STONE_PICKAXE = ToolCard(
             "chaos_stone_pickaxe", "Chaos Stone Pickaxe", "混沌のつるはし",
             "Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。",
-            4, PickaxeType(ToolMaterialCard.CHAOS_STONE), // TODO 特殊能力
+            4, FairyMiningToolType.pickaxe(ToolMaterialCard.CHAOS_STONE), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
