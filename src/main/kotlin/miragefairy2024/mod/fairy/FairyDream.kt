@@ -22,6 +22,7 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.world.RaycastContext
 
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.miragefairy2024.fairy_dream.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
+val GAIN_FAIRY_TRANSLATION = Translation({ "gui.miragefairy2024.fairy_dream.gain_fairy" }, "%s found!", "%sを発見した！")
 
 fun initFairyDream() {
 
@@ -119,5 +120,6 @@ fun initFairyDream() {
 
     // 翻訳
     GAIN_FAIRY_DREAM_TRANSLATION.enJa()
+    GAIN_FAIRY_TRANSLATION.enJa()
 
 }

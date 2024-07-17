@@ -7,9 +7,12 @@ import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.sync
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
+import miragefairy2024.util.invoke
+import miragefairy2024.util.obtain
 import miragefairy2024.util.register
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
+import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import net.minecraft.entity.player.PlayerEntity
@@ -66,6 +69,10 @@ class FairyDreamContainer {
         val actualAdditionalMotifs = motifs - map
         actualAdditionalMotifs.forEach { motif ->
             set(motif, true)
+            if (motif.rare <= 9) {
+                player.obtain(motif.createFairyItemStack())
+                player.sendMessage(text { GAIN_FAIRY_TRANSLATION(motif.displayName) }, true)
+            }
             GainFairyDreamChannel.sendToClient(player, motif)
         }
         if (actualAdditionalMotifs.isNotEmpty()) FairyDreamContainerExtraPlayerDataCategory.sync(player)
