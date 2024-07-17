@@ -25,6 +25,8 @@ fun initToolModule() = ModEvents.onInitialize {
     ToolCard.entries.forEach {
         it.init()
     }
+
+    FairyMiningToolType.CUT_ALL_TRANSLATION.enJa()
 }
 
 
