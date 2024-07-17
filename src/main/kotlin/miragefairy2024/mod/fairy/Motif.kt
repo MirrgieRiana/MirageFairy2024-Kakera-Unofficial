@@ -590,7 +590,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SPEED(2)
-            + speed(0.5) * fairyLevel.atLeast(16.0),
+            + speed(0.5) * fairyLevel.atLeast(16.0)
+            + mana(5.0) { TIME },
         MotifCardRecipes().always,
     ),
     MAGNETISM(
