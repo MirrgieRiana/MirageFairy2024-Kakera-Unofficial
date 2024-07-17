@@ -31,6 +31,7 @@ fun initToolModule() = ModEvents.onInitialize {
 interface ToolType<I : Item> {
     fun createItem(): I
     fun init(card: ToolCard<I>) = Unit
+    fun addPoems(poemList: PoemList) = poemList
 }
 
 class ToolCard<I : Item>(
@@ -55,7 +56,7 @@ class ToolCard<I : Item>(
 
         item.enJa(enName, jaName)
 
-        val poemList = PoemList(tier).poem(enPoem, jaPoem)
+        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { type.addPoems(it) }
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
