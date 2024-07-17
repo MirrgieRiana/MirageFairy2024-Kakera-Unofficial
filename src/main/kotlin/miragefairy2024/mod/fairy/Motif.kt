@@ -380,7 +380,7 @@ enum class MotifCard(
     ),
     MELON(
         "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
-        ParentMotifs() + { FOOD },
+        ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + experience(0.2) * level.atMost(29) * food(Items.MELON_SLICE)
             + regeneration(0.4) * food(Items.MELON_SLICE)
@@ -397,7 +397,7 @@ enum class MotifCard(
     ),
     SWEET_BERRY(
         "sweet_berry", 6, "Sweete Berria", "甘液果精スウェーテベッリャ", 0xB81D37, 0x4A070A, 0x4A070A, 0x126341,
-        ParentMotifs() + { FOOD },
+        ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + shooting.attack(0.6) * food(Items.SWEET_BERRIES) // TODO 射撃攻撃力増加ステータス効果
             + shooting.attack(0.6) * food.atLeast(12)
@@ -406,7 +406,7 @@ enum class MotifCard(
     ),
     GLOW_BERRY(
         "glow_berry", 6, "Glowe Berria", "蛍光液果精グローウェベッリャ", 0xFFB73A, 0x8F650C, 0x8F650C, 0x00841A,
-        ParentMotifs() + { FOOD },
+        ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.GLOW_BERRIES) // TODO 魔法攻撃力増加ステータス効果
             + magic.attack(0.6) * food.atLeast(12)
