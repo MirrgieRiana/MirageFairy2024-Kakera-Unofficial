@@ -110,7 +110,7 @@ enum class MotifCard(
     ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
-        ParentMotifs(),
+        ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + melee.attack(2.0) * overworld * daytime * fine * skyVisible
             + regeneration(1.0) * overworld * daytime * fine * skyVisible,
@@ -192,7 +192,7 @@ enum class MotifCard(
     ),
     NETHERITE(
         "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
-        ParentMotifs(),
+        ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + luck(0.4)
