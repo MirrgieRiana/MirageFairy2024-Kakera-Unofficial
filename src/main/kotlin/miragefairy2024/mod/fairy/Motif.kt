@@ -122,7 +122,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.attack(1.5) * onFire
             + fire.defence(5.0) * onFire
-            + ignition * health.atLeast(6.0),
+            + ignition * health.atLeast(6.0)
+            + mana(2.0) { FIRE },
         MotifCardRecipes().nether + Blocks.FIRE,
     ),
     WATER(
