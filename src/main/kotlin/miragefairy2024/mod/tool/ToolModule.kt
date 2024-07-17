@@ -100,7 +100,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_AXE = ToolCard(
             "miragium_axe", "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
-            3, FairyMiningToolType.axe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F), // TODO 特殊能力
+            3, FairyMiningToolType.axe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
@@ -139,7 +139,7 @@ class ToolCard<I : Item>(
         val XARPITE_AXE = ToolCard(
             "xarpite_axe", "Xarpite Axe", "紅天石の斧",
             "Strip the log from the space", "空間にこびりついた丸太の除去に。",
-            2, FairyMiningToolType.axe(ToolMaterialCard.XARPITE, 6.0F, -3.1F), // TODO 特殊能力
+            2, FairyMiningToolType.axe(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
