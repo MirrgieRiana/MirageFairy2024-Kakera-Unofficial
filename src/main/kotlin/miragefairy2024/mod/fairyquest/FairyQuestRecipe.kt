@@ -289,7 +289,7 @@ fun initFairyQuestRecipe() {
         }
         val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
             val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(128),
+                RarityFilterPlacementModifier.of(256),
                 SquarePlacementModifier.of(),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of(),
@@ -312,7 +312,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<Defaul
 
         var count = 0
         val currentBlockPos = BlockPos.Mutable()
-        repeat(4) {
+        repeat(2) {
             currentBlockPos.set(
                 context.origin,
                 random.nextInt(3) - random.nextInt(3),
