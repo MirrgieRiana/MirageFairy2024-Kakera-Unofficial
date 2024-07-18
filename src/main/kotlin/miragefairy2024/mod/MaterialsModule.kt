@@ -20,6 +20,7 @@ import miragefairy2024.util.registerMobDrop
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
+import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -279,6 +280,14 @@ fun initMaterialsModule() = ModEvents.onInitialize {
         input('#', MaterialCard.HAIMEVISKA_SAP.item)
         input('S', Items.STICK)
     } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
+
+    // 妖精の木の涙→粘着ピストン
+    registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
+        pattern("S")
+        pattern("P")
+        input('P', Blocks.PISTON)
+        input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
+    } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_ROSIN.item
 
     // ミラージュの花粉
     MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
