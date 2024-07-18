@@ -57,7 +57,9 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
         override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.items[0].name }.let { if (!gained) it.darkRed else it }
+            val text = text { display.items[0].name }
+                .let { if (display.items.size > 1) text { it + "..."() } else it }
+                .let { if (!gained) it.darkRed else it }
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createSlot(p + Point(1, 1)).entries(display.inputEntries[0]).disableBackground(),
@@ -94,7 +96,9 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
         override fun setupDisplay(display: BlockFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.blocks[0].name }.let { if (!gained) it.darkRed else it }
+            val text = text { display.blocks[0].name }
+                .let { if (display.blocks.size > 1) text { it + "..."() } else it }
+                .let { if (!gained) it.darkRed else it }
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createSlot(p + Point(1, 1)).entries(display.blocks[0].asItem().createItemStack().toEntryStack().toEntryIngredient()).disableBackground(),
@@ -131,7 +135,9 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.entityTypes[0].name }.let { if (!gained) it.darkRed else it }
+            val text = text { display.entityTypes[0].name }
+                .let { if (display.entityTypes.size > 1) text { it + "..."() } else it }
+                .let { if (!gained) it.darkRed else it }
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createLabel(p + Point(2, 5), text)
