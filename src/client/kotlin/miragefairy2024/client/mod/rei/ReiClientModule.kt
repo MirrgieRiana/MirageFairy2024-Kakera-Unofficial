@@ -10,7 +10,7 @@ abstract class ClientReiCategoryCard<D : BasicDisplay>(val parent: ReiCategoryCa
     companion object {
         val entries = listOf(
             WorldGenTraitClientReiCategoryCard,
-            MagicPlantCropClientReiCategoryCard,
+            HarvestClientReiCategoryCard,
             FairyQuestRecipeClientReiCategoryCard,
             CommonMotifRecipeClientReiCategoryCard,
             ItemFairyDreamRecipeClientReiCategoryCard,

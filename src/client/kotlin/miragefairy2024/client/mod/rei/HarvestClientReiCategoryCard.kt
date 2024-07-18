@@ -9,28 +9,28 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.magicPlantCropNotations
-import miragefairy2024.mod.rei.MagicPlantCropReiCategoryCard
+import miragefairy2024.mod.magicplant.harvestNotations
+import miragefairy2024.mod.rei.HarvestReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.toEntryStack
 import net.minecraft.text.Text
 
-object MagicPlantCropClientReiCategoryCard : ClientReiCategoryCard<MagicPlantCropReiCategoryCard.Display>(MagicPlantCropReiCategoryCard) {
+object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCard.Display>(HarvestReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        magicPlantCropNotations.forEach { recipe ->
-            registry.add(MagicPlantCropReiCategoryCard.Display(recipe))
+        harvestNotations.forEach { recipe ->
+            registry.add(HarvestReiCategoryCard.Display(recipe))
         }
     }
 
-    override fun createCategory() = object : DisplayCategory<MagicPlantCropReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = MagicPlantCropReiCategoryCard.identifier.first
-        override fun getTitle(): Text = MagicPlantCropReiCategoryCard.translation()
+    override fun createCategory() = object : DisplayCategory<HarvestReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = HarvestReiCategoryCard.identifier.first
+        override fun getTitle(): Text = HarvestReiCategoryCard.translation()
         override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item.createItemStack().toEntryStack()
-        override fun getDisplayWidth(display: MagicPlantCropReiCategoryCard.Display) = 136
+        override fun getDisplayWidth(display: HarvestReiCategoryCard.Display) = 136
         override fun getDisplayHeight() = 36
-        override fun setupDisplay(display: MagicPlantCropReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+        override fun setupDisplay(display: HarvestReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(3, 3)
             return listOf(
                 Widgets.createRecipeBase(bounds),

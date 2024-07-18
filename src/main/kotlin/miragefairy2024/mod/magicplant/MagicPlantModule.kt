@@ -78,10 +78,10 @@ abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
 }
 
 
-val magicPlantCropNotations = mutableListOf<MagicPlantCropNotation>()
+val harvestNotations = mutableListOf<HarvestNotation>()
 
-class MagicPlantCropNotation(val seed: ItemStack, val crops: List<ItemStack>)
+class HarvestNotation(val seed: ItemStack, val crops: List<ItemStack>)
 
 fun registerMagicPlantDropNotation(seed: Item, vararg drops: Item) {
-    magicPlantCropNotations += MagicPlantCropNotation(seed.createItemStack(), drops.map { it.createItemStack() })
+    harvestNotations += HarvestNotation(seed.createItemStack(), drops.map { it.createItemStack() })
 }

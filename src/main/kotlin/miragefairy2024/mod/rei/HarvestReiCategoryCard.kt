@@ -1,7 +1,7 @@
 package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
-import miragefairy2024.mod.magicplant.MagicPlantCropNotation
+import miragefairy2024.mod.magicplant.HarvestNotation
 import miragefairy2024.util.Single
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
@@ -15,11 +15,11 @@ import mirrg.kotlin.hydrogen.castOrThrow
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtList
 
-object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategoryCard.Display>("magic_plant_crop", "Magic Plant Crop", "魔法植物収穫物") {
+object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>("harvest", "Harvest", "収穫") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
-                MagicPlantCropNotation(
+                HarvestNotation(
                     tag.wrapper["Seed"].compound.get()!!.toItemStack(),
                     tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack() },
                 )
@@ -30,7 +30,7 @@ object MagicPlantCropReiCategoryCard : ReiCategoryCard<MagicPlantCropReiCategory
         }))
     }
 
-    class Display(val recipe: MagicPlantCropNotation) : BasicDisplay(
+    class Display(val recipe: HarvestNotation) : BasicDisplay(
         listOf(recipe.seed.toEntryStack().toEntryIngredient()),
         recipe.crops.map { it.toEntryStack().toEntryIngredient() },
     ) {
