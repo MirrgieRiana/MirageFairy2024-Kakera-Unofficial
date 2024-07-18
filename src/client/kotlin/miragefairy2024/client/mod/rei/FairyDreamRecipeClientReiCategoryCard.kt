@@ -31,20 +31,14 @@ import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
-import net.minecraft.registry.Registries
 import net.minecraft.text.Text
-import kotlin.jvm.optionals.getOrElse
 
 abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
 
 object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Item, ItemFairyDreamRecipeReiCategoryCard.Display>(ItemFairyDreamRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        FairyDreamRecipes.ITEM.getDisplayMap().forEach { (item, motif) ->
-            registry.add(ItemFairyDreamRecipeReiCategoryCard.Display(listOf(item), motif))
-        }
-        FairyDreamRecipes.ITEM.getDisplayTagMap().forEach { (itemTag, motif) ->
-            val itemList = Registries.ITEM.getEntryList(itemTag).getOrElse { return@forEach }.map { it.value() }
-            registry.add(ItemFairyDreamRecipeReiCategoryCard.Display(itemList, motif))
+        FairyDreamRecipes.ITEM.getDisplayMap().forEach { (motif, keys) ->
+            registry.add(ItemFairyDreamRecipeReiCategoryCard.Display(keys.toList(), motif))
         }
     }
 
@@ -78,12 +72,8 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
 
 object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Block, BlockFairyDreamRecipeReiCategoryCard.Display>(BlockFairyDreamRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        FairyDreamRecipes.BLOCK.getDisplayMap().forEach { (block, motif) ->
-            registry.add(BlockFairyDreamRecipeReiCategoryCard.Display(listOf(block), motif))
-        }
-        FairyDreamRecipes.BLOCK.getDisplayTagMap().forEach { (blockTag, motif) ->
-            val blockList = Registries.BLOCK.getEntryList(blockTag).getOrElse { return@forEach }.map { it.value() }
-            registry.add(BlockFairyDreamRecipeReiCategoryCard.Display(blockList, motif))
+        FairyDreamRecipes.BLOCK.getDisplayMap().forEach { (motif, keys) ->
+            registry.add(BlockFairyDreamRecipeReiCategoryCard.Display(keys.toList(), motif))
         }
     }
 
@@ -117,12 +107,8 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
 
 object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<EntityType<*>, EntityTypeFairyDreamRecipeReiCategoryCard.Display>(EntityTypeFairyDreamRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        FairyDreamRecipes.ENTITY_TYPE.getDisplayMap().forEach { (entityType, motif) ->
-            registry.add(EntityTypeFairyDreamRecipeReiCategoryCard.Display(listOf(entityType), motif))
-        }
-        FairyDreamRecipes.ENTITY_TYPE.getDisplayTagMap().forEach { (entityTypeTag, motif) ->
-            val entityTypeList = Registries.ENTITY_TYPE.getEntryList(entityTypeTag).getOrElse { return@forEach }.map { it.value() }
-            registry.add(EntityTypeFairyDreamRecipeReiCategoryCard.Display(entityTypeList, motif))
+        FairyDreamRecipes.ENTITY_TYPE.getDisplayMap().forEach { (motif, keys) ->
+            registry.add(EntityTypeFairyDreamRecipeReiCategoryCard.Display(keys.toList(), motif))
         }
     }
 

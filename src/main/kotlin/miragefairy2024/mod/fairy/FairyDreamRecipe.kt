@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairy
 
+import mirrg.kotlin.hydrogen.unit
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
@@ -15,24 +16,28 @@ object FairyDreamRecipes {
 }
 
 class FairyDreamTable<T>(val registry: Registry<T>) {
-    private val map = mutableMapOf<T, MutableSet<Motif>>()
-    private val displayMap = mutableListOf<Pair<T, Motif>>()
-    private val displayTagMap = mutableListOf<Pair<TagKey<T>, Motif>>()
+    private val entries = mutableListOf<Pair<T, Motif>>()
+    private val tagEntries = mutableListOf<Pair<TagKey<T>, Motif>>()
 
-    fun register(key: T, motif: Motif) {
-        map.getOrPut(key) { mutableSetOf() } += motif
-        displayMap += Pair(key, motif)
-    }
-
-    fun registerFromTag(tag: TagKey<T>, motif: Motif) {
-        registry.getEntryList(tag).getOrElse { return }.map { it.value() }.forEach {
-            map.getOrPut(it) { mutableSetOf() } += motif
+    private val mapPair: Pair<Map<T, Set<Motif>>, Map<Motif, Set<T>>> by lazy {
+        val map = mutableMapOf<T, MutableSet<Motif>>()
+        val reverseMap = mutableMapOf<Motif, MutableSet<T>>()
+        entries.forEach { (key, motif) ->
+            map.getOrPut(key) { mutableSetOf() } += motif
+            reverseMap.getOrPut(motif) { mutableSetOf() } += key
         }
-        displayTagMap += Pair(tag, motif)
+        tagEntries.forEach { (tag, motif) ->
+            registry.getEntryList(tag).getOrElse { return@forEach }.map { it.value() }.forEach { key ->
+                map.getOrPut(key) { mutableSetOf() } += motif
+                reverseMap.getOrPut(motif) { mutableSetOf() } += key
+            }
+        }
+        Pair(map, reverseMap)
     }
 
-    fun test(key: T): Set<Motif> = map.getOrElse(key) { setOf() }
+    fun register(key: T, motif: Motif) = unit { entries += Pair(key, motif) }
+    fun registerFromTag(tag: TagKey<T>, motif: Motif) = unit { tagEntries += Pair(tag, motif) }
 
-    fun getDisplayMap(): List<Pair<T, Motif>> = displayMap
-    fun getDisplayTagMap(): List<Pair<TagKey<T>, Motif>> = displayTagMap
+    fun test(key: T) = mapPair.first.getOrElse(key) { setOf() }
+    fun getDisplayMap() = mapPair.second
 }
