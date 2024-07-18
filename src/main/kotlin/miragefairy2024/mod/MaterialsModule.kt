@@ -117,6 +117,7 @@ enum class MaterialCard(
         fuelValue = 200,
     ),
     FAIRY_PLASTIC(
+        // TODO add recipe
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
         PoemList(2).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
