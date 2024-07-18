@@ -111,6 +111,11 @@ enum class MaterialCard(
             .statusEffect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
             .build(),
     ),
+    HAIMEVISKA_ROSIN(
+        "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
+        PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
+        fuelValue = 200,
+    ),
     FAIRY_PLASTIC(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
