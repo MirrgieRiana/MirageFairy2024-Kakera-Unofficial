@@ -18,7 +18,6 @@ import miragefairy2024.mod.rei.BlockFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.EntityTypeFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.ItemFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.ReiCategoryCard
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkRed
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -91,7 +90,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
                 .let { if (!gained) it.darkRed else it }
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createSlot(p + Point(1, 1)).entries(display.blocks[0].asItem().createItemStack().toEntryStack().toEntryIngredient()).disableBackground(),
+                Widgets.createSlot(p + Point(1, 1)).entries(display.inputEntries[0]).disableBackground(),
                 Widgets.createLabel(p + Point(21, 5), text)
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
