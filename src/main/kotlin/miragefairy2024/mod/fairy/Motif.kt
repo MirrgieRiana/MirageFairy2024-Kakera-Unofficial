@@ -244,7 +244,9 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.7)
-            + mana(0.4),
+            + mana(0.4)
+            + StatusEffects.HASTE() * ToolMaterialCard.NETHERITE()
+            + StatusEffects.HASTE(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes() + MaterialCard.XARPITE.item,
     ),
     MIRANAGITE(
@@ -252,7 +254,9 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.7)
-            + mana(0.4),
+            + mana(0.4)
+            + StatusEffects.LUCK() * ToolMaterialCard.NETHERITE()
+            + StatusEffects.LUCK(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(12.0),
         MotifCardRecipes() + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item,
     ),
     AMETHYST(
