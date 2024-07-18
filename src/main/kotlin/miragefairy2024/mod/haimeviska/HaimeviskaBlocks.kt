@@ -372,7 +372,7 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
         // 生産
         val fortune = EnchantmentHelper.getLevel(Enchantments.FORTUNE, toolItemStack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
-        drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.01 + 0.02 * fortune) // 妖精の木の涙
+        drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
         world.playSound(null, pos, SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * world.random.nextFloat())
