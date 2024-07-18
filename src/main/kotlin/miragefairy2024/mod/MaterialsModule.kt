@@ -46,6 +46,7 @@ enum class MaterialCard(
     XARPITE(
         "xarpite", "Xarpite", "紅天石",
         PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
+        fuelValue = 3200,
         // TODO 使えるワード：牢獄
     ),
     MIRANAGITE(
@@ -61,10 +62,12 @@ enum class MaterialCard(
     MIRAGE_LEAVES(
         "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
         PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
+        fuelValue = 100,
     ),
     MIRAGE_STEM(
         "mirage_stem", "Mirage Stem", "ミラージュの茎",
         PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
+        fuelValue = 100,
     ),
     FAIRY_CRYSTAL(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
@@ -81,6 +84,7 @@ enum class MaterialCard(
     VEROPEDA_LEAF(
         "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
         PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
+        fuelValue = 100,
     ),
     VEROPEDA_BERRIES(
         "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
@@ -111,6 +115,7 @@ enum class MaterialCard(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
         PoemList(2).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
+        fuelValue = 1600,
     ),
     FAIRY_RUBBER(
         // TODO add purpose
