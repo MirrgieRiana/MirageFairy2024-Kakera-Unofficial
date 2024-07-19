@@ -36,6 +36,7 @@ class FairyMiningToolType(
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var mineAll = false
     var cutAll = false
+    val descriptions = mutableListOf<Translation>()
 
     override fun createItem() = FairyMiningToolItem(this, Item.Settings())
 
@@ -46,16 +47,19 @@ class FairyMiningToolType(
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    override fun addPoems(poemList: PoemList): PoemList {
-        return poemList
-            .let { if (mineAll) it.translation(PoemType.DESCRIPTION, FairyMiningToolItem.MINE_ALL_TRANSLATION) else it }
-            .let { if (cutAll) it.translation(PoemType.DESCRIPTION, FairyMiningToolItem.CUT_ALL_TRANSLATION) else it }
-    }
+    override fun addPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.translation(PoemType.DESCRIPTION, description) }
 
 }
 
-fun FairyMiningToolType.mineAll() = this.also { it.mineAll = true }
-fun FairyMiningToolType.cutAll() = this.also { it.cutAll = true }
+fun FairyMiningToolType.mineAll() = this.also {
+    it.mineAll = true
+    it.descriptions += FairyMiningToolItem.MINE_ALL_TRANSLATION
+}
+
+fun FairyMiningToolType.cutAll() = this.also {
+    it.cutAll = true
+    it.descriptions += FairyMiningToolItem.CUT_ALL_TRANSLATION
+}
 
 // Sword 3, -2.4
 
