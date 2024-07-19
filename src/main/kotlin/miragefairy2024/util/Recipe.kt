@@ -50,24 +50,20 @@ class RecipeGenerationSettings<T> {
     var noGroup = false
 }
 
-infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: Item): RecipeGenerationSettings<T> {
-    listeners += { it.criterion(item) }
-    return this
+infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: Item) = this.apply {
+    this.listeners += { it.criterion(item) }
 }
 
-infix fun <T> RecipeGenerationSettings<T>.modId(modId: String): RecipeGenerationSettings<T> {
-    idModifiers += { Identifier(modId, it.path) }
-    return this
+infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
+    this.idModifiers += { Identifier(modId, it.path) }
 }
 
-infix fun <T> RecipeGenerationSettings<T>.from(item: Item): RecipeGenerationSettings<T> {
-    idModifiers += { it concat "_from_" concat item.getIdentifier().path }
-    return this
+infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
+    this.idModifiers += { it concat "_from_" concat item.getIdentifier().path }
 }
 
-fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true): RecipeGenerationSettings<T> {
+fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.apply {
     this.noGroup = noGroup
-    return this
 }
 
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
