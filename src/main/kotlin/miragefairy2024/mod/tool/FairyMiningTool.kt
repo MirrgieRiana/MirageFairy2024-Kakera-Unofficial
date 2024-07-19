@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
-import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.translation
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.Translation
