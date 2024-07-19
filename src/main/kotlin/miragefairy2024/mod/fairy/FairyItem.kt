@@ -155,18 +155,20 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val player = MirageFairy2024.clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
-        // 魔力
+        // パッシブスキル判定
         val level = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
         val (manaBoost, status) = if (player != null) {
             val passiveSkillProviders = player.findPassiveSkillProviders()
             val result = PassiveSkillResult()
             result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
+            val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }
             val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
-            Pair(result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }, status)
+            Pair(manaBoost, status)
         } else {
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = level * (1.0 + manaBoost)
+
         tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
 
         // レベル・凝縮数
@@ -227,7 +229,12 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
         val level = motif.rare.toDouble() + log(itemStack.getFairyCondensation().toDouble() * itemStack.count, 3.0)
-        return PassiveSkill("fairy/" concat motif.getIdentifier()!!, motif, level, motif.passiveSkillSpecifications)
+        return PassiveSkill(
+            "fairy/" concat motif.getIdentifier()!!,
+            motif,
+            level,
+            motif.passiveSkillSpecifications,
+        )
     }
 }
 
