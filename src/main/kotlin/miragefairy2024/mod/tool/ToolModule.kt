@@ -73,7 +73,7 @@ class ToolCard<I : Item>(
 
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
-            "A transparent brain", "闇を打ち砕く透明な心。",
+            "A brain frozen in crystal", "闇を打ち砕く透明な心。",
             2, FairyMiningToolType.pickaxe(ToolMaterialCard.FAIRY_CRYSTAL), // TODO 特殊能力
         ) {
             registerShapedRecipeGeneration(item) {
