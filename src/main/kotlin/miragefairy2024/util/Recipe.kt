@@ -47,6 +47,7 @@ class RecipeGenerationSettings<T> {
     val listeners = mutableListOf<(T) -> Unit>()
     val idModifiers = mutableListOf<(Identifier) -> Identifier>()
     var recipeCategory = RecipeCategory.MISC
+    var noGroup = false
 }
 
 infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: Item): RecipeGenerationSettings<T> {
@@ -64,6 +65,11 @@ infix fun <T> RecipeGenerationSettings<T>.from(item: Item): RecipeGenerationSett
     return this
 }
 
+fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true): RecipeGenerationSettings<T> {
+    this.noGroup = noGroup
+    return this
+}
+
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     creator: (RecipeCategory, Item, Int) -> T,
     item: Item,
@@ -73,10 +79,10 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     val settings = RecipeGenerationSettings<T>()
     MirageFairy2024DataGenerator.recipeGenerators {
         val builder = creator(settings.recipeCategory, item, count)
-        builder.group(item)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
+        if (!settings.noGroup) builder.group(item)
         block(builder)
         val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.offerTo(it, identifier)
