@@ -16,7 +16,7 @@ import net.minecraft.world.biome.Biome
 val worldGenTraitGenerations = mutableListOf<WorldGenTraitGeneration>()
 
 fun interface WorldGenTraitGeneration {
-    fun spawn(world: World, blockPos: BlockPos, block: Block): List<TraitStack>
+    fun spawn(world: World, blockPos: BlockPos, block: Block): Pair<List<TraitStack>, Boolean>
 }
 
 
@@ -84,8 +84,9 @@ fun registerWorldGenTraitRecipe(recipe: WorldGenTraitRecipe) {
 }
 
 class RecipeWorldGenTraitGeneration : WorldGenTraitGeneration {
-    override fun spawn(world: World, blockPos: BlockPos, block: Block): List<TraitStack> {
+    override fun spawn(world: World, blockPos: BlockPos, block: Block): Pair<List<TraitStack>, Boolean> {
         val resultTraitStackList = mutableListOf<TraitStack>()
+        var isRare = false
 
         // レシピ判定
         val aTraitStackList = mutableListOf<TraitStack>()
@@ -114,6 +115,7 @@ class RecipeWorldGenTraitGeneration : WorldGenTraitGeneration {
                 resultTraitStackList += cTraitStackList
                 if (sTraitStackList.isNotEmpty()) {
                     resultTraitStackList += sTraitStackList[world.random.nextInt(sTraitStackList.size)]
+                    isRare = true
                 }
             }
 
@@ -130,6 +132,7 @@ class RecipeWorldGenTraitGeneration : WorldGenTraitGeneration {
                 if (cTraitStackList.isNotEmpty()) {
                     cTraitStackList.removeAt(world.random.nextInt(cTraitStackList.size))
                     resultTraitStackList += cTraitStackList
+                    isRare = true
                 }
             }
 
@@ -142,6 +145,6 @@ class RecipeWorldGenTraitGeneration : WorldGenTraitGeneration {
             }
         }
 
-        return resultTraitStackList
+        return Pair(resultTraitStackList, isRare)
     }
 }

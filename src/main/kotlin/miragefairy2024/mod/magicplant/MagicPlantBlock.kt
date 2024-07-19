@@ -2,10 +2,12 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.boolean
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.darkRed
 import miragefairy2024.util.formatted
+import miragefairy2024.util.get
 import miragefairy2024.util.green
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -13,6 +15,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.toBlockPos
 import miragefairy2024.util.toBox
+import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
@@ -89,6 +92,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
             val blockEntity = world.getBlockEntity(pos) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = itemStack.getTraitStacks() ?: return@run
             blockEntity.setTraitStacks(traitStacks)
+            blockEntity.setRare(itemStack.isRare())
         }
     }
 
@@ -152,9 +156,10 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
     protected abstract fun getAdditionalDrops(world: World, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
 
     /** この植物本来の種子を返す。 */
-    protected fun createSeed(traitStacks: TraitStacks): ItemStack {
+    protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean = false): ItemStack {
         val itemStack = this.asItem().createItemStack()
         itemStack.setTraitStacks(traitStacks)
+        itemStack.setRare(isRare)
         return itemStack
     }
 
@@ -216,8 +221,9 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
     final override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
-        val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return EMPTY_ITEM_STACK
-        return createSeed(traitStacks)
+        val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return EMPTY_ITEM_STACK
+        val traitStacks = blockEntity.getTraitStacks() ?: return EMPTY_ITEM_STACK
+        return createSeed(traitStacks, isRare = blockEntity.isRare())
     }
 
     /** 破損時、LootTableと同じところで収穫物を追加する。 */
@@ -237,7 +243,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
             val player = builder.getOptional(LootContextParameters.THIS_ENTITY) as? PlayerEntity
             val tool = builder.getOptional(LootContextParameters.TOOL)
 
-            itemStacks += createSeed(traitStacks)
+            itemStacks += createSeed(traitStacks, isRare = blockEntity.isRare())
             itemStacks += getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
         }
         return itemStacks
@@ -343,6 +349,7 @@ abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(setti
 abstract class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state) {
 
     private var traitStacks: TraitStacks? = null
+    private var isRare = false
 
     fun getTraitStacks() = traitStacks
 
@@ -351,31 +358,45 @@ abstract class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, st
         markDirty()
     }
 
+    fun isRare() = isRare
+
+    fun setRare(isRare: Boolean) {
+        this.isRare = isRare
+        markDirty()
+    }
+
     override fun setWorld(world: World) {
         super.setWorld(world)
         if (traitStacks == null) {
             val block = world.getBlockState(pos).block
             val traitStackList = mutableListOf<TraitStack>()
+            var isRare = false
             worldGenTraitGenerations.forEach {
-                traitStackList += it.spawn(world, pos, block)
+                val result = it.spawn(world, pos, block)
+                traitStackList += result.first
+                if (result.second) isRare = true
             }
             setTraitStacks(TraitStacks.of(traitStackList))
+            setRare(isRare)
         }
     }
 
     public override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
+        if (isRare) nbt.putBoolean("Rare", true)
     }
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
         traitStacks = TraitStacks.readFromNbt(nbt)
+        isRare = nbt.getBoolean("Rare")
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound {
         val nbt = super.toInitialChunkDataNbt()
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
+        if (isRare) nbt.putBoolean("Rare", true)
         return nbt
     }
 
@@ -464,6 +485,8 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
             return super.place(context)
         }
     }
+
+    override fun hasGlint(stack: ItemStack) = stack.isRare() || super.hasGlint(stack)
 }
 
 fun ItemStack.getTraitStacks(): TraitStacks? {
@@ -474,3 +497,6 @@ fun ItemStack.getTraitStacks(): TraitStacks? {
 fun ItemStack.setTraitStacks(traitStacks: TraitStacks) {
     getOrCreateNbt().put("TraitStacks", traitStacks.toNbt())
 }
+
+fun ItemStack.isRare() = this.nbt.or { return false }.wrapper["Rare"].boolean.get().or { false }
+fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateNbt().wrapper["Rare"].boolean.set(if (isRare) true else null)
