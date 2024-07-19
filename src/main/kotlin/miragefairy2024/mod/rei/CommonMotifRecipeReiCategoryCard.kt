@@ -8,13 +8,13 @@ import miragefairy2024.mod.fairy.CommonMotifRecipe
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.motifRegistry
-import miragefairy2024.util.Single
 import miragefairy2024.util.get
 import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.Single
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
