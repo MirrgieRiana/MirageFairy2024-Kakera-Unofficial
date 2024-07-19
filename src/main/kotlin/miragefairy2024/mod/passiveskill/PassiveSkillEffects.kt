@@ -15,9 +15,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
+import miragefairy2024.util.repair
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
-import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.attribute.EntityAttribute
@@ -255,13 +255,7 @@ object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
-        val repairPower = context.world.random.randomInt(newValue)
-        if (repairPower <= 0) return
-        val itemStack = context.player.mainHandStack
-        if (!itemStack.isDamageable) return
-        val actualRepairAmount = repairPower atMost itemStack.damage
-        if (actualRepairAmount <= 0) return
-        itemStack.damage -= actualRepairAmount
+        context.player.mainHandStack.repair(context.world.random.randomInt(newValue))
     }
 
     override fun init() {

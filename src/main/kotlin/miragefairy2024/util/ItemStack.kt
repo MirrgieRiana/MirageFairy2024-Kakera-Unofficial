@@ -18,3 +18,11 @@ fun NbtCompound.toItemStack(): ItemStack = ItemStack.fromNbt(this)
 infix fun ItemStack.hasSameItem(other: ItemStack) = this.item === other.item
 infix fun ItemStack.hasSameItemAndNbt(other: ItemStack) = this hasSameItem other && Objects.equals(this.nbt, other.nbt)
 infix fun ItemStack.hasSameItemAndNbtAndCount(other: ItemStack) = this hasSameItemAndNbt other && this.count == other.count
+
+fun ItemStack.repair(amount: Int) {
+    if (amount <= 0) return
+    if (!this.isDamageable) return
+    val actualAmount = amount atMost this.damage
+    if (actualAmount <= 0) return
+    this.damage -= actualAmount
+}
