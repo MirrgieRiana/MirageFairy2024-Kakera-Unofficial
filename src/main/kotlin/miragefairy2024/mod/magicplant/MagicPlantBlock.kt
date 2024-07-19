@@ -103,7 +103,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
 
     /** 時間経過や骨粉などによって呼び出される成長と自動収穫などのためのイベントを処理します。 */
     protected fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
-        val traitStacks = world.getTraitStacks(blockPos) ?: return
+        val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
 
         // 成長
@@ -167,7 +167,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
             val targetBlock = targetBlockState.block as? MagicPlantBlock ?: return
             if (targetBlock != this) return
             if (!targetBlock.canCross(world, blockPos, targetBlockState)) return
-            val targetTraitStacks = world.getTraitStacks(targetBlockPos) ?: return
+            val targetTraitStacks = world.getMagicPlantBlockEntity(targetBlockPos)?.getTraitStacks() ?: return
             targetTraitStacksList += targetTraitStacks
         }
         check(blockPos.north())
@@ -187,7 +187,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
         val block = blockState.block
-        val traitStacks = world.getTraitStacks(blockPos) ?: return
+        val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
         val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
         val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
@@ -216,7 +216,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
     final override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
-        val traitStacks = world.getTraitStacks(pos) ?: return EMPTY_ITEM_STACK
+        val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return EMPTY_ITEM_STACK
         return createSeed(traitStacks)
     }
 
@@ -249,7 +249,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
         if (!state.isOf(newState.block)) run {
             if (world !is ServerWorld) return@run
             if (!canPick(state)) return@run
-            val traitStacks = world.getTraitStacks(pos) ?: return@run
+            val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, pos, traitStacks)
             val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
             if (experience > 0) dropExperience(world, pos, experience)
@@ -383,10 +383,7 @@ abstract class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, st
 
 }
 
-fun BlockView.getTraitStacks(blockPos: BlockPos): TraitStacks? {
-    val blockEntity = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity ?: return null
-    return blockEntity.getTraitStacks()
-}
+fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
 class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(block, settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
