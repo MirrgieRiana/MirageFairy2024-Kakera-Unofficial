@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "miragefairy2024:mirage_flour_of_sky",
   "key": {
     "#": {
       "item": "miragefairy2024:mirage_flour_of_underworld"

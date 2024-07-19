@@ -7,6 +7,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.modId
+import miragefairy2024.util.noGroup
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
@@ -216,24 +217,24 @@ fun initMaterialsModule() = ModEvents.onInitialize {
 
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
 
-    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard) {
+    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
         registerShapedRecipeGeneration(high.item) {
             pattern("###")
             pattern("###")
             pattern("###")
             input('#', low.item)
-        } on low.item from low.item
+        }.noGroup(noGroup) on low.item from low.item
         registerShapelessRecipeGeneration(low.item, 9) {
             input(high.item)
-        } on high.item from high.item
+        }.noGroup(noGroup) on high.item from high.item
     }
-    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME)
+    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME, noGroup = true)
 
     // 紅天石
     MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
