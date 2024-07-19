@@ -88,7 +88,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_PICKAXE = ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
-            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).pickaxe(), // TODO 特殊能力
+            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).pickaxe().mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -127,7 +127,7 @@ class ToolCard<I : Item>(
         val XARPITE_PICKAXE = ToolCard(
             "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
             "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
-            2, FairyMiningToolType(ToolMaterialCard.XARPITE).pickaxe(), // TODO 特殊能力
+            2, FairyMiningToolType(ToolMaterialCard.XARPITE).pickaxe().mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
