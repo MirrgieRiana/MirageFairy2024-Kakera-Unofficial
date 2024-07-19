@@ -157,14 +157,25 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
         // パッシブスキル判定
         val level = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
-        val (manaBoost, status) = if (player != null) {
+        val (manaBoost, status) = if (player != null) { // ワールドなど
+            // この妖精の実際に適用されるパッシブスキルを表示
+
+            // プレイヤーのパッシブスキルプロバイダーを取得
             val passiveSkillProviders = player.findPassiveSkillProviders()
+
+            // 一旦魔力用のコレクト
             val result = PassiveSkillResult()
             result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
+
+            // この妖精が受けられる魔力ブーストを計算
             val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }
+
+            // 実際のプロバイダを取得
             val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
+
             Pair(manaBoost, status)
-        } else {
+        } else { // 初期化時など
+            // この妖精の固有のパッシブスキルを出力
             Pair(0.0, PassiveSkillStatus.DISABLED)
         }
         val mana = level * (1.0 + manaBoost)
