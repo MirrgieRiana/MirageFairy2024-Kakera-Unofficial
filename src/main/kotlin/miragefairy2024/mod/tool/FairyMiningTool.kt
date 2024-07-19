@@ -51,16 +51,6 @@ class FairyMiningToolType(
 
 }
 
-fun FairyMiningToolType.mineAll() = this.also {
-    it.mineAll = true
-    it.descriptions += FairyMiningToolItem.MINE_ALL_TRANSLATION
-}
-
-fun FairyMiningToolType.cutAll() = this.also {
-    it.cutAll = true
-    it.descriptions += FairyMiningToolItem.CUT_ALL_TRANSLATION
-}
-
 // Sword 3, -2.4
 
 // Shovel 1.5, -3.0
@@ -91,6 +81,16 @@ fun FairyMiningToolType.axe(attackDamage: Float, attackSpeed: Float): FairyMinin
 // Hoe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
+
+fun FairyMiningToolType.mineAll() = this.also {
+    it.mineAll = true
+    it.descriptions += FairyMiningToolItem.MINE_ALL_TRANSLATION
+}
+
+fun FairyMiningToolType.cutAll() = this.also {
+    it.cutAll = true
+    it.descriptions += FairyMiningToolItem.CUT_ALL_TRANSLATION
+}
 
 
 class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE, settings) {
