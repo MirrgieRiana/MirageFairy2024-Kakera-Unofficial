@@ -26,6 +26,7 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.minecraft.block.ExperienceDroppingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.enums.Instrument
@@ -134,6 +135,7 @@ fun initOresModule() = ModEvents.onInitialize {
 
         card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
         card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
+        card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
 
     }
 
