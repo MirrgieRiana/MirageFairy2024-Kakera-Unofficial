@@ -29,38 +29,6 @@ class FairyMiningToolType(
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolType<FairyMiningToolItem> {
     companion object {
-        // Sword 3, -2.4
-
-        // Shovel 1.5, -3.0
-
-        fun pickaxe(toolMaterialCard: ToolMaterialCard): FairyMiningToolType {
-            return FairyMiningToolType(toolMaterialCard).also {
-                it.attackDamage = 1F
-                it.attackSpeed = -2.8F
-                it.tags += ItemTags.PICKAXES
-                it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-                it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
-            }
-        }
-
-        /**
-         * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
-         * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
-         */
-        fun axe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float): FairyMiningToolType {
-            return FairyMiningToolType(toolMaterialCard).also {
-                it.attackDamage = attackDamage
-                it.attackSpeed = attackSpeed
-                it.tags += ItemTags.AXES
-                it.effectiveBlockTags += BlockTags.AXE_MINEABLE
-            }
-        }
-
-        // Hoe
-        // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
-        // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
-
-
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Harvesting the entire tree", "木全体を伐採")
     }
 
@@ -87,6 +55,38 @@ class FairyMiningToolType(
 }
 
 fun FairyMiningToolType.cutAll() = this.also { it.cutAll = true }
+
+// Sword 3, -2.4
+
+// Shovel 1.5, -3.0
+
+fun FairyMiningToolType.pickaxe(): FairyMiningToolType {
+    return this.also {
+        it.attackDamage = 1F
+        it.attackSpeed = -2.8F
+        it.tags += ItemTags.PICKAXES
+        it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
+        it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+    }
+}
+
+/**
+ * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
+ * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
+ */
+fun FairyMiningToolType.axe(attackDamage: Float, attackSpeed: Float): FairyMiningToolType {
+    return this.also {
+        it.attackDamage = attackDamage
+        it.attackSpeed = attackSpeed
+        it.tags += ItemTags.AXES
+        it.effectiveBlockTags += BlockTags.AXE_MINEABLE
+    }
+}
+
+// Hoe
+// @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
+// @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
+
 
 class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE, settings) {
     override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (type.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
