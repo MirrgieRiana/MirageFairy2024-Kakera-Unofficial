@@ -21,7 +21,8 @@ import kotlin.math.log
 
 val PASSIVE_SKILL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
 val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.disabled" }, "Outside target slot", "対象スロット外")
-val PASSIVE_SKILL_DUPLICATED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.duplicated" }, "Duplicate items!", "アイテムが重複！")
+val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
+val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.supporting" }, "Supporting other item", "他のアイテムを支援中")
 val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.effective" }, "Effective", "発動中")
 
 fun initPassiveSkillExecution() {
@@ -53,7 +54,8 @@ fun initPassiveSkillExecution() {
     // 翻訳
     PASSIVE_SKILL_TRANSLATION.enJa()
     PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
-    PASSIVE_SKILL_DUPLICATED_TRANSLATION.enJa()
+    PASSIVE_SKILL_OVERFLOWED_TRANSLATION.enJa()
+    PASSIVE_SKILL_SUPPORTING_TRANSLATION.enJa()
     PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
 
 }
@@ -62,8 +64,11 @@ enum class PassiveSkillStatus {
     /** アイテムが有効なスロットにありません。 */
     DISABLED,
 
-    /** 同種のアイテムが既に存在します。 */
-    DUPLICATED,
+    /** パッシブスキルがあふれています。 */
+    OVERFLOWED,
+
+    /** 同種のアイテムを支援中。 */
+    SUPPORTING,
 
     /** パッシブスキルは有効です。 */
     EFFECTIVE,
@@ -72,33 +77,70 @@ enum class PassiveSkillStatus {
 val PassiveSkillStatus.description
     get() = when (this) {
         PassiveSkillStatus.DISABLED -> PASSIVE_SKILL_DISABLED_TRANSLATION()
-        PassiveSkillStatus.DUPLICATED -> PASSIVE_SKILL_DUPLICATED_TRANSLATION()
+        PassiveSkillStatus.OVERFLOWED -> PASSIVE_SKILL_OVERFLOWED_TRANSLATION()
+        PassiveSkillStatus.SUPPORTING -> PASSIVE_SKILL_SUPPORTING_TRANSLATION()
         PassiveSkillStatus.EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
     }
 
 class PassiveSkillProviders(val providers: List<Pair<ItemStack, PassiveSkillStatus>>, val passiveSkills: List<PassiveSkill>)
 
+@Suppress("UnusedReceiverParameter")
+fun PlayerEntity.getPassiveSkillCount() = 9
+
 fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
+    val passiveSkillCount = this.getPassiveSkillCount()
+
     val providers = mutableListOf<Pair<ItemStack, PassiveSkillStatus>>()
-    val passiveSkills = mutableListOf<PassiveSkill>()
-    val acceptedProviderIds = mutableSetOf<Identifier>()
-    val soulStream = this.soulStream
-    repeat(SoulStream.PASSIVE_SKILL_SLOT_COUNT) { slotIndex ->
-        val itemStack = soulStream[slotIndex]
+    val passiveSkillListTable = mutableMapOf<Identifier, MutableList<PassiveSkill>>()
+
+    fun addItemStack(itemStack: ItemStack, enabled: Boolean) {
         val item = itemStack.item
-        if (item is PassiveSkillProvider) {
-            val passiveSkill = item.getPassiveSkill(itemStack)
-            if (passiveSkill != null) {
-                if (passiveSkill.providerId in acceptedProviderIds) {
-                    providers += Pair(itemStack, PassiveSkillStatus.DUPLICATED)
-                } else {
-                    acceptedProviderIds += passiveSkill.providerId
+        if (item !is PassiveSkillProvider) return
+        val passiveSkill = item.getPassiveSkill(itemStack) ?: return
+
+        val passiveSkills = passiveSkillListTable[passiveSkill.providerId]
+        if (passiveSkills != null) { // 既存パッシブスキル
+            // 他のアイテムを支援
+            providers += Pair(itemStack, PassiveSkillStatus.SUPPORTING)
+            passiveSkills += passiveSkill
+        } else { // 新規パッシブスキル
+            if (!enabled) { // 発動対象スロットでない場所に配置されている
+                // 発動対象でないため新規パッシブスキルを発動しない
+            } else { // 発動対象スロットに配置されている
+                // パッシブスキルを新しく発動しようとしている
+                if (passiveSkillListTable.size >= passiveSkillCount) { // パッシブスキルの枠が満杯
+                    // パッシブスキルがあふれた
+                    providers += Pair(itemStack, PassiveSkillStatus.OVERFLOWED)
+                } else { // パッシブスキルの枠に余裕がある
+                    // パッシブスキルを新しく発動する
                     providers += Pair(itemStack, PassiveSkillStatus.EFFECTIVE)
-                    passiveSkills += passiveSkill
+                    passiveSkillListTable[passiveSkill.providerId] = mutableListOf(passiveSkill)
                 }
             }
         }
     }
+
+    // アイテムを検出
+    addItemStack(this.offHandStack, true)
+    this.armorItems.forEach {
+        addItemStack(it, true)
+    }
+    repeat(SoulStream.SLOT_COUNT) { index ->
+        addItemStack(this.soulStream[index], index < SoulStream.PASSIVE_SKILL_SLOT_COUNT)
+    }
+
+    // パッシブスキルを統合
+    val passiveSkills = passiveSkillListTable.values.map { passiveSkillList ->
+        val mainPassiveSkill = passiveSkillList[0]
+        PassiveSkill(
+            mainPassiveSkill.providerId,
+            mainPassiveSkill.motif,
+            mainPassiveSkill.rare,
+            passiveSkillList.sumOf { it.count },
+            mainPassiveSkill.specifications,
+        )
+    }
+
     return PassiveSkillProviders(providers.toList(), passiveSkills.toList())
 }
 
