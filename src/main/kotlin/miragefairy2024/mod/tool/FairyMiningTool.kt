@@ -108,9 +108,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.postMine(stack, world, state, pos, miner)
-        if (type.mineAll && !miner.isSneaking) run fail@{
+        if (type.mineAll) run fail@{
             if (world.isClient) return@fail
 
+            if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
             if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.isIn(ConventionalBlockTags.ORES)) return@fail // 掘ったブロックが鉱石ではない
@@ -129,9 +130,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 }
             }
         }
-        if (type.cutAll && !miner.isSneaking) run fail@{
+        if (type.cutAll) run fail@{
             if (world.isClient) return@fail
 
+            if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
             if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.isIn(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
