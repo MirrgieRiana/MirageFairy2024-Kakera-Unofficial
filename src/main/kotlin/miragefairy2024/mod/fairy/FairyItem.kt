@@ -156,8 +156,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val motif = stack.getFairyMotif() ?: return
 
         // パッシブスキル判定
-        val level = motif.rare.toDouble() + log(stack.getFairyCondensation().toDouble() * stack.count, 3.0)
-        val (manaBoost, status) = if (player != null) { // ワールドなど
+        val (count, manaBoost, status) = if (player != null) { // ワールドなど
             // この妖精の実際に適用されるパッシブスキルを表示
 
             // プレイヤーのパッシブスキルプロバイダーを取得
@@ -171,13 +170,20 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }
 
             // 実際のプロバイダを取得
-            val status = passiveSkillProviders.providers.find { it.first === stack }?.second ?: PassiveSkillStatus.DISABLED
+            val provider = passiveSkillProviders.providers.find { it.first === stack }
 
-            Pair(manaBoost, status)
+            if (provider != null) { // この妖精はパッシブスキルに関与している
+                // 実際に発動しているレベル分の個数と魔力パッシブを適用して表示
+                Triple(provider.third.count, manaBoost, provider.second)
+            } else { // この妖精はパッシブスキルに関与していない
+                // 魔力パッシブの効果だけ適用して表示
+                Triple(stack.getFairyCondensation().toDouble() * stack.count, manaBoost, PassiveSkillStatus.DISABLED)
+            }
         } else { // 初期化時など
             // この妖精の固有のパッシブスキルを出力
-            Pair(0.0, PassiveSkillStatus.DISABLED)
+            Triple(stack.getFairyCondensation().toDouble() * stack.count, 0.0, PassiveSkillStatus.DISABLED)
         }
+        val level = motif.rare.toDouble() + log(count, 3.0)
         val mana = level * (1.0 + manaBoost)
 
         tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }

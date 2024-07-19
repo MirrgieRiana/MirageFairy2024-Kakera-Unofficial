@@ -13,6 +13,7 @@ import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -82,7 +83,7 @@ val PassiveSkillStatus.description
         PassiveSkillStatus.EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
     }
 
-class PassiveSkillProviders(val providers: List<Pair<ItemStack, PassiveSkillStatus>>, val passiveSkills: List<PassiveSkill>)
+class PassiveSkillProviders(val providers: List<Triple<ItemStack, PassiveSkillStatus, PassiveSkill>>, val passiveSkills: List<PassiveSkill>)
 
 @Suppress("UnusedReceiverParameter")
 fun PlayerEntity.getPassiveSkillCount() = 9
@@ -90,31 +91,33 @@ fun PlayerEntity.getPassiveSkillCount() = 9
 fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     val passiveSkillCount = this.getPassiveSkillCount()
 
-    val providers = mutableListOf<Pair<ItemStack, PassiveSkillStatus>>()
-    val passiveSkillListTable = mutableMapOf<Identifier, MutableList<PassiveSkill>>()
+    val providers = mutableListOf<Triple<ItemStack, PassiveSkillStatus, Slot<PassiveSkill>>>()
+    val passiveSkillSlotListTable = mutableMapOf<Identifier, MutableList<Slot<PassiveSkill>>>()
 
     fun addItemStack(itemStack: ItemStack, enabled: Boolean) {
         val item = itemStack.item
         if (item !is PassiveSkillProvider) return
         val passiveSkill = item.getPassiveSkill(itemStack) ?: return
 
-        val passiveSkills = passiveSkillListTable[passiveSkill.providerId]
+        val passiveSkills = passiveSkillSlotListTable[passiveSkill.providerId]
         if (passiveSkills != null) { // 既存パッシブスキル
             // 他のアイテムを支援
-            providers += Pair(itemStack, PassiveSkillStatus.SUPPORTING)
-            passiveSkills += passiveSkill
+            val slot = Slot(passiveSkill)
+            providers += Triple(itemStack, PassiveSkillStatus.SUPPORTING, slot)
+            passiveSkills += slot
         } else { // 新規パッシブスキル
             if (!enabled) { // 発動対象スロットでない場所に配置されている
                 // 発動対象でないため新規パッシブスキルを発動しない
             } else { // 発動対象スロットに配置されている
                 // パッシブスキルを新しく発動しようとしている
-                if (passiveSkillListTable.size >= passiveSkillCount) { // パッシブスキルの枠が満杯
+                if (passiveSkillSlotListTable.size >= passiveSkillCount) { // パッシブスキルの枠が満杯
                     // パッシブスキルがあふれた
-                    providers += Pair(itemStack, PassiveSkillStatus.OVERFLOWED)
+                    providers += Triple(itemStack, PassiveSkillStatus.OVERFLOWED, Slot(passiveSkill))
                 } else { // パッシブスキルの枠に余裕がある
                     // パッシブスキルを新しく発動する
-                    providers += Pair(itemStack, PassiveSkillStatus.EFFECTIVE)
-                    passiveSkillListTable[passiveSkill.providerId] = mutableListOf(passiveSkill)
+                    val slot = Slot(passiveSkill)
+                    providers += Triple(itemStack, PassiveSkillStatus.EFFECTIVE, slot)
+                    passiveSkillSlotListTable[passiveSkill.providerId] = mutableListOf(slot)
                 }
             }
         }
@@ -130,18 +133,21 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     }
 
     // パッシブスキルを統合
-    val passiveSkills = passiveSkillListTable.values.map { passiveSkillList ->
-        val mainPassiveSkill = passiveSkillList[0]
-        PassiveSkill(
-            mainPassiveSkill.providerId,
-            mainPassiveSkill.motif,
-            mainPassiveSkill.rare,
-            passiveSkillList.sumOf { it.count },
-            mainPassiveSkill.specifications,
+    val passiveSkills = passiveSkillSlotListTable.values.map { passiveSkillSlotList ->
+        val mainPassiveSkillSlot = passiveSkillSlotList[0]
+        val passiveSkill = PassiveSkill(
+            mainPassiveSkillSlot.value.providerId,
+            mainPassiveSkillSlot.value.motif,
+            mainPassiveSkillSlot.value.rare,
+            passiveSkillSlotList.sumOf { it.value.count },
+            mainPassiveSkillSlot.value.specifications,
         )
+        mainPassiveSkillSlot.value = passiveSkill
+        passiveSkill
     }
+    val actualProviders = providers.map { Triple(it.first, it.second, it.third.value) }
 
-    return PassiveSkillProviders(providers.toList(), passiveSkills.toList())
+    return PassiveSkillProviders(actualProviders, passiveSkills)
 }
 
 fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
