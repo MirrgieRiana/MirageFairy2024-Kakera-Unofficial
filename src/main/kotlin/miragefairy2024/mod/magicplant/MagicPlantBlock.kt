@@ -248,6 +248,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
     final override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.isOf(newState.block)) run {
             if (world !is ServerWorld) return@run
+            if (!canPick(state)) return@run
             val traitStacks = world.getTraitStacks(pos) ?: return@run
             val traitEffects = calculateTraitEffects(world, pos, traitStacks)
             val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
