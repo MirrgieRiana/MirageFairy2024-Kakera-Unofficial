@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -32,6 +31,8 @@ fun initToolModule() = ModEvents.onInitialize {
     FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
     FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
     FairyMiningToolItem.NATURAL_RECOVERY_TRANSLATION.enJa()
+
+    initToolMaterialModule()
 }
 
 

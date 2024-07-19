@@ -16,7 +16,6 @@ import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initRecipeGroupModule
 import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
-import miragefairy2024.mod.initToolMaterialModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
@@ -86,7 +85,6 @@ object Modules {
             initPassiveSkillModule()
             initLastFoodModule()
             initFoodIngredientsModule()
-            initToolMaterialModule()
             initRecipeGroupModule()
             initSoundEventModule()
             initToolModule()

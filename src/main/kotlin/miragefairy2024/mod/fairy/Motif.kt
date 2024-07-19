@@ -5,7 +5,6 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
@@ -24,6 +23,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.SimplePassiveSkillConditionCard
 import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.ToolMaterialCardPassiveSkillCondition
+import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke

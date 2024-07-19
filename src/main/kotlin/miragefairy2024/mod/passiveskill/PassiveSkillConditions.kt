@@ -3,10 +3,10 @@ package miragefairy2024.mod.passiveskill
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategory
-import miragefairy2024.mod.ToolMaterialCard
 import miragefairy2024.mod.containsAsFoodIngredient
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.lastFood
+import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
