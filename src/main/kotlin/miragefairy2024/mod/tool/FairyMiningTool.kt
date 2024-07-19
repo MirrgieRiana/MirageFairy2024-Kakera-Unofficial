@@ -31,7 +31,7 @@ class FairyMiningToolType(
 ) : ToolType<FairyMiningToolItem> {
     companion object {
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
-        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Harvesting the entire tree", "木全体を伐採")
+        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
     }
 
     val tags = mutableListOf<TagKey<Item>>()
