@@ -55,27 +55,23 @@ class FairyMiningToolType(
 
 // Shovel 1.5, -3.0
 
-fun FairyMiningToolType.pickaxe(): FairyMiningToolType {
-    return this.also {
-        it.attackDamage = 1F
-        it.attackSpeed = -2.8F
-        it.tags += ItemTags.PICKAXES
-        it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-        it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
-    }
+fun FairyMiningToolType.pickaxe() = this.also {
+    it.attackDamage = 1F
+    it.attackSpeed = -2.8F
+    it.tags += ItemTags.PICKAXES
+    it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
+    it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
 }
 
 /**
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun FairyMiningToolType.axe(attackDamage: Float, attackSpeed: Float): FairyMiningToolType {
-    return this.also {
-        it.attackDamage = attackDamage
-        it.attackSpeed = attackSpeed
-        it.tags += ItemTags.AXES
-        it.effectiveBlockTags += BlockTags.AXE_MINEABLE
-    }
+fun FairyMiningToolType.axe(attackDamage: Float, attackSpeed: Float) = this.also {
+    it.attackDamage = attackDamage
+    it.attackSpeed = attackSpeed
+    it.tags += ItemTags.AXES
+    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
 }
 
 // Hoe
