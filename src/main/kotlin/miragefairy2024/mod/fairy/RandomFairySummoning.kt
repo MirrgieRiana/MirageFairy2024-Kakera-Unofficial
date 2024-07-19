@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EMPTY_ITEM_STACK
-import miragefairy2024.util.Single
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.enJa
@@ -19,6 +18,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.yellow
+import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs

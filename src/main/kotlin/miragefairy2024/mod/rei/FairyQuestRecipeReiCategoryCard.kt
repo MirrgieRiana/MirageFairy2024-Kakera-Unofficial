@@ -5,12 +5,12 @@ import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.fairyquest.FairyQuestRecipe
 import miragefairy2024.mod.fairyquest.fairyQuestRecipeRegistry
 import miragefairy2024.mod.fairyquest.setFairyQuestRecipe
-import miragefairy2024.util.Single
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIdentifier
+import mirrg.kotlin.hydrogen.Single
 
 object FairyQuestRecipeReiCategoryCard : ReiCategoryCard<FairyQuestRecipeReiCategoryCard.Display>("fairy_quest_recipe", "Fairy Quest", "フェアリークエスト") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {

@@ -8,7 +8,6 @@ import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.getIdentifier
 import miragefairy2024.mod.magicplant.setTraitStacks
 import miragefairy2024.mod.magicplant.toTrait
-import miragefairy2024.util.Single
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
@@ -16,6 +15,7 @@ import miragefairy2024.util.toBlock
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIdentifier
+import mirrg.kotlin.hydrogen.Single
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

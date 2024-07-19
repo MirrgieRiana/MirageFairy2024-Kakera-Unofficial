@@ -5,7 +5,6 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.toFairyMotif
-import miragefairy2024.util.Single
 import miragefairy2024.util.get
 import miragefairy2024.util.list
 import miragefairy2024.util.string
@@ -15,6 +14,7 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toNbtList
 import miragefairy2024.util.toNbtString
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.Single
 
 object FairyFamilyReiCategoryCard : ReiCategoryCard<FairyFamilyReiCategoryCard.Display>("fairy_family", "Fairy Family", "妖精系統") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {

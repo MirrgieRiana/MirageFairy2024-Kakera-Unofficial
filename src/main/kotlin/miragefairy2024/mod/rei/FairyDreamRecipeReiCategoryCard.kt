@@ -5,7 +5,6 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.toFairyMotif
-import miragefairy2024.util.Single
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
@@ -20,6 +19,7 @@ import miragefairy2024.util.toItem
 import miragefairy2024.util.toNbtList
 import miragefairy2024.util.toNbtString
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.Single
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item

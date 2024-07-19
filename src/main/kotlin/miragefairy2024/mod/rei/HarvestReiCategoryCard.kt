@@ -2,7 +2,6 @@ package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import miragefairy2024.mod.magicplant.HarvestNotation
-import miragefairy2024.util.Single
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
 import miragefairy2024.util.list
@@ -11,6 +10,7 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.castOrThrow
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtList
