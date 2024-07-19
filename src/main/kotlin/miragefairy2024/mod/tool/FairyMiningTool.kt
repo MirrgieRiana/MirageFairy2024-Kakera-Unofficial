@@ -29,10 +29,6 @@ import net.minecraft.world.World
 class FairyMiningToolType(
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolType<FairyMiningToolItem> {
-    companion object {
-        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
-        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
-    }
 
     val tags = mutableListOf<TagKey<Item>>()
     var attackDamage = 0F
@@ -52,8 +48,8 @@ class FairyMiningToolType(
 
     override fun addPoems(poemList: PoemList): PoemList {
         return poemList
-            .let { if (mineAll) it.translation(PoemType.DESCRIPTION, MINE_ALL_TRANSLATION) else it }
-            .let { if (cutAll) it.translation(PoemType.DESCRIPTION, CUT_ALL_TRANSLATION) else it }
+            .let { if (mineAll) it.translation(PoemType.DESCRIPTION, FairyMiningToolItem.MINE_ALL_TRANSLATION) else it }
+            .let { if (cutAll) it.translation(PoemType.DESCRIPTION, FairyMiningToolItem.CUT_ALL_TRANSLATION) else it }
     }
 
 }
@@ -94,6 +90,11 @@ fun FairyMiningToolType.axe(attackDamage: Float, attackSpeed: Float): FairyMinin
 
 
 class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE, settings) {
+    companion object {
+        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
+        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+    }
+
     override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (type.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
     override fun isSuitableFor(state: BlockState): Boolean {
         val itemMiningLevel = material.miningLevel
