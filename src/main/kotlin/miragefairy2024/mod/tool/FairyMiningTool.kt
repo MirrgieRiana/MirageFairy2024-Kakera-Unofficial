@@ -10,6 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.registerItemTagGeneration
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -29,6 +30,7 @@ class FairyMiningToolType(
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolType<FairyMiningToolItem> {
     companion object {
+        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Harvesting the entire tree", "木全体を伐採")
     }
 
@@ -36,6 +38,7 @@ class FairyMiningToolType(
     var attackDamage = 0F
     var attackSpeed = 0F
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
+    var mineAll = false
     var cutAll = false
 
     override fun createItem() = FairyMiningToolItem(this, Item.Settings())
@@ -49,11 +52,13 @@ class FairyMiningToolType(
 
     override fun addPoems(poemList: PoemList): PoemList {
         return poemList
+            .let { if (mineAll) it.translation(PoemType.DESCRIPTION, MINE_ALL_TRANSLATION) else it }
             .let { if (cutAll) it.translation(PoemType.DESCRIPTION, CUT_ALL_TRANSLATION) else it }
     }
 
 }
 
+fun FairyMiningToolType.mineAll() = this.also { it.mineAll = true }
 fun FairyMiningToolType.cutAll() = this.also { it.cutAll = true }
 
 // Sword 3, -2.4
@@ -102,6 +107,27 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.postMine(stack, world, state, pos, miner)
+        if (type.mineAll && !miner.isSneaking) run fail@{
+            if (world.isClient) return@fail
+
+            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
+            if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!state.isIn(ConventionalBlockTags.ORES)) return@fail // 掘ったブロックが鉱石ではない
+
+            // 発動
+
+            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 31) { _, toBlockPos ->
+                world.getBlockState(toBlockPos).block === state.block
+            }.forEach { (_, blockPos) ->
+                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                    stack.damage(1, miner) {
+                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    }
+                }
+            }
+        }
         if (type.cutAll && !miner.isSneaking) run fail@{
             if (world.isClient) return@fail
 
