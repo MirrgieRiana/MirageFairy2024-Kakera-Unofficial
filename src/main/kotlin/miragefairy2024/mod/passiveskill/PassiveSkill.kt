@@ -26,7 +26,7 @@ interface PassiveSkillProvider {
 }
 
 
-class PassiveSkill(val providerId: Identifier, val motif: Motif?, val level: Double, val specifications: List<PassiveSkillSpecification<*>>)
+class PassiveSkill(val providerId: Identifier, val motif: Motif?, val rare: Double, val count: Double, val specifications: List<PassiveSkillSpecification<*>>)
 
 
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)

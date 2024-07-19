@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
+import kotlin.math.log
 
 val PASSIVE_SKILL_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
 val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.disabled" }, "Outside target slot", "対象スロット外")
@@ -106,7 +107,7 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
 
     passiveSkills.forEach { passiveSkill ->
         val motif = passiveSkill.motif
-        val level = passiveSkill.level
+        val level = passiveSkill.rare + log(passiveSkill.count, 3.0)
         val mana = level * (1.0 + manaBoostValue.map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 })
         passiveSkill.specifications.forEach { specification ->
             fun <T> f(specification: PassiveSkillSpecification<T>) {
