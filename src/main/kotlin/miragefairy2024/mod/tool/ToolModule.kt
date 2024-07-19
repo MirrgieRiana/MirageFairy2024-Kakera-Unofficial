@@ -26,8 +26,11 @@ fun initToolModule() = ModEvents.onInitialize {
         it.init()
     }
 
+    FairyMiningToolItem.AREA_MINING_TRANSLATION.enJa()
     FairyMiningToolItem.MINE_ALL_TRANSLATION.enJa()
     FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
+    FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
+    FairyMiningToolItem.NATURAL_RECOVERY_TRANSLATION.enJa()
 }
 
 
