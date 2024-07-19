@@ -82,7 +82,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     val passiveSkills = mutableListOf<PassiveSkill>()
     val acceptedProviderIds = mutableSetOf<Identifier>()
     val soulStream = this.soulStream
-    SoulStream.PASSIVE_SKILL_SLOT_INDICES.forEach { slotIndex ->
+    repeat(SoulStream.PASSIVE_SKILL_SLOT_COUNT) { slotIndex ->
         val itemStack = soulStream[slotIndex]
         val item = itemStack.item
         if (item is PassiveSkillProvider) {
