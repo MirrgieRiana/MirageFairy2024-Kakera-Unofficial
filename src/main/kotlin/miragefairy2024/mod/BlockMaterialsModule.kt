@@ -66,7 +66,7 @@ enum class BlockMaterialCard(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
         MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL),
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
