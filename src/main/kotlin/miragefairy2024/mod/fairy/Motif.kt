@@ -116,6 +116,22 @@ enum class MotifCard(
     ),
 
     // 天体
+    STAR(
+        "star", 10, "Staria", "星精スターリャ", 0xffffff, 0x2C2C2E, 0x0E0E10, 0x191919,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + overall.attack(1.0) * overworld * fine * skyVisible
+            + mana(5.0) { STAR },
+        MotifCardRecipes().overworld,
+    ),
+    MOON(
+        "moon", 10, "Moonia", "月精モーニャ", 0xD9E4FF, 0x747D93, 0x0C121F, 0x2D4272,
+        ParentMotifs() + { STAR },
+        PassiveSkillBuilder()
+            + magic.attack(2.0) * overworld * night * fine * skyVisible
+            + regeneration(1.0) * overworld * night * fine * skyVisible,
+        MotifCardRecipes().overworld,
+    ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
         ParentMotifs() + { FIRE },
@@ -205,6 +221,15 @@ enum class MotifCard(
             + overall.defence(0.4),
         MotifCardRecipes().common(BiomeKeys.DRIPSTONE_CAVES) + Blocks.DRIPSTONE_BLOCK + Blocks.POINTED_DRIPSTONE,
     ),
+    NETHERRACK(
+        "netherrack", 7, "Netherrackia", "地獄岩精ネテッラッキャ", 0x9B5C5C, 0x703131, 0x703131, 0x8E1111,
+        ParentMotifs() + { FIRE },
+        PassiveSkillBuilder()
+            + overall.defence(0.2)
+            + fire.defence(1.0)
+            + overall.attack(0.2) * onFire,
+        MotifCardRecipes().nether + Blocks.NETHERRACK,
+    ),
 
     // 金属
     COPPER(
@@ -278,6 +303,17 @@ enum class MotifCard(
             + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
         MotifCardRecipes() + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item,
     ),
+    CHAOS_STONE(
+        "chaos_stone", 8, "Chaose Stonia", "混沌石精キャオセストーニャ", 0xDB5F00, 0xB36229, 0x78421C, 0xFFBF40,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + shooting.attack(0.7)
+            + luck(0.4)
+            + StatusEffects.HASTE() * ToolMaterialCard.CHAOS_STONE()
+            + StatusEffects.HASTE(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
+        MotifCardRecipes() + MaterialCard.CHAOS_STONE.item,
+    ),
+
     AMETHYST(
         "amethyst", 6, "Amethystia", "紫水晶精アメティスチャ", 0xCAA9FF, 0xA974FF, 0x9D60FF, 0xBC92FF,
         ParentMotifs(),
@@ -333,6 +369,14 @@ enum class MotifCard(
             + StatusEffects.SLOW_FALLING() * food(Items.CHICKEN) * fairyLevel.atLeast(11.0)
             + fall.defence(3.0) * food.atLeast(12),
         MotifCardRecipes().overworld + EntityType.CHICKEN,
+    ),
+    EGG(
+        "egg", 2, "Eggia", "卵精エッギャ", 0xF0E6C6, 0xE0CC91, 0xE0CC91, 0xBAAA79,
+        ParentMotifs() + { CHICKEN } + { FOOD },
+        PassiveSkillBuilder()
+            + health(0.8)
+            + regeneration(0.8) * food(Items.EGG),
+        MotifCardRecipes().overworld + EntityType.EGG,
     ),
     RABBIT(
         "rabbit", 5, "Rabbitia", "兎精ラッビーチャ", 0x9E866A, 0x8C7A64, 0x8C7962, 0x615345,
@@ -422,6 +466,22 @@ enum class MotifCard(
     ),
 
     // 魔法生物
+    BLAZE(
+        "blaze", 7, "Blazia", "烈炎精ブラージャ", 0xE7DA21, 0xCB6E06, 0xB44500, 0xFF8025,
+        ParentMotifs() + { FIRE },
+        PassiveSkillBuilder()
+            + shooting.attack(2.0) * onFire
+            + ignition * StatusEffects.FIRE_RESISTANCE,
+        MotifCardRecipes().nether + EntityType.BLAZE,
+    ),
+    MAGMA_CUBE(
+        "magma_cube", 7, "Magme Cubia", "溶岩賽精マグメツービャ", 0x3A0000, 0x592301, 0x300000, 0xE35C05,
+        ParentMotifs() + { FIRE },
+        PassiveSkillBuilder()
+            + melee.attack(2.0) * onFire
+            + ignition * StatusEffects.FIRE_RESISTANCE,
+        MotifCardRecipes().nether + EntityType.MAGMA_CUBE,
+    ),
     GOLEM(
         "golem", 6, "Golemia", "鉄魔像精ゴレーミャ", 0xC1AB9E, 0xB5ADA8, 0xABA39D, 0x557725,
         ParentMotifs(),
@@ -477,6 +537,22 @@ enum class MotifCard(
             + StatusEffects.STRENGTH(2) * food(Items.POTATO) * fairyLevel.atLeast(14.0)
             + regeneration(0.1) * food.atLeast(12),
         MotifCardRecipes().overworld + Blocks.POTATOES + Items.POTATO,
+    ),
+    POISONOUS_POTATO(
+        "poisonous_potato", 5, "Poisonouse Potatia", "毒芋精ポイソノウセポターチャ", 0xCFE661, 0xE7B456, 0xE7B456, 0x61B835,
+        ParentMotifs() + { POTATO },
+        PassiveSkillBuilder()
+            + melee.attack(1.4) * food(Items.POISONOUS_POTATO)
+            + overall.attack(0.2) * food.atLeast(12),
+        MotifCardRecipes().overworld + Blocks.POTATOES + Items.POISONOUS_POTATO,
+    ),
+    BEETROOT(
+        "beetroot", 4, "Beetrootia", "火焔菜精ベートローチャ", 0xC1727C, 0xA74D55, 0x96383D, 0x01A900,
+        ParentMotifs() + { FOOD } + { FIRE },
+        PassiveSkillBuilder()
+            + health(0.8) * food(Items.BEETROOT)
+            + regeneration(0.3) * food.atLeast(12),
+        MotifCardRecipes().overworld + Blocks.BEETROOTS + Items.BEETROOT,
     ),
     PUMPKIN(
         "pumpkin", 4, "Pumpkinia", "南瓜精プンプキーニャ", 0x792D0F, 0xE48A40, 0xE48A40, 0xDCBE00,
@@ -636,6 +712,12 @@ enum class MotifCard(
     ),
 
     // 建材
+    IRON_BARS(
+        "iron_bars", 4, "Irone Barsia", "鉄格子精イローネバルシャ", 0xFFFFFF, 0xA1A1A3, 0x404040, 0x404040,
+        ParentMotifs(),
+        PassiveSkillBuilder() + melee.defence(1.5),
+        MotifCardRecipes() + Blocks.IRON_BARS,
+    ),
     GLASS(
         "glass", 3, "Glassia", "硝子精グラッシャ", 0xFFFFFF, 0xEFF5FF, 0xE8EDF5, 0xADE0E9,
         ParentMotifs(),
@@ -666,6 +748,14 @@ enum class MotifCard(
     ),
 
     // ユーティリティ
+    LIGHTNING_ROD(
+        "lightning_rod", 4, "Lightninge Rodia", "避雷針精リグトニンゲロージャ", 0xFFFFFF, 0xF77653, 0xF77653, 0xF77653,
+        ParentMotifs() + { COPPER } + { THUNDER },
+        PassiveSkillBuilder()
+            + magic.attack(3.0) * overworld * thundering * outdoor
+            + magic.defence(3.0) * overworld * thundering * outdoor,
+        MotifCardRecipes() + Blocks.LIGHTNING_ROD,
+    ),
     CHEST(
         "chest", 2, "Chestia", "箱精ケスチャ", 0xD6982D, 0xB3822E, 0xB3822E, 0x42392C,
         ParentMotifs(),
@@ -732,6 +822,17 @@ enum class MotifCard(
             + speed(0.4) * overworld * night * skyVisible
             + regeneration(0.4) * overworld * night * skyVisible
             + StatusEffects.NIGHT_VISION() * overworld * night * skyVisible,
+        MotifCardRecipes().overworld,
+    ),
+
+    // 天候
+    THUNDER(
+        "thunder", 9, "Thunderia", "雷精ツンデーリャ", 0xB4FFFF, 0x4D5670, 0x4D5670, 0xFFEB00,
+        ParentMotifs(),
+        PassiveSkillBuilder() // TODO 雷に関する効果
+            + shooting.attack(1.0) * overworld * thundering
+            + magic.attack(1.0) * overworld * thundering
+            + mana(2.0) { THUNDER },
         MotifCardRecipes().overworld,
     ),
 
