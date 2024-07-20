@@ -45,7 +45,7 @@ class FairyMiningToolType(
     var mineAll = false
     var cutAll = false
     var silkTouch = false
-    var naturalRecovery = false
+    var selfMending = false
     val descriptions = mutableListOf<Translation>()
 
     override fun createItem() = FairyMiningToolItem(this, Item.Settings())
@@ -108,9 +108,9 @@ fun FairyMiningToolType.silkTouch() = this.also {
     it.descriptions += FairyMiningToolItem.SILK_TOUCH_TRANSLATION
 }
 
-fun FairyMiningToolType.naturalRecovery() = this.also {
-    it.naturalRecovery = true
-    it.descriptions += FairyMiningToolItem.NATURAL_RECOVERY_TRANSLATION
+fun FairyMiningToolType.selfMending() = this.also {
+    it.selfMending = true
+    it.descriptions += FairyMiningToolItem.SELF_MENDING_TRANSLATION
 }
 
 
@@ -120,7 +120,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
-        val NATURAL_RECOVERY_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.natural_recovery" }, "Natural recovery", "自然回復")
+        val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
     }
 
     override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (type.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
@@ -228,7 +228,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
     }
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
-        if (type.naturalRecovery) {
+        if (type.selfMending) {
             if (entity !is PlayerEntity) return // プレイヤーじゃない
             if (stack !== entity.mainHandStack) return // メインハンドに持っていない
             stack.repair(world.random.randomInt(0.1))

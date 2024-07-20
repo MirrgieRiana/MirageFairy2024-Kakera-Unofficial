@@ -30,7 +30,7 @@ fun initToolModule() = ModEvents.onInitialize {
     FairyMiningToolItem.MINE_ALL_TRANSLATION.enJa()
     FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
     FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
-    FairyMiningToolItem.NATURAL_RECOVERY_TRANSLATION.enJa()
+    FairyMiningToolItem.SELF_MENDING_TRANSLATION.enJa()
 
     initToolMaterialModule()
 }
@@ -80,7 +80,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く透明な心。",
-            2, FairyMiningToolType(ToolMaterialCard.FAIRY_CRYSTAL).pickaxe().naturalRecovery(),
+            2, FairyMiningToolType(ToolMaterialCard.FAIRY_CRYSTAL).pickaxe().selfMending(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -93,7 +93,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_PICKAXE = ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
-            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).pickaxe().naturalRecovery().mineAll(),
+            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).pickaxe().selfMending().mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -106,7 +106,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_AXE = ToolCard(
             "miragium_axe", "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
-            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).axe(5.0F, -3.0F).naturalRecovery().cutAll(),
+            3, FairyMiningToolType(ToolMaterialCard.MIRAGIUM).axe(5.0F, -3.0F).selfMending().cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
