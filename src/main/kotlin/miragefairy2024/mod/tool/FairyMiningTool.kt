@@ -261,9 +261,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
         if (type.selfMending) run {
+            if (world.isClient) return@run
             if (entity !is PlayerEntity) return@run // プレイヤーじゃない
             if (stack !== entity.mainHandStack) return@run // メインハンドに持っていない
-            stack.repair(world.random.randomInt(0.1))
+            stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * 10)
         }
     }
 
