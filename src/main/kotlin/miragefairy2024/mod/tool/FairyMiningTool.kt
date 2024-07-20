@@ -152,17 +152,19 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             (-1..1).forEach { x ->
                 (-1..1).forEach { y ->
                     (-1..1).forEach { z ->
-                        if (x != 0 || y != 0 || z != 0) run skip@{
+                        if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
                             val targetBlockState = world.getBlockState(targetBlockPos)
-                            if (targetBlockState !== state) return@skip // 元のブロックと異なる
-                            if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
-                            val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
-                            if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                            if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                stack.damage(1, miner) {
-                                    it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                            if (isSuitableFor(targetBlockState)) run skip@{
+                                if (targetBlockState !== state) return@skip // 元のブロックと異なる
+                                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                                if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                                val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
+                                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
+                                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
+                                    stack.damage(1, miner) {
+                                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                    }
                                 }
                             }
                         }
