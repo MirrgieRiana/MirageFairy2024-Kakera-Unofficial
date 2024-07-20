@@ -186,7 +186,8 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val level = motif.rare.toDouble() + log(count, 3.0)
         val mana = level * (1.0 + manaBoost)
 
-        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")()).aqua }
+        // 魔力・個数
+        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")() + "  "() + "(x${count formatAs "%.0f"})"()).aqua }
 
         // レベル・凝縮数
         tooltip += text { (LEVEL_TRANSLATION() + ": "() + Emoji.STAR() + (level formatAs "%.1f")() + "  "() + CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
@@ -202,8 +203,8 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
             tooltip += text { empty() }
 
-            val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE
-            tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (status != PassiveSkillStatus.EFFECTIVE) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
+            val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE || status == PassiveSkillStatus.SUPPORTING
+            tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.world, it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {

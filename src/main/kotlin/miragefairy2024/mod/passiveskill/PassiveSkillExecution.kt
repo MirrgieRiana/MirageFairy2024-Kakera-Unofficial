@@ -142,7 +142,9 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
             passiveSkillSlotList.sumOf { it.value.count },
             mainPassiveSkillSlot.value.specifications,
         )
-        mainPassiveSkillSlot.value = passiveSkill
+        passiveSkillSlotList.forEach {
+            it.value = passiveSkill
+        }
         passiveSkill
     }
     val actualProviders = providers.map { Triple(it.first, it.second, it.third.value) }
