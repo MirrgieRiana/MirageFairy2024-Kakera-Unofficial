@@ -159,6 +159,9 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                                 if (targetBlockState !== state) return@skip // 元のブロックと異なる
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+
+                                // 採掘を続行
+
                                 val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
@@ -189,6 +192,9 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+
+                // 採掘を続行
+
                 val targetBlockState = world.getBlockState(blockPos)
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
@@ -217,6 +223,9 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+
+                // 採掘を続行
+
                 val targetBlockState = world.getBlockState(blockPos)
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
@@ -232,6 +241,9 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+
+                // 採掘を続行
+
                 val targetBlockState = world.getBlockState(blockPos)
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
