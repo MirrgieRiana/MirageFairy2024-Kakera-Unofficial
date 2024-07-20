@@ -206,12 +206,12 @@ object DeepFairyForestBiomeCard : BiomeCard(
             .downfall(0.6F)
             .effects(
                 BiomeEffects.Builder()
-                    .waterColor(0xF3D9FF)
-                    .waterFogColor(0xF3D9FF)
-                    .fogColor(0xF7AFFF)
-                    .skyColor(0xF7AFFF)
-                    .grassColor(0x82FFBF)
-                    .foliageColor(0xCDAFFF)
+                    .waterColor(0xD1FCFF)
+                    .waterFogColor(0xD1FCFF)
+                    .fogColor(0xA8B0FF)
+                    .skyColor(0xA8B0FF)
+                    .grassColor(0x31EDCD)
+                    .foliageColor(0xB2A8FF)
                     .build()
             )
             .spawnSettings(SpawnSettings.Builder().also { spawnSettings ->
