@@ -154,14 +154,14 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                     (-1..1).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
-                            val targetBlockState = world.getBlockState(targetBlockPos)
-                            if (isSuitableFor(targetBlockState)) run skip@{
+                            if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                                 if (targetBlockState !== state) return@skip // 元のブロックと異なる
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
 
                                 // 採掘を続行
 
+                                val targetBlockState = world.getBlockState(targetBlockPos)
                                 val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
