@@ -165,8 +165,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                                 val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                    stack.damage(1, miner) {
-                                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                    if (targetHardness > 0) {
+                                        stack.damage(1, miner) {
+                                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                        }
                                     }
                                 }
                             }
@@ -199,8 +201,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
-                    stack.damage(1, miner) {
-                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    if (targetHardness > 0) {
+                        stack.damage(1, miner) {
+                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        }
                     }
                 }
             }
@@ -230,8 +234,10 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
-                    stack.damage(1, miner) {
-                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    if (targetHardness > 0) {
+                        stack.damage(1, miner) {
+                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        }
                     }
                     logBlockPosList += blockPos
                 }
@@ -248,9 +254,11 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 val targetHardness = targetBlockState.getHardness(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
-                    if (miner.random.nextFloat() < 0.1F) {
-                        stack.damage(1, miner) {
-                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    if (targetHardness > 0) {
+                        if (miner.random.nextFloat() < 0.1F) {
+                            stack.damage(1, miner) {
+                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                            }
                         }
                     }
                 }
