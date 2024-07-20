@@ -147,6 +147,8 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
             // 発動
 
+            val baseHardness = state.getHardness(world, pos)
+
             (-1..1).forEach { x ->
                 (-1..1).forEach { y ->
                     (-1..1).forEach { z ->
@@ -156,6 +158,8 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                             if (targetBlockState !== state) return@skip // 元のブロックと異なる
                             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                             if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                            val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
+                            if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                             if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                 stack.damage(1, miner) {
                                     it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -176,11 +180,16 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
             // 発動
 
+            val baseHardness = state.getHardness(world, pos)
+
             blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 31) { _, toBlockPos ->
                 world.getBlockState(toBlockPos).block === state.block
-            }.forEach { (_, blockPos) ->
+            }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                val targetBlockState = world.getBlockState(blockPos)
+                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     stack.damage(1, miner) {
                         it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -198,12 +207,17 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
             // 発動
 
+            val baseHardness = state.getHardness(world, pos)
+
             val logBlockPosList = mutableListOf<BlockPos>()
             blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, toBlockPos ->
                 world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
-            }.forEach { (_, blockPos) ->
+            }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                val targetBlockState = world.getBlockState(blockPos)
+                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     stack.damage(1, miner) {
                         it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -213,9 +227,12 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             }
             blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, toBlockPos ->
                 world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
-            }.forEach { (_, blockPos) ->
+            }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                val targetBlockState = world.getBlockState(blockPos)
+                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (miner.random.nextFloat() < 0.1F) {
                         stack.damage(1, miner) {
