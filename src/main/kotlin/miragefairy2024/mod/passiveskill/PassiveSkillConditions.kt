@@ -16,6 +16,7 @@ import miragefairy2024.util.removeTrailingZeros
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.FluidTags
@@ -162,4 +163,12 @@ enum class MainHandConditionCard(path: String, en: String, ja: String, val predi
 class MainHandPassiveSkillCondition(private val card: MainHandConditionCard) : PassiveSkillCondition {
     override val text: Text get() = card.translation()
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = card.predicate(context.player.mainHandStack)
+}
+
+
+// status effect
+
+class StatusEffectPassiveSkillCondition(private val statusEffect: StatusEffect) : PassiveSkillCondition {
+    override val text: Text get() = statusEffect.name
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.hasStatusEffect(statusEffect)
 }

@@ -21,6 +21,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.SimplePassiveSkillConditionCard
+import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.ToolMaterialCardPassiveSkillCondition
 import miragefairy2024.mod.tool.ToolMaterialCard
@@ -860,6 +861,8 @@ private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
 
 private operator fun MainHandConditionCard.invoke() = MainHandPassiveSkillCondition(this)
+
+private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: StatusEffect) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = PassiveSkillEffectCard.MANA_BOOST { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
 private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
