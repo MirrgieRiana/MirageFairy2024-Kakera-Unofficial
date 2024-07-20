@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
@@ -18,6 +19,7 @@ import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
@@ -114,7 +116,7 @@ fun FairyMiningToolType.selfMending() = this.also {
 }
 
 
-class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings), OverrideEnchantmentLevelCallback {
+class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings), OverrideEnchantmentLevelCallback, ItemPredicateConvertorCallback {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -240,5 +242,16 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
         }
         return oldLevel
+    }
+
+    override fun convertItemStack(itemStack: ItemStack): ItemStack {
+        var itemStack2 = itemStack
+        if (type.silkTouch) {
+            itemStack2 = itemStack2.copy()
+            val enchantments = EnchantmentHelper.get(itemStack2)
+            enchantments[Enchantments.SILK_TOUCH] = enchantments.getOrElse(Enchantments.SILK_TOUCH) { 0 } atLeast 1
+            EnchantmentHelper.set(enchantments, itemStack2)
+        }
+        return itemStack2
     }
 }
