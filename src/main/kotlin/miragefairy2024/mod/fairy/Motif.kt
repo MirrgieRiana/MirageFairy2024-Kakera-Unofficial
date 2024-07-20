@@ -134,7 +134,7 @@ enum class MotifCard(
     ),
     SUN(
         "sun", 10, "Sunia", "太陽精スーニャ", 0xff2f00, 0xff972b, 0xff7500, 0xffe7b2,
-        ParentMotifs() + { FIRE },
+        ParentMotifs() + { STAR } + { FIRE },
         PassiveSkillBuilder()
             + melee.attack(2.0) * overworld * daytime * fine * skyVisible
             + regeneration(1.0) * overworld * daytime * fine * skyVisible,
@@ -234,7 +234,7 @@ enum class MotifCard(
     // 金属
     COPPER(
         "copper", 3, "Copperia", "銅精ツォッペーリャ", 0xF69D7F, 0xF77653, 0xF77653, 0x5DC09A,
-        ParentMotifs(),
+        ParentMotifs() + { THUNDER },
         PassiveSkillBuilder()
             + luck(0.6)
             + overall.defence(0.6)
