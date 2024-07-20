@@ -155,7 +155,6 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
                             if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
-                                if (targetBlockState !== state) return@skip // 元のブロックと異なる
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
 
