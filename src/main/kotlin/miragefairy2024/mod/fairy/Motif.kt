@@ -560,7 +560,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.6) * food(Items.PUMPKIN) // TODO 魔法攻撃力増加ステータス効果
             + magic.defence(0.6) * food.atLeast(12),
-        MotifCardRecipes().overworld + Blocks.PUMPKIN,
+        MotifCardRecipes().overworld + Blocks.PUMPKIN + Blocks.CARVED_PUMPKIN,
     ),
     MELON(
         "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
