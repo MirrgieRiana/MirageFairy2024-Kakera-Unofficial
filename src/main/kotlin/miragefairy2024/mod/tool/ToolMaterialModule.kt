@@ -26,11 +26,11 @@ enum class FairyToolMaterials(
 ) : ToolMaterial {
     COPPER(196, 5.0F, 1.0F, MiningLevels.IRON, 18, Items.COPPER_INGOT.toIngredient()),
     MIRAGE(48, 1.6F, 0.0F, MiningLevels.WOOD, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
-    MIRAGIUM(87, 4.0F, 0.5F, MiningLevels.IRON, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
+    MIRAGIUM(87, 0.5F, 0.5F, MiningLevels.IRON, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     FAIRY_CRYSTAL(235, 5.0F, 1.5F, MiningLevels.IRON, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
     XARPITE(283, 1.0F, 2.0F, MiningLevels.IRON, 20, MaterialCard.XARPITE.item.toIngredient()),
     MIRANAGITE(256, 6.5F, 2.0F, MiningLevels.IRON, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
-    CHAOS_STONE(666, 9.0F, 2.0F, MiningLevels.NETHERITE, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
+    CHAOS_STONE(666, 2.0F, 2.0F, MiningLevels.NETHERITE, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
     ;
 
     override fun getDurability() = durability
