@@ -150,16 +150,15 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             (-1..1).forEach { x ->
                 (-1..1).forEach { y ->
                     (-1..1).forEach { z ->
-                        if (x != 0 || y != 0 || z != 0) {
+                        if (x != 0 || y != 0 || z != 0) run skip@{
                             val targetBlockPos = pos.add(x, y, z)
                             val targetBlockState = world.getBlockState(targetBlockPos)
-                            if (targetBlockState === state) {
-                                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
-                                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                    stack.damage(1, miner) {
-                                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-                                    }
+                            if (targetBlockState !== state) return@skip // 元のブロックと異なる
+                            if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                            if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
+                                stack.damage(1, miner) {
+                                    it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
                                 }
                             }
                         }
@@ -230,9 +229,9 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
     }
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
-        if (type.selfMending) {
-            if (entity !is PlayerEntity) return // プレイヤーじゃない
-            if (stack !== entity.mainHandStack) return // メインハンドに持っていない
+        if (type.selfMending) run {
+            if (entity !is PlayerEntity) return@run // プレイヤーじゃない
+            if (stack !== entity.mainHandStack) return@run // メインハンドに持っていない
             stack.repair(world.random.randomInt(0.1))
         }
     }
