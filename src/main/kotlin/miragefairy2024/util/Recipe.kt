@@ -30,7 +30,6 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.tag.TagKey
@@ -107,7 +106,7 @@ fun registerSmeltingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     MirageFairy2024DataGenerator.recipeGenerators {
-        val builder = CookingRecipeJsonBuilder.create(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime, RecipeSerializer.SMELTING)
+        val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
         builder.group(output)
         settings.listeners.forEach { listener ->
             listener(builder)
