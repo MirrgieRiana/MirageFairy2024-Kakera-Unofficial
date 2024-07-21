@@ -55,21 +55,23 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(3))
 
-                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
+                        surface(Surface.tiled(SlotType.FAIRY.texture, 18, 18))
                         repeat(9) { index ->
-                            child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = SlotType.FAIRY))
+                            child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = null))
                         }
                     })
 
                     child(verticalSpace(4))
 
                     child(verticalScroll(Sizing.fill(100), Sizing.fixed(18 * 5), 18).apply {
+                        surface(Surface.tiled(SlotType.NORMAL.texture, 18, 18))
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
                         scrollStep(18)
                         (9 until handler.soulStream.size).chunked(9).forEach { indices ->
                             child().child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                                 indices.forEach { index ->
-                                    child(slotContainer(slotAsComponent(9 * 3 + 9 + index)))
+                                    child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = null))
                                 }
                             })
                         }
@@ -82,17 +84,21 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
                     child(verticalSpace(1))
 
                     // プレイヤーインベントリ
-                    repeat(3) { r ->
-                        child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            repeat(9) { c ->
-                                child(slotContainer(slotAsComponent(9 * r + c)))
-                            }
-                        })
-                    }
+                    child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+                        surface(Surface.tiled(SlotType.NORMAL.texture, 18, 18))
+                        repeat(3) { r ->
+                            child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
+                                repeat(9) { c ->
+                                    child(slotContainer(slotAsComponent(9 * r + c), type = null))
+                                }
+                            })
+                        }
+                    })
                     child(verticalSpace(4))
-                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
+                    child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
+                        surface(Surface.tiled(SlotType.NORMAL.texture, 18, 18))
                         repeat(9) { c ->
-                            child(slotContainer(slotAsComponent(9 * 3 + c)))
+                            child(slotContainer(slotAsComponent(9 * 3 + c), type = null))
                         }
                     })
 
