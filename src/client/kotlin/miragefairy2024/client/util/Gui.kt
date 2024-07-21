@@ -20,10 +20,10 @@ enum class SlotType(val texture: Identifier) {
     FAIRY(Identifier(MirageFairy2024.modId, "textures/gui/fairy_slot.png")),
 }
 
-fun slotContainer(slotComponent: Component, type: SlotType = SlotType.NORMAL): FlowLayout {
+fun slotContainer(slotComponent: Component, type: SlotType? = SlotType.NORMAL): FlowLayout {
     return Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
         padding(Insets.of(1))
-        surface(Surface.tiled(type.texture, 18, 18))
+        if (type != null) surface(Surface.tiled(type.texture, 18, 18))
         allowOverflow(true)
         child(slotComponent)
     }
