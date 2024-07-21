@@ -10,6 +10,7 @@ import miragefairy2024.util.modId
 import miragefairy2024.util.noGroup
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerFuel
@@ -270,6 +271,7 @@ fun initMaterialsModule() = ModEvents.onInitialize {
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
     registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
+    registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
 
     // ヴェロペダの実
     MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
