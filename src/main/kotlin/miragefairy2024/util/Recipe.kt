@@ -118,6 +118,27 @@ fun registerSmeltingRecipeGeneration(
     return settings
 }
 
+fun registerBlastingRecipeGeneration(
+    input: Item,
+    output: Item,
+    experience: Double = 0.0,
+    cookingTime: Int = 100,
+    block: CookingRecipeJsonBuilder.() -> Unit = {},
+): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
+    val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
+    MirageFairy2024DataGenerator.recipeGenerators {
+        val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+        builder.group(output)
+        settings.listeners.forEach { listener ->
+            listener(builder)
+        }
+        block(builder)
+        val identifier = settings.idModifiers.fold(output.getIdentifier() concat "_from_blasting") { id, idModifier -> idModifier(id) }
+        builder.offerTo(it, identifier)
+    }
+    return settings
+}
+
 
 // Others
 
