@@ -128,7 +128,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
             if (world.getEntitiesByType(EntityType.EXPERIENCE_ORB, blockPos.toBox()) { true }.isNotEmpty()) return@run // 経験値がそこに存在する場合は中止
             val naturalAbscission = traitEffects[TraitEffectKeyCard.NATURAL_ABSCISSION.traitEffectKey]
             if (!(world.random.nextDouble() < naturalAbscission)) return@run // 確率で失敗
-            pick(world, blockPos, null, null)
+            pick(world, blockPos, null, null, false)
         }
 
     }
@@ -187,7 +187,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
     }
 
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
-    protected fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?) {
+    protected fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean) {
 
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
@@ -195,7 +195,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
         val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
         val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
-        val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
+        val experience = if (dropExperience) world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey]) else 0
 
         // アイテムを生成
         drops.forEach { itemStack ->
@@ -215,7 +215,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
     final override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (!canPick(state)) return ActionResult.PASS
         if (world.isClient) return ActionResult.SUCCESS
-        pick(world as ServerWorld, pos, player, player.mainHandStack)
+        pick(world as ServerWorld, pos, player, player.mainHandStack, true)
         return ActionResult.CONSUME
     }
 
