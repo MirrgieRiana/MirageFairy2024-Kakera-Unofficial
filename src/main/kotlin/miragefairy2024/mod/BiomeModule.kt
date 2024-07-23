@@ -258,7 +258,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() = TerraBlenderEvents.onTerraBlenderInitialized {
         val rule = MaterialRules.condition(
             MaterialRules.surface(),
             MaterialRules.condition(
