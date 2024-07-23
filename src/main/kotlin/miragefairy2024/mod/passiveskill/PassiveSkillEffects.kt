@@ -285,7 +285,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
 
         var remainingAmount = actualAmount
         var processedCount = 0
-        run finish@{
+        if (itemEntities.isNotEmpty()) run finish@{
             blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
                 val offset = toBlockPos.subtract(fromBlockPos)
                 val direction = when {
