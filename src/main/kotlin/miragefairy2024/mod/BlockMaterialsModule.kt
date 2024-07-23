@@ -100,10 +100,8 @@ enum class BlockMaterialCard(
 
 fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.block.register(Registries.BLOCK, card.identifier)
-            card.item.register(Registries.ITEM, card.identifier)
-        }
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
         ModEvents.onInitialize {
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

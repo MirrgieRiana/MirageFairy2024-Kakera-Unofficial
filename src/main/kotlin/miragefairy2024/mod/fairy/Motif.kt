@@ -1000,9 +1000,7 @@ operator fun Motif?.contains(child: Motif?) = this == null || child != null && c
 
 fun initMotif() {
     MotifCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.register(motifRegistry, card.identifier)
-        }
+        card.register(motifRegistry, card.identifier)
         ModEvents.onInitialize {
             card.translation.enJa()
             card.recipes.recipes.forEach {

@@ -61,10 +61,8 @@ object PlacedItemCard {
 
 fun initPlacedItemBlock() {
     PlacedItemCard.let { card ->
-        ModEvents.onRegistration {
-            card.block.register(Registries.BLOCK, card.identifier)
-            card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
-        }
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
 
         ModEvents.onInitialize {
             card.block.registerSingletonBlockStateGeneration()

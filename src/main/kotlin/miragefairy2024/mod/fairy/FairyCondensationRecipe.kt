@@ -33,9 +33,7 @@ enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, Spe
 
 fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
-        }
+        card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
         ModEvents.onInitialize {
             MirageFairy2024DataGenerator.recipeGenerators {
                 ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)

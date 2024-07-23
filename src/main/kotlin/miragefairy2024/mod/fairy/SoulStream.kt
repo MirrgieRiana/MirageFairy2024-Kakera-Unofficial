@@ -39,9 +39,7 @@ val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.miragefairy2024.open_s
 fun initSoulStream() {
 
     // 拡張プレイヤーデータ
-    ModEvents.onRegistration {
-        SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
-    }
+    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
 
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
@@ -59,9 +57,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    ModEvents.onRegistration {
-        soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
-    }
+    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
 
     // 翻訳
     ModEvents.onInitialize {

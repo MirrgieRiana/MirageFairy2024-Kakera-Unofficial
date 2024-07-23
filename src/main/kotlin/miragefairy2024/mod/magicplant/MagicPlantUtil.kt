@@ -17,14 +17,12 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
 fun MagicPlantCard<*, *>.initMagicPlant() {
-    ModEvents.onRegistration {
 
-        // 登録
-        block.register(Registries.BLOCK, blockIdentifier)
-        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
-        item.register(Registries.ITEM, itemIdentifier)
+    // 登録
+    block.register(Registries.BLOCK, blockIdentifier)
+    blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
+    item.register(Registries.ITEM, itemIdentifier)
 
-    }
     ModEvents.onInitialize {
 
         // 分類

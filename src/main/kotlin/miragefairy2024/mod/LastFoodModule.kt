@@ -20,12 +20,10 @@ import net.minecraft.world.GameRules
 import java.time.Instant
 
 fun initLastFoodModule() {
-    ModEvents.onRegistration {
 
-        // 拡張プレイヤーデータ
-        LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "last_food"))
+    // 拡張プレイヤーデータ
+    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "last_food"))
 
-    }
     ModEvents.onInitialize {
 
         // 食べ物を食べるとlastFoodをそれにする

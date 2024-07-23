@@ -1,7 +1,6 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
@@ -22,9 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
 fun initFairyDreamContainer() {
-    ModEvents.onRegistration {
-        FairyDreamContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_dream"))
-    }
+    FairyDreamContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_dream"))
 }
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {

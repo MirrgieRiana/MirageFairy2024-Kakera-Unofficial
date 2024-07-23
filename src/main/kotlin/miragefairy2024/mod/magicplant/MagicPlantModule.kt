@@ -32,18 +32,14 @@ val magicPlantSeedItemGroupCard = ItemGroupCard(
 fun initMagicPlantModule() {
 
     TraitEffectKeyCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
-        }
+        card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
         ModEvents.onInitialize {
             card.traitEffectKey.enJa(card.enName, card.jaName)
         }
     }
 
     TraitCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.trait.register(traitRegistry, card.identifier)
-        }
+        card.trait.register(traitRegistry, card.identifier)
         ModEvents.onInitialize {
             card.trait.enJa(card.enName, card.jaName)
         }

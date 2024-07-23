@@ -31,9 +31,7 @@ val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, player
 val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.modId}.fairy_quest_card.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 fun initFairyQuestCardScreenHandler() {
-    ModEvents.onRegistration {
-        fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
-    }
+    fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
     ModEvents.onInitialize {
         guiFairyQuestCardFullScreenTranslation.enJa()
     }

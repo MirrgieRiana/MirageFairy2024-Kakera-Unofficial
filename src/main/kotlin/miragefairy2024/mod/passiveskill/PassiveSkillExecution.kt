@@ -53,9 +53,7 @@ fun initPassiveSkillExecution() {
     }
 
     // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
-    ModEvents.onRegistration {
-        PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
-    }
+    PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
 
     // 翻訳
     ModEvents.onInitialize {

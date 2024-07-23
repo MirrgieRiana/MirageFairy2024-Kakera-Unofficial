@@ -229,9 +229,7 @@ val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.register(fairyQuestRecipeRegistry, card.identifier)
-        }
+        card.register(fairyQuestRecipeRegistry, card.identifier)
         ModEvents.onInitialize {
 
             card.titleTranslation.enJa()
@@ -306,13 +304,11 @@ fun initFairyQuestRecipe() {
         }
 
     }
-    ModEvents.onRegistration {
 
-        SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
+    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
 
-        FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
 
-    }
 }
 
 class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<DefaultFeatureConfig>(codec) {

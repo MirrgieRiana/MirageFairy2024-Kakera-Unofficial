@@ -206,9 +206,7 @@ val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mira
 
 fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.item.register(Registries.ITEM, card.identifier)
-        }
+        card.item.register(Registries.ITEM, card.identifier)
         ModEvents.onInitialize {
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
             card.item.registerGeneratedItemModelGeneration()

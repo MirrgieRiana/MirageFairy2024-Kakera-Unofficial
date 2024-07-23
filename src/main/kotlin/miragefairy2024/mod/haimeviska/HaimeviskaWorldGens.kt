@@ -49,12 +49,10 @@ val haimeviskaFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = Registry
 val haimeviskaDeepFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest"))
 
 fun initHaimeviskaWorldGens() {
-    ModEvents.onRegistration {
 
-        // TreeDecoratorの登録
-        HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
+    // TreeDecoratorの登録
+    HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
-    }
     ModEvents.onInitialize {
 
         // ConfiguredFeatureの登録

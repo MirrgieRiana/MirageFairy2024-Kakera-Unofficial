@@ -58,9 +58,7 @@ class ToolCard<I : Item>(
     val item = type.createItem()
 
     fun init() {
-        ModEvents.onRegistration {
-            item.register(Registries.ITEM, identifier)
-        }
+        item.register(Registries.ITEM, identifier)
 
         ModEvents.onInitialize {
             item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

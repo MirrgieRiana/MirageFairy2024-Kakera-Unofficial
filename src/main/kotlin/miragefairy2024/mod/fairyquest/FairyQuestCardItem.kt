@@ -56,9 +56,7 @@ private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCa
 
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        ModEvents.onRegistration {
-            card.item.register(Registries.ITEM, card.identifier)
-        }
+        card.item.register(Registries.ITEM, card.identifier)
         ModEvents.onInitialize {
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
                 fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {

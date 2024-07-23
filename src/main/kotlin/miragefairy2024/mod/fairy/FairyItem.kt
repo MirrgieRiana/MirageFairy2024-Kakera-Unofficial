@@ -75,9 +75,7 @@ val fairiesItemGroupCard = ItemGroupCard(
 
 fun initFairyItem() {
     FairyCard.let { card ->
-        ModEvents.onRegistration {
-            card.item.register(Registries.ITEM, card.identifier)
-        }
+        card.item.register(Registries.ITEM, card.identifier)
         ModEvents.onInitialize {
             card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
                 motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }

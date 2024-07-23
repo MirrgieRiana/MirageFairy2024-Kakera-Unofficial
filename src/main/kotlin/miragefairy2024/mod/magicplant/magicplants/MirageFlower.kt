@@ -98,12 +98,10 @@ fun initMirageFlower() {
 
     // 地形生成
     run {
-        ModEvents.onRegistration {
 
-            // Fairy Ring Feature
-            fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
+        // Fairy Ring Feature
+        fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
 
-        }
         ModEvents.onInitialize {
 
             // 小さな塊ConfiguredFeature

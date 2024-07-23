@@ -39,9 +39,7 @@ import java.util.UUID
 
 fun initPassiveSkillEffects() {
     PassiveSkillEffectCard.entries.forEach { card ->
-        ModEvents.onRegistration {
-            card.register(passiveSkillEffectRegistry, card.identifier)
-        }
+        card.register(passiveSkillEffectRegistry, card.identifier)
         card.init()
     }
 
