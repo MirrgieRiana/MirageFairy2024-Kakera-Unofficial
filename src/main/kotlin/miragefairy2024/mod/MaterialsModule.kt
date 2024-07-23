@@ -209,8 +209,8 @@ context(ModContext)
 fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
         card.item.register(Registries.ITEM, card.identifier)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         ModEvents.onInitialize {
-            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
             card.item.registerGeneratedItemModelGeneration()
         }
         card.item.enJa(card.enName, card.jaName)

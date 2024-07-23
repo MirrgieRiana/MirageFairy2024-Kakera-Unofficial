@@ -63,9 +63,9 @@ class ToolCard<I : Item>(
     fun init() {
         item.register(Registries.ITEM, identifier)
 
-        ModEvents.onInitialize {
-            item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
+        ModEvents.onInitialize {
             item.registerItemModelGeneration(Models.HANDHELD)
         }
 

@@ -25,22 +25,20 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
     blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
     item.register(Registries.ITEM, itemIdentifier)
 
-    ModEvents.onInitialize {
-
-        // 分類
-        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
-            traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
-                (0..3).map { b ->
-                    item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
-                }
+    // 分類
+    item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+    item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
+        traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
+            (0..3).map { b ->
+                item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
             }
         }
+    }
 
-        // 見た目
+    // 見た目
+    ModEvents.onInitialize {
         block.registerCutoutRenderLayer()
         item.registerGeneratedItemModelGeneration()
-
     }
 
     // 翻訳

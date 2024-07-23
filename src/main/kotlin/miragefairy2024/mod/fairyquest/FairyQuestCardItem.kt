@@ -59,14 +59,14 @@ context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        ModEvents.onInitialize {
-            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
-                fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
-                    val itemStack = card.item.createItemStack()
-                    itemStack.setFairyQuestRecipe(it.value)
-                    itemStack
-                }
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
+            fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
+                val itemStack = card.item.createItemStack()
+                itemStack.setFairyQuestRecipe(it.value)
+                itemStack
             }
+        }
+        ModEvents.onInitialize {
             card.item.registerItemModelGeneration(createFairyQuestCardModel())
             card.item.registerColorProvider { itemStack, tintIndex ->
                 if (tintIndex == 0) {

@@ -78,11 +78,12 @@ context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
-        ModEvents.onInitialize {
-            card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
-                motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
-            }
 
+        card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
+            motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
+        }
+
+        ModEvents.onInitialize {
             card.item.registerItemModelGeneration(createFairyModel())
             card.item.registerColorProvider { itemStack, tintIndex ->
                 if (tintIndex == 4) {

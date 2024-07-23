@@ -104,9 +104,10 @@ fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
         card.block.register(Registries.BLOCK, card.identifier)
         card.item.register(Registries.ITEM, card.identifier)
-        ModEvents.onInitialize {
-            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+
+        ModEvents.onInitialize {
             card.block.registerSingletonBlockStateGeneration()
             if (card.model != null) {
                 card.block.registerModelGeneration(card.model)
