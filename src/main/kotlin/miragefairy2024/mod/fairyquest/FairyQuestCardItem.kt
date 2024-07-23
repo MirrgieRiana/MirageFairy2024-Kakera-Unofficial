@@ -68,12 +68,12 @@ fun initFairyQuestCardItem() {
         }
         ModEvents.onInitialize {
             card.item.registerItemModelGeneration(createFairyQuestCardModel())
-            card.item.registerColorProvider { itemStack, tintIndex ->
-                if (tintIndex == 0) {
-                    itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
-                } else {
-                    0xFFFFFF
-                }
+        }
+        card.item.registerColorProvider { itemStack, tintIndex ->
+            if (tintIndex == 0) {
+                itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
+            } else {
+                0xFFFFFF
             }
         }
         card.item.enJa(card.enName, card.jaName)

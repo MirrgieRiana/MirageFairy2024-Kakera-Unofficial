@@ -137,18 +137,19 @@ private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(M
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
-    ModEvents.onInitialize {
 
-        // レンダリング
+    // レンダリング
+    ModEvents.onInitialize {
         card.block.registerSingletonBlockStateGeneration()
         createHaimeviskaLeavesModel(card.identifier).with().registerModelGeneration("block/" concat card.identifier)
-        card.block.registerCutoutRenderLayer()
-        card.block.registerFoliageColorProvider()
-        card.item.registerRedirectColorProvider()
+    }
+    card.block.registerCutoutRenderLayer()
+    card.block.registerFoliageColorProvider()
+    card.item.registerRedirectColorProvider()
 
-        // 性質
+    // 性質
+    ModEvents.onInitialize {
         card.block.registerFlammable(30, 30)
-
     }
 
     // タグ
@@ -234,17 +235,16 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 context(ModContext)
 private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
-    ModEvents.onInitialize {
 
-        // レンダリング
+    // レンダリング
+    ModEvents.onInitialize {
         card.block.registerSingletonBlockStateGeneration()
         Models.CROSS.with(
             TextureKey.CROSS to ("block/" concat card.identifier),
         ).registerModelGeneration("block/" concat card.identifier)
         card.item.registerBlockItemModelGeneration(card.block)
-        card.block.registerCutoutRenderLayer()
-
     }
+    card.block.registerCutoutRenderLayer()
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.SAPLINGS }

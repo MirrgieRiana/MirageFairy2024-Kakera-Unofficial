@@ -114,8 +114,8 @@ fun initBlockMaterialsModule() {
             } else {
                 card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
             }
-            if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
         }
+        if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)

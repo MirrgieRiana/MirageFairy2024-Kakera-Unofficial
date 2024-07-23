@@ -131,8 +131,8 @@ fun initOresModule() {
         ModEvents.onInitialize {
             card.block.registerSingletonBlockStateGeneration()
             card.block.registerModelGeneration(card.texturedModel)
-            card.block.registerCutoutRenderLayer()
         }
+        card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)

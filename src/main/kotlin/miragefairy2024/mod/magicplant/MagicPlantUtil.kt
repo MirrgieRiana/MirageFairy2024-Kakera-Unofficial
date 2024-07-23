@@ -36,8 +36,8 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
     }
 
     // 見た目
+    block.registerCutoutRenderLayer()
     ModEvents.onInitialize {
-        block.registerCutoutRenderLayer()
         item.registerGeneratedItemModelGeneration()
     }
 

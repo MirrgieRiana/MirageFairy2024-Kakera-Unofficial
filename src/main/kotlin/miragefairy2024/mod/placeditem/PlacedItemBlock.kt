@@ -79,8 +79,8 @@ fun initPlacedItemBlock() {
                     )
                 }.with()
             }
-            card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
         }
+        card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
         card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
     }

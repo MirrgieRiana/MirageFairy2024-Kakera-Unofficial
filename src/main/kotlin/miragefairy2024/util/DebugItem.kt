@@ -34,8 +34,8 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
     ModEvents.onInitialize {
         item.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(icon))
-        item.registerColorProvider { _, _ -> color }
     }
+    item.registerColorProvider { _, _ -> color }
 }
 
 context(ModContext)
