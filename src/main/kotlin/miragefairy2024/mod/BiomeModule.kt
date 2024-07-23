@@ -76,8 +76,8 @@ abstract class BiomeCard(
 }
 
 fun initBiomeModule() {
-    ModEvents.onInitialize {
-        BiomeCards.entries.forEach { card ->
+    BiomeCards.entries.forEach { card ->
+        ModEvents.onInitialize {
 
             // バイオームの生成
             registerDynamicGeneration(RegistryKeys.BIOME, card.registryKey) {
@@ -95,9 +95,9 @@ fun initBiomeModule() {
             // 翻訳生成
             card.translation.enJa()
 
-            card.init()
-
         }
+
+        card.init()
     }
     TerraBlenderEvents.onTerraBlenderInitialized {
         BiomeCards.entries.forEach { card ->
@@ -254,7 +254,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
             }.build()).build()
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         val rule = MaterialRules.condition(
             MaterialRules.surface(),
             MaterialRules.condition(

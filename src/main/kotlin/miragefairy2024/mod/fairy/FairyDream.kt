@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairy
 
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -24,7 +25,7 @@ import net.minecraft.world.RaycastContext
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.miragefairy2024.fairy_dream.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
 val GAIN_FAIRY_TRANSLATION = Translation({ "gui.miragefairy2024.fairy_dream.gain_fairy" }, "%s found!", "%sを発見した！")
 
-fun initFairyDream() {
+fun initFairyDream() = ModEvents.onInitialize {
 
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->

@@ -1,6 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategory
 import miragefairy2024.mod.containsAsFoodIngredient
@@ -27,7 +28,7 @@ import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
 import java.time.Instant
 
-fun initPassiveSkillConditions() {
+fun initPassiveSkillConditions() = ModEvents.onInitialize {
     SimplePassiveSkillConditionCard.entries.forEach { card ->
         card.init()
     }

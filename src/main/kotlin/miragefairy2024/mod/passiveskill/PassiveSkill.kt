@@ -1,7 +1,6 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.fairy.Motif
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
@@ -14,7 +13,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun initPassiveSkillModule() = ModEvents.onInitialize {
+fun initPassiveSkillModule() {
     initPassiveSkillConditions()
     initPassiveSkillEffects()
     initPassiveSkillExecution()

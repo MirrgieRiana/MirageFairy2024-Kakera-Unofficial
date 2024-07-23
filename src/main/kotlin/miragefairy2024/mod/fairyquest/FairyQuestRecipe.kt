@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
@@ -226,7 +227,7 @@ val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRe
 
 val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 
-fun initFairyQuestRecipe() {
+fun initFairyQuestRecipe() = ModEvents.onInitialize {
     FairyQuestRecipeCard.entries.forEach { card ->
 
         card.register(fairyQuestRecipeRegistry, card.identifier)

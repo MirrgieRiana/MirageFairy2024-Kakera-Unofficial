@@ -1,6 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mixin.api.DamageCallback
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.SoundEventCard
@@ -38,11 +39,15 @@ import java.util.UUID
 
 fun initPassiveSkillEffects() {
     PassiveSkillEffectCard.entries.forEach { card ->
-        card.register(passiveSkillEffectRegistry, card.identifier)
+        ModEvents.onInitialize {
+            card.register(passiveSkillEffectRegistry, card.identifier)
+        }
         card.init()
     }
 
-    EntityAttributePassiveSkillEffect.formatters[EntityAttributes.GENERIC_MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
+    ModEvents.onInitialize {
+        EntityAttributePassiveSkillEffect.formatters[EntityAttributes.GENERIC_MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
+    }
 }
 
 abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
@@ -91,7 +96,7 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkil
     }
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
         familyTranslation.enJa()
     }
@@ -193,7 +198,7 @@ object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") 
         }
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -216,7 +221,7 @@ object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience")
         }
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -232,7 +237,7 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
         }
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -245,7 +250,7 @@ object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
         context.player.addExhaustion(newValue.toFloat() * 4F)
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -258,7 +263,7 @@ object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
         context.player.mainHandStack.repair(context.world.random.randomInt(newValue))
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -322,7 +327,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
 
     }
 
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         translation.enJa()
     }
 }
@@ -379,7 +384,7 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
     }
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
-    override fun init() {
+    override fun init() = ModEvents.onInitialize {
         attackTranslation.enJa()
         defenceTranslation.enJa()
         Elements.entries.forEach {

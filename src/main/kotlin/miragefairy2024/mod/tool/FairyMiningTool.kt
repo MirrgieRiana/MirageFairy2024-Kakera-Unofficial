@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModEvents
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.PoemList
@@ -52,7 +53,7 @@ class FairyMiningToolType(
 
     override fun createItem() = FairyMiningToolItem(this, Item.Settings())
 
-    override fun init(card: ToolCard<FairyMiningToolItem>) {
+    override fun init(card: ToolCard<FairyMiningToolItem>) = ModEvents.onInitialize {
         tags.forEach {
             card.item.registerItemTagGeneration { it }
         }

@@ -2,6 +2,7 @@ package miragefairy2024.mod.haimeviska
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModEvents
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
@@ -133,7 +134,7 @@ private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
 
-private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
     card.block.registerSingletonBlockStateGeneration()
@@ -152,7 +153,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
-private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
     MirageFairy2024DataGenerator.blockStateModelGenerators {
@@ -169,7 +170,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
-private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
     card.block.registerVariantsBlockStateGeneration {
@@ -197,7 +198,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
-private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
     card.block.registerSingletonBlockStateGeneration()
@@ -214,7 +215,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
-private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
     card.block.registerSingletonBlockStateGeneration()
@@ -234,91 +235,97 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 fun initHaimeviskaBlocks() {
 
     HaimeviskaBlockCard.entries.forEach { card ->
+        ModEvents.onInitialize {
 
-        // 登録
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+            // 登録
+            card.block.register(Registries.BLOCK, card.identifier)
+            card.item.register(Registries.ITEM, card.identifier)
 
-        // カテゴリ
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+            // カテゴリ
+            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        // テキスト
-        card.block.enJa(card.settings.enName, card.settings.jaName)
-        card.item.registerPoem(card.settings.poemList)
-        card.item.registerPoemGeneration(card.settings.poemList)
+            // テキスト
+            card.block.enJa(card.settings.enName, card.settings.jaName)
+            card.item.registerPoem(card.settings.poemList)
+            card.item.registerPoemGeneration(card.settings.poemList)
+
+        }
 
         card.initializer(card)
     }
 
-    // ドロップ
-    HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration {
-        it.leavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.SAPLING_DROP_CHANCE)
-    }
-    HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
-    HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
-        LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-            },
-        ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
-        }
-    }
-    HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
-        LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
-            }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 2))
-            }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-                conditionally(RandomChanceLootCondition.builder(0.01F))
-            },
-        ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
-        }
-    }
-    HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
-        LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-            },
-            LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
-            }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-            },
-        ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
-        }
-    }
-    HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
-    HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
+    ModEvents.onInitialize {
 
-    // レシピ
-    HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
-    HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
-    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-        input(HaimeviskaBlockCard.LOG.item)
-    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    registerMagicPlantDropNotation(HaimeviskaBlockCard.DRIPPING_LOG.item, MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-    registerMagicPlantDropNotation(HaimeviskaBlockCard.HOLLOW_LOG.item, MaterialCard.FRACTAL_WISP.item)
+        // ドロップ
+        HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration {
+            it.leavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.SAPLING_DROP_CHANCE)
+        }
+        HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
+        HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
+            LootTable(
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                },
+            ) {
+                provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
+            }
+        }
+        HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
+            LootTable(
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
+                    apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+                }) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
+                    apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 2))
+                }) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                    conditionally(RandomChanceLootCondition.builder(0.01F))
+                },
+            ) {
+                provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
+            }
+        }
+        HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
+            LootTable(
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
+                    apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+                }) {
+                    conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                },
+            ) {
+                provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
+            }
+        }
+        HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
+        HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
+        // レシピ
+        HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
+        HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
+        registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
+            input(HaimeviskaBlockCard.LOG.item)
+        } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
+        registerMagicPlantDropNotation(HaimeviskaBlockCard.DRIPPING_LOG.item, MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
+        registerMagicPlantDropNotation(HaimeviskaBlockCard.HOLLOW_LOG.item, MaterialCard.FRACTAL_WISP.item)
+
+    }
 }
 
 

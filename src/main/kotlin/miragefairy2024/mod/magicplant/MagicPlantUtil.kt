@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
@@ -15,7 +16,7 @@ import net.minecraft.block.Block
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
-fun MagicPlantCard<*, *>.initMagicPlant() {
+fun MagicPlantCard<*, *>.initMagicPlant() = ModEvents.onInitialize {
 
     // 登録
     block.register(Registries.BLOCK, blockIdentifier)
