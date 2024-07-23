@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.mod.recipeGroupRegistry
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
@@ -65,6 +66,7 @@ fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.appl
     this.noGroup = noGroup
 }
 
+context(InitializationContext)
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     creator: (RecipeCategory, Item, Int) -> T,
     item: Item,
@@ -85,18 +87,21 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     return settings
 }
 
+context(InitializationContext)
 fun registerShapedRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapedRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::create, item, count, block)
 
+context(InitializationContext)
 fun registerShapelessRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::create, item, count, block)
 
+context(InitializationContext)
 fun registerSmeltingRecipeGeneration(
     input: Item,
     output: Item,
@@ -118,6 +123,7 @@ fun registerSmeltingRecipeGeneration(
     return settings
 }
 
+context(InitializationContext)
 fun registerBlastingRecipeGeneration(
     input: Item,
     output: Item,

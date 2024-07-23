@@ -2,6 +2,7 @@ package miragefairy2024.mod.haimeviska
 
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -48,6 +49,7 @@ val haimeviskaPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(Regi
 val haimeviskaFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest"))
 val haimeviskaDeepFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest"))
 
+context(ModContext)
 fun initHaimeviskaWorldGens() {
 
     // TreeDecoratorの登録

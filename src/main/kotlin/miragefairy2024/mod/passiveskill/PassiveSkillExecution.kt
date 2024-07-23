@@ -1,6 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
@@ -27,6 +28,7 @@ val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "item.miragefairy2024.f
 val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.supporting" }, "Supporting other item", "他のアイテムを支援中")
 val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.effective" }, "Effective", "発動中")
 
+context(ModContext)
 fun initPassiveSkillExecution() {
 
     // イベント処理

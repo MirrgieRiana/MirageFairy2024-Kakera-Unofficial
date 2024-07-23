@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.WISP_TAG
@@ -36,6 +37,7 @@ import net.minecraft.util.Identifier
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.miragefairy2024.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.miragefairy2024.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
+context(ModContext)
 fun initSoulStream() {
 
     // 拡張プレイヤーデータ

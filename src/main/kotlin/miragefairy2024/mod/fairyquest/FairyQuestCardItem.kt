@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairyquest
 
 import com.google.gson.JsonObject
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -54,6 +55,7 @@ object FairyQuestCardCard {
 
 private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "“%s”", "『%s』")
 
+context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)

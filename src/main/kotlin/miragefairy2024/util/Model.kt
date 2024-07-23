@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import com.google.gson.JsonElement
+import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
@@ -126,21 +127,36 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 
 // registerModelGeneration
 
+context(InitializationContext)
 fun TexturedModel.registerModelGeneration(identifier: Identifier) = MirageFairy2024DataGenerator.blockStateModelGenerators {
     this.model.upload(identifier, this.textures, it.modelCollector)
 }
 
+context(InitializationContext)
 fun Model.registerModelGeneration(identifier: Identifier, vararg textureEntries: Pair<TextureKey, Identifier>) = this.with(*textureEntries).registerModelGeneration(identifier)
+
+context(InitializationContext)
 fun Item.registerItemModelGeneration(texturedModel: TexturedModel) = texturedModel.registerModelGeneration("item/" concat this.getIdentifier())
+
+context(InitializationContext)
 fun Item.registerItemModelGeneration(model: Model) = this.registerItemModelGeneration(model with TextureMap.layer0(this))
+
+context(InitializationContext)
 fun Item.registerGeneratedItemModelGeneration() = this.registerItemModelGeneration(Models.GENERATED)
+
+context(InitializationContext)
 fun Item.registerBlockItemModelGeneration(block: Block) = this.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(block))
+
+context(InitializationContext)
 fun Block.registerModelGeneration(texturedModel: TexturedModel) = (texturedModel.model with texturedModel.textures).registerModelGeneration("block/" concat this.getIdentifier())
+
+context(InitializationContext)
 fun Block.registerModelGeneration(factory: TexturedModel.Factory) = this.registerModelGeneration(factory.get(this))
 
 
 // registerBlockStateGeneration
 
+context(InitializationContext)
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = MirageFairy2024DataGenerator.blockStateModelGenerators {
     it.blockStateCollector.accept(object : BlockStateSupplier {
         override fun get() = creator()
@@ -215,6 +231,7 @@ class VariantsBlockStateGenerationRegistrationScope {
     fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
 }
 
+context(InitializationContext)
 fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
     jsonObject(
         "variants" to jsonObject(
@@ -233,6 +250,7 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
     )
 }
 
+context(InitializationContext)
 fun Block.registerSingletonBlockStateGeneration() = MirageFairy2024DataGenerator.blockStateModelGenerators {
     it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" concat this.getIdentifier()))
 }

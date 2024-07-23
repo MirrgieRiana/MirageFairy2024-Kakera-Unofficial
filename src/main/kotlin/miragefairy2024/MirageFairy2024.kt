@@ -25,31 +25,36 @@ import miragefairy2024.mod.tool.initToolModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
+class ModContext
+
 class RegistrationContext
 
+class InitializationContext
+
 object ModEvents {
-    val onRegistration = InitializationEventRegistry<RegistrationContext.() -> Unit>()
-    val onInitialize = InitializationEventRegistry<() -> Unit>()
+    val onRegistration = InitializationEventRegistry<ModContext, context(RegistrationContext)() -> Unit>()
+    val onInitialize = InitializationEventRegistry<ModContext, context(InitializationContext)() -> Unit>()
 }
 
 object MirageFairy2024 : ModInitializer {
     val modId = "miragefairy2024"
     val logger = LoggerFactory.getLogger("miragefairy2024")
 
-    val onClientInit = InitializationEventRegistry<(ClientProxy) -> Unit>()
+    val onClientInit = InitializationEventRegistry<InitializationContext, (ClientProxy) -> Unit>()
     var clientProxy: ClientProxy? = null
 
     override fun onInitialize() {
         Modules.init()
         ModEvents.onRegistration.fire { it(RegistrationContext()) }
-        ModEvents.onInitialize.fire { it() }
+        ModEvents.onInitialize.fire { it(InitializationContext()) }
     }
 }
 
-class InitializationEventRegistry<T> {
+class InitializationEventRegistry<C, T> {
     private val list = mutableListOf<T>()
     private var closed = false
 
+    context(C)
     operator fun invoke(listener: T) {
         require(!closed)
         this.list += listener
@@ -71,28 +76,30 @@ object Modules {
             if (initialized) return
             initialized = true
 
-            initCommonModule()
-            initVanillaModule()
-            initReiModule()
-            initPoemModule()
-            initStatusEffectModule()
-            initMaterialsModule()
-            initBlockMaterialsModule()
-            initOresModule()
-            initMagicPlantModule()
-            initHaimeviskaModule()
-            initFairyQuestModule()
-            initNinePatchTextureModule()
-            initPlacedItemModule()
-            initFairyModule()
-            initExtraPlayerDataModule()
-            initPassiveSkillModule()
-            initLastFoodModule()
-            initFoodIngredientsModule()
-            initRecipeGroupModule()
-            initSoundEventModule()
-            initToolModule()
-            initBiomeModule()
+            with(ModContext()) {
+                initCommonModule()
+                initVanillaModule()
+                initReiModule()
+                initPoemModule()
+                initStatusEffectModule()
+                initMaterialsModule()
+                initBlockMaterialsModule()
+                initOresModule()
+                initMagicPlantModule()
+                initHaimeviskaModule()
+                initFairyQuestModule()
+                initNinePatchTextureModule()
+                initPlacedItemModule()
+                initFairyModule()
+                initExtraPlayerDataModule()
+                initPassiveSkillModule()
+                initLastFoodModule()
+                initFoodIngredientsModule()
+                initRecipeGroupModule()
+                initSoundEventModule()
+                initToolModule()
+                initBiomeModule()
+            }
         }
     }
 }

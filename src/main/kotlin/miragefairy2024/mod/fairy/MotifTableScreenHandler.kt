@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.register
 import miragefairy2024.util.toIdentifier
@@ -22,6 +23,7 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
     MotifTableScreenHandler(syncId, chanceTable)
 }
 
+context(ModContext)
 fun initMotifTableScreenHandler() {
     motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "motif_table"))
 }

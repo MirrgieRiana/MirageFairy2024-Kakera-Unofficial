@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -39,6 +40,7 @@ class ItemGroupCard(
         .displayName(translation())
         .build()
 
+    context(ModContext)
     fun init() {
         itemGroup.register(Registries.ITEM_GROUP, identifier)
         ModEvents.onInitialize {

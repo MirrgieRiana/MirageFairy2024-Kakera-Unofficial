@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import mirrg.kotlin.hydrogen.toUpperCamelCase
@@ -20,6 +21,7 @@ import net.minecraft.world.World
 import java.io.File
 import java.io.IOException
 
+context(ModContext)
 fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
     val item = object : Item(Settings()) {
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
@@ -36,6 +38,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
     }
 }
 
+context(ModContext)
 fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
         if (!world.isClient) return@registerDebugItem
@@ -43,6 +46,7 @@ fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 
     }
 }
 
+context(ModContext)
 fun registerServerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (ServerWorld, ServerPlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
         if (world.isClient) return@registerDebugItem

@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
@@ -73,6 +74,7 @@ val fairiesItemGroupCard = ItemGroupCard(
     Identifier(MirageFairy2024.modId, "fairies"), "Fairies", "妖精",
 ) { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() }
 
+context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)

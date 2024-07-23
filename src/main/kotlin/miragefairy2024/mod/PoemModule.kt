@@ -1,6 +1,8 @@
 package miragefairy2024.mod
 
+import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
@@ -14,6 +16,7 @@ import net.minecraft.util.Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
 
+context(ModContext)
 fun initPoemModule() = ModEvents.onInitialize {
     MirageFairy2024.onClientInit { clientProxy ->
         clientProxy.registerItemTooltipCallback { stack, lines ->
@@ -50,11 +53,13 @@ enum class PoemType(val color: Formatting) {
 interface Poem {
     val type: PoemType
     fun getText(item: Item): Text
+    context(InitializationContext)
     fun init(item: Item) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
     override fun getText(item: Item) = text { translate("${item.translationKey}.$key").formatted(type.color) }
+    context(InitializationContext)
     override fun init(item: Item) {
         en { "${item.translationKey}.$key" to en }
         ja { "${item.translationKey}.$key" to ja }
@@ -86,6 +91,7 @@ fun Item.registerPoem(poemList: PoemList) {
     itemPoemListTable[this] = poemList
 }
 
+context(InitializationContext)
 fun Item.registerPoemGeneration(poemList: PoemList) {
     poemList.poems.forEach {
         it.init(this)

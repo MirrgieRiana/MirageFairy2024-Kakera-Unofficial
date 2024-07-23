@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.util.Translation
@@ -64,6 +65,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     val translation = Translation({ "${MirageFairy2024.modId}.tool_material.$path" }, enName, jaName)
 }
 
+context(ModContext)
 fun initToolMaterialModule() = ModEvents.onInitialize {
 
     ToolMaterialCard.entries.forEach { card ->

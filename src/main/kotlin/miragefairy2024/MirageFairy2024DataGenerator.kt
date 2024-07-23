@@ -36,20 +36,20 @@ import java.util.function.Consumer
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
-    val blockStateModelGenerators = InitializationEventRegistry<(BlockStateModelGenerator) -> Unit>()
-    val itemModelGenerators = InitializationEventRegistry<(ItemModelGenerator) -> Unit>()
-    val blockTagGenerators = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
-    val itemTagGenerators = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
-    val biomeTagGenerators = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
-    val blockLootTableGenerators = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
-    val recipeGenerators = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
+    val blockStateModelGenerators = InitializationEventRegistry<InitializationContext, (BlockStateModelGenerator) -> Unit>()
+    val itemModelGenerators = InitializationEventRegistry<InitializationContext, (ItemModelGenerator) -> Unit>()
+    val blockTagGenerators = InitializationEventRegistry<InitializationContext, ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
+    val itemTagGenerators = InitializationEventRegistry<InitializationContext, ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val biomeTagGenerators = InitializationEventRegistry<InitializationContext, ((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
+    val blockLootTableGenerators = InitializationEventRegistry<InitializationContext, (FabricBlockLootTableProvider) -> Unit>()
+    val recipeGenerators = InitializationEventRegistry<InitializationContext, ((RecipeJsonProvider) -> Unit) -> Unit>()
     val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
-    val englishTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val japaneseTranslationGenerators = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val ninePatchTextureGenerators = InitializationEventRegistry<((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
-    val soundGenerators = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
+    val englishTranslationGenerators = InitializationEventRegistry<InitializationContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val japaneseTranslationGenerators = InitializationEventRegistry<InitializationContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val ninePatchTextureGenerators = InitializationEventRegistry<InitializationContext, ((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
+    val soundGenerators = InitializationEventRegistry<InitializationContext, ((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
 
-    val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
+    val onBuildRegistry = InitializationEventRegistry<InitializationContext, (RegistryBuilder) -> Unit>()
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack = fabricDataGenerator.createPack()

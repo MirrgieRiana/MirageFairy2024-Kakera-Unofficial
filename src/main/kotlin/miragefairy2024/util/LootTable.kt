@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.util.FortuneEffect.IGNORE
 import miragefairy2024.util.FortuneEffect.ORE
@@ -67,10 +68,12 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 }
 
 
+context(InitializationContext)
 fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = MirageFairy2024DataGenerator.blockLootTableGenerators {
     it.addDrop(this, initializer(it))
 }
 
+context(InitializationContext)
 fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration {
     it.drops(this)
 }
@@ -81,6 +84,7 @@ enum class FortuneEffect {
     UNIFORM,
 }
 
+context(InitializationContext)
 fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = ORE) = this.registerLootTableGeneration {
     BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
         if (additionalCount != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(additionalCount.start, additionalCount.endInclusive)))

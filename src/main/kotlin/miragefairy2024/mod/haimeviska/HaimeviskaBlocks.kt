@@ -2,6 +2,7 @@ package miragefairy2024.mod.haimeviska
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
@@ -81,7 +82,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
-class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val initializer: (HaimeviskaBlockCard) -> Unit) {
+class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
         val LEAVES = Settings(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
@@ -134,6 +135,7 @@ private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
 
+context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
@@ -153,6 +155,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onI
 
 }
 
+context(ModContext)
 private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
@@ -170,6 +173,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInit
 
 }
 
+context(ModContext)
 private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
@@ -198,6 +202,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) = 
 
 }
 
+context(ModContext)
 private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
@@ -215,6 +220,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onI
 
 }
 
+context(ModContext)
 private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.onInitialize {
 
     // レンダリング
@@ -232,6 +238,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.on
 }
 
 
+context(ModContext)
 fun initHaimeviskaBlocks() {
 
     HaimeviskaBlockCard.entries.forEach { card ->
@@ -252,7 +259,7 @@ fun initHaimeviskaBlocks() {
 
         }
 
-        card.initializer(card)
+        card.initializer(this@ModContext, card)
     }
 
     ModEvents.onInitialize {

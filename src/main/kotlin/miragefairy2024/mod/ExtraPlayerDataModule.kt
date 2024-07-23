@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import com.faux.customentitydata.api.playersaves.CustomPlayerSave
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.Channel
 import miragefairy2024.util.compound
@@ -48,6 +49,7 @@ val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (thi
 
 // Init
 
+context(ModContext)
 fun initExtraPlayerDataModule() = ModEvents.onInitialize {
 
     // インスタンス再生成時（死亡・一部のディメンション移動）にデータを維持

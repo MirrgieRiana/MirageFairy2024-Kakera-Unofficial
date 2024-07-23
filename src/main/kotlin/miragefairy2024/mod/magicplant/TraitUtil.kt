@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.InitializationContext
 import miragefairy2024.util.bitCount
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
@@ -17,6 +18,7 @@ fun Identifier.toTrait() = traitRegistry.get(this)
 fun Trait.getTranslationKey(): String = Util.createTranslationKey("mirageFairy2024.trait", this.getIdentifier())
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }
 
+context(InitializationContext)
 fun Trait.enJa(enName: String, jaName: String) {
     en { this.getTranslationKey() to enName }
     ja { this.getTranslationKey() to jaName }
@@ -48,6 +50,7 @@ fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
 fun TraitEffectKey<*>.getTranslationKey(): String = Util.createTranslationKey("mirageFairy2024.traitEffect", this.getIdentifier())
 fun TraitEffectKey<*>.getName() = run { text { translate(this@run.getTranslationKey()) } }
 
+context(InitializationContext)
 fun TraitEffectKey<*>.enJa(enName: String, jaName: String) {
     en { this.getTranslationKey() to enName }
     ja { this.getTranslationKey() to jaName }

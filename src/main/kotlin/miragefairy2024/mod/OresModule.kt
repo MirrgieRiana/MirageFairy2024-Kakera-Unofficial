@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.BaseStoneType.DEEPSLATE
 import miragefairy2024.mod.BaseStoneType.STONE
@@ -113,6 +114,7 @@ object OreModelCard {
     val model = Model(identifier, TextureKey.BACK, TextureKey.FRONT)
 }
 
+context(ModContext)
 fun initOresModule() {
 
     ModEvents.onInitialize {

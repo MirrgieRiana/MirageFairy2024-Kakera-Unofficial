@@ -1,6 +1,7 @@
 package miragefairy2024.mod.placeditem
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
@@ -59,6 +60,7 @@ object PlacedItemCard {
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }
 
+context(ModContext)
 fun initPlacedItemBlock() {
     PlacedItemCard.let { card ->
         card.block.register(Registries.BLOCK, card.identifier)

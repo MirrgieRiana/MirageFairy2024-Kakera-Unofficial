@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
@@ -16,6 +17,7 @@ import net.minecraft.util.Identifier
 
 val experienceStatusEffect = ExperienceStatusEffect()
 
+context(ModContext)
 fun initStatusEffectModule() {
     experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
     ModEvents.onInitialize {

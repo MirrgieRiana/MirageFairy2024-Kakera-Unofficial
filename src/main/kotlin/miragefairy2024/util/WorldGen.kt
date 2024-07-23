@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.Registry
@@ -18,12 +19,14 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 
 // Init
 
+context(InitializationContext)
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: (Registerable<T>) -> T): RegistryKey<T> {
     val key = RegistryKey.of(registryKey, identifier)
     registerDynamicGeneration(registryKey, key, creator)
     return key
 }
 
+context(InitializationContext)
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
     MirageFairy2024DataGenerator.onBuildRegistry {
         it.addRegistry(registryKey) { context ->

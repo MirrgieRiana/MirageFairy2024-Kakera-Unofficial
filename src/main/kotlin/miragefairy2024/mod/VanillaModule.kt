@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
@@ -21,6 +22,7 @@ enum class BlockTagCard(path: String) {
     val tag: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, identifier)
 }
 
+context(ModContext)
 fun initVanillaModule() {
 
     ModEvents.onInitialize {

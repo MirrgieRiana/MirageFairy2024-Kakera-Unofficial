@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import com.mojang.datafixers.util.Pair
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.haimeviskaDeepFairyForestPlacedFeatureKey
@@ -68,13 +69,16 @@ abstract class BiomeCard(
     vararg val tags: TagKey<Biome>,
 ) {
     abstract fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome
+    context(ModContext)
     open fun init() = Unit
+
     val identifier = Identifier(MirageFairy2024.modId, path)
     val registryKey: RegistryKey<Biome> = RegistryKey.of(RegistryKeys.BIOME, identifier)
     val biomeTag: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, identifier)
     val translation = Translation({ identifier.toTranslationKey("biome") }, en, ja)
 }
 
+context(ModContext)
 fun initBiomeModule() {
     BiomeCards.entries.forEach { card ->
         ModEvents.onInitialize {
@@ -254,6 +258,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
             }.build()).build()
     }
 
+    context(ModContext)
     override fun init() = ModEvents.onInitialize {
         val rule = MaterialRules.condition(
             MaterialRules.surface(),

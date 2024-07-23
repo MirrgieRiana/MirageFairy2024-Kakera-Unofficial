@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
@@ -998,6 +999,7 @@ operator fun Motif.contains(child: Motif): Boolean = child == this || child.pare
 operator fun Motif?.contains(child: Motif?) = this == null || child != null && child in this
 
 
+context(ModContext)
 fun initMotif() {
     MotifCard.entries.forEach { card ->
         card.register(motifRegistry, card.identifier)

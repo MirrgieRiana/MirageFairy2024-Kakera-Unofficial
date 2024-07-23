@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.isNotEmpty
@@ -31,6 +32,7 @@ enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, Spe
     val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { _, category -> creator(category, this) }
 }
 
+context(ModContext)
 fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
         card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)

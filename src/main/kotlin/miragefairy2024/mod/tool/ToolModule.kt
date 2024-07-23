@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
@@ -21,6 +22,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 
+context(ModContext)
 fun initToolModule() {
     ToolCard.entries.forEach {
         it.init()
@@ -40,7 +42,9 @@ fun initToolModule() {
 
 interface ToolType<I : Item> {
     fun createItem(): I
+    context(ModContext)
     fun init(card: ToolCard<I>) = Unit
+
     fun addPoems(poemList: PoemList) = poemList
 }
 
@@ -52,11 +56,12 @@ class ToolCard<I : Item>(
     private val jaPoem: String,
     private val tier: Int,
     private val type: ToolType<I>,
-    private val initializer: ToolCard<I>.() -> Unit = {},
+    private val initializer: context(ModContext)ToolCard<I>.() -> Unit = {},
 ) {
     val identifier = Identifier(MirageFairy2024.modId, path)
     val item = type.createItem()
 
+    context(ModContext)
     fun init() {
         item.register(Registries.ITEM, identifier)
 
@@ -73,7 +78,7 @@ class ToolCard<I : Item>(
         }
 
         type.init(this)
-        initializer(this)
+        initializer(this@ModContext, this)
     }
 
     @Suppress("unused")

@@ -3,6 +3,7 @@ package miragefairy2024.mod.magicplant.magicplants
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
@@ -81,6 +82,7 @@ val netherMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKe
 val mirageClusterFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest"))
 val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
 
+context(ModContext)
 fun initMirageFlower() {
     val card = MirageFlowerCard
     card.initMagicPlant()

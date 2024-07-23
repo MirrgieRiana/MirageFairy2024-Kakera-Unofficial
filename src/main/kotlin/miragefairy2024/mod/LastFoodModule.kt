@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mixin.api.EatFoodCallback
 import miragefairy2024.util.compound
@@ -19,6 +20,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.GameRules
 import java.time.Instant
 
+context(ModContext)
 fun initLastFoodModule() {
 
     // 拡張プレイヤーデータ

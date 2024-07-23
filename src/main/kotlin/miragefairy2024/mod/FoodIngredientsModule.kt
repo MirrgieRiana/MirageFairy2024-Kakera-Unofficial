@@ -1,6 +1,7 @@
 package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -80,6 +81,7 @@ enum class FoodIngredientCategoryCard(path: String, enName: String, jaName: Stri
     override val text get() = translation()
 }
 
+context(ModContext)
 fun initFoodIngredientsModule() = ModEvents.onInitialize {
     FoodIngredientCategoryCard.entries.forEach { card ->
         card.translation.enJa()

@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant.magicplants
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
@@ -57,6 +58,7 @@ object VeropedaCard : MagicPlantCard<VeropedaBlock, VeropedaBlockEntity>(
     ::VeropedaBlockEntity,
 )
 
+context(ModContext)
 fun initVeropeda() {
     val card = VeropedaCard
     card.initMagicPlant()
