@@ -141,14 +141,13 @@ fun initOresModule() {
         card.item.registerPoemGeneration(card.poemList)
 
         ModEvents.onInitialize {
-
             card.block.registerOreLootTableGeneration(card.dropItem)
-
-            card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
-            card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
-            card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
-
         }
+
+        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
+        card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
+
     }
 
     ModEvents.onInitialize {

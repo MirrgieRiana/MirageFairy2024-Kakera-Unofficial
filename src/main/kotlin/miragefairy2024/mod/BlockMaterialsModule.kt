@@ -122,10 +122,10 @@ fun initBlockMaterialsModule() {
 
         ModEvents.onInitialize {
             card.block.registerDefaultLootTableGeneration()
+        }
 
-            card.tags.forEach {
-                card.block.registerBlockTagGeneration { it }
-            }
+        card.tags.forEach {
+            card.block.registerBlockTagGeneration { it }
         }
     }
 

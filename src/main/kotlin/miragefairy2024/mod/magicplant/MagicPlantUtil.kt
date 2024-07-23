@@ -49,16 +49,15 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
     item.registerPoem(seedPoemList)
     item.registerPoemGeneration(seedPoemList)
 
+    // 性質
+    //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
+    block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
+
+    // レシピ
     ModEvents.onInitialize {
-
-        // 性質
-        //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
-        block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
-
-        // レシピ
         item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-
     }
+
 }
 
 class WorldGenTraitRecipeInitScope(val block: Block) {

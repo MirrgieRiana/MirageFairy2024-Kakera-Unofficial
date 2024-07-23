@@ -81,21 +81,20 @@ abstract class BiomeCard(
 context(ModContext)
 fun initBiomeModule() {
     BiomeCards.entries.forEach { card ->
-        ModEvents.onInitialize {
 
-            // バイオームの生成
+        // バイオームの生成
+        ModEvents.onInitialize {
             registerDynamicGeneration(RegistryKeys.BIOME, card.registryKey) {
                 card.createBiome(it.getRegistryLookup(RegistryKeys.PLACED_FEATURE), it.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER))
             }
+        }
 
-            // このバイオームを指定するバイオームタグの生成
-            card.identifier.registerBiomeTagGeneration { card.biomeTag }
+        // このバイオームを指定するバイオームタグの生成
+        card.identifier.registerBiomeTagGeneration { card.biomeTag }
 
-            // このバイオームをタグに登録
-            card.tags.forEach { tag ->
-                card.identifier.registerBiomeTagGeneration { tag }
-            }
-
+        // このバイオームをタグに登録
+        card.tags.forEach { tag ->
+            card.identifier.registerBiomeTagGeneration { tag }
         }
 
         // 翻訳生成
