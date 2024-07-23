@@ -275,17 +275,17 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
 
         val originalBlockPos = player.eyeBlockPos
         val reach = 15
-        val itemEntities = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
+        val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
             when {
                 it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
                 it.boundingBox.intersects(player.boundingBox) -> false // 既に触れているアイテムには無反応
                 else -> true
             }
-        }
+        }.groupBy { it.blockPos }
 
         var remainingAmount = actualAmount
         var processedCount = 0
-        if (itemEntities.isNotEmpty()) run finish@{
+        if (targetTable.isNotEmpty()) run finish@{
             blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
                 val offset = toBlockPos.subtract(fromBlockPos)
                 val direction = when {
@@ -299,20 +299,17 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
                 }
                 !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction) && !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
             }.forEach { (_, blockPos) ->
-                val currentBox = Box(blockPos).expand(0.98, 0.0, 0.98)
-                itemEntities
-                    .filter { it.boundingBox.intersects(currentBox) }
-                    .forEach {
+                targetTable[blockPos]?.forEach {
 
-                        it.teleport(player.x, player.y, player.z)
-                        it.resetPickupDelay()
+                    it.teleport(player.x, player.y, player.z)
+                    it.resetPickupDelay()
 
-                        processedCount++
+                    processedCount++
 
-                        remainingAmount--
-                        if (remainingAmount <= 0) return@finish
+                    remainingAmount--
+                    if (remainingAmount <= 0) return@finish
 
-                    }
+                }
             }
         }
 
