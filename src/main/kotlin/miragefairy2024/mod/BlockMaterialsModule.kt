@@ -129,17 +129,15 @@ fun initBlockMaterialsModule() {
         }
     }
 
-    ModEvents.onInitialize {
-        registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
-            pattern("###")
-            pattern("###")
-            pattern("###")
-            input('#', MaterialCard.MIRANAGITE.item)
-        } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
-        registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
-            input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
-        } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
-    }
+    registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
+        pattern("###")
+        pattern("###")
+        pattern("###")
+        input('#', MaterialCard.MIRANAGITE.item)
+    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+    registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
+        input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
+    } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
 
 }
 

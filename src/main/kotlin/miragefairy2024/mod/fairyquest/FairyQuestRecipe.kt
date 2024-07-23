@@ -239,7 +239,7 @@ fun initFairyQuestRecipe() {
 
 
         // 村チェストドロップ
-        ModEvents.onInitialize {
+        run {
             val allVillageChests = listOf(
                 LootTables.VILLAGE_WEAPONSMITH_CHEST,
                 LootTables.VILLAGE_TOOLSMITH_CHEST,

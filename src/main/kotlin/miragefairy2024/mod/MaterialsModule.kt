@@ -216,90 +216,84 @@ fun initMaterialsModule() {
         card.item.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
-        ModEvents.onInitialize {
-            if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
-        }
+        if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
 
-    ModEvents.onInitialize {
-
-        fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
-            registerShapedRecipeGeneration(high.item) {
-                pattern("###")
-                pattern("###")
-                pattern("###")
-                input('#', low.item)
-            }.noGroup(noGroup) on low.item from low.item
-            registerShapelessRecipeGeneration(low.item, 9) {
-                input(high.item)
-            }.noGroup(noGroup) on high.item from high.item
-        }
-        registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, noGroup = true)
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME, noGroup = true)
-
-        // 紅天石
-        MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
-        MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
-
-        // 混沌の石
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.SIMPLE_DUNGEON_CHEST, 10, 3..5)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ABANDONED_MINESHAFT_CHEST, 5)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ANCIENT_CITY_CHEST, 10, 1..5)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_CHEST, 10)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.VILLAGE_DESERT_HOUSE_CHEST, 3)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_ARCHAEOLOGY, 1)
-        MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_WELL_ARCHAEOLOGY, 1)
-
-        // ミラージュの葉
-        MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
-
-        // ミラージュの茎
-        registerShapelessRecipeGeneration(MaterialCard.MIRAGE_STEM.item) {
-            input(MaterialCard.MIRAGE_LEAVES.item)
-        } on MaterialCard.MIRAGE_LEAVES.item
-        MaterialCard.MIRAGE_STEM.item.registerComposterInput(0.5F)
-        registerShapedRecipeGeneration(Items.STICK, 2) {
-            pattern("#")
-            pattern("#")
-            input('#', MaterialCard.MIRAGE_STEM.item)
-        } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.modId from MaterialCard.MIRAGE_STEM.item
-
-        // ミラジウム
-        registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
-        registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
-
-        // ヴェロペダの葉
-        MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
-        registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
-        registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
-
-        // ヴェロペダの実
-        MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
-
-        // ハイメヴィスカの樹液→松明
-        registerShapedRecipeGeneration(Items.TORCH) {
-            pattern("#")
-            pattern("S")
-            input('#', MaterialCard.HAIMEVISKA_SAP.item)
-            input('S', Items.STICK)
-        } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
-
-        // 妖精の木の涙→粘着ピストン
-        registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
-            pattern("S")
-            pattern("P")
-            input('P', Blocks.PISTON)
-            input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
-        } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_ROSIN.item
-
+    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
+        registerShapedRecipeGeneration(high.item) {
+            pattern("###")
+            pattern("###")
+            pattern("###")
+            input('#', low.item)
+        }.noGroup(noGroup) on low.item from low.item
+        registerShapelessRecipeGeneration(low.item, 9) {
+            input(high.item)
+        }.noGroup(noGroup) on high.item from high.item
     }
+    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME, noGroup = true)
+
+    // 紅天石
+    MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
+    MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
+
+    // 混沌の石
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.SIMPLE_DUNGEON_CHEST, 10, 3..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ABANDONED_MINESHAFT_CHEST, 5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ANCIENT_CITY_CHEST, 10, 1..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_CHEST, 10)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.VILLAGE_DESERT_HOUSE_CHEST, 3)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_ARCHAEOLOGY, 1)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_WELL_ARCHAEOLOGY, 1)
+
+    // ミラージュの葉
+    MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
+
+    // ミラージュの茎
+    registerShapelessRecipeGeneration(MaterialCard.MIRAGE_STEM.item) {
+        input(MaterialCard.MIRAGE_LEAVES.item)
+    } on MaterialCard.MIRAGE_LEAVES.item
+    MaterialCard.MIRAGE_STEM.item.registerComposterInput(0.5F)
+    registerShapedRecipeGeneration(Items.STICK, 2) {
+        pattern("#")
+        pattern("#")
+        input('#', MaterialCard.MIRAGE_STEM.item)
+    } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.modId from MaterialCard.MIRAGE_STEM.item
+
+    // ミラジウム
+    registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
+
+    // ヴェロペダの葉
+    MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
+    registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
+    registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
+
+    // ヴェロペダの実
+    MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
+
+    // ハイメヴィスカの樹液→松明
+    registerShapedRecipeGeneration(Items.TORCH) {
+        pattern("#")
+        pattern("S")
+        input('#', MaterialCard.HAIMEVISKA_SAP.item)
+        input('S', Items.STICK)
+    } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
+
+    // 妖精の木の涙→粘着ピストン
+    registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
+        pattern("S")
+        pattern("P")
+        input('P', Blocks.PISTON)
+        input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
+    } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_ROSIN.item
 
     // ミラージュの花粉
     MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }

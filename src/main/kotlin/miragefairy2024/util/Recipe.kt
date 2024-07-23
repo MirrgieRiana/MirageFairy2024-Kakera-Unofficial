@@ -1,7 +1,8 @@
 package miragefairy2024.util
 
-import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
@@ -66,7 +67,7 @@ fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.appl
     this.noGroup = noGroup
 }
 
-context(InitializationContext)
+context(ModContext)
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     creator: (RecipeCategory, Item, Int) -> T,
     item: Item,
@@ -74,34 +75,36 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     block: T.() -> Unit = {},
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val builder = creator(settings.recipeCategory, item, count)
-        settings.listeners.forEach { listener ->
-            listener(builder)
+    ModEvents.onInitialize {
+        MirageFairy2024DataGenerator.recipeGenerators {
+            val builder = creator(settings.recipeCategory, item, count)
+            settings.listeners.forEach { listener ->
+                listener(builder)
+            }
+            if (!settings.noGroup) builder.group(item)
+            block(builder)
+            val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
+            builder.offerTo(it, identifier)
         }
-        if (!settings.noGroup) builder.group(item)
-        block(builder)
-        val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
     }
     return settings
 }
 
-context(InitializationContext)
+context(ModContext)
 fun registerShapedRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapedRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::create, item, count, block)
 
-context(InitializationContext)
+context(ModContext)
 fun registerShapelessRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::create, item, count, block)
 
-context(InitializationContext)
+context(ModContext)
 fun registerSmeltingRecipeGeneration(
     input: Item,
     output: Item,
@@ -110,20 +113,22 @@ fun registerSmeltingRecipeGeneration(
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
-        settings.listeners.forEach { listener ->
-            listener(builder)
+    ModEvents.onInitialize {
+        MirageFairy2024DataGenerator.recipeGenerators {
+            val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+            builder.group(output)
+            settings.listeners.forEach { listener ->
+                listener(builder)
+            }
+            block(builder)
+            val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
+            builder.offerTo(it, identifier)
         }
-        block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
     }
     return settings
 }
 
-context(InitializationContext)
+context(ModContext)
 fun registerBlastingRecipeGeneration(
     input: Item,
     output: Item,
@@ -132,15 +137,17 @@ fun registerBlastingRecipeGeneration(
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
-    MirageFairy2024DataGenerator.recipeGenerators {
-        val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
-        settings.listeners.forEach { listener ->
-            listener(builder)
+    ModEvents.onInitialize {
+        MirageFairy2024DataGenerator.recipeGenerators {
+            val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+            builder.group(output)
+            settings.listeners.forEach { listener ->
+                listener(builder)
+            }
+            block(builder)
+            val identifier = settings.idModifiers.fold(output.getIdentifier() concat "_from_blasting") { id, idModifier -> idModifier(id) }
+            builder.offerTo(it, identifier)
         }
-        block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier() concat "_from_blasting") { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
     }
     return settings
 }
@@ -148,7 +155,8 @@ fun registerBlastingRecipeGeneration(
 
 // Others
 
-fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) {
+context(ModContext)
+fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) = ModEvents.onInitialize {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == Blocks.GRASS.lootTableId) {
@@ -170,13 +178,14 @@ fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, bio
     }
 }
 
+context(ModContext)
 fun Item.registerMobDrop(
     entityType: EntityType<*>,
     onlyKilledByPlayer: Boolean = false,
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) {
+) = ModEvents.onInitialize {
     val lootTableId = entityType.lootTableId
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
@@ -195,7 +204,8 @@ fun Item.registerMobDrop(
     }
 }
 
-fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) {
+context(ModContext)
+fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) = ModEvents.onInitialize {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == lootTableId) {
@@ -213,11 +223,13 @@ fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: Int
     }
 }
 
-fun Item.registerComposterInput(chance: Float) {
+context(ModContext)
+fun Item.registerComposterInput(chance: Float) = ModEvents.onInitialize {
     ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(this, chance)
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */
-fun Item.registerFuel(ticks: Int) {
+context(ModContext)
+fun Item.registerFuel(ticks: Int) = ModEvents.onInitialize {
     FuelRegistry.INSTANCE.add(this, ticks)
 }

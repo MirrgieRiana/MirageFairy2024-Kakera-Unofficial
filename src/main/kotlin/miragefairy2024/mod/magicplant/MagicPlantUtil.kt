@@ -54,9 +54,7 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
     block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
 
     // レシピ
-    ModEvents.onInitialize {
-        item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-    }
+    item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
 
 }
 

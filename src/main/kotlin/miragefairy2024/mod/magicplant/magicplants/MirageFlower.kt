@@ -226,10 +226,11 @@ fun initMirageFlower() {
 
         }
 
-        // レシピ
-        registerMagicPlantDropNotation(card.item, MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
-
     }
+
+    // レシピ
+    registerMagicPlantDropNotation(card.item, MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
+
 }
 
 @Suppress("OVERRIDE_DEPRECATION")

@@ -337,16 +337,17 @@ fun initHaimeviskaBlocks() {
         HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
         HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
-        // レシピ
-        HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
-        HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
-        registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-            input(HaimeviskaBlockCard.LOG.item)
-        } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-        registerMagicPlantDropNotation(HaimeviskaBlockCard.DRIPPING_LOG.item, MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-        registerMagicPlantDropNotation(HaimeviskaBlockCard.HOLLOW_LOG.item, MaterialCard.FRACTAL_WISP.item)
-
     }
+
+    // レシピ
+    HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
+    HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
+    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
+        input(HaimeviskaBlockCard.LOG.item)
+    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
+    registerMagicPlantDropNotation(HaimeviskaBlockCard.DRIPPING_LOG.item, MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
+    registerMagicPlantDropNotation(HaimeviskaBlockCard.HOLLOW_LOG.item, MaterialCard.FRACTAL_WISP.item)
+
 }
 
 

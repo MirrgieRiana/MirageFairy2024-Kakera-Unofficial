@@ -148,10 +148,11 @@ fun initVeropeda() {
 
         }
 
-        // レシピ
-        registerMagicPlantDropNotation(card.item, MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
-
     }
+
+    // レシピ
+    registerMagicPlantDropNotation(card.item, MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
+
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
