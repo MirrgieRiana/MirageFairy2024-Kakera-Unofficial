@@ -108,6 +108,7 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         jvmTarget = "17"
+        freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
 
