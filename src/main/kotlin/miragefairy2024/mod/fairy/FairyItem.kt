@@ -121,18 +121,16 @@ fun initFairyItem() {
                     }
                 }
             }
-
-            card.item.enJa(card.enName, card.jaName)
         }
+
+        card.item.enJa(card.enName, card.jaName)
     }
 
-    ModEvents.onInitialize {
-        RARE_TRANSLATION.enJa()
-        MANA_TRANSLATION.enJa()
-        LEVEL_TRANSLATION.enJa()
-        CONDENSATION_TRANSLATION.enJa()
-        CONDENSATION_RECIPE_TRANSLATION.enJa()
-    }
+    RARE_TRANSLATION.enJa()
+    MANA_TRANSLATION.enJa()
+    LEVEL_TRANSLATION.enJa()
+    CONDENSATION_TRANSLATION.enJa()
+    CONDENSATION_RECIPE_TRANSLATION.enJa()
 
     fairiesItemGroupCard.init()
 }

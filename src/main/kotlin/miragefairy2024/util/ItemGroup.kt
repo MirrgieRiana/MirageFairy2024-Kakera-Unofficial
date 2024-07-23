@@ -1,7 +1,6 @@
 package miragefairy2024.util
 
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
@@ -43,8 +42,6 @@ class ItemGroupCard(
     context(ModContext)
     fun init() {
         itemGroup.register(Registries.ITEM_GROUP, identifier)
-        ModEvents.onInitialize {
-            translation.enJa()
-        }
+        translation.enJa()
     }
 }

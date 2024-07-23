@@ -1,29 +1,34 @@
 package miragefairy2024.util
 
-import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 
-context(InitializationContext)
-fun en(getter: () -> Pair<String, String>) = MirageFairy2024DataGenerator.englishTranslationGenerators {
-    val pair = getter()
-    it.add(pair.first, pair.second)
+context(ModContext)
+fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
+    MirageFairy2024DataGenerator.englishTranslationGenerators {
+        val pair = getter()
+        it.add(pair.first, pair.second)
+    }
 }
 
-context(InitializationContext)
-fun ja(getter: () -> Pair<String, String>) = MirageFairy2024DataGenerator.japaneseTranslationGenerators {
-    val pair = getter()
-    it.add(pair.first, pair.second)
+context(ModContext)
+fun ja(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
+    MirageFairy2024DataGenerator.japaneseTranslationGenerators {
+        val pair = getter()
+        it.add(pair.first, pair.second)
+    }
 }
 
-context(InitializationContext)
+context(ModContext)
 fun Block.enJa(enName: String, jaName: String) {
     en { this.translationKey to enName }
     ja { this.translationKey to jaName }
 }
 
-context(InitializationContext)
+context(ModContext)
 fun Item.enJa(enName: String, jaName: String) {
     en { this.translationKey to enName }
     ja { this.translationKey to jaName }
@@ -36,7 +41,7 @@ operator fun Translation.invoke() = text { translate(this@invoke.keyGetter()) }
 
 operator fun Translation.invoke(vararg args: Any?) = text { translate(this@invoke.keyGetter(), *args) }
 
-context(InitializationContext)
+context(ModContext)
 fun Translation.enJa() {
     en { this.keyGetter() to en }
     ja { this.keyGetter() to ja }

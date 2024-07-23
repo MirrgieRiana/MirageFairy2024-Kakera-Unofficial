@@ -48,9 +48,8 @@ fun initFairyDream() {
         }
     }
 
+    // 妖精の夢回収判定
     ModEvents.onInitialize {
-
-        // 妖精の夢回収判定
         ServerTickEvents.END_SERVER_TICK.register { server ->
             if (server.ticks % (20 * 5) == 0) {
                 server.playerManager.playerList.forEach { player ->
@@ -123,10 +122,10 @@ fun initFairyDream() {
                 }
             }
         }
-
-        // 翻訳
-        GAIN_FAIRY_DREAM_TRANSLATION.enJa()
-        GAIN_FAIRY_TRANSLATION.enJa()
-
     }
+
+    // 翻訳
+    GAIN_FAIRY_DREAM_TRANSLATION.enJa()
+    GAIN_FAIRY_TRANSLATION.enJa()
+
 }

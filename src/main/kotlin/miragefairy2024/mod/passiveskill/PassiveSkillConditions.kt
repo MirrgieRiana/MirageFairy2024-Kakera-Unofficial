@@ -1,9 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
-import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategory
 import miragefairy2024.mod.containsAsFoodIngredient
@@ -31,7 +29,7 @@ import net.minecraft.world.biome.Biome
 import java.time.Instant
 
 context(ModContext)
-fun initPassiveSkillConditions() = ModEvents.onInitialize {
+fun initPassiveSkillConditions() {
     SimplePassiveSkillConditionCard.entries.forEach { card ->
         card.init()
     }
@@ -75,7 +73,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
     override val text = translation()
 
-    context(InitializationContext)
+    context(ModContext)
     fun init() {
         translation.enJa()
     }

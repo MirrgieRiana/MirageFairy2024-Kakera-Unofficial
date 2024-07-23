@@ -212,15 +212,18 @@ fun initMaterialsModule() {
         ModEvents.onInitialize {
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
             card.item.registerGeneratedItemModelGeneration()
-            card.item.enJa(card.enName, card.jaName)
-            card.item.registerPoem(card.poemList)
-            card.item.registerPoemGeneration(card.poemList)
+        }
+        card.item.enJa(card.enName, card.jaName)
+        card.item.registerPoem(card.poemList)
+        card.item.registerPoemGeneration(card.poemList)
+        ModEvents.onInitialize {
             if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
         }
     }
-    ModEvents.onInitialize {
 
-        APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
+    APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
+
+    ModEvents.onInitialize {
 
         fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
             registerShapedRecipeGeneration(high.item) {

@@ -35,27 +35,21 @@ fun initMagicPlantModule() {
 
     TraitEffectKeyCard.entries.forEach { card ->
         card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
-        ModEvents.onInitialize {
-            card.traitEffectKey.enJa(card.enName, card.jaName)
-        }
+        card.traitEffectKey.enJa(card.enName, card.jaName)
     }
 
     TraitCard.entries.forEach { card ->
         card.trait.register(traitRegistry, card.identifier)
-        ModEvents.onInitialize {
-            card.trait.enJa(card.enName, card.jaName)
-        }
+        card.trait.enJa(card.enName, card.jaName)
     }
 
     ModEvents.onInitialize {
-
         worldGenTraitGenerations += RecipeWorldGenTraitGeneration()
-
-        TRAIT_TRANSLATION.enJa()
-        CREATIVE_ONLY_TRANSLATION.enJa()
-        INVALID_TRANSLATION.enJa()
-
     }
+
+    TRAIT_TRANSLATION.enJa()
+    CREATIVE_ONLY_TRANSLATION.enJa()
+    INVALID_TRANSLATION.enJa()
 
     magicPlantSeedItemGroupCard.init()
 

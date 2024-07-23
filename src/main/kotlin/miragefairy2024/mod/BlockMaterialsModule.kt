@@ -114,11 +114,13 @@ fun initBlockMaterialsModule() {
                 card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
             }
             if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
+        }
 
-            card.block.enJa(card.enName, card.jaName)
-            card.item.registerPoem(card.poemList)
-            card.item.registerPoemGeneration(card.poemList)
+        card.block.enJa(card.enName, card.jaName)
+        card.item.registerPoem(card.poemList)
+        card.item.registerPoemGeneration(card.poemList)
 
+        ModEvents.onInitialize {
             card.block.registerDefaultLootTableGeneration()
 
             card.tags.forEach {

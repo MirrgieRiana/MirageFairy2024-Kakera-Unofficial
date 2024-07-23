@@ -232,58 +232,56 @@ context(ModContext)
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
         card.register(fairyQuestRecipeRegistry, card.identifier)
+
+        card.titleTranslation.enJa()
+        card.messageTranslation.enJa()
+        card.clientTranslation.enJa()
+
+
+        // 村チェストドロップ
         ModEvents.onInitialize {
+            val allVillageChests = listOf(
+                LootTables.VILLAGE_WEAPONSMITH_CHEST,
+                LootTables.VILLAGE_TOOLSMITH_CHEST,
+                LootTables.VILLAGE_ARMORER_CHEST,
+                LootTables.VILLAGE_CARTOGRAPHER_CHEST,
+                LootTables.VILLAGE_MASON_CHEST,
+                LootTables.VILLAGE_SHEPARD_CHEST,
+                LootTables.VILLAGE_BUTCHER_CHEST,
+                LootTables.VILLAGE_FLETCHER_CHEST,
+                LootTables.VILLAGE_FISHER_CHEST,
+                LootTables.VILLAGE_TANNERY_CHEST,
+                LootTables.VILLAGE_TEMPLE_CHEST,
+                LootTables.VILLAGE_DESERT_HOUSE_CHEST,
+                LootTables.VILLAGE_PLAINS_CHEST,
+                LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
+                LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
+                LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+            )
 
-            card.titleTranslation.enJa()
-            card.messageTranslation.enJa()
-            card.clientTranslation.enJa()
-
-
-            // 村チェストドロップ
-            run {
-                val allVillageChests = listOf(
-                    LootTables.VILLAGE_WEAPONSMITH_CHEST,
-                    LootTables.VILLAGE_TOOLSMITH_CHEST,
-                    LootTables.VILLAGE_ARMORER_CHEST,
-                    LootTables.VILLAGE_CARTOGRAPHER_CHEST,
-                    LootTables.VILLAGE_MASON_CHEST,
-                    LootTables.VILLAGE_SHEPARD_CHEST,
-                    LootTables.VILLAGE_BUTCHER_CHEST,
-                    LootTables.VILLAGE_FLETCHER_CHEST,
-                    LootTables.VILLAGE_FISHER_CHEST,
-                    LootTables.VILLAGE_TANNERY_CHEST,
-                    LootTables.VILLAGE_TEMPLE_CHEST,
-                    LootTables.VILLAGE_DESERT_HOUSE_CHEST,
-                    LootTables.VILLAGE_PLAINS_CHEST,
-                    LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
-                    LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
-                    LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
-                )
-
-                fun registerChestLoot(lootTableId: Identifier, weight: Int) {
-                    FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
-                        apply { SetFairyQuestRecipeLootFunction(card.identifier) }
-                    }
-                }
-
-                when (card.lootCategory) {
-                    FairyQuestRecipeCard.LootCategory.NONE -> Unit
-
-                    FairyQuestRecipeCard.LootCategory.COMMON -> {
-                        allVillageChests.forEach {
-                            registerChestLoot(it, 10)
-                        }
-                    }
-
-                    FairyQuestRecipeCard.LootCategory.RARE -> {
-                        allVillageChests.forEach {
-                            registerChestLoot(it, 1)
-                        }
-                    }
+            fun registerChestLoot(lootTableId: Identifier, weight: Int) {
+                FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
+                    apply { SetFairyQuestRecipeLootFunction(card.identifier) }
                 }
             }
 
+            when (card.lootCategory) {
+                FairyQuestRecipeCard.LootCategory.NONE -> Unit
+
+                FairyQuestRecipeCard.LootCategory.COMMON -> {
+                    allVillageChests.forEach {
+                        registerChestLoot(it, 10)
+                    }
+                }
+
+                FairyQuestRecipeCard.LootCategory.RARE -> {
+                    allVillageChests.forEach {
+                        registerChestLoot(it, 1)
+                    }
+                }
+            }
         }
+
     }
 
     ModEvents.onInitialize {

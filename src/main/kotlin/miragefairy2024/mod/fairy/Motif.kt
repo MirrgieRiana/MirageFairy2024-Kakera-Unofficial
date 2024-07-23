@@ -2,7 +2,6 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
@@ -894,8 +893,8 @@ class ParentMotifs {
 // レシピ
 
 class MotifCardRecipes {
-    val recipes = mutableListOf<(MotifCard) -> Unit>()
-    fun onInit(recipe: (MotifCard) -> Unit): MotifCardRecipes {
+    val recipes = mutableListOf<context(ModContext)(MotifCard) -> Unit>()
+    fun onInit(recipe: context(ModContext)(MotifCard) -> Unit): MotifCardRecipes {
         recipes += recipe
         return this
     }
@@ -1003,11 +1002,9 @@ context(ModContext)
 fun initMotif() {
     MotifCard.entries.forEach { card ->
         card.register(motifRegistry, card.identifier)
-        ModEvents.onInitialize {
-            card.translation.enJa()
-            card.recipes.recipes.forEach {
-                it(card)
-            }
+        card.translation.enJa()
+        card.recipes.recipes.forEach {
+            it(this@ModContext, card)
         }
     }
 

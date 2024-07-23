@@ -41,11 +41,15 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
         block.registerCutoutRenderLayer()
         item.registerGeneratedItemModelGeneration()
 
-        // 翻訳
-        block.enJa(blockEnName, blockJaName)
-        item.enJa(itemEnName, itemJaName)
-        item.registerPoem(seedPoemList)
-        item.registerPoemGeneration(seedPoemList)
+    }
+
+    // 翻訳
+    block.enJa(blockEnName, blockJaName)
+    item.enJa(itemEnName, itemJaName)
+    item.registerPoem(seedPoemList)
+    item.registerPoemGeneration(seedPoemList)
+
+    ModEvents.onInitialize {
 
         // 性質
         //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく

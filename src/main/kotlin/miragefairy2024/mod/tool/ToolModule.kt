@@ -28,13 +28,11 @@ fun initToolModule() {
         it.init()
     }
 
-    ModEvents.onInitialize {
-        FairyMiningToolItem.AREA_MINING_TRANSLATION.enJa()
-        FairyMiningToolItem.MINE_ALL_TRANSLATION.enJa()
-        FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
-        FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
-        FairyMiningToolItem.SELF_MENDING_TRANSLATION.enJa()
-    }
+    FairyMiningToolItem.AREA_MINING_TRANSLATION.enJa()
+    FairyMiningToolItem.MINE_ALL_TRANSLATION.enJa()
+    FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
+    FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
+    FairyMiningToolItem.SELF_MENDING_TRANSLATION.enJa()
 
     initToolMaterialModule()
 }
@@ -69,13 +67,13 @@ class ToolCard<I : Item>(
             item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
             item.registerItemModelGeneration(Models.HANDHELD)
-
-            item.enJa(enName, jaName)
-
-            val poemList = PoemList(tier).poem(enPoem, jaPoem).let { type.addPoems(it) }
-            item.registerPoem(poemList)
-            item.registerPoemGeneration(poemList)
         }
+
+        item.enJa(enName, jaName)
+
+        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { type.addPoems(it) }
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
         type.init(this)
         initializer(this@ModContext, this)

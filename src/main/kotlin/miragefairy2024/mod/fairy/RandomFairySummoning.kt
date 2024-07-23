@@ -1,7 +1,6 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EMPTY_ITEM_STACK
@@ -46,7 +45,7 @@ val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.miragefairy20
 val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
 
 context(ModContext)
-fun initRandomFairySummoning() = ModEvents.onInitialize {
+fun initRandomFairySummoning() {
     MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION.enJa()
     MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION.enJa()
 }

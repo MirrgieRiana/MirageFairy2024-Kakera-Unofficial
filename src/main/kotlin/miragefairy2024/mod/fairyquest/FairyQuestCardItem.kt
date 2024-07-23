@@ -75,13 +75,13 @@ fun initFairyQuestCardItem() {
                     0xFFFFFF
                 }
             }
-            card.item.enJa(card.enName, card.jaName)
         }
+        card.item.enJa(card.enName, card.jaName)
     }
 
-    ModEvents.onInitialize {
-        fairyQuestCardFairyQuestTranslation.enJa()
+    fairyQuestCardFairyQuestTranslation.enJa()
 
+    ModEvents.onInitialize {
         registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
             input(FairyQuestCardIngredient.toVanilla())
         } on FairyQuestCardCard.item from FairyQuestCardCard.item

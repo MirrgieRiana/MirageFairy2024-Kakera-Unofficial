@@ -58,13 +58,11 @@ fun initPassiveSkillExecution() {
     PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
 
     // 翻訳
-    ModEvents.onInitialize {
-        PASSIVE_SKILL_TRANSLATION.enJa()
-        PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
-        PASSIVE_SKILL_OVERFLOWED_TRANSLATION.enJa()
-        PASSIVE_SKILL_SUPPORTING_TRANSLATION.enJa()
-        PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
-    }
+    PASSIVE_SKILL_TRANSLATION.enJa()
+    PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
+    PASSIVE_SKILL_OVERFLOWED_TRANSLATION.enJa()
+    PASSIVE_SKILL_SUPPORTING_TRANSLATION.enJa()
+    PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
 
 }
 

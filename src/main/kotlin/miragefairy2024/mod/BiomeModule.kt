@@ -96,10 +96,10 @@ fun initBiomeModule() {
                 card.identifier.registerBiomeTagGeneration { tag }
             }
 
-            // 翻訳生成
-            card.translation.enJa()
-
         }
+
+        // 翻訳生成
+        card.translation.enJa()
 
         card.init()
     }

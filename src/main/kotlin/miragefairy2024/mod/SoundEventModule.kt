@@ -32,7 +32,7 @@ fun initSoundEventModule() {
         card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
         ModEvents.onInitialize {
             MirageFairy2024DataGenerator.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
-            card.translation.enJa()
         }
+        card.translation.enJa()
     }
 }

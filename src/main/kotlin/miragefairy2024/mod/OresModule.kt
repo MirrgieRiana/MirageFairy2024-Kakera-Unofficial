@@ -122,18 +122,25 @@ fun initOresModule() {
     }
 
     OreCard.entries.forEach { card ->
+
         card.block.register(Registries.BLOCK, card.identifier)
         card.item.register(Registries.ITEM, card.identifier)
+
         ModEvents.onInitialize {
+
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
             card.block.registerSingletonBlockStateGeneration()
             card.block.registerModelGeneration(card.texturedModel)
             card.block.registerCutoutRenderLayer()
 
-            card.block.enJa(card.enName, card.jaName)
-            card.item.registerPoem(card.poemList)
-            card.item.registerPoemGeneration(card.poemList)
+        }
+
+        card.block.enJa(card.enName, card.jaName)
+        card.item.registerPoem(card.poemList)
+        card.item.registerPoemGeneration(card.poemList)
+
+        ModEvents.onInitialize {
 
             card.block.registerOreLootTableGeneration(card.dropItem)
 

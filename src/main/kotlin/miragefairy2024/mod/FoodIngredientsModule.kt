@@ -82,33 +82,35 @@ enum class FoodIngredientCategoryCard(path: String, enName: String, jaName: Stri
 }
 
 context(ModContext)
-fun initFoodIngredientsModule() = ModEvents.onInitialize {
+fun initFoodIngredientsModule() {
     FoodIngredientCategoryCard.entries.forEach { card ->
         card.translation.enJa()
     }
 
-    FoodIngredientsRegistry.registry[Items.GOLDEN_APPLE] = FoodIngredients() + Items.APPLE
-    FoodIngredientsRegistry.registry[Items.ENCHANTED_GOLDEN_APPLE] = FoodIngredients() + Items.GOLDEN_APPLE
-    FoodIngredientsRegistry.registry[Items.GOLDEN_CARROT] = FoodIngredients() + Items.CARROT
-    FoodIngredientsRegistry.registry[Items.BAKED_POTATO] = FoodIngredients() + Items.POTATO
-    FoodIngredientsRegistry.registry[Items.POISONOUS_POTATO] = FoodIngredients() + Items.POTATO
-    FoodIngredientsRegistry.registry[Items.DRIED_KELP] = FoodIngredients() + Items.KELP
-    FoodIngredientsRegistry.registry[Items.COOKED_BEEF] = FoodIngredients() + Items.BEEF
-    FoodIngredientsRegistry.registry[Items.COOKED_PORKCHOP] = FoodIngredients() + Items.PORKCHOP
-    FoodIngredientsRegistry.registry[Items.COOKED_MUTTON] = FoodIngredients() + Items.MUTTON
-    FoodIngredientsRegistry.registry[Items.COOKED_CHICKEN] = FoodIngredients() + Items.CHICKEN
-    FoodIngredientsRegistry.registry[Items.COOKED_RABBIT] = FoodIngredients() + Items.RABBIT
-    FoodIngredientsRegistry.registry[Items.COD] = FoodIngredients() + FoodIngredientCategoryCard.FISH
-    FoodIngredientsRegistry.registry[Items.COOKED_COD] = FoodIngredients() + Items.COD
-    FoodIngredientsRegistry.registry[Items.SALMON] = FoodIngredients() + FoodIngredientCategoryCard.FISH
-    FoodIngredientsRegistry.registry[Items.COOKED_SALMON] = FoodIngredients() + Items.SALMON
-    FoodIngredientsRegistry.registry[Items.BREAD] = FoodIngredients() + Items.WHEAT
-    FoodIngredientsRegistry.registry[Items.COOKIE] = FoodIngredients() + Items.WHEAT + Items.COCOA_BEANS
-    FoodIngredientsRegistry.registry[Items.PUMPKIN_PIE] = FoodIngredients() + Items.PUMPKIN + Items.SUGAR + Items.EGG
-    FoodIngredientsRegistry.registry[Items.MUSHROOM_STEW] = FoodIngredients() + Items.RED_MUSHROOM + Items.BROWN_MUSHROOM
-    FoodIngredientsRegistry.registry[Items.BEETROOT_SOUP] = FoodIngredients() + Items.BEETROOT
-    FoodIngredientsRegistry.registry[Items.RABBIT_STEW] = FoodIngredients() + Items.RABBIT + Items.POTATO + Items.CARROT + FoodIngredientCategoryCard.MUSHROOM
-    FoodIngredientsRegistry.registry[Items.SUSPICIOUS_STEW] = FoodIngredients() + Items.RED_MUSHROOM + Items.BROWN_MUSHROOM
-    FoodIngredientsRegistry.registry[Items.RED_MUSHROOM] = FoodIngredients() + FoodIngredientCategoryCard.MUSHROOM
-    FoodIngredientsRegistry.registry[Items.BROWN_MUSHROOM] = FoodIngredients() + FoodIngredientCategoryCard.MUSHROOM
+    ModEvents.onInitialize {
+        FoodIngredientsRegistry.registry[Items.GOLDEN_APPLE] = FoodIngredients() + Items.APPLE
+        FoodIngredientsRegistry.registry[Items.ENCHANTED_GOLDEN_APPLE] = FoodIngredients() + Items.GOLDEN_APPLE
+        FoodIngredientsRegistry.registry[Items.GOLDEN_CARROT] = FoodIngredients() + Items.CARROT
+        FoodIngredientsRegistry.registry[Items.BAKED_POTATO] = FoodIngredients() + Items.POTATO
+        FoodIngredientsRegistry.registry[Items.POISONOUS_POTATO] = FoodIngredients() + Items.POTATO
+        FoodIngredientsRegistry.registry[Items.DRIED_KELP] = FoodIngredients() + Items.KELP
+        FoodIngredientsRegistry.registry[Items.COOKED_BEEF] = FoodIngredients() + Items.BEEF
+        FoodIngredientsRegistry.registry[Items.COOKED_PORKCHOP] = FoodIngredients() + Items.PORKCHOP
+        FoodIngredientsRegistry.registry[Items.COOKED_MUTTON] = FoodIngredients() + Items.MUTTON
+        FoodIngredientsRegistry.registry[Items.COOKED_CHICKEN] = FoodIngredients() + Items.CHICKEN
+        FoodIngredientsRegistry.registry[Items.COOKED_RABBIT] = FoodIngredients() + Items.RABBIT
+        FoodIngredientsRegistry.registry[Items.COD] = FoodIngredients() + FoodIngredientCategoryCard.FISH
+        FoodIngredientsRegistry.registry[Items.COOKED_COD] = FoodIngredients() + Items.COD
+        FoodIngredientsRegistry.registry[Items.SALMON] = FoodIngredients() + FoodIngredientCategoryCard.FISH
+        FoodIngredientsRegistry.registry[Items.COOKED_SALMON] = FoodIngredients() + Items.SALMON
+        FoodIngredientsRegistry.registry[Items.BREAD] = FoodIngredients() + Items.WHEAT
+        FoodIngredientsRegistry.registry[Items.COOKIE] = FoodIngredients() + Items.WHEAT + Items.COCOA_BEANS
+        FoodIngredientsRegistry.registry[Items.PUMPKIN_PIE] = FoodIngredients() + Items.PUMPKIN + Items.SUGAR + Items.EGG
+        FoodIngredientsRegistry.registry[Items.MUSHROOM_STEW] = FoodIngredients() + Items.RED_MUSHROOM + Items.BROWN_MUSHROOM
+        FoodIngredientsRegistry.registry[Items.BEETROOT_SOUP] = FoodIngredients() + Items.BEETROOT
+        FoodIngredientsRegistry.registry[Items.RABBIT_STEW] = FoodIngredients() + Items.RABBIT + Items.POTATO + Items.CARROT + FoodIngredientCategoryCard.MUSHROOM
+        FoodIngredientsRegistry.registry[Items.SUSPICIOUS_STEW] = FoodIngredients() + Items.RED_MUSHROOM + Items.BROWN_MUSHROOM
+        FoodIngredientsRegistry.registry[Items.RED_MUSHROOM] = FoodIngredients() + FoodIngredientCategoryCard.MUSHROOM
+        FoodIngredientsRegistry.registry[Items.BROWN_MUSHROOM] = FoodIngredients() + FoodIngredientCategoryCard.MUSHROOM
+    }
 }

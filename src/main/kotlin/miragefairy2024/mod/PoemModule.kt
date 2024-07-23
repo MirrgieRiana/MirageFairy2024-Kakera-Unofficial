@@ -1,6 +1,5 @@
 package miragefairy2024.mod
 
-import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
@@ -53,13 +52,13 @@ enum class PoemType(val color: Formatting) {
 interface Poem {
     val type: PoemType
     fun getText(item: Item): Text
-    context(InitializationContext)
+    context(ModContext)
     fun init(item: Item) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
     override fun getText(item: Item) = text { translate("${item.translationKey}.$key").formatted(type.color) }
-    context(InitializationContext)
+    context(ModContext)
     override fun init(item: Item) {
         en { "${item.translationKey}.$key" to en }
         ja { "${item.translationKey}.$key" to ja }
@@ -86,12 +85,13 @@ fun PoemList.translation(type: PoemType, translation: Translation) = this + Exte
 
 // Util
 
-fun Item.registerPoem(poemList: PoemList) {
+context(ModContext)
+fun Item.registerPoem(poemList: PoemList) = ModEvents.onInitialize {
     require(this !in itemPoemListTable)
     itemPoemListTable[this] = poemList
 }
 
-context(InitializationContext)
+context(ModContext)
 fun Item.registerPoemGeneration(poemList: PoemList) {
     poemList.poems.forEach {
         it.init(this)

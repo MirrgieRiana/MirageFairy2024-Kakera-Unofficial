@@ -247,17 +247,15 @@ fun initHaimeviskaBlocks() {
         card.block.register(Registries.BLOCK, card.identifier)
         card.item.register(Registries.ITEM, card.identifier)
 
+        // カテゴリ
         ModEvents.onInitialize {
-
-            // カテゴリ
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-            // テキスト
-            card.block.enJa(card.settings.enName, card.settings.jaName)
-            card.item.registerPoem(card.settings.poemList)
-            card.item.registerPoemGeneration(card.settings.poemList)
-
         }
+
+        // テキスト
+        card.block.enJa(card.settings.enName, card.settings.jaName)
+        card.item.registerPoem(card.settings.poemList)
+        card.item.registerPoemGeneration(card.settings.poemList)
 
         card.initializer(this@ModContext, card)
     }

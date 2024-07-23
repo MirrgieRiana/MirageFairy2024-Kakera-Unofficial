@@ -98,7 +98,7 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkil
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
         familyTranslation.enJa()
     }
@@ -201,7 +201,7 @@ object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") 
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -225,7 +225,7 @@ object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience")
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -242,7 +242,7 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -256,7 +256,7 @@ object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -270,7 +270,7 @@ object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -335,7 +335,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
     }
 
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         translation.enJa()
     }
 }
@@ -393,37 +393,39 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
     context(ModContext)
-    override fun init() = ModEvents.onInitialize {
+    override fun init() {
         attackTranslation.enJa()
         defenceTranslation.enJa()
         Elements.entries.forEach {
             it.translation.enJa()
         }
-        DamageCallback.EVENT.register { entity, source, amount ->
-            var damage = amount
+        ModEvents.onInitialize {
+            DamageCallback.EVENT.register { entity, source, amount ->
+                var damage = amount
 
-            val attacker = source.attacker
-            if (attacker is PlayerEntity) {
-                var attackBonus = 0.0
-                attacker.passiveSkillResult[ELEMENT].attackMap.forEach { (element, value) ->
-                    if (element.test(source)) {
-                        attackBonus += value
+                val attacker = source.attacker
+                if (attacker is PlayerEntity) {
+                    var attackBonus = 0.0
+                    attacker.passiveSkillResult[ELEMENT].attackMap.forEach { (element, value) ->
+                        if (element.test(source)) {
+                            attackBonus += value
+                        }
                     }
+                    damage *= (1.0 + attackBonus).toFloat()
                 }
-                damage *= (1.0 + attackBonus).toFloat()
-            }
 
-            if (entity is PlayerEntity) {
-                var defenceBonus = 0.0
-                entity.passiveSkillResult[ELEMENT].defenceMap.forEach { (element, value) ->
-                    if (element.test(source)) {
-                        defenceBonus += value
+                if (entity is PlayerEntity) {
+                    var defenceBonus = 0.0
+                    entity.passiveSkillResult[ELEMENT].defenceMap.forEach { (element, value) ->
+                        if (element.test(source)) {
+                            defenceBonus += value
+                        }
                     }
+                    damage /= (1.0 + defenceBonus).toFloat()
                 }
-                damage /= (1.0 + defenceBonus).toFloat()
-            }
 
-            damage
+                damage
+            }
         }
     }
 }

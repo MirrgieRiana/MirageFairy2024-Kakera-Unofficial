@@ -62,10 +62,8 @@ fun initSoulStream() {
     soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
 
     // 翻訳
-    ModEvents.onInitialize {
-        SOUL_STREAM_TRANSLATION.enJa()
-        OPEN_SOUL_STREAM_KEY_TRANSLATION.enJa()
-    }
+    SOUL_STREAM_TRANSLATION.enJa()
+    OPEN_SOUL_STREAM_KEY_TRANSLATION.enJa()
 
 }
 

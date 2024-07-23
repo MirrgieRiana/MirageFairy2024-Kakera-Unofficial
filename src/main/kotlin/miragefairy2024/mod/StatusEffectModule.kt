@@ -2,7 +2,6 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.register
@@ -20,10 +19,8 @@ val experienceStatusEffect = ExperienceStatusEffect()
 context(ModContext)
 fun initStatusEffectModule() {
     experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
-    ModEvents.onInitialize {
-        en { experienceStatusEffect.translationKey to "Experience" }
-        ja { experienceStatusEffect.translationKey to "経験値獲得" }
-    }
+    en { experienceStatusEffect.translationKey to "Experience" }
+    ja { experienceStatusEffect.translationKey to "経験値獲得" }
 }
 
 class ExperienceStatusEffect : InstantStatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {

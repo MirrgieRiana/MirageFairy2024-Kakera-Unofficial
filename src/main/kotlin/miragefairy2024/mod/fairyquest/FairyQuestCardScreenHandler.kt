@@ -2,7 +2,6 @@ package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -34,9 +33,7 @@ val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy202
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
     fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
-    ModEvents.onInitialize {
-        guiFairyQuestCardFullScreenTranslation.enJa()
-    }
+    guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
 class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {
