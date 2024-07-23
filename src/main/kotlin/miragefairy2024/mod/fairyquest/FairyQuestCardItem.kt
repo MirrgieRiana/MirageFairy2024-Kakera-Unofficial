@@ -54,34 +54,40 @@ object FairyQuestCardCard {
 
 private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "“%s”", "『%s』")
 
-fun initFairyQuestCardItem() = ModEvents.onInitialize {
+fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
-            fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
-                val itemStack = card.item.createItemStack()
-                itemStack.setFairyQuestRecipe(it.value)
-                itemStack
-            }
+        ModEvents.onRegistration {
+            card.item.register(Registries.ITEM, card.identifier)
         }
-        card.item.registerItemModelGeneration(createFairyQuestCardModel())
-        card.item.registerColorProvider { itemStack, tintIndex ->
-            if (tintIndex == 0) {
-                itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
-            } else {
-                0xFFFFFF
+        ModEvents.onInitialize {
+            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
+                fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
+                    val itemStack = card.item.createItemStack()
+                    itemStack.setFairyQuestRecipe(it.value)
+                    itemStack
+                }
             }
+            card.item.registerItemModelGeneration(createFairyQuestCardModel())
+            card.item.registerColorProvider { itemStack, tintIndex ->
+                if (tintIndex == 0) {
+                    itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
+                } else {
+                    0xFFFFFF
+                }
+            }
+            card.item.enJa(card.enName, card.jaName)
         }
-        card.item.enJa(card.enName, card.jaName)
     }
 
-    fairyQuestCardFairyQuestTranslation.enJa()
+    ModEvents.onInitialize {
+        fairyQuestCardFairyQuestTranslation.enJa()
 
-    registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
-        input(FairyQuestCardIngredient.toVanilla())
-    } on FairyQuestCardCard.item from FairyQuestCardCard.item
+        registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
+            input(FairyQuestCardIngredient.toVanilla())
+        } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
-    CustomIngredientSerializer.register(FairyQuestCardIngredient.SERIALIZER)
+        CustomIngredientSerializer.register(FairyQuestCardIngredient.SERIALIZER)
+    }
 }
 
 class FairyQuestCardItem(settings: Settings) : Item(settings) {

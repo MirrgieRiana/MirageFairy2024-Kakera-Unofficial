@@ -235,11 +235,14 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) = ModEvents.on
 fun initHaimeviskaBlocks() {
 
     HaimeviskaBlockCard.entries.forEach { card ->
-        ModEvents.onInitialize {
+        ModEvents.onRegistration {
 
             // 登録
             card.block.register(Registries.BLOCK, card.identifier)
             card.item.register(Registries.ITEM, card.identifier)
+
+        }
+        ModEvents.onInitialize {
 
             // カテゴリ
             card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

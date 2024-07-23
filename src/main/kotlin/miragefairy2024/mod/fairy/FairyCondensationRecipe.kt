@@ -31,11 +31,15 @@ enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, Spe
     val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { _, category -> creator(category, this) }
 }
 
-fun initFairyCondensationRecipe() = ModEvents.onInitialize {
+fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
-        card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
-        MirageFairy2024DataGenerator.recipeGenerators {
-            ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
+        ModEvents.onRegistration {
+            card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
+        }
+        ModEvents.onInitialize {
+            MirageFairy2024DataGenerator.recipeGenerators {
+                ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
+            }
         }
     }
 }

@@ -98,41 +98,46 @@ enum class BlockMaterialCard(
     val item = BlockItem(block, Item.Settings())
 }
 
-fun initBlockMaterialsModule() = ModEvents.onInitialize {
+fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
-
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-        card.block.registerSingletonBlockStateGeneration()
-        if (card.model != null) {
-            card.block.registerModelGeneration(card.model)
-        } else {
-            card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+        ModEvents.onRegistration {
+            card.block.register(Registries.BLOCK, card.identifier)
+            card.item.register(Registries.ITEM, card.identifier)
         }
-        if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
+        ModEvents.onInitialize {
+            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.enJa(card.enName, card.jaName)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+            card.block.registerSingletonBlockStateGeneration()
+            if (card.model != null) {
+                card.block.registerModelGeneration(card.model)
+            } else {
+                card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+            }
+            if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
 
-        card.block.registerDefaultLootTableGeneration()
+            card.block.enJa(card.enName, card.jaName)
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
 
-        card.tags.forEach {
-            card.block.registerBlockTagGeneration { it }
+            card.block.registerDefaultLootTableGeneration()
+
+            card.tags.forEach {
+                card.block.registerBlockTagGeneration { it }
+            }
         }
     }
 
-    registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
-        pattern("###")
-        pattern("###")
-        pattern("###")
-        input('#', MaterialCard.MIRANAGITE.item)
-    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
-    registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
-        input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
-    } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
+    ModEvents.onInitialize {
+        registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
+            pattern("###")
+            pattern("###")
+            pattern("###")
+            input('#', MaterialCard.MIRANAGITE.item)
+        } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+        registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
+            input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
+        } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
+    }
 
 }
 

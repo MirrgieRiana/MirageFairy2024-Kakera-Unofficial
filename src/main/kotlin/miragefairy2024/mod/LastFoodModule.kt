@@ -19,33 +19,38 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.GameRules
 import java.time.Instant
 
-fun initLastFoodModule() = ModEvents.onInitialize {
+fun initLastFoodModule() {
+    ModEvents.onRegistration {
 
-    // 拡張プレイヤーデータ
-    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "last_food"))
+        // 拡張プレイヤーデータ
+        LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "last_food"))
 
-    // 食べ物を食べるとlastFoodをそれにする
-    EatFoodCallback.EVENT.register { entity, world, stack ->
-        if (world.isClient) return@register
-        if (entity !is PlayerEntity) return@register
-        entity as ServerPlayerEntity
-        if (!stack.isFood) return@register
-        entity.lastFood.itemStack = stack.copy()
-        entity.lastFood.time = Instant.now()
-        LastFoodExtraPlayerDataCategory.sync(entity)
     }
+    ModEvents.onInitialize {
 
-    // プレイヤーが死ぬとリセット
-    ServerLivingEntityEvents.AFTER_DEATH.register { entity, _ ->
-        if (entity !is PlayerEntity) return@register
-        entity as ServerPlayerEntity
-        if (entity.isSpectator) return@register
-        if (entity.world.gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
-        entity.lastFood.itemStack = null
-        entity.lastFood.time = null
-        LastFoodExtraPlayerDataCategory.sync(entity)
+        // 食べ物を食べるとlastFoodをそれにする
+        EatFoodCallback.EVENT.register { entity, world, stack ->
+            if (world.isClient) return@register
+            if (entity !is PlayerEntity) return@register
+            entity as ServerPlayerEntity
+            if (!stack.isFood) return@register
+            entity.lastFood.itemStack = stack.copy()
+            entity.lastFood.time = Instant.now()
+            LastFoodExtraPlayerDataCategory.sync(entity)
+        }
+
+        // プレイヤーが死ぬとリセット
+        ServerLivingEntityEvents.AFTER_DEATH.register { entity, _ ->
+            if (entity !is PlayerEntity) return@register
+            entity as ServerPlayerEntity
+            if (entity.isSpectator) return@register
+            if (entity.world.gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
+            entity.lastFood.itemStack = null
+            entity.lastFood.time = null
+            LastFoodExtraPlayerDataCategory.sync(entity)
+        }
+
     }
-
 }
 
 

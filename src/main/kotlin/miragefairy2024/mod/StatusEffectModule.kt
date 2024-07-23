@@ -16,10 +16,14 @@ import net.minecraft.util.Identifier
 
 val experienceStatusEffect = ExperienceStatusEffect()
 
-fun initStatusEffectModule() = ModEvents.onInitialize {
-    experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
-    en { experienceStatusEffect.translationKey to "Experience" }
-    ja { experienceStatusEffect.translationKey to "経験値獲得" }
+fun initStatusEffectModule() {
+    ModEvents.onRegistration {
+        experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
+    }
+    ModEvents.onInitialize {
+        en { experienceStatusEffect.translationKey to "Experience" }
+        ja { experienceStatusEffect.translationKey to "経験値獲得" }
+    }
 }
 
 class ExperienceStatusEffect : InstantStatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {

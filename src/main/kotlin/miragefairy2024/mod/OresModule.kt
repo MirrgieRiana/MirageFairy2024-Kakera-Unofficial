@@ -113,58 +113,65 @@ object OreModelCard {
     val model = Model(identifier, TextureKey.BACK, TextureKey.FRONT)
 }
 
-fun initOresModule() = ModEvents.onInitialize {
+fun initOresModule() {
 
-    OreModelCard.parentModel.registerModelGeneration(OreModelCard.identifier)
+    ModEvents.onInitialize {
+        OreModelCard.parentModel.registerModelGeneration(OreModelCard.identifier)
+    }
 
     OreCard.entries.forEach { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        ModEvents.onRegistration {
+            card.block.register(Registries.BLOCK, card.identifier)
+            card.item.register(Registries.ITEM, card.identifier)
+        }
+        ModEvents.onInitialize {
+            card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+            card.block.registerSingletonBlockStateGeneration()
+            card.block.registerModelGeneration(card.texturedModel)
+            card.block.registerCutoutRenderLayer()
 
-        card.block.registerSingletonBlockStateGeneration()
-        card.block.registerModelGeneration(card.texturedModel)
-        card.block.registerCutoutRenderLayer()
+            card.block.enJa(card.enName, card.jaName)
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
 
-        card.block.enJa(card.enName, card.jaName)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+            card.block.registerOreLootTableGeneration(card.dropItem)
 
-        card.block.registerOreLootTableGeneration(card.dropItem)
+            card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+            card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
+            card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
-        card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
-        card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
-
+        }
     }
 
-    fun worldGen(card: OreCard) {
+    ModEvents.onInitialize {
+        fun worldGen(card: OreCard) {
 
-        val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
-            val targets = when (card.baseStoneType) {
-                STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
-                DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
+            val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
+                val targets = when (card.baseStoneType) {
+                    STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
+                    DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
+                }
+                Feature.ORE with OreFeatureConfig(targets, 12)
             }
-            Feature.ORE with OreFeatureConfig(targets, 12)
-        }
 
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-            val placementModifiers = listOf(
-                CountPlacementModifier.of(8),
-                SquarePlacementModifier.of(),
-                HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(128)),
-                BiomePlacementModifier.of(),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
-        }.also {
-            BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.UNDERGROUND_ORES, it)
+            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
+                val placementModifiers = listOf(
+                    CountPlacementModifier.of(8),
+                    SquarePlacementModifier.of(),
+                    HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(128)),
+                    BiomePlacementModifier.of(),
+                )
+                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
+            }.also {
+                BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.UNDERGROUND_ORES, it)
+            }
+
         }
+        worldGen(OreCard.MIRANAGITE_ORE)
+        worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
 
     }
-    worldGen(OreCard.MIRANAGITE_ORE)
-    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
-
 }
 
 fun createOreModel() = Model {

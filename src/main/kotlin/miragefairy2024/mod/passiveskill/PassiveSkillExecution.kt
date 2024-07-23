@@ -27,38 +27,44 @@ val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "item.miragefairy2024.f
 val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.supporting" }, "Supporting other item", "他のアイテムを支援中")
 val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.miragefairy2024.fairy.passive_skill.effective" }, "Effective", "発動中")
 
-fun initPassiveSkillExecution() = ModEvents.onInitialize {
+fun initPassiveSkillExecution() {
 
     // イベント処理
-    ServerTickEvents.END_SERVER_TICK.register { server ->
-        if (server.ticks % 20 == 0) {
-            server.playerManager.playerList.forEach { player ->
+    ModEvents.onInitialize {
+        ServerTickEvents.END_SERVER_TICK.register { server ->
+            if (server.ticks % 20 == 0) {
+                server.playerManager.playerList.forEach { player ->
 
-                // 現在装備しているパッシブスキルの列挙
-                val passiveSkillProviders = player.findPassiveSkillProviders()
+                    // 現在装備しているパッシブスキルの列挙
+                    val passiveSkillProviders = player.findPassiveSkillProviders()
 
-                // 現在発動しているパッシブスキル効果の計算
-                val result = PassiveSkillResult()
-                result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
-                val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
-                result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
+                    // 現在発動しているパッシブスキル効果の計算
+                    val result = PassiveSkillResult()
+                    result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
+                    val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
+                    result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
 
-                // 効果
-                result.update(player)
+                    // 効果
+                    result.update(player)
 
+                }
             }
         }
     }
 
     // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
-    PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
+    ModEvents.onRegistration {
+        PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "passive_skill_result"))
+    }
 
     // 翻訳
-    PASSIVE_SKILL_TRANSLATION.enJa()
-    PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
-    PASSIVE_SKILL_OVERFLOWED_TRANSLATION.enJa()
-    PASSIVE_SKILL_SUPPORTING_TRANSLATION.enJa()
-    PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
+    ModEvents.onInitialize {
+        PASSIVE_SKILL_TRANSLATION.enJa()
+        PASSIVE_SKILL_DISABLED_TRANSLATION.enJa()
+        PASSIVE_SKILL_OVERFLOWED_TRANSLATION.enJa()
+        PASSIVE_SKILL_SUPPORTING_TRANSLATION.enJa()
+        PASSIVE_SKILL_EFFECTIVE_TRANSLATION.enJa()
+    }
 
 }
 

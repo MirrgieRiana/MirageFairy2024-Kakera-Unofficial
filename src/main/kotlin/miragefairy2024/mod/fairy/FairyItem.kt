@@ -74,9 +74,11 @@ val fairiesItemGroupCard = ItemGroupCard(
 ) { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() }
 
 fun initFairyItem() {
-    ModEvents.onInitialize {
-        FairyCard.let { card ->
+    FairyCard.let { card ->
+        ModEvents.onRegistration {
             card.item.register(Registries.ITEM, card.identifier)
+        }
+        ModEvents.onInitialize {
             card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
                 motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
             }
@@ -122,7 +124,9 @@ fun initFairyItem() {
 
             card.item.enJa(card.enName, card.jaName)
         }
+    }
 
+    ModEvents.onInitialize {
         RARE_TRANSLATION.enJa()
         MANA_TRANSLATION.enJa()
         LEVEL_TRANSLATION.enJa()

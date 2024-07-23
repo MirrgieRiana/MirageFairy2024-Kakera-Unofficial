@@ -25,7 +25,10 @@ import miragefairy2024.mod.tool.initToolModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
+class RegistrationContext
+
 object ModEvents {
+    val onRegistration = InitializationEventRegistry<RegistrationContext.() -> Unit>()
     val onInitialize = InitializationEventRegistry<() -> Unit>()
 }
 
@@ -38,6 +41,7 @@ object MirageFairy2024 : ModInitializer {
 
     override fun onInitialize() {
         Modules.init()
+        ModEvents.onRegistration.fire { it(RegistrationContext()) }
         ModEvents.onInitialize.fire { it() }
     }
 }

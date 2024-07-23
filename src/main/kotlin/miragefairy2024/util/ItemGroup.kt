@@ -39,8 +39,12 @@ class ItemGroupCard(
         .displayName(translation())
         .build()
 
-    fun init() = ModEvents.onInitialize {
-        itemGroup.register(Registries.ITEM_GROUP, identifier)
-        translation.enJa()
+    fun init() {
+        ModEvents.onRegistration {
+            itemGroup.register(Registries.ITEM_GROUP, identifier)
+        }
+        ModEvents.onInitialize {
+            translation.enJa()
+        }
     }
 }

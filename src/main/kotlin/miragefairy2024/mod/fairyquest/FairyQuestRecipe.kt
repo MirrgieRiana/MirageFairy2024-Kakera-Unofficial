@@ -227,83 +227,92 @@ val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRe
 
 val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 
-fun initFairyQuestRecipe() = ModEvents.onInitialize {
+fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
+        ModEvents.onRegistration {
+            card.register(fairyQuestRecipeRegistry, card.identifier)
+        }
+        ModEvents.onInitialize {
 
-        card.register(fairyQuestRecipeRegistry, card.identifier)
-
-        card.titleTranslation.enJa()
-        card.messageTranslation.enJa()
-        card.clientTranslation.enJa()
+            card.titleTranslation.enJa()
+            card.messageTranslation.enJa()
+            card.clientTranslation.enJa()
 
 
-        // 村チェストドロップ
+            // 村チェストドロップ
+            run {
+                val allVillageChests = listOf(
+                    LootTables.VILLAGE_WEAPONSMITH_CHEST,
+                    LootTables.VILLAGE_TOOLSMITH_CHEST,
+                    LootTables.VILLAGE_ARMORER_CHEST,
+                    LootTables.VILLAGE_CARTOGRAPHER_CHEST,
+                    LootTables.VILLAGE_MASON_CHEST,
+                    LootTables.VILLAGE_SHEPARD_CHEST,
+                    LootTables.VILLAGE_BUTCHER_CHEST,
+                    LootTables.VILLAGE_FLETCHER_CHEST,
+                    LootTables.VILLAGE_FISHER_CHEST,
+                    LootTables.VILLAGE_TANNERY_CHEST,
+                    LootTables.VILLAGE_TEMPLE_CHEST,
+                    LootTables.VILLAGE_DESERT_HOUSE_CHEST,
+                    LootTables.VILLAGE_PLAINS_CHEST,
+                    LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
+                    LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
+                    LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+                )
+
+                fun registerChestLoot(lootTableId: Identifier, weight: Int) {
+                    FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
+                        apply { SetFairyQuestRecipeLootFunction(card.identifier) }
+                    }
+                }
+
+                when (card.lootCategory) {
+                    FairyQuestRecipeCard.LootCategory.NONE -> Unit
+
+                    FairyQuestRecipeCard.LootCategory.COMMON -> {
+                        allVillageChests.forEach {
+                            registerChestLoot(it, 10)
+                        }
+                    }
+
+                    FairyQuestRecipeCard.LootCategory.RARE -> {
+                        allVillageChests.forEach {
+                            registerChestLoot(it, 1)
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    ModEvents.onInitialize {
+
+        // 地形生成
         run {
-            val allVillageChests = listOf(
-                LootTables.VILLAGE_WEAPONSMITH_CHEST,
-                LootTables.VILLAGE_TOOLSMITH_CHEST,
-                LootTables.VILLAGE_ARMORER_CHEST,
-                LootTables.VILLAGE_CARTOGRAPHER_CHEST,
-                LootTables.VILLAGE_MASON_CHEST,
-                LootTables.VILLAGE_SHEPARD_CHEST,
-                LootTables.VILLAGE_BUTCHER_CHEST,
-                LootTables.VILLAGE_FLETCHER_CHEST,
-                LootTables.VILLAGE_FISHER_CHEST,
-                LootTables.VILLAGE_TANNERY_CHEST,
-                LootTables.VILLAGE_TEMPLE_CHEST,
-                LootTables.VILLAGE_DESERT_HOUSE_CHEST,
-                LootTables.VILLAGE_PLAINS_CHEST,
-                LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
-                LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
-                LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
-            )
-
-            fun registerChestLoot(lootTableId: Identifier, weight: Int) {
-                FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
-                    apply { SetFairyQuestRecipeLootFunction(card.identifier) }
-                }
+            val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+                FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
             }
-
-            when (card.lootCategory) {
-                FairyQuestRecipeCard.LootCategory.NONE -> Unit
-
-                FairyQuestRecipeCard.LootCategory.COMMON -> {
-                    allVillageChests.forEach {
-                        registerChestLoot(it, 10)
-                    }
-                }
-
-                FairyQuestRecipeCard.LootCategory.RARE -> {
-                    allVillageChests.forEach {
-                        registerChestLoot(it, 1)
-                    }
-                }
+            val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+                val placementModifiers = listOf(
+                    RarityFilterPlacementModifier.of(256),
+                    SquarePlacementModifier.of(),
+                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                    BiomePlacementModifier.of(),
+                )
+                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
             }
+            BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
         }
 
     }
+    ModEvents.onRegistration {
 
-    // 地形生成
-    run {
-        val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-            FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
-        }
-        val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-            val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(256),
-                SquarePlacementModifier.of(),
-                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                BiomePlacementModifier.of(),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
-        }
-        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
+        SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
+
+        FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+
     }
-
-    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
-
-    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
-
 }
 
 class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<DefaultFeatureConfig>(codec) {

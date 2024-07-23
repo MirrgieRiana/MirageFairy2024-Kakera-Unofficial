@@ -94,11 +94,17 @@ fun initMirageFlower() {
             texturedModel.registerModelGeneration("block/" concat card.blockIdentifier concat "_age$age")
         }
 
-        // 地形生成
-        run {
+    }
+
+    // 地形生成
+    run {
+        ModEvents.onRegistration {
 
             // Fairy Ring Feature
             fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
+
+        }
+        ModEvents.onInitialize {
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
@@ -166,6 +172,9 @@ fun initMirageFlower() {
             BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, largeMirageClusterPlacedFeatureKey)
 
         }
+    }
+
+    ModEvents.onInitialize {
 
         // 特性
         WorldGenTraitRecipeInitScope(card.block).run {

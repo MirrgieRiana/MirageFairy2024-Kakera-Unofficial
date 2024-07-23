@@ -21,8 +21,10 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
-fun initFairyDreamContainer() = ModEvents.onInitialize {
-    FairyDreamContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_dream"))
+fun initFairyDreamContainer() {
+    ModEvents.onRegistration {
+        FairyDreamContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_dream"))
+    }
 }
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {

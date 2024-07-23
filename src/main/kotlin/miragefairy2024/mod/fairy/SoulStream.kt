@@ -36,30 +36,38 @@ import net.minecraft.util.Identifier
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.miragefairy2024.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.miragefairy2024.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-fun initSoulStream() = ModEvents.onInitialize {
+fun initSoulStream() {
 
     // 拡張プレイヤーデータ
-    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
+    ModEvents.onRegistration {
+        SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
+    }
 
     // ソウルストリームを開く要求パケット
-    OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
-        player.openHandledScreen(object : ExtendedScreenHandlerFactory {
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
-            }
+    ModEvents.onInitialize {
+        OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
+            player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                    return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
+                }
 
-            override fun getDisplayName() = SOUL_STREAM_TRANSLATION()
+                override fun getDisplayName() = SOUL_STREAM_TRANSLATION()
 
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
-        })
+                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
+            })
+        }
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
+    ModEvents.onRegistration {
+        soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
+    }
 
     // 翻訳
-    SOUL_STREAM_TRANSLATION.enJa()
-    OPEN_SOUL_STREAM_KEY_TRANSLATION.enJa()
+    ModEvents.onInitialize {
+        SOUL_STREAM_TRANSLATION.enJa()
+        OPEN_SOUL_STREAM_KEY_TRANSLATION.enJa()
+    }
 
 }
 

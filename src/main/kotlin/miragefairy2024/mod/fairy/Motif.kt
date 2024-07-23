@@ -998,12 +998,16 @@ operator fun Motif.contains(child: Motif): Boolean = child == this || child.pare
 operator fun Motif?.contains(child: Motif?) = this == null || child != null && child in this
 
 
-fun initMotif() = ModEvents.onInitialize {
+fun initMotif() {
     MotifCard.entries.forEach { card ->
-        card.register(motifRegistry, card.identifier)
-        card.translation.enJa()
-        card.recipes.recipes.forEach {
-            it(card)
+        ModEvents.onRegistration {
+            card.register(motifRegistry, card.identifier)
+        }
+        ModEvents.onInitialize {
+            card.translation.enJa()
+            card.recipes.recipes.forEach {
+                it(card)
+            }
         }
     }
 

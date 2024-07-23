@@ -30,17 +30,26 @@ val magicPlantSeedItemGroupCard = ItemGroupCard(
 ) { MirageFlowerCard.item.createItemStack() }
 
 fun initMagicPlantModule() {
-    ModEvents.onInitialize {
 
-        TraitEffectKeyCard.entries.forEach { card ->
+    TraitEffectKeyCard.entries.forEach { card ->
+        ModEvents.onRegistration {
             card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
+        }
+        ModEvents.onInitialize {
             card.traitEffectKey.enJa(card.enName, card.jaName)
         }
+    }
 
-        TraitCard.entries.forEach { card ->
+    TraitCard.entries.forEach { card ->
+        ModEvents.onRegistration {
             card.trait.register(traitRegistry, card.identifier)
+        }
+        ModEvents.onInitialize {
             card.trait.enJa(card.enName, card.jaName)
         }
+    }
+
+    ModEvents.onInitialize {
 
         worldGenTraitGenerations += RecipeWorldGenTraitGeneration()
 

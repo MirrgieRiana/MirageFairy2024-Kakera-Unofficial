@@ -25,10 +25,14 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
     val soundEvent: SoundEvent = SoundEvent.of(identifier)
 }
 
-fun initSoundEventModule() = ModEvents.onInitialize {
+fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
-        card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
-        MirageFairy2024DataGenerator.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
-        card.translation.enJa()
+        ModEvents.onRegistration {
+            card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
+        }
+        ModEvents.onInitialize {
+            MirageFairy2024DataGenerator.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
+            card.translation.enJa()
+        }
     }
 }

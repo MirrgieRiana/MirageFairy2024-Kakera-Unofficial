@@ -59,26 +59,30 @@ object PlacedItemCard {
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }
 
-fun initPlacedItemBlock() = ModEvents.onInitialize {
+fun initPlacedItemBlock() {
     PlacedItemCard.let { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
-
-        card.block.registerSingletonBlockStateGeneration()
-        card.block.registerModelGeneration {
-            Model {
-                ModelData(
-                    parent = Identifier("minecraft", "block/block"),
-                    textures = ModelTexturesData(
-                        TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
-                    ),
-                    elements = ModelElementsData(),
-                )
-            }.with()
+        ModEvents.onRegistration {
+            card.block.register(Registries.BLOCK, card.identifier)
+            card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
         }
-        card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
+        ModEvents.onInitialize {
+            card.block.registerSingletonBlockStateGeneration()
+            card.block.registerModelGeneration {
+                Model {
+                    ModelData(
+                        parent = Identifier("minecraft", "block/block"),
+                        textures = ModelTexturesData(
+                            TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
+                        ),
+                        elements = ModelElementsData(),
+                    )
+                }.with()
+            }
+            card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
+
+            card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
+        }
     }
 }
 
