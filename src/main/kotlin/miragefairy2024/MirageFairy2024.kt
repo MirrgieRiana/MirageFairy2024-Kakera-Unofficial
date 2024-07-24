@@ -32,10 +32,10 @@ class RegistrationContext
 class InitializationContext
 
 object ModEvents {
-    val onRegistration = InitializationEventRegistry<ModContext, context(RegistrationContext)() -> Unit>()
-    val onInitialize = InitializationEventRegistry<ModContext, context(InitializationContext)() -> Unit>()
+    val onRegistration = InitializationEventRegistry<context(RegistrationContext)() -> Unit>()
+    val onInitialize = InitializationEventRegistry<context(InitializationContext)() -> Unit>()
 
-    val onClientInit = InitializationEventRegistry<ModContext, () -> Unit>()
+    val onClientInit = InitializationEventRegistry<() -> Unit>()
 }
 
 object MirageFairy2024 : ModInitializer {
@@ -51,11 +51,11 @@ object MirageFairy2024 : ModInitializer {
     }
 }
 
-class InitializationEventRegistry<C, T> {
+class InitializationEventRegistry<T> {
     private val list = mutableListOf<T>()
     private var closed = false
 
-    context(C)
+    context(ModContext)
     operator fun invoke(listener: T) {
         require(!closed)
         this.list += listener

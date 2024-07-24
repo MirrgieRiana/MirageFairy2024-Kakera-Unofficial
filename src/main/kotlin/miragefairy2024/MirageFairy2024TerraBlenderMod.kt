@@ -3,7 +3,7 @@ package miragefairy2024
 import terrablender.api.TerraBlenderApi
 
 object TerraBlenderEvents {
-    val onTerraBlenderInitialized = InitializationEventRegistry<ModContext, () -> Unit>()
+    val onTerraBlenderInitialized = InitializationEventRegistry<() -> Unit>()
 }
 
 class MirageFairy2024TerraBlenderMod : TerraBlenderApi {
