@@ -13,13 +13,13 @@ import miragefairy2024.mod.placeditem.PlacedItemBlockEntity
 import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
-import miragefairy2024.util.addFeature
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.registerFeature
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toIngredient
@@ -296,7 +296,7 @@ fun initFairyQuestRecipe() {
         )
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
-    addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
+    registerFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
 

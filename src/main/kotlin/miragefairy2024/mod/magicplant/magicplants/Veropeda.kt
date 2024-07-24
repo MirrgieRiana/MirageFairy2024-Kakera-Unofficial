@@ -12,11 +12,11 @@ import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.initMagicPlant
 import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
 import miragefairy2024.mod.poem
-import miragefairy2024.util.addFeature
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.registerFeature
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
@@ -96,7 +96,7 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(veropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            addFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            registerFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
         // ネザー
@@ -108,7 +108,7 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeVeropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            registerFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
     }
