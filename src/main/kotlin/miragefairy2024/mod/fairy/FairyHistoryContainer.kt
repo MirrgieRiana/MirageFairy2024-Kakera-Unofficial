@@ -28,7 +28,7 @@ object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fa
             val data = FairyHistoryContainer()
             nbt.keys.forEach { key ->
                 val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
-                data.set(motif, nbt.wrapper[key].int.get())
+                data[motif] = nbt.wrapper[key].int.get()
             }
             return data
         }
@@ -48,13 +48,16 @@ class FairyHistoryContainer {
 
     val entries get() = map.entries
 
-    fun add(motif: Motif, count: Int) {
-        map[motif] = map.getOrElse(motif) { 0 } + count
-    }
+    operator fun get(motif: Motif) = map.getOrElse(motif) { 0 }
 
-    fun set(motif: Motif, count: Int?) {
+    operator fun set(motif: Motif, count: Int?) {
         if (count != null) {
-            map[motif] = count
+            check(count >= 0)
+            if (count == 0) {
+                map.remove(motif)
+            } else {
+                map[motif] = count
+            }
         } else {
             map.remove(motif)
         }

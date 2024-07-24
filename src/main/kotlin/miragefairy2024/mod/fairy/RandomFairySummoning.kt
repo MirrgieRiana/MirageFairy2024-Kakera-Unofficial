@@ -189,7 +189,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         player.obtain(resultItemStack)
 
         // 妖精召喚履歴に追加
-        player.fairyHistoryContainer.add(condensedMotif.motif, actualCondensation * actualCount)
+        player.fairyHistoryContainer[condensedMotif.motif] += actualCondensation * actualCount
         FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
         // エフェクト
