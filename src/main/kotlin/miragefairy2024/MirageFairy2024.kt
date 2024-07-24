@@ -27,13 +27,9 @@ import org.slf4j.LoggerFactory
 
 class ModContext
 
-class RegistrationContext
-
-class InitializationContext
-
 object ModEvents {
-    val onRegistration = InitializationEventRegistry<context(RegistrationContext)() -> Unit>()
-    val onInitialize = InitializationEventRegistry<context(InitializationContext)() -> Unit>()
+    val onRegistration = InitializationEventRegistry<() -> Unit>()
+    val onInitialize = InitializationEventRegistry<() -> Unit>()
 
     val onClientInit = InitializationEventRegistry<() -> Unit>()
 }
@@ -46,8 +42,8 @@ object MirageFairy2024 : ModInitializer {
 
     override fun onInitialize() {
         Modules.init()
-        ModEvents.onRegistration.fire { it(RegistrationContext()) }
-        ModEvents.onInitialize.fire { it(InitializationContext()) }
+        ModEvents.onRegistration.fire { it() }
+        ModEvents.onInitialize.fire { it() }
     }
 }
 
