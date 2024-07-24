@@ -25,8 +25,6 @@ import miragefairy2024.mod.tool.initToolModule
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
 
-class ModContext
-
 object ModEvents {
     val onRegistration = InitializationEventRegistry<() -> Unit>()
     val onInitialize = InitializationEventRegistry<() -> Unit>()
@@ -44,24 +42,6 @@ object MirageFairy2024 : ModInitializer {
         Modules.init()
         ModEvents.onRegistration.fire { it() }
         ModEvents.onInitialize.fire { it() }
-    }
-}
-
-class InitializationEventRegistry<T> {
-    private val list = mutableListOf<T>()
-    private var closed = false
-
-    context(ModContext)
-    operator fun invoke(listener: T) {
-        require(!closed)
-        this.list += listener
-    }
-
-    fun fire(processor: (T) -> Unit) {
-        closed = true
-        this.list.forEach {
-            processor(it)
-        }
     }
 }
 
