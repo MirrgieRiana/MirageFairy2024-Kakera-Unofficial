@@ -284,25 +284,21 @@ fun initFairyQuestRecipe() {
 
     }
 
+    // 地形生成
     ModEvents.onInitialize {
-
-        // 地形生成
-        run {
-            val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-                FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
-            }
-            val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(256),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
-            }
-            BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
+        val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+            FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
         }
-
+        val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+            val placementModifiers = listOf(
+                RarityFilterPlacementModifier.of(256),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
+        }
+        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
     }
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
