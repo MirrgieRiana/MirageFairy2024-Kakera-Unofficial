@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.ModContext
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
+import miragefairy2024.mod.sync
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
@@ -93,7 +94,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
     override fun usageTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
         if (world.isClient) return
-        if (user !is PlayerEntity) return
+        if (user !is ServerPlayerEntity) return
 
         run {
             var t = 72000 - remainingUseTicks
@@ -128,7 +129,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
     }
 
-    private fun craft(player: PlayerEntity, itemStack: ItemStack) {
+    private fun craft(player: ServerPlayerEntity, itemStack: ItemStack) {
         val world = player.world
 
         // 消費
@@ -180,13 +181,16 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
         // 上の場合、 count ≒ 1.27
         val count = condensedMotif.condensation / actualCondensation
+        val actualCount = world.random.randomInt(count)
 
-        val resultItemStack = condensedMotif.motif.createFairyItemStack(condensation = actualCondensation, count = world.random.randomInt(count))
+        val resultItemStack = condensedMotif.motif.createFairyItemStack(condensation = actualCondensation, count = actualCount)
 
         // 入手
         player.obtain(resultItemStack)
 
-        // TODO 妖精召喚履歴に追加
+        // 妖精召喚履歴に追加
+        player.fairyHistoryContainer.add(condensedMotif.motif, actualCondensation * actualCount)
+        FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
         // エフェクト
         world.playSound(null, player.x, player.y, player.z, SoundEvents.BLOCK_DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
