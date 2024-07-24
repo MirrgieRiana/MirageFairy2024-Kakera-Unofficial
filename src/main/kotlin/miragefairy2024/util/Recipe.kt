@@ -150,7 +150,7 @@ fun registerBlastingRecipeGeneration(
 // Others
 
 context(ModContext)
-fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) = ModEvents.onInitialize {
+fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == Blocks.GRASS.lootTableId) {
@@ -179,19 +179,21 @@ fun Item.registerMobDrop(
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) = ModEvents.onInitialize {
-    val lootTableId = entityType.lootTableId
-    LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
-        if (source.isBuiltin) {
-            if (id == lootTableId) {
-                tableBuilder.configure {
-                    pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
-                        if (amount != null) apply(SetCountLootFunction.builder(amount, false))
-                        if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
-                    }) {
-                        if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
-                        if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
-                    })
+) {
+    ModEvents.onInitialize {
+        val lootTableId = entityType.lootTableId
+        LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
+            if (source.isBuiltin) {
+                if (id == lootTableId) {
+                    tableBuilder.configure {
+                        pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+                            if (amount != null) apply(SetCountLootFunction.builder(amount, false))
+                            if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
+                        }) {
+                            if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
+                            if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
+                        })
+                    }
                 }
             }
         }
@@ -199,7 +201,7 @@ fun Item.registerMobDrop(
 }
 
 context(ModContext)
-fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) = ModEvents.onInitialize {
+fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) {
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
             if (id == lootTableId) {

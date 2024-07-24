@@ -51,7 +51,7 @@ val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (thi
 // Init
 
 context(ModContext)
-fun initExtraPlayerDataModule() = ModEvents.onInitialize {
+fun initExtraPlayerDataModule() {
 
     // インスタンス再生成時（死亡・一部のディメンション移動）にデータを維持
     ServerPlayerEvents.COPY_FROM.register { oldPlayer, newPlayer, _ ->
@@ -78,9 +78,11 @@ fun initExtraPlayerDataModule() = ModEvents.onInitialize {
     }
 
     // セーブ・ロードイベント登録
-    object : CustomPlayerSave(Identifier(MirageFairy2024.modId, "extra_player_data")) {
-        override fun savePlayer(player: PlayerEntity) = player.extraPlayerDataContainer.toNbt()
-        override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
+    ModEvents.onInitialize {
+        object : CustomPlayerSave(Identifier(MirageFairy2024.modId, "extra_player_data")) {
+            override fun savePlayer(player: PlayerEntity) = player.extraPlayerDataContainer.toNbt()
+            override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
+        }
     }
 
 }

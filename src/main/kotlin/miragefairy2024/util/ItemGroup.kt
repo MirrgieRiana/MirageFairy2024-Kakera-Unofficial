@@ -1,7 +1,6 @@
 package miragefairy2024.util
 
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
@@ -13,14 +12,15 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
 
 context(ModContext)
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) = ModEvents.onInitialize {
+fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         it.add(this)
     }
 }
 
 context(ModContext)
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) = ModEvents.onInitialize {
+@Suppress("UnusedReceiverParameter")
+fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.add(itemStack)

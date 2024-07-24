@@ -2,7 +2,6 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
@@ -32,24 +31,22 @@ context(ModContext)
 fun initPassiveSkillExecution() {
 
     // イベント処理
-    ModEvents.onInitialize {
-        ServerTickEvents.END_SERVER_TICK.register { server ->
-            if (server.ticks % 20 == 0) {
-                server.playerManager.playerList.forEach { player ->
+    ServerTickEvents.END_SERVER_TICK.register { server ->
+        if (server.ticks % 20 == 0) {
+            server.playerManager.playerList.forEach { player ->
 
-                    // 現在装備しているパッシブスキルの列挙
-                    val passiveSkillProviders = player.findPassiveSkillProviders()
+                // 現在装備しているパッシブスキルの列挙
+                val passiveSkillProviders = player.findPassiveSkillProviders()
 
-                    // 現在発動しているパッシブスキル効果の計算
-                    val result = PassiveSkillResult()
-                    result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
-                    val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
-                    result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
+                // 現在発動しているパッシブスキル効果の計算
+                val result = PassiveSkillResult()
+                result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
+                val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
+                result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
 
-                    // 効果
-                    result.update(player)
+                // 効果
+                result.update(player)
 
-                }
             }
         }
     }

@@ -399,33 +399,31 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
         Elements.entries.forEach {
             it.translation.enJa()
         }
-        ModEvents.onInitialize {
-            DamageCallback.EVENT.register { entity, source, amount ->
-                var damage = amount
+        DamageCallback.EVENT.register { entity, source, amount ->
+            var damage = amount
 
-                val attacker = source.attacker
-                if (attacker is PlayerEntity) {
-                    var attackBonus = 0.0
-                    attacker.passiveSkillResult[ELEMENT].attackMap.forEach { (element, value) ->
-                        if (element.test(source)) {
-                            attackBonus += value
-                        }
+            val attacker = source.attacker
+            if (attacker is PlayerEntity) {
+                var attackBonus = 0.0
+                attacker.passiveSkillResult[ELEMENT].attackMap.forEach { (element, value) ->
+                    if (element.test(source)) {
+                        attackBonus += value
                     }
-                    damage *= (1.0 + attackBonus).toFloat()
                 }
-
-                if (entity is PlayerEntity) {
-                    var defenceBonus = 0.0
-                    entity.passiveSkillResult[ELEMENT].defenceMap.forEach { (element, value) ->
-                        if (element.test(source)) {
-                            defenceBonus += value
-                        }
-                    }
-                    damage /= (1.0 + defenceBonus).toFloat()
-                }
-
-                damage
+                damage *= (1.0 + attackBonus).toFloat()
             }
+
+            if (entity is PlayerEntity) {
+                var defenceBonus = 0.0
+                entity.passiveSkillResult[ELEMENT].defenceMap.forEach { (element, value) ->
+                    if (element.test(source)) {
+                        defenceBonus += value
+                    }
+                }
+                damage /= (1.0 + defenceBonus).toFloat()
+            }
+
+            damage
         }
     }
 }
