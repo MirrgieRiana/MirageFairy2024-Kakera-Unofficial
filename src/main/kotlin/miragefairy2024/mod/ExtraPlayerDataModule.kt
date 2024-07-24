@@ -11,6 +11,7 @@ import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.slf4j.hydrogen.getLogger
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -169,7 +170,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
                 val data = try {
                     loader.castOrThrow(value)
                 } catch (e: ClassCastException) {
-                    MirageFairy2024.logger.error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
+                    getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
                     return
                 }
                 nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(data))
