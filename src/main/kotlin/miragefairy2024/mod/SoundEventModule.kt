@@ -31,7 +31,7 @@ fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
         card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
         ModEvents.onInitialize {
-            DataGenerationEvents.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
+            DataGenerationEvents.onGenerateSound { it(card.path, card.translation.keyGetter(), card.sounds) }
         }
         card.translation.enJa()
     }

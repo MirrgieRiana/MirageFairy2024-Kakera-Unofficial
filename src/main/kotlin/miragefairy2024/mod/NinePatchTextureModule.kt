@@ -28,7 +28,7 @@ class NinePatchTextureCard(
 context(ModContext)
 fun initNinePatchTextureModule() = ModEvents.onInitialize {
     NinePatchTextureCard.entries.forEach { card ->
-        DataGenerationEvents.ninePatchTextureGenerators {
+        DataGenerationEvents.onGenerateNinePatchTexture {
             it(card.identifier, card)
         }
     }

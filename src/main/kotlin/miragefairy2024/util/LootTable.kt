@@ -71,7 +71,7 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 context(ModContext)
 fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = ModEvents.onInitialize {
-    DataGenerationEvents.blockLootTableGenerators {
+    DataGenerationEvents.onGenerateBlockLootTable {
         it.addDrop(this, initializer(it))
     }
 }

@@ -37,7 +37,7 @@ fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
         card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
         ModEvents.onInitialize {
-            DataGenerationEvents.recipeGenerators {
+            DataGenerationEvents.onGenerateRecipe {
                 ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
             }
         }

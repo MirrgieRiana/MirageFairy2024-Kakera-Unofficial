@@ -11,42 +11,42 @@ import net.minecraft.world.biome.Biome
 
 context(ModContext)
 fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = ModEvents.onInitialize {
-    DataGenerationEvents.blockTagGenerators {
+    DataGenerationEvents.onGenerateBlockTag {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = ModEvents.onInitialize {
-    DataGenerationEvents.blockTagGenerators {
+    DataGenerationEvents.onGenerateBlockTag {
         it(tagProvider()).addOptionalTag(this)
     }
 }
 
 context(ModContext)
 fun Item.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = ModEvents.onInitialize {
-    DataGenerationEvents.itemTagGenerators {
+    DataGenerationEvents.onGenerateItemTag {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = ModEvents.onInitialize {
-    DataGenerationEvents.itemTagGenerators {
+    DataGenerationEvents.onGenerateItemTag {
         it(tagProvider()).addOptionalTag(this)
     }
 }
 
 context(ModContext)
 fun Identifier.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = ModEvents.onInitialize {
-    DataGenerationEvents.biomeTagGenerators {
+    DataGenerationEvents.onGenerateBiomeTag {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = ModEvents.onInitialize {
-    DataGenerationEvents.biomeTagGenerators {
+    DataGenerationEvents.onGenerateBiomeTag {
         it(tagProvider()).addOptionalTag(this)
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.item.Item
 
 context(ModContext)
 fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    DataGenerationEvents.englishTranslationGenerators {
+    DataGenerationEvents.onGenerateEnglishTranslation {
         val pair = getter()
         it.add(pair.first, pair.second)
     }
@@ -16,7 +16,7 @@ fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
 
 context(ModContext)
 fun ja(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    DataGenerationEvents.japaneseTranslationGenerators {
+    DataGenerationEvents.onGenerateJapaneseTranslation {
         val pair = getter()
         it.add(pair.first, pair.second)
     }

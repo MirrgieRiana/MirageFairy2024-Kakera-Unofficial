@@ -161,7 +161,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     ModEvents.onInitialize {
-        DataGenerationEvents.blockStateModelGenerators {
+        DataGenerationEvents.onGenerateBlockStateModel {
             it.registerLog(card.block).log(card.block)
         }
     }

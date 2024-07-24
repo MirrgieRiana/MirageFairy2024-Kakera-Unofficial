@@ -76,7 +76,7 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
     ModEvents.onInitialize {
-        DataGenerationEvents.recipeGenerators {
+        DataGenerationEvents.onGenerateRecipe {
             val builder = creator(settings.recipeCategory, item, count)
             settings.listeners.forEach { listener ->
                 listener(builder)
@@ -114,7 +114,7 @@ fun registerSmeltingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     ModEvents.onInitialize {
-        DataGenerationEvents.recipeGenerators {
+        DataGenerationEvents.onGenerateRecipe {
             val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
             builder.group(output)
             settings.listeners.forEach { listener ->
@@ -138,7 +138,7 @@ fun registerBlastingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     ModEvents.onInitialize {
-        DataGenerationEvents.recipeGenerators {
+        DataGenerationEvents.onGenerateRecipe {
             val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
             builder.group(output)
             settings.listeners.forEach { listener ->
