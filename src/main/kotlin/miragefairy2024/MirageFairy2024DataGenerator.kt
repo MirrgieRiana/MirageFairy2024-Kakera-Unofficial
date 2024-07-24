@@ -35,6 +35,8 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 object DataGenerationEvents {
+    val onInitializeDataGenerator = InitializationEventRegistry<ModContext, () -> Unit>()
+
     val onGenerateBlockStateModel = InitializationEventRegistry<ModContext, (BlockStateModelGenerator) -> Unit>()
     val onGenerateItemModel = InitializationEventRegistry<ModContext, (ItemModelGenerator) -> Unit>()
     val onGenerateBlockTag = InitializationEventRegistry<ModContext, ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
@@ -56,6 +58,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         Modules.init()
+        DataGenerationEvents.onInitializeDataGenerator.fire { it() }
         val pack = fabricDataGenerator.createPack()
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {

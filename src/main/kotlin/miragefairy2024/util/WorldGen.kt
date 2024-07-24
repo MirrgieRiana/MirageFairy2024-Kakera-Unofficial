@@ -39,7 +39,7 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key
             context.register(key, creator(context))
         }
     }
-    ModEvents.onInitialize {
+    DataGenerationEvents.onInitializeDataGenerator {
         MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
     }
 }
