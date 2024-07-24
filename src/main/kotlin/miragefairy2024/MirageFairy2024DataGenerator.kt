@@ -59,6 +59,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         Modules.init()
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }
+
         val pack = fabricDataGenerator.createPack()
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
