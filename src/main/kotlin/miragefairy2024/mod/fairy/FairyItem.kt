@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.clientProxy
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.passiveskill.ManaBoostPassiveSkillEffect
@@ -155,7 +156,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
-        val player = MirageFairy2024.clientProxy?.getClientPlayer()
+        val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
         // パッシブスキル判定

@@ -1,8 +1,8 @@
 package miragefairy2024.mod
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.clientProxy
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
@@ -18,7 +18,7 @@ val itemPoemListTable = mutableMapOf<Item, PoemList>()
 context(ModContext)
 fun initPoemModule() {
     ModEvents.onClientInit {
-        MirageFairy2024.clientProxy!!.registerItemTooltipCallback { stack, lines ->
+        clientProxy!!.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
             val texts = mutableListOf<Text>()
 

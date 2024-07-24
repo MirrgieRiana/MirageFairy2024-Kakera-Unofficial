@@ -35,9 +35,6 @@ object ModEvents {
 object MirageFairy2024 : ModInitializer {
     val modId = "miragefairy2024"
     val logger = LoggerFactory.getLogger("miragefairy2024")
-
-    var clientProxy: ClientProxy? = null
-
     override fun onInitialize() {
         Modules.init()
         ModEvents.onRegistration.fire { it() }

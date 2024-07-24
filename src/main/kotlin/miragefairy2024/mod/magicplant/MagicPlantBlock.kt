@@ -1,6 +1,6 @@
 package miragefairy2024.mod.magicplant
 
-import miragefairy2024.MirageFairy2024
+import miragefairy2024.clientProxy
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.boolean
 import miragefairy2024.util.createItemStack
@@ -410,7 +410,7 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         if (world == null) return
-        val player = MirageFairy2024.clientProxy?.getClientPlayer() ?: return
+        val player = clientProxy?.getClientPlayer() ?: return
 
         // 特性を得る、無い場合はクリエイティブ専用
         val traitStacks = stack.getTraitStacks() ?: run {

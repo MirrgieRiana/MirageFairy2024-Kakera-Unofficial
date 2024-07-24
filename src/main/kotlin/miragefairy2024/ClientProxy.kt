@@ -11,6 +11,9 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 
+var clientProxy: ClientProxy? = null
+
+
 interface ClientProxy {
     fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit)
     fun registerCutoutRenderLayer(block: Block)

@@ -2,11 +2,11 @@ package miragefairy2024.util
 
 import miragefairy2024.BlockColorProvider
 import miragefairy2024.ItemColorProvider
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
+import miragefairy2024.clientProxy
 import mirrg.kotlin.hydrogen.castOrThrow
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
@@ -17,28 +17,28 @@ import net.minecraft.item.ItemStack
 
 context(ModContext)
 fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {
-    MirageFairy2024.clientProxy!!.registerCutoutRenderLayer(this)
+    clientProxy!!.registerCutoutRenderLayer(this)
 }
 
 context(ModContext)
 fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
-    MirageFairy2024.clientProxy!!.registerBlockColorProvider(this, provider)
+    clientProxy!!.registerBlockColorProvider(this, provider)
 }
 
 context(ModContext)
 fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockState, world, blockPos, tintIndex ->
-    MirageFairy2024.clientProxy!!.getFoliageBlockColorProvider().invoke(blockState, world, blockPos, tintIndex)
+    clientProxy!!.getFoliageBlockColorProvider().invoke(blockState, world, blockPos, tintIndex)
 }
 
 context(ModContext)
 fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
-    MirageFairy2024.clientProxy!!.registerItemColorProvider(this, provider)
+    clientProxy!!.registerItemColorProvider(this, provider)
 }
 
 context(ModContext)
 fun BlockItem.registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
     val block = itemStack.item.castOrThrow<BlockItem>().block
-    MirageFairy2024.clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultState, null, null, tintIndex)
+    clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultState, null, null, tintIndex)
 }
 
 
@@ -53,5 +53,5 @@ fun RenderingProxy.renderItemStack(itemStack: ItemStack, dotX: Double, dotY: Dou
 
 context(ModContext)
 fun <T> BlockEntityType<T>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
-    MirageFairy2024.clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this)
+    clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this)
 }

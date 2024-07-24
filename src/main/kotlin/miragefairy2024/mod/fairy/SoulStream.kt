@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.clientProxy
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.WISP_TAG
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
@@ -111,7 +112,7 @@ object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "
 // GUI
 
 val soulStreamScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
-    SoulStreamScreenHandler(syncId, playerInventory, MirageFairy2024.clientProxy!!.getClientPlayer()!!.soulStream)
+    SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
 }
 
 class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val soulStream: Inventory) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
