@@ -19,3 +19,18 @@ class InitializationEventRegistry<T> {
         }
     }
 }
+
+object Modules {
+    private val lock = Any()
+    private var initialized = false
+    fun init() {
+        synchronized(lock) {
+            if (initialized) return
+            initialized = true
+
+            with(ModContext()) {
+                initModules()
+            }
+        }
+    }
+}
