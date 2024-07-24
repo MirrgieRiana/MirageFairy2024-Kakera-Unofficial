@@ -169,9 +169,8 @@ fun initMirageFlower() {
 
     }
 
+    // 特性
     ModEvents.onInitialize {
-
-        // 特性
         WorldGenTraitRecipeInitScope(card.block).run {
 
             // 標準特性
@@ -220,7 +219,6 @@ fun initMirageFlower() {
             registerWorldGenTraitRecipe(".CRS", TraitCard.PROSPERITY_OF_SPECIES, WorldGenTraitRecipe.Condition.InBiome(ConventionalBiomeTags.PLAINS)) // 種の繁栄
 
         }
-
     }
 
     // レシピ
