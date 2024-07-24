@@ -102,62 +102,62 @@ fun initMirageFlower() {
         // Fairy Ring Feature
         fairyRingFeature.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
 
+        // 小さな塊ConfiguredFeature
+        registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
+            val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
+            Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        }
+
+        // Fairy Ring ConfiguredFeature
+        registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, largeMirageClusterConfiguredFeatureKey) {
+            val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
+            fairyRingFeature with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        }
+
+        // 地上とエンド用PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, mirageClusterPlacedFeatureKey) {
+            val placementModifiers = listOf(
+                RarityFilterPlacementModifier.of(16),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
+        }
+
+        // ネザー用PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, netherMirageClusterPlacedFeatureKey) {
+            val placementModifiers = listOf(
+                RarityFilterPlacementModifier.of(64),
+                CountMultilayerPlacementModifier.of(1),
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
+        }
+
+        // 妖精の森用PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, mirageClusterFairyForestPlacedFeatureKey) {
+            val placementModifiers = listOf(
+                CountPlacementModifier.of(4),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
+        }
+
+        // Fairy Ring PlacedFeature
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, largeMirageClusterPlacedFeatureKey) {
+            val placementModifiers = listOf(
+                RarityFilterPlacementModifier.of(600),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeMirageClusterConfiguredFeatureKey) with placementModifiers
+        }
+
         ModEvents.onInitialize {
-
-            // 小さな塊ConfiguredFeature
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
-            }
-
-            // Fairy Ring ConfiguredFeature
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, largeMirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                fairyRingFeature with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
-            }
-
-            // 地上とエンド用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, mirageClusterPlacedFeatureKey) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(16),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
-            }
-
-            // ネザー用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, netherMirageClusterPlacedFeatureKey) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(64),
-                    CountMultilayerPlacementModifier.of(1),
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
-            }
-
-            // 妖精の森用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, mirageClusterFairyForestPlacedFeatureKey) {
-                val placementModifiers = listOf(
-                    CountPlacementModifier.of(4),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(mirageClusterConfiguredFeatureKey) with placementModifiers
-            }
-
-            // Fairy Ring PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, largeMirageClusterPlacedFeatureKey) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(600),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeMirageClusterConfiguredFeatureKey) with placementModifiers
-            }
 
             // 地上とエンドに配置
             BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, mirageClusterPlacedFeatureKey)
@@ -170,6 +170,7 @@ fun initMirageFlower() {
             BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, largeMirageClusterPlacedFeatureKey)
 
         }
+
     }
 
     ModEvents.onInitialize {

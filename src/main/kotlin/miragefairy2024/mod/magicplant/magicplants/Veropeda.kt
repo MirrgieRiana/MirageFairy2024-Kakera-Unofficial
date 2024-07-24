@@ -73,7 +73,8 @@ fun initVeropeda() {
     }
 
     // 地形生成
-    ModEvents.onInitialize {
+    run {
+
         // 小さな塊
         val veropedaClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster")) {
             val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
@@ -96,7 +97,9 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(veropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            ModEvents.onInitialize {
+                BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            }
         }
 
         // ネザー
@@ -108,8 +111,11 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeVeropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            ModEvents.onInitialize {
+                BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
+            }
         }
+
     }
 
     // 特性

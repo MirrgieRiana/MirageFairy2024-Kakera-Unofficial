@@ -55,62 +55,61 @@ fun initHaimeviskaWorldGens() {
     // TreeDecoratorの登録
     HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
-    ModEvents.onInitialize {
-
-        // ConfiguredFeatureの登録
-        registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, haimeviskaConfiguredFeatureKey) {
-            Feature.TREE with TreeFeatureConfig.Builder(
-                BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
-                LargeOakTrunkPlacer(22, 10, 0), // 最大32
-                BlockStateProvider.of(HaimeviskaBlockCard.LEAVES.block),
-                LargeOakFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(2), 4),
-                TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
-            ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
-        }
-
-        // まばらなPlacedFeature
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaPlacedFeatureKey) {
-            val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(512),
-                SquarePlacementModifier.of(),
-                SurfaceWaterDepthFilterPlacementModifier.of(0),
-                PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-                BiomePlacementModifier.of(),
-                PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
-        }
-
-        // 高密度のPlacedFeature
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaFairyForestPlacedFeatureKey) {
-            val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(16),
-                SquarePlacementModifier.of(),
-                SurfaceWaterDepthFilterPlacementModifier.of(0),
-                PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-                BiomePlacementModifier.of(),
-                PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
-        }
-
-        // 超高密度のPlacedFeature
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaDeepFairyForestPlacedFeatureKey) {
-            val placementModifiers = listOf(
-                CountPlacementModifier.of(8),
-                SquarePlacementModifier.of(),
-                SurfaceWaterDepthFilterPlacementModifier.of(0),
-                PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-                BiomePlacementModifier.of(),
-                PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
-        }
-
-        // 平原・森林バイオームに配置
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaPlacedFeatureKey)
-
+    // ConfiguredFeatureの登録
+    registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, haimeviskaConfiguredFeatureKey) {
+        Feature.TREE with TreeFeatureConfig.Builder(
+            BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
+            LargeOakTrunkPlacer(22, 10, 0), // 最大32
+            BlockStateProvider.of(HaimeviskaBlockCard.LEAVES.block),
+            LargeOakFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(2), 4),
+            TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
+        ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
     }
+
+    // まばらなPlacedFeature
+    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaPlacedFeatureKey) {
+        val placementModifiers = listOf(
+            RarityFilterPlacementModifier.of(512),
+            SquarePlacementModifier.of(),
+            SurfaceWaterDepthFilterPlacementModifier.of(0),
+            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+            BiomePlacementModifier.of(),
+            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
+        )
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+    }
+
+    // 高密度のPlacedFeature
+    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaFairyForestPlacedFeatureKey) {
+        val placementModifiers = listOf(
+            RarityFilterPlacementModifier.of(16),
+            SquarePlacementModifier.of(),
+            SurfaceWaterDepthFilterPlacementModifier.of(0),
+            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+            BiomePlacementModifier.of(),
+            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
+        )
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+    }
+
+    // 超高密度のPlacedFeature
+    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaDeepFairyForestPlacedFeatureKey) {
+        val placementModifiers = listOf(
+            CountPlacementModifier.of(8),
+            SquarePlacementModifier.of(),
+            SurfaceWaterDepthFilterPlacementModifier.of(0),
+            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+            BiomePlacementModifier.of(),
+            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
+        )
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+    }
+
+    // 平原・森林バイオームに配置
+    ModEvents.onInitialize {
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaPlacedFeatureKey)
+    }
+
 }
 
 class HaimeviskaTreeDecorator : TreeDecorator() {

@@ -285,19 +285,19 @@ fun initFairyQuestRecipe() {
     }
 
     // 地形生成
+    val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+        FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
+    }
+    val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+        val placementModifiers = listOf(
+            RarityFilterPlacementModifier.of(256),
+            SquarePlacementModifier.of(),
+            PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+            BiomePlacementModifier.of(),
+        )
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
+    }
     ModEvents.onInitialize {
-        val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-            FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
-        }
-        val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-            val placementModifiers = listOf(
-                RarityFilterPlacementModifier.of(256),
-                SquarePlacementModifier.of(),
-                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                BiomePlacementModifier.of(),
-            )
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
-        }
         BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
     }
 

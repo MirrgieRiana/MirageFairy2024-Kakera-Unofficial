@@ -145,34 +145,34 @@ fun initOresModule() {
 
     }
 
-    ModEvents.onInitialize {
-        fun worldGen(card: OreCard) {
+    fun worldGen(card: OreCard) {
 
-            val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
-                val targets = when (card.baseStoneType) {
-                    STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
-                    DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
-                }
-                Feature.ORE with OreFeatureConfig(targets, 12)
+        val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
+            val targets = when (card.baseStoneType) {
+                STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
+                DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
             }
+            Feature.ORE with OreFeatureConfig(targets, 12)
+        }
 
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-                val placementModifiers = listOf(
-                    CountPlacementModifier.of(8),
-                    SquarePlacementModifier.of(),
-                    HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(128)),
-                    BiomePlacementModifier.of(),
-                )
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
-            }.also {
+        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
+            val placementModifiers = listOf(
+                CountPlacementModifier.of(8),
+                SquarePlacementModifier.of(),
+                HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(128)),
+                BiomePlacementModifier.of(),
+            )
+            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
+        }.also {
+            ModEvents.onInitialize {
                 BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.UNDERGROUND_ORES, it)
             }
-
         }
-        worldGen(OreCard.MIRANAGITE_ORE)
-        worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
 
     }
+    worldGen(OreCard.MIRANAGITE_ORE)
+    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
+
 }
 
 fun createOreModel() = Model {

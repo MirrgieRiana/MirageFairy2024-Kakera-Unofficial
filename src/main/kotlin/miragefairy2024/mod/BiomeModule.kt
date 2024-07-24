@@ -3,7 +3,6 @@ package miragefairy2024.mod
 import com.mojang.datafixers.util.Pair
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.haimeviskaDeepFairyForestPlacedFeatureKey
 import miragefairy2024.mod.haimeviska.haimeviskaFairyForestPlacedFeatureKey
@@ -83,10 +82,8 @@ fun initBiomeModule() {
     BiomeCards.entries.forEach { card ->
 
         // バイオームの生成
-        ModEvents.onInitialize {
-            registerDynamicGeneration(RegistryKeys.BIOME, card.registryKey) {
-                card.createBiome(it.getRegistryLookup(RegistryKeys.PLACED_FEATURE), it.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER))
-            }
+        registerDynamicGeneration(RegistryKeys.BIOME, card.registryKey) {
+            card.createBiome(it.getRegistryLookup(RegistryKeys.PLACED_FEATURE), it.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER))
         }
 
         // このバイオームを指定するバイオームタグの生成
