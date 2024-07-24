@@ -2,7 +2,6 @@ package miragefairy2024.mod.magicplant.magicplants
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
@@ -13,6 +12,7 @@ import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.initMagicPlant
 import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
 import miragefairy2024.mod.poem
+import miragefairy2024.util.addFeature
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
@@ -21,7 +21,6 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.BlockState
@@ -97,9 +96,7 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(veropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            ModEvents.onInitialize {
-                BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
-            }
+            addFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
         // ネザー
@@ -111,9 +108,7 @@ fun initVeropeda() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeVeropedaClusterConfiguredFeatureKey) with placementModifiers
         }.also {
-            ModEvents.onInitialize {
-                BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
-            }
+            addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
         }
 
     }

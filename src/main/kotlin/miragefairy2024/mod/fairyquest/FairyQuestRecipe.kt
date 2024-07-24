@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
@@ -14,6 +13,7 @@ import miragefairy2024.mod.placeditem.PlacedItemBlockEntity
 import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
+import miragefairy2024.util.addFeature
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -28,7 +28,6 @@ import miragefairy2024.util.with
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.join
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
@@ -297,9 +296,7 @@ fun initFairyQuestRecipe() {
         )
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
-    ModEvents.onInitialize {
-        BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
-    }
+    addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureKey)
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
 

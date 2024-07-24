@@ -3,11 +3,10 @@ package miragefairy2024.mod.haimeviska
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
+import miragefairy2024.util.addFeature
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.HorizontalFacingBlock
@@ -106,9 +105,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    ModEvents.onInitialize {
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaPlacedFeatureKey)
-    }
+    addFeature(BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)), GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaPlacedFeatureKey)
 
 }
 

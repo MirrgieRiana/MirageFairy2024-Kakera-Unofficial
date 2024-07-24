@@ -3,16 +3,20 @@ package miragefairy2024.util
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.util.Identifier
+import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.FeatureConfig
 import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.placementmodifier.PlacementModifier
+import java.util.function.Predicate
 
 infix fun <C : FeatureConfig, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
 infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<PlacementModifier>) = PlacedFeature(this, placementModifiers)
@@ -35,4 +39,9 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key
         }
     }
     MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
+}
+
+context(ModContext)
+fun addFeature(biomeSelector: Predicate<BiomeSelectionContext>, step: GenerationStep.Feature, placedFeatureRegistryKey: RegistryKey<PlacedFeature>) = ModEvents.onInitialize {
+    BiomeModifications.addFeature(biomeSelector, step, placedFeatureRegistryKey)
 }
