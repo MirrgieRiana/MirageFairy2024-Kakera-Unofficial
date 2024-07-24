@@ -2,7 +2,6 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.passiveskill.ManaBoostPassiveSkillEffect
@@ -39,7 +38,7 @@ import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemModelGeneration
+import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
@@ -83,9 +82,7 @@ fun initFairyItem() {
             motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
         }
 
-        ModEvents.onInitialize {
-            card.item.registerItemModelGeneration(createFairyModel())
-        }
+        card.item.registerModelGeneration(createFairyModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 4) {
                 val condensation = itemStack.getFairyCondensation()

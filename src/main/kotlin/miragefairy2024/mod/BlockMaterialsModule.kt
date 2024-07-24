@@ -10,8 +10,10 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.concat
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -29,7 +31,6 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.data.client.TextureKey
-import net.minecraft.data.client.TextureMap
 import net.minecraft.data.client.TexturedModel
 import net.minecraft.entity.Entity
 import net.minecraft.item.BlockItem
@@ -60,7 +61,7 @@ enum class BlockMaterialCard(
     blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Settings) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
-    val model: TexturedModel.Factory? = null,
+    val texturedModelFactory: TexturedModel.Factory? = null,
     val isCutoutRenderLayer: Boolean = false,
 ) {
     MIRANAGITE_BLOCK(
@@ -80,7 +81,7 @@ enum class BlockMaterialCard(
         PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
         MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
         tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-        model = localVacuumDecayTexturedModel, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
+        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
     ),
     ;
 
@@ -107,13 +108,11 @@ fun initBlockMaterialsModule() {
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        ModEvents.onInitialize {
-            card.block.registerSingletonBlockStateGeneration()
-            if (card.model != null) {
-                card.block.registerModelGeneration(card.model)
-            } else {
-                card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
-            }
+        card.block.registerSingletonBlockStateGeneration()
+        if (card.texturedModelFactory != null) {
+            card.block.registerModelGeneration(card.texturedModelFactory)
+        } else {
+            card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
         }
         if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
 
@@ -142,14 +141,14 @@ fun initBlockMaterialsModule() {
 
 }
 
-private val localVacuumDecayTexturedModel = TexturedModel.Factory { block ->
-    Model { textures ->
+private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block ->
+    Model { textureMap ->
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.name to textures.getTexture(TextureKey.BACK).string,
-                TextureKey.BACK.name to textures.getTexture(TextureKey.BACK).string,
-                TextureKey.FRONT.name to textures.getTexture(TextureKey.FRONT).string,
+                TextureKey.PARTICLE.name to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.FRONT.name to textureMap.getTexture(TextureKey.FRONT).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(
@@ -179,8 +178,8 @@ private val localVacuumDecayTexturedModel = TexturedModel.Factory { block ->
             ),
         )
     }.with(
-        TextureKey.BACK to TextureMap.getSubId(block, "_base"),
-        TextureKey.FRONT to TextureMap.getSubId(block, "_spark"),
+        TextureKey.BACK to ("block/" concat block.getIdentifier() concat "_base"),
+        TextureKey.FRONT to ("block/" concat block.getIdentifier() concat "_spark"),
     )
 }
 

@@ -1,8 +1,9 @@
 package miragefairy2024.util
 
 import com.google.gson.JsonElement
-import miragefairy2024.InitializationContext
 import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -127,41 +128,40 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 
 // registerModelGeneration
 
-context(InitializationContext)
-fun TexturedModel.registerModelGeneration(identifier: Identifier) = MirageFairy2024DataGenerator.blockStateModelGenerators {
-    this.model.upload(identifier, this.textures, it.modelCollector)
+context(ModContext)
+fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = ModEvents.onInitialize {
+    MirageFairy2024DataGenerator.blockStateModelGenerators {
+        val texturedModel = texturedModelCreator()
+        texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
+    }
 }
 
-context(InitializationContext)
-fun Model.registerModelGeneration(identifier: Identifier, vararg textureEntries: Pair<TextureKey, Identifier>) = this.with(*textureEntries).registerModelGeneration(identifier)
+context(ModContext)
+fun Item.registerModelGeneration(texturedModelCreator: () -> TexturedModel) = registerModelGeneration({ "item/" concat this.getIdentifier() }) { texturedModelCreator() }
 
-context(InitializationContext)
-fun Item.registerItemModelGeneration(texturedModel: TexturedModel) = texturedModel.registerModelGeneration("item/" concat this.getIdentifier())
+context(ModContext)
+fun Item.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this) }) = this.registerModelGeneration { model with textureMapCreator() }
 
-context(InitializationContext)
-fun Item.registerItemModelGeneration(model: Model) = this.registerItemModelGeneration(model with TextureMap.layer0(this))
+context(ModContext)
+fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.GENERATED)
 
-context(InitializationContext)
-fun Item.registerGeneratedItemModelGeneration() = this.registerItemModelGeneration(Models.GENERATED)
+context(ModContext)
+fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(block) }
 
-context(InitializationContext)
-fun Item.registerBlockItemModelGeneration(block: Block) = this.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(block))
-
-context(InitializationContext)
-fun Block.registerModelGeneration(texturedModel: TexturedModel) = (texturedModel.model with texturedModel.textures).registerModelGeneration("block/" concat this.getIdentifier())
-
-context(InitializationContext)
-fun Block.registerModelGeneration(factory: TexturedModel.Factory) = this.registerModelGeneration(factory.get(this))
+context(ModContext)
+fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) = registerModelGeneration({ "block/" concat this.getIdentifier() }) { texturedModelFactory.get(this) }
 
 
 // registerBlockStateGeneration
 
-context(InitializationContext)
-fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = MirageFairy2024DataGenerator.blockStateModelGenerators {
-    it.blockStateCollector.accept(object : BlockStateSupplier {
-        override fun get() = creator()
-        override fun getBlock() = this@registerBlockStateGeneration
-    })
+context(ModContext)
+fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = ModEvents.onInitialize {
+    MirageFairy2024DataGenerator.blockStateModelGenerators {
+        it.blockStateCollector.accept(object : BlockStateSupplier {
+            override fun get() = creator()
+            override fun getBlock() = this@registerBlockStateGeneration
+        })
+    }
 }
 
 enum class BlockStateVariantRotation(val degrees: Int) {
@@ -231,7 +231,7 @@ class VariantsBlockStateGenerationRegistrationScope {
     fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
 }
 
-context(InitializationContext)
+context(ModContext)
 fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
     jsonObject(
         "variants" to jsonObject(
@@ -250,7 +250,9 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
     )
 }
 
-context(InitializationContext)
-fun Block.registerSingletonBlockStateGeneration() = MirageFairy2024DataGenerator.blockStateModelGenerators {
-    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" concat this.getIdentifier()))
+context(ModContext)
+fun Block.registerSingletonBlockStateGeneration() = ModEvents.onInitialize {
+    MirageFairy2024DataGenerator.blockStateModelGenerators {
+        it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" concat this.getIdentifier()))
+    }
 }

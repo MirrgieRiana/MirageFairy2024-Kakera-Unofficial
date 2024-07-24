@@ -2,7 +2,6 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -15,7 +14,7 @@ import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerFuel
-import miragefairy2024.util.registerGeneratedItemModelGeneration
+import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerGrassDrop
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
@@ -210,9 +209,7 @@ fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        ModEvents.onInitialize {
-            card.item.registerGeneratedItemModelGeneration()
-        }
+        card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.enName, card.jaName)
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)

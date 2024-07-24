@@ -16,6 +16,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.util.concat
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -63,14 +64,15 @@ fun initVeropeda() {
     val card = VeropedaCard
     card.initMagicPlant()
 
-    ModEvents.onInitialize {
-
-        // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" concat card.blockIdentifier) with card.block.ageProperty }
-        card.block.ageProperty.values.forEach { age ->
-            val texturedModel = Models.CROSS.with(TextureKey.CROSS to ("block/" concat card.blockIdentifier concat "_age$age"))
-            texturedModel.registerModelGeneration("block/" concat card.blockIdentifier concat "_age$age")
+    // 見た目
+    card.block.registerVariantsBlockStateGeneration { normal("block/" concat card.block.getIdentifier()) with card.block.ageProperty }
+    card.block.ageProperty.values.forEach { age ->
+        registerModelGeneration({ "block/" concat card.block.getIdentifier() concat "_age$age" }) {
+            Models.CROSS.with(TextureKey.CROSS to ("block/" concat card.block.getIdentifier() concat "_age$age"))
         }
+    }
+
+    ModEvents.onInitialize {
 
         // 地形生成
         run {

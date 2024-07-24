@@ -2,7 +2,6 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -13,7 +12,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemModelGeneration
+import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.data.client.Models
 import net.minecraft.item.Item
@@ -65,9 +64,7 @@ class ToolCard<I : Item>(
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        ModEvents.onInitialize {
-            item.registerItemModelGeneration(Models.HANDHELD)
-        }
+        item.registerModelGeneration(Models.HANDHELD)
 
         item.enJa(enName, jaName)
 

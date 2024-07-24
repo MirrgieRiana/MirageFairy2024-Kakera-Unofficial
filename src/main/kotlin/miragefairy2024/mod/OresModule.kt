@@ -32,6 +32,7 @@ import net.minecraft.block.ExperienceDroppingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.enums.Instrument
 import net.minecraft.data.client.TextureKey
+import net.minecraft.data.client.TexturedModel
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
@@ -96,7 +97,7 @@ enum class OreCard(
         ExperienceDroppingBlock(settings, UniformIntProvider.create(experience.first, experience.second))
     }
     val item = BlockItem(block, Item.Settings())
-    val texturedModel = run {
+    val texturedModelFactory = TexturedModel.Factory {
         val baseStoneTexture = when (baseStoneType) {
             STONE -> Identifier("minecraft", "block/stone")
             DEEPSLATE -> Identifier("minecraft", "block/deepslate")
@@ -117,9 +118,7 @@ object OreModelCard {
 context(ModContext)
 fun initOresModule() {
 
-    ModEvents.onInitialize {
-        OreModelCard.parentModel.registerModelGeneration(OreModelCard.identifier)
-    }
+    registerModelGeneration({ OreModelCard.identifier }) { OreModelCard.parentModel.with() }
 
     OreCard.entries.forEach { card ->
 
@@ -128,10 +127,8 @@ fun initOresModule() {
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        ModEvents.onInitialize {
-            card.block.registerSingletonBlockStateGeneration()
-            card.block.registerModelGeneration(card.texturedModel)
-        }
+        card.block.registerSingletonBlockStateGeneration()
+        card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)

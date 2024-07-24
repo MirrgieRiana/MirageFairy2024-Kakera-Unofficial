@@ -2,7 +2,6 @@ package miragefairy2024.mod.placeditem
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.util.EMPTY_ITEM_STACK
@@ -66,19 +65,17 @@ fun initPlacedItemBlock() {
         card.block.register(Registries.BLOCK, card.identifier)
         card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
 
-        ModEvents.onInitialize {
-            card.block.registerSingletonBlockStateGeneration()
-            card.block.registerModelGeneration {
-                Model {
-                    ModelData(
-                        parent = Identifier("minecraft", "block/block"),
-                        textures = ModelTexturesData(
-                            TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
-                        ),
-                        elements = ModelElementsData(),
-                    )
-                }.with()
-            }
+        card.block.registerSingletonBlockStateGeneration()
+        card.block.registerModelGeneration {
+            Model {
+                ModelData(
+                    parent = Identifier("minecraft", "block/block"),
+                    textures = ModelTexturesData(
+                        TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
+                    ),
+                    elements = ModelElementsData(),
+                )
+            }.with()
         }
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 

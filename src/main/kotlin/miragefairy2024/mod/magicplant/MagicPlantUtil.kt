@@ -1,7 +1,6 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
@@ -11,7 +10,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
-import miragefairy2024.util.registerGeneratedItemModelGeneration
+import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
@@ -37,9 +36,7 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
 
     // 見た目
     block.registerCutoutRenderLayer()
-    ModEvents.onInitialize {
-        item.registerGeneratedItemModelGeneration()
-    }
+    item.registerGeneratedModelGeneration()
 
     // 翻訳
     block.enJa(blockEnName, blockJaName)

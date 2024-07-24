@@ -22,11 +22,12 @@ import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockItemModelGeneration
+import miragefairy2024.util.registerBlockGeneratedModelGeneration
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -139,10 +140,8 @@ context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    ModEvents.onInitialize {
-        card.block.registerSingletonBlockStateGeneration()
-        createHaimeviskaLeavesModel(card.identifier).with().registerModelGeneration("block/" concat card.identifier)
-    }
+    card.block.registerSingletonBlockStateGeneration()
+    card.block.registerModelGeneration(haimeviskaLeavesTexturedModelFactory)
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
     card.item.registerRedirectColorProvider()
@@ -182,27 +181,28 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 context(ModContext)
 private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
-    ModEvents.onInitialize {
 
-        // レンダリング
-        card.block.registerVariantsBlockStateGeneration {
-            val normal = BlockStateVariant(model = "block/" concat card.identifier)
-            listOf(
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
-            )
-        }
+    // レンダリング
+    card.block.registerVariantsBlockStateGeneration {
+        val normal = BlockStateVariant(model = "block/" concat card.block.getIdentifier())
+        listOf(
+            propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
+            propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
+            propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
+            propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
+        )
+    }
+    card.block.registerModelGeneration {
         Models.ORIENTABLE.with(
-            TextureKey.TOP to ("block/" concat HaimeviskaBlockCard.LOG.identifier concat "_top"),
-            TextureKey.SIDE to ("block/" concat HaimeviskaBlockCard.LOG.identifier),
-            TextureKey.FRONT to ("block/" concat card.identifier),
-        ).registerModelGeneration("block/" concat card.identifier)
+            TextureKey.TOP to ("block/" concat HaimeviskaBlockCard.LOG.block.getIdentifier() concat "_top"),
+            TextureKey.SIDE to ("block/" concat HaimeviskaBlockCard.LOG.block.getIdentifier()),
+            TextureKey.FRONT to ("block/" concat it.getIdentifier()),
+        )
+    }
 
-        // 性質
+    // 性質
+    ModEvents.onInitialize {
         card.block.registerFlammable(5, 5)
-
     }
 
     // タグ
@@ -214,17 +214,18 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 context(ModContext)
 private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
-    ModEvents.onInitialize {
 
-        // レンダリング
-        card.block.registerSingletonBlockStateGeneration()
+    // レンダリング
+    card.block.registerSingletonBlockStateGeneration()
+    card.block.registerModelGeneration {
         Models.CUBE_ALL.with(
-            TextureKey.ALL to ("block/" concat card.identifier),
-        ).registerModelGeneration("block/" concat card.identifier)
+            TextureKey.ALL to ("block/" concat it.getIdentifier()),
+        )
+    }
 
-        // 性質
+    // 性質
+    ModEvents.onInitialize {
         card.block.registerFlammable(5, 20)
-
     }
 
     // タグ
@@ -237,13 +238,13 @@ context(ModContext)
 private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    ModEvents.onInitialize {
-        card.block.registerSingletonBlockStateGeneration()
+    card.block.registerSingletonBlockStateGeneration()
+    card.block.registerModelGeneration {
         Models.CROSS.with(
-            TextureKey.CROSS to ("block/" concat card.identifier),
-        ).registerModelGeneration("block/" concat card.identifier)
-        card.item.registerBlockItemModelGeneration(card.block)
+            TextureKey.CROSS to ("block/" concat it.getIdentifier()),
+        )
     }
+    card.item.registerBlockGeneratedModelGeneration(card.block)
     card.block.registerCutoutRenderLayer()
 
     // タグ

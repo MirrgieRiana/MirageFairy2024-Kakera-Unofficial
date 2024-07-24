@@ -2,7 +2,6 @@ package miragefairy2024.util
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import mirrg.kotlin.hydrogen.toUpperCamelCase
 import net.minecraft.data.client.Models
@@ -32,9 +31,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
     }
     item.register(Registries.ITEM, Identifier(MirageFairy2024.modId, path))
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-    ModEvents.onInitialize {
-        item.registerItemModelGeneration(Models.GENERATED with TextureMap.layer0(icon))
-    }
+    item.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(icon) }
     item.registerColorProvider { _, _ -> color }
 }
 

@@ -20,7 +20,7 @@ import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemModelGeneration
+import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
@@ -66,9 +66,7 @@ fun initFairyQuestCardItem() {
                 itemStack
             }
         }
-        ModEvents.onInitialize {
-            card.item.registerItemModelGeneration(createFairyQuestCardModel())
-        }
+        card.item.registerModelGeneration(createFairyQuestCardModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 0) {
                 itemStack.getFairyQuestRecipe()?.color ?: 0xFF00FF
