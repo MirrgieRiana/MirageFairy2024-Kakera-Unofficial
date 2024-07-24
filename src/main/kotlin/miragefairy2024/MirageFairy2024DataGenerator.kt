@@ -35,19 +35,19 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 object DataGenerationEvents {
-    val onGenerateBlockStateModel = InitializationEventRegistry<InitializationContext, (BlockStateModelGenerator) -> Unit>()
-    val onGenerateItemModel = InitializationEventRegistry<InitializationContext, (ItemModelGenerator) -> Unit>()
-    val onGenerateBlockTag = InitializationEventRegistry<InitializationContext, ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
-    val onGenerateItemTag = InitializationEventRegistry<InitializationContext, ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
-    val onGenerateBiomeTag = InitializationEventRegistry<InitializationContext, ((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
-    val onGenerateBlockLootTable = InitializationEventRegistry<InitializationContext, (FabricBlockLootTableProvider) -> Unit>()
-    val onGenerateRecipe = InitializationEventRegistry<InitializationContext, ((RecipeJsonProvider) -> Unit) -> Unit>()
-    val onGenerateEnglishTranslation = InitializationEventRegistry<InitializationContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val onGenerateJapaneseTranslation = InitializationEventRegistry<InitializationContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val onGenerateNinePatchTexture = InitializationEventRegistry<InitializationContext, ((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
-    val onGenerateSound = InitializationEventRegistry<InitializationContext, ((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
+    val onGenerateBlockStateModel = InitializationEventRegistry<ModContext, (BlockStateModelGenerator) -> Unit>()
+    val onGenerateItemModel = InitializationEventRegistry<ModContext, (ItemModelGenerator) -> Unit>()
+    val onGenerateBlockTag = InitializationEventRegistry<ModContext, ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
+    val onGenerateItemTag = InitializationEventRegistry<ModContext, ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val onGenerateBiomeTag = InitializationEventRegistry<ModContext, ((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
+    val onGenerateBlockLootTable = InitializationEventRegistry<ModContext, (FabricBlockLootTableProvider) -> Unit>()
+    val onGenerateRecipe = InitializationEventRegistry<ModContext, ((RecipeJsonProvider) -> Unit) -> Unit>()
+    val onGenerateEnglishTranslation = InitializationEventRegistry<ModContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val onGenerateJapaneseTranslation = InitializationEventRegistry<ModContext, (FabricLanguageProvider.TranslationBuilder) -> Unit>()
+    val onGenerateNinePatchTexture = InitializationEventRegistry<ModContext, ((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
+    val onGenerateSound = InitializationEventRegistry<ModContext, ((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
 
-    val onBuildRegistry = InitializationEventRegistry<InitializationContext, (RegistryBuilder) -> Unit>()
+    val onBuildRegistry = InitializationEventRegistry<ModContext, (RegistryBuilder) -> Unit>()
 }
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {

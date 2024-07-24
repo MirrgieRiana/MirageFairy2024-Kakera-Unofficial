@@ -75,17 +75,15 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     block: T.() -> Unit = {},
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
-    ModEvents.onInitialize {
-        DataGenerationEvents.onGenerateRecipe {
-            val builder = creator(settings.recipeCategory, item, count)
-            settings.listeners.forEach { listener ->
-                listener(builder)
-            }
-            if (!settings.noGroup) builder.group(item)
-            block(builder)
-            val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
-            builder.offerTo(it, identifier)
+    DataGenerationEvents.onGenerateRecipe {
+        val builder = creator(settings.recipeCategory, item, count)
+        settings.listeners.forEach { listener ->
+            listener(builder)
         }
+        if (!settings.noGroup) builder.group(item)
+        block(builder)
+        val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
+        builder.offerTo(it, identifier)
     }
     return settings
 }
@@ -113,17 +111,15 @@ fun registerSmeltingRecipeGeneration(
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
-    ModEvents.onInitialize {
-        DataGenerationEvents.onGenerateRecipe {
-            val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-            builder.group(output)
-            settings.listeners.forEach { listener ->
-                listener(builder)
-            }
-            block(builder)
-            val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
-            builder.offerTo(it, identifier)
+    DataGenerationEvents.onGenerateRecipe {
+        val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+        builder.group(output)
+        settings.listeners.forEach { listener ->
+            listener(builder)
         }
+        block(builder)
+        val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
+        builder.offerTo(it, identifier)
     }
     return settings
 }
@@ -137,17 +133,15 @@ fun registerBlastingRecipeGeneration(
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
-    ModEvents.onInitialize {
-        DataGenerationEvents.onGenerateRecipe {
-            val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-            builder.group(output)
-            settings.listeners.forEach { listener ->
-                listener(builder)
-            }
-            block(builder)
-            val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
-            builder.offerTo(it, identifier)
+    DataGenerationEvents.onGenerateRecipe {
+        val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+        builder.group(output)
+        settings.listeners.forEach { listener ->
+            listener(builder)
         }
+        block(builder)
+        val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
+        builder.offerTo(it, identifier)
     }
     return settings
 }

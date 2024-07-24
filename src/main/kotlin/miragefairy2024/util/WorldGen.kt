@@ -33,13 +33,15 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, ide
 }
 
 context(ModContext)
-fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) = ModEvents.onInitialize {
+fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
     DataGenerationEvents.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
             context.register(key, creator(context))
         }
     }
-    MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
+    ModEvents.onInitialize {
+        MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
+    }
 }
 
 context(ModContext)

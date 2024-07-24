@@ -2,7 +2,6 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.util.FortuneEffect.IGNORE
 import miragefairy2024.util.FortuneEffect.ORE
 import miragefairy2024.util.FortuneEffect.UNIFORM
@@ -70,10 +69,8 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 
 context(ModContext)
-fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateBlockLootTable {
-        it.addDrop(this, initializer(it))
-    }
+fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable {
+    it.addDrop(this, initializer(it))
 }
 
 context(ModContext)

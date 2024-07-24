@@ -2,24 +2,19 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 
 context(ModContext)
-fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateEnglishTranslation {
-        val pair = getter()
-        it.add(pair.first, pair.second)
-    }
+fun en(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateEnglishTranslation {
+    val pair = getter()
+    it.add(pair.first, pair.second)
 }
 
 context(ModContext)
-fun ja(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateJapaneseTranslation {
-        val pair = getter()
-        it.add(pair.first, pair.second)
-    }
+fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapaneseTranslation {
+    val pair = getter()
+    it.add(pair.first, pair.second)
 }
 
 context(ModContext)

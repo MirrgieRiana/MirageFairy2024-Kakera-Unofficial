@@ -3,7 +3,6 @@ package miragefairy2024.util
 import com.google.gson.JsonElement
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -129,11 +128,9 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 // registerModelGeneration
 
 context(ModContext)
-fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateBlockStateModel {
-        val texturedModel = texturedModelCreator()
-        texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
-    }
+fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
+    val texturedModel = texturedModelCreator()
+    texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
 }
 
 context(ModContext)
@@ -155,13 +152,11 @@ fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) =
 // registerBlockStateGeneration
 
 context(ModContext)
-fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateBlockStateModel {
-        it.blockStateCollector.accept(object : BlockStateSupplier {
-            override fun get() = creator()
-            override fun getBlock() = this@registerBlockStateGeneration
-        })
-    }
+fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
+    it.blockStateCollector.accept(object : BlockStateSupplier {
+        override fun get() = creator()
+        override fun getBlock() = this@registerBlockStateGeneration
+    })
 }
 
 enum class BlockStateVariantRotation(val degrees: Int) {
@@ -251,8 +246,6 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 }
 
 context(ModContext)
-fun Block.registerSingletonBlockStateGeneration() = ModEvents.onInitialize {
-    DataGenerationEvents.onGenerateBlockStateModel {
-        it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
-    }
+fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
+    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
 }

@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
@@ -36,10 +35,8 @@ context(ModContext)
 fun initFairyCondensationRecipe() {
     SpecialRecipeCard.entries.forEach { card ->
         card.serializer.register(Registries.RECIPE_SERIALIZER, card.identifier)
-        ModEvents.onInitialize {
-            DataGenerationEvents.onGenerateRecipe {
-                ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
-            }
+        DataGenerationEvents.onGenerateRecipe {
+            ComplexRecipeJsonBuilder.create(card.serializer).offerTo(it, card.identifier.string)
         }
     }
 }
