@@ -12,4 +12,5 @@ fun initFairyModule() {
     initFairyDream()
     initFairyDreamContainer()
     initSoulStream()
+    initFairyHistoryContainer()
 }
