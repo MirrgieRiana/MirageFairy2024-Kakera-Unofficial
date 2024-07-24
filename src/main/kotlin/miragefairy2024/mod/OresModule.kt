@@ -2,7 +2,6 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.BaseStoneType.DEEPSLATE
 import miragefairy2024.mod.BaseStoneType.STONE
 import miragefairy2024.util.Model
@@ -135,9 +134,7 @@ fun initOresModule() {
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
 
-        ModEvents.onInitialize {
-            card.block.registerOreLootTableGeneration(card.dropItem)
-        }
+        card.block.registerOreLootTableGeneration(card.dropItem)
 
         card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
         card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }

@@ -2,7 +2,6 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
@@ -120,9 +119,7 @@ fun initBlockMaterialsModule() {
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
 
-        ModEvents.onInitialize {
-            card.block.registerDefaultLootTableGeneration()
-        }
+        card.block.registerDefaultLootTableGeneration()
 
         card.tags.forEach {
             card.block.registerBlockTagGeneration { it }
