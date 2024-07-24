@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairyhouse
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -18,6 +19,7 @@ import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
@@ -25,12 +27,15 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.MapColor
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.enums.Instrument
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -52,7 +57,7 @@ open class AbstractFairyHouseCard<B : AbstractFairyHouseBlock, E : AbstractFairy
     blockEntityCreator: (BlockPos, BlockState) -> E,
 ) {
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val block = blockCreator(FabricBlockSettings.create().nonOpaque())
+    val block = blockCreator(FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK))
     val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
     val item = BlockItem(block, Item.Settings())
 
@@ -75,6 +80,7 @@ open class AbstractFairyHouseCard<B : AbstractFairyHouseBlock, E : AbstractFairy
             )
         }
         block.registerCutoutRenderLayer()
+        blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
         block.enJa(enName, jaName)
         val poemList = PoemList(tier).poem(enPoem, jaPoem)
@@ -90,4 +96,4 @@ open class AbstractFairyHouseCard<B : AbstractFairyHouseBlock, E : AbstractFairy
 
 abstract class AbstractFairyHouseBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider
 
-abstract class AbstractFairyHouseBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state)
+abstract class AbstractFairyHouseBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state), RenderingProxyBlockEntity

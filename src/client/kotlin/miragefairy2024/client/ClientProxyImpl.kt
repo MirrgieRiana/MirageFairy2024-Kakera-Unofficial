@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.color.world.BiomeColors
 import net.minecraft.client.color.world.FoliageColors
+import net.minecraft.client.render.OverlayTexture
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
@@ -25,6 +26,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.world.BlockRenderView
 
@@ -99,5 +101,9 @@ class RenderingProxyBlockEntityRenderer<T>(
             override fun renderItemStack(itemStack: ItemStack) = MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
         }
         blockEntity.render(renderingProxy, tickDelta, light, overlay)
+
+       //val r = RenderLayer.getEyes(Identifier("textures/entity/spider_eyes.png"))
+       //val vertexConsumer = vertexConsumers.getBuffer(OverlayTexture())
+       //this.getContextModel().render(matrices, vertexConsumer, 15728640, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f)
     }
 }
