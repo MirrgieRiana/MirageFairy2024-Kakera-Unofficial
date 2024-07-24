@@ -34,13 +34,14 @@ class InitializationContext
 object ModEvents {
     val onRegistration = InitializationEventRegistry<ModContext, context(RegistrationContext)() -> Unit>()
     val onInitialize = InitializationEventRegistry<ModContext, context(InitializationContext)() -> Unit>()
+
+    val onClientInit = InitializationEventRegistry<ModContext, () -> Unit>()
 }
 
 object MirageFairy2024 : ModInitializer {
     val modId = "miragefairy2024"
     val logger = LoggerFactory.getLogger("miragefairy2024")
 
-    val onClientInit = InitializationEventRegistry<InitializationContext, (ClientProxy) -> Unit>()
     var clientProxy: ClientProxy? = null
 
     override fun onInitialize() {

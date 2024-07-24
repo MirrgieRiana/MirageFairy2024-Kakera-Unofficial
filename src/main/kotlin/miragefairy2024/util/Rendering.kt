@@ -16,17 +16,13 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
 context(ModContext)
-fun Block.registerCutoutRenderLayer() = ModEvents.onInitialize {
-    MirageFairy2024.onClientInit {
-        it.registerCutoutRenderLayer(this)
-    }
+fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {
+    MirageFairy2024.clientProxy!!.registerCutoutRenderLayer(this)
 }
 
 context(ModContext)
-fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onInitialize {
-    MirageFairy2024.onClientInit {
-        it.registerBlockColorProvider(this, provider)
-    }
+fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
+    MirageFairy2024.clientProxy!!.registerBlockColorProvider(this, provider)
 }
 
 context(ModContext)
@@ -35,10 +31,8 @@ fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockSta
 }
 
 context(ModContext)
-fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onInitialize {
-    MirageFairy2024.onClientInit {
-        it.registerItemColorProvider(this, provider)
-    }
+fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
+    MirageFairy2024.clientProxy!!.registerItemColorProvider(this, provider)
 }
 
 context(ModContext)
@@ -58,8 +52,6 @@ fun RenderingProxy.renderItemStack(itemStack: ItemStack, dotX: Double, dotY: Dou
 }
 
 context(ModContext)
-fun <T> BlockEntityType<T>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onInitialize {
-    MirageFairy2024.onClientInit {
-        it.registerRenderingProxyBlockEntityRendererFactory(this)
-    }
+fun <T> BlockEntityType<T>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
+    MirageFairy2024.clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this)
 }

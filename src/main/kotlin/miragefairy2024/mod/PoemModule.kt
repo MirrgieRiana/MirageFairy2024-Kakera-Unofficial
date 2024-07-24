@@ -16,9 +16,9 @@ import net.minecraft.util.Formatting
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
 
 context(ModContext)
-fun initPoemModule() = ModEvents.onInitialize {
-    MirageFairy2024.onClientInit { clientProxy ->
-        clientProxy.registerItemTooltipCallback { stack, lines ->
+fun initPoemModule() {
+    ModEvents.onClientInit {
+        MirageFairy2024.clientProxy!!.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
             val texts = mutableListOf<Text>()
 
