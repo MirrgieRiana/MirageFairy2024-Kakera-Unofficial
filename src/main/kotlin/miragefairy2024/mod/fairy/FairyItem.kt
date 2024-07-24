@@ -34,6 +34,7 @@ import miragefairy2024.util.gray
 import miragefairy2024.util.green
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
+import miragefairy2024.util.join
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
@@ -191,13 +192,40 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         val mana = level * (1.0 + manaBoost)
 
         // 魔力・個数
-        tooltip += text { (MANA_TRANSLATION() + ": "() + Emoji.MANA() + (mana formatAs "%.1f")() + "  "() + "(x${count formatAs "%.0f"})"()).aqua }
+        tooltip += text {
+            listOf(
+                MANA_TRANSLATION(),
+                ": "(),
+                Emoji.MANA(),
+                (mana formatAs "%.1f")(),
+                "  "(),
+                "(x${count formatAs "%.0f"})"(),
+            ).join().aqua
+        }
 
         // レベル・凝縮数
-        tooltip += text { (LEVEL_TRANSLATION() + ": "() + Emoji.STAR() + (level formatAs "%.1f")() + "  "() + CONDENSATION_TRANSLATION() + ": x${stack.getFairyCondensation()}"() + if (stack.count != 1) " *${stack.count}"() else empty()).green }
+        tooltip += text {
+            listOf(
+                LEVEL_TRANSLATION(),
+                ": "(),
+                Emoji.STAR(),
+                (level formatAs "%.1f")(),
+                "  "(),
+                CONDENSATION_TRANSLATION(),
+                ": x${stack.getFairyCondensation()}"(),
+                if (stack.count != 1) " *${stack.count}"() else empty(),
+            ).join().green
+        }
 
         // レア・ID
-        tooltip += text { (RARE_TRANSLATION() + ": ${motif.rare}"() + "  "() + motif.getIdentifier()!!.path()).green }
+        tooltip += text {
+            listOf(
+                RARE_TRANSLATION(),
+                ": ${motif.rare}"(),
+                "  "(),
+                motif.getIdentifier()!!.path(),
+            ).join().green
+        }
 
         // 機能説明
         tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
