@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.loot.LootTable
 import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.LocationCheckLootCondition
 import net.minecraft.loot.condition.MatchToolLootCondition
@@ -150,25 +151,35 @@ fun registerBlastingRecipeGeneration(
 // Others
 
 context(ModContext)
-fun Item.registerGrassDrop(amount: Float = 1.0F, fortuneMultiplier: Int = 2, biome: (() -> RegistryKey<Biome>)? = null) {
+fun Item.registerLootTableModification(lootTableIdGetter: () -> Identifier, block: (LootTable.Builder) -> Unit) = ModEvents.onInitialize {
+    val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
-            if (id == Blocks.GRASS.lootTableId) {
-                tableBuilder.configure {
-                    pool(LootPool(AlternativeLootPoolEntry {
-                        alternatively(EmptyLootPoolEntry {
-                            conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().items(Items.SHEARS)))
-                        })
-                        alternatively(ItemLootPoolEntry(this@registerGrassDrop) {
-                            conditionally(RandomChanceLootCondition.builder(0.125F * amount))
-                            if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
-                            apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
-                            apply(ExplosionDecayLootFunction.builder())
-                        })
-                    }))
-                }
+            if (id == lootTableId) {
+                block(tableBuilder)
             }
         }
+    }
+}
+
+context(ModContext)
+fun Item.registerGrassDrop(
+    amount: Float = 1.0F,
+    fortuneMultiplier: Int = 2,
+    biome: (() -> RegistryKey<Biome>)? = null,
+) = this.registerLootTableModification({ Blocks.GRASS.lootTableId }) { tableBuilder ->
+    tableBuilder.configure {
+        pool(LootPool(AlternativeLootPoolEntry {
+            alternatively(EmptyLootPoolEntry {
+                conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().items(Items.SHEARS)))
+            })
+            alternatively(ItemLootPoolEntry(this@registerGrassDrop) {
+                conditionally(RandomChanceLootCondition.builder(0.125F * amount))
+                if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
+                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
+                apply(ExplosionDecayLootFunction.builder())
+            })
+        }))
     }
 }
 
@@ -179,42 +190,32 @@ fun Item.registerMobDrop(
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) {
-    ModEvents.onInitialize {
-        val lootTableId = entityType.lootTableId
-        LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
-            if (source.isBuiltin) {
-                if (id == lootTableId) {
-                    tableBuilder.configure {
-                        pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
-                            if (amount != null) apply(SetCountLootFunction.builder(amount, false))
-                            if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
-                        }) {
-                            if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
-                            if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
-                        })
-                    }
-                }
-            }
-        }
+) = this.registerLootTableModification({ entityType.lootTableId }) { tableBuilder ->
+    tableBuilder.configure {
+        pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+            if (amount != null) apply(SetCountLootFunction.builder(amount, false))
+            if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
+        }) {
+            if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
+            if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
+        })
     }
 }
 
 context(ModContext)
-fun Item.registerChestLoot(lootTableId: Identifier, weight: Int = 10, count: IntRange? = null, block: LeafEntry.Builder<*>.() -> Unit = {}) {
-    LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
-        if (source.isBuiltin) {
-            if (id == lootTableId) {
-                tableBuilder.modifyPools { lootPool ->
-                    lootPool.configure {
-                        with(ItemLootPoolEntry(this@registerChestLoot) {
-                            weight(weight)
-                            if (count != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(count.first.toFloat(), count.last.toFloat())))
-                            block(this)
-                        })
-                    }
-                }
-            }
+fun Item.registerChestLoot(
+    lootTableIdGetter: () -> Identifier,
+    weight: Int = 10,
+    count: IntRange? = null,
+    block: LeafEntry.Builder<*>.() -> Unit = {},
+) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder ->
+    tableBuilder.modifyPools { lootPool ->
+        lootPool.configure {
+            with(ItemLootPoolEntry(this@registerChestLoot) {
+                weight(weight)
+                if (count != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(count.first.toFloat(), count.last.toFloat())))
+                block(this)
+            })
         }
     }
 }

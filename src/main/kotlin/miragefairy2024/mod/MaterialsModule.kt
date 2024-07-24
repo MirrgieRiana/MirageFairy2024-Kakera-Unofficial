@@ -242,13 +242,13 @@ fun initMaterialsModule() {
     MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
 
     // 混沌の石
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.SIMPLE_DUNGEON_CHEST, 10, 3..5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ABANDONED_MINESHAFT_CHEST, 5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.ANCIENT_CITY_CHEST, 10, 1..5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_CHEST, 10)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.VILLAGE_DESERT_HOUSE_CHEST, 3)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_PYRAMID_ARCHAEOLOGY, 1)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot(LootTables.DESERT_WELL_ARCHAEOLOGY, 1)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.SIMPLE_DUNGEON_CHEST }, 10, 3..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT_CHEST }, 5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ANCIENT_CITY_CHEST }, 10, 1..5)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_CHEST }, 10)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE_CHEST }, 3)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
+    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
 
     // ミラージュの葉
     MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)

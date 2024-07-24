@@ -259,7 +259,7 @@ fun initFairyQuestRecipe() {
             )
 
             fun registerChestLoot(lootTableId: Identifier, weight: Int) {
-                FairyQuestCardCard.item.registerChestLoot(lootTableId, weight) {
+                FairyQuestCardCard.item.registerChestLoot({ lootTableId }, weight) {
                     apply { SetFairyQuestRecipeLootFunction(card.identifier) }
                 }
             }
