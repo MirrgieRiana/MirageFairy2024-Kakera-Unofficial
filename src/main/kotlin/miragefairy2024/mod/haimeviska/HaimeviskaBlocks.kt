@@ -147,9 +147,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.item.registerRedirectColorProvider()
 
     // 性質
-    ModEvents.onInitialize {
-        card.block.registerFlammable(30, 30)
-    }
+    card.block.registerFlammable(30, 30)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.LEAVES }
@@ -160,17 +158,16 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 context(ModContext)
 private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
-    ModEvents.onInitialize {
 
-        // レンダリング
+    // レンダリング
+    ModEvents.onInitialize {
         MirageFairy2024DataGenerator.blockStateModelGenerators {
             it.registerLog(card.block).log(card.block)
         }
-
-        // 性質
-        card.block.registerFlammable(5, 5)
-
     }
+
+    // 性質
+    card.block.registerFlammable(5, 5)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
@@ -201,9 +198,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     }
 
     // 性質
-    ModEvents.onInitialize {
-        card.block.registerFlammable(5, 5)
-    }
+    card.block.registerFlammable(5, 5)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
@@ -224,9 +219,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
     }
 
     // 性質
-    ModEvents.onInitialize {
-        card.block.registerFlammable(5, 20)
-    }
+    card.block.registerFlammable(5, 20)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.PLANKS }

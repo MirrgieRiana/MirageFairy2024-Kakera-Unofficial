@@ -1,5 +1,7 @@
 package miragefairy2024.util
 
+import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
@@ -10,4 +12,7 @@ fun Block.getIdentifier() = Registries.BLOCK.getId(this)
 
 fun Identifier.toBlock() = Registries.BLOCK.get(this)
 
-fun Block.registerFlammable(burn: Int, spread: Int) = FlammableBlockRegistry.getDefaultInstance().add(this, 30, 60)
+context(ModContext)
+fun Block.registerFlammable(burn: Int, spread: Int) = ModEvents.onInitialize {
+    FlammableBlockRegistry.getDefaultInstance().add(this, 30, 60)
+}
