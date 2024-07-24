@@ -60,7 +60,7 @@ infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
 }
 
 infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
-    this.idModifiers += { it concat "_from_" concat item.getIdentifier().path }
+    this.idModifiers += { it * "_from_" * item.getIdentifier().path }
 }
 
 fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.apply {
@@ -145,7 +145,7 @@ fun registerBlastingRecipeGeneration(
                 listener(builder)
             }
             block(builder)
-            val identifier = settings.idModifiers.fold(output.getIdentifier() concat "_from_blasting") { id, idModifier -> idModifier(id) }
+            val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
             builder.offerTo(it, identifier)
         }
     }

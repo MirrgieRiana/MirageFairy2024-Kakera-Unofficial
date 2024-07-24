@@ -18,7 +18,6 @@ import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
 import miragefairy2024.mod.poem
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
-import miragefairy2024.util.concat
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
@@ -26,6 +25,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
@@ -89,10 +89,10 @@ fun initMirageFlower() {
     card.initMagicPlant()
 
     // 見た目
-    card.block.registerVariantsBlockStateGeneration { normal("block/" concat card.block.getIdentifier()) with card.block.ageProperty }
+    card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
     card.block.ageProperty.values.forEach { age ->
-        registerModelGeneration({ "block/" concat card.block.getIdentifier() concat "_age$age" }) {
-            Models.CROSS.with(TextureKey.CROSS to ("block/" concat card.block.getIdentifier() concat "_age$age"))
+        registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
+            Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
         }
     }
 

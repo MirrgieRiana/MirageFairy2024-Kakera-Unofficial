@@ -18,7 +18,6 @@ import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
-import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -42,6 +41,7 @@ import miragefairy2024.util.registerRedirectColorProvider
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.times
 import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.block.AbstractBlock
@@ -184,7 +184,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     card.block.registerVariantsBlockStateGeneration {
-        val normal = BlockStateVariant(model = "block/" concat card.block.getIdentifier())
+        val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
         listOf(
             propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
             propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
@@ -194,9 +194,9 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     }
     card.block.registerModelGeneration {
         Models.ORIENTABLE.with(
-            TextureKey.TOP to ("block/" concat HaimeviskaBlockCard.LOG.block.getIdentifier() concat "_top"),
-            TextureKey.SIDE to ("block/" concat HaimeviskaBlockCard.LOG.block.getIdentifier()),
-            TextureKey.FRONT to ("block/" concat it.getIdentifier()),
+            TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier() * "_top",
+            TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier(),
+            TextureKey.FRONT to "block/" * it.getIdentifier(),
         )
     }
 
@@ -219,7 +219,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerSingletonBlockStateGeneration()
     card.block.registerModelGeneration {
         Models.CUBE_ALL.with(
-            TextureKey.ALL to ("block/" concat it.getIdentifier()),
+            TextureKey.ALL to "block/" * it.getIdentifier(),
         )
     }
 
@@ -241,7 +241,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerSingletonBlockStateGeneration()
     card.block.registerModelGeneration {
         Models.CROSS.with(
-            TextureKey.CROSS to ("block/" concat it.getIdentifier()),
+            TextureKey.CROSS to "block/" * it.getIdentifier(),
         )
     }
     card.item.registerBlockGeneratedModelGeneration(card.block)

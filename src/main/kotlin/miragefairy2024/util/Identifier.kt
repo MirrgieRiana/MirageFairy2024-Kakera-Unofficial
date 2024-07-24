@@ -6,5 +6,5 @@ val Identifier.string get() = this.toString()
 
 fun String.toIdentifier() = Identifier(this)
 
-infix fun String.concat(identifier: Identifier) = Identifier(identifier.namespace, this + identifier.path)
-infix fun Identifier.concat(string: String) = Identifier(this.namespace, this.path + string)
+operator fun String.times(identifier: Identifier) = Identifier(identifier.namespace, this + identifier.path)
+operator fun Identifier.times(string: String) = Identifier(this.namespace, this.path + string)

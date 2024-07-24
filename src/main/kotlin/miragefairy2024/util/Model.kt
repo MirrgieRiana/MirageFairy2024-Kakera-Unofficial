@@ -137,7 +137,7 @@ fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCre
 }
 
 context(ModContext)
-fun Item.registerModelGeneration(texturedModelCreator: () -> TexturedModel) = registerModelGeneration({ "item/" concat this.getIdentifier() }) { texturedModelCreator() }
+fun Item.registerModelGeneration(texturedModelCreator: () -> TexturedModel) = registerModelGeneration({ "item/" * this.getIdentifier() }) { texturedModelCreator() }
 
 context(ModContext)
 fun Item.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this) }) = this.registerModelGeneration { model with textureMapCreator() }
@@ -149,7 +149,7 @@ context(ModContext)
 fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(block) }
 
 context(ModContext)
-fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) = registerModelGeneration({ "block/" concat this.getIdentifier() }) { texturedModelFactory.get(this) }
+fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }
 
 
 // registerBlockStateGeneration
@@ -223,7 +223,7 @@ class VariantsBlockStateGenerationRegistrationScope {
         return property.values.flatMap { value ->
             this.map { (properties, variant) ->
                 val entry = property with value
-                propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! concat "_${entry.keyName}${entry.valueName}")
+                propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
             }
         }
     }
@@ -253,6 +253,6 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = ModEvents.onInitialize {
     MirageFairy2024DataGenerator.blockStateModelGenerators {
-        it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" concat this.getIdentifier()))
+        it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
     }
 }

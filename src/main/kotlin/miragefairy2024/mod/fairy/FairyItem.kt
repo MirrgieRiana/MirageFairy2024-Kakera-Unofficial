@@ -23,7 +23,6 @@ import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.buildText
-import miragefairy2024.util.concat
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.enJa
@@ -41,6 +40,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.times
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
@@ -250,7 +250,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
         return PassiveSkill(
-            "fairy/" concat motif.getIdentifier()!!,
+            "fairy/" * motif.getIdentifier()!!,
             motif,
             motif.rare.toDouble(),
             itemStack.getFairyCondensation().toDouble() * itemStack.count.toDouble(),

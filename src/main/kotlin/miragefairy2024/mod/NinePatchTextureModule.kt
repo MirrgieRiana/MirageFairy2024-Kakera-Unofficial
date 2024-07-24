@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
-import miragefairy2024.util.concat
+import miragefairy2024.util.times
 import net.minecraft.util.Identifier
 
 class NinePatchTextureCard(
@@ -22,7 +22,7 @@ class NinePatchTextureCard(
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val texture = "textures/gui/" concat identifier concat ".png"
+    val texture = "textures/gui/" * identifier * ".png"
 }
 
 context(ModContext)

@@ -12,7 +12,6 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.concat
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -23,6 +22,7 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerOreLootTableGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
@@ -104,7 +104,7 @@ enum class OreCard(
         }
         OreModelCard.model.with(
             TextureKey.BACK to baseStoneTexture,
-            TextureKey.FRONT to ("block/" concat Identifier(MirageFairy2024.modId, texturePath)),
+            TextureKey.FRONT to "block/" * Identifier(MirageFairy2024.modId, texturePath),
         )
     }
 }

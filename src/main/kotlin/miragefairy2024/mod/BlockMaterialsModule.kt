@@ -10,7 +10,6 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.concat
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
@@ -25,6 +24,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -178,8 +178,8 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block
             ),
         )
     }.with(
-        TextureKey.BACK to ("block/" concat block.getIdentifier() concat "_base"),
-        TextureKey.FRONT to ("block/" concat block.getIdentifier() concat "_spark"),
+        TextureKey.BACK to "block/" * block.getIdentifier() * "_base",
+        TextureKey.FRONT to "block/" * block.getIdentifier() * "_spark",
     )
 }
 

@@ -7,9 +7,9 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.concat
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.minecraft.data.client.TextureKey
 import net.minecraft.data.client.TexturedModel
@@ -52,7 +52,7 @@ val haimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { block ->
             ),
         )
     }.with(
-        TextureKey.BACK to ("block/" concat block.getIdentifier()),
-        TextureKey.FRONT to ("block/" concat block.getIdentifier() concat "_blossom"),
+        TextureKey.BACK to "block/" * block.getIdentifier(),
+        TextureKey.FRONT to "block/" * block.getIdentifier() * "_blossom",
     )
 }
