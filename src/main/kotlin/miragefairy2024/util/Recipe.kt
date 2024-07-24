@@ -1,6 +1,6 @@
 package miragefairy2024.util
 
-import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
@@ -76,7 +76,7 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
     ModEvents.onInitialize {
-        MirageFairy2024DataGenerator.recipeGenerators {
+        DataGenerationEvents.recipeGenerators {
             val builder = creator(settings.recipeCategory, item, count)
             settings.listeners.forEach { listener ->
                 listener(builder)
@@ -114,7 +114,7 @@ fun registerSmeltingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     ModEvents.onInitialize {
-        MirageFairy2024DataGenerator.recipeGenerators {
+        DataGenerationEvents.recipeGenerators {
             val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
             builder.group(output)
             settings.listeners.forEach { listener ->
@@ -138,7 +138,7 @@ fun registerBlastingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     ModEvents.onInitialize {
-        MirageFairy2024DataGenerator.recipeGenerators {
+        DataGenerationEvents.recipeGenerators {
             val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.ofItems(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
             builder.group(output)
             settings.listeners.forEach { listener ->

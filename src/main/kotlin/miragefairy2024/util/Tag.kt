@@ -1,6 +1,6 @@
 package miragefairy2024.util
 
-import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import net.minecraft.block.Block
@@ -11,42 +11,42 @@ import net.minecraft.world.biome.Biome
 
 context(ModContext)
 fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.blockTagGenerators {
+    DataGenerationEvents.blockTagGenerators {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.blockTagGenerators {
+    DataGenerationEvents.blockTagGenerators {
         it(tagProvider()).addOptionalTag(this)
     }
 }
 
 context(ModContext)
 fun Item.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.itemTagGenerators {
+    DataGenerationEvents.itemTagGenerators {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.itemTagGenerators {
+    DataGenerationEvents.itemTagGenerators {
         it(tagProvider()).addOptionalTag(this)
     }
 }
 
 context(ModContext)
 fun Identifier.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.biomeTagGenerators {
+    DataGenerationEvents.biomeTagGenerators {
         it(tagProvider()).add(this)
     }
 }
 
 context(ModContext)
 fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.biomeTagGenerators {
+    DataGenerationEvents.biomeTagGenerators {
         it(tagProvider()).addOptionalTag(this)
     }
 }

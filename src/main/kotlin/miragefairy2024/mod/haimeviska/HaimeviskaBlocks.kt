@@ -1,7 +1,7 @@
 package miragefairy2024.mod.haimeviska
 
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
@@ -161,7 +161,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     ModEvents.onInitialize {
-        MirageFairy2024DataGenerator.blockStateModelGenerators {
+        DataGenerationEvents.blockStateModelGenerators {
             it.registerLog(card.block).log(card.block)
         }
     }

@@ -1,7 +1,7 @@
 package miragefairy2024.mod
 
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.Translation
@@ -31,7 +31,7 @@ fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
         card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
         ModEvents.onInitialize {
-            MirageFairy2024DataGenerator.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
+            DataGenerationEvents.soundGenerators { it(card.path, card.translation.keyGetter(), card.sounds) }
         }
         card.translation.enJa()
     }

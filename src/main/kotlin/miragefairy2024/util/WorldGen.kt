@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
@@ -33,7 +34,7 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, ide
 
 context(ModContext)
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.onBuildRegistry {
+    DataGenerationEvents.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
             context.register(key, creator(context))
         }

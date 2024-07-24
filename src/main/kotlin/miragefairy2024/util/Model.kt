@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
 import com.google.gson.JsonElement
-import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import mirrg.kotlin.gson.hydrogen.jsonArray
@@ -130,7 +130,7 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 
 context(ModContext)
 fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.blockStateModelGenerators {
+    DataGenerationEvents.blockStateModelGenerators {
         val texturedModel = texturedModelCreator()
         texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
     }
@@ -156,7 +156,7 @@ fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) =
 
 context(ModContext)
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.blockStateModelGenerators {
+    DataGenerationEvents.blockStateModelGenerators {
         it.blockStateCollector.accept(object : BlockStateSupplier {
             override fun get() = creator()
             override fun getBlock() = this@registerBlockStateGeneration
@@ -252,7 +252,7 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 
 context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.blockStateModelGenerators {
+    DataGenerationEvents.blockStateModelGenerators {
         it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
     }
 }

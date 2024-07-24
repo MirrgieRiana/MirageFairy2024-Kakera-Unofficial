@@ -1,7 +1,7 @@
 package miragefairy2024.mod
 
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.times
@@ -28,7 +28,7 @@ class NinePatchTextureCard(
 context(ModContext)
 fun initNinePatchTextureModule() = ModEvents.onInitialize {
     NinePatchTextureCard.entries.forEach { card ->
-        MirageFairy2024DataGenerator.ninePatchTextureGenerators {
+        DataGenerationEvents.ninePatchTextureGenerators {
             it(card.identifier, card)
         }
     }

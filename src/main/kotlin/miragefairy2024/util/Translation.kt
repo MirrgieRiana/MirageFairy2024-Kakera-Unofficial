@@ -1,6 +1,6 @@
 package miragefairy2024.util
 
-import miragefairy2024.MirageFairy2024DataGenerator
+import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import net.minecraft.block.Block
@@ -8,7 +8,7 @@ import net.minecraft.item.Item
 
 context(ModContext)
 fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.englishTranslationGenerators {
+    DataGenerationEvents.englishTranslationGenerators {
         val pair = getter()
         it.add(pair.first, pair.second)
     }
@@ -16,7 +16,7 @@ fun en(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
 
 context(ModContext)
 fun ja(getter: () -> Pair<String, String>) = ModEvents.onInitialize {
-    MirageFairy2024DataGenerator.japaneseTranslationGenerators {
+    DataGenerationEvents.japaneseTranslationGenerators {
         val pair = getter()
         it.add(pair.first, pair.second)
     }
