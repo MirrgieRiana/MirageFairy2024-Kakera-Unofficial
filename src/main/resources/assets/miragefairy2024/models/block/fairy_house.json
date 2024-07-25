@@ -16,6 +16,7 @@
 		"11": "miragefairy2024:block/fairy_house/shelf",
 		"12": "miragefairy2024:block/fairy_house/carpet",
 		"13": "miragefairy2024:block/naked_haimeviska_log",
+		"14": "miragefairy2024:block/fairy_house/bed",
 		"particle": "miragefairy2024:block/haimeviska_log"
 	},
 	"elements": [
@@ -76,9 +77,9 @@
 		},
 		{
 			"name": "front_decoration",
-			"from": [0, 0, 0.5],
-			"to": [16, 16, 0.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
+			"from": [0, -0.5, 0.5],
+			"to": [16, 15.5, 0.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -0.5, 0.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "texture": "#9"},
 				"south": {"uv": [16, 0, 0, 16], "texture": "#9"}
@@ -104,9 +105,9 @@
 		},
 		{
 			"name": "shelf",
-			"from": [5, 0, 14],
-			"to": [11, 10, 15.9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [9, 0, 14]},
+			"from": [8, 0, 14],
+			"to": [14, 10, 15.9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 0, 14]},
 			"faces": {
 				"north": {"uv": [5, 6, 11, 16], "texture": "#11"},
 				"east": {"uv": [11, 6, 13, 16], "texture": "#11"},
@@ -135,6 +136,55 @@
 				"south": {"uv": [11, 14, 12, 16], "texture": "#13"},
 				"west": {"uv": [7, 14, 8, 16], "texture": "#13"}
 			}
+		},
+		{
+			"from": [0.1, 0.1, 11.9],
+			"to": [6.1, 2.1, 15.9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0.1, 0.1, 13.9]},
+			"faces": {
+				"north": {"uv": [12, 10, 10, 4], "rotation": 270, "texture": "#14"},
+				"east": {"uv": [6, 14, 4, 10], "rotation": 90, "texture": "#14"},
+				"south": {"uv": [6, 10, 4, 4], "rotation": 90, "texture": "#14"},
+				"west": {"uv": [4, 0, 6, 4], "rotation": 270, "texture": "#14"},
+				"up": {"uv": [6, 4, 10, 10], "rotation": 270, "texture": "#14"},
+				"down": {"uv": [0, 4, 4, 10], "rotation": 270, "texture": "#14"}
+			}
+		},
+		{
+			"from": [0.1, 5.1, 11.9],
+			"to": [6.1, 7.1, 15.9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0.1, 5.1, 13.9]},
+			"faces": {
+				"north": {"uv": [12, 10, 10, 4], "rotation": 270, "texture": "#14"},
+				"east": {"uv": [6, 14, 4, 10], "rotation": 90, "texture": "#14"},
+				"south": {"uv": [6, 10, 4, 4], "rotation": 90, "texture": "#14"},
+				"west": {"uv": [4, 0, 6, 4], "rotation": 270, "texture": "#14"},
+				"up": {"uv": [6, 4, 10, 10], "rotation": 270, "texture": "#14"},
+				"down": {"uv": [0, 4, 4, 10], "rotation": 270, "texture": "#14"}
+			}
+		},
+		{
+			"from": [0.1, 10.1, 11.9],
+			"to": [6.1, 12.1, 15.9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0.1, 10.1, 13.9]},
+			"faces": {
+				"north": {"uv": [12, 10, 10, 4], "rotation": 270, "texture": "#14"},
+				"east": {"uv": [6, 14, 4, 10], "rotation": 90, "texture": "#14"},
+				"south": {"uv": [6, 10, 4, 4], "rotation": 90, "texture": "#14"},
+				"west": {"uv": [4, 0, 6, 4], "rotation": 270, "texture": "#14"},
+				"up": {"uv": [6, 4, 10, 10], "rotation": 270, "texture": "#14"},
+				"down": {"uv": [0, 4, 4, 10], "rotation": 270, "texture": "#14"}
+			}
+		},
+		{
+			"name": "chain",
+			"from": [4.1, 0.1, 11.8],
+			"to": [6.1, 16.1, 11.8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2.1, 0.1, 11.8]},
+			"faces": {
+				"north": {"uv": [12, 0, 14, 16], "texture": "#14"},
+				"south": {"uv": [14, 0, 12, 16], "texture": "#14"}
+			}
 		}
 	],
 	"groups": [
@@ -157,6 +207,12 @@
 			"origin": [10, 2, 7],
 			"color": 0,
 			"children": [10, 11]
+		},
+		{
+			"name": "bed",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [12, 13, 14, 15]
 		}
 	]
 }

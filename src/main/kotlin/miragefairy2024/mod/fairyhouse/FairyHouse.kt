@@ -6,6 +6,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import mirrg.kotlin.hydrogen.or
@@ -72,6 +73,14 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : AbstractFairyHou
                 renderingProxy.scale(0.5F, 0.5F, 0.5F)
                 renderingProxy.translate(0.0, 2.0 / 16.0, 0.0)
                 renderingProxy.renderItemStack(MotifCard.DIAMOND.createFairyItemStack())
+            }
+
+            renderingProxy.stack {
+                renderingProxy.translate(4.5 / 16.0, 2.5 / 16.0, 8.5 / 16.0)
+                renderingProxy.rotateY(90.0F / 180F * 3.14F)
+                renderingProxy.scale(0.5F, 0.5F, 0.5F)
+                renderingProxy.translate(0.0, 0.0 / 16.0, 0.0)
+                renderingProxy.renderItemStack(Items.CAKE.createItemStack())
             }
         }
     }
