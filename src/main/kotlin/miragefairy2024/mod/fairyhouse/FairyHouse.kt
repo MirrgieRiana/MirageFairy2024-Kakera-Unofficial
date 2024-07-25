@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -14,15 +15,17 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.item.Items
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import kotlin.jvm.optionals.getOrNull
 
 object FairyHouseCard : AbstractFairyHouseCard<FairyHouseBlock, FairyHouseBlockEntity>(
     "fairy_house", 2, "Fairy House", "妖精の家",
     "TODO", "TODO", // TODO
-    { FairyHouseBlock(it) },
+    { FairyHouseBlock(it.luminance { 5 }) },
     { pos, state -> FairyHouseBlockEntity(pos, state) },
 ) {
     context(ModContext)
@@ -47,7 +50,16 @@ class FairyHouseBlock(settings: Settings) : AbstractFairyHouseBlock(settings) {
 }
 
 class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : AbstractFairyHouseBlockEntity(FairyHouseCard.blockEntityType, pos, state) {
-    val inventory = createInventory(3)
+
+    private val inventory = DefaultedList.ofSize(4, EMPTY_ITEM_STACK)
+
+    override fun writeNbt(nbt: NbtCompound) {
+        super.writeNbt(nbt)
+
+
+        //nbt.wrapper["ItemStack"].set(itemStack.toNbt())
+    }
+
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = world ?: return
         val blockState = world.getBlockState(pos)
@@ -89,8 +101,10 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : AbstractFairyHou
                 renderingProxy.renderItemStack(Items.CAKE.createItemStack())
             }
 
-            renderingProxy.renderCutoutBlock(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"), null, 1.0F, 1.0F, 1.0F, 15, overlay)
+            val i = (light and 0x0000FF) or 0xF00000
+            renderingProxy.renderCutoutBlock(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"), null, 1.0F, 1.0F, 1.0F, i, overlay)
 
         }
     }
+
 }
