@@ -36,6 +36,7 @@ import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.random.Random
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.gen.GenerationStep
@@ -171,8 +172,8 @@ class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = VeropedaBlockEntity(pos, state)
-    override fun getFruitDrops(count: Int): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
-    override fun getLeafDrops(count: Int): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
+    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 }
 
 class VeropedaBlockEntity(pos: BlockPos, state: BlockState) : MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state)

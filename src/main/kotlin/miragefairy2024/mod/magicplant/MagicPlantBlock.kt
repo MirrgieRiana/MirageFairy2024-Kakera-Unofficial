@@ -324,25 +324,25 @@ abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(setti
 
         if (isMaxAge(blockState)) {
             val fruitCount = world.random.randomInt(fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += getFruitDrops(fruitCount)
+            if (fruitCount > 0) drops += getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val leafCount = world.random.randomInt(leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += getLeafDrops(leafCount)
+            if (leafCount > 0) drops += getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val rareCount = world.random.randomInt(0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += getRareDrops(rareCount)
+            if (rareCount > 0) drops += getRareDrops(rareCount, world.random)
         }
 
         return drops
     }
 
-    open fun getFruitDrops(count: Int): List<ItemStack> = listOf()
-    open fun getLeafDrops(count: Int): List<ItemStack> = listOf()
-    open fun getRareDrops(count: Int): List<ItemStack> = listOf()
+    open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
 
 }
 

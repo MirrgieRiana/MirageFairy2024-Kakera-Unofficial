@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 
@@ -44,6 +45,7 @@ interface RenderingProxy {
     fun rotateZ(rad: Float)
 
     fun renderItemStack(itemStack: ItemStack)
+    fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
 }
 
 interface RenderingProxyBlockEntity {

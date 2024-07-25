@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairyhouse
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.mod.MaterialCard
@@ -9,12 +10,12 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
-import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.ItemTags
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import kotlin.jvm.optionals.getOrNull
 
@@ -46,13 +47,18 @@ class FairyHouseBlock(settings: Settings) : AbstractFairyHouseBlock(settings) {
 }
 
 class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : AbstractFairyHouseBlockEntity(FairyHouseCard.blockEntityType, pos, state) {
+    val inventory = createInventory(3)
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        val direction = world.or { return }.getBlockState(pos).getOrEmpty(HorizontalFacingBlock.FACING).getOrNull().or { return }
+        val world = world ?: return
+        val blockState = world.getBlockState(pos)
+        if (!blockState.isOf(FairyHouseCard.block)) return
+        val direction = blockState.getOrEmpty(HorizontalFacingBlock.FACING).getOrNull() ?: return
 
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
             renderingProxy.rotateY(-direction.asRotation() / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
+
             renderingProxy.stack {
                 renderingProxy.translate(0.2, 0.01, 0.3)
                 renderingProxy.rotateY(126.0F / 180F * 3.14F)
@@ -82,6 +88,9 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : AbstractFairyHou
                 renderingProxy.translate(0.0, 0.0 / 16.0, 0.0)
                 renderingProxy.renderItemStack(Items.CAKE.createItemStack())
             }
+
+            renderingProxy.renderCutoutBlock(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"), null, 1.0F, 1.0F, 1.0F, 15, overlay)
+
         }
     }
 }
