@@ -6,6 +6,7 @@ import miragefairy2024.Modules
 import miragefairy2024.client.mod.fairy.initFairyClientModule
 import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
 import miragefairy2024.client.mod.initExtraPlayerDataClientModule
+import miragefairy2024.client.mod.initFairyHouseClientModule
 import miragefairy2024.clientProxy
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
@@ -20,6 +21,7 @@ object MirageFairy2024Client : ClientModInitializer {
         initFairyQuestClientModule()
         initFairyClientModule()
         initExtraPlayerDataClientModule()
+        initFairyHouseClientModule()
 
         ModelLoadingPlugin.register {
             it.addModels(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"))

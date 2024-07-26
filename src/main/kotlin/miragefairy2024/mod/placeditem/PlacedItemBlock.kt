@@ -91,6 +91,13 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.onSyncedBlockEvent(state, world, pos, type, data)
+        val blockEntity = world.getBlockEntity(pos) ?: return false
+        return blockEntity.onSyncedBlockEvent(type, data)
+    }
+
     // レンダリング
     override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
