@@ -12,10 +12,11 @@
 		"7": "miragefairy2024:block/fairy_house/input_inner",
 		"8": "miragefairy2024:block/fairy_house/front_inner",
 		"9": "miragefairy2024:block/fairy_house/front_decoration",
-		"11": "miragefairy2024:block/fairy_house/shelf",
+		"11": "miragefairy2024:block/fairy_house/book_shelf",
 		"12": "miragefairy2024:block/fairy_house/carpet",
 		"13": "miragefairy2024:block/naked_haimeviska_log",
 		"14": "miragefairy2024:block/fairy_house/bed",
+		"16": "miragefairy2024:block/fairy_house/shelf",
 		"particle": "miragefairy2024:block/haimeviska_log"
 	},
 	"elements": [
@@ -231,6 +232,16 @@
 				"up": {"uv": [8, 15, 11, 15.9], "texture": "#0"},
 				"down": {"uv": [8, 0.1, 11, 1], "texture": "#0"}
 			}
+		},
+		{
+			"name": "shelf",
+			"from": [0, 0, 0],
+			"to": [3, 6, 4],
+			"faces": {
+				"east": {"uv": [3, 4, 7, 10], "texture": "#16"},
+				"south": {"uv": [0, 4, 3, 10], "texture": "#16"},
+				"up": {"uv": [0, 0, 3, 4], "texture": "#16"}
+			}
 		}
 	],
 	"groups": [
@@ -259,6 +270,7 @@
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [14, 15, 16, 17, 18]
-		}
+		},
+		19
 	]
 }
