@@ -17,12 +17,14 @@ import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
+import miragefairy2024.util.Model
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
+import miragefairy2024.util.randomBoolean
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockGeneratedModelGeneration
@@ -48,6 +50,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.LeavesBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.PillarBlock
 import net.minecraft.block.SaplingBlock
@@ -66,13 +69,17 @@ import net.minecraft.item.Item
 import net.minecraft.loot.condition.RandomChanceLootCondition
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -87,13 +94,13 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
         val LEAVES = Settings(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
             PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
-        ).let { HaimeviskaBlockCard(it, { Blocks.createLeavesBlock(BlockSoundGroup.GRASS) }, ::initLeavesHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HaimeviskaLeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
         val LOG = Settings(
             "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
             PoemList(1)
                 .poem("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。")
                 .description("Can be incised with a sword", "剣を使って傷を付けられる"),
-        ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSetting()) }, ::initLogHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock) }
         val INCISED_LOG = Settings(
             "incised_haimeviska_log", "Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木",
             PoemList(1)
@@ -129,8 +136,9 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
     val item = BlockItem(block, Item.Settings())
 }
 
+private fun createLeavesSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never)
 private fun createBaseWoodSetting() = AbstractBlock.Settings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
-private fun createLogSetting() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
+private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
@@ -139,8 +147,16 @@ context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    card.block.registerSingletonBlockStateGeneration()
-    card.block.registerModelGeneration(haimeviskaLeavesTexturedModelFactory)
+    card.block.registerVariantsBlockStateGeneration {
+        val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
+        listOf(
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) to normal.with(model = "block/charged_" * card.block.getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) to normal.with(model = "block/uncharged_" * card.block.getIdentifier()),
+        )
+    }
+    registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
+    registerModelGeneration({ "block/uncharged_" * card.block.getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
+    card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
     card.item.registerRedirectColorProvider()
@@ -169,6 +185,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
     card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
@@ -200,6 +217,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
     card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
@@ -243,6 +261,8 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
+
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, Identifier(MirageFairy2024.modId, "haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
@@ -335,6 +355,33 @@ fun initHaimeviskaBlocks() {
 
 }
 
+
+class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
+    companion object {
+        val CHARGED: BooleanProperty = BooleanProperty.of("charged")
+    }
+
+    init {
+        defaultState = defaultState.with(CHARGED, true)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        super.appendProperties(builder)
+        builder.add(CHARGED)
+    }
+
+    override fun hasRandomTicks(state: BlockState) = super.hasRandomTicks(state) || !state[CHARGED]
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        super.randomTick(state, world, pos, random)
+        if (!state[CHARGED]) {
+            if (random.randomBoolean(15, world.getLightLevel(pos))) {
+                world.setBlockState(pos, state.with(CHARGED, true), Block.NOTIFY_LISTENERS)
+            }
+        }
+    }
+}
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {

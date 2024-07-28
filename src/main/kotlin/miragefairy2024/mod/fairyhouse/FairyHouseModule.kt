@@ -6,6 +6,10 @@ import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.fairyhouse.AbstractFairyHouseBlockEntity.PropertySettings
+import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.haimeviska.HaimeviskaLeavesBlock
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -13,6 +17,8 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.NeighborType
+import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
@@ -35,6 +41,7 @@ import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
@@ -57,6 +64,9 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ArrayPropertyDelegate
@@ -106,21 +116,30 @@ open class AbstractFairyHouseCard<B : AbstractFairyHouseBlock<E>, E : AbstractFa
     private val jaPoem: String,
     blockCreator: (FabricBlockSettings) -> B,
     val blockEntityAccessor: BlockEntityAccessor<E>,
-    val screenHandlerCreator: (Int, PlayerInventory, Inventory, PropertyDelegate, ScreenHandlerContext) -> AbstractFairyHouseScreenHandler<E>,
-    val blockEntitySettings: AbstractFairyHouseBlockEntity.Settings,
+    val screenHandlerCreator: (AbstractFairyHouseScreenHandler.Arguments) -> AbstractFairyHouseScreenHandler<E>,
+    val guiWidth: Int,
+    val guiHeight: Int,
+    oldBlockEntitySettings: AbstractFairyHouseBlockEntity.Settings<E>,
 ) {
+    val foliaProperty = PropertySettings<E>({ folia }, { folia = it })
+    val blockEntitySettings = AbstractFairyHouseBlockEntity.Settings(
+        oldBlockEntitySettings.slots,
+        listOf(foliaProperty) + oldBlockEntitySettings.properties,
+    )
+    val propertyIndexTable = blockEntitySettings.properties.withIndex().associate { (index, it) -> it to index }
     val identifier = Identifier(MirageFairy2024.modId, path)
     val block = blockCreator(FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK))
     val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
     val item = BlockItem(block, Item.Settings())
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-        screenHandlerCreator(
+    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
+        val arguments = AbstractFairyHouseScreenHandler.Arguments(
             syncId,
             playerInventory,
             SimpleInventory(blockEntitySettings.slots.size),
             ArrayPropertyDelegate(blockEntitySettings.properties.size),
             ScreenHandlerContext.EMPTY,
         )
+        screenHandlerCreator(arguments)
     }
 
     context(ModContext)
@@ -151,6 +170,7 @@ open class AbstractFairyHouseCard<B : AbstractFairyHouseBlock<E>, E : AbstractFa
         item.registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
         block.registerDefaultLootTableGeneration()
 
@@ -220,6 +240,9 @@ open class AbstractFairyHouseBlock<E : AbstractFairyHouseBlockEntity<E>>(
     // Status
 
     @Suppress("OVERRIDE_DEPRECATION")
+    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 4
+
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun hasComparatorOutput(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -232,15 +255,18 @@ open class AbstractFairyHouseBlock<E : AbstractFairyHouseBlockEntity<E>>(
 
 }
 
-open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
+abstract class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
     val card: AbstractFairyHouseCard<*, E>,
     pos: BlockPos,
     state: BlockState,
 ) : LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
+    abstract val self: E
+
+
     // Settings
 
-    class Settings(val slots: List<SlotSettings> = listOf(), val properties: List<PropertySettings> = listOf()) {
+    class Settings<E : AbstractFairyHouseBlockEntity<*>>(val slots: List<SlotSettings> = listOf(), val properties: List<PropertySettings<E>> = listOf()) {
         val availableSlotsTable = arrayOf(
             slots.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
             slots.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
@@ -252,6 +278,8 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
     }
 
     class SlotSettings(
+        val x: Int,
+        val y: Int,
         val dropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
@@ -268,7 +296,7 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
      */
     class Appearance(val x: Double, val y: Double, val z: Double, val pitch: Double, val yaw: Double)
 
-    class PropertySettings(val getter: () -> Int, val setter: (Int) -> Unit)
+    class PropertySettings<E>(val getter: E.() -> Int, val setter: E.(Int) -> Unit)
 
 
     // Data
@@ -283,6 +311,10 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
         super.writeNbt(nbt)
         inventory.writeToNbt(nbt)
     }
+
+    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
+
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 
     // Inventory
@@ -299,11 +331,21 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
+        if (card.blockEntitySettings.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        markDirty()
     }
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack = Inventories.splitStack(inventory, slot, amount)
+    override fun removeStack(slot: Int, amount: Int): ItemStack {
+        if (card.blockEntitySettings.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        markDirty()
+        return Inventories.splitStack(inventory, slot, amount)
+    }
 
-    override fun removeStack(slot: Int): ItemStack = Inventories.removeStack(inventory, slot)
+    override fun removeStack(slot: Int): ItemStack {
+        if (card.blockEntitySettings.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        markDirty()
+        return Inventories.removeStack(inventory, slot)
+    }
 
     override fun isValid(slot: Int, stack: ItemStack) = card.blockEntitySettings.slots[slot].filter(stack)
 
@@ -323,12 +365,18 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
 
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = dir in card.blockEntitySettings.slots[slot].extractDirections
 
-    override fun clear() = inventory.replaceAll { EMPTY_ITEM_STACK }
+    override fun clear() {
+        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        markDirty()
+        inventory.replaceAll { EMPTY_ITEM_STACK }
+    }
 
     fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
             if (card.blockEntitySettings.slots[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
         }
+        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        markDirty()
     }
 
 
@@ -349,37 +397,19 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
 
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
-            renderingProxy.rotateY(-direction.asRotation() / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
-            renderingProxy.stack {
-                renderingProxy.translate(0.2, 0.01, 0.3)
-                renderingProxy.rotateY(126.0F / 180F * 3.14F)
-                renderingProxy.scale(0.5F, 0.5F, 0.5F)
-                renderingProxy.translate(0.0, 2.0 / 16.0, 0.0)
-                renderingProxy.renderItemStack(inventory[0])
-            }
-            renderingProxy.stack {
-                renderingProxy.translate(0.7, 0.01, 0.4)
-                renderingProxy.rotateY(42.0F / 180F * 3.14F)
-                renderingProxy.scale(0.5F, 0.5F, 0.5F)
-                renderingProxy.translate(0.0, 2.0 / 16.0, 0.0)
-                renderingProxy.renderItemStack(inventory[1])
-            }
-            renderingProxy.stack {
-                renderingProxy.translate(0.3, 0.01, 0.8)
-                renderingProxy.rotateY(235.0F / 180F * 3.14F)
-                renderingProxy.scale(0.5F, 0.5F, 0.5F)
-                renderingProxy.translate(0.0, 2.0 / 16.0, 0.0)
-                renderingProxy.renderItemStack(inventory[2])
-            }
-
-            renderingProxy.stack {
-                renderingProxy.translate(4.5 / 16.0, 2.5 / 16.0, 8.5 / 16.0)
-                renderingProxy.rotateY(90.0F / 180F * 3.14F)
-                renderingProxy.scale(0.5F, 0.5F, 0.5F)
-                renderingProxy.translate(0.0, 0.0 / 16.0, 0.0)
-                renderingProxy.renderItemStack(inventory[3])
+            card.blockEntitySettings.slots.forEachIndexed { index, slot ->
+                val appearance = slot.appearance ?: return@forEachIndexed
+                renderingProxy.stack {
+                    renderingProxy.translate(appearance.x / 16.0, appearance.y / 16.0, appearance.z / 16.0) // 移動
+                    renderingProxy.rotateY(-appearance.yaw.toFloat() / 180F * 3.14F) // 横回転
+                    renderingProxy.rotateX(-appearance.pitch.toFloat() / 180F * 3.14F) // 足元を起点にして縦回転
+                    renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
+                    renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
+                    renderingProxy.renderItemStack(inventory[index])
+                }
             }
 
             renderExtra(renderingProxy, tickDelta, light, overlay)
@@ -394,8 +424,8 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
 
     private val propertyDelegate = object : PropertyDelegate {
         override fun size() = card.blockEntitySettings.properties.size
-        override fun get(index: Int) = card.blockEntitySettings.properties.getOrNull(index)?.getter?.invoke() ?: 0
-        override fun set(index: Int, value: Int) = unit { card.blockEntitySettings.properties.getOrNull(index)?.setter?.invoke(value) }
+        override fun get(index: Int) = card.blockEntitySettings.properties.getOrNull(index)?.getter?.invoke(self) ?: 0
+        override fun set(index: Int, value: Int) = unit { card.blockEntitySettings.properties.getOrNull(index)?.setter?.invoke(self, value) }
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
@@ -403,41 +433,88 @@ open class AbstractFairyHouseBlockEntity<E : AbstractFairyHouseBlockEntity<E>>(
     override fun getContainerName(): Text = card.block.name
 
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): AbstractFairyHouseScreenHandler<E> {
-        return card.screenHandlerCreator(syncId, playerInventory, this, propertyDelegate, ScreenHandlerContext.create(world, pos))
+        val arguments = AbstractFairyHouseScreenHandler.Arguments(
+            syncId,
+            playerInventory,
+            this,
+            propertyDelegate,
+            ScreenHandlerContext.create(world, pos),
+        )
+        return card.screenHandlerCreator(arguments)
+    }
+
+
+    // Fairy House
+
+    var folia = 0
+
+    fun collectFolia() {
+        val world = world ?: return
+
+        // 最大200ブロックのハイメヴィスカの原木を探す
+        val logs = blockVisitor(listOf(pos), maxCount = 200, neighborType = NeighborType.VERTICES) { _, toBlockPos ->
+            world.getBlockState(toBlockPos).isIn(HAIMEVISKA_LOGS)
+        }.map { it.second }.toList()
+
+        // 最大距離6までの葉をすべて探す
+        var changed = false
+        run finished@{
+            blockVisitor(logs, visitOrigins = false, maxDistance = 6) { _, toBlockPos ->
+                world.getBlockState(toBlockPos).isOf(HaimeviskaBlockCard.LEAVES.block)
+            }.forEach { (_, blockPos) ->
+                val blockState = world.getBlockState(blockPos)
+                if (blockState[HaimeviskaLeavesBlock.CHARGED]) {
+                    folia += 100
+                    changed = true
+                    world.setBlockState(blockPos, blockState.with(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
+                    if (folia > 10000) return@finished
+                }
+            }
+        }
+
+        if (changed) markDirty()
+
     }
 
 }
 
 open class AbstractFairyHouseScreenHandler<E : AbstractFairyHouseBlockEntity<E>>(
-    card: AbstractFairyHouseCard<*, E>,
-    syncId: Int,
-    private val playerInventory: PlayerInventory,
-    private val inventory: Inventory,
-    propertyDelegate: PropertyDelegate,
-    protected val context: ScreenHandlerContext,
-) : ScreenHandler(card.screenHandlerType, syncId) {
+    val card: AbstractFairyHouseCard<*, E>,
+    val arguments: Arguments,
+) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+
+    class Arguments(
+        val syncId: Int,
+        val playerInventory: PlayerInventory,
+        val inventory: Inventory,
+        val propertyDelegate: PropertyDelegate,
+        val context: ScreenHandlerContext,
+    )
 
     init {
-        checkSize(inventory, card.blockEntitySettings.slots.size)
-        checkDataCount(propertyDelegate, card.blockEntitySettings.properties.size)
+        checkSize(arguments.inventory, card.blockEntitySettings.slots.size)
+        checkDataCount(arguments.propertyDelegate, card.blockEntitySettings.properties.size)
 
+        val y = card.guiHeight - 82
         repeat(3) { r ->
             repeat(9) { c ->
-                addSlot(Slot(playerInventory, 9 + r * 9 + c, 8 + c * 18, 84 + r * 18))
+                addSlot(Slot(arguments.playerInventory, 9 + r * 9 + c, 8 + c * 18, y + r * 18))
             }
         }
         repeat(9) { c ->
-            addSlot(Slot(playerInventory, c, 8 + c * 18, 142))
+            addSlot(Slot(arguments.playerInventory, c, 8 + c * 18, y + 18 * 3 + 4))
         }
         card.blockEntitySettings.slots.forEachIndexed { index, slot ->
-            addSlot(Slot(inventory, index, 8 + index * 18, 51))
+            addSlot(object : Slot(arguments.inventory, index, slot.x, slot.y) {
+                override fun canInsert(stack: ItemStack) = slot.filter(stack)
+            })
         }
 
         @Suppress("LeakingThis")
-        addProperties(propertyDelegate)
+        addProperties(arguments.propertyDelegate)
     }
 
-    override fun canUse(player: PlayerEntity) = inventory.canPlayerUse(player)
+    override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
@@ -462,5 +539,11 @@ open class AbstractFairyHouseScreenHandler<E : AbstractFairyHouseBlockEntity<E>>
 
         return originalItemStack
     }
+
+    var folia: Int
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[card.foliaProperty]!!)
+        set(value) {
+            arguments.propertyDelegate.set(card.propertyIndexTable[card.foliaProperty]!!, value)
+        }
 
 }

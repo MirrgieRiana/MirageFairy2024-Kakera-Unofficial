@@ -51,7 +51,7 @@ enum class NeighborType {
 fun blockVisitor(
     originalBlockPosList: Iterable<BlockPos>,
     visitOrigins: Boolean = true,
-    maxDistance: Int,
+    maxDistance: Int = Int.MAX_VALUE,
     maxCount: Int? = null,
     neighborType: NeighborType = NeighborType.FACES,
     predicate: (fromBlockPos: BlockPos, toBlockPos: BlockPos) -> Boolean,

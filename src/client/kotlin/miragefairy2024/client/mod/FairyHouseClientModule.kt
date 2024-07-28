@@ -1,8 +1,11 @@
 package miragefairy2024.client.mod
 
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.client.util.drawRightText
 import miragefairy2024.mod.fairyhouse.AbstractFairyHouseScreenHandler
 import miragefairy2024.mod.fairyhouse.FairyHouseBlockEntity
 import miragefairy2024.mod.fairyhouse.FairyHouseCard
+import miragefairy2024.util.text
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreens
@@ -25,7 +28,20 @@ class FairyHouseScreen(
     title,
 ) {
     companion object {
-        private val TEXTURE = Identifier("textures/gui/container/brewing_stand.png")
+        private val TEXTURE = Identifier(MirageFairy2024.modId, "textures/gui/container/fairy_house.png")
+    }
+
+    private val card = FairyHouseCard
+
+    init {
+        backgroundWidth = card.guiWidth
+        backgroundHeight = card.guiHeight
+        playerInventoryTitleY = backgroundHeight - 94
+    }
+
+    override fun init() {
+        super.init()
+        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
@@ -39,5 +55,10 @@ class FairyHouseScreen(
         val y = (height - backgroundHeight) / 2
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight)
     }
+
+    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) {
+        super.drawForeground(context, mouseX, mouseY)
+        context.drawRightText(textRenderer, text { "${handler.folia}"() }, backgroundWidth - 5, titleY, 0x404040, false)
+     }
 
 }
