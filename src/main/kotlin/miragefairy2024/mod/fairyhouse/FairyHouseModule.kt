@@ -235,6 +235,8 @@ open class AbstractFairyHouseBlock<E : AbstractFairyHouseBlockEntity<E>>(
         player.incrementStat(Stats.INTERACT_WITH_BREWINGSTAND)
         return ActionResult.CONSUME
     }
+    フォリアの取得タイミングをランダムに
+    フォリアを保存
 
 
     // Status
