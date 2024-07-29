@@ -67,8 +67,10 @@ import net.minecraft.item.Item
 import net.minecraft.loot.condition.RandomChanceLootCondition
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.sound.SoundCategory
@@ -171,6 +173,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
     card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
@@ -202,6 +205,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
     card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
@@ -245,6 +249,8 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
+
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, Identifier(MirageFairy2024.modId, "haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
