@@ -64,6 +64,16 @@ import net.minecraft.world.WorldView
 @Suppress("OVERRIDE_DEPRECATION")
 abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
+    // Block Entity
+
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.onSyncedBlockEvent(state, world, pos, type, data)
+        val blockEntity = world.getBlockEntity(pos) ?: return false
+        return blockEntity.onSyncedBlockEvent(type, data)
+    }
+
+
     // Behaviour
 
     override fun canPlantOnTop(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isSideSolid(world, pos, Direction.UP, SideShapeType.CENTER) || floor.isOf(Blocks.FARMLAND)
