@@ -48,6 +48,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.LeavesBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.PillarBlock
 import net.minecraft.block.SaplingBlock
@@ -87,7 +88,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
         val LEAVES = Settings(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
             PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
-        ).let { HaimeviskaBlockCard(it, { Blocks.createLeavesBlock(BlockSoundGroup.GRASS) }, ::initLeavesHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { LeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
         val LOG = Settings(
             "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
             PoemList(1)
@@ -129,6 +130,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
     val item = BlockItem(block, Item.Settings())
 }
 
+private fun createLeavesSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never)
 private fun createBaseWoodSetting() = AbstractBlock.Settings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
