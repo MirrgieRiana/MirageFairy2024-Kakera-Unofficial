@@ -46,6 +46,7 @@ import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.random.Random
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.biome.BiomeKeys
@@ -240,9 +241,9 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = MirageFlowerBlockEntity(pos, state)
-    override fun getFruitDrops(count: Int): List<ItemStack> = listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(count))
-    override fun getLeafDrops(count: Int): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
+    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 }
 
 class MirageFlowerBlockEntity(pos: BlockPos, state: BlockState) : MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state)
