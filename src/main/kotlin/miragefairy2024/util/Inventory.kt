@@ -4,7 +4,9 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.screen.ScreenHandler
+import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
 operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, stack)
@@ -110,4 +112,33 @@ fun ScreenHandler.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>)
     }
 
     return moved
+}
+
+
+// MutableList
+
+fun MutableList<ItemStack>.reset() = this.replaceAll { EMPTY_ITEM_STACK }
+
+fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound) {
+    nbt.wrapper["Items"].list.get()?.let { items ->
+        items.forEach { item ->
+            item.wrapper.compound.get()?.let { itemCompound ->
+                val slotIndex = (itemCompound.wrapper["Slot"].byte.orDefault { 0 }.get() and 255.toByte()).toInt()
+                if (slotIndex in this.indices) this[slotIndex] = ItemStack.fromNbt(itemCompound)
+            }
+        }
+    }
+}
+
+fun List<ItemStack>.writeToNbt(nbt: NbtCompound) {
+    val nbtList = NbtList()
+    this.forEachIndexed { slotIndex, itemStack ->
+        if (itemStack.isNotEmpty) {
+            val itemCompound = NbtCompound()
+            itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
+            itemStack.writeNbt(itemCompound)
+            nbtList.add(itemCompound)
+        }
+    }
+    nbt.put("Items", nbtList)
 }
