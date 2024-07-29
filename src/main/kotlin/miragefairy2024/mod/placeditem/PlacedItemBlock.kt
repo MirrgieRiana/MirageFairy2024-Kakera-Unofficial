@@ -137,7 +137,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var itemRotateY = 0.0
 
 
-    public override fun writeNbt(nbt: NbtCompound) {
+    override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
         nbt.wrapper["ItemStack"].set(itemStack.toNbt())
         nbt.wrapper["ItemX"].double.set(itemX)
