@@ -20,11 +20,13 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory
 import net.minecraft.client.render.model.json.ModelTransformationMode
+import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.world.BlockRenderView
 
@@ -97,6 +99,16 @@ class RenderingProxyBlockEntityRenderer<T>(
             override fun rotateZ(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Z.rotation(rad))
 
             override fun renderItemStack(itemStack: ItemStack) = MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
+
+            override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
+                val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getCutout())
+                val bakedModel = if (variant != null) {
+                    MinecraftClient.getInstance().bakedModelManager.getModel(ModelIdentifier(identifier, variant))
+                } else {
+                    MinecraftClient.getInstance().bakedModelManager.getModel(identifier)
+                }
+                MinecraftClient.getInstance().blockRenderManager.modelRenderer.render(matrices.peek(), vertexConsumer, null, bakedModel, red, green, blue, light, overlay)
+            }
         }
         blockEntity.render(renderingProxy, tickDelta, light, overlay)
     }
