@@ -15,7 +15,35 @@ import net.minecraft.data.client.TextureKey
 import net.minecraft.data.client.TexturedModel
 import net.minecraft.util.Identifier
 
-val haimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { block ->
+val unchargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { block ->
+    Model { textureMap ->
+        ModelData(
+            parent = Identifier("minecraft", "block/block"),
+            textures = ModelTexturesData(
+                TextureKey.PARTICLE.name to TextureKey.BACK.string,
+                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
+            ),
+            elements = ModelElementsData(
+                ModelElementData(
+                    from = listOf(0, 0, 0),
+                    to = listOf(16, 16, 16),
+                    faces = ModelFacesData(
+                        down = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "down"),
+                        up = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "up"),
+                        north = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "north"),
+                        south = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "south"),
+                        west = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "west"),
+                        east = ModelFaceData(uv = listOf(0, 0, 16, 16), texture = TextureKey.BACK.string, tintindex = 0, cullface = "east"),
+                    ),
+                ),
+            ),
+        )
+    }.with(
+        TextureKey.BACK to "block/" * block.getIdentifier(),
+    )
+}
+
+val chargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { block ->
     Model { textureMap ->
         ModelData(
             parent = Identifier("minecraft", "block/block"),

@@ -23,6 +23,7 @@
       "state": {
         "Name": "miragefairy2024:haimeviska_leaves",
         "Properties": {
+          "charged": "true",
           "distance": "7",
           "persistent": "false",
           "waterlogged": "false"

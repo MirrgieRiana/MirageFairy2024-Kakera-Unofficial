@@ -17,12 +17,14 @@ import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
+import miragefairy2024.util.Model
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
+import miragefairy2024.util.randomBoolean
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockGeneratedModelGeneration
@@ -76,6 +78,8 @@ import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -90,7 +94,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
         val LEAVES = Settings(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
             PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
-        ).let { HaimeviskaBlockCard(it, { LeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HaimeviskaLeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
         val LOG = Settings(
             "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
             PoemList(1)
@@ -143,8 +147,16 @@ context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    card.block.registerSingletonBlockStateGeneration()
-    card.block.registerModelGeneration(haimeviskaLeavesTexturedModelFactory)
+    card.block.registerVariantsBlockStateGeneration {
+        val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
+        listOf(
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) to normal.with(model = "block/charged_" * card.block.getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) to normal.with(model = "block/uncharged_" * card.block.getIdentifier()),
+        )
+    }
+    registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
+    registerModelGeneration({ "block/uncharged_" * card.block.getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
+    card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
     card.item.registerRedirectColorProvider()
@@ -343,6 +355,33 @@ fun initHaimeviskaBlocks() {
 
 }
 
+
+class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
+    companion object {
+        val CHARGED: BooleanProperty = BooleanProperty.of("charged")
+    }
+
+    init {
+        defaultState = defaultState.with(CHARGED, true)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        super.appendProperties(builder)
+        builder.add(CHARGED)
+    }
+
+    override fun hasRandomTicks(state: BlockState) = super.hasRandomTicks(state) || !state[CHARGED]
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        super.randomTick(state, world, pos, random)
+        if (!state[CHARGED]) {
+            if (random.randomBoolean(15, world.getLightLevel(pos))) {
+                world.setBlockState(pos, state.with(CHARGED, true), Block.NOTIFY_LISTENERS)
+            }
+        }
+    }
+}
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {

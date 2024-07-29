@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "miragefairy2024:block/haimeviska_leaves"
+    "charged=false": {
+      "model": "miragefairy2024:block/uncharged_haimeviska_leaves"
+    },
+    "charged=true": {
+      "model": "miragefairy2024:block/charged_haimeviska_leaves"
     }
   }
 }
