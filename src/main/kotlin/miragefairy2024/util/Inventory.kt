@@ -1,8 +1,10 @@
 package miragefairy2024.util
 
+import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.screen.ScreenHandler
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
 operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, stack)
@@ -66,3 +68,46 @@ fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInven
  * @return すべてのアイテムが完全に移動したかどうか
  */
 fun Inventory.mergeTo(other: Inventory) = mergeInventory(this, this.indices, other, other.indices)
+
+
+// Insert
+
+/** @see ScreenHandler#insertItem */
+fun ScreenHandler.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>): Boolean {
+    var moved = false
+
+    // 既存スロットへの挿入
+    if (insertItemStack.isStackable) run {
+        indices.forEach { i ->
+            if (insertItemStack.isEmpty) return@run // 挿入完了
+            val slot = this.slots[i]
+            val slotItemStack = slot.stack
+            if (slotItemStack.isNotEmpty && slot.canInsert(insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+                val moveCount = insertItemStack.count atMost (slotItemStack.maxCount - slotItemStack.count atLeast 0)
+                if (moveCount > 0) {
+                    insertItemStack.count -= moveCount
+                    slotItemStack.count += moveCount
+                    slot.markDirty()
+                    moved = true
+                }
+            }
+        }
+    }
+
+    // 新規スロットへの挿入
+    if (!insertItemStack.isEmpty) run {
+        indices.forEach { i ->
+            val slot = this.slots[i]
+            val slotItemStack = slot.stack
+            if (slotItemStack.isEmpty && slot.canInsert(insertItemStack)) { // 宛先が空っぽかつ、そのアイテムを挿入可能な場合
+                val moveCount = insertItemStack.count atMost slot.maxItemCount
+                slot.stack = insertItemStack.split(moveCount)
+                slot.markDirty()
+                moved = true
+                return@run // 新規スロットへの挿入は一度に1スロット分しかしない
+            }
+        }
+    }
+
+    return moved
+}
