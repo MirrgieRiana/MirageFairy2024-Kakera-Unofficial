@@ -93,7 +93,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
             PoemList(1)
                 .poem("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。")
                 .description("Can be incised with a sword", "剣を使って傷を付けられる"),
-        ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSetting()) }, ::initLogHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock) }
         val INCISED_LOG = Settings(
             "incised_haimeviska_log", "Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木",
             PoemList(1)
@@ -130,7 +130,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
 }
 
 private fun createBaseWoodSetting() = AbstractBlock.Settings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
-private fun createLogSetting() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
+private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
