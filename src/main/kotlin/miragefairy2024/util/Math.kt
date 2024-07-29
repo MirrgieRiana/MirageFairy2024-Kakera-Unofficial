@@ -10,6 +10,12 @@ fun Random.randomInt(d: Double): Int {
     return if (this.nextDouble() < mod) i + 1 else i
 }
 
+fun Random.randomBoolean(maxRate: Int, rate: Int): Boolean {
+    if (rate >= maxRate) return true
+    if (rate <= 0) return false
+    return this.nextInt(maxRate) < rate
+}
+
 val Int.bitCount: Int
     get() {
         var b = 0
