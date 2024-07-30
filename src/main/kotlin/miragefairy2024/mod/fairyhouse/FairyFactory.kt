@@ -91,13 +91,13 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
         folia = nbt.wrapper["Folia"].int.get() ?: 0
-        collectionCooldown = nbt.wrapper["CollectionCooldown"].int.get() ?: 0
+        foliaCollectionCooldown = nbt.wrapper["FoliaCollectionCooldown"].int.get() ?: 0
     }
 
     override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
         nbt.wrapper["Folia"].int.set(folia)
-        nbt.wrapper["CollectionCooldown"].int.set(collectionCooldown)
+        nbt.wrapper["FoliaCollectionCooldown"].int.set(foliaCollectionCooldown)
     }
 
 
@@ -116,15 +116,15 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
     open fun onFoliaChanged(oldFolia: Int, newFolia: Int) = Unit
 
 
-    private var collectionCooldown = 0
+    private var foliaCollectionCooldown = 0
 
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
-        if (collectionCooldown > 0) {
-            collectionCooldown--
+        if (foliaCollectionCooldown > 0) {
+            foliaCollectionCooldown--
         } else {
             if (folia < 1000) {
-                collectionCooldown = 200
+                foliaCollectionCooldown = 200
                 collectFolia()
             }
         }
