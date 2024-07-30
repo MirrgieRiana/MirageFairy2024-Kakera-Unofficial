@@ -5,12 +5,11 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mixin.api.DamageCallback
 import miragefairy2024.mod.Emoji
-import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.invoke
 import miragefairy2024.util.Translation
-import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.buildText
+import miragefairy2024.util.collectItem
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
@@ -21,7 +20,6 @@ import miragefairy2024.util.repair
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
@@ -31,11 +29,8 @@ import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.tag.DamageTypeTags
-import net.minecraft.sound.SoundCategory
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.Box
-import net.minecraft.util.math.Direction
 import java.util.UUID
 
 context(ModContext)
@@ -284,54 +279,11 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
         if (newValue <= 0.0) return
         val actualAmount = world.random.randomInt(newValue)
         if (actualAmount <= 0) return
-
-        val originalBlockPos = player.eyeBlockPos
-        val reach = 15
-        val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
-            when {
-                it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
-                it.boundingBox.intersects(player.boundingBox) -> false // 既に触れているアイテムには無反応
-                else -> true
-            }
-        }.groupBy { it.blockPos }
-
-        var remainingAmount = actualAmount
-        var processedCount = 0
-        if (targetTable.isNotEmpty()) run finish@{
-            blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
-                val offset = toBlockPos.subtract(fromBlockPos)
-                val direction = when {
-                    offset.y == -1 -> Direction.DOWN
-                    offset.y == 1 -> Direction.UP
-                    offset.z == -1 -> Direction.NORTH
-                    offset.z == 1 -> Direction.SOUTH
-                    offset.x == -1 -> Direction.WEST
-                    offset.x == 1 -> Direction.EAST
-                    else -> throw AssertionError()
-                }
-                !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction) && !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
-            }.forEach { (_, blockPos) ->
-                targetTable[blockPos]?.forEach {
-
-                    it.teleport(player.x, player.y, player.z)
-                    it.resetPickupDelay()
-
-                    processedCount++
-
-                    remainingAmount--
-                    if (remainingAmount <= 0) return@finish
-
-                }
-            }
+        collectItem(world, player.eyeBlockPos, reach = 15, maxCount = actualAmount, predicate = { !it.boundingBox.intersects(player.boundingBox) }) { // 既に触れているアイテムには無反応
+            it.teleport(player.x, player.y, player.z)
+            it.resetPickupDelay()
+            true
         }
-
-        if (processedCount > 0) {
-
-            // Effect
-            world.playSound(null, player.x, player.y, player.z, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
-
-        }
-
     }
 
     context(ModContext)

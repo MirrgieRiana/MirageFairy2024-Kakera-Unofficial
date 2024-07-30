@@ -19,6 +19,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.insertItem
+import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.register
@@ -473,9 +474,9 @@ open class AbstractFairyHouseScreenHandler(val card: AbstractFairyHouseCard<*, *
         val originalItemStack = newItemStack.copy()
 
         if (slot < 9 * 4) { // 上へ
-            if (!insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
+            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
         } else { // 下へ
-            if (!insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
+            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
             slots[slot].onQuickTransfer(newItemStack, originalItemStack)
         }
 

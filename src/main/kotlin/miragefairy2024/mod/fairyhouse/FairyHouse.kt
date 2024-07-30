@@ -63,10 +63,26 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlockEntity, FairyFactoryScre
 class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(FairyHouseCard, pos, state) {
     override val self = this
 
+    private var cooldown = -1
+
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
-        if (folia >= 100) {
-            folia -= world.random.nextBetween(1, 100)
+        if (cooldown > 0) {
+            cooldown--
+        } else if (cooldown <= -1) {
+            cooldown = world.random.nextInt(20 * 10)
+        } else {
+            cooldown = 20 * 10
+
+            var folia = getFolia()
+            val status = run {
+                if (folia < 100) return@run FairyFactoryBlock.Status.OFFLINE
+                folia -= 100
+                FairyFactoryBlock.Status.IDLE
+            }
+            setFolia(folia)
+            setStatus(status)
+
         }
     }
 }

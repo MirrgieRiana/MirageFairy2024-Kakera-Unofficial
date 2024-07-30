@@ -1,13 +1,19 @@
 package miragefairy2024.util
 
+import miragefairy2024.mod.SoundEventCard
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.FarmlandBlock
 import net.minecraft.block.OperatorBlock
+import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundCategory
+import net.minecraft.util.math.BlockBox
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
+import net.minecraft.util.math.Direction
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
@@ -177,4 +183,63 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
     val newItemStack = itemStack.copy()
     if (success) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
+}
+
+fun collectItem(
+    world: World,
+    originalBlockPos: BlockPos,
+    reach: Int,
+    region: BlockBox = BlockBox.infinite(),
+    maxCount: Int = Int.MAX_VALUE,
+    predicate: (ItemEntity) -> Boolean = { true },
+    ignoreOriginalWall: Boolean = false,
+    process: (ItemEntity) -> Boolean
+) {
+    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
+        !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
+    }.groupBy { it.blockPos }
+
+    var remainingAmount = maxCount
+    var processedCount = 0
+    if (targetTable.isNotEmpty()) run finish@{
+        blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
+            val offset = toBlockPos.subtract(fromBlockPos)
+            if (toBlockPos !in region) return@blockVisitor false
+            val direction = when {
+                offset.y == -1 -> Direction.DOWN
+                offset.y == 1 -> Direction.UP
+                offset.z == -1 -> Direction.NORTH
+                offset.z == 1 -> Direction.SOUTH
+                offset.x == -1 -> Direction.WEST
+                offset.x == 1 -> Direction.EAST
+                else -> throw AssertionError()
+            }
+            if (ignoreOriginalWall) {
+                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+            } else {
+                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction)
+            }
+        }.forEach { (_, blockPos) ->
+            targetTable[blockPos]?.forEach {
+
+                val doNext = process(it)
+
+                processedCount++
+
+                remainingAmount--
+                if (remainingAmount <= 0) return@finish
+
+                if (!doNext) return@finish
+            }
+        }
+    }
+
+    if (processedCount > 0) {
+
+        // Effect
+        val p = originalBlockPos.toCenterPos()
+        world.playSound(null, p.x + 0.5, p.y + 0.5, p.z + 0.5, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
+
+    }
+
 }
