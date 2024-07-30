@@ -103,7 +103,7 @@ open class AbstractFairyHouseCard<E : AbstractFairyHouseBlockEntity<E>, H : Abst
     private val jaName: String,
     private val enPoem: String,
     private val jaPoem: String,
-    blockCreator: (FabricBlockSettings) -> Block,
+    blockCreator: (FabricBlockSettings) -> AbstractFairyHouseBlock,
     val blockEntityAccessor: BlockEntityAccessor<E>,
     val screenHandlerCreator: (AbstractFairyHouseScreenHandler.Arguments) -> H,
     val guiWidth: Int,

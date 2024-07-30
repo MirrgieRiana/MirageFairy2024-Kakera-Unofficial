@@ -2,8 +2,9 @@ package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.util.drawRightText
+import miragefairy2024.mod.fairyhouse.FairyFactoryScreenHandler
 import miragefairy2024.mod.fairyhouse.FairyHouseCard
-import miragefairy2024.mod.fairyhouse.FairyHouseScreenHandler
+import miragefairy2024.mod.fairyhouse.FairyHouseModelCard
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.minecraft.client.gui.DrawContext
@@ -15,7 +16,9 @@ import net.minecraft.util.Identifier
 
 fun initFairyHouseClientModule() {
     ModelLoadingPlugin.register {
-        it.addModels(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"))
+        FairyHouseModelCard.entries.forEach { card ->
+            it.addModels(card.identifier)
+        }
     }
 
     HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(gui, inventory, title) }
@@ -23,10 +26,10 @@ fun initFairyHouseClientModule() {
 
 
 class FairyHouseScreen(
-    handler: FairyHouseScreenHandler,
+    handler: FairyFactoryScreenHandler,
     playerInventory: PlayerInventory,
     title: Text,
-) : HandledScreen<FairyHouseScreenHandler>(
+) : HandledScreen<FairyFactoryScreenHandler>(
     handler,
     playerInventory,
     title,

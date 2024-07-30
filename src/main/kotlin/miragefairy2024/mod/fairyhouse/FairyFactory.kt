@@ -1,17 +1,22 @@
 package miragefairy2024.mod.fairyhouse
 
+import miragefairy2024.RenderingProxy
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaLeavesBlock
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrNull
 import miragefairy2024.util.int
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -22,7 +27,7 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
     jaName: String,
     enPoem: String,
     jaPoem: String,
-    blockCreator: (FabricBlockSettings) -> Block,
+    blockCreator: (FabricBlockSettings) -> FairyFactoryBlock,
     blockEntityAccessor: BlockEntityAccessor<E>,
     screenHandlerCreator: (AbstractFairyHouseScreenHandler.Arguments) -> H,
     guiWidth: Int,
@@ -35,7 +40,7 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
     jaName,
     enPoem,
     jaPoem,
-    blockCreator,
+    { blockCreator(it.luminance { blockState -> if (blockState.getOrNull(FairyFactoryBlock.LIT) == true) 5 else 0 }) },
     blockEntityAccessor,
     screenHandlerCreator,
     guiWidth,
@@ -47,6 +52,21 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
 ) {
     companion object {
         val FOLIA_PROPERTY = AbstractFairyHouseBlockEntity.PropertySettings<FairyFactoryBlockEntity<*>>({ folia }, { folia = it })
+    }
+}
+
+open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *>, settings: Settings) : AbstractFairyHouseBlock(cardGetter, settings) {
+    companion object {
+        val LIT: BooleanProperty = Properties.LIT
+    }
+
+    init {
+        defaultState = defaultState.with(LIT, false)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        super.appendProperties(builder)
+        builder.add(LIT)
     }
 }
 
@@ -104,6 +124,11 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
 
         if (changed) markDirty()
 
+    }
+
+    override fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
+        val i = (light and 0x0000FF) or 0xF00000
+        renderingProxy.renderCutoutBlock(FairyHouseModelCard.LANTERN.identifier, null, 1.0F, 1.0F, 1.0F, i, overlay)
     }
 
 }

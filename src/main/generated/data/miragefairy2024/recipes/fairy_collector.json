@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_collector",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:fairy_house"
+    },
+    "B": {
+      "item": "minecraft:bowl"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    }
+  },
+  "pattern": [
+    "BCB",
+    "C#C",
+    "BCB"
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_collector"
+  },
+  "show_notification": true
+}

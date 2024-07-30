@@ -1,8 +1,6 @@
 package miragefairy2024.mod.fairyhouse
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.RenderingProxy
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
@@ -12,17 +10,16 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.ItemTags
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyHouseCard : FairyFactoryCard<FairyHouseBlockEntity, FairyHouseScreenHandler>(
+object FairyHouseCard : FairyFactoryCard<FairyHouseBlockEntity, FairyFactoryScreenHandler>(
     "fairy_house", 2, "Fairy House", "妖精の家",
     "Home sweet home", "あたたかいおうち",
-    { AbstractFairyHouseBlock({ FairyHouseCard }, it.luminance { 5 }) },
+    { FairyFactoryBlock({ FairyHouseCard }, it) },
     BlockEntityAccessor(::FairyHouseBlockEntity),
-    ::FairyHouseScreenHandler,
+    { FairyFactoryScreenHandler(FairyHouseCard, it) },
     176, 180,
     AbstractFairyHouseBlockEntity.Settings(
         slots = listOf(
@@ -66,11 +63,6 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlockEntity, FairyHouseScreen
 class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(FairyHouseCard, pos, state) {
     override val self = this
 
-    override fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        val i = (light and 0x0000FF) or 0xF00000
-        renderingProxy.renderCutoutBlock(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern"), null, 1.0F, 1.0F, 1.0F, i, overlay)
-    }
-
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
         if (folia >= 100) {
@@ -78,5 +70,3 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBloc
         }
     }
 }
-
-class FairyHouseScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyHouseCard, arguments)
