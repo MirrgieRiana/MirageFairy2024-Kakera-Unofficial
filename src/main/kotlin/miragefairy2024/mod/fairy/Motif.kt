@@ -837,6 +837,15 @@ enum class MotifCard(
         MotifCardRecipes().overworld,
     ),
 
+    // 行為
+    CARRY(
+        "carry", 2, "Carria", "運搬精ツァッリャ", 0xD8BEEE, 0xC9C9C9, 0xC9C9C9, 0xCFAC8C,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + mana(2.0) { CARRY },
+        MotifCardRecipes(),
+    ),
+
     // 概念
     MAGNETISM(
         "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
