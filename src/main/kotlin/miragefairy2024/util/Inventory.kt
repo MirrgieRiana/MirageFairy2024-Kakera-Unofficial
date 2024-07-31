@@ -46,7 +46,7 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     val srcCount = srcItemStack.count
     val oldDestCount = destItemStack.count
     val allCount = srcCount + oldDestCount
-    val newDestCount = allCount atMost destInventory.maxCountPerStack atMost srcItemStack.maxCount
+    val newDestCount = allCount atMost destInventory.maxCountPerStack atMost srcItemStack.maxCount atLeast oldDestCount
 
     // 移動処理
     if (destItemStack.isEmpty) {
@@ -56,6 +56,7 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     }
     val newSrcCount = allCount - newDestCount
     srcItemStack.count = newSrcCount
+    if (newSrcCount == 0) srcInventory[srcSlotIndex] = EMPTY_ITEM_STACK
 
     return MergeResult(newSrcCount == 0)
 }
