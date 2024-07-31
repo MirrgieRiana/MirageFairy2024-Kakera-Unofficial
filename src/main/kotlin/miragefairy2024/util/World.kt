@@ -60,7 +60,7 @@ fun blockVisitor(
     maxDistance: Int = Int.MAX_VALUE,
     maxCount: Int? = null,
     neighborType: NeighborType = NeighborType.FACES,
-    predicate: (fromBlockPos: BlockPos, toBlockPos: BlockPos) -> Boolean,
+    predicate: (distance: Int, fromBlockPos: BlockPos, toBlockPos: BlockPos) -> Boolean,
 ) = sequence {
     val checkedBlockPosList = mutableSetOf<BlockPos>()
     var nextBlockPosList = originalBlockPosList.toMutableSet()
@@ -74,6 +74,7 @@ fun blockVisitor(
         val currentBlockPosList: Set<BlockPos> = nextBlockPosList
         nextBlockPosList = mutableSetOf()
 
+        val nextDistance = distance + 1
         currentBlockPosList.forEach nextCurrentBlockPos@{ fromBlockPos ->
 
             if (distance > 0 || visitOrigins) {
@@ -84,7 +85,7 @@ fun blockVisitor(
 
             fun check(offsetX: Int, offsetY: Int, offsetZ: Int) {
                 val toBlockPos = fromBlockPos.add(offsetX, offsetY, offsetZ)
-                if (toBlockPos !in checkedBlockPosList && predicate(fromBlockPos, toBlockPos)) {
+                if (toBlockPos !in checkedBlockPosList && predicate(nextDistance, fromBlockPos, toBlockPos)) {
                     checkedBlockPosList += toBlockPos
                     nextBlockPosList += toBlockPos
                 }
@@ -202,7 +203,7 @@ fun collectItem(
     var remainingAmount = maxCount
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
-        blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
+        blockVisitor(listOf(originalBlockPos), maxDistance = reach) { _, fromBlockPos, toBlockPos ->
             if (toBlockPos !in region) return@blockVisitor false
             val offset = toBlockPos.subtract(fromBlockPos)
             val direction = when {

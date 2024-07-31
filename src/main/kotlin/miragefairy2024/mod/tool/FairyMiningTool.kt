@@ -190,7 +190,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
             val baseHardness = state.getHardness(world, pos)
 
-            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 31) { _, toBlockPos ->
+            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 31) { _, _, toBlockPos ->
                 world.getBlockState(toBlockPos).block === state.block
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
@@ -223,7 +223,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
             val baseHardness = state.getHardness(world, pos)
 
             val logBlockPosList = mutableListOf<BlockPos>()
-            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, toBlockPos ->
+            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
                 world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
@@ -243,7 +243,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                     logBlockPosList += blockPos
                 }
             }
-            blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, toBlockPos ->
+            blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, _, toBlockPos ->
                 world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
