@@ -112,8 +112,8 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
 
         // リザルトにアイテムが残っている場合、排出を試みる
         if (!resultInventory.isEmpty) {
-            val completed = resultInventory.mergeTo(outputInventory)
-            if (!completed) return // リザルトにまだアイテムが残っているので次のクラフトを開始できない
+            val result = resultInventory.mergeTo(outputInventory)
+            if (!result.completed) return // リザルトにまだアイテムが残っているので次のクラフトを開始できない
         }
         // この時点でリザルトは空
 

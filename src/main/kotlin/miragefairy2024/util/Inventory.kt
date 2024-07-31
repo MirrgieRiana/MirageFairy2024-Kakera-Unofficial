@@ -17,13 +17,23 @@ val Inventory.itemStacks get() = this.indices.map { this[it] }
 // Merge
 
 /**
+ * @param completed 移動が完了したかどうか
+ */
+class MergeResult(val completed: Boolean) {
+    companion object {
+        val UP_TO_DATE = MergeResult(true)
+        val FAILED = MergeResult(false)
+    }
+}
+
+/**
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): Boolean {
+fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): MergeResult {
     when {
-        srcInventory[srcSlotIndex].isEmpty -> return true // 元から空なので何もする必要はない
-        !destInventory.isValid(destSlotIndex, srcInventory[srcSlotIndex]) -> return false // 宛先にこの種類のアイテムが入らない
+        srcInventory[srcSlotIndex].isEmpty -> return MergeResult.UP_TO_DATE // 元から空なので何もする必要はない
+        !destInventory.isValid(destSlotIndex, srcInventory[srcSlotIndex]) -> return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
         destInventory[destSlotIndex].isEmpty || srcInventory[srcSlotIndex] hasSameItemAndNbt destInventory[destSlotIndex] -> {
             // 先が空もしくは元と同じ種類のアイテムが入っている場合、マージ
 
@@ -39,10 +49,10 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
             }
             srcInventory[srcSlotIndex].count = allCount - destCount
 
-            return srcInventory[srcSlotIndex].isEmpty
+            return MergeResult(srcInventory[srcSlotIndex].isEmpty)
         }
 
-        else -> return false // 宛先に別のアイテムが入っているので何もできない
+        else -> return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
     }
 }
 
@@ -50,25 +60,25 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
+fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
     destIndices.forEach { destIndex ->
         val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndex)
-        if (result) return true // すべてマージされたのでこれ以降の判定は不要
+        if (result.completed) return MergeResult(true) // すべてマージされたのでこれ以降の判定は不要
     }
-    return false
+    return MergeResult(false)
 }
 
 /**
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
+fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
     var completed = true
     srcIndices.forEach { srcIndex ->
         val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndices)
-        if (!result) completed = false
+        if (!result.completed) completed = false
     }
-    return completed
+    return MergeResult(completed)
 }
 
 /**
