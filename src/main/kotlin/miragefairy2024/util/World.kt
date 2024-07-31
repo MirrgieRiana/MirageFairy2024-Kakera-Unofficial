@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
+import net.minecraft.util.math.BlockBox
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
@@ -188,6 +189,7 @@ fun collectItem(
     world: World,
     originalBlockPos: BlockPos,
     reach: Int = Int.MAX_VALUE,
+    region: BlockBox = BlockBox.infinite(),
     maxCount: Int = Int.MAX_VALUE,
     predicate: (ItemEntity) -> Boolean = { true },
     process: (ItemEntity) -> Unit,
@@ -200,6 +202,7 @@ fun collectItem(
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
         blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
+            if (toBlockPos !in region) return@blockVisitor false
             val offset = toBlockPos.subtract(fromBlockPos)
             val direction = when {
                 offset.y == -1 -> Direction.DOWN
