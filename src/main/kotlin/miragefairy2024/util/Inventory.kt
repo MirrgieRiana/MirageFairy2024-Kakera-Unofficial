@@ -2,6 +2,7 @@ package miragefairy2024.util
 
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
+import mirrg.kotlin.hydrogen.unit
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
@@ -108,22 +109,50 @@ fun Inventory.mergeTo(other: Inventory) = mergeInventory(this, this.indices, oth
 
 // Insert
 
+interface InventoryAccessor {
+    val size: Int
+    fun getItemStack(index: Int): ItemStack
+    fun setItemStack(index: Int, itemStack: ItemStack)
+    fun getMaxItemCount(index: Int): Int
+    fun canInsert(index: Int, itemStack: ItemStack): Boolean
+    fun markDirty(index: Int)
+}
+
+val ScreenHandler.inventoryAccessor: InventoryAccessor
+    get() = object : InventoryAccessor {
+        override val size: Int get() = this@inventoryAccessor.slots.size
+        override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].stack
+        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].stack = itemStack }
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxItemCount
+        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].canInsert(itemStack)
+        override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].markDirty()
+    }
+
+val Inventory.inventoryAccessor: InventoryAccessor
+    get() = object : InventoryAccessor {
+        override val size: Int get() = this@inventoryAccessor.size
+        override fun getItemStack(index: Int) = this@inventoryAccessor[index]
+        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor[index] = itemStack }
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.maxCountPerStack
+        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.isValid(index, itemStack)
+        override fun markDirty(index: Int) = this@inventoryAccessor.markDirty()
+    }
+
 /** @see ScreenHandler.insertItem */
-fun ScreenHandler.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>): Boolean {
+fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>): Boolean {
     var moved = false
 
     // 既存スロットへの挿入
     if (insertItemStack.isStackable) run {
         indices.forEach { i ->
             if (insertItemStack.isEmpty) return@run // 挿入完了
-            val slot = this.slots[i]
-            val slotItemStack = slot.stack
-            if (slotItemStack.isNotEmpty && slot.canInsert(insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+            val slotItemStack = this.getItemStack(i)
+            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
                 val moveCount = insertItemStack.count atMost (slotItemStack.maxCount - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount
                     slotItemStack.count += moveCount
-                    slot.markDirty()
+                    this.markDirty(i)
                     moved = true
                 }
             }
@@ -133,12 +162,11 @@ fun ScreenHandler.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>)
     // 新規スロットへの挿入
     if (!insertItemStack.isEmpty) run {
         indices.forEach { i ->
-            val slot = this.slots[i]
-            val slotItemStack = slot.stack
-            if (slotItemStack.isEmpty && slot.canInsert(insertItemStack)) { // 宛先が空っぽかつ、そのアイテムを挿入可能な場合
-                val moveCount = insertItemStack.count atMost slot.maxItemCount
-                slot.stack = insertItemStack.split(moveCount)
-                slot.markDirty()
+            val slotItemStack = this.getItemStack(i)
+            if (slotItemStack.isEmpty && this.canInsert(i, insertItemStack)) { // 宛先が空っぽかつ、そのアイテムを挿入可能な場合
+                val moveCount = insertItemStack.count atMost this.getMaxItemCount(i)
+                this.setItemStack(i, insertItemStack.split(moveCount))
+                this.markDirty(i)
                 moved = true
                 return@run // 新規スロットへの挿入は一度に1スロット分しかしない
             }
