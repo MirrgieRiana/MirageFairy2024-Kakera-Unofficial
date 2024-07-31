@@ -7,12 +7,12 @@ import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
-import miragefairy2024.util.insertItem
 import miragefairy2024.util.int
-import miragefairy2024.util.inventoryAccessor
-import miragefairy2024.util.itemStacks
+import miragefairy2024.util.isNotEmpty
+import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.set
 import miragefairy2024.util.wrapper
 import net.minecraft.block.BlockState
 import net.minecraft.item.ItemStack
@@ -111,13 +111,28 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
-        var folia = getFolia()
+
+        if (getFolia() < 10) {
+            setStatus(FairyFactoryBlock.Status.OFFLINE)
+            return
+        }
+        setFolia(getFolia() - 10)
+
+        var processing = false
 
         collectionProgress += collectionSpeed
-        if (collectionProgress >= 10000) {
+        if (collectionProgress >= 10000) run {
             collectionProgress = 0
 
+            if (this[1].isNotEmpty) return@run
 
+            val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
+            collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
+                this[1] = it.stack.copy()
+                it.discard()
+                true
+            }
+            processing = true
 
         }
 
@@ -125,51 +140,10 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
         if (sortProgress >= 10000) {
             sortProgress = 0
 
-
-
-        }
-
-        setFolia(folia)
-
-        
-
-        if (collectionCooldown > 0) {
-            collectionCooldown--
-        } else if (collectionCooldown <= -1) {
-            collectionCooldown = world.random.nextInt(20 * 10)
-        } else {
-            collectionCooldown = 20 * 10
-
-            val status = run {
-                if (folia < 10) return@run FairyFactoryBlock.Status.OFFLINE // フォリアが足りない
-
-                if (!itemStacks.any { it.isEmpty }) return@run FairyFactoryBlock.Status.IDLE // 負荷軽減のために1スロも空いていない場合は止める
-
-                var collected = false
-                val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-                collectItem(world, pos, maxCount = 2, reach = 30, region = region, ignoreOriginalWall = true) {
-                    if (folia < 10) return@collectItem false
-                    val itemStack = it.stack.copy()
-                    if (inventoryAccessor.insertItem(itemStack, 3..9)) {
-                        folia -= 10
-                        collected = true
-                    }
-                    if (itemStack.isEmpty) {
-                        it.discard()
-                    } else {
-                        it.stack = itemStack
-                    }
-                    true
-                }
-
-                if (collected) {
-                    FairyFactoryBlock.Status.PROCESSING
-                } else {
-                    FairyFactoryBlock.Status.IDLE
-                }
-            }
-            setStatus(status)
+            mergeInventory(this, 1, this, 3..8)
 
         }
+
+        setStatus(if (processing) FairyFactoryBlock.Status.PROCESSING else FairyFactoryBlock.Status.IDLE)
     }
 }
