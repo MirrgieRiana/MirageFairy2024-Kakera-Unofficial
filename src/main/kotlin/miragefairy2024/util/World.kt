@@ -6,7 +6,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.block.FarmlandBlock
 import net.minecraft.block.OperatorBlock
 import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
@@ -187,7 +186,6 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 
 fun collectItem(
     world: World,
-    player: PlayerEntity,
     originalBlockPos: BlockPos,
     reach: Int,
     maxCount: Int,
