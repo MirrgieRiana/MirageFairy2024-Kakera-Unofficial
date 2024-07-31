@@ -62,7 +62,12 @@ fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Invent
  * @return すべてのアイテムが完全に移動したかどうか
  */
 fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
-    return srcIndices.all { srcIndex -> mergeInventory(srcInventory, srcIndex, destInventory, destIndices) }
+    var completed = true
+    srcIndices.forEach { srcIndex ->
+        val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndices)
+        if (!result) completed = false
+    }
+    return completed
 }
 
 /**
