@@ -31,29 +31,24 @@ class MergeResult(val completed: Boolean) {
  * @return すべてのアイテムが完全に移動したかどうか
  */
 fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): MergeResult {
-    when {
-        srcInventory[srcSlotIndex].isEmpty -> return MergeResult.UP_TO_DATE // 元から空なので何もする必要はない
-        !destInventory.isValid(destSlotIndex, srcInventory[srcSlotIndex]) -> return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
-        destInventory[destSlotIndex].isEmpty || srcInventory[srcSlotIndex] hasSameItemAndNbt destInventory[destSlotIndex] -> {
-            // 先が空もしくは元と同じ種類のアイテムが入っている場合、マージ
+    if (srcInventory[srcSlotIndex].isEmpty) return MergeResult.UP_TO_DATE // 元から空なので何もする必要はない
+    if (!destInventory.isValid(destSlotIndex, srcInventory[srcSlotIndex])) return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
+    if (!destInventory[destSlotIndex].isEmpty && !(srcInventory[srcSlotIndex] hasSameItemAndNbt destInventory[destSlotIndex])) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
+    // 先が空もしくは元と同じ種類のアイテムが入っている場合、マージ
 
-            // 個数計算
-            val allCount = srcInventory[srcSlotIndex].count + destInventory[destSlotIndex].count
-            val destCount = allCount atMost destInventory.maxCountPerStack atMost srcInventory[srcSlotIndex].maxCount
+    // 個数計算
+    val allCount = srcInventory[srcSlotIndex].count + destInventory[destSlotIndex].count
+    val destCount = allCount atMost destInventory.maxCountPerStack atMost srcInventory[srcSlotIndex].maxCount
 
-            // 移動処理
-            if (destInventory[destSlotIndex].isEmpty) {
-                destInventory[destSlotIndex] = srcInventory[srcSlotIndex].copyWithCount(destCount)
-            } else {
-                destInventory[destSlotIndex].count = destCount
-            }
-            srcInventory[srcSlotIndex].count = allCount - destCount
-
-            return MergeResult(srcInventory[srcSlotIndex].isEmpty)
-        }
-
-        else -> return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
+    // 移動処理
+    if (destInventory[destSlotIndex].isEmpty) {
+        destInventory[destSlotIndex] = srcInventory[srcSlotIndex].copyWithCount(destCount)
+    } else {
+        destInventory[destSlotIndex].count = destCount
     }
+    srcInventory[srcSlotIndex].count = allCount - destCount
+
+    return MergeResult(srcInventory[srcSlotIndex].isEmpty)
 }
 
 /**
