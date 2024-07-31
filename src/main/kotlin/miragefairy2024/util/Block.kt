@@ -23,3 +23,5 @@ fun <T : Comparable<T>> BlockState.getOrNull(property: Property<T>): T? {
     val value = this.entries[property] ?: return null
     return property.type.cast(value)
 }
+
+fun <T : Comparable<T>> BlockState.getOr(property: Property<T>, default: () -> T) = this.getOrNull(property) ?: default()
