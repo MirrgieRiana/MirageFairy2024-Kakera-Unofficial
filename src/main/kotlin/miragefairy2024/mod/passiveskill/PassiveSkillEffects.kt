@@ -282,6 +282,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
         collectItem(world, player.eyeBlockPos, reach = 15, maxCount = actualAmount, predicate = { !it.boundingBox.intersects(player.boundingBox) }) { // 既に触れているアイテムには無反応
             it.teleport(player.x, player.y, player.z)
             it.resetPickupDelay()
+            true
         }
     }
 

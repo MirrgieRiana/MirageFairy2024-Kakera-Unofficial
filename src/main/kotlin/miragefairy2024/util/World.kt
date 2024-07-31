@@ -192,7 +192,7 @@ fun collectItem(
     region: BlockBox = BlockBox.infinite(),
     maxCount: Int = Int.MAX_VALUE,
     predicate: (ItemEntity) -> Boolean = { true },
-    process: (ItemEntity) -> Unit,
+    process: (ItemEntity) -> Boolean,
 ) {
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
@@ -217,13 +217,14 @@ fun collectItem(
         }.forEach { (_, blockPos) ->
             targetTable[blockPos]?.forEach {
 
-                process(it)
+                val doNext = process(it)
 
                 processedCount++
 
                 remainingAmount--
                 if (remainingAmount <= 0) return@finish
 
+                if (!doNext) return@finish
             }
         }
     }
