@@ -38,7 +38,7 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     if (!destInventory.isValid(destSlotIndex, srcItemStack)) return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
 
     val destItemStack = destInventory[destSlotIndex]
-    if (!destItemStack.isEmpty && !(srcItemStack hasSameItemAndNbt destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
+    if (destItemStack.isNotEmpty && !(srcItemStack hasSameItemAndNbt destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
 
     // 先が空もしくは元と同じ種類のアイテムが入っている場合、マージ
 
@@ -47,6 +47,9 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     val oldDestCount = destItemStack.count
     val allCount = srcCount + oldDestCount
     val newDestCount = allCount atMost destInventory.maxCountPerStack atMost srcItemStack.maxCount atLeast oldDestCount
+    val moveCount = newDestCount - oldDestCount
+
+    if (moveCount == 0) return MergeResult.FAILED // 宛先にこれ以上入らない
 
     // 移動処理
     if (destItemStack.isEmpty) {
