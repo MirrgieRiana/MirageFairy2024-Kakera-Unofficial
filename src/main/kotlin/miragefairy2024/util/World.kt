@@ -191,12 +191,13 @@ fun collectItem(
     originalBlockPos: BlockPos,
     reach: Int,
     maxCount: Int,
+    predicate: (ItemEntity) -> Boolean,
     process: (ItemEntity) -> Unit,
 ) {
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
         when {
             it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
-            it.boundingBox.intersects(player.boundingBox) -> false // 既に触れているアイテムには無反応
+            !predicate(it) -> false
             else -> true
         }
     }.groupBy { it.blockPos }
