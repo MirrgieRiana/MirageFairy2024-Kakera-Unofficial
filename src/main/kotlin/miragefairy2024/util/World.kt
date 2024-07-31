@@ -191,6 +191,7 @@ fun collectItem(
     reach: Int = Int.MAX_VALUE,
     region: BlockBox = BlockBox.infinite(),
     maxCount: Int = Int.MAX_VALUE,
+    ignoreOriginalWall: Boolean = false,
     predicate: (ItemEntity) -> Boolean = { true },
     process: (ItemEntity) -> Boolean,
 ) {
@@ -213,7 +214,11 @@ fun collectItem(
                 offset.x == 1 -> Direction.EAST
                 else -> throw AssertionError()
             }
-            !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction) && !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+            if (ignoreOriginalWall && fromBlockPos == originalBlockPos) {
+                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+            } else {
+                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction)
+            }
         }.forEach { (_, blockPos) ->
             targetTable[blockPos]?.forEach {
 
