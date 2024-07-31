@@ -18,11 +18,13 @@ val Inventory.itemStacks get() = this.indices.map { this[it] }
 
 /**
  * @param completed 移動が完了したかどうか
+ * @param movementTimes アイテムの移動を行った回数
+ * @param movedItemCount 移動されたアイテムの個数
  */
-class MergeResult(val completed: Boolean) {
+class MergeResult(val completed: Boolean, val movementTimes: Int, val movedItemCount: Int) {
     companion object {
-        val UP_TO_DATE = MergeResult(true)
-        val FAILED = MergeResult(false)
+        val UP_TO_DATE = MergeResult(true, 0, 0)
+        val FAILED = MergeResult(false, 0, 0)
     }
 }
 
@@ -61,7 +63,7 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     srcItemStack.count = newSrcCount
     if (newSrcCount == 0) srcInventory[srcSlotIndex] = EMPTY_ITEM_STACK
 
-    return MergeResult(newSrcCount == 0)
+    return MergeResult(newSrcCount == 0, 1, moveCount)
 }
 
 /**
@@ -69,11 +71,15 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
  * @return すべてのアイテムが完全に移動したかどうか
  */
 fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
+    var movementTimes = 0
+    var movedItemCount = 0
     destIndices.forEach { destIndex ->
         val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndex)
-        if (result.completed) return MergeResult(true) // すべてマージされたのでこれ以降の判定は不要
+        movementTimes += result.movementTimes
+        movedItemCount += result.movedItemCount
+        if (result.completed) return MergeResult(true, movementTimes, movedItemCount) // すべてマージされたのでこれ以降の判定は不要
     }
-    return MergeResult(false)
+    return MergeResult(false, movementTimes, movedItemCount)
 }
 
 /**
@@ -82,11 +88,15 @@ fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Invent
  */
 fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
     var completed = true
+    var movementTimes = 0
+    var movedItemCount = 0
     srcIndices.forEach { srcIndex ->
         val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndices)
         if (!result.completed) completed = false
+        movementTimes += result.movementTimes
+        movedItemCount += result.movedItemCount
     }
-    return MergeResult(completed)
+    return MergeResult(completed, movementTimes, movedItemCount)
 }
 
 /**
