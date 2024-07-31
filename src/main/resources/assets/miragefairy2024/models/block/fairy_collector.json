@@ -2,13 +2,13 @@
   "credit": "Made with Blockbench",
   "parent": "minecraft:block/block",
   "textures": {
-    "4": "miragefairy2024:block/fairy_house/output",
-    "6": "miragefairy2024:block/fairy_house/output_inner",
-    "7": "miragefairy2024:block/fairy_house/fairy_collector_front",
-    "9": "miragefairy2024:block/fairy_house/fairy_collector_front_inner",
+    "4": "miragefairy2024:block/fairy_building/output",
+    "6": "miragefairy2024:block/fairy_building/output_inner",
+    "7": "miragefairy2024:block/fairy_building/fairy_collector_front",
+    "9": "miragefairy2024:block/fairy_building/fairy_collector_front_inner",
     "17": "miragefairy2024:block/haimeviska_planks",
-    "18": "miragefairy2024:block/fairy_house/haimeviska_log_top_output",
-    "particle": "miragefairy2024:block/fairy_house/fairy_collector_front"
+    "18": "miragefairy2024:block/fairy_building/haimeviska_log_top_output",
+    "particle": "miragefairy2024:block/fairy_building/fairy_collector_front"
   },
   "elements": [
     {

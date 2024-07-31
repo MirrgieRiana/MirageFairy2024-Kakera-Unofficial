@@ -39,6 +39,8 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
     guiWidth: Int,
     guiHeight: Int,
     oldBlockEntitySettings: FairyBuildingBlockEntity.Settings<E>,
+    val collectingFolia: Int,
+    val maxFolia: Int,
 ) : FairyBuildingCard<E, H>(
     path,
     tier,
@@ -46,7 +48,7 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
     jaName,
     enPoem,
     jaPoem,
-    { blockCreator(it.luminance { blockState -> if (blockState[FairyFactoryBlock.STATUS].isLit) 5 else 0 }) },
+    { blockCreator(it.luminance { blockState -> if (blockState[FairyFactoryBlock.STATUS].isLit) 8 else 0 }) },
     blockEntityAccessor,
     screenHandlerCreator,
     guiWidth,
@@ -65,7 +67,8 @@ open class FairyFactoryCard<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScre
     }
 }
 
-open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *>, settings: Settings) : FairyBuildingBlock(cardGetter, settings) {
+open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *>, settings: Settings) :
+    FairyBuildingBlock(cardGetter, settings) {
     companion object {
         val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
     }
@@ -89,7 +92,8 @@ open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *>, settings:
     }
 }
 
-abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: FairyFactoryCard<E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
+abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<E, *>, pos: BlockPos, state: BlockState) :
+    FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
             if (!itemStack.isOf(FairyCard.item)) return 0.0
@@ -129,7 +133,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--
         } else {
-            if (folia < 20_000) {
+            if (folia < card.collectingFolia) {
                 foliaCollectionCooldown = 200
                 collectFolia()
             }
@@ -155,7 +159,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
                     folia += 1000
                     changed = true
                     world.setBlockState(blockPos, blockState.with(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
-                    if (folia >= 100_000) return@finished
+                    if (folia >= card.maxFolia) return@finished
                 }
             }
         }
@@ -165,21 +169,25 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(card: Fai
 
 
     override fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        val i = if (cachedState[FairyFactoryBlock.STATUS].isLit) (light and 0x0000FF) or 0xF00000 else light
-        renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN.identifier, null, 1.0F, 1.0F, 1.0F, i, overlay)
+        if (cachedState[FairyFactoryBlock.STATUS].isLit) {
+            renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN.identifier, null, 1.0F, 1.0F, 1.0F, (light and 0x0000FF) or 0xF00000, overlay)
+        } else {
+            renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN_OFF.identifier, null, 1.0F, 1.0F, 1.0F, light, overlay)
+        }
     }
 
 }
 
-open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
+open class FairyFactoryScreenHandler(private val card: FairyFactoryCard<*, *>, arguments: Arguments) :
+    FairyBuildingScreenHandler(card, arguments) {
     companion object {
         val FOLIA_PROPERTY = FairyBuildingBlockEntity.PropertySettings<FairyFactoryBlockEntity<*>>({ folia / 10 }, { folia = it * 10 }) // folia: 0 .. 100_000
     }
 
     var folia: Int
-        get() = arguments.propertyDelegate.get(card.propertyIndexTable[FOLIA_PROPERTY]!!)
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[FOLIA_PROPERTY]!!) * 10
         set(value) {
-            arguments.propertyDelegate.set(card.propertyIndexTable[FOLIA_PROPERTY]!!, value)
+            arguments.propertyDelegate.set(card.propertyIndexTable[FOLIA_PROPERTY]!!, value / 10) // TODO convertor
         }
 
 }

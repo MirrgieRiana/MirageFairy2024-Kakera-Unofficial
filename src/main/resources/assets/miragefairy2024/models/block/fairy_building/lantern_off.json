@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "parent": "minecraft:block/block",
   "textures": {
-    "10": "miragefairy2024:block/fairy_building/lantern"
+    "10": "miragefairy2024:block/fairy_building/lantern_off"
   },
   "elements": [
     {

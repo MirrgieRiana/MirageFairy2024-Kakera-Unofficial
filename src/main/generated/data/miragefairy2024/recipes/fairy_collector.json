@@ -6,17 +6,14 @@
     "#": {
       "item": "miragefairy2024:fairy_house"
     },
-    "B": {
-      "item": "minecraft:bowl"
-    },
     "C": {
       "item": "minecraft:chest"
     }
   },
   "pattern": [
-    "BCB",
+    " C ",
     "C#C",
-    "BCB"
+    " C "
   ],
   "result": {
     "item": "miragefairy2024:fairy_collector"

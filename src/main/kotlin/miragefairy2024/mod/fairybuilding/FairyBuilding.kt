@@ -42,6 +42,7 @@ import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.MapColor
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
@@ -82,6 +83,7 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
@@ -163,7 +165,18 @@ open class FairyBuildingCard<E : FairyBuildingBlockEntity<E>, H : FairyBuildingS
     }
 }
 
-open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *>, settings: Settings) :
+    SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+    companion object {
+        private val SHAPE = VoxelShapes.union(
+            createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
+            createCuboidShape(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
+            createCuboidShape(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
+            createCuboidShape(0.0, 0.0, 15.9, 16.0, 16.0, 16.0),
+            createCuboidShape(0.0, 15.9, 0.0, 16.0, 16.0, 16.0),
+            createCuboidShape(15.9, 0.0, 0.0, 16.0, 16.0, 16.0),
+        )
+    }
 
     // Block Entity
 
@@ -223,7 +236,7 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *>, set
     // Status
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 4
+    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 6
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun hasComparatorOutput(state: BlockState) = true
@@ -236,17 +249,13 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *>, set
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
 
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(
-    val card: FairyBuildingCard<E, *>,
-    pos: BlockPos,
-    state: BlockState,
-) : LockableContainerBlockEntity(
-    card.blockEntityType,
-    pos,
-    state,
-), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<E, *>, pos: BlockPos, state: BlockState) :
+    LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract val self: E
 
@@ -271,6 +280,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
         val appearance: Appearance? = null,
+        val toolTipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     )
 
@@ -432,7 +442,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(
 
 }
 
-open class FairyBuildingScreenHandler(val card: FairyBuildingCard<*, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(card: FairyBuildingCard<*, *>, val arguments: Arguments) :
+    ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,

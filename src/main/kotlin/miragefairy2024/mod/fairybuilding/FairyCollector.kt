@@ -3,9 +3,12 @@ package miragefairy2024.mod.fairybuilding
 import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.util.Translation
 import miragefairy2024.util.collectItem
+import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.int
+import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
@@ -31,15 +34,15 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyCol
         slots = run {
             val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
             listOf(
-                FairyBuildingBlockEntity.SlotSettings(19, 34) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
-                FairyBuildingBlockEntity.SlotSettings(39, 34, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 机
-                FairyBuildingBlockEntity.SlotSettings(76, 34, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)) { it.isOf(FairyCard.item) }, // 仕分け妖精
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 0, 25 + 18 * 0, extractDirections = extractDirections, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 籠
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 1, 25 + 18 * 0, extractDirections = extractDirections), // 籠
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 2, 25 + 18 * 0, extractDirections = extractDirections), // 籠
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 0, 25 + 18 * 1, extractDirections = extractDirections), // 籠
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 1, 25 + 18 * 1, extractDirections = extractDirections), // 籠
-                FairyBuildingBlockEntity.SlotSettings(101 + 18 * 2, 25 + 18 * 1, extractDirections = extractDirections), // 籠
+                FairyBuildingBlockEntity.SlotSettings(20, 35, toolTipGetter = { listOf(FairyCollectorCard.SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+                FairyBuildingBlockEntity.SlotSettings(40, 35, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 机
+                FairyBuildingBlockEntity.SlotSettings(77, 35, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)) { it.isOf(FairyCard.item) }, // 仕分け妖精
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = FairyBuildingBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 籠
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 籠
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 籠
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 籠
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 籠
+                FairyBuildingBlockEntity.SlotSettings(102 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 籠
             )
         },
         properties = listOf(
@@ -49,22 +52,25 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyCol
             FairyCollectorScreenHandler.SORT_SPEED_PROPERTY,
         ),
     ),
+    10_000, 20_000,
 ) {
+    val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ identifier.toTranslationKey("gui", "specified_fairy_slot") }, "Only %s Family", "%s系統のみ")
     context(ModContext)
     override fun init() {
         super.init()
+        SPECIFIED_FAIRY_SLOT_TRANSLATION.enJa()
         registerShapedRecipeGeneration(FairyCollectorCard.item) {
-            pattern("BCB")
+            pattern(" C ")
             pattern("C#C")
-            pattern("BCB")
+            pattern(" C ")
             input('#', FairyHouseCard.item)
             input('C', Items.CHEST)
-            input('B', Items.BOWL)
         } on FairyHouseCard.item
     }
 }
 
-class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
+class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) :
+    FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
 
     override val self = this
 
@@ -103,7 +109,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
 
-        if (folia < 10_000) {
+        if (folia < 3_000) {
             setStatus(FairyFactoryBlock.Status.OFFLINE)
             return
         }
@@ -149,7 +155,8 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
 }
 
-class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
+class FairyCollectorScreenHandler(arguments: Arguments) :
+    FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
     companion object {
         val COLLECTION_PROGRESS_PROPERTY = FairyBuildingBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
         val SORT_PROGRESS_PROPERTY = FairyBuildingBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
@@ -157,8 +164,12 @@ class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHand
         val SORT_SPEED_PROPERTY = FairyBuildingBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ sortSpeed }, { sortSpeed = it })
     }
 
+    private val card = FairyCollectorCard
+
     var collectionProgress: Int
-        get() = arguments.propertyDelegate.get(card.propertyIndexTable[COLLECTION_PROGRESS_PROPERTY]!!)
+        get() {
+            return arguments.propertyDelegate.get(card.propertyIndexTable[COLLECTION_PROGRESS_PROPERTY]!!)
+        }
         set(value) {
             arguments.propertyDelegate.set(card.propertyIndexTable[COLLECTION_PROGRESS_PROPERTY]!!, value)
         }
