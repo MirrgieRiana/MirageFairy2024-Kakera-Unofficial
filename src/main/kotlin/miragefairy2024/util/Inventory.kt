@@ -42,7 +42,7 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     val destItemStack = destInventory[destSlotIndex]
     if (destItemStack.isNotEmpty && !(srcItemStack hasSameItemAndNbt destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
 
-    // 先が空もしくは元と同じ種類のアイテムが入っている場合、マージ
+    // 先が空もしくは元と同じ種類のアイテムが入っているのでマージ
 
     // 個数計算
     val srcCount = srcItemStack.count
