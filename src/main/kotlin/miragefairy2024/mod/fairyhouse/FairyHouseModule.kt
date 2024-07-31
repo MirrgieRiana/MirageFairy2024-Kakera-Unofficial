@@ -5,7 +5,7 @@ import miragefairy2024.ModContext
 import net.minecraft.util.Identifier
 
 enum class FairyHouseModelCard(val identifier: Identifier) {
-    LANTERN ( Identifier(MirageFairy2024.modId, "block/fairy_house/lantern")),
+    LANTERN(Identifier(MirageFairy2024.modId, "block/fairy_house/lantern")),
 }
 
 context(ModContext)

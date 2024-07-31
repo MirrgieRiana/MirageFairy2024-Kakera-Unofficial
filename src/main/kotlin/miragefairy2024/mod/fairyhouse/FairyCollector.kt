@@ -3,8 +3,6 @@ package miragefairy2024.mod.fairyhouse
 import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
-import miragefairy2024.mod.fairy.getFairyCondensation
-import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -15,24 +13,22 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.wrapper
 import net.minecraft.block.BlockState
-import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockBox
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import kotlin.math.log
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyFactoryScreenHandler>(
-    "fairy_collector", 2, "Fairy Collector", "エンデルマーニャの隠れ家",
-    "TODO", "あれ？ここにあったリモコン知らない？", // TODO
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyCollectorScreenHandler>(
+    "fairy_collector", 2, "Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家",
+    "An attractor of curiosity", "あれ？ここにあったリモコン知らない？",
     { FairyFactoryBlock({ FairyCollectorCard }, it) },
     BlockEntityAccessor(::FairyCollectorBlockEntity),
-    { FairyFactoryScreenHandler(FairyCollectorCard, it) },
+    { FairyCollectorScreenHandler(it) },
     176, 162,
     AbstractFairyHouseBlockEntity.Settings(
         slots = listOf(
-            AbstractFairyHouseBlockEntity.SlotSettings(19, 34) { FairyCollectorCard.isValid(it) }, // 回収妖精
+            AbstractFairyHouseBlockEntity.SlotSettings(19, 34) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
             AbstractFairyHouseBlockEntity.SlotSettings(39, 34, appearance = AbstractFairyHouseBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 机
             AbstractFairyHouseBlockEntity.SlotSettings(76, 34, appearance = AbstractFairyHouseBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)) { it.isOf(FairyCard.item) }, // 仕分け妖精
             AbstractFairyHouseBlockEntity.SlotSettings(101 + 18 * 0, 25 + 18 * 0, appearance = AbstractFairyHouseBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 籠
@@ -42,17 +38,14 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyFac
             AbstractFairyHouseBlockEntity.SlotSettings(101 + 18 * 1, 25 + 18 * 1, appearance = AbstractFairyHouseBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 籠
             AbstractFairyHouseBlockEntity.SlotSettings(101 + 18 * 2, 25 + 18 * 1, appearance = AbstractFairyHouseBlockEntity.Appearance(4.5, 2.2, 14.0, 90.0, 270.0)), // 籠
         ),
+        properties = listOf(
+            FairyCollectorScreenHandler.COLLECTION_PROGRESS_PROPERTY,
+            FairyCollectorScreenHandler.SORT_PROGRESS_PROPERTY,
+            FairyCollectorScreenHandler.COLLECTION_SPEED_PROPERTY,
+            FairyCollectorScreenHandler.SORT_SPEED_PROPERTY,
+        ),
     ),
 ) {
-    private fun isValid(itemStack: ItemStack): Boolean {
-        if (!itemStack.isOf(FairyCard.item)) return false
-        val motif = itemStack.getFairyMotif() ?: return false
-        return when (motif) {
-            MotifCard.HOPPER, MotifCard.ENDERMAN -> true // TODO 系統
-            else -> false
-        }
-    }
-
     context(ModContext)
     override fun init() {
         super.init()
@@ -67,19 +60,10 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlockEntity, FairyFac
     }
 }
 
-private fun getFairyLevel(itemStack: ItemStack): Double {
-    if (!itemStack.isOf(FairyCard.item)) return 0.0
-    val motif = itemStack.getFairyMotif() ?: return 0.0
-    val count = itemStack.getFairyCondensation() * itemStack.count
-    val level = motif.rare.toDouble() + log(count.toDouble(), 3.0)
-    return level
-}
-
 class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
+
     override val self = this
 
-    private var collectionProgress = 0
-    private var sortProgress = 0
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
@@ -95,8 +79,11 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
     }
 
 
-    private var collectionSpeed = 0
-    private var sortSpeed = 0
+    var collectionProgress = 0
+    var sortProgress = 0
+    var collectionSpeed = 0
+    var sortSpeed = 0
+
 
     override fun markDirty() {
         super.markDirty()
@@ -104,46 +91,89 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
     }
 
     private fun updateCache() {
-        collectionSpeed = (10000.0 / (20.0 * 3.0) / 10.0 * getFairyLevel(this[0])).toInt()
-        sortSpeed = (10000.0 / (20.0 * 2.0) / 10.0 * getFairyLevel(this[2])).toInt()
+        collectionSpeed = (10000.0 / (20.0 * 3.0) * (getFairyLevel(this[0]) / 10.0)).toInt()
+        sortSpeed = (10000.0 / (20.0 * 2.0) * (getFairyLevel(this[2]) / 10.0)).toInt()
     }
 
 
     override fun tick(world: World, pos: BlockPos, state: BlockState) {
         super.tick(world, pos, state)
 
-        if (getFolia() < 10) {
+        if (folia < 1000) {
             setStatus(FairyFactoryBlock.Status.OFFLINE)
             return
         }
-        setFolia(getFolia() - 10)
 
-        var processing = false
+        folia -= 1
 
-        collectionProgress += collectionSpeed
-        if (collectionProgress >= 10000) run {
-            collectionProgress = 0
+        if (this[1].isEmpty) {
+            collectionProgress += collectionSpeed
+            if (collectionProgress >= 10000) run {
+                collectionProgress = 0
 
-            if (this[1].isNotEmpty) return@run
+                folia -= 100
 
-            val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-            collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
-                this[1] = it.stack.copy()
-                it.discard()
-                true
+                val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
+                collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
+
+                    folia -= 50 + 2 * it.stack.count
+
+                    this[1] = it.stack.copy()
+                    it.discard()
+
+                    true
+                }
+
             }
-            processing = true
-
         }
 
-        sortProgress += sortSpeed
-        if (sortProgress >= 10000) {
-            sortProgress = 0
+        if (this[1].isNotEmpty) {
+            sortProgress += sortSpeed
+            if (sortProgress >= 10000) {
+                sortProgress = 0
 
-            mergeInventory(this, 1, this, 3..8)
+                folia -= 100
 
+                mergeInventory(this, 1, this, 3..8) // TODO 移動がされた場合に progress = true
+
+            }
         }
 
-        setStatus(if (processing) FairyFactoryBlock.Status.PROCESSING else FairyFactoryBlock.Status.IDLE)
+        setStatus(FairyFactoryBlock.Status.PROCESSING)
     }
+
+}
+
+class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
+    companion object {
+        val COLLECTION_PROGRESS_PROPERTY = AbstractFairyHouseBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
+        val SORT_PROGRESS_PROPERTY = AbstractFairyHouseBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
+        val COLLECTION_SPEED_PROPERTY = AbstractFairyHouseBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ collectionSpeed }, { collectionSpeed = it })
+        val SORT_SPEED_PROPERTY = AbstractFairyHouseBlockEntity.PropertySettings<FairyCollectorBlockEntity>({ sortSpeed }, { sortSpeed = it })
+    }
+
+    var collectionProgress: Int
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[COLLECTION_PROGRESS_PROPERTY]!!)
+        set(value) {
+            arguments.propertyDelegate.set(card.propertyIndexTable[COLLECTION_PROGRESS_PROPERTY]!!, value)
+        }
+
+    var sortProgress: Int
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[SORT_PROGRESS_PROPERTY]!!)
+        set(value) {
+            arguments.propertyDelegate.set(card.propertyIndexTable[SORT_PROGRESS_PROPERTY]!!, value)
+        }
+
+    var collectionSpeed: Int
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[COLLECTION_SPEED_PROPERTY]!!)
+        set(value) {
+            arguments.propertyDelegate.set(card.propertyIndexTable[COLLECTION_SPEED_PROPERTY]!!, value)
+        }
+
+    var sortSpeed: Int
+        get() = arguments.propertyDelegate.get(card.propertyIndexTable[SORT_SPEED_PROPERTY]!!)
+        set(value) {
+            arguments.propertyDelegate.set(card.propertyIndexTable[SORT_SPEED_PROPERTY]!!, value)
+        }
+
 }
