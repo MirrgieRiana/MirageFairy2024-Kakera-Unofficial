@@ -195,11 +195,7 @@ fun collectItem(
     process: (ItemEntity) -> Unit,
 ) {
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
-        when {
-            it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
-            !predicate(it) -> false
-            else -> true
-        }
+        !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
     }.groupBy { it.blockPos }
 
     var remainingAmount = maxCount
