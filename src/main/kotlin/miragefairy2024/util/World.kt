@@ -191,6 +191,7 @@ fun collectItem(
     originalBlockPos: BlockPos,
     reach: Int,
     maxCount: Int,
+    process: (ItemEntity) -> Unit,
 ) {
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
         when {
@@ -218,8 +219,7 @@ fun collectItem(
         }.forEach { (_, blockPos) ->
             targetTable[blockPos]?.forEach {
 
-                it.teleport(player.x, player.y, player.z)
-                it.resetPickupDelay()
+                process(it)
 
                 processedCount++
 
