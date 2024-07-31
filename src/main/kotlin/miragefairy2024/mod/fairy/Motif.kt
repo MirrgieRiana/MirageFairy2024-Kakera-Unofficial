@@ -392,7 +392,7 @@ enum class MotifCard(
     ),
     WOLF(
         "wolf", 4, "Wolfia", "狼精ウォルフャ", 0x827165, 0xBFBDBE, 0x9E9A96, 0x3F3E3A,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + melee.attack(0.4) * food(Items.MUTTON) // TODO 肉全般条件
             + melee.attack(0.4) * food.atLeast(12)
@@ -401,13 +401,13 @@ enum class MotifCard(
     ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder() + experience(1.0) * level.atMost(29),
         MotifCardRecipes().always + EntityType.PLAYER,
     ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder() + collection(1.2) * food.atLeast(12),
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
     ),
@@ -431,7 +431,7 @@ enum class MotifCard(
     // アンデッド
     ZOMBIE(
         "zombie", 2, "Zombia", "硬屍精ゾンビャ", 0x2B4219, 0x00AAAA, 0x322976, 0x2B4219,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + melee.attack(0.6) * food.atMost(6)
             + melee.attack(0.6) * indoor,
@@ -485,7 +485,7 @@ enum class MotifCard(
     ),
     GOLEM(
         "golem", 6, "Golemia", "鉄魔像精ゴレーミャ", 0xC1AB9E, 0xB5ADA8, 0xABA39D, 0x557725,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + melee.attack(0.6) * outdoor,
@@ -766,7 +766,7 @@ enum class MotifCard(
     ),
     HOPPER(
         "hopper", 4, "Hopperia", "漏斗精ホッペーリャ", 0xFFFFFF, 0x797979, 0x646464, 0x5A5A5A,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + collection(0.6)
             + collection(0.6) * indoor,
@@ -849,7 +849,7 @@ enum class MotifCard(
     // 概念
     MAGNETISM(
         "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
-        ParentMotifs(),
+        ParentMotifs() + { CARRY },
         PassiveSkillBuilder() + collection(1.0),
         MotifCardRecipes().always,
     ),
