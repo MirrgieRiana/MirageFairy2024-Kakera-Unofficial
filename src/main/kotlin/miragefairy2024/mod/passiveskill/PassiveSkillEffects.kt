@@ -279,7 +279,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
         if (newValue <= 0.0) return
         val actualAmount = world.random.randomInt(newValue)
         if (actualAmount <= 0) return
-        collectItem(world, player.eyeBlockPos, reach = 15, maxCount = actualAmount, { !it.boundingBox.intersects(player.boundingBox) }) { // 既に触れているアイテムには無反応
+        collectItem(world, player.eyeBlockPos, reach = 15, maxCount = actualAmount, predicate = { !it.boundingBox.intersects(player.boundingBox) }) { // 既に触れているアイテムには無反応
             it.teleport(player.x, player.y, player.z)
             it.resetPickupDelay()
         }

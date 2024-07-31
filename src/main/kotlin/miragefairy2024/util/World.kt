@@ -187,9 +187,9 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 fun collectItem(
     world: World,
     originalBlockPos: BlockPos,
-    reach: Int,
-    maxCount: Int,
-    predicate: (ItemEntity) -> Boolean,
+    reach: Int = Int.MAX_VALUE,
+    maxCount: Int = Int.MAX_VALUE,
+    predicate: (ItemEntity) -> Boolean = { true },
     process: (ItemEntity) -> Unit,
 ) {
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
