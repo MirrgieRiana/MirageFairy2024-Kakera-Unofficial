@@ -188,10 +188,10 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 fun collectItem(
     world: World,
     player: PlayerEntity,
-    actualAmount: Int,
+    originalBlockPos: BlockPos,
+    reach: Int,
+    maxCount: Int,
 ) {
-    val originalBlockPos = player.eyeBlockPos
-    val reach = 15
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
         when {
             it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
@@ -200,7 +200,7 @@ fun collectItem(
         }
     }.groupBy { it.blockPos }
 
-    var remainingAmount = actualAmount
+    var remainingAmount = maxCount
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
         blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->

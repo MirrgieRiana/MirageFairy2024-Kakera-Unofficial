@@ -11,6 +11,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.buildText
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.enJa
+import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.randomInt
@@ -278,7 +279,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
         if (newValue <= 0.0) return
         val actualAmount = world.random.randomInt(newValue)
         if (actualAmount <= 0) return
-        collectItem(world, player, actualAmount)
+        collectItem(world, player, player.eyeBlockPos, reach = 15, maxCount = actualAmount)
     }
 
     context(ModContext)
