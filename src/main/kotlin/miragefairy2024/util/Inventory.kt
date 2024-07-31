@@ -52,7 +52,8 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
  */
 fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): Boolean {
     destIndices.forEach { destIndex ->
-        if (mergeInventory(srcInventory, srcIndex, destInventory, destIndex)) return true // すべてマージされたのでこれ以降の判定は不要
+        val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndex)
+        if (result) return true // すべてマージされたのでこれ以降の判定は不要
     }
     return false
 }
