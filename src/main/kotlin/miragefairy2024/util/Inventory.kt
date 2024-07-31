@@ -108,7 +108,7 @@ fun Inventory.mergeTo(other: Inventory) = mergeInventory(this, this.indices, oth
 
 // Insert
 
-/** @see ScreenHandler#insertItem */
+/** @see ScreenHandler.insertItem */
 fun ScreenHandler.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>): Boolean {
     var moved = false
 
