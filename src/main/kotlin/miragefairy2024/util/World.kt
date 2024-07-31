@@ -1,13 +1,19 @@
 package miragefairy2024.util
 
+import miragefairy2024.mod.SoundEventCard
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.FarmlandBlock
 import net.minecraft.block.OperatorBlock
+import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundCategory
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
+import net.minecraft.util.math.Direction
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
@@ -177,4 +183,58 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
     val newItemStack = itemStack.copy()
     if (success) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
+}
+
+fun collectItem(
+    world: World,
+    player: PlayerEntity,
+    actualAmount: Int,
+) {
+    val originalBlockPos = player.eyeBlockPos
+    val reach = 15
+    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
+        when {
+            it.isSpectator -> false // スペクテイターモードであるアイテムには無反応
+            it.boundingBox.intersects(player.boundingBox) -> false // 既に触れているアイテムには無反応
+            else -> true
+        }
+    }.groupBy { it.blockPos }
+
+    var remainingAmount = actualAmount
+    var processedCount = 0
+    if (targetTable.isNotEmpty()) run finish@{
+        blockVisitor(listOf(originalBlockPos), maxDistance = reach) { fromBlockPos, toBlockPos ->
+            val offset = toBlockPos.subtract(fromBlockPos)
+            val direction = when {
+                offset.y == -1 -> Direction.DOWN
+                offset.y == 1 -> Direction.UP
+                offset.z == -1 -> Direction.NORTH
+                offset.z == 1 -> Direction.SOUTH
+                offset.x == -1 -> Direction.WEST
+                offset.x == 1 -> Direction.EAST
+                else -> throw AssertionError()
+            }
+            !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction) && !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+        }.forEach { (_, blockPos) ->
+            targetTable[blockPos]?.forEach {
+
+                it.teleport(player.x, player.y, player.z)
+                it.resetPickupDelay()
+
+                processedCount++
+
+                remainingAmount--
+                if (remainingAmount <= 0) return@finish
+
+            }
+        }
+    }
+
+    if (processedCount > 0) {
+
+        // Effect
+        world.playSound(null, player.x, player.y, player.z, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
+
+    }
+
 }
