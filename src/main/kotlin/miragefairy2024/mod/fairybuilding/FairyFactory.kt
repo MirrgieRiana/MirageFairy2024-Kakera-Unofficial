@@ -52,10 +52,10 @@ open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *, *>, settin
         val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
     }
 
-    enum class Status(private val string: String, val isLit: Boolean) : StringIdentifiable {
-        OFFLINE("offline", false),
-        IDLE("idle", true),
-        PROCESSING("processing", true),
+    enum class Status(private val string: String, val isLit: Boolean, val doMovePosition: Boolean) : StringIdentifiable {
+        OFFLINE("offline", false, false),
+        IDLE("idle", true, false),
+        PROCESSING("processing", true, true),
         ;
 
         override fun asString() = string
@@ -107,8 +107,8 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     var folia = 0
     private var foliaCollectionCooldown = 0
 
-    override fun tick(world: World, pos: BlockPos, state: BlockState) {
-        super.tick(world, pos, state)
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--
         } else {
@@ -146,6 +146,8 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
     }
 
+
+    override val doMovePosition get() = cachedState[FairyFactoryBlock.STATUS].doMovePosition
 
     override fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         if (cachedState[FairyFactoryBlock.STATUS].isLit) {

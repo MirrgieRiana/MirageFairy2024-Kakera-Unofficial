@@ -83,6 +83,7 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
@@ -140,6 +141,8 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
         val filter: (ItemStack) -> Boolean = { true },
     )
 
+    class Appearance(val isFairy: Boolean, val positions: List<Position>)
+
     /**
      * @param x 1/16 scale
      * @param y 1/16 scale
@@ -147,7 +150,7 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
      * @param pitch degree
      * @param yaw degree
      */
-    class Appearance(val x: Double, val y: Double, val z: Double, val pitch: Double, val yaw: Double)
+    class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
 
     open fun createProperties(): List<PropertySettings<E>> = listOf()
@@ -274,8 +277,10 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *>, 
     // Move
 
     override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return if (world.isClient) null else checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
-            blockEntity.tick(world2, pos, state2)
+        return if (world.isClient) checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
+            blockEntity.clientTick(world2, pos, state2)
+        } else checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
+            blockEntity.serverTick(world2, pos, state2)
         }
     }
 
@@ -409,12 +414,80 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Move
 
-    open fun tick(world: World, pos: BlockPos, state: BlockState) = Unit
+    open fun serverTick(world: World, pos: BlockPos, state: BlockState) = Unit
 
     open fun getComparatorOutput() = 0
 
 
     // Rendering
+
+    protected open val doMovePosition get() = false
+
+    private val fairyAnimators = Array(card.slots.size) { index ->
+        val appearance = card.slots[index].appearance
+        if (appearance != null) FairyAnimator(appearance) else null
+    }
+
+    private inner class FairyAnimator(val appearance: FairyBuildingSettings.Appearance) {
+        init {
+            check(appearance.positions.isNotEmpty())
+        }
+
+        private var index = 0
+        private var position = appearance.positions[index]
+        private var countdown = position.duration
+
+        var ticks = (Math.random() * 1000).toInt()
+        var xSpeed = 0.0
+        var ySpeed = 0.0
+        var zSpeed = 0.0
+        var yawSpeed = 0.0F
+        var pitchSpeed = 0.0F
+        var x = position.x
+        var y = position.y
+        var z = position.z
+        var yaw = position.yaw
+        var pitch = position.pitch
+
+        fun tick(doMovePosition: Boolean) {
+            val world = world ?: return
+
+            // 定位置の切り替え
+            if (doMovePosition) {
+                countdown--
+                if (countdown <= 0) {
+
+                    index++
+                    if (index >= appearance.positions.size) index = 0
+
+                    position = appearance.positions[index]
+                    countdown = (appearance.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
+
+                }
+            }
+
+            // 妖精の移動
+            ticks++
+            xSpeed = (position.x - x) * 0.1
+            ySpeed = (position.y - y) * 0.1
+            zSpeed = (position.z - z) * 0.1
+            yawSpeed = (position.yaw - yaw) * 0.1F
+            pitchSpeed = (position.pitch - pitch) * 0.1F
+            x += xSpeed
+            y += ySpeed
+            z += zSpeed
+            yaw += yawSpeed
+            pitch += pitchSpeed
+
+        }
+    }
+
+    open fun clientTick(world: World, pos: BlockPos, state: BlockState) {
+        cachedState
+        fairyAnimators.forEach {
+            it?.tick(doMovePosition)
+        }
+    }
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = world ?: return
@@ -428,12 +501,29 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
             card.slots.forEachIndexed { index, slot ->
-                val appearance = slot.appearance ?: return@forEachIndexed
+                val fairyAnimator = fairyAnimators[index] ?: return@forEachIndexed
+
+                val x = fairyAnimator.x + fairyAnimator.xSpeed * tickDelta.toDouble()
+                val y = fairyAnimator.y + fairyAnimator.ySpeed * tickDelta.toDouble()
+                val z = fairyAnimator.z + fairyAnimator.zSpeed * tickDelta.toDouble()
+                val yaw = fairyAnimator.yaw + fairyAnimator.yawSpeed * tickDelta
+                val pitch = fairyAnimator.pitch + fairyAnimator.pitchSpeed * tickDelta
+                val yawOffset = if (fairyAnimator.appearance.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
+                val pitchOffset = if (fairyAnimator.appearance.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
+
                 renderingProxy.stack {
-                    renderingProxy.translate(appearance.x / 16.0, appearance.y / 16.0, appearance.z / 16.0) // 移動
-                    renderingProxy.rotateY(-appearance.yaw.toFloat() / 180F * 3.14F) // 横回転
-                    renderingProxy.rotateX(-appearance.pitch.toFloat() / 180F * 3.14F) // 足元を起点にして縦回転
+                    renderingProxy.translate(x / 16.0, y / 16.0, z / 16.0) // 移動
+                    renderingProxy.rotateY(-yaw / 180F * MathHelper.PI) // 横回転
+                    renderingProxy.rotateX(-pitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
                     renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
+
+                    if (fairyAnimator.appearance.isFairy) {
+                        renderingProxy.translate(0.0, 0.25, 0.0)
+                        renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
+                        renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
+                        renderingProxy.translate(0.0, -0.25, 0.0)
+                    }
+
                     renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
                     renderingProxy.renderItemStack(inventory[index])
                 }
@@ -451,8 +541,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     private val propertyDelegate = object : PropertyDelegate {
         override fun size() = card.properties.size
-        override fun get(index: Int) = card.properties.getOrNull(index)?.getter?.invoke(self) ?: 0
-        override fun set(index: Int, value: Int) = unit { card.properties.getOrNull(index)?.setter?.invoke(self, value) }
+        override fun get(index: Int) = card.properties.getOrNull(index)?.let { it.encoder(it.getter.invoke(self)).toInt() } ?: 0
+        override fun set(index: Int, value: Int) = unit { card.properties.getOrNull(index)?.let { it.setter.invoke(self, it.decoder(value.toShort())) } }
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
