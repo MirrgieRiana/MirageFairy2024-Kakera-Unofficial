@@ -157,8 +157,6 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
 }
 
-open class FairyFactoryScreenHandler(private val card: FairyFactoryCard<*, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
-    var folia
-        get() = getProperty(card, FairyFactorySettings.FOLIA_PROPERTY)
-        set(value) = setProperty(card, FairyFactorySettings.FOLIA_PROPERTY, value)
+open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
+    var folia by Property(FairyFactorySettings.FOLIA_PROPERTY)
 }

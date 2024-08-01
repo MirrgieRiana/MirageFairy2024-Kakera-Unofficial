@@ -169,17 +169,8 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 }
 
 class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
-    private val card = FairyCollectorCard
-    var collectionProgress
-        get() = getProperty(card, FairyCollectorSettings.COLLECTION_PROGRESS_PROPERTY)
-        set(value) = setProperty(card, FairyCollectorSettings.COLLECTION_PROGRESS_PROPERTY, value)
-    var sortProgress
-        get() = getProperty(card, FairyCollectorSettings.SORT_PROGRESS_PROPERTY)
-        set(value) = setProperty(card, FairyCollectorSettings.SORT_PROGRESS_PROPERTY, value)
-    var collectionSpeed
-        get() = getProperty(card, FairyCollectorSettings.COLLECTION_SPEED_PROPERTY)
-        set(value) = setProperty(card, FairyCollectorSettings.COLLECTION_SPEED_PROPERTY, value)
-    var sortSpeed
-        get() = getProperty(card, FairyCollectorSettings.SORT_SPEED_PROPERTY)
-        set(value) = setProperty(card, FairyCollectorSettings.SORT_SPEED_PROPERTY, value)
+    var collectionProgress by Property(FairyCollectorSettings.COLLECTION_PROGRESS_PROPERTY)
+    var sortProgress by Property(FairyCollectorSettings.SORT_PROGRESS_PROPERTY)
+    var collectionSpeed by Property(FairyCollectorSettings.COLLECTION_SPEED_PROPERTY)
+    var sortSpeed by Property(FairyCollectorSettings.SORT_SPEED_PROPERTY)
 }

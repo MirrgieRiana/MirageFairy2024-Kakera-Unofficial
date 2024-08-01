@@ -472,7 +472,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
@@ -531,16 +531,16 @@ open class FairyBuildingScreenHandler(card: FairyBuildingCard<*, *, *>, val argu
         return originalItemStack
     }
 
-}
+    inner class Property(private val property: FairyBuildingSettings.PropertySettings<*>) {
+        operator fun getValue(thisRef: Any?, property: Any?): Int {
+            val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
+            return this.property.decoder(arguments.propertyDelegate.get(propertyIndex).toShort())
+        }
 
-fun FairyBuildingScreenHandler.getProperty(card: FairyBuildingCard<*, *, *>, property: FairyBuildingSettings.PropertySettings<*>): Int {
-    val propertyIndex = card.propertyIndexTable[property] ?: throw NullPointerException("No such property")
-    val value = this.arguments.propertyDelegate.get(propertyIndex)
-    return property.decoder(value.toShort())
-}
+        operator fun setValue(thisRef: Any?, property: Any?, value: Int) {
+            val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
+            arguments.propertyDelegate.set(propertyIndex, this.property.encoder(value).toInt())
+        }
+    }
 
-fun FairyBuildingScreenHandler.setProperty(card: FairyBuildingCard<*, *, *>, property: FairyBuildingSettings.PropertySettings<*>, value: Int) {
-    val propertyIndex = card.propertyIndexTable[property] ?: throw NullPointerException("No such property")
-    val short = property.encoder(value)
-    this.arguments.propertyDelegate.set(propertyIndex, short.toInt())
 }
