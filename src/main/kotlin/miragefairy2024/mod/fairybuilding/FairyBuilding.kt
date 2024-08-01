@@ -123,6 +123,10 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
     abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
 
 
+    abstract val guiWidth: Int
+    abstract val guiHeight: Int
+
+
     open fun createSlots(): List<SlotSettings> = listOf()
 
     class SlotSettings(
@@ -154,10 +158,6 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
         val encoder: (Int) -> Short = { it.toShort() },
         val decoder: (Short) -> Int = { it.toInt() },
     )
-
-
-    abstract val guiWidth: Int
-    abstract val guiHeight: Int
 
 }
 

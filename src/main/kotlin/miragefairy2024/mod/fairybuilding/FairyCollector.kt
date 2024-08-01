@@ -36,6 +36,9 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
 
     override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(arguments)
 
+    override val guiWidth = 176
+    override val guiHeight = 162
+
     override fun createSlots(): List<SlotSettings> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlots() + listOf(
@@ -61,9 +64,6 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
         COLLECTION_SPEED_PROPERTY,
         SORT_SPEED_PROPERTY,
     )
-
-    override val guiWidth = 176
-    override val guiHeight = 162
 
     override val collectingFolia = 10_000
     override val maxFolia = 20_000

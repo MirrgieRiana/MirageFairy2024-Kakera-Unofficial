@@ -29,6 +29,9 @@ object FairyHouseSettings : FairyFactorySettings<FairyHouseBlockEntity, FairyFac
 
     override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyFactoryScreenHandler(FairyHouseCard, arguments)
 
+    override val guiWidth = 176
+    override val guiHeight = 178
+
     override fun createSlots(): List<SlotSettings> {
         return super.createSlots() + listOf(
             SlotSettings(8, 39, appearance = Appearance(10.0, 9.5, 14.5, 0.0, 180.0)), // 本棚の上
@@ -50,9 +53,6 @@ object FairyHouseSettings : FairyFactorySettings<FairyHouseBlockEntity, FairyFac
             SlotSettings(148, 60, appearance = Appearance(5.0, 0.1, 4.0, 0.0, 290.0)) { it.isOf(FairyCard.item) }, // 床
         )
     }
-
-    override val guiWidth = 176
-    override val guiHeight = 178
 
     override val collectingFolia = 2_000
     override val maxFolia = 4_000
