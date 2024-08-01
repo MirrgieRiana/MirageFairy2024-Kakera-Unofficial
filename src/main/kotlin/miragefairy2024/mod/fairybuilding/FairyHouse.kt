@@ -38,19 +38,29 @@ object FairyHouseSettings : FairyFactorySettings<FairyHouseBlockEntity, FairyFac
             SlotSettings(61, 17, appearance = Appearance(true, listOf(Position(4.5, 2.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
             SlotSettings(61, 41, appearance = Appearance(true, listOf(Position(4.5, 7.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
             SlotSettings(61, 65, appearance = Appearance(true, listOf(Position(4.5, 12.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
-            SlotSettings(82, 48, appearance = Appearance(false, listOf(Position(1.5, 5.5, 2.0, 0.0F, 90.0F, 200)))), // タンスの上
+            SlotSettings(82, 48, appearance = Appearance(false, listOf(Position(1.5, 5.5, 2.0, 0.0F, 270.0F, 200)))), // タンスの上
             SlotSettings(104, 27, appearance = Appearance(true, listOf(Position(12.0, 0.1, 3.0, 0.0F, 280.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
             SlotSettings(128, 17, appearance = Appearance(false, listOf(Position(11.5, 1.5, 7.5, 0.0F, 270.0F, 200)))), // テーブルの上
             SlotSettings(152, 17, appearance = Appearance(true, listOf(Position(13.0, 0.1, 12.0, 0.0F, 70.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
             SlotSettings(152, 37, appearance = Appearance(true, listOf(Position(9.0, 0.1, 12.0, 0.0F, 110.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
-            SlotSettings(108, 60, appearance = Appearance(true, listOf(Position(2.0, 0.1, 10.0, 0.0F, 110.0F, 200)))) { it.isOf(FairyCard.item) }, // 床
+            SlotSettings(108, 60, appearance = Appearance(true, run {
+                listOf(
+                    Position(2.0, 0.1, 10.0, 0.0F, 110.0F, 140),
+                    Position(6.0, 0.1, 10.0, 0.0F, 60.0F, 140),
+                )
+            })) { it.isOf(FairyCard.item) }, // 床（左下）
             SlotSettings(
                 128, 60,
                 appearance = Appearance(false, listOf(Position(4.0, 0.1, 7.0, 0.0F, 90.0F, 200))),
                 insertDirections = setOf(Direction.UP, Direction.WEST),
                 extractDirections = setOf(Direction.DOWN, Direction.EAST),
             ), // 床の上
-            SlotSettings(148, 60, appearance = Appearance(true, listOf(Position(5.0, 0.1, 4.0, 0.0F, 290.0F, 200)))) { it.isOf(FairyCard.item) }, // 床
+            SlotSettings(148, 60, appearance = Appearance(true, run {
+                listOf(
+                    Position(5.0, 0.1, 4.0, 0.0F, 290.0F, 180),
+                    Position(7.0, 0.1, 6.0, 0.0F, 320.0F, 180),
+                )
+            })) { it.isOf(FairyCard.item) }, // 床（右上）
         )
     }
 
