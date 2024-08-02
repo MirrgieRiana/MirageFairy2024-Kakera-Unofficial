@@ -5,6 +5,7 @@ import miragefairy2024.Modules
 import miragefairy2024.client.mod.fairy.initFairyClientModule
 import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
 import miragefairy2024.client.mod.initExtraPlayerDataClientModule
+import miragefairy2024.client.mod.initFairyBuildingClientModule
 import miragefairy2024.clientProxy
 import net.fabricmc.api.ClientModInitializer
 
@@ -17,5 +18,6 @@ object MirageFairy2024Client : ClientModInitializer {
         initFairyQuestClientModule()
         initFairyClientModule()
         initExtraPlayerDataClientModule()
+        initFairyBuildingClientModule()
     }
 }
