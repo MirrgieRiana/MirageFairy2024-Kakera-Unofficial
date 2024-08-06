@@ -67,6 +67,14 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
+val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
+val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
+val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
+val mirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
+val netherMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_mirage_cluster"))
+val mirageClusterFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest"))
+val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
+
 object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEntity>(
     "mirage_flower", "Mirage Flower", "妖花ミラージュ",
     "mirage_bulb", "Mirage Bulb", "ミラージュの球根",
@@ -76,14 +84,6 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
     { MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS)) },
     ::MirageFlowerBlockEntity,
 )
-
-val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
-val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
-val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
-val mirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
-val netherMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_mirage_cluster"))
-val mirageClusterFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest"))
-val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
 
 context(ModContext)
 fun initMirageFlower() {
