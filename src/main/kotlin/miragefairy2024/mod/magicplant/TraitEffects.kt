@@ -2,6 +2,8 @@ package miragefairy2024.mod.magicplant
 
 import mirrg.kotlin.hydrogen.or
 
+// api
+
 class MutableTraitEffects {
     private val map = mutableMapOf<TraitEffectKey<*>, Any>()
 
@@ -24,6 +26,9 @@ class MutableTraitEffects {
         }
     }
 }
+
+
+// util
 
 operator fun MutableTraitEffects.plusAssign(other: MutableTraitEffects) {
     other.keys.forEach { key ->

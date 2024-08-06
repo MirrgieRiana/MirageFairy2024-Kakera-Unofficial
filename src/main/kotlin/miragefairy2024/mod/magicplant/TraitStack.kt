@@ -7,11 +7,16 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import net.minecraft.nbt.NbtCompound
 
+// api
+
 class TraitStack(val trait: Trait, val level: Int) {
     init {
         require(level >= 1)
     }
 }
+
+
+// util
 
 fun NbtCompound.toTraitStack(): TraitStack? {
     val trait = this.wrapper["Trait"].string.get()?.toIdentifier()?.toTrait() ?: return null
