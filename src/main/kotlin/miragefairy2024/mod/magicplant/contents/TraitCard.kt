@@ -56,10 +56,10 @@ enum class TraitCard(
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val trait = CompoundTrait(sortKey, traitFactorCard.traitFactor, traitEffectKeyCard)
+    val trait: Trait = CompoundTrait(sortKey, traitFactorCard.traitFactor, traitEffectKeyCard)
 }
 
-class CompoundTrait(sortKey: String, private val factor: TraitFactor, private val traitEffectKeyCard: TraitEffectKeyCard) : Trait(traitEffectKeyCard.color, sortKey) {
+private class CompoundTrait(sortKey: String, private val factor: TraitFactor, private val traitEffectKeyCard: TraitEffectKeyCard) : Trait(traitEffectKeyCard.color, sortKey) {
     override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
         val factor = factor.getFactor(world, blockPos)
         return if (factor != 0.0) {
