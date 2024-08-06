@@ -1,8 +1,12 @@
 package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.TraitEffectKey
+import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.getName
+import miragefairy2024.mod.magicplant.traitEffectKeyRegistry
+import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.util.Formatting
@@ -44,5 +48,13 @@ enum class TraitEffectKeyCard(
             override fun plus(a: Double, b: Double) = a + b
             override fun getDefaultValue() = 0.0
         }
+    }
+}
+
+context(ModContext)
+fun initTraitEffectKeyCard() {
+    TraitEffectKeyCard.entries.forEach { card ->
+        card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
+        card.traitEffectKey.enJa(card.enName, card.jaName)
     }
 }

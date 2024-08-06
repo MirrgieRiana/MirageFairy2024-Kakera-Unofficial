@@ -1,9 +1,13 @@
 package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
 import miragefairy2024.mod.magicplant.TraitFactor
+import miragefairy2024.mod.magicplant.enJa
+import miragefairy2024.mod.magicplant.traitRegistry
+import miragefairy2024.util.register
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -57,6 +61,14 @@ enum class TraitCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
     val trait: Trait = CompoundTrait(sortKey, traitFactorCard.traitFactor, traitEffectKeyCard)
+}
+
+context(ModContext)
+fun initTraitCard() {
+    TraitCard.entries.forEach { card ->
+        card.trait.register(traitRegistry, card.identifier)
+        card.trait.enJa(card.enName, card.jaName)
+    }
 }
 
 private class CompoundTrait(sortKey: String, private val factor: TraitFactor, private val traitEffectKeyCard: TraitEffectKeyCard) : Trait(traitEffectKeyCard.color, sortKey) {
