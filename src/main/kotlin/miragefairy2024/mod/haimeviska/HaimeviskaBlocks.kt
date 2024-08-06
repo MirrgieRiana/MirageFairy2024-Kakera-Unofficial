@@ -7,7 +7,7 @@ import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
-import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
+import miragefairy2024.mod.fairy.registerHarvestNotation
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -350,8 +350,8 @@ fun initHaimeviskaBlocks() {
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
         input(HaimeviskaBlockCard.LOG.item)
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    registerMagicPlantDropNotation(HaimeviskaBlockCard.DRIPPING_LOG.item, MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-    registerMagicPlantDropNotation(HaimeviskaBlockCard.HOLLOW_LOG.item, MaterialCard.FRACTAL_WISP.item)
+    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
+    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
 
 }
 
