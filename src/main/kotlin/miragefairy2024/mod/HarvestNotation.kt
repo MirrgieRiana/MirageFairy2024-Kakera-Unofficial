@@ -11,6 +11,6 @@ val harvestNotations = mutableListOf<HarvestNotation>()
 class HarvestNotation(val seed: ItemStack, val crops: List<ItemStack>)
 
 context(ModContext)
-fun registerMagicPlantDropNotation(seed: Item, vararg drops: Item) = ModEvents.onInitialize {
-    harvestNotations += HarvestNotation(seed.createItemStack(), drops.map { it.createItemStack() })
+fun Item.registerHarvestNotation(vararg drops: Item) = ModEvents.onInitialize {
+    harvestNotations += HarvestNotation(this.createItemStack(), drops.map { it.createItemStack() })
 }

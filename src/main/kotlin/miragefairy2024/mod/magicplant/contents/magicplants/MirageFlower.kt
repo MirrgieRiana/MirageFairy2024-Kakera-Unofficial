@@ -15,7 +15,7 @@ import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.magicplant.initMagicPlant
 import miragefairy2024.mod.poem
-import miragefairy2024.mod.registerMagicPlantDropNotation
+import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.createCuboidShape
@@ -224,7 +224,7 @@ fun initMirageFlower() {
     }
 
     // レシピ
-    registerMagicPlantDropNotation(card.item, MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
+    card.item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
 
 }
 
