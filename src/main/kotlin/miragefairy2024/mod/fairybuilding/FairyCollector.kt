@@ -41,30 +41,30 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
     override fun createSlots(): List<SlotSettings> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlots() + listOf(
-            SlotSettings(20, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
-            SlotSettings(31 + 18 * 0, 26 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
-            SlotSettings(31 + 18 * 1, 26 + 18 * 0), // 机
-            SlotSettings(31 + 18 * 0, 26 + 18 * 1), // 机
-            SlotSettings(31 + 18 * 1, 26 + 18 * 1), // 机
-            SlotSettings(77, 35, appearance = Appearance(true, run {
+            SlotSettings(13, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            SlotSettings(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
+            SlotSettings(81, 35, appearance = Appearance(true, run { // 仕分け妖精
                 listOf(
                     Position(11.5, 0.1, 6.0, 0.0F, 90.0F, 40),
                     Position(7.0, 0.1, 8.0, 0.0F, 275.0F, 40),
                     Position(12.0, 0.1, 8.0, 0.0F, 265.0F, 40),
                     Position(8.0, 0.1, 6.0, 0.0F, 20.0F, 40),
                 )
-            })) { it.isOf(FairyCard.item) }, // 仕分け妖精
-            SlotSettings(102 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
-            SlotSettings(102 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            })) { it.isOf(FairyCard.item) },
+            SlotSettings(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
+            SlotSettings(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(37 + 18 * 1, 17 + 18 * 0), // 机
+            SlotSettings(37 + 18 * 0, 17 + 18 * 1), // 机
+            SlotSettings(37 + 18 * 1, 17 + 18 * 1), // 机
         )
     }
 
-    val TABLE_SLOT_INDICES = 1..4
-    val CHEST_SLOT_INDICES = 6..11
+    val TABLE_SLOT_INDICES = listOf(1, 9, 10, 11)
+    val CHEST_SLOT_INDICES = 3..8
 
     val COLLECTION_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
     val SORT_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
