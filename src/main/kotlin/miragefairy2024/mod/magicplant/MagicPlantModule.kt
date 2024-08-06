@@ -2,7 +2,6 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
@@ -34,10 +33,6 @@ fun initMagicPlantModule() {
     TraitCard.entries.forEach { card ->
         card.trait.register(traitRegistry, card.identifier)
         card.trait.enJa(card.enName, card.jaName)
-    }
-
-    ModEvents.onInitialize {
-        worldGenTraitGenerations += RecipeWorldGenTraitGeneration()
     }
 
     TRAIT_TRANSLATION.enJa()
