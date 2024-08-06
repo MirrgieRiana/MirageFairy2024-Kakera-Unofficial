@@ -7,7 +7,7 @@ fun interface TraitFactor {
     fun getFactor(world: World, blockPos: BlockPos): Double
 }
 
-fun interface TraitCondition : TraitFactor {
-    override fun getFactor(world: World, blockPos: BlockPos) = if (isValid(world, blockPos)) 1.0 else 0.0
-    fun isValid(world: World, blockPos: BlockPos): Boolean
+@Suppress("FunctionName")
+fun TraitCondition(isValid: (world: World, blockPos: BlockPos) -> Boolean) = TraitFactor { world, blockPos ->
+    if (isValid(world, blockPos)) 1.0 else 0.0
 }
