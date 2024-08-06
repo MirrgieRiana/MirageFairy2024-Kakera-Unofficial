@@ -822,7 +822,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + speed(0.4) * overworld * night * skyVisible
             + regeneration(0.4) * overworld * night * skyVisible
-            + StatusEffects.NIGHT_VISION() * overworld * night * skyVisible,
+            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * overworld * night * skyVisible,
         MotifCardRecipes().overworld,
     ),
 
