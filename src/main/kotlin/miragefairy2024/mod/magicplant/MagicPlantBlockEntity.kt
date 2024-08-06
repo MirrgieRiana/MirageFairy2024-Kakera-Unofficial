@@ -34,15 +34,9 @@ abstract class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, st
         super.setWorld(world)
         if (traitStacks == null) {
             val block = world.getBlockState(pos).block
-            val traitStackList = mutableListOf<TraitStack>()
-            var isRare = false
-            worldGenTraitGenerations.forEach {
-                val result = it.spawn(world, pos, block)
-                traitStackList += result.first
-                if (result.second) isRare = true
-            }
-            setTraitStacks(TraitStacks.of(traitStackList))
-            setRare(isRare)
+            val result = spawnTraitStacks(world, pos, block)
+            setTraitStacks(result.first)
+            setRare(result.second)
         }
     }
 
