@@ -40,9 +40,11 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldView
 
 @Suppress("OVERRIDE_DEPRECATION")
-abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val cardGetter: () -> MagicPlantCard<*>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
+
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(cardGetter().blockEntityType, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
@@ -259,7 +261,7 @@ abstract class MagicPlantBlock(settings: Settings) : PlantBlock(settings), Block
 
 }
 
-abstract class SimpleMagicPlantBlock(settings: Settings) : MagicPlantBlock(settings) {
+abstract class SimpleMagicPlantBlock(cardGetter: () -> MagicPlantCard<*>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
 
     // Property
 

@@ -157,7 +157,7 @@ object VeropedaCard : MagicPlantCard<VeropedaBlock>(
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
+class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }, settings) {
     companion object {
         private val AGE_TO_SHAPE: Array<VoxelShape> = arrayOf(
             createCuboidShape(3.0, 5.0),
@@ -169,7 +169,6 @@ class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
 
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state)
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 }
