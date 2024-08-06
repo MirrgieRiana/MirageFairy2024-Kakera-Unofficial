@@ -20,7 +20,6 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
@@ -81,14 +80,4 @@ abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
     val block = blockCreator()
     val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
     val item = MagicPlantSeedItem(block, Item.Settings())
-}
-
-
-val harvestNotations = mutableListOf<HarvestNotation>()
-
-class HarvestNotation(val seed: ItemStack, val crops: List<ItemStack>)
-
-context(ModContext)
-fun registerMagicPlantDropNotation(seed: Item, vararg drops: Item) = ModEvents.onInitialize {
-    harvestNotations += HarvestNotation(seed.createItemStack(), drops.map { it.createItemStack() })
 }
