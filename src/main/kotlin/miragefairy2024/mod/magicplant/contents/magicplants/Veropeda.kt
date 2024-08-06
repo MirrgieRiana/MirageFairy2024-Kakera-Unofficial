@@ -1,4 +1,4 @@
-package miragefairy2024.mod.magicplant.magicplants
+package miragefairy2024.mod.magicplant.contents.magicplants
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -8,8 +8,8 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
-import miragefairy2024.mod.magicplant.TraitCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
+import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.magicplant.initMagicPlant
 import miragefairy2024.mod.magicplant.registerMagicPlantDropNotation
 import miragefairy2024.mod.poem

@@ -8,8 +8,8 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.getName
-import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.worldGenTraitRecipeRegistry
 import miragefairy2024.mod.rei.WorldGenTraitReiCategoryCard
 import miragefairy2024.util.createItemStack

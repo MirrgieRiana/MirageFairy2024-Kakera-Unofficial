@@ -6,7 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.haimeviskaDeepFairyForestPlacedFeatureKey
 import miragefairy2024.mod.haimeviska.haimeviskaFairyForestPlacedFeatureKey
-import miragefairy2024.mod.magicplant.magicplants.mirageClusterFairyForestPlacedFeatureKey
+import miragefairy2024.mod.magicplant.contents.magicplants.mirageClusterFairyForestPlacedFeatureKey
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration

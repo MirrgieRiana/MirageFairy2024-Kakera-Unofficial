@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.ModContext
+import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration

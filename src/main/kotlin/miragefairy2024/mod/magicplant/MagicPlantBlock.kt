@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.clientProxy
+import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.boolean
 import miragefairy2024.util.createItemStack
