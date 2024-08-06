@@ -41,7 +41,7 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
     override fun createSlots(): List<SlotSettings> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlots() + listOf(
-            SlotSettings(13, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            SlotSettings(15, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
             SlotSettings(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
             SlotSettings(81, 35, appearance = Appearance(true, run { // 仕分け妖精
                 listOf(
@@ -151,7 +151,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
                 folia -= 1000
 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-                collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
+                collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
                     folia -= 500 + 30 * it.stack.count
 
