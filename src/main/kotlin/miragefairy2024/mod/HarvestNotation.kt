@@ -1,4 +1,4 @@
-package miragefairy2024.mod.magicplant
+package miragefairy2024.mod
 
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
