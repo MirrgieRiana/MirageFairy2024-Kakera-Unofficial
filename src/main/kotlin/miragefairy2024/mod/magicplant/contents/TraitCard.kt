@@ -2,27 +2,8 @@ package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.magicplant.CompoundTrait
-import miragefairy2024.mod.magicplant.TraitCondition
-import miragefairy2024.mod.magicplant.TraitEffectKey
 import miragefairy2024.mod.magicplant.TraitFactor
-import miragefairy2024.mod.magicplant.getName
-import miragefairy2024.util.HumidityCategory
-import miragefairy2024.util.TemperatureCategory
-import miragefairy2024.util.getCrystalErg
-import miragefairy2024.util.getMoisture
-import miragefairy2024.util.humidityCategory
-import miragefairy2024.util.temperatureCategory
-import miragefairy2024.util.text
-import mirrg.kotlin.hydrogen.atLeast
-import mirrg.kotlin.hydrogen.atMost
-import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.world.Heightmap
-import kotlin.math.pow
-
-// TraitCard
 
 enum class TraitCard(
     path: String,
@@ -73,70 +54,4 @@ enum class TraitCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
     val trait = CompoundTrait(sortKey, factor, traitEffectKeyCard)
-}
-
-
-// TraitEffectKey
-
-enum class TraitEffectKeyCard(
-    path: String,
-    val enName: String,
-    val jaName: String,
-    val color: Formatting,
-    isLogScale: Boolean,
-) {
-    NUTRITION("nutrition", "NTR", "栄養値", Formatting.AQUA, false),
-    ENVIRONMENT("environment", "ENV", "環境値", Formatting.GREEN, false),
-    GROWTH_BOOST("growth_boost", "GRW", "成長速度", Formatting.DARK_BLUE, false),
-    SEEDS_PRODUCTION("seeds_production", "SEED", "種子生成", Formatting.RED, false),
-    FRUITS_PRODUCTION("fruits_production", "FRUIT", "果実生成", Formatting.LIGHT_PURPLE, false),
-    LEAVES_PRODUCTION("leaves_production", "LEAF", "葉面生成", Formatting.DARK_GREEN, false),
-    RARE_PRODUCTION("rare_production", "RARE", "希少品生成", Formatting.GOLD, false),
-    PRODUCTION_BOOST("production_boost", "PRD", "生産能力", Formatting.DARK_RED, false),
-    EXPERIENCE_PRODUCTION("experience_production", "XP", "経験値", Formatting.YELLOW, false),
-    FORTUNE_FACTOR("fortune_factor", "FTN", "幸運係数", Formatting.DARK_PURPLE, false),
-    NATURAL_ABSCISSION("natural_abscission", "NA", "自然落果", Formatting.BLUE, true),
-    ;
-
-    val identifier = Identifier(MirageFairy2024.modId, path)
-    val traitEffectKey = if (isLogScale) {
-        object : TraitEffectKey<Double>() {
-            override fun getValue(level: Int) = 1 - 0.95.pow(level.toDouble())
-            override fun getDescription(value: Double) = text { getName() + (value * 100 formatAs "%+.0f%%")() }
-            override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
-            override fun getDefaultValue() = 0.0
-        }
-    } else {
-        object : TraitEffectKey<Double>() {
-            override fun getValue(level: Int) = 0.1 * level
-            override fun getDescription(value: Double) = text { getName() + (value * 100 formatAs "%+.0f%%")() }
-            override fun plus(a: Double, b: Double) = a + b
-            override fun getDefaultValue() = 0.0
-        }
-    }
-}
-
-
-// TraitFactor
-
-object TraitFactors {
-    val ALWAYS = TraitFactor { _, _ -> 1.0 }
-    val FLOOR_MOISTURE = TraitFactor { world, blockPos -> world.getMoisture(blockPos.down()) }
-    val FLOOR_CRYSTAL_ERG = TraitFactor { world, blockPos -> world.getCrystalErg(blockPos.down()) }
-    val FLOOR_HARDNESS = TraitFactor { world, blockPos ->
-        val blockState = world.getBlockState(blockPos.down())
-        if (!blockState.isIn(BlockTags.PICKAXE_MINEABLE)) return@TraitFactor 0.0
-        val hardness = blockState.getHardness(world, blockPos.down())
-        if (hardness < 0) return@TraitFactor 0.0
-        hardness / 2.0 atMost 2.0
-    }
-    val LIGHT = TraitFactor { world, blockPos -> (world.getLightLevel(blockPos) - 8 atLeast 0) / 7.0 }
-    val DARKNESS = TraitFactor { world, blockPos -> ((15 - world.getLightLevel(blockPos)) - 8 atLeast 0) / 7.0 }
-    val LOW_TEMPERATURE = TraitCondition { world, blockPos -> world.getBiome(blockPos).temperatureCategory == TemperatureCategory.LOW }
-    val MEDIUM_TEMPERATURE = TraitCondition { world, blockPos -> world.getBiome(blockPos).temperatureCategory == TemperatureCategory.MEDIUM }
-    val HIGH_TEMPERATURE = TraitCondition { world, blockPos -> world.getBiome(blockPos).temperatureCategory == TemperatureCategory.HIGH }
-    val LOW_HUMIDITY = TraitCondition { world, blockPos -> world.getBiome(blockPos).humidityCategory == HumidityCategory.LOW }
-    val MEDIUM_HUMIDITY = TraitCondition { world, blockPos -> world.getBiome(blockPos).humidityCategory == HumidityCategory.MEDIUM }
-    val HIGH_HUMIDITY = TraitCondition { world, blockPos -> world.getBiome(blockPos).humidityCategory == HumidityCategory.HIGH }
-    val OUTDOOR = TraitCondition { world, blockPos -> blockPos.y >= world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, blockPos).y }
 }
