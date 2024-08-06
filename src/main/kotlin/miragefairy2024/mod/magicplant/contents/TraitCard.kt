@@ -1,6 +1,11 @@
-package miragefairy2024.mod.magicplant
+package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.magicplant.CompoundTrait
+import miragefairy2024.mod.magicplant.TraitCondition
+import miragefairy2024.mod.magicplant.TraitEffectKey
+import miragefairy2024.mod.magicplant.TraitFactor
+import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.getCrystalErg

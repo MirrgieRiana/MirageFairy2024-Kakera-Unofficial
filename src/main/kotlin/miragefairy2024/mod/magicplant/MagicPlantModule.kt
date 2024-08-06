@@ -4,9 +4,11 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
-import miragefairy2024.mod.magicplant.magicplants.initMirageFlower
-import miragefairy2024.mod.magicplant.magicplants.initVeropeda
+import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.initMirageFlower
+import miragefairy2024.mod.magicplant.contents.magicplants.initVeropeda
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack

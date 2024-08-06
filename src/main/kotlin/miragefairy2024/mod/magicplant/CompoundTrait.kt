@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 

@@ -7,7 +7,7 @@ import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
-import miragefairy2024.mod.magicplant.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.ElementPassiveSkillEffect
