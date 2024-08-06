@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.humidityCategory
@@ -81,6 +82,26 @@ val worldGenTraitRecipeRegistry = mutableMapOf<Block, MutableList<WorldGenTraitR
 
 fun registerWorldGenTraitRecipe(recipe: WorldGenTraitRecipe) {
     worldGenTraitRecipeRegistry.getOrPut(recipe.block) { mutableListOf() } += recipe
+}
+
+class WorldGenTraitRecipeInitScope(val block: Block) {
+
+    fun registerWorldGenTraitRecipe(pattern: String, traitCard: TraitCard, condition: WorldGenTraitRecipe.Condition = WorldGenTraitRecipe.Condition.Always) {
+        pattern.forEachIndexed { i, ch ->
+            val rarity = when (ch) {
+                '.' -> return@forEachIndexed
+                'A' -> WorldGenTraitRecipe.Rarity.A
+                'C' -> WorldGenTraitRecipe.Rarity.C
+                'N' -> WorldGenTraitRecipe.Rarity.N
+                'R' -> WorldGenTraitRecipe.Rarity.R
+                'S' -> WorldGenTraitRecipe.Rarity.S
+                else -> throw IllegalArgumentException()
+            }
+            val level = 1 shl (pattern.length - 1 - i)
+            registerWorldGenTraitRecipe(WorldGenTraitRecipe(block, rarity, traitCard.trait, level, condition))
+        }
+    }
+
 }
 
 class RecipeWorldGenTraitGeneration : WorldGenTraitGeneration {

@@ -1,7 +1,8 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
@@ -13,9 +14,38 @@ import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
-import net.minecraft.block.Block
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.BlockState
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
+
+abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
+    blockPath: String,
+    val blockEnName: String,
+    val blockJaName: String,
+    itemPath: String,
+    val itemEnName: String,
+    val itemJaName: String,
+    val seedPoemList: PoemList,
+    blockCreator: () -> B,
+    blockEntityCreator: (BlockPos, BlockState) -> BE,
+) {
+    companion object {
+        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
+    }
+
+    val blockIdentifier = Identifier(MirageFairy2024.modId, blockPath)
+    val itemIdentifier = Identifier(MirageFairy2024.modId, itemPath)
+    val block = blockCreator()
+    val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
+    val item = MagicPlantSeedItem(block, Item.Settings())
+}
 
 context(ModContext)
 fun MagicPlantCard<*, *>.initMagicPlant() {
@@ -51,25 +81,5 @@ fun MagicPlantCard<*, *>.initMagicPlant() {
 
     // レシピ
     item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-
-}
-
-class WorldGenTraitRecipeInitScope(val block: Block) {
-
-    fun registerWorldGenTraitRecipe(pattern: String, traitCard: TraitCard, condition: WorldGenTraitRecipe.Condition = WorldGenTraitRecipe.Condition.Always) {
-        pattern.forEachIndexed { i, ch ->
-            val rarity = when (ch) {
-                '.' -> return@forEachIndexed
-                'A' -> WorldGenTraitRecipe.Rarity.A
-                'C' -> WorldGenTraitRecipe.Rarity.C
-                'N' -> WorldGenTraitRecipe.Rarity.N
-                'R' -> WorldGenTraitRecipe.Rarity.R
-                'S' -> WorldGenTraitRecipe.Rarity.S
-                else -> throw IllegalArgumentException()
-            }
-            val level = 1 shl (pattern.length - 1 - i)
-            registerWorldGenTraitRecipe(WorldGenTraitRecipe(block, rarity, traitCard.trait, level, condition))
-        }
-    }
 
 }
