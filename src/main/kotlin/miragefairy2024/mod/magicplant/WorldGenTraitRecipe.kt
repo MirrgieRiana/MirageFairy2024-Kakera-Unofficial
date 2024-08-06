@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.biome.Biome
 
+// api
+
 val worldGenTraitRecipeRegistry = mutableMapOf<Block, MutableList<WorldGenTraitRecipe>>()
 
 class WorldGenTraitRecipe(
@@ -72,6 +74,9 @@ class WorldGenTraitRecipe(
     }
 
 }
+
+
+// util
 
 fun registerWorldGenTraitRecipe(recipe: WorldGenTraitRecipe) {
     worldGenTraitRecipeRegistry.getOrPut(recipe.block) { mutableListOf() } += recipe

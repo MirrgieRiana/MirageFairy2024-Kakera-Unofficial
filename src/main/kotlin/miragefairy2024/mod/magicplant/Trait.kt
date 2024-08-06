@@ -16,6 +16,8 @@ import net.minecraft.util.Util
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
+// api
+
 val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
@@ -29,11 +31,17 @@ abstract class Trait(val color: Formatting, private val sortKey: String) : Compa
     }
 }
 
+
+// init
+
 context(ModContext)
 fun Trait.enJa(enName: String, jaName: String) {
     en { this.getTranslationKey() to enName }
     ja { this.getTranslationKey() to jaName }
 }
+
+
+// util
 
 fun Trait.getIdentifier() = traitRegistry.getId(this)!!
 fun Identifier.toTrait() = traitRegistry.get(this)

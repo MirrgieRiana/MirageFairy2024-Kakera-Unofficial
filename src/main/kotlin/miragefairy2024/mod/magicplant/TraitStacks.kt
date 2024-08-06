@@ -7,6 +7,8 @@ import net.minecraft.nbt.NbtElement
 import net.minecraft.nbt.NbtList
 import java.util.SortedMap
 
+// api
+
 class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) {
     companion object {
         fun of(traitStackList: Iterable<TraitStack>): TraitStacks {
@@ -38,6 +40,9 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
 
     val traitStackList by lazy { traitStackMap.map { TraitStack(it.key, it.value) } }
 }
+
+
+// util
 
 fun NbtList.toTraitStacks(): TraitStacks {
     val traitStackList = (0..<this.size).mapNotNull {

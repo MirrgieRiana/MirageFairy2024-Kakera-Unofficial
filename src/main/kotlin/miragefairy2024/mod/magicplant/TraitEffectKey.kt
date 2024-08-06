@@ -13,6 +13,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 
+// api
+
 val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait_effect_key"))
 val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.createSimple(traitEffectKeyRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
@@ -23,11 +25,17 @@ abstract class TraitEffectKey<T : Any> {
     abstract fun getDefaultValue(): T
 }
 
+
+// init
+
 context(ModContext)
 fun TraitEffectKey<*>.enJa(enName: String, jaName: String) {
     en { this.getTranslationKey() to enName }
     ja { this.getTranslationKey() to jaName }
 }
+
+
+// util
 
 fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getId(this)!!
 fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
