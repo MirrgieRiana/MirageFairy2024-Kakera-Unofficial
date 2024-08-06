@@ -49,14 +49,14 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaCard : MagicPlantCard<VeropedaBlock, VeropedaBlockEntity>(
+object VeropedaCard : MagicPlantCard<VeropedaBlock>(
     "veropeda", "Veropeda", "呪草ヴェロペダ",
     "veropeda_bulb", "Veropeda Bulb", "ヴェロペダの球根",
     PoemList(1)
         .poem("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
         .poem("classification", "Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科"),
     { VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP)) },
-    ::VeropedaBlockEntity,
+    { pos, state -> MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state) },
 ) {
     context(ModContext)
     override fun init() {
@@ -169,9 +169,7 @@ class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
 
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = VeropedaBlockEntity(pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state)
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 }
-
-class VeropedaBlockEntity(pos: BlockPos, state: BlockState) : MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state)

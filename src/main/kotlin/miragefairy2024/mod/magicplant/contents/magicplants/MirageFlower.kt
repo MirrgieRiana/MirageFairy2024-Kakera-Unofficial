@@ -74,14 +74,14 @@ val netherMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKe
 val mirageClusterFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest"))
 val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
 
-object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEntity>(
+object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock>(
     "mirage_flower", "Mirage Flower", "妖花ミラージュ",
     "mirage_bulb", "Mirage Bulb", "ミラージュの球根",
     PoemList(1)
         .poem("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
         .poem("classification", "Order Miragales, family Miragaceae", "妖花目ミラージュ科"),
     { MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS)) },
-    ::MirageFlowerBlockEntity,
+    { pos, state -> MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state) },
 ) {
     context(ModContext)
     override fun init() {
@@ -239,7 +239,7 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
 
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MirageFlowerBlockEntity(pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state)
 
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> {
         var count2 = count.toDouble()
@@ -261,8 +261,6 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(settings) {
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 }
-
-class MirageFlowerBlockEntity(pos: BlockPos, state: BlockState) : MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state)
 
 class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius: Float, val ySpread: Int, val feature: RegistryEntry<PlacedFeature>) : FeatureConfig {
     companion object {

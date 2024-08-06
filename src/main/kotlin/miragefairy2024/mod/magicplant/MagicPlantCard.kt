@@ -16,7 +16,6 @@ import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
@@ -25,7 +24,7 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
+abstract class MagicPlantCard<B : MagicPlantBlock>(
     blockPath: String,
     val blockEnName: String,
     val blockJaName: String,
@@ -34,7 +33,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
     val itemJaName: String,
     val seedPoemList: PoemList,
     blockCreator: () -> B,
-    blockEntityCreator: (BlockPos, BlockState) -> BE,
+    blockEntityCreator: (BlockPos, BlockState) -> MagicPlantBlockEntity,
 ) {
     companion object {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
