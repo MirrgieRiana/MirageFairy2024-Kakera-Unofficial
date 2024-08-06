@@ -1,7 +1,7 @@
 package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
-import miragefairy2024.mod.magicplant.HarvestNotation
+import miragefairy2024.mod.HarvestNotation
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
 import miragefairy2024.util.list
