@@ -45,41 +45,42 @@ abstract class MagicPlantCard<B : MagicPlantBlock, BE : BlockEntity>(
     val block = blockCreator()
     val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
     val item = MagicPlantSeedItem(block, Item.Settings())
-}
 
-context(ModContext)
-fun MagicPlantCard<*, *>.initMagicPlant() {
+    context(ModContext)
+    open fun init() {
 
-    // 登録
-    block.register(Registries.BLOCK, blockIdentifier)
-    blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
-    item.register(Registries.ITEM, itemIdentifier)
+        // 登録
+        block.register(Registries.BLOCK, blockIdentifier)
+        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
+        item.register(Registries.ITEM, itemIdentifier)
 
-    // 分類
-    item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-    item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
-        traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
-            (0..3).map { b ->
-                item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
+        // 分類
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
+            traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
+                (0..3).map { b ->
+                    item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
+                }
             }
         }
+
+        // 見た目
+        block.registerCutoutRenderLayer()
+        item.registerGeneratedModelGeneration()
+
+        // 翻訳
+        block.enJa(blockEnName, blockJaName)
+        item.enJa(itemEnName, itemJaName)
+        item.registerPoem(seedPoemList)
+        item.registerPoemGeneration(seedPoemList)
+
+        // 性質
+        //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
+        block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
+
+        // レシピ
+        item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
+
     }
-
-    // 見た目
-    block.registerCutoutRenderLayer()
-    item.registerGeneratedModelGeneration()
-
-    // 翻訳
-    block.enJa(blockEnName, blockJaName)
-    item.enJa(itemEnName, itemJaName)
-    item.registerPoem(seedPoemList)
-    item.registerPoemGeneration(seedPoemList)
-
-    // 性質
-    //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
-    block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
-
-    // レシピ
-    item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
 
 }
