@@ -86,13 +86,12 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
     context(ModContext)
     override fun init() {
         super.init()
-        val card = MirageFlowerCard
 
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
-        card.block.ageProperty.values.forEach { age ->
-            registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
+        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()) with block.ageProperty }
+        block.ageProperty.values.forEach { age ->
+            registerModelGeneration({ "block/" * block.getIdentifier() * "_age$age" }) {
+                Models.CROSS.with(TextureKey.CROSS to "block/" * block.getIdentifier() * "_age$age")
             }
         }
 
@@ -104,13 +103,13 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, largeMirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
                 fairyRingFeature with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
@@ -171,7 +170,7 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
 
         // 特性
         ModEvents.onInitialize {
-            WorldGenTraitRecipeInitScope(card.block).run {
+            WorldGenTraitRecipeInitScope(block).run {
 
                 // 標準特性
                 registerWorldGenTraitRecipe("A.RS", TraitCard.ETHER_RESPIRATION) // エーテル呼吸
@@ -222,7 +221,7 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock, MirageFlowerBlockEnt
         }
 
         // レシピ
-        card.item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
+        item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
 
     }
 }
