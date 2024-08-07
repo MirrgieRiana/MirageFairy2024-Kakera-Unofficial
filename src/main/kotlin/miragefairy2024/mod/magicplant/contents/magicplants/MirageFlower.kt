@@ -157,14 +157,14 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock>(
             }
 
             // 地上とエンドに配置
-            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInOverworld())
-            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInTheEnd().and(BiomeSelectors.excludeByKey(BiomeKeys.THE_END)))
+            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInOverworld() }
+            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInTheEnd().and(BiomeSelectors.excludeByKey(BiomeKeys.THE_END)) }
 
             // ネザーに配置
-            netherMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInTheNether())
+            netherMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInTheNether() }
 
             // 地上にFairy Ringを配置
-            largeMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInOverworld())
+            largeMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInOverworld() }
 
         }
 

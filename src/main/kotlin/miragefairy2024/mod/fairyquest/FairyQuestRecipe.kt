@@ -296,7 +296,7 @@ fun initFairyQuestRecipe() {
         )
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
-    placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInOverworld())
+    placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInOverworld() }
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
 

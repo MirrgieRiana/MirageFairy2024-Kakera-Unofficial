@@ -161,7 +161,7 @@ fun initOresModule() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
-            it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES, BiomeSelectors.foundInOverworld())
+            it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { BiomeSelectors.foundInOverworld() }
         }
 
     }
