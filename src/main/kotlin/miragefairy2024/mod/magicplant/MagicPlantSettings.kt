@@ -14,10 +14,16 @@ import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
 abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
+    companion object {
+        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
+    }
+
     abstract val card: C
 
     abstract val blockPath: String
