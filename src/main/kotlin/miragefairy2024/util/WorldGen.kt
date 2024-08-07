@@ -45,6 +45,6 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key
 }
 
 context(ModContext)
-fun registerFeature(biomeSelector: Predicate<BiomeSelectionContext>, step: GenerationStep.Feature, placedFeatureRegistryKey: RegistryKey<PlacedFeature>) = ModEvents.onInitialize {
-    BiomeModifications.addFeature(biomeSelector, step, placedFeatureRegistryKey)
+fun RegistryKey<PlacedFeature>.registerFeature(step: GenerationStep.Feature, biomeSelector: Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
+    BiomeModifications.addFeature(biomeSelector, step, this)
 }
