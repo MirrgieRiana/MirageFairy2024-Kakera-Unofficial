@@ -62,18 +62,16 @@ object VeropedaSettings : MagicPlantSettings<VeropedaBlock>() {
     override val jaClassification = "妖花目ヴェロペダ科"
 
     override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
-}
 
-object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings) {
     context(ModContext)
-    override fun init() {
-        super.init()
+    override fun init(card: MagicPlantCard<*, VeropedaBlock>) {
+        super.init(card)
 
         // 見た目
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()) with block.ageProperty }
-        block.ageProperty.values.forEach { age ->
-            registerModelGeneration({ "block/" * block.getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/" * block.getIdentifier() * "_age$age")
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
+        card.block.ageProperty.values.forEach { age ->
+            registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
+                Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
             }
         }
 
@@ -82,13 +80,13 @@ object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSe
 
             // 小さな塊
             val veropedaClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster")) {
-                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             val largeVeropedaClusterConfiguredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_veropeda_cluster")) {
-                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
@@ -121,7 +119,7 @@ object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSe
 
         // 特性
         ModEvents.onInitialize {
-            WorldGenTraitRecipeInitScope(block).run {
+            WorldGenTraitRecipeInitScope(card.block).run {
 
                 // 標準特性
                 registerWorldGenTraitRecipe("A.RS", TraitCard.PAVEMENT_FLOWERS) // アスファルトに咲く花
@@ -158,10 +156,12 @@ object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSe
         }
 
         // レシピ
-        item.registerHarvestNotation(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
+        card.item.registerHarvestNotation(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
 
     }
 }
+
+object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings)
 
 @Suppress("OVERRIDE_DEPRECATION")
 class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }, settings) {
