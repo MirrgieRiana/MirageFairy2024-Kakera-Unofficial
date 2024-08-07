@@ -25,10 +25,7 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-abstract class MagicPlantCard<S : MagicPlantSettings<B>, B : MagicPlantBlock>(
-    val settings: S,
-    blockEntityCreator: (BlockPos, BlockState) -> MagicPlantBlockEntity,
-) {
+abstract class MagicPlantCard<S : MagicPlantSettings<B>, B : MagicPlantBlock>(val settings: S) {
     companion object {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }
@@ -36,7 +33,8 @@ abstract class MagicPlantCard<S : MagicPlantSettings<B>, B : MagicPlantBlock>(
     val blockIdentifier = Identifier(MirageFairy2024.modId, settings.blockPath)
     val itemIdentifier = Identifier(MirageFairy2024.modId, settings.itemPath)
     val block = settings.createBlock()
-    val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
+    private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(blockEntityType, blockPos, blockState)
+    val blockEntityType: BlockEntityType<MagicPlantBlockEntity> = BlockEntityType(::createBlockEntity, setOf(block), null)
     val item = MagicPlantSeedItem(block, Item.Settings())
 
     context(ModContext)
