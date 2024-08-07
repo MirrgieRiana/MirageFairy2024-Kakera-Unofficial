@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.registerHarvestNotation
@@ -54,7 +53,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override val enClassification = "Order Miragales, family Veropedaceae"
     override val jaClassification = "妖花目ヴェロペダ科"
 
-    override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
+    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
     override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),

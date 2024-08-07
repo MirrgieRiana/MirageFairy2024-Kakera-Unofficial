@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
@@ -68,7 +67,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override val enClassification = "Order Miragales, family Miragaceae"
     override val jaClassification = "妖花目ミラージュ科"
 
-    override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
     override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),

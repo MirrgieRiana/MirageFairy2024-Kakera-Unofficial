@@ -1,19 +1,13 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
 open class MagicPlantCard<B : MagicPlantBlock>(settings: MagicPlantSettings<*, B>) {
-    companion object {
-        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
-    }
-
     val blockIdentifier = Identifier(MirageFairy2024.modId, settings.blockPath)
     val itemIdentifier = Identifier(MirageFairy2024.modId, settings.itemPath)
     val block = settings.createBlock()
