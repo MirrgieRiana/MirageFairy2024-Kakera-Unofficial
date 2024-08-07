@@ -32,7 +32,6 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldView
 
-@Suppress("OVERRIDE_DEPRECATION")
 abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSettings<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
@@ -117,6 +116,8 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
     }
 
     final override fun hasRandomTicks(state: BlockState) = true
+
+    @Suppress("OVERRIDE_DEPRECATION")
     final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) = move(world, pos, state, autoPick = true)
 
     final override fun isFertilizable(world: WorldView, pos: BlockPos, state: BlockState, isClient: Boolean) = canGrow(state)
@@ -195,6 +196,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
     }
 
     /** 右クリック時、収穫が可能であれば収穫する。 */
+    @Suppress("OVERRIDE_DEPRECATION")
     final override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (!canPick(state)) return ActionResult.PASS
         if (world.isClient) return ActionResult.SUCCESS
@@ -211,6 +213,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     /** 破損時、LootTableと同じところで収穫物を追加する。 */
     // 本来 LootTable を使ってすべて行う想定だが、他にドロップを自由に制御できる場所がないため苦肉の策でここでプログラムで生成する
+    @Suppress("OVERRIDE_DEPRECATION")
     final override fun getDroppedStacks(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
         val itemStacks = mutableListOf<ItemStack>()
         @Suppress("DEPRECATION")
@@ -234,6 +237,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     /** 破壊時、経験値をドロップする。 */
     // 経験値のドロップを onStacksDropped で行うと BlockEntity が得られないためこちらで実装する
+    @Suppress("OVERRIDE_DEPRECATION")
     final override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.isOf(newState.block)) run {
             if (world !is ServerWorld) return@run
