@@ -76,9 +76,7 @@ object MirageFlowerSettings : MagicPlantSettings<MirageFlowerBlock>() {
     override val jaClassification = "妖花目ミラージュ科"
 
     override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
-}
 
-object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings) {
     val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
     val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
     val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
@@ -88,14 +86,14 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock
     val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
 
     context(ModContext)
-    override fun init() {
-        super.init()
+    override fun init(card: MagicPlantCard<*, MirageFlowerBlock>) {
+        super.init(card)
 
         // 見た目
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()) with block.ageProperty }
-        block.ageProperty.values.forEach { age ->
-            registerModelGeneration({ "block/" * block.getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/" * block.getIdentifier() * "_age$age")
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
+        card.block.ageProperty.values.forEach { age ->
+            registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
+                Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
             }
         }
 
@@ -107,13 +105,13 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, mirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, largeMirageClusterConfiguredFeatureKey) {
-                val blockStateProvider = BlockStateProvider.of(block.withAge(block.maxAge))
+                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 fairyRingFeature with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
@@ -169,7 +167,7 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock
 
         // 特性
         ModEvents.onInitialize {
-            WorldGenTraitRecipeInitScope(block).run {
+            WorldGenTraitRecipeInitScope(card.block).run {
 
                 // 標準特性
                 registerWorldGenTraitRecipe("A.RS", TraitCard.ETHER_RESPIRATION) // エーテル呼吸
@@ -220,10 +218,12 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock
         }
 
         // レシピ
-        item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
+        card.item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
 
     }
 }
+
+object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings)
 
 @Suppress("OVERRIDE_DEPRECATION")
 class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlowerCard }, settings) {
