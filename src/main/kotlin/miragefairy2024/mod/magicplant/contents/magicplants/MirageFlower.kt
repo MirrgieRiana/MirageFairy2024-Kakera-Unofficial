@@ -35,6 +35,8 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
+import net.minecraft.state.property.IntProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.biome.BiomeKeys
@@ -52,7 +54,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, SimpleMagicPlantBlock>() {
+object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageFlowerBlock>() {
     override val card get() = MirageFlowerCard
 
     override val blockPath = "mirage_flower"
@@ -67,7 +69,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, SimpleM
     override val enClassification = "Order Miragales, family Miragaceae"
     override val jaClassification = "妖花目ミラージュ科"
 
-    override fun createBlock() = SimpleMagicPlantBlock(this, createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
     override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),
@@ -93,8 +95,8 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, SimpleM
         super.init()
 
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
-        card.block.ageProperty.values.forEach { age ->
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
+        card.block.getAgeProperty().values.forEach { age ->
             registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
             }
@@ -226,7 +228,11 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, SimpleM
     }
 }
 
-object MirageFlowerCard : SimpleMagicPlantCard<SimpleMagicPlantBlock>(MirageFlowerSettings)
+object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerSettings)
+
+class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerSettings, settings) {
+    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+}
 
 private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
