@@ -39,7 +39,9 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
+object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>() {
+    override val card get() = VeropedaCard
+
     override val blockPath = "veropeda"
     override val blockEnName = "Veropeda"
     override val blockJaName = "呪草ヴェロペダ"
@@ -54,7 +56,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
 
     override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
-    override val outlineShapes = listOf(
+    override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),
         createCuboidShape(4.0, 7.0),
         createCuboidShape(7.0, 9.0),
@@ -65,8 +67,8 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
     context(ModContext)
-    override fun init(card: MagicPlantCard<*, VeropedaBlock>) {
-        super.init(card)
+    override fun init() {
+        super.init()
 
         // 見た目
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
@@ -162,6 +164,6 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
     }
 }
 
-object VeropedaCard : SimpleMagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings)
+object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaSettings)
 
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }, settings)
+class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaSettings, settings)

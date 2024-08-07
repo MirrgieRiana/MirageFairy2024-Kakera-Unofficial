@@ -5,7 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
-import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerSettings
+import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaSettings
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
@@ -33,7 +34,7 @@ fun initMagicPlantModule() {
     initTraitEffectKeyCard()
     initTraitCard()
 
-    MirageFlowerCard.init()
-    VeropedaCard.init()
+    MirageFlowerSettings.init()
+    VeropedaSettings.init()
 
 }
