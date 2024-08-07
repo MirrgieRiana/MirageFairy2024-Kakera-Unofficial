@@ -6,7 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.haimeviskaDeepFairyForestPlacedFeatureKey
 import miragefairy2024.mod.haimeviska.haimeviskaFairyForestPlacedFeatureKey
-import miragefairy2024.mod.magicplant.contents.magicplants.mirageClusterFairyForestPlacedFeatureKey
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
@@ -179,7 +179,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultVegetation(lookupBackedBuilder)
                 DefaultBiomeFeatures.addSweetBerryBushes(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, mirageClusterFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerCard.mirageClusterFairyForestPlacedFeatureKey)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
@@ -247,7 +247,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, mirageClusterFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerCard.mirageClusterFairyForestPlacedFeatureKey)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
