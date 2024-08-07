@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
@@ -65,10 +64,7 @@ object VeropedaSettings : MagicPlantSettings<VeropedaBlock>() {
     override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 }
 
-object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(
-    VeropedaSettings,
-    { pos, state -> MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state) },
-) {
+object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings) {
     context(ModContext)
     override fun init() {
         super.init()

@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
@@ -79,10 +78,7 @@ object MirageFlowerSettings : MagicPlantSettings<MirageFlowerBlock>() {
     override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 }
 
-object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(
-    MirageFlowerSettings,
-    { pos, state -> MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state) },
-) {
+object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings) {
     val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
     val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
     val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
