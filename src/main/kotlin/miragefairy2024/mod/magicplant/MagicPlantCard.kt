@@ -25,9 +25,8 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
+abstract class MagicPlantCard<S : MagicPlantSettings<B>, B : MagicPlantBlock>(
     val settings: S,
-    blockCreator: () -> B,
     blockEntityCreator: (BlockPos, BlockState) -> MagicPlantBlockEntity,
 ) {
     companion object {
@@ -36,7 +35,7 @@ abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
 
     val blockIdentifier = Identifier(MirageFairy2024.modId, settings.blockPath)
     val itemIdentifier = Identifier(MirageFairy2024.modId, settings.itemPath)
-    val block = blockCreator()
+    val block = settings.createBlock()
     val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
     val item = MagicPlantSeedItem(block, Item.Settings())
 

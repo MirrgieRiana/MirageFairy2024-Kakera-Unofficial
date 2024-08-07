@@ -49,7 +49,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : MagicPlantSettings() {
+object VeropedaSettings : MagicPlantSettings<VeropedaBlock>() {
     override val blockPath = "veropeda"
     override val blockEnName = "Veropeda"
     override val blockJaName = "呪草ヴェロペダ"
@@ -61,11 +61,12 @@ object VeropedaSettings : MagicPlantSettings() {
     override val jaPoem = "毒を喰らい、毒と化す。"
     override val enClassification = "Order Miragales, family Veropedaceae"
     override val jaClassification = "妖花目ヴェロペダ科"
+
+    override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 }
 
 object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(
     VeropedaSettings,
-    { VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP)) },
     { pos, state -> MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state) },
 ) {
     context(ModContext)

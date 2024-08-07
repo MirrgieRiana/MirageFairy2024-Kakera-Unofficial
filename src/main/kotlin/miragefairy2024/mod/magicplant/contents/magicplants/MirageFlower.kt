@@ -63,7 +63,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : MagicPlantSettings() {
+object MirageFlowerSettings : MagicPlantSettings<MirageFlowerBlock>() {
     override val blockPath = "mirage_flower"
     override val blockEnName = "Mirage Flower"
     override val blockJaName = "妖花ミラージュ"
@@ -75,11 +75,12 @@ object MirageFlowerSettings : MagicPlantSettings() {
     override val jaPoem = "可憐にして人畜無害たる魔物。"
     override val enClassification = "Order Miragales, family Miragaceae"
     override val jaClassification = "妖花目ミラージュ科"
+
+    override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 }
 
 object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(
     MirageFlowerSettings,
-    { MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS)) },
     { pos, state -> MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state) },
 ) {
     val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
