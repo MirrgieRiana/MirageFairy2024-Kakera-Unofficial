@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.MagicPlantCard
-import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.registerHarvestNotation
@@ -47,7 +46,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : MagicPlantSettings<VeropedaBlock>() {
+object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
     override val blockPath = "veropeda"
     override val blockEnName = "Veropeda"
     override val blockJaName = "呪草ヴェロペダ"

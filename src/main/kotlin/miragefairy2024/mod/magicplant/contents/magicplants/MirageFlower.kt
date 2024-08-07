@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.MagicPlantCard
-import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
@@ -61,7 +60,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : MagicPlantSettings<MirageFlowerBlock>() {
+object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
     override val blockPath = "mirage_flower"
     override val blockEnName = "Mirage Flower"
     override val blockJaName = "妖花ミラージュ"

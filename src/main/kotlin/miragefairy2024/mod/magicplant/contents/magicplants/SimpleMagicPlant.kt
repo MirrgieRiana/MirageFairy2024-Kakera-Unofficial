@@ -2,6 +2,7 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.MagicPlantCard
+import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
@@ -21,7 +22,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
-abstract class SimpleMagicPlantBlock(cardGetter: () -> MagicPlantCard<*, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
+abstract class SimpleMagicPlantSettings<B : SimpleMagicPlantBlock> : MagicPlantSettings<B>()
+
+abstract class SimpleMagicPlantBlock(private val cardGetter: () -> MagicPlantCard<out SimpleMagicPlantSettings<*>, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
 
     // Property
 
