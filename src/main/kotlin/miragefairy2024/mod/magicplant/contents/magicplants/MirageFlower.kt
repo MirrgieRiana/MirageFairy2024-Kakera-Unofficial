@@ -28,9 +28,7 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
 import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
@@ -38,13 +36,8 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
@@ -74,6 +67,13 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
     override val jaClassification = "妖花目ミラージュ科"
 
     override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+
+    override val outlineShapes = listOf(
+        createCuboidShape(3.0, 5.0),
+        createCuboidShape(6.0, 12.0),
+        createCuboidShape(6.0, 15.0),
+        createCuboidShape(6.0, 16.0),
+    )
 
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
@@ -225,22 +225,9 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
     }
 }
 
-object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings)
+object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings)
 
-@Suppress("OVERRIDE_DEPRECATION")
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlowerCard }, settings) {
-    companion object {
-        private val AGE_TO_SHAPE: Array<VoxelShape> = arrayOf(
-            createCuboidShape(3.0, 5.0),
-            createCuboidShape(6.0, 12.0),
-            createCuboidShape(6.0, 15.0),
-            createCuboidShape(6.0, 16.0),
-        )
-    }
-
-    override val ageProperty: IntProperty get() = Properties.AGE_3
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-}
+class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlowerCard }, settings)
 
 private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
