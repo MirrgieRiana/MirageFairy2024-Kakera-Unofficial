@@ -1,6 +1,6 @@
 package miragefairy2024.mod.magicplant
 
-abstract class MagicPlantSettings {
+abstract class MagicPlantSettings<B : MagicPlantBlock> {
     abstract val blockPath: String
     abstract val blockEnName: String
     abstract val blockJaName: String
@@ -12,4 +12,6 @@ abstract class MagicPlantSettings {
     abstract val jaPoem: String
     abstract val enClassification: String
     abstract val jaClassification: String
+
+    abstract fun createBlock(): B
 }
