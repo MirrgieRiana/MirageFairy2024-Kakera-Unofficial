@@ -38,42 +38,43 @@ abstract class MagicPlantCard<S : MagicPlantSettings<B>, B : MagicPlantBlock>(va
     val item = MagicPlantSeedItem(block, Item.Settings())
 
     context(ModContext)
-    open fun init() {
+    open fun init() = settings.run {
+        val card = this@MagicPlantCard
 
         // 登録
-        block.register(Registries.BLOCK, blockIdentifier)
-        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, blockIdentifier)
-        item.register(Registries.ITEM, itemIdentifier)
+        card.block.register(Registries.BLOCK, card.blockIdentifier)
+        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.blockIdentifier)
+        card.item.register(Registries.ITEM, card.itemIdentifier)
 
         // 分類
-        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
             traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
                 (0..3).map { b ->
-                    item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
+                    card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
                 }
             }
         }
 
         // 見た目
-        block.registerCutoutRenderLayer()
-        item.registerGeneratedModelGeneration()
+        card.block.registerCutoutRenderLayer()
+        card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        block.enJa(settings.blockEnName, settings.blockJaName)
-        item.enJa(settings.itemEnName, settings.itemJaName)
-        val seedPoemList = PoemList(settings.tier)
-            .poem(settings.enPoem, settings.jaPoem)
-            .poem("classification", settings.enClassification, settings.jaClassification)
-        item.registerPoem(seedPoemList)
-        item.registerPoemGeneration(seedPoemList)
+        card.block.enJa(blockEnName, blockJaName)
+        card.item.enJa(itemEnName, itemJaName)
+        val seedPoemList = PoemList(tier)
+            .poem(enPoem, jaPoem)
+            .poem("classification", enClassification, jaClassification)
+        card.item.registerPoem(seedPoemList)
+        card.item.registerPoemGeneration(seedPoemList)
 
         // 性質
-        //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
-        block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
+        //card.block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
+        card.block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
 
         // レシピ
-        item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
 
     }
 
