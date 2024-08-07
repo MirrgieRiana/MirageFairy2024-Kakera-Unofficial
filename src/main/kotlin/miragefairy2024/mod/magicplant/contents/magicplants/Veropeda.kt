@@ -95,7 +95,7 @@ object VeropedaCard : MagicPlantCard<VeropedaBlock>(
                 )
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(veropedaClusterConfiguredFeatureKey) with placementModifiers
             }.also {
-                registerFeature(BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY), GenerationStep.Feature.VEGETAL_DECORATION, it)
+                it.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.tag(ConventionalBiomeTags.CLIMATE_DRY))
             }
 
             // ネザー
@@ -107,7 +107,7 @@ object VeropedaCard : MagicPlantCard<VeropedaBlock>(
                 )
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(largeVeropedaClusterConfiguredFeatureKey) with placementModifiers
             }.also {
-                registerFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Feature.VEGETAL_DECORATION, it)
+                it.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.foundInTheNether())
             }
 
         }
