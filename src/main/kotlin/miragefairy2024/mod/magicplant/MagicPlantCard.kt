@@ -24,7 +24,8 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-abstract class MagicPlantCard<B : MagicPlantBlock>(
+abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
+    val settings: S,
     blockPath: String,
     val blockEnName: String,
     val blockJaName: String,

@@ -40,7 +40,7 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldView
 
 @Suppress("OVERRIDE_DEPRECATION")
-abstract class MagicPlantBlock(private val cardGetter: () -> MagicPlantCard<*>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val cardGetter: () -> MagicPlantCard<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
 
@@ -261,7 +261,7 @@ abstract class MagicPlantBlock(private val cardGetter: () -> MagicPlantCard<*>, 
 
 }
 
-abstract class SimpleMagicPlantBlock(cardGetter: () -> MagicPlantCard<*>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
+abstract class SimpleMagicPlantBlock(cardGetter: () -> MagicPlantCard<*, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
 
     // Property
 
