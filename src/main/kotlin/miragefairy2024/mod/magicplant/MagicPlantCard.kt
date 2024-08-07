@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.createItemStack
@@ -26,13 +27,6 @@ import net.minecraft.util.math.BlockPos
 
 abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
     val settings: S,
-    blockPath: String,
-    val blockEnName: String,
-    val blockJaName: String,
-    itemPath: String,
-    val itemEnName: String,
-    val itemJaName: String,
-    val seedPoemList: PoemList,
     blockCreator: () -> B,
     blockEntityCreator: (BlockPos, BlockState) -> MagicPlantBlockEntity,
 ) {
@@ -40,8 +34,8 @@ abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }
 
-    val blockIdentifier = Identifier(MirageFairy2024.modId, blockPath)
-    val itemIdentifier = Identifier(MirageFairy2024.modId, itemPath)
+    val blockIdentifier = Identifier(MirageFairy2024.modId, settings.blockPath)
+    val itemIdentifier = Identifier(MirageFairy2024.modId, settings.itemPath)
     val block = blockCreator()
     val blockEntityType = BlockEntityType(blockEntityCreator, setOf(block), null)
     val item = MagicPlantSeedItem(block, Item.Settings())
@@ -69,8 +63,11 @@ abstract class MagicPlantCard<S : MagicPlantSettings, B : MagicPlantBlock>(
         item.registerGeneratedModelGeneration()
 
         // 翻訳
-        block.enJa(blockEnName, blockJaName)
-        item.enJa(itemEnName, itemJaName)
+        block.enJa(settings.blockEnName, settings.blockJaName)
+        item.enJa(settings.itemEnName, settings.itemJaName)
+        val seedPoemList = PoemList(settings.tier)
+            .poem(settings.enPoem, settings.jaPoem)
+            .poem("classification", settings.enClassification, settings.jaClassification)
         item.registerPoem(seedPoemList)
         item.registerPoemGeneration(seedPoemList)
 

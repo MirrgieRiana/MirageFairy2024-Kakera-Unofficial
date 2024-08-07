@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MagicPlantSettings
@@ -12,7 +11,6 @@ import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
@@ -65,15 +63,22 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : MagicPlantSettings()
+object MirageFlowerSettings : MagicPlantSettings() {
+    override val blockPath = "mirage_flower"
+    override val blockEnName = "Mirage Flower"
+    override val blockJaName = "妖花ミラージュ"
+    override val itemPath = "mirage_bulb"
+    override val itemEnName = "Mirage Bulb"
+    override val itemJaName = "ミラージュの球根"
+    override val tier = 1
+    override val enPoem = "Evolution to escape extermination"
+    override val jaPoem = "可憐にして人畜無害たる魔物。"
+    override val enClassification = "Order Miragales, family Miragaceae"
+    override val jaClassification = "妖花目ミラージュ科"
+}
 
 object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(
     MirageFlowerSettings,
-    "mirage_flower", "Mirage Flower", "妖花ミラージュ",
-    "mirage_bulb", "Mirage Bulb", "ミラージュの球根",
-    PoemList(1)
-        .poem("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
-        .poem("classification", "Order Miragales, family Miragaceae", "妖花目ミラージュ科"),
     { MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS)) },
     { pos, state -> MagicPlantBlockEntity(MirageFlowerCard.blockEntityType, pos, state) },
 ) {

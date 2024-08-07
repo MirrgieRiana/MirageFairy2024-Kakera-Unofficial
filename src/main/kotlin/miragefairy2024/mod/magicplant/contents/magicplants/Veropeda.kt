@@ -4,14 +4,12 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -51,15 +49,22 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : MagicPlantSettings()
+object VeropedaSettings : MagicPlantSettings() {
+    override val blockPath = "veropeda"
+    override val blockEnName = "Veropeda"
+    override val blockJaName = "呪草ヴェロペダ"
+    override val itemPath = "veropeda_bulb"
+    override val itemEnName = "Veropeda Bulb"
+    override val itemJaName = "ヴェロペダの球根"
+    override val tier = 1
+    override val enPoem = "Contains strong acids made from insects"
+    override val jaPoem = "毒を喰らい、毒と化す。"
+    override val enClassification = "Order Miragales, family Veropedaceae"
+    override val jaClassification = "妖花目ヴェロペダ科"
+}
 
 object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(
     VeropedaSettings,
-    "veropeda", "Veropeda", "呪草ヴェロペダ",
-    "veropeda_bulb", "Veropeda Bulb", "ヴェロペダの球根",
-    PoemList(1)
-        .poem("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
-        .poem("classification", "Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科"),
     { VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP)) },
     { pos, state -> MagicPlantBlockEntity(VeropedaCard.blockEntityType, pos, state) },
 ) {
