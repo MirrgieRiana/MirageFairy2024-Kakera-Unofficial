@@ -14,13 +14,22 @@ import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.hydrogen.or
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.Block
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.AliasedBlockItem
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
+import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(block, settings) {
@@ -104,6 +113,24 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
     }
 
     override fun hasGlint(stack: ItemStack) = stack.isRare() || super.hasGlint(stack)
+
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        if (user.isSneaking) {
+            val itemStack = user.getStackInHand(hand)
+            if (world.isClient) return TypedActionResult.success(itemStack)
+            user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos))
+                }
+
+                override fun getDisplayName() = text { "TODO"() }
+
+                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
+            })
+            return TypedActionResult.consume(itemStack)
+        }
+        return super.use(world, user, hand)
+    }
 }
 
 fun ItemStack.getTraitStacks(): TraitStacks? {

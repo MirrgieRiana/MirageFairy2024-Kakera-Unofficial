@@ -7,7 +7,6 @@ import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
-import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -42,24 +41,30 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
     override fun createSlots(): List<SlotSettings> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlots() + listOf(
-            SlotSettings(20, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
-            SlotSettings(40, 35, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
-            SlotSettings(77, 35, appearance = Appearance(true, run {
+            SlotSettings(15, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            SlotSettings(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
+            SlotSettings(81, 35, appearance = Appearance(true, run { // 仕分け妖精
                 listOf(
                     Position(11.5, 0.1, 6.0, 0.0F, 90.0F, 40),
                     Position(7.0, 0.1, 8.0, 0.0F, 275.0F, 40),
                     Position(12.0, 0.1, 8.0, 0.0F, 265.0F, 40),
                     Position(8.0, 0.1, 6.0, 0.0F, 20.0F, 40),
                 )
-            })) { it.isOf(FairyCard.item) }, // 仕分け妖精
-            SlotSettings(102 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
-            SlotSettings(102 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotSettings(102 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            })) { it.isOf(FairyCard.item) },
+            SlotSettings(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
+            SlotSettings(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(106 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(37 + 18 * 1, 17 + 18 * 0), // 机
+            SlotSettings(37 + 18 * 0, 17 + 18 * 1), // 机
+            SlotSettings(37 + 18 * 1, 17 + 18 * 1), // 机
         )
     }
+
+    val TABLE_SLOT_INDICES = listOf(1, 9, 10, 11)
+    val CHEST_SLOT_INDICES = 3..8
 
     val COLLECTION_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
     val SORT_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
@@ -136,39 +141,40 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
         folia -= 10
 
-        if (this[1].isEmpty) {
-            collectionProgress += collectionSpeed
-            if (collectionProgress >= 10000) run {
-                collectionProgress = 0
+        collectionProgress += collectionSpeed
+        if (collectionProgress >= 10000) {
+            collectionProgress = 0
+
+            val indices = FairyCollectorSettings.TABLE_SLOT_INDICES.filter { this[it].isEmpty }.toCollection(ArrayDeque())
+            if (indices.isNotEmpty()) {
 
                 folia -= 1000
 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-                collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
+                collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
                     folia -= 500 + 30 * it.stack.count
 
-                    this[1] = it.stack.copy()
+                    val index = indices.removeFirst()
+                    this[index] = it.stack.copy()
                     it.discard()
                     // TODO パーティクル
 
-                    true
+                    indices.isNotEmpty()
                 }
 
             }
         }
 
-        if (this[1].isNotEmpty) {
-            sortProgress += sortSpeed
-            if (sortProgress >= 10000) {
-                sortProgress = 0
+        sortProgress += sortSpeed
+        if (sortProgress >= 10000) {
+            sortProgress = 0
 
-                folia -= 200
+            folia -= 200
 
-                val result = mergeInventory(this, 1, this, 3..8)
-                folia -= 20 * result.movedItemCount
+            val result = mergeInventory(this, FairyCollectorSettings.TABLE_SLOT_INDICES, this, FairyCollectorSettings.CHEST_SLOT_INDICES)
+            folia -= 20 * result.movedItemCount
 
-            }
         }
 
         setStatus(FairyFactoryBlock.Status.PROCESSING)
