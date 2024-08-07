@@ -11,6 +11,7 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.ShapeContext
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.attribute.EntityAttributes
@@ -18,27 +19,33 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.IntProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 abstract class SimpleMagicPlantSettings<B : SimpleMagicPlantBlock> : MagicPlantSettings<B>() {
+    abstract val outlineShapes: List<VoxelShape>
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
 }
 
-abstract class SimpleMagicPlantBlock(private val cardGetter: () -> MagicPlantCard<out SimpleMagicPlantSettings<*>, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
+abstract class SimpleMagicPlantCard<S : SimpleMagicPlantSettings<B>, B : SimpleMagicPlantBlock>(settings: S) : MagicPlantCard<S, B>(settings) {
+    val outlineShapes = settings.outlineShapes.toTypedArray()
+}
+
+abstract class SimpleMagicPlantBlock(private val cardGetter: () -> SimpleMagicPlantCard<out SimpleMagicPlantSettings<*>, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
 
     // Property
 
-    abstract val ageProperty: IntProperty
+    val ageProperty: IntProperty get() = Properties.AGE_3
 
-    @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
     val maxAge: Int = ageProperty.values.max()
 
     init {
-        @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
         defaultState = defaultState.with(ageProperty, 0)
     }
 
@@ -49,6 +56,12 @@ abstract class SimpleMagicPlantBlock(private val cardGetter: () -> MagicPlantCar
     fun getAge(state: BlockState) = state[ageProperty]!!
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
     fun withAge(age: Int): BlockState = defaultState.with(ageProperty, age atLeast 0 atMost maxAge)
+
+
+    // Shape
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = cardGetter().outlineShapes[getAge(state)]
 
 
     // Magic Plant

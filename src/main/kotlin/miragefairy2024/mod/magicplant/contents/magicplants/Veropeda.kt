@@ -20,21 +20,14 @@ import miragefairy2024.util.tag
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
 import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.PlacedFeatures
@@ -60,6 +53,13 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
     override val jaClassification = "妖花目ヴェロペダ科"
 
     override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
+
+    override val outlineShapes = listOf(
+        createCuboidShape(3.0, 5.0),
+        createCuboidShape(4.0, 7.0),
+        createCuboidShape(7.0, 9.0),
+        createCuboidShape(7.0, 16.0),
+    )
 
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
@@ -162,19 +162,6 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
     }
 }
 
-object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings)
+object VeropedaCard : SimpleMagicPlantCard<VeropedaSettings, VeropedaBlock>(VeropedaSettings)
 
-@Suppress("OVERRIDE_DEPRECATION")
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }, settings) {
-    companion object {
-        private val AGE_TO_SHAPE: Array<VoxelShape> = arrayOf(
-            createCuboidShape(3.0, 5.0),
-            createCuboidShape(4.0, 7.0),
-            createCuboidShape(7.0, 9.0),
-            createCuboidShape(7.0, 16.0),
-        )
-    }
-
-    override val ageProperty: IntProperty get() = Properties.AGE_3
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-}
+class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }, settings)
