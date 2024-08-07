@@ -12,6 +12,7 @@ import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.enJa
+import miragefairy2024.util.overworld
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -24,7 +25,6 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.minecraft.block.ExperienceDroppingBlock
@@ -161,7 +161,7 @@ fun initOresModule() {
             )
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
-            it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { BiomeSelectors.foundInOverworld() }
+            it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
         }
 
     }

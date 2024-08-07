@@ -17,9 +17,14 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
+import miragefairy2024.util.biome
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.end
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.nether
+import miragefairy2024.util.not
+import miragefairy2024.util.overworld
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -28,7 +33,6 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
@@ -157,14 +161,14 @@ object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock>(
             }
 
             // 地上とエンドに配置
-            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInOverworld() }
-            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInTheEnd().and(BiomeSelectors.excludeByKey(BiomeKeys.THE_END)) }
+            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
+            mirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { end * !biome(BiomeKeys.THE_END) }
 
             // ネザーに配置
-            netherMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInTheNether() }
+            netherMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether }
 
             // 地上にFairy Ringを配置
-            largeMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.foundInOverworld() }
+            largeMirageClusterPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
 
         }
 
