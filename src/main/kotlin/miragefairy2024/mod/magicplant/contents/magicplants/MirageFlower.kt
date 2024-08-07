@@ -53,7 +53,9 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
+object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageFlowerBlock>() {
+    override val card get() = MirageFlowerCard
+
     override val blockPath = "mirage_flower"
     override val blockEnName = "Mirage Flower"
     override val blockJaName = "妖花ミラージュ"
@@ -68,7 +70,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
 
     override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
-    override val outlineShapes = listOf(
+    override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),
         createCuboidShape(6.0, 12.0),
         createCuboidShape(6.0, 15.0),
@@ -88,8 +90,8 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
     val largeMirageClusterPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
 
     context(ModContext)
-    override fun init(card: MagicPlantCard<*, MirageFlowerBlock>) {
-        super.init(card)
+    override fun init() {
+        super.init()
 
         // 見た目
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
@@ -225,9 +227,9 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
     }
 }
 
-object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(MirageFlowerSettings)
+object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerSettings)
 
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlowerCard }, settings)
+class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerSettings, settings)
 
 private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()

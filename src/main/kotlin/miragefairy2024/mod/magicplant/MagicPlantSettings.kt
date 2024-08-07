@@ -17,7 +17,9 @@ import miragefairy2024.util.registerItemGroup
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
-abstract class MagicPlantSettings<B : MagicPlantBlock> {
+abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
+    abstract val card: C
+
     abstract val blockPath: String
     abstract val blockEnName: String
     abstract val blockJaName: String
@@ -33,7 +35,7 @@ abstract class MagicPlantSettings<B : MagicPlantBlock> {
     abstract fun createBlock(): B
 
     context(ModContext)
-    open fun init(card: MagicPlantCard<*, B>) {
+    open fun init() {
 
         // 登録
         card.block.register(Registries.BLOCK, card.blockIdentifier)

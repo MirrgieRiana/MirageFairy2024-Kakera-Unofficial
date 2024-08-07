@@ -26,18 +26,16 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class SimpleMagicPlantSettings<B : SimpleMagicPlantBlock> : MagicPlantSettings<B>() {
-    abstract val outlineShapes: List<VoxelShape>
+abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantSettings<C, B>() {
+    abstract val outlineShapes: Array<VoxelShape>
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
 }
 
-abstract class SimpleMagicPlantCard<S : SimpleMagicPlantSettings<B>, B : SimpleMagicPlantBlock>(settings: S) : MagicPlantCard<S, B>(settings) {
-    val outlineShapes = settings.outlineShapes.toTypedArray()
-}
+abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(settings: SimpleMagicPlantSettings<*, B>) : MagicPlantCard<B>(settings)
 
-abstract class SimpleMagicPlantBlock(private val cardGetter: () -> SimpleMagicPlantCard<out SimpleMagicPlantSettings<*>, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
+abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
 
     // Property
 
@@ -61,7 +59,7 @@ abstract class SimpleMagicPlantBlock(private val cardGetter: () -> SimpleMagicPl
     // Shape
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = cardGetter().outlineShapes[getAge(state)]
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = magicPlantSettings.outlineShapes[getAge(state)]
 
 
     // Magic Plant
@@ -94,17 +92,17 @@ abstract class SimpleMagicPlantBlock(private val cardGetter: () -> SimpleMagicPl
 
         if (isMaxAge(blockState)) {
             val fruitCount = world.random.randomInt(fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += cardGetter().settings.getFruitDrops(fruitCount, world.random)
+            if (fruitCount > 0) drops += magicPlantSettings.getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val leafCount = world.random.randomInt(leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += cardGetter().settings.getLeafDrops(leafCount, world.random)
+            if (leafCount > 0) drops += magicPlantSettings.getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val rareCount = world.random.randomInt(0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += cardGetter().settings.getRareDrops(rareCount, world.random)
+            if (rareCount > 0) drops += magicPlantSettings.getRareDrops(rareCount, world.random)
         }
 
         return drops
