@@ -1,7 +1,5 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
@@ -43,13 +41,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.random.Random
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
@@ -57,12 +53,10 @@ import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.FeatureConfig
 import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.feature.util.FeatureContext
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
@@ -263,55 +257,4 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlow
 
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
-}
-
-class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius: Float, val ySpread: Int, val feature: RegistryEntry<PlacedFeature>) : FeatureConfig {
-    companion object {
-        val CODEC: Codec<FairyRingFeatureConfig> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                Codec.INT.fieldOf("tries").forGetter(FairyRingFeatureConfig::tries),
-                Codec.FLOAT.fieldOf("min_radius").forGetter(FairyRingFeatureConfig::minRadius),
-                Codec.FLOAT.fieldOf("max_radius").forGetter(FairyRingFeatureConfig::maxRadius),
-                Codec.INT.fieldOf("y_spread").forGetter(FairyRingFeatureConfig::ySpread),
-                PlacedFeature.REGISTRY_CODEC.fieldOf("feature").forGetter(FairyRingFeatureConfig::feature),
-            ).apply(instance, ::FairyRingFeatureConfig)
-        }
-    }
-
-    init {
-        require(tries >= 0)
-        require(minRadius >= 0F)
-        require(maxRadius >= 0F)
-        require(maxRadius >= minRadius)
-        require(ySpread >= 0)
-    }
-}
-
-class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRingFeatureConfig>(codec) {
-    override fun generate(context: FeatureContext<FairyRingFeatureConfig>): Boolean {
-        val config = context.config
-        val random = context.random
-        val originBlockPos = context.origin
-        val world = context.world
-
-        var count = 0
-        val minRadius = config.minRadius
-        val radiusRange = config.maxRadius - minRadius
-        val y1 = config.ySpread + 1
-        val mutableBlockPos = BlockPos.Mutable()
-        for (l in 0 until config.tries) {
-            val r = random.nextFloat() * radiusRange + minRadius
-            val theta = random.nextFloat() * MathHelper.TAU
-            val x = MathHelper.floor(MathHelper.cos(theta) * r)
-            val y = random.nextInt(y1) - random.nextInt(y1)
-            val z = MathHelper.floor(MathHelper.sin(theta) * r)
-
-            mutableBlockPos.set(originBlockPos, x, y, z)
-            if (config.feature.value().generateUnregistered(world, context.generator, random, mutableBlockPos)) {
-                count++
-            }
-        }
-
-        return count > 0
-    }
 }
