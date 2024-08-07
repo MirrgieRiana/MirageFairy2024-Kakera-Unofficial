@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
+import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
@@ -64,7 +65,10 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerCard : MagicPlantCard<MirageFlowerBlock>(
+object MirageFlowerSettings : MagicPlantSettings()
+
+object MirageFlowerCard : MagicPlantCard<MirageFlowerSettings, MirageFlowerBlock>(
+    MirageFlowerSettings,
     "mirage_flower", "Mirage Flower", "妖花ミラージュ",
     "mirage_bulb", "Mirage Bulb", "ミラージュの球根",
     PoemList(1)

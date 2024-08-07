@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MagicPlantCard
+import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.SimpleMagicPlantBlock
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
@@ -50,7 +51,10 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaCard : MagicPlantCard<VeropedaBlock>(
+object VeropedaSettings : MagicPlantSettings()
+
+object VeropedaCard : MagicPlantCard<VeropedaSettings, VeropedaBlock>(
+    VeropedaSettings,
     "veropeda", "Veropeda", "呪草ヴェロペダ",
     "veropeda_bulb", "Veropeda Bulb", "ヴェロペダの球根",
     PoemList(1)
