@@ -190,13 +190,18 @@ fun collectItem(
     world: World,
     originalBlockPos: BlockPos,
     reach: Int = Int.MAX_VALUE,
-    region: BlockBox = BlockBox.infinite(),
+    region: BlockBox? = null,
     maxCount: Int = Int.MAX_VALUE,
     ignoreOriginalWall: Boolean = false,
     predicate: (ItemEntity) -> Boolean = { true },
     process: (ItemEntity) -> Boolean,
 ) {
-    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, Box(originalBlockPos).expand(reach.toDouble())) {
+    val box = when {
+        region != null -> Box.from(region)
+        reach != Int.MAX_VALUE -> Box(originalBlockPos).expand(reach.toDouble())
+        else -> Box.from(BlockBox.infinite())
+    }
+    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
     }.groupBy { it.blockPos }
 
@@ -204,7 +209,7 @@ fun collectItem(
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
         blockVisitor(listOf(originalBlockPos), maxDistance = reach) { _, fromBlockPos, toBlockPos ->
-            if (toBlockPos !in region) return@blockVisitor false
+            if (region != null && toBlockPos !in region) return@blockVisitor false
             val offset = toBlockPos.subtract(fromBlockPos)
             val direction = when {
                 offset.y == -1 -> Direction.DOWN
