@@ -61,6 +61,9 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaBlock>() {
 
     override fun createBlock() = VeropedaBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
+    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
+
     context(ModContext)
     override fun init(card: MagicPlantCard<*, VeropedaBlock>) {
         super.init(card)
@@ -174,6 +177,4 @@ class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock({ VeropedaCard }
 
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
-    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 }
