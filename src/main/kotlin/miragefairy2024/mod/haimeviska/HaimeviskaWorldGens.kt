@@ -105,7 +105,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    haimeviskaPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)))
+    haimeviskaPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { BiomeSelectors.tag(ConventionalBiomeTags.PLAINS).or(BiomeSelectors.tag(ConventionalBiomeTags.FOREST)) }
 
 }
 
