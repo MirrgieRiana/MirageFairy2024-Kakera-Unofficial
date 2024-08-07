@@ -19,7 +19,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.util.shape.VoxelShape
@@ -35,25 +34,28 @@ abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleM
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(settings: SimpleMagicPlantSettings<*, B>) : MagicPlantCard<B>(settings)
 
-open class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
+abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
 
     // Property
 
-    val ageProperty: IntProperty get() = Properties.AGE_3
+    abstract fun getAgeProperty(): IntProperty
 
-    val maxAge: Int = ageProperty.values.max()
+    @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
+    private val agePropertyCache = getAgeProperty()
+
+    val maxAge: Int = agePropertyCache.values.max()
 
     init {
-        defaultState = defaultState.with(ageProperty, 0)
+        defaultState = defaultState.with(agePropertyCache, 0)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        builder.add(ageProperty)
+        builder.add(getAgeProperty()/* この関数は親クラスのinitで呼ばれるのでフィールドを参照できない */)
     }
 
-    fun getAge(state: BlockState) = state[ageProperty]!!
+    fun getAge(state: BlockState) = state[agePropertyCache]!!
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
-    fun withAge(age: Int): BlockState = defaultState.with(ageProperty, age atLeast 0 atMost maxAge)
+    fun withAge(age: Int): BlockState = defaultState.with(agePropertyCache, age atLeast 0 atMost maxAge)
 
 
     // Shape

@@ -25,6 +25,8 @@ import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
+import net.minecraft.state.property.IntProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.gen.GenerationStep
@@ -38,7 +40,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, SimpleMagicPlantBlock>() {
+object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>() {
     override val card get() = VeropedaCard
 
     override val blockPath = "veropeda"
@@ -53,7 +55,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, SimpleMagicPlan
     override val enClassification = "Order Miragales, family Veropedaceae"
     override val jaClassification = "妖花目ヴェロペダ科"
 
-    override fun createBlock() = SimpleMagicPlantBlock(this, createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
+    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
     override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),
@@ -70,8 +72,8 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, SimpleMagicPlan
         super.init()
 
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.ageProperty }
-        card.block.ageProperty.values.forEach { age ->
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
+        card.block.getAgeProperty().values.forEach { age ->
             registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
             }
@@ -163,4 +165,8 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, SimpleMagicPlan
     }
 }
 
-object VeropedaCard : SimpleMagicPlantCard<SimpleMagicPlantBlock>(VeropedaSettings)
+object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaSettings)
+
+class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaSettings, settings) {
+    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+}
