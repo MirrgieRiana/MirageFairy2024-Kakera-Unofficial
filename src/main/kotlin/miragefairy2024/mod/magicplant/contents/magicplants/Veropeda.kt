@@ -57,7 +57,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
-    override val outlineShapes = arrayOf(
+    override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),
         createCuboidShape(4.0, 7.0),
         createCuboidShape(7.0, 9.0),

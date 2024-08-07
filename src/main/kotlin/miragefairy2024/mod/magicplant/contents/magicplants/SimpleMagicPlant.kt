@@ -26,7 +26,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantSettings<C, B>() {
-    abstract val outlineShapes: Array<VoxelShape>
+    abstract val outlineShapes: List<VoxelShape>
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
@@ -60,8 +60,10 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
 
     // Shape
 
+    private val outlineShapesCache = magicPlantSettings.outlineShapes.toTypedArray()
+
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = magicPlantSettings.outlineShapes[getAge(state)]
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
 
 
     // Magic Plant

@@ -71,7 +71,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
 
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
-    override val outlineShapes = arrayOf(
+    override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),
         createCuboidShape(6.0, 12.0),
         createCuboidShape(6.0, 15.0),
