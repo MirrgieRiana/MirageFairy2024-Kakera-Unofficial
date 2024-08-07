@@ -35,7 +35,7 @@ abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleM
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(settings: SimpleMagicPlantSettings<*, B>) : MagicPlantCard<B>(settings)
 
-abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
+open class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
 
     // Property
 

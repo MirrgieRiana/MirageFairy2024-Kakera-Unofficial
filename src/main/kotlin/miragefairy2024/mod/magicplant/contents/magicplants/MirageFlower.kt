@@ -52,7 +52,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageFlowerBlock>() {
+object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, SimpleMagicPlantBlock>() {
     override val card get() = MirageFlowerCard
 
     override val blockPath = "mirage_flower"
@@ -67,7 +67,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override val enClassification = "Order Miragales, family Miragaceae"
     override val jaClassification = "妖花目ミラージュ科"
 
-    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = SimpleMagicPlantBlock(this, createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
     override val outlineShapes = arrayOf(
         createCuboidShape(3.0, 5.0),
@@ -226,9 +226,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     }
 }
 
-object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerSettings)
-
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerSettings, settings)
+object MirageFlowerCard : SimpleMagicPlantCard<SimpleMagicPlantBlock>(MirageFlowerSettings)
 
 private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
