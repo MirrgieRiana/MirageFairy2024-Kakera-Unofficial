@@ -75,6 +75,10 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerBlock>() {
 
     override fun createBlock() = MirageFlowerBlock(MagicPlantCard.createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 
+    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
+    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
+
     val fairyRingFeature = FairyRingFeature(FairyRingFeatureConfig.CODEC)
     val mirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
     val largeMirageClusterConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
@@ -236,9 +240,6 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock({ MirageFlow
 
     override val ageProperty: IntProperty get() = Properties.AGE_3
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = AGE_TO_SHAPE[getAge(state)]
-    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 }
 
 private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {

@@ -22,7 +22,11 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
-abstract class SimpleMagicPlantSettings<B : SimpleMagicPlantBlock> : MagicPlantSettings<B>()
+abstract class SimpleMagicPlantSettings<B : SimpleMagicPlantBlock> : MagicPlantSettings<B>() {
+    open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
+}
 
 abstract class SimpleMagicPlantBlock(private val cardGetter: () -> MagicPlantCard<out SimpleMagicPlantSettings<*>, *>, settings: Settings) : MagicPlantBlock(cardGetter, settings) {
 
@@ -77,24 +81,20 @@ abstract class SimpleMagicPlantBlock(private val cardGetter: () -> MagicPlantCar
 
         if (isMaxAge(blockState)) {
             val fruitCount = world.random.randomInt(fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += getFruitDrops(fruitCount, world.random)
+            if (fruitCount > 0) drops += cardGetter().settings.getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val leafCount = world.random.randomInt(leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += getLeafDrops(leafCount, world.random)
+            if (leafCount > 0) drops += cardGetter().settings.getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
             val rareCount = world.random.randomInt(0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += getRareDrops(rareCount, world.random)
+            if (rareCount > 0) drops += cardGetter().settings.getRareDrops(rareCount, world.random)
         }
 
         return drops
     }
-
-    open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
-    open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
-    open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
 
 }
