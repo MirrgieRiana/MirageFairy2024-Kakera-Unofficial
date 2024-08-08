@@ -4,8 +4,8 @@ import com.mojang.datafixers.util.Pair
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.TerraBlenderEvents
-import miragefairy2024.mod.haimeviska.haimeviskaDeepFairyForestPlacedFeatureKey
-import miragefairy2024.mod.haimeviska.haimeviskaFairyForestPlacedFeatureKey
+import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
+import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerSettings
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -170,7 +170,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultDisks(lookupBackedBuilder)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY)
                 DefaultBiomeFeatures.addForestTrees(lookupBackedBuilder)
 
                 DefaultBiomeFeatures.addDefaultFlowers(lookupBackedBuilder)
@@ -242,7 +242,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultDisks(lookupBackedBuilder)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, haimeviskaDeepFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)

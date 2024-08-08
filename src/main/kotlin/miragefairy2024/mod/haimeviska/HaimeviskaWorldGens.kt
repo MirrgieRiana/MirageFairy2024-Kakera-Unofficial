@@ -44,10 +44,10 @@ object HaimeviskaTreeDecoratorCard {
     val type: TreeDecoratorType<HaimeviskaTreeDecorator> = TreeDecoratorType(codec)
 }
 
-val haimeviskaConfiguredFeatureKey: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
-val haimeviskaPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
-val haimeviskaFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest"))
-val haimeviskaDeepFairyForestPlacedFeatureKey: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest"))
+val HAIMEVISKA_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
+val HAIMEVISKA_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
+val HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest"))
+val HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest"))
 
 context(ModContext)
 fun initHaimeviskaWorldGens() {
@@ -56,7 +56,7 @@ fun initHaimeviskaWorldGens() {
     HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
     // ConfiguredFeatureの登録
-    registerDynamicGeneration(haimeviskaConfiguredFeatureKey) {
+    registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
         Feature.TREE with TreeFeatureConfig.Builder(
             BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
@@ -67,7 +67,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // まばらなPlacedFeature
-    registerDynamicGeneration(haimeviskaPlacedFeatureKey) {
+    registerDynamicGeneration(HAIMEVISKA_PLACED_FEATURE_KEY) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(512),
             SquarePlacementModifier.of(),
@@ -76,11 +76,11 @@ fun initHaimeviskaWorldGens() {
             BiomePlacementModifier.of(),
             PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
         )
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 高密度のPlacedFeature
-    registerDynamicGeneration(haimeviskaFairyForestPlacedFeatureKey) {
+    registerDynamicGeneration(HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(16),
             SquarePlacementModifier.of(),
@@ -89,11 +89,11 @@ fun initHaimeviskaWorldGens() {
             BiomePlacementModifier.of(),
             PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
         )
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 超高密度のPlacedFeature
-    registerDynamicGeneration(haimeviskaDeepFairyForestPlacedFeatureKey) {
+    registerDynamicGeneration(HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY) {
         val placementModifiers = listOf(
             CountPlacementModifier.of(8),
             SquarePlacementModifier.of(),
@@ -102,11 +102,11 @@ fun initHaimeviskaWorldGens() {
             BiomePlacementModifier.of(),
             PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
         )
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(haimeviskaConfiguredFeatureKey) with placementModifiers
+        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 平原・森林バイオームに配置
-    haimeviskaPlacedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { tag(ConventionalBiomeTags.PLAINS) + tag(ConventionalBiomeTags.FOREST) }
+    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { tag(ConventionalBiomeTags.PLAINS) + tag(ConventionalBiomeTags.FOREST) }
 
 }
 
