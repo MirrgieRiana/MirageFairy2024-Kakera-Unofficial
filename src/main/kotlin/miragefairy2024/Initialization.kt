@@ -17,6 +17,7 @@ class InitializationEventRegistry<T> {
         list.forEach {
             processor(it)
         }
+        list.clear()
     }
 }
 
