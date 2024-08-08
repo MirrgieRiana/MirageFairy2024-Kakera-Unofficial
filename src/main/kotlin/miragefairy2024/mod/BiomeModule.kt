@@ -179,7 +179,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultVegetation(lookupBackedBuilder)
                 DefaultBiomeFeatures.addSweetBerryBushes(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.mirageClusterFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
@@ -247,7 +247,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.mirageClusterFairyForestPlacedFeatureKey)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
