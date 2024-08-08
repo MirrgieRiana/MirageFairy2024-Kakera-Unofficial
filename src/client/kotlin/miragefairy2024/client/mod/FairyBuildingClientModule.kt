@@ -102,8 +102,8 @@ class FairyHouseScreen(arguments: Arguments<FairyFactoryScreenHandler>) : FairyF
 class FairyCollectorScreen(arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(FairyCollectorCard, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
-        context.drawTexture(SPRITES_TEXTURE, x + 19, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
-        context.drawTexture(SPRITES_TEXTURE, x + 76, y + 28, 0F, 0F, (18.0 * (handler.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
+        context.drawTexture(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
+        context.drawTexture(SPRITES_TEXTURE, x + 80, y + 28, 0F, 0F, (18.0 * (handler.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
     }
 
     override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
