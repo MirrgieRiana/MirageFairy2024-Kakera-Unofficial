@@ -7,7 +7,6 @@ import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
-import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -60,6 +59,9 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
             SlotSettings(102 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
         )
     }
+
+    val TABLE_SLOT_INDICES = 1..1
+    val CHEST_SLOT_INDICES = 3..8
 
     val COLLECTION_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
     val SORT_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
@@ -136,39 +138,40 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
         folia -= 10
 
-        if (this[1].isEmpty) {
-            collectionProgress += collectionSpeed
-            if (collectionProgress >= 10000) run {
-                collectionProgress = 0
+        collectionProgress += collectionSpeed
+        if (collectionProgress >= 10000) run {
+            collectionProgress = 0
+
+            val indices = FairyCollectorSettings.TABLE_SLOT_INDICES.filter { this[it].isEmpty }.toCollection(ArrayDeque())
+            if (indices.isNotEmpty()) {
 
                 folia -= 1000
 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-                collectItem(world, pos, maxCount = 1, reach = 30, region = region, ignoreOriginalWall = true) {
+                collectItem(world, pos, reach = 30, region = region, ignoreOriginalWall = true) {
 
                     folia -= 500 + 30 * it.stack.count
 
-                    this[1] = it.stack.copy()
+                    val index = indices.removeFirst()
+                    this[index] = it.stack.copy()
                     it.discard()
                     // TODO パーティクル
 
-                    true
+                    indices.isNotEmpty()
                 }
 
             }
         }
 
-        if (this[1].isNotEmpty) {
-            sortProgress += sortSpeed
-            if (sortProgress >= 10000) {
-                sortProgress = 0
+        sortProgress += sortSpeed
+        if (sortProgress >= 10000) {
+            sortProgress = 0
 
-                folia -= 200
+            folia -= 200
 
-                val result = mergeInventory(this, 1, this, 3..8)
-                folia -= 20 * result.movedItemCount
+            val result = mergeInventory(this, FairyCollectorSettings.TABLE_SLOT_INDICES, this, FairyCollectorSettings.CHEST_SLOT_INDICES)
+            folia -= 20 * result.movedItemCount
 
-            }
         }
 
         setStatus(FairyFactoryBlock.Status.PROCESSING)
