@@ -9,6 +9,8 @@ import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.createNetherRarityFilterPlacementModifiers
+import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
 import miragefairy2024.util.nether
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
@@ -31,10 +33,6 @@ import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
-import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
 object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>() {
@@ -90,22 +88,13 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
             // 地上
             registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(16),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createRarityFilterFlowerPlacementModifiers(16)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(8),
-                    CountMultilayerPlacementModifier.of(1),
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createNetherRarityFilterPlacementModifiers(8)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 

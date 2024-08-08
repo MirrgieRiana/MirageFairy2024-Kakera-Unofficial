@@ -11,8 +11,11 @@ import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.biome
+import miragefairy2024.util.createCountFlowerPlacementModifiers
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.createNetherRarityFilterPlacementModifiers
+import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
 import miragefairy2024.util.end
 import miragefairy2024.util.nether
 import miragefairy2024.util.not
@@ -42,11 +45,6 @@ import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
-import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
 object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageFlowerBlock>() {
@@ -109,44 +107,25 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
 
             // 地上とエンド用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(16),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createRarityFilterFlowerPlacementModifiers(16)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // ネザー用PlacedFeature
             registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(64),
-                    CountMultilayerPlacementModifier.of(1),
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createNetherRarityFilterPlacementModifiers(64)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // 妖精の森用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    CountPlacementModifier.of(4),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createCountFlowerPlacementModifiers(4)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // Fairy Ring PlacedFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = listOf(
-                    RarityFilterPlacementModifier.of(600),
-                    SquarePlacementModifier.of(),
-                    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-                    BiomePlacementModifier.of(),
-                )
+                val placementModifiers = createRarityFilterFlowerPlacementModifiers(600)
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 

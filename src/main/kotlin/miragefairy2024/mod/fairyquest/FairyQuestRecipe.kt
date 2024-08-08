@@ -14,6 +14,7 @@ import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.overworld
@@ -53,11 +54,7 @@ import net.minecraft.world.Heightmap
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.DefaultFeatureConfig
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.util.FeatureContext
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 
 val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -288,12 +285,7 @@ fun initFairyQuestRecipe() {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
     val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-        val placementModifiers = listOf(
-            RarityFilterPlacementModifier.of(256),
-            SquarePlacementModifier.of(),
-            PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-            BiomePlacementModifier.of(),
-        )
+        val placementModifiers = createRarityFilterFlowerPlacementModifiers(256)
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
