@@ -3,6 +3,8 @@ package miragefairy2024.mod.haimeviska
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.createCountTreePlacementModifiers
+import miragefairy2024.util.createRarityFilterTreePlacementModifiers
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -22,15 +24,9 @@ import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.PlacedFeature
-import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.TreeFeatureConfig
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.LargeOakFoliagePlacer
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
-import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
-import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.treedecorator.TreeDecorator
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType
@@ -68,40 +64,19 @@ fun initHaimeviskaWorldGens() {
 
     // まばらなPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_PLACED_FEATURE_KEY) {
-        val placementModifiers = listOf(
-            RarityFilterPlacementModifier.of(512),
-            SquarePlacementModifier.of(),
-            SurfaceWaterDepthFilterPlacementModifier.of(0),
-            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-            BiomePlacementModifier.of(),
-            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-        )
+        val placementModifiers = createRarityFilterTreePlacementModifiers(512, HaimeviskaBlockCard.SAPLING.block)
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = listOf(
-            RarityFilterPlacementModifier.of(16),
-            SquarePlacementModifier.of(),
-            SurfaceWaterDepthFilterPlacementModifier.of(0),
-            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-            BiomePlacementModifier.of(),
-            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-        )
+        val placementModifiers = createRarityFilterTreePlacementModifiers(16, HaimeviskaBlockCard.SAPLING.block)
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 超高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = listOf(
-            CountPlacementModifier.of(8),
-            SquarePlacementModifier.of(),
-            SurfaceWaterDepthFilterPlacementModifier.of(0),
-            PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-            BiomePlacementModifier.of(),
-            PlacedFeatures.wouldSurvive(HaimeviskaBlockCard.SAPLING.block),
-        )
+        val placementModifiers = createCountTreePlacementModifiers(8, HaimeviskaBlockCard.SAPLING.block)
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 

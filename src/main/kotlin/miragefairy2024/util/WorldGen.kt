@@ -7,6 +7,7 @@ import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
+import net.minecraft.block.Block
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
@@ -15,11 +16,20 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.FeatureConfig
 import net.minecraft.world.gen.feature.PlacedFeature
+import net.minecraft.world.gen.feature.PlacedFeatures
+import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
+import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
+import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
+import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
 import net.minecraft.world.gen.placementmodifier.PlacementModifier
+import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
+import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
+import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier
 import java.util.function.Predicate
 
 infix fun <C : FeatureConfig, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
@@ -68,3 +78,51 @@ context(BiomeSelectorScope) fun tag(tag: TagKey<Biome>): Predicate<BiomeSelectio
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.not(): Predicate<BiomeSelectionContext> = this.negate()
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.times(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.and(other)
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.plus(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.or(other)
+
+
+// PlacementModifier
+
+fun createCountOrePlacementModifiers(count: Int, minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf(
+    CountPlacementModifier.of(count),
+    SquarePlacementModifier.of(),
+    HeightRangePlacementModifier.uniform(YOffset.fixed(minOffset), YOffset.fixed(maxOffset)),
+    BiomePlacementModifier.of(),
+)
+
+fun createRarityFilterTreePlacementModifiers(chance: Int, saplingBlock: Block): List<PlacementModifier> = listOf(
+    RarityFilterPlacementModifier.of(chance),
+    SquarePlacementModifier.of(),
+    SurfaceWaterDepthFilterPlacementModifier.of(0),
+    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+    BiomePlacementModifier.of(),
+    PlacedFeatures.wouldSurvive(saplingBlock),
+)
+
+fun createCountTreePlacementModifiers(count: Int, saplingBlock: Block): List<PlacementModifier> = listOf(
+    CountPlacementModifier.of(count),
+    SquarePlacementModifier.of(),
+    SurfaceWaterDepthFilterPlacementModifier.of(0),
+    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+    BiomePlacementModifier.of(),
+    PlacedFeatures.wouldSurvive(saplingBlock),
+)
+
+fun createRarityFilterFlowerPlacementModifiers(chance: Int): List<PlacementModifier> = listOf(
+    RarityFilterPlacementModifier.of(chance),
+    SquarePlacementModifier.of(),
+    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+    BiomePlacementModifier.of(),
+)
+
+fun createCountFlowerPlacementModifiers(count: Int): List<PlacementModifier> = listOf(
+    CountPlacementModifier.of(count),
+    SquarePlacementModifier.of(),
+    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+    BiomePlacementModifier.of(),
+)
+
+fun createNetherRarityFilterPlacementModifiers(chance: Int): List<PlacementModifier> = listOf(
+    RarityFilterPlacementModifier.of(chance),
+    CountMultilayerPlacementModifier.of(1),
+    BiomePlacementModifier.of(),
+)

@@ -11,6 +11,7 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.createCountOrePlacementModifiers
 import miragefairy2024.util.enJa
 import miragefairy2024.util.overworld
 import miragefairy2024.util.register
@@ -42,13 +43,8 @@ import net.minecraft.structure.rule.TagMatchRuleTest
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.intprovider.UniformIntProvider
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.OreFeatureConfig
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
-import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 
 enum class BaseStoneType {
     STONE,
@@ -153,12 +149,7 @@ fun initOresModule() {
         }
 
         registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-            val placementModifiers = listOf(
-                CountPlacementModifier.of(8),
-                SquarePlacementModifier.of(),
-                HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(128)),
-                BiomePlacementModifier.of(),
-            )
+            val placementModifiers = createCountOrePlacementModifiers(8, -64, 128)
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
