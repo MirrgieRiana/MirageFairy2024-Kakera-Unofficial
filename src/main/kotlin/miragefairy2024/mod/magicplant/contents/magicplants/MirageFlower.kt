@@ -71,7 +71,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
-    override val possibleTraits = listOf(
+    override val possibleTraits = setOf(
         TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
         TraitCard.PHAEOSYNTHESIS.trait, // 闇合成

@@ -62,7 +62,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
-    override val possibleTraits = listOf(
+    override val possibleTraits = setOf(
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
         TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
         TraitCard.OSMOTIC_ABSORPTION.trait, // 浸透吸収

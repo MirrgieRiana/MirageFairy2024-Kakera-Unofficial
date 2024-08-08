@@ -66,7 +66,7 @@ class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos:
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-private fun spawnTraitStacks(possibleTraits: List<Trait>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
+private fun spawnTraitStacks(possibleTraits: Iterable<Trait>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
 
     // スポーン条件判定
     val aTraitStackList = mutableListOf<TraitStack>()

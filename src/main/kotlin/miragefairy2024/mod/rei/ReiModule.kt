@@ -15,7 +15,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
 ) {
     companion object {
         val entries = listOf(
-            TraitSpawnReiCategoryCard,
+            TraitReiCategoryCard,
             HarvestReiCategoryCard,
             FairyQuestRecipeReiCategoryCard,
             CommonMotifRecipeReiCategoryCard,

@@ -381,8 +381,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     override fun isValid(slot: Int, stack: ItemStack) = card.slots[slot].filter(stack)
 
-    override fun getAvailableSlots(side: Direction): IntArray {
-        val actualSide = when (side) {
+    private fun getActualSide(side: Direction): Direction {
+        return when (side) {
             Direction.UP, Direction.DOWN -> side
 
             else -> {
@@ -390,12 +390,19 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 Direction.fromHorizontal((direction.horizontal + side.horizontal) % 4)
             }
         }
-        return card.availableSlotsTable[actualSide.id]
     }
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = dir in card.slots[slot].insertDirections && isValid(slot, stack)
+    override fun getAvailableSlots(side: Direction): IntArray {
+        return card.availableSlotsTable[getActualSide(side).id]
+    }
 
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = dir in card.slots[slot].extractDirections
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?): Boolean {
+        return (dir == null || (getActualSide(dir) in card.slots[slot].insertDirections)) && isValid(slot, stack)
+    }
+
+    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction): Boolean {
+        return getActualSide(dir) in card.slots[slot].extractDirections
+    }
 
     override fun clear() {
         world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
