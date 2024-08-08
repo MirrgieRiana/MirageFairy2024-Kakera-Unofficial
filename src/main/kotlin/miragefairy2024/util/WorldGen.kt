@@ -117,7 +117,7 @@ val flower: List<PlacementModifier>
     )
 
 context(PlacementModifiersScope)
-val nether
+val netherFlower
     get(): List<PlacementModifier> = listOf(
         CountMultilayerPlacementModifier.of(1),
         BiomePlacementModifier.of(),

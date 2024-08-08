@@ -11,6 +11,7 @@ import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
+import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.registerDynamicGeneration
@@ -95,7 +96,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(8) + nether }
+                val placementModifiers = placementModifiers { per(8) + netherFlower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
