@@ -82,7 +82,7 @@ fun initBiomeModule() {
     BiomeCards.entries.forEach { card ->
 
         // バイオームの生成
-        registerDynamicGeneration(RegistryKeys.BIOME, card.registryKey) {
+        registerDynamicGeneration(card.registryKey) {
             card.createBiome(it.getRegistryLookup(RegistryKeys.PLACED_FEATURE), it.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER))
         }
 
