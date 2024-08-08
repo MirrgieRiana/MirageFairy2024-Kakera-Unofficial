@@ -11,15 +11,16 @@ import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.biome
-import miragefairy2024.util.createCountFlowerPlacementModifiers
+import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.createNetherRarityFilterPlacementModifiers
-import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
 import miragefairy2024.util.end
+import miragefairy2024.util.flower
 import miragefairy2024.util.nether
 import miragefairy2024.util.not
 import miragefairy2024.util.overworld
+import miragefairy2024.util.per
+import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -107,25 +108,25 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
 
             // 地上とエンド用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = createRarityFilterFlowerPlacementModifiers(16)
+                val placementModifiers = placementModifiers { per(16) + flower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // ネザー用PlacedFeature
             registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = createNetherRarityFilterPlacementModifiers(64)
+                val placementModifiers = placementModifiers { per(64) + nether }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // 妖精の森用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-                val placementModifiers = createCountFlowerPlacementModifiers(4)
+                val placementModifiers = placementModifiers { count(4) + flower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // Fairy Ring PlacedFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = createRarityFilterFlowerPlacementModifiers(600)
+                val placementModifiers = placementModifiers { per(600) + flower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 

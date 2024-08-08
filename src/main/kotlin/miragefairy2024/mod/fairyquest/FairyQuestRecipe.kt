@@ -14,10 +14,12 @@ import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
 import miragefairy2024.util.enJa
+import miragefairy2024.util.flower
 import miragefairy2024.util.invoke
 import miragefairy2024.util.overworld
+import miragefairy2024.util.per
+import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
@@ -285,7 +287,7 @@ fun initFairyQuestRecipe() {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
     val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
-        val placementModifiers = createRarityFilterFlowerPlacementModifiers(256)
+        val placementModifiers = placementModifiers { per(256) + flower }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }

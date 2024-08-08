@@ -11,9 +11,10 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.createCountOrePlacementModifiers
+import miragefairy2024.util.count
 import miragefairy2024.util.enJa
 import miragefairy2024.util.overworld
+import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -25,6 +26,7 @@ import miragefairy2024.util.registerOreLootTableGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.times
+import miragefairy2024.util.uniformOre
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
@@ -149,7 +151,7 @@ fun initOresModule() {
         }
 
         registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-            val placementModifiers = createCountOrePlacementModifiers(8, -64, 128)
+            val placementModifiers = placementModifiers { count(8) + uniformOre(-64, 128) }
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }

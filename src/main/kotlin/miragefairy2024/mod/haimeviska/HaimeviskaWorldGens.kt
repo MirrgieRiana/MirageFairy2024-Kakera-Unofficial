@@ -3,13 +3,15 @@ package miragefairy2024.mod.haimeviska
 import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.util.createCountTreePlacementModifiers
-import miragefairy2024.util.createRarityFilterTreePlacementModifiers
+import miragefairy2024.util.count
+import miragefairy2024.util.per
+import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.tag
+import miragefairy2024.util.tree
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.HorizontalFacingBlock
@@ -64,19 +66,19 @@ fun initHaimeviskaWorldGens() {
 
     // まばらなPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_PLACED_FEATURE_KEY) {
-        val placementModifiers = createRarityFilterTreePlacementModifiers(512, HaimeviskaBlockCard.SAPLING.block)
+        val placementModifiers = placementModifiers { per(512) + tree(HaimeviskaBlockCard.SAPLING.block) }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = createRarityFilterTreePlacementModifiers(16, HaimeviskaBlockCard.SAPLING.block)
+        val placementModifiers = placementModifiers { per(16) + tree(HaimeviskaBlockCard.SAPLING.block) }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 
     // 超高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = createCountTreePlacementModifiers(8, HaimeviskaBlockCard.SAPLING.block)
+        val placementModifiers = placementModifiers { count(8) + tree(HaimeviskaBlockCard.SAPLING.block) }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
     }
 

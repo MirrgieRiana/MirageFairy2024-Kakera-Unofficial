@@ -82,47 +82,43 @@ context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.plus(o
 
 // PlacementModifier
 
-fun createCountOrePlacementModifiers(count: Int, minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf(
-    CountPlacementModifier.of(count),
+object PlacementModifiersScope
+
+fun placementModifiers(block: PlacementModifiersScope.() -> List<PlacementModifier>) = block(PlacementModifiersScope)
+
+context(PlacementModifiersScope)
+fun count(count: Int): List<PlacementModifier> = listOf(CountPlacementModifier.of(count))
+
+context(PlacementModifiersScope)
+fun per(chance: Int): List<PlacementModifier> = listOf(RarityFilterPlacementModifier.of(chance))
+
+context(PlacementModifiersScope)
+fun tree(saplingBlock: Block): List<PlacementModifier> = listOf(
+    SquarePlacementModifier.of(),
+    SurfaceWaterDepthFilterPlacementModifier.of(0),
+    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+    BiomePlacementModifier.of(),
+    PlacedFeatures.wouldSurvive(saplingBlock),
+)
+
+context(PlacementModifiersScope)
+fun uniformOre(minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf(
     SquarePlacementModifier.of(),
     HeightRangePlacementModifier.uniform(YOffset.fixed(minOffset), YOffset.fixed(maxOffset)),
     BiomePlacementModifier.of(),
 )
 
-fun createRarityFilterTreePlacementModifiers(chance: Int, saplingBlock: Block): List<PlacementModifier> = listOf(
-    RarityFilterPlacementModifier.of(chance),
-    SquarePlacementModifier.of(),
-    SurfaceWaterDepthFilterPlacementModifier.of(0),
-    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-    BiomePlacementModifier.of(),
-    PlacedFeatures.wouldSurvive(saplingBlock),
-)
+context(PlacementModifiersScope)
+val flower: List<PlacementModifier>
+    get() = listOf(
+        SquarePlacementModifier.of(),
+        PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+        BiomePlacementModifier.of(),
+    )
 
-fun createCountTreePlacementModifiers(count: Int, saplingBlock: Block): List<PlacementModifier> = listOf(
-    CountPlacementModifier.of(count),
-    SquarePlacementModifier.of(),
-    SurfaceWaterDepthFilterPlacementModifier.of(0),
-    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
-    BiomePlacementModifier.of(),
-    PlacedFeatures.wouldSurvive(saplingBlock),
-)
-
-fun createRarityFilterFlowerPlacementModifiers(chance: Int): List<PlacementModifier> = listOf(
-    RarityFilterPlacementModifier.of(chance),
-    SquarePlacementModifier.of(),
-    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-    BiomePlacementModifier.of(),
-)
-
-fun createCountFlowerPlacementModifiers(count: Int): List<PlacementModifier> = listOf(
-    CountPlacementModifier.of(count),
-    SquarePlacementModifier.of(),
-    PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
-    BiomePlacementModifier.of(),
-)
-
-fun createNetherRarityFilterPlacementModifiers(chance: Int): List<PlacementModifier> = listOf(
-    RarityFilterPlacementModifier.of(chance),
-    CountMultilayerPlacementModifier.of(1),
-    BiomePlacementModifier.of(),
-)
+context(PlacementModifiersScope)
+val nether
+    get(): List<PlacementModifier> = listOf(
+        CountMultilayerPlacementModifier.of(1),
+        BiomePlacementModifier.of(),
+    )
