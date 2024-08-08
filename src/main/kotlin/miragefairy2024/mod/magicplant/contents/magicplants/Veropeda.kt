@@ -9,9 +9,10 @@ import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.createNetherRarityFilterPlacementModifiers
-import miragefairy2024.util.createRarityFilterFlowerPlacementModifiers
+import miragefairy2024.util.flower
 import miragefairy2024.util.nether
+import miragefairy2024.util.per
+import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.tag
@@ -88,13 +89,13 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
             // 地上
             registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = createRarityFilterFlowerPlacementModifiers(16)
+                val placementModifiers = placementModifiers { per(16) + flower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = createNetherRarityFilterPlacementModifiers(8)
+                val placementModifiers = placementModifiers { per(8) + nether }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
