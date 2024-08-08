@@ -1,17 +1,25 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MagicPlantSettings
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.randomInt
+import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.times
+import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.ShapeContext
+import net.minecraft.data.client.Models
+import net.minecraft.data.client.TextureKey
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.attribute.EntityAttributes
@@ -30,6 +38,20 @@ abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleM
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
+
+    context(ModContext)
+    override fun init() {
+        super.init()
+
+        // 見た目
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
+        card.block.getAgeProperty().values.forEach { age ->
+            registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
+                Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
+            }
+        }
+
+    }
 }
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(settings: SimpleMagicPlantSettings<*, B>) : MagicPlantCard<B>(settings)
