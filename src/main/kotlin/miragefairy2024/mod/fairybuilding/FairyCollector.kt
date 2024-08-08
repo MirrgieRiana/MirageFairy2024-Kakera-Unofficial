@@ -142,7 +142,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
         folia -= 10
 
         collectionProgress += collectionSpeed
-        if (collectionProgress >= 10000) run {
+        if (collectionProgress >= 10000) {
             collectionProgress = 0
 
             val indices = FairyCollectorSettings.TABLE_SLOT_INDICES.filter { this[it].isEmpty }.toCollection(ArrayDeque())
