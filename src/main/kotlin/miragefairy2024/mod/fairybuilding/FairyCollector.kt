@@ -57,10 +57,13 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
             SlotSettings(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
             SlotSettings(106 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
             SlotSettings(106 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            SlotSettings(37 + 18 * 1, 17 + 18 * 0), // 机
+            SlotSettings(37 + 18 * 0, 17 + 18 * 1), // 机
+            SlotSettings(37 + 18 * 1, 17 + 18 * 1), // 机
         )
     }
 
-    val TABLE_SLOT_INDICES = 1..1
+    val TABLE_SLOT_INDICES = listOf(1, 9, 10, 11)
     val CHEST_SLOT_INDICES = 3..8
 
     val COLLECTION_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
