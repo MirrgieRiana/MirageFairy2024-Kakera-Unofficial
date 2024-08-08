@@ -14,7 +14,6 @@ import miragefairy2024.util.biome
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.end
-import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.nether
 import miragefairy2024.util.not
 import miragefairy2024.util.overworld
@@ -22,14 +21,10 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
-import miragefairy2024.util.registerModelGeneration
-import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.MapColor
-import net.minecraft.data.client.Models
-import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
@@ -93,14 +88,6 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     context(ModContext)
     override fun init() {
         super.init()
-
-        // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
-        card.block.getAgeProperty().values.forEach { age ->
-            registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/" * card.block.getIdentifier() * "_age$age")
-            }
-        }
 
         // 地形生成
         run {
