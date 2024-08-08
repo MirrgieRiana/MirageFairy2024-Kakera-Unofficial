@@ -17,6 +17,7 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.end
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
+import miragefairy2024.util.netherFlower
 import miragefairy2024.util.not
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
@@ -114,7 +115,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
 
             // ネザー用PlacedFeature
             registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(64) + nether }
+                val placementModifiers = placementModifiers { per(64) + netherFlower }
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
