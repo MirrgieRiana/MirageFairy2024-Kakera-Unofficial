@@ -31,6 +31,7 @@ fun initMagicPlantModule() {
     magicPlantSeedItemGroupCard.init()
 
 
+    initTraitListScreenHandler()
     initTraitEffectKeyCard()
     initTraitCard()
 
