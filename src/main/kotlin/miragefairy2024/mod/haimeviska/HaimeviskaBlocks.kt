@@ -448,5 +448,5 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
 }
 
 class HaimeviskaSaplingGenerator : SaplingGenerator() {
-    override fun getTreeFeature(random: Random, bees: Boolean) = haimeviskaConfiguredFeatureKey
+    override fun getTreeFeature(random: Random, bees: Boolean) = HAIMEVISKA_CONFIGURED_FEATURE_KEY
 }
