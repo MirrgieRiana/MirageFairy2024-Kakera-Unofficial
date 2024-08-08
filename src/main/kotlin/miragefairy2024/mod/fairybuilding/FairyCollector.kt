@@ -151,7 +151,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
                 folia -= 1000
 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
-                collectItem(world, pos, reach = 30, region = region, ignoreOriginalWall = true) {
+                collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
                     folia -= 500 + 30 * it.stack.count
 
