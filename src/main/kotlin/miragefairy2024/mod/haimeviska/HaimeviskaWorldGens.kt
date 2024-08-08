@@ -56,7 +56,7 @@ fun initHaimeviskaWorldGens() {
     HaimeviskaTreeDecoratorCard.type.register(Registries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
 
     // ConfiguredFeatureの登録
-    registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, haimeviskaConfiguredFeatureKey) {
+    registerDynamicGeneration(haimeviskaConfiguredFeatureKey) {
         Feature.TREE with TreeFeatureConfig.Builder(
             BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
@@ -67,7 +67,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // まばらなPlacedFeature
-    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaPlacedFeatureKey) {
+    registerDynamicGeneration(haimeviskaPlacedFeatureKey) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(512),
             SquarePlacementModifier.of(),
@@ -80,7 +80,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 高密度のPlacedFeature
-    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaFairyForestPlacedFeatureKey) {
+    registerDynamicGeneration(haimeviskaFairyForestPlacedFeatureKey) {
         val placementModifiers = listOf(
             RarityFilterPlacementModifier.of(16),
             SquarePlacementModifier.of(),
@@ -93,7 +93,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 超高密度のPlacedFeature
-    registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, haimeviskaDeepFairyForestPlacedFeatureKey) {
+    registerDynamicGeneration(haimeviskaDeepFairyForestPlacedFeatureKey) {
         val placementModifiers = listOf(
             CountPlacementModifier.of(8),
             SquarePlacementModifier.of(),

@@ -77,19 +77,19 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
         run {
 
             // 小さな塊
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
+            registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
+            registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     RarityFilterPlacementModifier.of(16),
                     SquarePlacementModifier.of(),
@@ -100,7 +100,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
             }
 
             // ネザー
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     RarityFilterPlacementModifier.of(8),
                     CountMultilayerPlacementModifier.of(1),

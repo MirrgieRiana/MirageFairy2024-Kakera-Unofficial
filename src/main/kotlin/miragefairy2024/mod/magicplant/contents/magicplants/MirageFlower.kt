@@ -96,19 +96,19 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
             FAIRY_RING_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
 
             // 小さな塊ConfiguredFeature
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
+            registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
-            registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
+            registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
                 FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上とエンド用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     RarityFilterPlacementModifier.of(16),
                     SquarePlacementModifier.of(),
@@ -119,7 +119,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
             }
 
             // ネザー用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     RarityFilterPlacementModifier.of(64),
                     CountMultilayerPlacementModifier.of(1),
@@ -129,7 +129,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
             }
 
             // 妖精の森用PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     CountPlacementModifier.of(4),
                     SquarePlacementModifier.of(),
@@ -140,7 +140,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
             }
 
             // Fairy Ring PlacedFeature
-            registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
+            registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = listOf(
                     RarityFilterPlacementModifier.of(600),
                     SquarePlacementModifier.of(),

@@ -31,12 +31,13 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 context(ModContext)
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: (Registerable<T>) -> T): RegistryKey<T> {
     val key = RegistryKey.of(registryKey, identifier)
-    registerDynamicGeneration(registryKey, key, creator)
+    registerDynamicGeneration(key, creator)
     return key
 }
 
 context(ModContext)
-fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
+fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
+    val registryKey = RegistryKey.ofRegistry<T>(key.registry)
     DataGenerationEvents.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
             context.register(key, creator(context))
