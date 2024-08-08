@@ -9,12 +9,12 @@ class InitializationEventRegistry<T> {
     context(ModContext)
     operator fun invoke(listener: T) {
         require(!closed)
-        this.list += listener
+        list += listener
     }
 
     fun fire(processor: (T) -> Unit) {
         closed = true
-        this.list.forEach {
+        list.forEach {
             processor(it)
         }
     }
