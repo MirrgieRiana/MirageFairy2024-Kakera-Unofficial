@@ -22,6 +22,8 @@ val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(Iden
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class Trait(val color: Formatting, private val sortKey: String) : Comparable<Trait> {
+    abstract val spawnSpecs: List<TraitSpawnSpec>
+
     /** 呼び出された時点でそこにブロックの実体が存在しない場合があります。 */
     abstract fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects?
     override fun compareTo(other: Trait): Int {

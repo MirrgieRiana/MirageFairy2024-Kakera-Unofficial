@@ -2,9 +2,7 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.createCuboidShape
@@ -64,6 +62,32 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
+    override val possibleTraits = listOf(
+        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait, // 浸透吸収
+        TraitCard.COLD_ADAPTATION.trait, // 寒冷適応
+        TraitCard.WARM_ADAPTATION.trait, // 温暖適応
+        TraitCard.HOT_ADAPTATION.trait, // 熱帯適応
+        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
+        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
+        TraitCard.SPINY_LEAVES.trait, // 棘状の葉
+        TraitCard.DESERT_GEM.trait, // 砂漠の宝石
+        TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
+        TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
+    )
+
     val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster"))
     val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_veropeda_cluster"))
     val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster"))
@@ -103,44 +127,6 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
             VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { tag(ConventionalBiomeTags.CLIMATE_DRY) } // 地上用クラスタ
             NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
 
-        }
-
-        // 特性
-        ModEvents.onInitialize {
-            WorldGenTraitRecipeInitScope(card.block).run {
-
-                // 標準特性
-                registerWorldGenTraitRecipe("A.RS", TraitCard.PAVEMENT_FLOWERS) // アスファルトに咲く花
-                registerWorldGenTraitRecipe("A.RS", TraitCard.OSMOTIC_ABSORPTION) // 浸透吸収
-                registerWorldGenTraitRecipe("A.RS", TraitCard.ARID_ADAPTATION) // 乾燥適応
-                registerWorldGenTraitRecipe("..CR", TraitCard.SEEDS_PRODUCTION) // 種子生成
-                registerWorldGenTraitRecipe("C.CR", TraitCard.FRUITS_PRODUCTION) // 果実生成
-                registerWorldGenTraitRecipe("C.CR", TraitCard.LEAVES_PRODUCTION) // 葉面生成
-                registerWorldGenTraitRecipe("..CR", TraitCard.GOLDEN_APPLE) // 金のリンゴ
-
-                // N特性
-                registerWorldGenTraitRecipe("NRS.", TraitCard.PHAEOSYNTHESIS) // 闇合成
-                registerWorldGenTraitRecipe("NRS.", TraitCard.CARNIVOROUS_PLANT) // 食虫植物
-                registerWorldGenTraitRecipe("NRS.", TraitCard.PROSPERITY_OF_SPECIES) // 種の繁栄
-                registerWorldGenTraitRecipe("NRS.", TraitCard.FOUR_LEAFED) // 四つ葉
-                registerWorldGenTraitRecipe("NRS.", TraitCard.NATURAL_ABSCISSION) // 自然落果
-                registerWorldGenTraitRecipe("..NR", TraitCard.PHOTOSYNTHESIS) // 光合成
-                registerWorldGenTraitRecipe("..NR", TraitCard.EXPERIENCE_PRODUCTION) // 経験値生成
-                registerWorldGenTraitRecipe("..NR", TraitCard.FRUIT_OF_KNOWLEDGE) // 知識の果実
-                registerWorldGenTraitRecipe("..NR", TraitCard.SPINY_LEAVES) // 棘状の葉
-                registerWorldGenTraitRecipe("..NR", TraitCard.DESERT_GEM) // 砂漠の宝石
-                registerWorldGenTraitRecipe("..NR", TraitCard.ADVERSITY_FLOWER) // 高嶺の花
-                registerWorldGenTraitRecipe("..NR", TraitCard.FLESHY_LEAVES) // 肉厚の葉
-
-                // SR特性
-                registerWorldGenTraitRecipe(".S..", TraitCard.COLD_ADAPTATION) // 寒冷適応
-                registerWorldGenTraitRecipe(".S..", TraitCard.WARM_ADAPTATION) // 温暖適応
-                registerWorldGenTraitRecipe(".S..", TraitCard.HOT_ADAPTATION) // 熱帯適応
-                registerWorldGenTraitRecipe(".S..", TraitCard.ARID_ADAPTATION) // 乾燥適応
-                registerWorldGenTraitRecipe(".S..", TraitCard.MESIC_ADAPTATION) // 中湿適応
-                registerWorldGenTraitRecipe(".S..", TraitCard.HUMID_ADAPTATION) // 湿潤適応
-
-            }
         }
 
         // レシピ

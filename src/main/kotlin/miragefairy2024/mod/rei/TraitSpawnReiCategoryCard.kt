@@ -2,6 +2,8 @@ package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.mod.magicplant.Trait
+import miragefairy2024.mod.magicplant.TraitSpawnSpec
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
@@ -20,7 +22,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCard.Display>("world_gen_trait", "World Gen Trait", "地形生成特性") {
+object TraitSpawnReiCategoryCard : ReiCategoryCard<TraitSpawnReiCategoryCard.Display>("world_gen_trait", "World Gen Trait", "地形生成特性") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
@@ -50,7 +52,7 @@ object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCa
         return listOf(itemStack.toEntryStack().toEntryIngredient())
     }
 
-    class Display(val recipe: WorldGenTraitRecipe) : BasicDisplay(
+    class Display(val trait: Trait, spawnSpec: TraitSpawnSpec) : BasicDisplay(
         listOf(),
         recipe.getOutput(),
     ) {
