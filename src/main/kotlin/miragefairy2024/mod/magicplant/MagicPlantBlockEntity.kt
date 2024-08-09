@@ -68,8 +68,6 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
 fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<TraitStacks, Boolean> {
-    val resultTraitStackList = mutableListOf<TraitStack>()
-    var isRare = false
 
     // レシピ判定
     val aTraitStackList = mutableListOf<TraitStack>()
@@ -91,6 +89,8 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<Trait
     }
 
     // 抽選
+    val resultTraitStackList = mutableListOf<TraitStack>()
+    var isRare = false
     val r = world.random.nextDouble()
     when {
         r < 0.01 -> { // +S
