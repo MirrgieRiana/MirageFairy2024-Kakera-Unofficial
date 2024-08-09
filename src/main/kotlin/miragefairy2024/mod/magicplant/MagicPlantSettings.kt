@@ -40,6 +40,8 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
     abstract fun createBlock(): B
 
+    abstract val possibleTraits: Set<Trait>
+
     context(ModContext)
     open fun init() {
 
