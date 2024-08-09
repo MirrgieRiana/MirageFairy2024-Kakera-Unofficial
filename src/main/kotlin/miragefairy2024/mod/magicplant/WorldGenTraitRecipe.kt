@@ -19,28 +19,11 @@ val worldGenTraitRecipeRegistry = mutableMapOf<Block, MutableList<WorldGenTraitR
 
 class WorldGenTraitRecipe(
     val block: Block,
-    val rarity: Rarity,
+    val rarity: TraitSpawnRarity,
     val trait: Trait,
     val level: Int,
     val condition: Condition
 ) {
-
-    enum class Rarity {
-        /** 必ず付与される。 */
-        A,
-
-        /** 1%の確率で選ばれるC欠損テーブルに乗る。 */
-        C,
-
-        /** 90%の確率で選ばれるN獲得テーブルに乗る。 */
-        N,
-
-        /** 8%の確率で選ばれるR獲得テーブルに乗る。 */
-        R,
-
-        /** 1%の確率で選ばれるSR獲得テーブルに乗る。 */
-        S,
-    }
 
     interface Condition {
         val description: Text
@@ -87,11 +70,11 @@ class WorldGenTraitRecipeInitScope(val block: Block) {
         pattern.forEachIndexed { i, ch ->
             val rarity = when (ch) {
                 '.' -> return@forEachIndexed
-                'A' -> WorldGenTraitRecipe.Rarity.A
-                'C' -> WorldGenTraitRecipe.Rarity.C
-                'N' -> WorldGenTraitRecipe.Rarity.N
-                'R' -> WorldGenTraitRecipe.Rarity.R
-                'S' -> WorldGenTraitRecipe.Rarity.S
+                'A' -> TraitSpawnRarity.A
+                'C' -> TraitSpawnRarity.C
+                'N' -> TraitSpawnRarity.N
+                'R' -> TraitSpawnRarity.R
+                'S' -> TraitSpawnRarity.S
                 else -> throw IllegalArgumentException()
             }
             val level = 1 shl (pattern.length - 1 - i)
