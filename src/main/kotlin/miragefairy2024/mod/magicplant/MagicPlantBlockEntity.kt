@@ -80,11 +80,11 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<Trait
     worldGenTraitRecipeRegistry[block].or { listOf() }.forEach { recipe ->
         if (recipe.condition.canSpawn(world, blockPos)) {
             val traitStackList = when (recipe.rarity) {
-                TraitSpawnRarity.A -> aTraitStackList
-                TraitSpawnRarity.C -> cTraitStackList
-                TraitSpawnRarity.N -> nTraitStackList
-                TraitSpawnRarity.R -> rTraitStackList
-                TraitSpawnRarity.S -> sTraitStackList
+                TraitSpawnRarity.ALWAYS -> aTraitStackList
+                TraitSpawnRarity.COMMON -> cTraitStackList
+                TraitSpawnRarity.NORMAL -> nTraitStackList
+                TraitSpawnRarity.RARE -> rTraitStackList
+                TraitSpawnRarity.S_RARE -> sTraitStackList
             }
             traitStackList += TraitStack(recipe.trait, recipe.level)
         }
