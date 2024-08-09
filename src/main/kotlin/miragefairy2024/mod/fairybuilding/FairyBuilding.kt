@@ -396,9 +396,9 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         return card.availableSlotsTable[getActualSide(side).id]
     }
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = dir in card.slots[slot].insertDirections && isValid(slot, stack)
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || (getActualSide(dir) in card.slots[slot].insertDirections)) && isValid(slot, stack)
 
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = dir in card.slots[slot].extractDirections
+    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = getActualSide(dir) in card.slots[slot].extractDirections
 
     override fun clear() {
         world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
