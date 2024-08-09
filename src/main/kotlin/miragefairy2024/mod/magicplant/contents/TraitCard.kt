@@ -65,6 +65,20 @@ class TraitCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
     val trait: Trait = CompoundTrait(sortKey, traitFactorCard.traitFactor, traitEffectKeyCard)
+
+    private class CompoundTrait(sortKey: String, private val factor: TraitFactor, private val traitEffectKeyCard: TraitEffectKeyCard) : Trait(traitEffectKeyCard.color, sortKey) {
+        override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
+            val factor = factor.getFactor(world, blockPos)
+            return if (factor != 0.0) {
+                val traitEffects = MutableTraitEffects()
+                traitEffects[traitEffectKeyCard.traitEffectKey] = traitEffectKeyCard.traitEffectKey.getValue(level) * factor
+                traitEffects
+            } else {
+                null
+            }
+        }
+    }
+
 }
 
 context(ModContext)
@@ -72,18 +86,5 @@ fun initTraitCard() {
     TraitCard.entries.forEach { card ->
         card.trait.register(traitRegistry, card.identifier)
         card.trait.enJa(card.enName, card.jaName)
-    }
-}
-
-private class CompoundTrait(sortKey: String, private val factor: TraitFactor, private val traitEffectKeyCard: TraitEffectKeyCard) : Trait(traitEffectKeyCard.color, sortKey) {
-    override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
-        val factor = factor.getFactor(world, blockPos)
-        return if (factor != 0.0) {
-            val traitEffects = MutableTraitEffects()
-            traitEffects[traitEffectKeyCard.traitEffectKey] = traitEffectKeyCard.traitEffectKey.getValue(level) * factor
-            traitEffects
-        } else {
-            null
-        }
     }
 }
