@@ -70,11 +70,11 @@ class WorldGenTraitRecipeInitScope(val block: Block) {
         pattern.forEachIndexed { i, ch ->
             val rarity = when (ch) {
                 '.' -> return@forEachIndexed
-                'A' -> TraitSpawnRarity.A
-                'C' -> TraitSpawnRarity.C
-                'N' -> TraitSpawnRarity.N
-                'R' -> TraitSpawnRarity.R
-                'S' -> TraitSpawnRarity.S
+                'A' -> TraitSpawnRarity.ALWAYS
+                'C' -> TraitSpawnRarity.COMMON
+                'N' -> TraitSpawnRarity.NORMAL
+                'R' -> TraitSpawnRarity.RARE
+                'S' -> TraitSpawnRarity.S_RARE
                 else -> throw IllegalArgumentException()
             }
             val level = 1 shl (pattern.length - 1 - i)

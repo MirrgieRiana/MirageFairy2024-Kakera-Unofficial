@@ -35,11 +35,11 @@ object WorldGenTraitClientReiCategoryCard : ClientReiCategoryCard<WorldGenTraitR
         override fun getDisplayHeight() = 36
         override fun setupDisplay(display: WorldGenTraitReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val rarityText = when (display.recipe.rarity) {
-                TraitSpawnRarity.A -> text { "100%"() }
-                TraitSpawnRarity.C -> text { ">99%"() }
-                TraitSpawnRarity.N -> text { "<90%"() }
-                TraitSpawnRarity.R -> text { "<8%"() }
-                TraitSpawnRarity.S -> text { "<1%"() }
+                TraitSpawnRarity.ALWAYS -> text { "100%"() }
+                TraitSpawnRarity.COMMON -> text { ">99%"() }
+                TraitSpawnRarity.NORMAL -> text { "<90%"() }
+                TraitSpawnRarity.RARE -> text { "<8%"() }
+                TraitSpawnRarity.S_RARE -> text { "<1%"() }
             }
             val traitStackText = text { (display.recipe.trait.getName() + " "() + display.recipe.level.toString(2)()).formatted(display.recipe.trait.color) }
             val p = bounds.location + Point(3, 3)
