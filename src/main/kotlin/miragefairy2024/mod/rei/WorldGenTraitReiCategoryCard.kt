@@ -2,6 +2,7 @@ package miragefairy2024.mod.rei
 
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.mod.magicplant.TraitSpawnRarity
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
@@ -26,7 +27,7 @@ object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCa
             Display(
                 WorldGenTraitRecipe(
                     tag.getString("Block").toIdentifier().toBlock(),
-                    WorldGenTraitRecipe.Rarity.valueOf(tag.getString("Rarity")),
+                    TraitSpawnRarity.valueOf(tag.getString("Rarity")),
                     tag.getString("Trait").toIdentifier().toTrait()!!,
                     tag.getInt("Level"),
                     object : WorldGenTraitRecipe.Condition {

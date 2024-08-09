@@ -7,7 +7,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import miragefairy2024.mod.magicplant.WorldGenTraitRecipe
+import miragefairy2024.mod.magicplant.TraitSpawnRarity
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.worldGenTraitRecipeRegistry
@@ -35,11 +35,11 @@ object WorldGenTraitClientReiCategoryCard : ClientReiCategoryCard<WorldGenTraitR
         override fun getDisplayHeight() = 36
         override fun setupDisplay(display: WorldGenTraitReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val rarityText = when (display.recipe.rarity) {
-                WorldGenTraitRecipe.Rarity.A -> text { "100%"() }
-                WorldGenTraitRecipe.Rarity.C -> text { ">99%"() }
-                WorldGenTraitRecipe.Rarity.N -> text { "<90%"() }
-                WorldGenTraitRecipe.Rarity.R -> text { "<8%"() }
-                WorldGenTraitRecipe.Rarity.S -> text { "<1%"() }
+                TraitSpawnRarity.A -> text { "100%"() }
+                TraitSpawnRarity.C -> text { ">99%"() }
+                TraitSpawnRarity.N -> text { "<90%"() }
+                TraitSpawnRarity.R -> text { "<8%"() }
+                TraitSpawnRarity.S -> text { "<1%"() }
             }
             val traitStackText = text { (display.recipe.trait.getName() + " "() + display.recipe.level.toString(2)()).formatted(display.recipe.trait.color) }
             val p = bounds.location + Point(3, 3)
