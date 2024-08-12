@@ -2,10 +2,15 @@ package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.container.WrappingParentComponent
 import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.CursorStyle
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 
 class ClickableContainer<C : Component>(horizontalSizing: Sizing, verticalSizing: Sizing, private val action: () -> Boolean, child: () -> C) : WrappingParentComponent<C>(horizontalSizing, verticalSizing, child()) {
+    init {
+        cursorStyle(CursorStyle.HAND)
+    }
+
     override fun canFocus(source: Component.FocusSource) = source == Component.FocusSource.KEYBOARD_CYCLE
 
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {

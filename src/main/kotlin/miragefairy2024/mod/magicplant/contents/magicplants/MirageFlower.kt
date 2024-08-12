@@ -4,8 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.registerHarvestNotation
-import miragefairy2024.util.biome
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -22,6 +20,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.times
+import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.block.MapColor
 import net.minecraft.item.ItemStack
@@ -67,10 +66,12 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
         createCuboidShape(6.0, 16.0),
     )
 
+    override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
+    override val family = Identifier(MirageFairy2024.modId, "mirage")
     override val possibleTraits = setOf(
         TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -92,8 +93,8 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
         TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
         TraitCard.NODED_STEM.trait, // 節状の茎
-        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 知識の果実
-        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
+        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 知識の果実
+        //TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.SPINY_LEAVES.trait, // 棘状の葉
         TraitCard.DESERT_GEM.trait, // 砂漠の宝石
         TraitCard.HEATING_MECHANISM.trait, // 発熱機構
@@ -105,6 +106,10 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
         TraitCard.ETHER_PREDATION.trait, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
         TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
+        //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
+        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
+        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
+        TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
     val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
@@ -162,14 +167,11 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
             }
 
             MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { end * !biome(BiomeKeys.THE_END) } // エンド外縁の島々に通常クラスタ
+            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { end * !+BiomeKeys.THE_END } // エンド外縁の島々に通常クラスタ
             NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
             LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
 
         }
-
-        // レシピ
-        card.item.registerHarvestNotation(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
 
     }
 }
@@ -180,7 +182,7 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlower
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 
-private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
+fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
     if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(random.randomInt(count2)))
     count2 /= 9.0

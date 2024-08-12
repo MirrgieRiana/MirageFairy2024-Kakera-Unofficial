@@ -75,6 +75,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
             val traitStacks = itemStack.getTraitStacks() ?: return@run
             blockEntity.setTraitStacks(traitStacks)
             blockEntity.setRare(itemStack.isRare())
+            blockEntity.setNatural(false)
         }
     }
 
@@ -95,9 +96,10 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         // 成長
         if (canGrow(blockState)) {
             val nutrition = traitEffects[TraitEffectKeyCard.NUTRITION.traitEffectKey]
-            val environment = traitEffects[TraitEffectKeyCard.ENVIRONMENT.traitEffectKey]
+            val temperature = traitEffects[TraitEffectKeyCard.TEMPERATURE.traitEffectKey]
+            val humidity = traitEffects[TraitEffectKeyCard.HUMIDITY.traitEffectKey]
             val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
-            val actualGrowthAmount = world.random.randomInt(0.2 * nutrition * environment * (1 + growthBoost) * speed)
+            val actualGrowthAmount = world.random.randomInt(magicPlantSettings.baseGrowth * 0.2 * nutrition * temperature * (0.2 + humidity) * (1 + growthBoost) * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlockState(blockPos, newBlockState, NOTIFY_LISTENERS)
@@ -148,13 +150,24 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
     }
 
     /** 交配が可能であれば交配された種子、そうでなければこの植物本来の種子を返す。 */
-    protected fun calculateCrossedSeed(world: World, blockPos: BlockPos, traitStacks: TraitStacks): ItemStack {
-
+    protected fun calculateCrossedSeed(world: World, blockPos: BlockPos, traitStacks: TraitStacks, crossbreedingRate: Double): ItemStack {
         val targetTraitStacksList = mutableListOf<TraitStacks>()
         fun check(targetBlockPos: BlockPos) {
             val targetBlockState = world.getBlockState(targetBlockPos)
             val targetBlock = targetBlockState.block as? MagicPlantBlock ?: return
-            if (targetBlock != this) return
+            run {
+                if (targetBlock == this) {
+                    return@run
+                }
+                if (crossbreedingRate > 0.0) {
+                    if (targetBlock.magicPlantSettings.family == this.magicPlantSettings.family) {
+                        if (world.random.nextDouble() < crossbreedingRate) {
+                            return@run
+                        }
+                    }
+                }
+                return
+            }
             if (!targetBlock.canCross(world, blockPos, targetBlockState)) return
             val targetTraitStacks = world.getMagicPlantBlockEntity(targetBlockPos)?.getTraitStacks() ?: return
             targetTraitStacksList += targetTraitStacks
@@ -176,7 +189,8 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
         val block = blockState.block
-        val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
+        val blockEntity = world.getMagicPlantBlockEntity(blockPos) ?: return
+        val traitStacks = blockEntity.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
         val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
         val experience = if (dropExperience) world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey]) else 0
@@ -189,6 +203,9 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
         // 成長段階を消費
         world.setBlockState(blockPos, getBlockStateAfterPicking(blockState), NOTIFY_LISTENERS)
+
+        // 天然フラグを除去
+        blockEntity.setNatural(false)
 
         // エフェクト
         world.playSound(null, blockPos, soundGroup.breakSound, SoundCategory.BLOCKS, (soundGroup.volume + 1.0F) / 2.0F * 0.5F, soundGroup.pitch * 0.8F)

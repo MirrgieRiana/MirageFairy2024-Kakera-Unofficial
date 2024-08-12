@@ -14,9 +14,12 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Direction
+import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.YOffset
+import net.minecraft.world.gen.blockpredicate.BlockPredicate
 import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.FeatureConfig
@@ -25,8 +28,10 @@ import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
+import net.minecraft.world.gen.placementmodifier.EnvironmentScanPlacementModifier
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
 import net.minecraft.world.gen.placementmodifier.PlacementModifier
+import net.minecraft.world.gen.placementmodifier.RandomOffsetPlacementModifier
 import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier
@@ -72,9 +77,8 @@ context(BiomeSelectorScope) val all: Predicate<BiomeSelectionContext> get() = Bi
 context(BiomeSelectorScope) val overworld: Predicate<BiomeSelectionContext> get() = BiomeSelectors.foundInOverworld()
 context(BiomeSelectorScope) val nether: Predicate<BiomeSelectionContext> get() = BiomeSelectors.foundInTheNether()
 context(BiomeSelectorScope) val end: Predicate<BiomeSelectionContext> get() = BiomeSelectors.foundInTheEnd()
-context(BiomeSelectorScope) fun biome(vararg biomes: RegistryKey<Biome>): Predicate<BiomeSelectionContext> = BiomeSelectors.includeByKey(*biomes)
-context(BiomeSelectorScope) fun biome(biomes: Collection<RegistryKey<Biome>>): Predicate<BiomeSelectionContext> = BiomeSelectors.includeByKey(biomes)
-context(BiomeSelectorScope) fun tag(tag: TagKey<Biome>): Predicate<BiomeSelectionContext> = BiomeSelectors.tag(tag)
+context(BiomeSelectorScope) operator fun RegistryKey<Biome>.unaryPlus(): Predicate<BiomeSelectionContext> = BiomeSelectors.includeByKey(this)
+context(BiomeSelectorScope) operator fun TagKey<Biome>.unaryPlus(): Predicate<BiomeSelectionContext> = BiomeSelectors.tag(this)
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.not(): Predicate<BiomeSelectionContext> = this.negate()
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.times(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.and(other)
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.plus(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.or(other)
@@ -120,5 +124,15 @@ context(PlacementModifiersScope)
 val netherFlower
     get(): List<PlacementModifier> = listOf(
         CountMultilayerPlacementModifier.of(1),
+        BiomePlacementModifier.of(),
+    )
+
+context(PlacementModifiersScope)
+val undergroundFlower: List<PlacementModifier>
+    get() = listOf(
+        SquarePlacementModifier.of(),
+        PlacedFeatures.BOTTOM_TO_120_RANGE,
+        EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12),
+        RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1)),
         BiomePlacementModifier.of(),
     )

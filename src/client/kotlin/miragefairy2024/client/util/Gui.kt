@@ -40,17 +40,17 @@ fun inventoryNameLabel(name: Text, horizontalTextAlignment: HorizontalAlignment?
     color(Color.ofRgb(0x404040))
 }
 
-fun verticalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int): ScrollContainer<FlowLayout> {
+fun verticalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int, overlapped: Boolean = false): ScrollContainer<FlowLayout> {
     return Containers.verticalScroll(horizontalSizing, verticalSizing, Containers.verticalFlow(horizontalSizing, Sizing.content()).apply {
-        padding(Insets.of(0, 0, 0, scrollbarThiccness))
+        if (!overlapped) padding(Insets.of(0, 0, 0, scrollbarThiccness))
     }).apply {
         scrollbarThiccness(scrollbarThiccness)
     }
 }
 
-fun horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int): ScrollContainer<FlowLayout> {
+fun horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbarThiccness: Int, overlapped: Boolean = false): ScrollContainer<FlowLayout> {
     return Containers.horizontalScroll(horizontalSizing, verticalSizing, Containers.horizontalFlow(Sizing.content(), verticalSizing).apply {
-        padding(Insets.of(0, scrollbarThiccness, 0, 0))
+        if (!overlapped) padding(Insets.of(0, scrollbarThiccness, 0, 0))
     }).apply {
         scrollbarThiccness(scrollbarThiccness)
     }

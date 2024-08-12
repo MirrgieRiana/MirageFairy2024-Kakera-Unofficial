@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
+import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.createItemStack
@@ -14,10 +15,13 @@ import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.sortedEntrySet
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.util.Identifier
 
 abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {
@@ -40,7 +44,11 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
     abstract fun createBlock(): B
 
+    abstract val family: Identifier
     abstract val possibleTraits: Set<Trait>
+
+    open val baseGrowth = 1.0
+    abstract val drops: List<Item>
 
     context(ModContext)
     open fun init() {
@@ -53,7 +61,7 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
-            traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
+            traitRegistry.sortedEntrySet.flatMap { (_, trait) ->
                 (0..3).map { b ->
                     card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
                 }
@@ -79,6 +87,7 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
         // レシピ
         card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        card.item.registerHarvestNotation(drops)
 
     }
 }

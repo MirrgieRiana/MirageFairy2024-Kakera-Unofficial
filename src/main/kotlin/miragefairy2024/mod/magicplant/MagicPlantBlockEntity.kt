@@ -16,14 +16,15 @@ import net.minecraft.world.biome.Biome
 class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
 
     private var traitStacks: TraitStacks? = null
-    private var isRare = false
-
     fun getTraitStacks() = traitStacks
 
     fun setTraitStacks(traitStacks: TraitStacks) {
         this.traitStacks = traitStacks
         markDirty()
     }
+
+
+    private var isRare = false
 
     fun isRare() = isRare
 
@@ -32,12 +33,24 @@ class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos:
         markDirty()
     }
 
+
+    private var isNatural = false
+
+    fun isNatural() = isNatural
+
+    fun setNatural(isNatural: Boolean) {
+        this.isNatural = isNatural
+        markDirty()
+    }
+
+
     override fun setWorld(world: World) {
         super.setWorld(world)
         if (traitStacks == null) {
             val result = spawnTraitStacks(settings.possibleTraits, world.getBiome(pos), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
+            setNatural(true)
         }
     }
 
@@ -45,18 +58,21 @@ class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos:
         super.writeNbt(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
+        if (isNatural) nbt.putBoolean("Natural", true)
     }
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
+        isNatural = nbt.getBoolean("Natural")
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound {
         val nbt = super.toInitialChunkDataNbt()
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
+        if (isNatural) nbt.putBoolean("Natural", true)
         return nbt
     }
 

@@ -22,6 +22,7 @@ import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
+import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
@@ -60,7 +61,7 @@ fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
-            fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
+            fairyQuestRecipeRegistry.sortedEntrySet.map {
                 val itemStack = card.item.createItemStack()
                 itemStack.setFairyQuestRecipe(it.value)
                 itemStack
@@ -157,7 +158,7 @@ object FairyQuestCardIngredient : CustomIngredient {
     override fun test(stack: ItemStack) = stack.isOf(FairyQuestCardCard.item)
 
     override fun getMatchingStacks(): List<ItemStack> {
-        return fairyQuestRecipeRegistry.entrySet.sortedBy { it.key.value }.map {
+        return fairyQuestRecipeRegistry.sortedEntrySet.map {
             val itemStack = FairyQuestCardCard.item.createItemStack()
             itemStack.setFairyQuestRecipe(it.value)
             itemStack

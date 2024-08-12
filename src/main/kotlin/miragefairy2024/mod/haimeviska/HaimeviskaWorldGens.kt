@@ -10,8 +10,8 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
-import miragefairy2024.util.tag
 import miragefairy2024.util.tree
+import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.HorizontalFacingBlock
@@ -83,7 +83,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { tag(ConventionalBiomeTags.PLAINS) + tag(ConventionalBiomeTags.FOREST) }
+    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
 
 }
 
