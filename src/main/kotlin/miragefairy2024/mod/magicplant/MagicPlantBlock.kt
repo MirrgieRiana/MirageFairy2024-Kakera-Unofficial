@@ -150,7 +150,6 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     /** 交配が可能であれば交配された種子、そうでなければこの植物本来の種子を返す。 */
     protected fun calculateCrossedSeed(world: World, blockPos: BlockPos, traitStacks: TraitStacks, crossbreedingRate: Double): ItemStack {
-
         val targetTraitStacksList = mutableListOf<TraitStacks>()
         fun check(targetBlockPos: BlockPos) {
             val targetBlockState = world.getBlockState(targetBlockPos)
