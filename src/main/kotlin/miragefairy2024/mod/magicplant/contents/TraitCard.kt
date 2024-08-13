@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
-import miragefairy2024.mod.magicplant.TraitCondition
 import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.traitRegistry
 import miragefairy2024.util.register
@@ -18,8 +17,8 @@ class TraitCard(
     val jaName: String,
     enPoem: String,
     jaPoem: String,
-    traitConditionCards: List<TraitConditionCard>,
-    traitEffectKeyCardStacks: List<Pair<TraitEffectKeyCard, Double>>,
+    private val traitConditionCards: List<TraitConditionCard>,
+    private val traitEffectKeyCardStacks: List<Pair<TraitEffectKeyCard, Double>>,
 ) {
     companion object {
         val entries = mutableListOf<TraitCard>()
@@ -234,12 +233,10 @@ class TraitCard(
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val trait: Trait = CompoundTrait(traitConditionCards.map { it.traitCondition }, traitEffectKeyCardStacks)
-
-    private class CompoundTrait(private val conditions: List<TraitCondition>, private val traitEffectKeyCardStacks: List<Pair<TraitEffectKeyCard, Double>>) : Trait(traitEffectKeyCardStacks.first().first.color) {
+    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.color) {
         override val primaryEffect = traitEffectKeyCardStacks.first().first.traitEffectKey
         override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
-            val factor = conditions.map { it.getFactor(world, blockPos) }.fold(1.0) { a, b -> a * b }
+            val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos) }.fold(1.0) { a, b -> a * b }
             return if (factor != 0.0) {
                 val traitEffects = MutableTraitEffects()
                 traitEffectKeyCardStacks.forEach {
