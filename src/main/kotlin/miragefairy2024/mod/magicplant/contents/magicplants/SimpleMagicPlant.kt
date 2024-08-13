@@ -35,6 +35,12 @@ import net.minecraft.world.World
 
 abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantSettings<C, B>() {
     abstract val outlineShapes: List<VoxelShape>
+
+    open val baseSeedGeneration = 1.0
+    open val baseFruitGeneration = 1.0
+    open val baseLeafGeneration = 1.0
+    open val baseRareGeneration = 1.0
+
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
@@ -110,24 +116,24 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
 
         if (isMaxAge(blockState)) {
-            val seedCount = world.random.randomInt(seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val seedCount = world.random.randomInt(magicPlantSettings.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             repeat(seedCount) {
                 drops += calculateCrossedSeed(world, blockPos, traitStacks)
             }
         }
 
         if (isMaxAge(blockState)) {
-            val fruitCount = world.random.randomInt(fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val fruitCount = world.random.randomInt(magicPlantSettings.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             if (fruitCount > 0) drops += magicPlantSettings.getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val leafCount = world.random.randomInt(leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val leafCount = world.random.randomInt(magicPlantSettings.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             if (leafCount > 0) drops += magicPlantSettings.getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val rareCount = world.random.randomInt(0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val rareCount = world.random.randomInt(magicPlantSettings.baseRareGeneration * 0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             if (rareCount > 0) drops += magicPlantSettings.getRareDrops(rareCount, world.random)
         }
 
