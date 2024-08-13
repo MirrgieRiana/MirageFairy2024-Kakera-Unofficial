@@ -45,7 +45,7 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 
 context(ModContext)
 fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: (Registerable<T>) -> T): RegistryKey<T> {
-    val key = RegistryKey.of(registryKey, identifier)
+    val key = registryKey with identifier
     registerDynamicGeneration(key, creator)
     return key
 }

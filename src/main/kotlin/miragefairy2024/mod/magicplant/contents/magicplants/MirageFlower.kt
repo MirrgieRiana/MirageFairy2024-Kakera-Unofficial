@@ -31,7 +31,6 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.MapColor
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
@@ -40,9 +39,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
@@ -80,12 +77,12 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override val family = Identifier(MirageFairy2024.modId, "mirage")
 
     val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
-    val MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
-    val LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
-    val MIRAGE_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster"))
-    val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_mirage_cluster"))
-    val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest"))
-    val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "large_mirage_cluster"))
+    val MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster")
+    val LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "large_mirage_cluster")
+    val MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster")
+    val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "nether_mirage_cluster")
+    val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest")
+    val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "large_mirage_cluster")
 
     context(ModContext)
     override fun init() {

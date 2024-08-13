@@ -17,15 +17,12 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.PillarBlock
 import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.TreeFeatureConfig
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.LargeOakFoliagePlacer
@@ -42,10 +39,10 @@ object HaimeviskaTreeDecoratorCard {
     val type: TreeDecoratorType<HaimeviskaTreeDecorator> = TreeDecoratorType(codec)
 }
 
-val HAIMEVISKA_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
-val HAIMEVISKA_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska"))
-val HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest"))
-val HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest"))
+val HAIMEVISKA_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska")
+val HAIMEVISKA_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska")
+val HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest")
+val HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest")
 
 context(ModContext)
 fun initHaimeviskaWorldGens() {
