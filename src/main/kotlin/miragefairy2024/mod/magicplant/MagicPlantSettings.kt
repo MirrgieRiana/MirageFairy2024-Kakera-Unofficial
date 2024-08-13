@@ -43,6 +43,7 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
     abstract fun createBlock(): B
 
+    open val baseGrowth = 1.0
     abstract val drops: List<Item>
 
     context(ModContext)
