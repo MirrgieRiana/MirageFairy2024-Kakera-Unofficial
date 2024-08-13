@@ -16,7 +16,7 @@ import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
-import miragefairy2024.util.tag
+import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.MapColor
@@ -100,7 +100,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
                 it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
             }
 
-            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { tag(ConventionalBiomeTags.CLIMATE_DRY) } // 地上用クラスタ
+            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ
             NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
 
         }
