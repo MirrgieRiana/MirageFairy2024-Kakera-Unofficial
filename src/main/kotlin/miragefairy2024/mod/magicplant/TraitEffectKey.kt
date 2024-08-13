@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
@@ -20,6 +21,7 @@ val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.
 
 abstract class TraitEffectKey<T : Any> {
     abstract val sortValue: Double
+    abstract val style: Style
     abstract fun getValue(level: Double): T
     abstract fun plus(a: T, b: T): T
     abstract fun getDescription(value: T): Text
