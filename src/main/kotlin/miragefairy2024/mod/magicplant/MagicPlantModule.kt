@@ -3,6 +3,7 @@ package miragefairy2024.mod.magicplant
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.initTraitCard
+import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerSettings
@@ -31,6 +32,7 @@ fun initMagicPlantModule() {
     magicPlantSeedItemGroupCard.init()
 
 
+    initTraitConditionCard()
     initTraitEffectKeyCard()
     initTraitCard()
 
