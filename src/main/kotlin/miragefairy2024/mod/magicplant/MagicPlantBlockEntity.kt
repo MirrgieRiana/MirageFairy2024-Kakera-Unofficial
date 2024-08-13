@@ -4,7 +4,6 @@ import mirrg.kotlin.hydrogen.or
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
@@ -14,7 +13,7 @@ import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state) {
+class MagicPlantBlockEntity(settings: MagicPlantSettings<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
 
     private var traitStacks: TraitStacks? = null
 

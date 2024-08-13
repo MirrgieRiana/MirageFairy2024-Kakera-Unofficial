@@ -36,7 +36,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     // Block Entity
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(magicPlantSettings.card.blockEntityType, pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(magicPlantSettings, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
