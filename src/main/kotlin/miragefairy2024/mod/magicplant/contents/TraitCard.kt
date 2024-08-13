@@ -32,173 +32,173 @@ class TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val PHOTOSYNTHESIS = !TraitCard(
             "photosynthesis", "Photosynthesis", "光合成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LIGHT), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.LIGHT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val PHAEOSYNTHESIS = !TraitCard(
             "phaeosynthesis", "Phaeosynthesis", "闇合成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.DARKNESS), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.DARKNESS), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val OSMOTIC_ABSORPTION = !TraitCard(
             "osmotic_absorption", "Osmotic Absorption", "浸透吸収",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.FLOOR_MOISTURE), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.FLOOR_MOISTURE), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val CRYSTAL_ABSORPTION = !TraitCard(
             "crystal_absorption", "Crystal Absorption", "鉱物吸収",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.FLOOR_CRYSTAL_ERG), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.FLOOR_CRYSTAL_ERG), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
 
         val AIR_ADAPTATION = !TraitCard(
             "air_adaptation", "Air Adaptation", "空気適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val COLD_ADAPTATION = !TraitCard(
             "cold_adaptation", "Cold Adaptation", "寒冷適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val WARM_ADAPTATION = !TraitCard(
             "warm_adaptation", "Warm Adaptation", "温暖適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val HOT_ADAPTATION = !TraitCard(
             "hot_adaptation", "Hot Adaptation", "熱帯適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val ARID_ADAPTATION = !TraitCard(
             "arid_adaptation", "Arid Adaptation", "乾燥適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val MESIC_ADAPTATION = !TraitCard(
             "mesic_adaptation", "Mesic Adaptation", "中湿適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val HUMID_ADAPTATION = !TraitCard(
             "humid_adaptation", "Humid Adaptation", "湿潤適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
 
         val SEEDS_PRODUCTION = !TraitCard(
             "seeds_production", "Seeds Production", "種子生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
         )
         val FRUITS_PRODUCTION = !TraitCard(
             "fruits_production", "Fruits Production", "果実生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
         )
         val LEAVES_PRODUCTION = !TraitCard(
             "leaves_production", "Leaves Production", "葉面生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
         )
         val RARE_PRODUCTION = !TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.003),
         )
         val EXPERIENCE_PRODUCTION = !TraitCard(
             "experience_production", "Xp Production", "経験値生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         )
 
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         )
 
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         )
         val NODED_STEM = !TraitCard(
             "noded_stem", "Noded Stem", "節状の茎",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.GROWTH_BOOST to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         )
         val FRUIT_OF_KNOWLEDGE = !TraitCard(
             "fruit_of_knowledge", "Fruit of Knowledge", "知識の果実",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         )
         val GOLDEN_APPLE = !TraitCard(
             "golden_apple", "Golden Apple", "金のリンゴ",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         )
         val SPINY_LEAVES = !TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘状の葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val DESERT_GEM = !TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 1.0),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
         val HEATING_MECHANISM = !TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val WATERLOGGING_TOLERANCE = !TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 1.0),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
         )
         val ADVERSITY_FLOWER = !TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
         )
         val FLESHY_LEAVES = !TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 1.0),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
         )
         val NATURAL_ABSCISSION = !TraitCard(
             "natural_abscission", "Natural Abscission", "自然落果",
@@ -210,25 +210,25 @@ class TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.OUTDOOR), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.OUTDOOR), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val ETHER_PREDATION = !TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val PAVEMENT_FLOWERS = !TraitCard(
             "pavement_flowers", "Pavement Flowers", "アスファルトに咲く花",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.FLOOR_HARDNESS), listOf(TraitEffectKeyCard.NUTRITION to 1.0),
+            listOf(TraitConditionCard.FLOOR_HARDNESS), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
         val PROSPERITY_OF_SPECIES = !TraitCard(
             "prosperity_of_species", "Prosperity of Species", "種の繁栄",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
         )
     }
 
