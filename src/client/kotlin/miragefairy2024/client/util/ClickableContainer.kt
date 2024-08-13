@@ -6,6 +6,12 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 
 class ClickableContainer<C : Component>(horizontalSizing: Sizing, verticalSizing: Sizing, private val action: () -> Boolean, child: () -> C) : WrappingParentComponent<C>(horizontalSizing, verticalSizing, child()) {
+    // これを設定してもchildが受け取ってしまうのでカーソルを設定することができない
+    // see: io.wispforest.owo.ui.core.OwoUIAdapter.render
+    //init {
+    //    cursorStyle(CursorStyle.HAND)
+    //}
+
     override fun canFocus(source: Component.FocusSource) = source == Component.FocusSource.KEYBOARD_CYCLE
 
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
