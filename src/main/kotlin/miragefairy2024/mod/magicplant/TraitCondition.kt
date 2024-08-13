@@ -8,5 +8,6 @@ import net.minecraft.world.World
 
 interface TraitCondition {
     val emoji: Text
+    val name: Text
     fun getFactor(world: World, blockPos: BlockPos): Double
 }
