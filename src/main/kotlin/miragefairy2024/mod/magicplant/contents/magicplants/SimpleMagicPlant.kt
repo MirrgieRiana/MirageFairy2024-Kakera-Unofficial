@@ -114,11 +114,12 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
         val rareGeneration = traitEffects[TraitEffectKeyCard.RARE_PRODUCTION.traitEffectKey]
         val generationBoost = traitEffects[TraitEffectKeyCard.PRODUCTION_BOOST.traitEffectKey]
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
+        val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
 
         if (isMaxAge(blockState)) {
             val seedCount = world.random.randomInt(magicPlantSettings.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             repeat(seedCount) {
-                drops += calculateCrossedSeed(world, blockPos, traitStacks)
+                drops += calculateCrossedSeed(world, blockPos, traitStacks, crossbreeding)
             }
         }
 
