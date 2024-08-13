@@ -11,7 +11,7 @@ import miragefairy2024.mod.magicplant.TraitSpawnRarity
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.worldGenTraitRecipeRegistry
-import miragefairy2024.mod.rei.WorldGenTraitReiCategoryCard
+import miragefairy2024.mod.rei.TraitReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.formatted
 import miragefairy2024.util.invoke
@@ -20,20 +20,20 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryStack
 import net.minecraft.text.Text
 
-object WorldGenTraitClientReiCategoryCard : ClientReiCategoryCard<WorldGenTraitReiCategoryCard.Display>(WorldGenTraitReiCategoryCard) {
+object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.Display>(TraitReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
         worldGenTraitRecipeRegistry.values.flatten().forEach { recipe ->
-            registry.add(WorldGenTraitReiCategoryCard.Display(recipe))
+            registry.add(TraitReiCategoryCard.Display(recipe))
         }
     }
 
-    override fun createCategory() = object : DisplayCategory<WorldGenTraitReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = WorldGenTraitReiCategoryCard.identifier.first
-        override fun getTitle(): Text = WorldGenTraitReiCategoryCard.translation()
+    override fun createCategory() = object : DisplayCategory<TraitReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = TraitReiCategoryCard.identifier.first
+        override fun getTitle(): Text = TraitReiCategoryCard.translation()
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
-        override fun getDisplayWidth(display: WorldGenTraitReiCategoryCard.Display) = 180
+        override fun getDisplayWidth(display: TraitReiCategoryCard.Display) = 180
         override fun getDisplayHeight() = 36
-        override fun setupDisplay(display: WorldGenTraitReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+        override fun setupDisplay(display: TraitReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val rarityText = when (display.recipe.rarity) {
                 TraitSpawnRarity.ALWAYS -> text { "100%"() }
                 TraitSpawnRarity.COMMON -> text { ">99%"() }

@@ -21,7 +21,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-object WorldGenTraitReiCategoryCard : ReiCategoryCard<WorldGenTraitReiCategoryCard.Display>("world_gen_trait", "World Gen Trait", "地形生成特性") {
+object TraitReiCategoryCard : ReiCategoryCard<TraitReiCategoryCard.Display>("trait", "Trait", "特性") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
