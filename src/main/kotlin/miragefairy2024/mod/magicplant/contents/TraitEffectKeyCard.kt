@@ -10,7 +10,6 @@ import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.text.Style
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import kotlin.math.pow
 
@@ -36,6 +35,7 @@ enum class TraitEffectKeyCard(
 
     FORTUNE_FACTOR("fortune_factor", "FTN", "幸運係数", 4100.0, Style.EMPTY.withColor(0xFF4FFF), false),
     NATURAL_ABSCISSION("natural_abscission", "NA", "自然落果", 4200.0, Style.EMPTY.withColor(0x5959FF), true),
+    CROSSBREEDING("crossbreeding", "Crossbreeding", "交雑", 4300.0, Style.EMPTY.withColor(0xFFA011), true),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
