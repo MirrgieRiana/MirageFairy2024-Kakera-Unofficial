@@ -75,6 +75,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
             val traitStacks = itemStack.getTraitStacks() ?: return@run
             blockEntity.setTraitStacks(traitStacks)
             blockEntity.setRare(itemStack.isRare())
+            blockEntity.setNatural(false)
         }
     }
 

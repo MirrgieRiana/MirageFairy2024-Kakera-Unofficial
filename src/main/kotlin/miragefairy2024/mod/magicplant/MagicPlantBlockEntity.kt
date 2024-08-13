@@ -35,6 +35,16 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
     }
 
 
+    private var isNatural = false
+
+    fun isNatural() = isNatural
+
+    fun setNatural(isNatural: Boolean) {
+        this.isNatural = isNatural
+        markDirty()
+    }
+
+
     override fun setWorld(world: World) {
         super.setWorld(world)
         if (traitStacks == null) {
@@ -42,6 +52,7 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
             val result = spawnTraitStacks(world, pos, block)
             setTraitStacks(result.first)
             setRare(result.second)
+            setNatural(true)
         }
     }
 
@@ -49,18 +60,21 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
         super.writeNbt(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
+        if (isNatural) nbt.putBoolean("Natural", false)
     }
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
+        isNatural = nbt.getBoolean("Natural")
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound {
         val nbt = super.toInitialChunkDataNbt()
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
+        if (isNatural) nbt.putBoolean("Natural", true)
         return nbt
     }
 
