@@ -15,6 +15,7 @@ import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.sortedEntrySet
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
@@ -55,7 +56,7 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
-            traitRegistry.entrySet.sortedBy { it.key.value }.flatMap { (_, trait) ->
+            traitRegistry.sortedEntrySet.flatMap { (_, trait) ->
                 (0..3).map { b ->
                     card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
                 }

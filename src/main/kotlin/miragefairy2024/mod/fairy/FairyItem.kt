@@ -40,6 +40,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.times
@@ -81,7 +82,7 @@ fun initFairyItem() {
         card.item.register(Registries.ITEM, card.identifier)
 
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
-            motifRegistry.entrySet.sortedBy { it.key.value }.map { it.value.createFairyItemStack() }
+            motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
         }
 
         card.item.registerModelGeneration(createFairyModel())
