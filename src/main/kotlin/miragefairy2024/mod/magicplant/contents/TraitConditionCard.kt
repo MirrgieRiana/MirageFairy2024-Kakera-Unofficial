@@ -47,7 +47,6 @@ enum class TraitConditionCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
     val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait_condition") }, enName, jaName)
-
     val traitCondition = object : TraitCondition {
         override val emoji = emoji()
         override val name = translation()
