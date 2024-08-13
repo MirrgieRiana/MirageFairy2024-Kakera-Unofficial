@@ -20,7 +20,6 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.MapColor
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
@@ -28,9 +27,7 @@ import net.minecraft.state.property.Properties
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.ConfiguredFeature
 import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.PlacedFeatures
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
@@ -66,10 +63,10 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
     override val family = Identifier(MirageFairy2024.modId, "veropeda")
 
-    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster"))
-    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY: RegistryKey<ConfiguredFeature<*, *>> = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "large_veropeda_cluster"))
-    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "veropeda_cluster"))
-    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY: RegistryKey<PlacedFeature> = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "nether_veropeda_cluster"))
+    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "veropeda_cluster")
+    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "large_veropeda_cluster")
+    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "veropeda_cluster")
+    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "nether_veropeda_cluster")
 
     context(ModContext)
     override fun init() {

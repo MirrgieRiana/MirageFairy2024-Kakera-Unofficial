@@ -11,6 +11,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
@@ -74,7 +75,7 @@ abstract class BiomeCard(
     open fun init() = Unit
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val registryKey: RegistryKey<Biome> = RegistryKey.of(RegistryKeys.BIOME, identifier)
+    val registryKey = RegistryKeys.BIOME with identifier
     val translation = Translation({ identifier.toTranslationKey("biome") }, en, ja)
 }
 
