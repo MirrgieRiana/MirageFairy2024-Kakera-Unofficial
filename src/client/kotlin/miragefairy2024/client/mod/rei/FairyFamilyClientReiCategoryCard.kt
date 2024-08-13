@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.motifRegistry
 import miragefairy2024.mod.rei.FairyFamilyReiCategoryCard
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
+import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import net.minecraft.text.Text
@@ -27,7 +28,7 @@ object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCa
         //fun Motif.getAncestors(): List<Motif> = this.parents.flatMap { it.getAncestors() } + this.parents
         //fun Motif.getDescendants(): List<Motif> = childrenTable.getOrElse(this) { listOf() }.flatMap { it.getDescendants() } + childrenTable.getOrElse(this) { listOf() }
 
-        motifRegistry.entrySet.forEach {
+        motifRegistry.sortedEntrySet.forEach {
             val parents = it.value.parents
             val children = childrenTable[it.value] ?: listOf()
             if (parents.isNotEmpty() || children.isNotEmpty()) {
