@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.mod.magicplant.TraitCondition
+import miragefairy2024.mod.magicplant.getMagicPlantBlockEntity
 import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.getCrystalErg
@@ -29,6 +30,7 @@ enum class TraitConditionCard(
     MEDIUM_HUMIDITY(TraitCondition { world, blockPos -> if (world.getBiome(blockPos).humidityCategory == HumidityCategory.MEDIUM) 1.0 else 0.0 }),
     HIGH_HUMIDITY(TraitCondition { world, blockPos -> if (world.getBiome(blockPos).humidityCategory == HumidityCategory.HIGH) 1.0 else 0.0 }),
     OUTDOOR(TraitCondition { world, blockPos -> if (blockPos.y >= world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, blockPos).y) 1.0 else 0.0 }),
+    NATURAL(TraitCondition { world, blockPos -> if (world.getMagicPlantBlockEntity(blockPos)?.isNatural() == true) 1.0 else 0.0 }),
 }
 
 private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
