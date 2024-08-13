@@ -10,6 +10,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
@@ -49,7 +50,7 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
         super.setWorld(world)
         if (traitStacks == null) {
             val block = world.getBlockState(pos).block
-            val result = spawnTraitStacks(world, pos, block)
+            val result = spawnTraitStacks(world, pos, block, world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
@@ -84,7 +85,7 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<TraitStacks, Boolean> {
+fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block, random: Random): Pair<TraitStacks, Boolean> {
 
     // レシピ判定
     val aTraitStackList = mutableListOf<TraitStack>()
@@ -108,13 +109,13 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<Trait
     // 抽選
     val resultTraitStackList = mutableListOf<TraitStack>()
     var isRare = false
-    val r = world.random.nextDouble()
+    val r = random.nextDouble()
     when {
         r < 0.01 -> { // +S
             resultTraitStackList += aTraitStackList
             resultTraitStackList += cTraitStackList
             if (sTraitStackList.isNotEmpty()) {
-                resultTraitStackList += sTraitStackList[world.random.nextInt(sTraitStackList.size)]
+                resultTraitStackList += sTraitStackList[random.nextInt(sTraitStackList.size)]
                 isRare = true
             }
         }
@@ -123,14 +124,14 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<Trait
             resultTraitStackList += aTraitStackList
             resultTraitStackList += cTraitStackList
             if (rTraitStackList.isNotEmpty()) {
-                resultTraitStackList += rTraitStackList[world.random.nextInt(rTraitStackList.size)]
+                resultTraitStackList += rTraitStackList[random.nextInt(rTraitStackList.size)]
             }
         }
 
         r >= 0.01 && r < 0.02 -> { // -C
             resultTraitStackList += aTraitStackList
             if (cTraitStackList.isNotEmpty()) {
-                cTraitStackList.removeAt(world.random.nextInt(cTraitStackList.size))
+                cTraitStackList.removeAt(random.nextInt(cTraitStackList.size))
                 resultTraitStackList += cTraitStackList
                 isRare = true
             }
@@ -140,7 +141,7 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block): Pair<Trait
             resultTraitStackList += aTraitStackList
             resultTraitStackList += cTraitStackList
             if (nTraitStackList.isNotEmpty()) {
-                resultTraitStackList += nTraitStackList[world.random.nextInt(nTraitStackList.size)]
+                resultTraitStackList += nTraitStackList[random.nextInt(nTraitStackList.size)]
             }
         }
     }
