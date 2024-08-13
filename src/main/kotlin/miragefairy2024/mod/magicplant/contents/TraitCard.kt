@@ -6,7 +6,11 @@ import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
 import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.traitRegistry
+import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
+import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -233,7 +237,8 @@ class TraitCard(
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style) {
+    val poemTranslation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait", "poem") }, enPoem, jaPoem)
+    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style, text { poemTranslation() }) {
         override val primaryEffect = traitEffectKeyCardStacks.first().first.traitEffectKey
         override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
             val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos) }.fold(1.0) { a, b -> a * b }
@@ -254,6 +259,7 @@ class TraitCard(
 context(ModContext)
 fun initTraitCard() {
     TraitCard.entries.forEach { card ->
+        card.poemTranslation.enJa()
         card.trait.register(traitRegistry, card.identifier)
         card.trait.enJa(card.enName, card.jaName)
     }

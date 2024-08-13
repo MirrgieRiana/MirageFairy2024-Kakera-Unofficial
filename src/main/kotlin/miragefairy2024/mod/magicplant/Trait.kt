@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.minecraft.util.math.BlockPos
@@ -21,7 +22,7 @@ import net.minecraft.world.World
 val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
-abstract class Trait(val style: Style) : Comparable<Trait> {
+abstract class Trait(val style: Style, val poem: Text) : Comparable<Trait> {
     abstract val primaryEffect: TraitEffectKey<*>
 
     /** 呼び出された時点でそこにブロックの実体が存在しない場合があります。 */
