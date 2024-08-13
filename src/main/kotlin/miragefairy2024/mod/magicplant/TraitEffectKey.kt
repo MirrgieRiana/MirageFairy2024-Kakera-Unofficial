@@ -20,6 +20,7 @@ val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = Regist
 val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.createSimple(traitEffectKeyRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class TraitEffectKey<T : Any> {
+    abstract val emoji: Text
     abstract val sortValue: Double
     abstract val style: Style
     abstract fun getValue(level: Double): T
