@@ -21,6 +21,7 @@ import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.util.Identifier
 
 abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {
@@ -42,6 +43,8 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     abstract val jaClassification: String
 
     abstract fun createBlock(): B
+
+    abstract val family: Identifier
 
     open val baseGrowth = 1.0
     abstract val drops: List<Item>
