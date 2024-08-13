@@ -16,7 +16,6 @@ import net.minecraft.world.World
 class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state) {
 
     private var traitStacks: TraitStacks? = null
-    private var isRare = false
 
     fun getTraitStacks() = traitStacks
 
@@ -25,12 +24,16 @@ class MagicPlantBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Bloc
         markDirty()
     }
 
+
+    private var isRare = false
+
     fun isRare() = isRare
 
     fun setRare(isRare: Boolean) {
         this.isRare = isRare
         markDirty()
     }
+
 
     override fun setWorld(world: World) {
         super.setWorld(world)
