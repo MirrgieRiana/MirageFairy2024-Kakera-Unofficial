@@ -61,7 +61,7 @@ enum class TraitEffectKeyCard(
             override val name = translation()
             override val sortValue = sortValue
             override val style = style
-            override fun getValue(level: Double) = 0.1 * level
+            override fun getValue(level: Double) = level
             override fun getDescription(value: Double) = text { name + (value * 100 formatAs "%+.0f%%")() }
             override fun plus(a: Double, b: Double) = a + b
             override fun getDefaultValue() = 0.0
