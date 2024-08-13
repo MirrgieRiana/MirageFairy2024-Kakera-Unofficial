@@ -120,7 +120,7 @@ object FairyForestBiomeCard : BiomeCard(
     ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING),
     ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.SURFACE),
     0.95F,
-    BiomeTags.IS_FOREST, ConventionalBiomeTags.FLORAL,
+    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.FLORAL,
 ) {
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.Builder()
@@ -193,7 +193,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
     ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING),
     ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.SURFACE),
     0.95F,
-    BiomeTags.IS_FOREST,
+    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST,
 ) {
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.Builder()
