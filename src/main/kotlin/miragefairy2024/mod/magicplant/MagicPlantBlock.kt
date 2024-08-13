@@ -188,7 +188,8 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
         val block = blockState.block
-        val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
+        val blockEntity = world.getMagicPlantBlockEntity(blockPos) ?: return
+        val traitStacks = blockEntity.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
         val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
         val experience = if (dropExperience) world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey]) else 0
@@ -201,6 +202,9 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
         // 成長段階を消費
         world.setBlockState(blockPos, getBlockStateAfterPicking(blockState), NOTIFY_LISTENERS)
+
+        // 天然フラグを除去
+        blockEntity.setNatural(false)
 
         // エフェクト
         world.playSound(null, blockPos, soundGroup.breakSound, SoundCategory.BLOCKS, (soundGroup.volume + 1.0F) / 2.0F * 0.5F, soundGroup.pitch * 0.8F)
