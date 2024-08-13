@@ -204,7 +204,7 @@ class TraitCard(
             "natural_abscission", "Natural Abscission", "自然落果",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 0.1),
         )
         val CARNIVOROUS_PLANT = !TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
