@@ -4,11 +4,11 @@ import miragefairy2024.clientProxy
 import miragefairy2024.util.boolean
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.darkRed
-import miragefairy2024.util.formatted
 import miragefairy2024.util.get
 import miragefairy2024.util.green
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
+import miragefairy2024.util.style
 import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
@@ -85,7 +85,7 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
                             .map { it.getDescription() }
                             .reduce { a, b -> a + ","() + b }
                     }
-                    text { ("  "() + trait.getName() + " "() + levelText + " ("() + description + ")"()).formatted(trait.color) }
+                    text { ("  "() + trait.getName() + " "() + levelText + " ("() + description + ")"()).style(trait.style) }
                 } else {
                     text { ("  "() + trait.getName() + " "() + levelText + " ("() + INVALID_TRANSLATION() + ")"()).darkGray }
                 }

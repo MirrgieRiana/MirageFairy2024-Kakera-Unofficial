@@ -233,7 +233,7 @@ class TraitCard(
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.color) {
+    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style) {
         override val primaryEffect = traitEffectKeyCardStacks.first().first.traitEffectKey
         override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
             val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos) }.fold(1.0) { a, b -> a * b }
