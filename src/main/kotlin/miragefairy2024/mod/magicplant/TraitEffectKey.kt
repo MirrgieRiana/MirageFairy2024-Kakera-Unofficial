@@ -20,7 +20,7 @@ val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.
 
 abstract class TraitEffectKey<T : Any> {
     abstract val sortValue: Double
-    abstract fun getValue(level: Int): T
+    abstract fun getValue(level: Double): T
     abstract fun plus(a: T, b: T): T
     abstract fun getDescription(value: T): Text
     abstract fun getDefaultValue(): T
