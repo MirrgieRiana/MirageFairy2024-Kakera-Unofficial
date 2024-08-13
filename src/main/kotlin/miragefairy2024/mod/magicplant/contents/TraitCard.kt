@@ -124,7 +124,7 @@ class TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 1.0),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03),
         )
         val EXPERIENCE_PRODUCTION = !TraitCard(
             "experience_production", "Xp Production", "経験値生成",

@@ -133,7 +133,7 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
         }
 
         if (isMaxAge(blockState)) {
-            val rareCount = world.random.randomInt(magicPlantSettings.baseRareGeneration * 0.03 * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val rareCount = world.random.randomInt(magicPlantSettings.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             if (rareCount > 0) drops += magicPlantSettings.getRareDrops(rareCount, world.random)
         }
 
