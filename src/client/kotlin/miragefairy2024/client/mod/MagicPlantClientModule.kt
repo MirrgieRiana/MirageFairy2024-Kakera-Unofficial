@@ -11,8 +11,18 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.client.util.horizontalSpace
+import miragefairy2024.client.util.inventoryNameLabel
+import miragefairy2024.client.util.verticalScroll
+import miragefairy2024.client.util.verticalSpace
+import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
+import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.traitListScreenHandlerType
+import miragefairy2024.mod.magicplant.traitListScreenTranslation
+import miragefairy2024.util.invoke
+import miragefairy2024.util.style
+import miragefairy2024.util.text
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
@@ -30,24 +40,35 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
             verticalAlignment(VerticalAlignment.CENTER)
             horizontalAlignment(HorizontalAlignment.CENTER)
 
-            // GUI外枠描画用
-            child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+            child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply { // 外枠
                 surface(Surface.PANEL)
                 padding(Insets.of(7))
 
-                // 横幅固定メインコンテナ
-                child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
-                    surface(Surface.TOOLTIP)
-                    padding(Insets.of(7))
+                child(inventoryNameLabel(traitListScreenTranslation(), HorizontalAlignment.CENTER)) // GUI名
+                child(verticalSpace(3))
+                child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply { // リスト・特性セクション
+                    child(verticalScroll(Sizing.fixed(80), Sizing.fixed(160), 5).apply { // リスト
+                        surface(Surface.TOOLTIP)
+                        padding(Insets.of(5))
 
-                    child(Components.texture(Identifier(MirageFairy2024.modId, "textures/gui/traits/waterlogging_tolerance.png"), 0, 0, 32, 32, 32, 32).apply {
+                        child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
+                            handler.traitStacks.traitStackList.flatMap { listOf(it, it, it, it, it, it, it, it)/* TODO */ }.forEach { traitStack ->
+                                child(Components.label(text { (traitStack.trait.getName() + " ${traitStack.level}"()).style(traitStack.trait.style) }))
+                            }
+                        })
+                    })
+                    child(horizontalSpace(2))
+                    child(Containers.verticalFlow(Sizing.fixed(80), Sizing.fixed(160)).apply { // 特性カード
+                        surface(NinePatchTextureCard.TRAIT_BACKGROUND.surface)
+                        padding(Insets.of(5))
+
+                        child(Components.texture(Identifier(MirageFairy2024.modId, "textures/gui/traits/waterlogging_tolerance.png"), 0, 0, 32, 32, 32, 32).apply {
+
+                        })
 
                     })
-
                 })
-
             })
-
         }
     }
 }

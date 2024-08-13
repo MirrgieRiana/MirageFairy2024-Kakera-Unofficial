@@ -16,8 +16,9 @@ class NinePatchTextureCard(
 ) {
     companion object {
         val FAIRY_QUEST_CARD_MESSAGE = NinePatchTextureCard("fairy_quest_card_message", 66, 66, 22, 22, true)
+        val TRAIT_BACKGROUND = NinePatchTextureCard("trait_background", 66, 66, 22, 22, true)
 
-        val entries = listOf(FAIRY_QUEST_CARD_MESSAGE)
+        val entries = listOf(FAIRY_QUEST_CARD_MESSAGE, TRAIT_BACKGROUND)
     }
 
     val identifier = Identifier(MirageFairy2024.modId, path)

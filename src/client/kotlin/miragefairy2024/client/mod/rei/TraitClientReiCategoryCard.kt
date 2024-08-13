@@ -19,12 +19,14 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import miragefairy2024.client.mod.surface
 import miragefairy2024.client.util.ClickableContainer
 import miragefairy2024.client.util.SlotType
 import miragefairy2024.client.util.leftBorderLayout
 import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
+import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitSpawnRarity
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.TraitStacks
@@ -101,7 +103,7 @@ object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.D
                                 true
                             }) {
                                 Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply { // カード
-                                    surface(Surface.TOOLTIP)
+                                    surface(NinePatchTextureCard.TRAIT_BACKGROUND.surface)
                                     padding(Insets.of(5))
 
                                     child(Components.label(text { display.trait.getName().style(display.trait.style) }).apply { // 特性名
@@ -198,7 +200,7 @@ object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.D
                             true
                         }) {
                             topBorderLayout(Sizing.fill(100), Sizing.fill(100)).apply { // カード
-                                surface(Surface.TOOLTIP)
+                                surface(NinePatchTextureCard.TRAIT_BACKGROUND.surface)
                                 padding(Insets.of(5))
                                 gap = 5
 

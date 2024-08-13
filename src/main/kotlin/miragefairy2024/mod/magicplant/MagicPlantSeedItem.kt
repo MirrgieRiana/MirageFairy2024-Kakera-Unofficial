@@ -120,12 +120,14 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
             if (world.isClient) return TypedActionResult.success(itemStack)
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos))
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos), itemStack.getTraitStacks() ?: TraitStacks.EMPTY)
                 }
 
-                override fun getDisplayName() = text { "TODO"() }
+                override fun getDisplayName() = text { traitListScreenTranslation() }
 
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
+                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
+                    TraitListScreenHandler.write(buf, itemStack.getTraitStacks() ?: TraitStacks.EMPTY)
+                }
             })
             return TypedActionResult.consume(itemStack)
         }
