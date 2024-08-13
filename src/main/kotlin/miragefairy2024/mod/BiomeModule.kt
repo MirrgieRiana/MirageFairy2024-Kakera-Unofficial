@@ -73,7 +73,6 @@ abstract class BiomeCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
     val registryKey: RegistryKey<Biome> = RegistryKey.of(RegistryKeys.BIOME, identifier)
-    val biomeTag: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, identifier)
     val translation = Translation({ identifier.toTranslationKey("biome") }, en, ja)
 }
 
@@ -85,9 +84,6 @@ fun initBiomeModule() {
         registerDynamicGeneration(card.registryKey) {
             card.createBiome(it.getRegistryLookup(RegistryKeys.PLACED_FEATURE), it.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER))
         }
-
-        // このバイオームを指定するバイオームタグの生成
-        card.identifier.registerBiomeTagGeneration { card.biomeTag }
 
         // このバイオームをタグに登録
         card.tags.forEach { tag ->
