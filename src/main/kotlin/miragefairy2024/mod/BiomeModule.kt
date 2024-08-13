@@ -44,6 +44,8 @@ import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
 
+val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, Identifier(MirageFairy2024.modId, "fairy"))
+
 @Suppress("unused")
 object BiomeCards {
     val entries = mutableListOf<BiomeCard>()
@@ -120,7 +122,7 @@ object FairyForestBiomeCard : BiomeCard(
     ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING),
     ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.SURFACE),
     0.95F,
-    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.FLORAL,
+    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.FLORAL, FAIRY_BIOME_TAG,
 ) {
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.Builder()
@@ -193,7 +195,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
     ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING),
     ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.SURFACE),
     0.95F,
-    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST,
+    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, FAIRY_BIOME_TAG,
 ) {
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.Builder()
