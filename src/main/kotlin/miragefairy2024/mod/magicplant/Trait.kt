@@ -21,11 +21,14 @@ import net.minecraft.world.World
 val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
-abstract class Trait(val color: Formatting, private val sortKey: String) : Comparable<Trait> {
+abstract class Trait(val color: Formatting) : Comparable<Trait> {
+    abstract val primaryEffect: TraitEffectKey<*>
+
     /** 呼び出された時点でそこにブロックの実体が存在しない場合があります。 */
     abstract fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects?
+
     override fun compareTo(other: Trait): Int {
-        (this.sortKey cmp other.sortKey).let { if (it != 0) return it }
+        (this.primaryEffect.sortValue cmp other.primaryEffect.sortValue).let { if (it != 0) return it }
         (this.getIdentifier() cmp other.getIdentifier()).let { if (it != 0) return it }
         return 0
     }
