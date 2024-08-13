@@ -5,9 +5,10 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.magicplant.TraitEffectKey
-import miragefairy2024.mod.magicplant.enJa
-import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.traitEffectKeyRegistry
+import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
+import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
@@ -18,8 +19,8 @@ import kotlin.math.pow
 enum class TraitEffectKeyCard(
     path: String,
     emoji: Emoji,
-    val enName: String,
-    val jaName: String,
+    enName: String,
+    jaName: String,
     sortValue: Double,
     style: Style,
     isLogScale: Boolean,
@@ -42,23 +43,26 @@ enum class TraitEffectKeyCard(
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
+    val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait_effect") }, enName, jaName)
     val traitEffectKey = if (isLogScale) {
         object : TraitEffectKey<Double>() {
             override val emoji = emoji()
+            override val name = translation()
             override val sortValue = sortValue
             override val style = style
             override fun getValue(level: Double) = 1 - 0.95.pow(level)
-            override fun getDescription(value: Double) = text { getName() + (value * 100 formatAs "%+.0f%%")() }
+            override fun getDescription(value: Double) = text { name + (value * 100 formatAs "%+.0f%%")() }
             override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
             override fun getDefaultValue() = 0.0
         }
     } else {
         object : TraitEffectKey<Double>() {
             override val emoji = emoji()
+            override val name = translation()
             override val sortValue = sortValue
             override val style = style
             override fun getValue(level: Double) = 0.1 * level
-            override fun getDescription(value: Double) = text { getName() + (value * 100 formatAs "%+.0f%%")() }
+            override fun getDescription(value: Double) = text { name + (value * 100 formatAs "%+.0f%%")() }
             override fun plus(a: Double, b: Double) = a + b
             override fun getDefaultValue() = 0.0
         }
@@ -69,6 +73,6 @@ context(ModContext)
 fun initTraitEffectKeyCard() {
     TraitEffectKeyCard.entries.forEach { card ->
         card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
-        card.traitEffectKey.enJa(card.enName, card.jaName)
+        card.translation.enJa()
     }
 }
