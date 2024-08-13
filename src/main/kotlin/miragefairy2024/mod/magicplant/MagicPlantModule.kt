@@ -6,13 +6,17 @@ import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
-import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerSettings
-import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaSettings
+import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import net.minecraft.util.Identifier
+
+val magicPlantCards: List<MagicPlantCard<*>> = listOf(
+    MirageFlowerCard,
+    VeropedaCard,
+)
 
 val TRAIT_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.trait" }, "Trait", "特性")
 val CREATIVE_ONLY_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.creativeOnly" }, "Creative Only", "クリエイティブ専用")
@@ -36,7 +40,8 @@ fun initMagicPlantModule() {
     initTraitEffectKeyCard()
     initTraitCard()
 
-    MirageFlowerSettings.init()
-    VeropedaSettings.init()
+    magicPlantCards.forEach { card ->
+        card.init()
+    }
 
 }
