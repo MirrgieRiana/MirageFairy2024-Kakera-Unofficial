@@ -18,7 +18,6 @@ import net.minecraft.world.World
 enum class TraitFactorCard(
     val traitFactor: TraitFactor,
 ) {
-    ALWAYS(TraitFactor { _, _ -> 1.0 }),
     FLOOR_MOISTURE(TraitFactor { world, blockPos -> world.getMoisture(blockPos.down()) }),
     FLOOR_CRYSTAL_ERG(TraitFactor { world, blockPos -> world.getCrystalErg(blockPos.down()) }),
     FLOOR_HARDNESS(TraitFactor { world, blockPos -> getFloorHardness(world, blockPos) }),

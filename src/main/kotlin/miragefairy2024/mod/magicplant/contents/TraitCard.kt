@@ -29,7 +29,7 @@ class TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.NUTRITION,
+            listOf(), TraitEffectKeyCard.NUTRITION,
         )
         val PHOTOSYNTHESIS = !TraitCard(
             "photosynthesis", "Photosynthesis", "光合成",
@@ -60,7 +60,7 @@ class TraitCard(
             "air_adaptation", "Air Adaptation", "空気適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.ENVIRONMENT,
+            listOf(), TraitEffectKeyCard.ENVIRONMENT,
         )
         val COLD_ADAPTATION = !TraitCard(
             "cold_adaptation", "Cold Adaptation", "寒冷適応",
@@ -103,63 +103,63 @@ class TraitCard(
             "seeds_production", "Seeds Production", "種子生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.SEEDS_PRODUCTION,
+            listOf(), TraitEffectKeyCard.SEEDS_PRODUCTION,
         )
         val FRUITS_PRODUCTION = !TraitCard(
             "fruits_production", "Fruits Production", "果実生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.FRUITS_PRODUCTION,
+            listOf(), TraitEffectKeyCard.FRUITS_PRODUCTION,
         )
         val LEAVES_PRODUCTION = !TraitCard(
             "leaves_production", "Leaves Production", "葉面生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.LEAVES_PRODUCTION,
+            listOf(), TraitEffectKeyCard.LEAVES_PRODUCTION,
         )
         val RARE_PRODUCTION = !TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.RARE_PRODUCTION,
+            listOf(), TraitEffectKeyCard.RARE_PRODUCTION,
         )
         val EXPERIENCE_PRODUCTION = !TraitCard(
             "experience_production", "Xp Production", "経験値生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.EXPERIENCE_PRODUCTION,
+            listOf(), TraitEffectKeyCard.EXPERIENCE_PRODUCTION,
         )
 
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.FORTUNE_FACTOR,
+            listOf(), TraitEffectKeyCard.FORTUNE_FACTOR,
         )
 
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.FORTUNE_FACTOR,
+            listOf(), TraitEffectKeyCard.FORTUNE_FACTOR,
         )
         val NODED_STEM = !TraitCard(
             "noded_stem", "Noded Stem", "節状の茎",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.GROWTH_BOOST,
+            listOf(), TraitEffectKeyCard.GROWTH_BOOST,
         )
         val FRUIT_OF_KNOWLEDGE = !TraitCard(
             "fruit_of_knowledge", "Fruit of Knowledge", "知識の果実",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.EXPERIENCE_PRODUCTION,
+            listOf(), TraitEffectKeyCard.EXPERIENCE_PRODUCTION,
         )
         val GOLDEN_APPLE = !TraitCard(
             "golden_apple", "Golden Apple", "金のリンゴ",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.FORTUNE_FACTOR,
+            listOf(), TraitEffectKeyCard.FORTUNE_FACTOR,
         )
         val SPINY_LEAVES = !TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘状の葉",
@@ -189,7 +189,7 @@ class TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.FRUITS_PRODUCTION,
+            listOf(), TraitEffectKeyCard.FRUITS_PRODUCTION,
         )
         val FLESHY_LEAVES = !TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
@@ -201,7 +201,7 @@ class TraitCard(
             "natural_abscission", "Natural Abscission", "自然落果",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.NATURAL_ABSCISSION,
+            listOf(), TraitEffectKeyCard.NATURAL_ABSCISSION,
         )
         val CARNIVOROUS_PLANT = !TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
@@ -213,7 +213,7 @@ class TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.NUTRITION,
+            listOf(), TraitEffectKeyCard.NUTRITION,
         )
         val PAVEMENT_FLOWERS = !TraitCard(
             "pavement_flowers", "Pavement Flowers", "アスファルトに咲く花",
@@ -225,7 +225,7 @@ class TraitCard(
             "prosperity_of_species", "Prosperity of Species", "種の繁栄",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitFactorCard.ALWAYS), TraitEffectKeyCard.SEEDS_PRODUCTION,
+            listOf(), TraitEffectKeyCard.SEEDS_PRODUCTION,
         )
     }
 
