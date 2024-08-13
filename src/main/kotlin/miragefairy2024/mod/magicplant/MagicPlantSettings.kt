@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
+import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.createItemStack
@@ -16,6 +17,7 @@ import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
@@ -39,6 +41,8 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     abstract val jaClassification: String
 
     abstract fun createBlock(): B
+
+    abstract val drops: List<Item>
 
     context(ModContext)
     open fun init() {
@@ -77,6 +81,7 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
         // レシピ
         card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        card.item.registerHarvestNotation(drops)
 
     }
 }

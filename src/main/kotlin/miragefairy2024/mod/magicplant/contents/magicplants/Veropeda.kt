@@ -6,7 +6,6 @@ import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.WorldGenTraitRecipeInitScope
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -61,6 +60,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
         createCuboidShape(7.0, 16.0),
     )
 
+    override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
     override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
@@ -142,9 +142,6 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
 
             }
         }
-
-        // レシピ
-        card.item.registerHarvestNotation(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
 
     }
 }
