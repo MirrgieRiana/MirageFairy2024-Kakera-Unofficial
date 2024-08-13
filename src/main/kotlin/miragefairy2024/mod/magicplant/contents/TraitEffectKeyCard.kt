@@ -22,20 +22,20 @@ enum class TraitEffectKeyCard(
     style: Style,
     isLogScale: Boolean,
 ) {
-    NUTRITION("nutrition", "NTR", "栄養値", 1100.0, Style.EMPTY.withFormatting(Formatting.AQUA), false),
-    ENVIRONMENT("environment", "ENV", "環境値", 1200.0, Style.EMPTY.withFormatting(Formatting.GREEN), false),
+    NUTRITION("nutrition", "NTR", "栄養値", 1100.0, Style.EMPTY.withColor(0xCECECE), false),
+    ENVIRONMENT("environment", "ENV", "環境値", 1200.0, Style.EMPTY.withColor(0xA0CC8E), false),
 
-    SEEDS_PRODUCTION("seeds_production", "SEED", "種子生成", 2100.0, Style.EMPTY.withFormatting(Formatting.RED), false),
-    FRUITS_PRODUCTION("fruits_production", "FRUIT", "果実生成", 2200.0, Style.EMPTY.withFormatting(Formatting.LIGHT_PURPLE), false),
-    LEAVES_PRODUCTION("leaves_production", "LEAF", "葉面生成", 2300.0, Style.EMPTY.withFormatting(Formatting.DARK_GREEN), false),
-    RARE_PRODUCTION("rare_production", "RARE", "希少品生成", 2400.0, Style.EMPTY.withFormatting(Formatting.GOLD), false),
-    EXPERIENCE_PRODUCTION("experience_production", "XP", "経験値", 2500.0, Style.EMPTY.withFormatting(Formatting.YELLOW), false),
+    SEEDS_PRODUCTION("seeds_production", "SEED", "種子生成", 2100.0, Style.EMPTY.withColor(0xFFC587), false),
+    FRUITS_PRODUCTION("fruits_production", "FRUIT", "果実生成", 2200.0, Style.EMPTY.withColor(0xFF87BF), false),
+    LEAVES_PRODUCTION("leaves_production", "LEAF", "葉面生成", 2300.0, Style.EMPTY.withColor(0x32C900), false),
+    RARE_PRODUCTION("rare_production", "RARE", "希少品生成", 2400.0, Style.EMPTY.withColor(0x00E2E2), false),
+    EXPERIENCE_PRODUCTION("experience_production", "XP", "経験値", 2500.0, Style.EMPTY.withColor(0xEFEF00), false),
 
-    GROWTH_BOOST("growth_boost", "GRW", "成長速度", 3100.0, Style.EMPTY.withFormatting(Formatting.DARK_BLUE), false),
-    PRODUCTION_BOOST("production_boost", "PRD", "生産能力", 3200.0, Style.EMPTY.withFormatting(Formatting.DARK_RED), false),
+    GROWTH_BOOST("growth_boost", "GRW", "成長速度", 3100.0, Style.EMPTY.withColor(0x00C600), false),
+    PRODUCTION_BOOST("production_boost", "PRD", "生産能力", 3200.0, Style.EMPTY.withColor(0xFF4242), false),
 
-    FORTUNE_FACTOR("fortune_factor", "FTN", "幸運係数", 4100.0, Style.EMPTY.withFormatting(Formatting.DARK_PURPLE), false),
-    NATURAL_ABSCISSION("natural_abscission", "NA", "自然落果", 4200.0, Style.EMPTY.withFormatting(Formatting.BLUE), true),
+    FORTUNE_FACTOR("fortune_factor", "FTN", "幸運係数", 4100.0, Style.EMPTY.withColor(0xFF4FFF), false),
+    NATURAL_ABSCISSION("natural_abscission", "NA", "自然落果", 4200.0, Style.EMPTY.withColor(0x5959FF), true),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
