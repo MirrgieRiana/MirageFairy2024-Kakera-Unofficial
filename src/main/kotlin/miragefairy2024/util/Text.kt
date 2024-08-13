@@ -1,8 +1,10 @@
 package miragefairy2024.util
 
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 
+fun Text.style(style: Style): Text = Text.empty().append(this).setStyle(style)
 fun Text.formatted(formatting: Formatting): Text = Text.empty().append(this).formatted(formatting)
 val Text.black get() = this.formatted(Formatting.BLACK)
 val Text.darkBlue get() = this.formatted(Formatting.DARK_BLUE)
