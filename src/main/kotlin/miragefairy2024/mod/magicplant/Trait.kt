@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
+import miragefairy2024.util.times
 import mirrg.kotlin.hydrogen.cmp
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
@@ -56,3 +57,5 @@ fun Identifier.toTrait() = traitRegistry.get(this)
 
 fun Trait.getTranslationKey(): String = Util.createTranslationKey("mirageFairy2024.trait", this.getIdentifier())
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }
+
+val Trait.texture get() = "textures/gui/traits/" * this.getIdentifier() * ".png"
