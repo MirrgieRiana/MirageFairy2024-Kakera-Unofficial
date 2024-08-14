@@ -191,6 +191,7 @@ enum class MaterialCard(
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
     ),
 
+    // TODO minia crystal
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)

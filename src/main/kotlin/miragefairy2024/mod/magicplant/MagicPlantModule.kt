@@ -5,7 +5,10 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
+import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.EmeraldLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
@@ -15,7 +18,10 @@ import net.minecraft.util.Identifier
 
 val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     MirageFlowerCard,
+    PhantomFlowerCard,
     VeropedaCard,
+    DiamondLuminariaCard,
+    EmeraldLuminariaCard,
 )
 
 val TRAIT_TRANSLATION = Translation({ "item.miragefairy2024.magicplant.trait" }, "Trait", "特性")
@@ -37,6 +43,7 @@ fun initMagicPlantModule() {
 
 
     initTraitSpawnConditionScope()
+    initTraitListScreenHandler()
     initTraitConditionCard()
     initTraitEffectKeyCard()
     initTraitCard()

@@ -179,7 +179,7 @@ class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlower
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 
-private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
+fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
     if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(random.randomInt(count2)))
     count2 /= 9.0
