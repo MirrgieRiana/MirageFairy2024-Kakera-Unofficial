@@ -39,8 +39,8 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
     override val itemEnName = "Phantom Bulb"
     override val itemJaName = "ファントムの球根"
     override val tier = 3
-    override val enPoem = "TODO" // TODO
-    override val jaPoem = "TODO" // TODO
+    override val enPoem = "Illusory telepathy"
+    override val jaPoem = "――おいでよ、僕たちのところへ"
     override val enClassification = "Order Miragales, family Miragaceae"
     override val jaClassification = "妖花目ミラージュ科"
 
