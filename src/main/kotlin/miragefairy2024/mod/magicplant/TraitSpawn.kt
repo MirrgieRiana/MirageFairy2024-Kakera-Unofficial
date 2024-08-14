@@ -1,5 +1,16 @@
 package miragefairy2024.mod.magicplant
 
+import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.text.Text
+import net.minecraft.world.biome.Biome
+
+class TraitSpawnSpec(val condition: TraitSpawnCondition, val rarity: TraitSpawnRarity, val level: Int)
+
+interface TraitSpawnCondition {
+    val description: Text
+    fun canSpawn(biome: RegistryEntry<Biome>): Boolean
+}
+
 enum class TraitSpawnRarity {
     /** 必ず付与される。 */
     ALWAYS,
