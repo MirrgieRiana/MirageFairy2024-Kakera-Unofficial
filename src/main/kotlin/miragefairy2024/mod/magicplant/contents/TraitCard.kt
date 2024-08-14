@@ -302,6 +302,38 @@ class TraitCard(
         ) {
 
         }
+        val PHANTOM_FLOWER = !TraitCard(
+            "phantom_flower", "Phantom Flower", "幻の花",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
+        ) {
+
+        }
+        val ETERNAL_TREASURE = !TraitCard(
+            "eternal_treasure", "Eternal Treasure", "悠久の秘宝",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(TraitConditionCard.NATURAL), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1),
+        ) {
+
+        }
+        val TREASURE_OF_XARPA = !TraitCard(
+            "treasure_of_xarpa", "Treasure of Xarpa", "シャルパの秘宝",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.001),
+        ) {
+
+        }
+        val CROSSBREEDING = !TraitCard(
+            "crossbreeding", "Crossbreeding", "交雑",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(), listOf(TraitEffectKeyCard.CROSSBREEDING to 0.1),
+        ) {
+
+        }
     }
 
     init {
