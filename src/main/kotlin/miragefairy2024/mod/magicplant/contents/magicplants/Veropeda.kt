@@ -62,6 +62,45 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
     override val family = Identifier(MirageFairy2024.modId, "veropeda")
+    override val possibleTraits = setOf(
+        //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
+        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait, // 浸透吸収
+        //TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
+        //TraitCard.AIR_ADAPTATION.trait, // 空気適応
+        TraitCard.COLD_ADAPTATION.trait, // 寒冷適応
+        TraitCard.WARM_ADAPTATION.trait, // 温暖適応
+        TraitCard.HOT_ADAPTATION.trait, // 熱帯適応
+        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
+        //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
+        //TraitCard.FOUR_LEAFED.trait, // 四つ葉
+        //TraitCard.NODED_STEM.trait, // 節状の茎
+        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 知識の果実
+        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
+        TraitCard.SPINY_LEAVES.trait, // 棘状の葉
+        TraitCard.DESERT_GEM.trait, // 砂漠の宝石
+        //TraitCard.HEATING_MECHANISM.trait, // 発熱機構
+        //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
+        TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
+        //TraitCard.ETHER_PREDATION.trait, // エーテル捕食
+        TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
+        TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
+        //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
+        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
+        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
+        TraitCard.CROSSBREEDING.trait, // 交雑
+    )
 
     val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "veropeda_cluster")
     val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "large_veropeda_cluster")
