@@ -96,9 +96,10 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         // 成長
         if (canGrow(blockState)) {
             val nutrition = traitEffects[TraitEffectKeyCard.NUTRITION.traitEffectKey]
-            val environment = traitEffects[TraitEffectKeyCard.ENVIRONMENT.traitEffectKey]
+            val temperature = traitEffects[TraitEffectKeyCard.TEMPERATURE.traitEffectKey]
+            val humidity = traitEffects[TraitEffectKeyCard.HUMIDITY.traitEffectKey]
             val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
-            val actualGrowthAmount = world.random.randomInt(magicPlantSettings.baseGrowth * 0.2 * nutrition * environment * (1 + growthBoost) * speed)
+            val actualGrowthAmount = world.random.randomInt(magicPlantSettings.baseGrowth * 0.2 * nutrition * temperature * (0.2 + humidity) * (1 + growthBoost) * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlockState(blockPos, newBlockState, NOTIFY_LISTENERS)

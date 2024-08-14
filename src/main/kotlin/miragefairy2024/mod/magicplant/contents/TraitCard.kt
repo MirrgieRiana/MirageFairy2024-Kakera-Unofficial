@@ -63,43 +63,43 @@ class TraitCard(
             "air_adaptation", "Air Adaptation", "空気適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.HUMIDITY to 0.05),
         )
         val COLD_ADAPTATION = !TraitCard(
             "cold_adaptation", "Cold Adaptation", "寒冷適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         )
         val WARM_ADAPTATION = !TraitCard(
             "warm_adaptation", "Warm Adaptation", "温暖適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         )
         val HOT_ADAPTATION = !TraitCard(
             "hot_adaptation", "Hot Adaptation", "熱帯適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         )
         val ARID_ADAPTATION = !TraitCard(
             "arid_adaptation", "Arid Adaptation", "乾燥適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         )
         val MESIC_ADAPTATION = !TraitCard(
             "mesic_adaptation", "Mesic Adaptation", "中湿適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         )
         val HUMID_ADAPTATION = !TraitCard(
             "humid_adaptation", "Humid Adaptation", "湿潤適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         )
 
         val SEEDS_PRODUCTION = !TraitCard(
@@ -168,7 +168,7 @@ class TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘状の葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         )
         val DESERT_GEM = !TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
@@ -180,13 +180,13 @@ class TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         )
         val WATERLOGGING_TOLERANCE = !TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.ENVIRONMENT to 0.1),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         )
         val ADVERSITY_FLOWER = !TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",

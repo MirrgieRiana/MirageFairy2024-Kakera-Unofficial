@@ -26,7 +26,8 @@ enum class TraitEffectKeyCard(
     isLogScale: Boolean,
 ) {
     NUTRITION("nutrition", Emoji.NUTRITION, "Nutrition", "栄養値", 1100.0, Style.EMPTY.withColor(0xCECECE), false),
-    ENVIRONMENT("environment", Emoji.MEDIUM_TEMPERATURE, "Environment", "環境値", 1200.0, Style.EMPTY.withColor(0xA0CC8E), false),
+    TEMPERATURE("temperature", Emoji.MEDIUM_TEMPERATURE, "Temperature Environment", "気温環境値", 1200.0, Style.EMPTY.withColor(0xA0CC8E), false),
+    HUMIDITY("humidity", Emoji.MEDIUM_HUMIDITY, "Humidity Environment", "湿度環境値", 1300.0, Style.EMPTY.withColor(0x8ECCCC), false),
 
     SEEDS_PRODUCTION("seeds_production", Emoji.SEEDS_PRODUCTION, "Seeds Production", "種子生成", 2100.0, Style.EMPTY.withColor(0xFFC587), false),
     FRUITS_PRODUCTION("fruits_production", Emoji.FRUITS_PRODUCTION, "Fruits Production", "果実生成", 2200.0, Style.EMPTY.withColor(0xFF87BF), false),
