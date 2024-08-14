@@ -26,6 +26,8 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
 
         fun of(vararg traitStacks: TraitStack) = of(traitStacks.asIterable())
 
+        val EMPTY = of()
+
         fun readFromNbt(parent: NbtCompound, key: String = "TraitStacks"): TraitStacks? {
             if (!parent.contains(key, NbtElement.LIST_TYPE.toInt())) return null
             return parent.getList(key, NbtElement.COMPOUND_TYPE.toInt()).toTraitStacks()
