@@ -1,6 +1,5 @@
 package miragefairy2024.mod.magicplant
 
-import mirrg.kotlin.hydrogen.or
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -92,16 +91,18 @@ fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block, random: Ran
     val nTraitStackList = mutableListOf<TraitStack>()
     val rTraitStackList = mutableListOf<TraitStack>()
     val sTraitStackList = mutableListOf<TraitStack>()
-    worldGenTraitRecipeRegistry[block].or { listOf() }.forEach { recipe ->
-        if (recipe.condition.canSpawn(world, blockPos)) {
-            val traitStackList = when (recipe.rarity) {
+    if (false) {
+        val trait: Trait = TODO()
+        val spawnSpec: TraitSpawnSpec = TODO()
+        if (spawnSpec.condition.canSpawn(world.getBiome(blockPos))) {
+            val traitStackList = when (spawnSpec.rarity) {
                 TraitSpawnRarity.ALWAYS -> aTraitStackList
                 TraitSpawnRarity.COMMON -> cTraitStackList
                 TraitSpawnRarity.NORMAL -> nTraitStackList
                 TraitSpawnRarity.RARE -> rTraitStackList
                 TraitSpawnRarity.S_RARE -> sTraitStackList
             }
-            traitStackList += TraitStack(recipe.trait, recipe.level)
+            traitStackList += TraitStack(trait, spawnSpec.level)
         }
     }
 
