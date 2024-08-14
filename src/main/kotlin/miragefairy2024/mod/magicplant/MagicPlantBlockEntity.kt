@@ -1,18 +1,19 @@
 package miragefairy2024.mod.magicplant
 
-import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import net.minecraft.world.biome.Biome
 
-class MagicPlantBlockEntity(settings: MagicPlantSettings<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
+class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
 
     private var traitStacks: TraitStacks? = null
 
@@ -47,8 +48,7 @@ class MagicPlantBlockEntity(settings: MagicPlantSettings<*, *>, pos: BlockPos, s
     override fun setWorld(world: World) {
         super.setWorld(world)
         if (traitStacks == null) {
-            val block = world.getBlockState(pos).block
-            val result = spawnTraitStacks(world, pos, block, world.random)
+            val result = spawnTraitStacks(settings.possibleTraits, world.getBiome(pos), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
@@ -83,26 +83,26 @@ class MagicPlantBlockEntity(settings: MagicPlantSettings<*, *>, pos: BlockPos, s
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-fun spawnTraitStacks(world: World, blockPos: BlockPos, block: Block, random: Random): Pair<TraitStacks, Boolean> {
+fun spawnTraitStacks(possibleTraits: Iterable<Trait>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
 
-    // レシピ判定
+    // スポーン条件判定
     val aTraitStackList = mutableListOf<TraitStack>()
     val cTraitStackList = mutableListOf<TraitStack>()
     val nTraitStackList = mutableListOf<TraitStack>()
     val rTraitStackList = mutableListOf<TraitStack>()
     val sTraitStackList = mutableListOf<TraitStack>()
-    if (false) {
-        val trait: Trait = TODO()
-        val spawnSpec: TraitSpawnSpec = TODO()
-        if (spawnSpec.condition.canSpawn(world.getBiome(blockPos))) {
-            val traitStackList = when (spawnSpec.rarity) {
-                TraitSpawnRarity.ALWAYS -> aTraitStackList
-                TraitSpawnRarity.COMMON -> cTraitStackList
-                TraitSpawnRarity.NORMAL -> nTraitStackList
-                TraitSpawnRarity.RARE -> rTraitStackList
-                TraitSpawnRarity.S_RARE -> sTraitStackList
+    possibleTraits.forEach { trait ->
+        trait.spawnSpecs.forEach { spawnSpec ->
+            if (spawnSpec.condition.canSpawn(biome)) {
+                val traitStackList = when (spawnSpec.rarity) {
+                    TraitSpawnRarity.ALWAYS -> aTraitStackList
+                    TraitSpawnRarity.COMMON -> cTraitStackList
+                    TraitSpawnRarity.NORMAL -> nTraitStackList
+                    TraitSpawnRarity.RARE -> rTraitStackList
+                    TraitSpawnRarity.S_RARE -> sTraitStackList
+                }
+                traitStackList += TraitStack(trait, spawnSpec.level)
             }
-            traitStackList += TraitStack(trait, spawnSpec.level)
         }
     }
 
