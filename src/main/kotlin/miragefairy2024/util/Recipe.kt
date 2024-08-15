@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
@@ -8,6 +9,7 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.block.ComposterBlock
+import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder
 import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.RecipeProvider
@@ -15,7 +17,9 @@ import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.EntityType
+import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTable
 import net.minecraft.loot.condition.KilledByPlayerLootCondition
@@ -33,10 +37,16 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.SpecialCraftingRecipe
+import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
+import net.minecraft.world.World
 import net.minecraft.world.biome.Biome
 
 // Crafting
@@ -145,6 +155,33 @@ fun registerBlastingRecipeGeneration(
         builder.offerTo(it, identifier)
     }
     return settings
+}
+
+
+// Special Recipe
+
+context(ModContext)
+fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInventory) -> SpecialRecipeResult?) {
+    val identifier = Identifier(MirageFairy2024.modId, path)
+    lateinit var serializer: SpecialRecipeSerializer<*>
+    serializer = SpecialRecipeSerializer { _, category ->
+        object : SpecialCraftingRecipe(identifier, category) {
+            override fun matches(inventory: RecipeInputInventory, world: World) = matcher(inventory) != null
+            override fun craft(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
+            override fun getRemainder(inventory: RecipeInputInventory): DefaultedList<ItemStack> = matcher(inventory)?.getRemainder() ?: super.getRemainder(inventory)
+            override fun fits(width: Int, height: Int) = width * height >= minSlots
+            override fun getSerializer() = serializer
+        }
+    }
+    serializer.register(Registries.RECIPE_SERIALIZER, identifier)
+    DataGenerationEvents.onGenerateRecipe {
+        ComplexRecipeJsonBuilder.create(serializer).offerTo(it, identifier.string)
+    }
+}
+
+interface SpecialRecipeResult {
+    fun craft(): ItemStack
+    fun getRemainder(): DefaultedList<ItemStack>? = null
 }
 
 
