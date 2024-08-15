@@ -207,9 +207,9 @@ enum class FairyQuestRecipeCard(
 
     val identifier = Identifier(MirageFairy2024.modId, path)
 
-    val titleTranslation = Translation({ "miragefairy2024.fairyQuestRecipe.$path.title" }, enTitle, jaTitle)
-    val messageTranslation = Translation({ "miragefairy2024.fairyQuestRecipe.$path.message" }, enMessage, jaMessage)
-    val clientTranslation = Translation({ "miragefairy2024.fairyQuestRecipe.$path.client" }, enClient, jaClient)
+    val titleTranslation = Translation({ "${MirageFairy2024.modId}.fairyQuestRecipe.$path.title" }, enTitle, jaTitle)
+    val messageTranslation = Translation({ "${MirageFairy2024.modId}.fairyQuestRecipe.$path.message" }, enMessage, jaMessage)
+    val clientTranslation = Translation({ "${MirageFairy2024.modId}.fairyQuestRecipe.$path.client" }, enClient, jaClient)
 
     override val title get() = titleTranslation()
     override val message get() = messageTranslation()

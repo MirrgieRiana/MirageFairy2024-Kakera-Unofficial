@@ -202,7 +202,7 @@ enum class MaterialCard(
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "mirage_flour"))
 val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "wisp"))
 
-val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
+val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 
 context(ModContext)
 fun initMaterialsModule() {

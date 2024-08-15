@@ -33,7 +33,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
     abstract val serializer: Single<BasicDisplay.Serializer<D>>
 }
 
-val COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION = Translation({ "gui.miragefairy2024.common_motif_recipe.always" }, "Always", "常時")
+val COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION = Translation({ "gui.${MirageFairy2024.modId}.common_motif_recipe.always" }, "Always", "常時")
 
 context(ModContext)
 fun initReiModule() {

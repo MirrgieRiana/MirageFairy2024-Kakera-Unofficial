@@ -880,7 +880,7 @@ enum class MotifCard(
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val translation = Translation({ "miragefairy2024.motif.${identifier.toTranslationKey()}" }, enName, jaName)
+    val translation = Translation({ "${MirageFairy2024.modId}.motif.${identifier.toTranslationKey()}" }, enName, jaName)
     override val displayName = translation()
     override val parents get() = parentMotifs.get()
     override val passiveSkillSpecifications = passiveSkillBuilder.specifications
