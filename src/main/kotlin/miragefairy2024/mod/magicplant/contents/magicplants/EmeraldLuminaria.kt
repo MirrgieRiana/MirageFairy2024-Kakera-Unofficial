@@ -18,7 +18,6 @@ import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.MapColor
-import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
@@ -59,7 +58,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
     )
 
     override val drops = listOf(Items.EMERALD)
-    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(Items.EMERALD.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
     override val family = Identifier(MirageFairy2024.modId, "luminaria")
     override val possibleTraits = setOf(

@@ -15,7 +15,6 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.block.MapColor
-import net.minecraft.item.ItemStack
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
@@ -57,8 +56,8 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
     override val baseFruitGeneration = 9.0
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.FAIRY_CRYSTAL.item)
-    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
-    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
+    override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
     override val family = Identifier(MirageFairy2024.modId, "mirage")
     override val possibleTraits = setOf(

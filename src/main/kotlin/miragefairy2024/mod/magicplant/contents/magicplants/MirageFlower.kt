@@ -64,9 +64,9 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     )
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
-    override fun getFruitDrops(count: Int, random: Random): List<ItemStack> = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
+    override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
     override val family = Identifier(MirageFairy2024.modId, "mirage")
     override val possibleTraits = setOf(
