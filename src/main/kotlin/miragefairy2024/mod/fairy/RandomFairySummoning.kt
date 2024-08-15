@@ -1,5 +1,6 @@
 package miragefairy2024.mod.fairy
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
 import miragefairy2024.mod.sync
@@ -42,8 +43,8 @@ import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import kotlin.math.pow
 
-val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
-val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.miragefairy2024.mirage_flour.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
+val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
+val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
 
 context(ModContext)
 fun initRandomFairySummoning() {

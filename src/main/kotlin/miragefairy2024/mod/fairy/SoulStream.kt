@@ -35,8 +35,8 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
-private val SOUL_STREAM_TRANSLATION = Translation({ "container.miragefairy2024.soul_stream" }, "Soul Stream", "ソウルストリーム")
-val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.miragefairy2024.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
+private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.modId}.soul_stream" }, "Soul Stream", "ソウルストリーム")
+val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.modId}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
 context(ModContext)
 fun initSoulStream() {

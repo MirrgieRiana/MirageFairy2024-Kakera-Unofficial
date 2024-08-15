@@ -73,8 +73,8 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkil
     class Value(val map: Map<Motif?, Double>)
 
     override val isPreprocessor = true
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
-    private val familyTranslation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}.family" }, "%s Family", "%s系統")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Mana", "魔力")
+    private val familyTranslation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}.family" }, "%s Family", "%s系統")
     override fun getText(value: Value): Text {
         return value.map.map { (motif, value) ->
             text { translation() + ": "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() + if (motif != null) " ("() + familyTranslation(motif.displayName) + ")"() else empty() }
@@ -183,7 +183,7 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
 }
 
 object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Ignition", "発火")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Ignition", "発火")
     override fun getText(value: Boolean) = text { if (value) translation() else empty() }
     override val unit = false
     override fun castOrThrow(value: Any?) = value as Boolean
@@ -208,7 +208,7 @@ abstract class DoublePassiveSkillEffectCard(path: String) : PassiveSkillEffectCa
 }
 
 object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue > 0.0) {
@@ -226,7 +226,7 @@ object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience")
 }
 
 object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regeneration") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Regeneration: %s/s", "持続回復: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Regeneration: %s/s", "持続回復: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue > 0.0) {
@@ -243,7 +243,7 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
 }
 
 object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Hunger: %s/s", "空腹: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Hunger: %s/s", "空腹: %s/秒")
     override fun getText(value: Double) = text { translation(-value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
@@ -257,7 +257,7 @@ object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
 }
 
 object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Mending: %s/s", "修繕: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Mending: %s/s", "修繕: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
@@ -271,7 +271,7 @@ object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
 }
 
 object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection") {
-    private val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}" }, "Collection: %s/s", "収集: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}" }, "Collection: %s/s", "収集: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         val world = context.world
@@ -309,13 +309,13 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
         FALL("fall", "Fall", "落下", { it.isIn(DamageTypeTags.IS_FALL) }),
         ;
 
-        val translation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}.elements.$path" }, enName, jaName)
+        val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}.elements.$path" }, enName, jaName)
         override val text = translation()
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
 
-    private val attackTranslation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}.attack" }, "%s Attack", "%s攻撃力")
-    private val defenceTranslation = Translation({ "miragefairy2024.passive_skill_type.${identifier.toTranslationKey()}.defence" }, "%s Defence", "%s防御力")
+    private val attackTranslation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}.attack" }, "%s Attack", "%s攻撃力")
+    private val defenceTranslation = Translation({ "${MirageFairy2024.modId}.passive_skill_type.${identifier.toTranslationKey()}.defence" }, "%s Defence", "%s防御力")
     override fun getText(value: Value): Text {
         return listOf(
             value.attackMap.map { (element, value) ->
