@@ -13,6 +13,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import kotlin.math.pow
 
@@ -52,7 +53,13 @@ enum class TraitEffectKeyCard(
             override val sortValue = sortValue
             override val style = style
             override fun getValue(level: Double) = 1 - 0.5.pow(level)
-            override fun getDescription(value: Double) = text { name + (value * 100 formatAs "%+.1f%%")() }
+            override fun renderValue(value: Double): Text {
+                return when {
+                    value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
+                    else -> text { (value * 100.0 formatAs "%.0f%%")() }
+                }
+            }
+
             override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
             override fun getDefaultValue() = 0.0
         }
@@ -63,7 +70,13 @@ enum class TraitEffectKeyCard(
             override val sortValue = sortValue
             override val style = style
             override fun getValue(level: Double) = level
-            override fun getDescription(value: Double) = text { name + (value * 100 formatAs "%+.1f%%")() }
+            override fun renderValue(value: Double): Text {
+                return when {
+                    value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
+                    else -> text { (value * 100.0 formatAs "%.0f%%")() }
+                }
+            }
+
             override fun plus(a: Double, b: Double) = a + b
             override fun getDefaultValue() = 0.0
         }

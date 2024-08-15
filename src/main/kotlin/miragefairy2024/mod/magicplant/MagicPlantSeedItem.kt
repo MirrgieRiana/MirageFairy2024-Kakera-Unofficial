@@ -82,8 +82,11 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
                 tooltip += if (traitEffects != null) {
                     val description = text {
                         traitEffects.effects
-                            .map { it.getDescription() }
-                            .reduce { a, b -> a + ","() + b }
+                            .map {
+                                fun <T : Any> TraitEffect<T>.render() = text { this@render.key.emoji + this@render.key.renderValue(this@render.value) }
+                                it.render()
+                            }
+                            .reduce { a, b -> a + " "() + b }
                     }
                     text { ("  "() + trait.getName() + " "() + levelText + " ("() + description + ")"()).style(trait.style) }
                 } else {
