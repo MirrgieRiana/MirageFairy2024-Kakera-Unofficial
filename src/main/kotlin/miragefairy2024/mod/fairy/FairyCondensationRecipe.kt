@@ -22,13 +22,13 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
-enum class SpecialRecipeCard(path: String, creator: (CraftingRecipeCategory, SpecialRecipeCard) -> CraftingRecipe) {
+enum class SpecialRecipeCard(path: String, creator: (SpecialRecipeCard, CraftingRecipeCategory) -> CraftingRecipe) {
     FAIRY_CONDENSATION("fairy_condensation", ::FairyCondensationRecipe),
     FAIRY_DECONDENSATION("fairy_decondensation", ::FairyDecondensationRecipe),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
-    val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { _, category -> creator(category, this) }
+    val serializer: SpecialRecipeSerializer<*> = SpecialRecipeSerializer { _, category -> creator(this, category) }
 }
 
 context(ModContext)
@@ -41,7 +41,7 @@ fun initFairyCondensationRecipe() {
     }
 }
 
-private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(card.identifier, category) {
+private class FairyCondensationRecipe(val card: SpecialRecipeCard, category: CraftingRecipeCategory) : SpecialCraftingRecipe(card.identifier, category) {
 
     private interface MatchResult {
         fun craft(): ItemStack
@@ -83,7 +83,7 @@ private class FairyCondensationRecipe(category: CraftingRecipeCategory, val card
     override fun getSerializer() = card.serializer
 }
 
-private class FairyDecondensationRecipe(category: CraftingRecipeCategory, val card: SpecialRecipeCard) : SpecialCraftingRecipe(card.identifier, category) {
+private class FairyDecondensationRecipe(val card: SpecialRecipeCard, category: CraftingRecipeCategory) : SpecialCraftingRecipe(card.identifier, category) {
 
     private interface MatchResult {
         fun craft(): ItemStack
