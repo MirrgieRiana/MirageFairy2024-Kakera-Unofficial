@@ -19,9 +19,7 @@ fun initFairyCondensationRecipe() {
         val notEmptyItemStacks = itemStacks.filter { it.isNotEmpty }
 
         // 余計なアイテムが入っていたら失敗
-        notEmptyItemStacks.forEach {
-            if (!it.isOf(FairyCard.item)) return@registerSpecialRecipe null
-        }
+        if (notEmptyItemStacks.any { !it.isOf(FairyCard.item) }) return@registerSpecialRecipe null
 
         // 2個以上無ければ失敗
         if (notEmptyItemStacks.size < 2) return@registerSpecialRecipe null
