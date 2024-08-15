@@ -10,7 +10,7 @@ object ModEvents {
 }
 
 object MirageFairy2024 : ModInitializer {
-    val modId = "miragefairy2024"
+    val modId = "miragefairy2024" // TODO リファクタリング
     override fun onInitialize() {
         Modules.init()
         ModEvents.onRegistration.fire { it() }

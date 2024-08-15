@@ -184,6 +184,12 @@ interface SpecialRecipeResult {
     fun getRemainder(): DefaultedList<ItemStack>? = null
 }
 
+fun MutableList<ItemStack>.pull(predicate: (ItemStack) -> Boolean): ItemStack? {
+    val index = this.indexOfFirst { predicate(it) }
+    if (index == -1) return null
+    return this.removeAt(index)
+}
+
 
 // Others
 
