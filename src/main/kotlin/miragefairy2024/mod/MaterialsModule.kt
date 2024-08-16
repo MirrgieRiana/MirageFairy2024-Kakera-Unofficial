@@ -2,14 +2,23 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.fairy.FairyCard
+import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
+import miragefairy2024.mod.fairy.createFairyItemStack
+import miragefairy2024.mod.fairy.getFairyCondensation
+import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.isNotEmpty
+import miragefairy2024.util.itemStacks
 import miragefairy2024.util.modId
 import miragefairy2024.util.noGroup
 import miragefairy2024.util.on
+import miragefairy2024.util.pull
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
@@ -23,6 +32,7 @@ import miragefairy2024.util.registerMobDrop
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
+import miragefairy2024.util.registerSpecialRecipe
 import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.effect.StatusEffectInstance
@@ -196,47 +206,65 @@ enum class MaterialCard(
     MINA_1(
         "mina_1", "1 Mina", "1ミナ",
         PoemList(0)
-            .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい"),
+            .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(1, it) },
     ),
     MINA_5(
         "mina_5", "5 Mina", "5ミナ",
         PoemList(0)
-            .poem("Fairy snack", "ご縁があるよ"),
+            .poem("Fairy snack", "ご縁があるよ")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(5, it) },
     ),
     MINA_10(
         "mina_10", "10 Mina", "10ミナ",
         PoemList(0)
-            .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。"),
+            .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(10, it) },
     ),
     MINA_50(
         "mina_50", "50 Mina", "50ミナ",
         PoemList(0)
-            .poem("The Society failed to replicate this.", "形而上学的有機結晶"),
+            .poem("The Society failed to replicate this.", "形而上学的有機結晶")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(50, it) },
     ),
     MINA_100(
         "mina_100", "100 Mina", "100ミナ",
         PoemList(0)
-            .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。"),
+            .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(100, it) },
     ),
     MINA_500(
         "mina_500", "500 Mina", "500ミナ",
         PoemList(0)
-            .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。"),
+            .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(500, it) },
     ),
     MINA_1000(
         "mina_1000", "1000 Mina", "1000ミナ",
         PoemList(0)
-            .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。"),
+            .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(1000, it) },
     ),
     MINA_5000(
         "mina_5000", "5000 Mina", "5000ミナ",
         PoemList(0)
-            .poem("The price of a soul.", "魂の値段。"),
+            .poem("The price of a soul.", "魂の値段。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(5000, it) },
     ),
     MINA_10000(
         "mina_10000", "10000 Mina", "10000ミナ",
         PoemList(0)
-            .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。"),
+            .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
+            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        creator = { MinaItem(10000, it) },
     ),
 
     APOSTLE_WAND(
@@ -256,6 +284,7 @@ val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(Mir
 val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "wisp"))
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
+val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mina.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
 
 context(ModContext)
 fun initMaterialsModule() {
@@ -270,6 +299,7 @@ fun initMaterialsModule() {
     }
 
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
+    MINA_DESCRIPTION_TRANSLATION.enJa()
 
     fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
         registerShapedRecipeGeneration(high.item) {
@@ -378,7 +408,42 @@ fun initMaterialsModule() {
     registerMinaRecipeGeneration(MaterialCard.MINA_1000.item, MaterialCard.MINA_5000.item, 5)
     registerMinaRecipeGeneration(MaterialCard.MINA_5000.item, MaterialCard.MINA_10000.item, 2)
 
+    // ミーニャ⇔ミナ両替
+    registerSpecialRecipe("minia_from_mina", 1) { inventory ->
+        val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
+        if (itemStacks.pull { it.isOf(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
+        val itemStack = itemStacks.pull { true } ?: return@registerSpecialRecipe null // アイテム取得
+        if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
+        val item = itemStack.item as? MinaItem ?: return@registerSpecialRecipe null // そのアイテムはミナでなければならない
+        object : SpecialRecipeResult {
+            override fun craft() = MotifCard.MINA.createFairyItemStack(condensation = item.mina)
+        }
+    }
+    registerSpecialRecipe("mina_from_minia", 1) { inventory ->
+        val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
+        if (itemStacks.pull { it.isOf(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
+        val fairyItemStack = itemStacks.pull { it.isOf(FairyCard.item) && it.getFairyMotif() == MotifCard.MINA } ?: return@registerSpecialRecipe null // ミーニャ取得
+        if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
+        val item = when (fairyItemStack.getFairyCondensation()) {
+            1 -> MaterialCard.MINA_1.item
+            5 -> MaterialCard.MINA_5.item
+            10 -> MaterialCard.MINA_10.item
+            50 -> MaterialCard.MINA_50.item
+            100 -> MaterialCard.MINA_100.item
+            500 -> MaterialCard.MINA_500.item
+            1000 -> MaterialCard.MINA_1000.item
+            5000 -> MaterialCard.MINA_5000.item
+            10000 -> MaterialCard.MINA_10000.item
+            else -> return@registerSpecialRecipe null
+        }
+        object : SpecialRecipeResult {
+            override fun craft() = item.createItemStack()
+        }
+    }
+
 }
+
+class MinaItem(val mina: Int, settings: Settings) : Item(settings)
 
 class ApostleWandItem(settings: Settings) : Item(settings) {
     override fun hasRecipeRemainder() = true
