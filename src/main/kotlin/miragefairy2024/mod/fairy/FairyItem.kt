@@ -216,7 +216,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
                 ": x${stack.getFairyCondensation()}"(),
                 if (stack.count != 1) " *${stack.count}"() else empty(),
                 *(if (context.isAdvanced) listOf(
-                    "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0})"(), // TODO もっといい表示に
+                    "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.entries?.size ?: 0})"(), // TODO もっといい表示に
                 ) else listOf()).toTypedArray()
             ).join().green
         }
