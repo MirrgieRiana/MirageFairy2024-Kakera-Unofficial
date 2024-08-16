@@ -358,6 +358,26 @@ fun initMaterialsModule() {
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
+    // ミナ両替
+    fun registerMinaRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
+        registerShapelessRecipeGeneration(higherItem, count = 1) {
+            repeat(count) {
+                input(lowerItem)
+            }
+        } on lowerItem from lowerItem
+        registerShapelessRecipeGeneration(lowerItem, count = count) {
+            input(higherItem)
+        } on higherItem from higherItem
+    }
+    registerMinaRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
+    registerMinaRecipeGeneration(MaterialCard.MINA_5.item, MaterialCard.MINA_10.item, 2)
+    registerMinaRecipeGeneration(MaterialCard.MINA_10.item, MaterialCard.MINA_50.item, 5)
+    registerMinaRecipeGeneration(MaterialCard.MINA_50.item, MaterialCard.MINA_100.item, 2)
+    registerMinaRecipeGeneration(MaterialCard.MINA_100.item, MaterialCard.MINA_500.item, 5)
+    registerMinaRecipeGeneration(MaterialCard.MINA_500.item, MaterialCard.MINA_1000.item, 2)
+    registerMinaRecipeGeneration(MaterialCard.MINA_1000.item, MaterialCard.MINA_5000.item, 5)
+    registerMinaRecipeGeneration(MaterialCard.MINA_5000.item, MaterialCard.MINA_10000.item, 2)
+
 }
 
 class ApostleWandItem(settings: Settings) : Item(settings) {
