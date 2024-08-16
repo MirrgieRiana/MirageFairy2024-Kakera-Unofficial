@@ -37,6 +37,7 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.predicate.entity.LocationPredicate
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.RecipeCategory
@@ -168,16 +169,9 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInve
         object : SpecialCraftingRecipe(identifier, category) {
             override fun matches(inventory: RecipeInputInventory, world: World) = matcher(inventory) != null
             override fun craft(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
-            override fun getRemainder(inventory: RecipeInputInventory): DefaultedList<ItemStack> {
-                return matcher(inventory)?.getRemainder() ?: run {
-                    val defaultedList = DefaultedList.ofSize(inventory.size, EMPTY_ITEM_STACK)
-                    repeat(defaultedList.size) { i ->
-                        val item = inventory.getStack(i).item
-                        if (item.hasRecipeRemainder()) defaultedList[i] = item.recipeRemainder!!.createItemStack()
-                    }
-                    defaultedList
-                }
-            }
+            override fun getRemainder(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
+                override fun getRemainder(inventory: RecipeInputInventory) = super.getRemainder(inventory)
+            }.getRemainder(inventory)
 
             override fun fits(width: Int, height: Int) = width * height >= minSlots
             override fun getSerializer() = serializer
