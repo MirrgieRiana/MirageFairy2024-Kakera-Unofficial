@@ -441,6 +441,14 @@ fun initMaterialsModule() {
         }
     }
 
+    // 使徒のステッキ
+    registerShapedRecipeGeneration(MaterialCard.APOSTLE_WAND.item) {
+        pattern(" G")
+        pattern("S ")
+        input('S', MaterialCard.MIRAGE_STEM.item)
+        input('G', Items.GOLD_INGOT)
+    } on MaterialCard.MIRAGE_STEM.item
+
 }
 
 class MinaItem(val mina: Int, settings: Settings) : Item(settings)
