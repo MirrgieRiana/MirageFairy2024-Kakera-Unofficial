@@ -4,7 +4,6 @@ import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.times
-import net.minecraft.util.Identifier
 
 class NinePatchTextureCard(
     path: String,
@@ -21,7 +20,7 @@ class NinePatchTextureCard(
         val entries = listOf(FAIRY_QUEST_CARD_MESSAGE, TRAIT_BACKGROUND)
     }
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val texture = "textures/gui/" * identifier * ".png"
 }
 

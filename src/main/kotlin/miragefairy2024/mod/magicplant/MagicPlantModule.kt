@@ -14,7 +14,6 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
-import net.minecraft.util.Identifier
 
 val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     MirageFlowerCard,
@@ -29,7 +28,7 @@ val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mag
 val INVALID_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.magic_plant.invalid" }, "Invalid", "無効")
 
 val magicPlantSeedItemGroupCard = ItemGroupCard(
-    Identifier(MirageFairy2024.modId, "magic_plant_seeds"), "Magic Plant Seeds", "魔法植物の種子",
+    MirageFairy2024.identifier("magic_plant_seeds"), "Magic Plant Seeds", "魔法植物の種子",
 ) { MirageFlowerCard.item.createItemStack() }
 
 context(ModContext)

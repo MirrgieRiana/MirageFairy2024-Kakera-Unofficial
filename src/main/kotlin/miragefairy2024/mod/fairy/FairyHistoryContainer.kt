@@ -13,11 +13,10 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.Identifier
 
 context(ModContext)
 fun initFairyHistoryContainer() {
-    FairyHistoryContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "fairy_history_container"))
+    FairyHistoryContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_history_container"))
 }
 
 object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyHistoryContainer> {

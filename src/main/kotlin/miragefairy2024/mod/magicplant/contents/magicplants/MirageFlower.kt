@@ -29,7 +29,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
@@ -68,7 +67,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
-    override val family = Identifier(MirageFairy2024.modId, "mirage")
+    override val family = MirageFairy2024.identifier("mirage")
     override val possibleTraits = setOf(
         TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -110,12 +109,12 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     )
 
     val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
-    val MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster")
-    val LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "large_mirage_cluster")
-    val MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster")
-    val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "nether_mirage_cluster")
-    val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "mirage_cluster_fairy_forest")
-    val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "large_mirage_cluster")
+    val MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("mirage_cluster")
+    val LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_mirage_cluster")
+    val MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("mirage_cluster")
+    val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("nether_mirage_cluster")
+    val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("mirage_cluster_fairy_forest")
+    val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("large_mirage_cluster")
 
     context(ModContext)
     override fun init() {
@@ -125,7 +124,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
         run {
 
             // Fairy Ring Feature
-            FAIRY_RING_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_ring"))
+            FAIRY_RING_FEATURE.register(Registries.FEATURE, MirageFairy2024.identifier("fairy_ring"))
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {

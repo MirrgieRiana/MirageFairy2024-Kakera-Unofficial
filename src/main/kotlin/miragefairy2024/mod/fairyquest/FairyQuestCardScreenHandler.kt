@@ -32,7 +32,7 @@ val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy202
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
-    fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+    fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("fairy_quest_card"))
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 

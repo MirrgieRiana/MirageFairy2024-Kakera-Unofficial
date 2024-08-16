@@ -15,7 +15,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
 import net.minecraft.world.GameRules
 import java.time.Instant
 
@@ -23,7 +22,7 @@ context(ModContext)
 fun initLastFoodModule() {
 
     // 拡張プレイヤーデータ
-    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "last_food"))
+    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
 
     EatFoodCallback.EVENT.register { entity, world, stack ->
         if (world.isClient) return@register

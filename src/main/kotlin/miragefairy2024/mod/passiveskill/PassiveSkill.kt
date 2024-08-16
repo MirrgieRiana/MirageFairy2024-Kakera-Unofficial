@@ -42,7 +42,7 @@ interface PassiveSkillCondition {
 }
 
 
-val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "passive_skill_effect"))
+val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("passive_skill_effect"))
 val passiveSkillEffectRegistry: Registry<PassiveSkillEffect<*>> = FabricRegistryBuilder.createSimple(passiveSkillEffectRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface PassiveSkillEffect<T> {

@@ -19,7 +19,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.Feature
@@ -59,7 +58,7 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
 
-    override val family = Identifier(MirageFairy2024.modId, "mirage")
+    override val family = MirageFairy2024.identifier("mirage")
     override val possibleTraits = setOf(
         TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -100,8 +99,8 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
         TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
-    val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "phantom_cluster")
-    val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "phantom_cluster")
+    val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
+    val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
 
     context(ModContext)
     override fun init() {

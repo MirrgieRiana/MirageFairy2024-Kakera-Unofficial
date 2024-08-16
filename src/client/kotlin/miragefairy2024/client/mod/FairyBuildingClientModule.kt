@@ -19,7 +19,6 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import java.util.Optional
 import kotlin.math.roundToInt
 
@@ -37,7 +36,7 @@ fun initFairyBuildingClientModule() {
 open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, H>, arguments: Arguments<H>) :
     HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
-        val SPRITES_TEXTURE = Identifier(MirageFairy2024.modId, "textures/gui/sprites/fairy_building.png")
+        val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
 
     class Arguments<H : FairyBuildingScreenHandler>(val handler: H, val playerInventory: PlayerInventory, val title: Text)

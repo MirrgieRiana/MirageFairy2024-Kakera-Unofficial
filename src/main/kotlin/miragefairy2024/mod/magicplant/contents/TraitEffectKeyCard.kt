@@ -14,7 +14,6 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.text.Style
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import kotlin.math.pow
 
 enum class TraitEffectKeyCard(
@@ -44,7 +43,7 @@ enum class TraitEffectKeyCard(
     CROSSBREEDING("crossbreeding", Emoji.CROSSBREEDING, "Crossbreeding", "交雑", 4300.0, Style.EMPTY.withColor(0xFFA011), true),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait_effect") }, enName, jaName)
     val traitEffectKey = if (isLogScale) {
         object : TraitEffectKey<Double>() {

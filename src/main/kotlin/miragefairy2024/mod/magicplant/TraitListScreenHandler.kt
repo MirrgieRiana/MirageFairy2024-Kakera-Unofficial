@@ -19,7 +19,6 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.util.Identifier
 
 val traitListScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY, TraitListScreenHandler.read(buf))
@@ -29,7 +28,7 @@ val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.modId}.tra
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    traitListScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "trait_list"))
+    traitListScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("trait_list"))
     traitListScreenTranslation.enJa()
 }
 

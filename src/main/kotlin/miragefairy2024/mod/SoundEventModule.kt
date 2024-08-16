@@ -8,7 +8,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import net.minecraft.registry.Registries
 import net.minecraft.sound.SoundEvent
-import net.minecraft.util.Identifier
 
 enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: List<String>) {
     MAGIC1("magic1", "Magic fired", "魔法が発射される", listOf("magic1")),
@@ -19,8 +18,8 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
     COLLECT("collect", "Collect item", "アイテムを集める", listOf("collect")),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
-    val sounds = soundPaths.map { Identifier(MirageFairy2024.modId, it) }
+    val identifier = MirageFairy2024.identifier(path)
+    val sounds = soundPaths.map { MirageFairy2024.identifier(it) }
     val translation = Translation({ identifier.toTranslationKey("subtitles") }, en, ja)
     val soundEvent: SoundEvent = SoundEvent.of(identifier)
 }

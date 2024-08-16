@@ -45,7 +45,6 @@ import net.minecraft.loot.LootTables
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
 import kotlin.math.pow
 
 enum class MaterialCard(
@@ -274,14 +273,14 @@ enum class MaterialCard(
     ),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val item = Item.Settings()
         .let { if (foodComponent != null) it.food(foodComponent) else it }
         .let { creator(it) }
 }
 
-val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "mirage_flour"))
-val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(MirageFairy2024.modId, "wisp"))
+val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
+val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("wisp"))
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mina.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")

@@ -22,7 +22,6 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BiomeTags
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.GenerationSettings
@@ -45,7 +44,7 @@ import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
 
-val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, Identifier(MirageFairy2024.modId, "fairy"))
+val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, MirageFairy2024.identifier("fairy"))
 
 @Suppress("unused")
 object BiomeCards {
@@ -74,7 +73,7 @@ abstract class BiomeCard(
     context(ModContext)
     open fun init() = Unit
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val registryKey = RegistryKeys.BIOME with identifier
     val translation = Translation({ identifier.toTranslationKey("biome") }, en, ja)
 }

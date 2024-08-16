@@ -18,7 +18,6 @@ import miragefairy2024.util.temperatureCategory
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.Heightmap
 import net.minecraft.world.World
@@ -45,7 +44,7 @@ enum class TraitConditionCard(
     NATURAL("natural", Emoji.NATURAL, "Natural", "天然", { world, blockPos -> if (world.getMagicPlantBlockEntity(blockPos)?.isNatural() == true) 1.0 else 0.0 }),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait_condition") }, enName, jaName)
     val traitCondition = object : TraitCondition {
         override val emoji = emoji()

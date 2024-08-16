@@ -19,7 +19,6 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.util.Identifier
 
 context(ModContext)
 fun initToolModule() {
@@ -55,7 +54,7 @@ class ToolCard<I : Item>(
     private val type: ToolType<I>,
     private val initializer: context(ModContext)ToolCard<I>.() -> Unit = {},
 ) {
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val item = type.createItem()
 
     context(ModContext)

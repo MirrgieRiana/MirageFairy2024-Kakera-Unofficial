@@ -75,7 +75,7 @@ enum class OreCard(
     ),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val block = run {
         val settings = when (baseStoneType) {
             STONE -> FabricBlockSettings.create()
@@ -101,14 +101,14 @@ enum class OreCard(
         }
         OreModelCard.model.with(
             TextureKey.BACK to baseStoneTexture,
-            TextureKey.FRONT to "block/" * Identifier(MirageFairy2024.modId, texturePath),
+            TextureKey.FRONT to "block/" * MirageFairy2024.identifier(texturePath),
         )
     }
 }
 
 object OreModelCard {
     val parentModel = createOreModel()
-    val identifier = Identifier(MirageFairy2024.modId, "block/ore")
+    val identifier = MirageFairy2024.identifier("block/ore")
     val model = Model(identifier, TextureKey.BACK, TextureKey.FRONT)
 }
 

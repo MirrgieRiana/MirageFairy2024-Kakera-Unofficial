@@ -84,7 +84,7 @@ enum class BlockMaterialCard(
     ),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val block = run {
         val settings = AbstractBlock.Settings.create()
         settings.mapColor(mapColor)

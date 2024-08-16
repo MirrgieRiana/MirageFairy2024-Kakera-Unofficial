@@ -21,7 +21,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.Feature
@@ -57,7 +56,7 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
     override val drops = listOf(Items.DIAMOND)
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
-    override val family = Identifier(MirageFairy2024.modId, "luminaria")
+    override val family = MirageFairy2024.identifier("luminaria")
     override val possibleTraits = setOf(
         //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -98,8 +97,8 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
         TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
-    val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "diamond_luminaria_cluster")
-    val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "diamond_luminaria_cluster")
+    val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
+    val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
 
     context(ModContext)
     override fun init() {

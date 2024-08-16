@@ -62,7 +62,7 @@ import kotlin.math.roundToInt
 object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
-    val identifier = Identifier(MirageFairy2024.modId, "fairy")
+    val identifier = MirageFairy2024.identifier("fairy")
     val item = FairyItem(Item.Settings().fireproof())
 }
 
@@ -73,7 +73,7 @@ private val CONDENSATION_TRANSLATION = Translation({ "item.${MirageFairy2024.mod
 private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 val fairiesItemGroupCard = ItemGroupCard(
-    Identifier(MirageFairy2024.modId, "fairies"), "Fairies", "妖精",
+    MirageFairy2024.identifier("fairies"), "Fairies", "妖精",
 ) { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() }
 
 context(ModContext)
@@ -140,11 +140,11 @@ private fun createFairyModel() = Model {
     ModelData(
         parent = Identifier("item/generated"),
         textures = ModelTexturesData(
-            "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_skin").string,
-            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_front").string,
-            "layer2" to Identifier(MirageFairy2024.modId, "item/fairy_back").string,
-            "layer3" to Identifier(MirageFairy2024.modId, "item/fairy_hair").string,
-            "layer4" to Identifier(MirageFairy2024.modId, "item/fairy_dress").string,
+            "layer0" to MirageFairy2024.identifier("item/fairy_skin").string,
+            "layer1" to MirageFairy2024.identifier("item/fairy_front").string,
+            "layer2" to MirageFairy2024.identifier("item/fairy_back").string,
+            "layer3" to MirageFairy2024.identifier("item/fairy_hair").string,
+            "layer4" to MirageFairy2024.identifier("item/fairy_dress").string,
         ),
     )
 }

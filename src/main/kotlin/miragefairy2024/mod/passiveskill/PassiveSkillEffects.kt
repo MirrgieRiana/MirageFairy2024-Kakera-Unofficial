@@ -30,7 +30,6 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import java.util.UUID
 
 context(ModContext)
@@ -62,7 +61,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
         val ELEMENT = +ElementPassiveSkillEffect
     }
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     context(ModContext)
     open fun init() = Unit
 
