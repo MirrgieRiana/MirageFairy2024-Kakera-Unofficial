@@ -44,8 +44,8 @@ class TraitCard(
 
         val ETHER_RESPIRATION = !TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Through the action of the astral radiation, ether is vaporized, generating a vortex of souls. Since the appearance of etherobacteria billions of years ago, the universe has been filled with life forms possessing will.",
+            "情緒体の作用によってエーテルを気化し、魂の渦を生成する。数十億年前にエテロバクテリアが姿を現して以来、宇宙には意志を持った生命で溢れた。",
             listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.ALWAYS)
@@ -55,8 +55,8 @@ class TraitCard(
         }
         val PHOTOSYNTHESIS = !TraitCard(
             "photosynthesis", "Photosynthesis", "光合成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Through the energy of light, oxygen and organic matter are produced from water and carbon dioxide. Photosynthesis is a fundamental life activity of plants, alongside etheric respiration, and it supports the existence of many organisms, including herbivores, carnivores, and humans.",
+            "光のエネルギーにより、水と二酸化炭素から酸素と有機物が生産される。光合成はエーテル呼吸と並ぶ植物の生命活動の根幹であり、草食動物、肉食動物、人間など、多くの生物の存在を成り立たせている。",
             listOf(TraitConditionCard.LIGHT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.SNOWY }
@@ -234,8 +234,8 @@ class TraitCard(
 
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
-            "TODO", // TODO
-            "TODO", // TODO
+            "A powerful light illuminates the world. A gentle breeze sways the trees. Mirage petals brush against the cheeks. Swirling pollen comes together, transforming into the body of a fairy. The fairy knows. The fate of everything in this world.",
+            "力強い光が世界を照らす。柔らかな風が木々を揺らす。ミラージュの花びらが頬を撫でる。渦巻く花粉は一つになり、妖精へと姿を変える。妖精は知っている。この世のすべての運命を。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             //register("1000", )
@@ -356,8 +356,8 @@ class TraitCard(
         }
         val NATURAL_ABSCISSION = !TraitCard(
             "natural_abscission", "Natural Abscission", "自然落果",
-            "TODO", // TODO
-            "TODO", // TODO
+            "A part of the plant's body falls off and drops to the ground. The wind, animals, and sometimes even humans carry it far away. For the plant, the automation of harvesting is merely a means of reproduction.",
+            "植物の体の一部が欠落し、地面に落ちる。それを風や動物、ときには人間が遠くへ運ぶ。収穫の自動化は、植物にとっては繁殖の手段にすぎないのだ。",
             listOf(), listOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE)
@@ -378,8 +378,8 @@ class TraitCard(
         }
         val ETHER_PREDATION = !TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
-            "TODO", // TODO
-            "TODO", // TODO
+            "All living beings possess an etheric soul. If that is the case, where do the souls of fairies come from? In a sense, the Mirage is a carnivorous plant.",
+            "生きとし生ける者はみな、エーテルの魂を持つ。なれば、妖精の魂はどこから来るのか？ミラージュはある意味肉食植物だ。",
             listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { end }
@@ -411,8 +411,8 @@ class TraitCard(
         }
         val PHANTOM_FLOWER = !TraitCard(
             "phantom_flower", "Phantom Flower", "幻の花",
-            "TODO", // TODO
-            "TODO", // TODO
+            "A phantom flower that blooms in the distant land of fairies. Is its true nature that of an illusory flower? Or is it a flower that shows illusions?",
+            "遥か妖精の地に咲く幻の花。その正体は幻のような花か？幻を見せる花か？",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             //register("1000", )
@@ -422,8 +422,8 @@ class TraitCard(
         }
         val ETERNAL_TREASURE = !TraitCard(
             "eternal_treasure", "Eternal Treasure", "悠久の秘宝",
-            "TODO", // TODO
-            "TODO", // TODO
+            "A mysterious fruit shown by nature. Many greedy humans attempted to cultivate it, but not a single one succeeded, or so the story goes.",
+            "自然が見せる神秘の果実。多くの欲深き人間がその栽培化を試みたものの、成功した者は誰一人として居なかったという。",
             listOf(TraitConditionCard.NATURAL), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.COMMON)
@@ -433,8 +433,8 @@ class TraitCard(
         }
         val TREASURE_OF_XARPA = !TraitCard(
             "treasure_of_xarpa", "Treasure of Xarpa", "シャルパの秘宝",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
+            "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.001),
         ) {
             register("1000", TraitSpawnRarity.RARE) { +BiomeKeys.DEEP_DARK }
@@ -445,8 +445,8 @@ class TraitCard(
         }
         val CROSSBREEDING = !TraitCard(
             "crossbreeding", "Crossbreeding", "交雑",
-            "TODO", // TODO
-            "TODO", // TODO
+            "By crossbreeding with different species of plants within the same family, it is possible to introduce genetic traits that the original plant species does not naturally possess.",
+            "同じ科の異種の植物との交配により、その植物種には本来備わらない遺伝的形質を持たせることができる。",
             listOf(), listOf(TraitEffectKeyCard.CROSSBREEDING to 0.1),
         ) {
             //register("1000", )
