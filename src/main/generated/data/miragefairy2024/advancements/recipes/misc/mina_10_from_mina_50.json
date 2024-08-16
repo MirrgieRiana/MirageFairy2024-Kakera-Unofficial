@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mina_50": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "miragefairy2024:mina_50"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:mina_10_from_mina_50"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_mina_50",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:mina_10_from_mina_50"
+    ]
+  },
+  "sends_telemetry_event": false
+}

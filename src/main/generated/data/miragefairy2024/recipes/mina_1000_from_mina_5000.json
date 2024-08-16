@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:mina_1000",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:mina_5000"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "item": "miragefairy2024:mina_1000"
+  }
+}
