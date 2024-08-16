@@ -191,6 +191,51 @@ enum class MaterialCard(
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
     ),
 
+    MINA_1(
+        "mina_1", "1 Mina", "1ミナ",
+        PoemList(0)
+            .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい"),
+    ),
+    MINA_5(
+        "mina_5", "5 Mina", "5ミナ",
+        PoemList(0)
+            .poem("Fairy snack", "ご縁があるよ"),
+    ),
+    MINA_10(
+        "mina_10", "10 Mina", "10ミナ",
+        PoemList(0)
+            .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。"),
+    ),
+    MINA_50(
+        "mina_50", "50 Mina", "50ミナ",
+        PoemList(0)
+            .poem("The Society failed to replicate this.", "形而上学的有機結晶"),
+    ),
+    MINA_100(
+        "mina_100", "100 Mina", "100ミナ",
+        PoemList(0)
+            .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。"),
+    ),
+    MINA_500(
+        "mina_500", "500 Mina", "500ミナ",
+        PoemList(0)
+            .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。"),
+    ),
+    MINA_1000(
+        "mina_1000", "1000 Mina", "1000ミナ",
+        PoemList(0)
+            .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。"),
+    ),
+    MINA_5000(
+        "mina_5000", "5000 Mina", "5000ミナ",
+        PoemList(0)
+            .poem("The price of a soul.", "魂の値段。"),
+    ),
+    MINA_10000(
+        "mina_10000", "10000 Mina", "10000ミナ",
+        PoemList(0)
+            .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。"),
+    ),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
