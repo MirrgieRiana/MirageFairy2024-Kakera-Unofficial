@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.modId
@@ -28,6 +29,7 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTables
 import net.minecraft.registry.Registries
@@ -236,6 +238,12 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。"),
     ),
+
+    APOSTLE_WAND(
+        "apostle_wand", "Apostle's Wand", "使徒のステッキ",
+        PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
+        creator = { ApostleWandItem(it.maxCount(1)) },
+    ),
     ;
 
     val identifier = Identifier(MirageFairy2024.modId, path)
@@ -350,4 +358,9 @@ fun initMaterialsModule() {
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
+}
+
+class ApostleWandItem(settings: Settings) : Item(settings) {
+    override fun hasRecipeRemainder() = true
+    override fun getRecipeRemainder(stack: ItemStack) = stack.item.createItemStack()
 }
