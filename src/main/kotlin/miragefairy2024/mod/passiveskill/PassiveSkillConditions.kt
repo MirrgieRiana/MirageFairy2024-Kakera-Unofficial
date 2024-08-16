@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.FluidTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
 import java.time.Instant
@@ -67,7 +66,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
 
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
@@ -121,7 +120,7 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 
 class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     companion object {
-        val identifier = Identifier(MirageFairy2024.modId, "food_ingredient")
+        val identifier = MirageFairy2024.identifier("food_ingredient")
         val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
     }
 

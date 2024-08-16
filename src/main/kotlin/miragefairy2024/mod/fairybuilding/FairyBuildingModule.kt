@@ -7,8 +7,8 @@ import miragefairy2024.util.enJa
 import net.minecraft.util.Identifier
 
 enum class FairyBuildingModelCard(val identifier: Identifier) {
-    LANTERN(Identifier(MirageFairy2024.modId, "block/fairy_building/lantern")),
-    LANTERN_OFF(Identifier(MirageFairy2024.modId, "block/fairy_building/lantern_off")),
+    LANTERN(MirageFairy2024.identifier("block/fairy_building/lantern")),
+    LANTERN_OFF(MirageFairy2024.identifier("block/fairy_building/lantern_off")),
 }
 
 val fairyBuildingCards: List<FairyBuildingCard<*, *, *>> = listOf(

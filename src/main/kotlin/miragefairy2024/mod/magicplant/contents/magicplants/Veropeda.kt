@@ -21,7 +21,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.Feature
@@ -58,7 +57,7 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
 
-    override val family = Identifier(MirageFairy2024.modId, "veropeda")
+    override val family = MirageFairy2024.identifier("veropeda")
     override val possibleTraits = setOf(
         //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -99,10 +98,10 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
         TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
-    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "veropeda_cluster")
-    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "large_veropeda_cluster")
-    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "veropeda_cluster")
-    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "nether_veropeda_cluster")
+    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
+    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
 
     context(ModContext)
     override fun init() {

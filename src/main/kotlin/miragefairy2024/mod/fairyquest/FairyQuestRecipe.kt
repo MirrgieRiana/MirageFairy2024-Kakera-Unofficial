@@ -58,7 +58,7 @@ import net.minecraft.world.gen.feature.DefaultFeatureConfig
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.util.FeatureContext
 
-val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "fairy_quest_recipe"))
+val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface FairyQuestRecipe {
@@ -205,7 +205,7 @@ enum class FairyQuestRecipeCard(
     ),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
 
     val titleTranslation = Translation({ "${MirageFairy2024.modId}.fairyQuestRecipe.$path.title" }, enTitle, jaTitle)
     val messageTranslation = Translation({ "${MirageFairy2024.modId}.fairyQuestRecipe.$path.message" }, enMessage, jaMessage)
@@ -283,18 +283,18 @@ fun initFairyQuestRecipe() {
     }
 
     // 地形生成
-    val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+    val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
-    val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card")) {
+    val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
         val placementModifiers = placementModifiers { per(256) + flower }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
 
-    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, Identifier(MirageFairy2024.modId, "set_fairy_quest_recipe"))
+    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
 
-    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, Identifier(MirageFairy2024.modId, "fairy_quest_card"))
+    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, MirageFairy2024.identifier("fairy_quest_card"))
 
 }
 

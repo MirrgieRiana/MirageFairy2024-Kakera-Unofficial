@@ -19,7 +19,6 @@ import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 
 class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuestTitle: Text, private val fairyQuestMessage: Text, private val fairyQuestClient: Text, title: Text) : BaseOwoScreen<FlowLayout>(title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
@@ -55,7 +54,7 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
                         // 罫線装飾用パネル
                         child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
+                            surface(Surface.tiled(MirageFairy2024.identifier("textures/gui/fairy_quest_card_line.png"), 11, 11))
                             padding(Insets.of(0, 1, 0, 0))
 
                             // メッセージテキストラベル

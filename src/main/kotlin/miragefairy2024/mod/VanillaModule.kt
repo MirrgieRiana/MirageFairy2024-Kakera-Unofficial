@@ -10,14 +10,13 @@ import net.minecraft.block.Blocks
 import net.minecraft.item.Items
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
 import kotlin.jvm.optionals.getOrElse
 
 enum class BlockTagCard(path: String) {
     CONCRETE("concrete"),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val tag: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, identifier)
 }
 

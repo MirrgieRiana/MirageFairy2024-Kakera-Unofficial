@@ -7,11 +7,10 @@ import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.PositionedRectangle
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.MirageFairy2024
-import net.minecraft.util.Identifier
 import kotlin.math.roundToInt
 
-private val FAIRY_QUEST_PROGRESS_BACKGROUND = Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_progress_background.png")
-private val FAIRY_QUEST_PROGRESS_OVERLAY = Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_progress_overlay.png")
+private val FAIRY_QUEST_PROGRESS_BACKGROUND = MirageFairy2024.identifier("textures/gui/fairy_quest_progress_background.png")
+private val FAIRY_QUEST_PROGRESS_OVERLAY = MirageFairy2024.identifier("textures/gui/fairy_quest_progress_overlay.png")
 
 class FairyQuestProgress {
     private val textureComponent: TextureComponent

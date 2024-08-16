@@ -82,7 +82,6 @@ import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -131,7 +130,7 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
 
     class Settings(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
 
-    val identifier = Identifier(MirageFairy2024.modId, settings.path)
+    val identifier = MirageFairy2024.identifier(settings.path)
     val block = blockCreator()
     val item = BlockItem(block, Item.Settings())
 }
@@ -262,7 +261,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 
-val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, Identifier(MirageFairy2024.modId, "haimeviska_logs"))
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {

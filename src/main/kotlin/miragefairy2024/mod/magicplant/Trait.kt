@@ -20,7 +20,7 @@ import net.minecraft.world.World
 
 // api
 
-val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait"))
+val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class Trait(val style: Style, val poem: Text) : Comparable<Trait> {

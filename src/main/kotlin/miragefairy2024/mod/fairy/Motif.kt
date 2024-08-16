@@ -55,7 +55,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeKeys
 
-val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "motif"))
+val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 fun Motif.getIdentifier() = motifRegistry.getId(this)
@@ -879,7 +879,7 @@ enum class MotifCard(
     ),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ "${MirageFairy2024.modId}.motif.${identifier.toTranslationKey()}" }, enName, jaName)
     override val displayName = translation()
     override val parents get() = parentMotifs.get()

@@ -14,7 +14,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import java.io.File
@@ -29,7 +28,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
             return TypedActionResult.success(user.getStackInHand(hand), world.isClient)
         }
     }
-    item.register(Registries.ITEM, Identifier(MirageFairy2024.modId, path))
+    item.register(Registries.ITEM, MirageFairy2024.identifier(path))
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
     item.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(icon) }
     item.registerColorProvider { _, _ -> color }

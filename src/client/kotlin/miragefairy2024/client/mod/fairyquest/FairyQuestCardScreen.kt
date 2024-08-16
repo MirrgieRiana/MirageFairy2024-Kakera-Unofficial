@@ -30,7 +30,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 
 class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, FairyQuestCardScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
@@ -75,7 +74,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                                     // 罫線装飾用パネル
                                     child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
-                                        surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_quest_card_line.png"), 11, 11))
+                                        surface(Surface.tiled(MirageFairy2024.identifier("textures/gui/fairy_quest_card_line.png"), 11, 11))
                                         padding(Insets.of(0, 1, 0, 0))
 
                                         // メッセージテキストラベル

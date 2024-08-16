@@ -78,7 +78,6 @@ import net.minecraft.stat.Stats
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
@@ -165,7 +164,7 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
 }
 
 open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val settings: S) {
-    val identifier = Identifier(MirageFairy2024.modId, settings.path)
+    val identifier = MirageFairy2024.identifier(settings.path)
 
     val block = settings.createBlock(settings.createBlockSettings())
 

@@ -5,9 +5,8 @@ import miragefairy2024.util.Channel
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.util.Identifier
 
-object GainFairyDreamChannel : Channel<Motif>(Identifier(MirageFairy2024.modId, "gain_fairy_dream")) {
+object GainFairyDreamChannel : Channel<Motif>(MirageFairy2024.identifier("gain_fairy_dream")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: Motif) {
         buf.writeString(packet.getIdentifier()!!.string)
     }

@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier
 
 // api
 
-val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "trait_effect_key"))
+val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("trait_effect_key"))
 val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.createSimple(traitEffectKeyRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class TraitEffectKey<T : Any> {

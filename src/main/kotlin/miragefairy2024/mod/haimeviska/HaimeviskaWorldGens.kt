@@ -18,7 +18,6 @@ import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.PillarBlock
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.gen.GenerationStep
@@ -33,16 +32,16 @@ import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer
 import java.util.OptionalInt
 
 object HaimeviskaTreeDecoratorCard {
-    val identifier = Identifier(MirageFairy2024.modId, "haimeviska")
+    val identifier = MirageFairy2024.identifier("haimeviska")
     val treeDecorator = HaimeviskaTreeDecorator()
     private val codec: Codec<HaimeviskaTreeDecorator> = Codec.unit { treeDecorator }
     val type: TreeDecoratorType<HaimeviskaTreeDecorator> = TreeDecoratorType(codec)
 }
 
-val HAIMEVISKA_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska")
-val HAIMEVISKA_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska")
-val HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska_fairy_forest")
-val HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "haimeviska_deep_fairy_forest")
+val HAIMEVISKA_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("haimeviska")
+val HAIMEVISKA_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("haimeviska")
+val HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("haimeviska_fairy_forest")
+val HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("haimeviska_deep_fairy_forest")
 
 context(ModContext)
 fun initHaimeviskaWorldGens() {

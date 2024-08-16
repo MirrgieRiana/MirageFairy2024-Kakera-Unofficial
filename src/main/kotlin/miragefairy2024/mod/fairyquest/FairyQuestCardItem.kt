@@ -50,7 +50,7 @@ import net.minecraft.world.World
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
     val jaName = "破損したフェアリークエストカード"
-    val identifier = Identifier(MirageFairy2024.modId, "fairy_quest_card")
+    val identifier = MirageFairy2024.identifier("fairy_quest_card")
     val item = FairyQuestCardItem(Item.Settings())
 }
 
@@ -138,14 +138,14 @@ private fun createFairyQuestCardModel() = Model {
     ModelData(
         parent = Identifier("item/generated"),
         textures = ModelTexturesData(
-            "layer0" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_background").string,
-            "layer1" to Identifier(MirageFairy2024.modId, "item/fairy_quest_card_frame").string,
+            "layer0" to MirageFairy2024.identifier("item/fairy_quest_card_background").string,
+            "layer1" to MirageFairy2024.identifier("item/fairy_quest_card_frame").string,
         ),
     )
 }
 
 object FairyQuestCardIngredient : CustomIngredient {
-    val ID = Identifier(MirageFairy2024.modId, "fairy_quest_card")
+    val ID = MirageFairy2024.identifier("fairy_quest_card")
     val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
         override fun getIdentifier() = ID
         override fun read(json: JsonObject?) = FairyQuestCardIngredient

@@ -23,7 +23,6 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.state.property.IntProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
@@ -60,7 +59,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
     override val drops = listOf(Items.EMERALD)
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
-    override val family = Identifier(MirageFairy2024.modId, "luminaria")
+    override val family = MirageFairy2024.identifier("luminaria")
     override val possibleTraits = setOf(
         //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
@@ -101,9 +100,9 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
         TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
-    val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with Identifier(MirageFairy2024.modId, "emerald_luminaria_cluster")
-    val EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "emerald_luminaria_cluster")
-    val UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with Identifier(MirageFairy2024.modId, "underground_emerald_luminaria_cluster")
+    val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
+    val EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
+    val UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("underground_emerald_luminaria_cluster")
 
     context(ModContext)
     override fun init() {

@@ -15,7 +15,6 @@ import net.minecraft.item.ToolMaterials
 import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
 
 enum class FairyToolMaterials(
     private val durability: Int,
@@ -59,7 +58,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),
     ;
 
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     val tag: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, identifier)
     val translation = Translation({ "${MirageFairy2024.modId}.tool_material.$path" }, enName, jaName)
 }

@@ -54,7 +54,7 @@ import net.minecraft.world.WorldAccess
 import net.minecraft.world.WorldView
 
 object PlacedItemCard {
-    val identifier = Identifier(MirageFairy2024.modId, "placed_item")
+    val identifier = MirageFairy2024.identifier("placed_item")
     val block = PlacedItemBlock(AbstractBlock.Settings.create().noCollision().strength(0.2F).pistonBehavior(PistonBehavior.DESTROY))
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }

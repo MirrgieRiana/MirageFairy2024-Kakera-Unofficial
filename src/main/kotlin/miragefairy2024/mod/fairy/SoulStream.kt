@@ -33,7 +33,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.modId}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.modId}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
@@ -42,7 +41,7 @@ context(ModContext)
 fun initSoulStream() {
 
     // 拡張プレイヤーデータ
-    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, Identifier(MirageFairy2024.modId, "soul_stream"))
+    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("soul_stream"))
 
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
@@ -60,7 +59,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "soul_stream"))
+    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("soul_stream"))
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
@@ -103,7 +102,7 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 
 // ソウルストリームを開く要求パケット
 
-object OpenSoulStreamChannel : Channel<Unit>(Identifier(MirageFairy2024.modId, "open_soul_stream")) {
+object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_soul_stream")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: Unit) = Unit
     override fun readFromBuf(buf: PacketByteBuf) = Unit
 }

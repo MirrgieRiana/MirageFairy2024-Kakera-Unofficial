@@ -12,13 +12,12 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
-import net.minecraft.util.Identifier
 
 val experienceStatusEffect = ExperienceStatusEffect()
 
 context(ModContext)
 fun initStatusEffectModule() {
-    experienceStatusEffect.register(Registries.STATUS_EFFECT, Identifier(MirageFairy2024.modId, "experience"))
+    experienceStatusEffect.register(Registries.STATUS_EFFECT, MirageFairy2024.identifier("experience"))
     en { experienceStatusEffect.translationKey to "Experience" }
     ja { experienceStatusEffect.translationKey to "経験値獲得" }
 }

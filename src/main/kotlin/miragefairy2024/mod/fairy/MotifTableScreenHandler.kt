@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.util.Identifier
 
 val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     val length = buf.readInt()
@@ -25,7 +24,7 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
 
 context(ModContext)
 fun initMotifTableScreenHandler() {
-    motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, Identifier(MirageFairy2024.modId, "motif_table"))
+    motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("motif_table"))
 }
 
 class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {

@@ -162,7 +162,7 @@ fun registerBlastingRecipeGeneration(
 
 context(ModContext)
 fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInventory) -> SpecialRecipeResult?) {
-    val identifier = Identifier(MirageFairy2024.modId, path)
+    val identifier = MirageFairy2024.identifier(path)
     lateinit var serializer: SpecialRecipeSerializer<*>
     serializer = SpecialRecipeSerializer { _, category ->
         object : SpecialCraftingRecipe(identifier, category) {

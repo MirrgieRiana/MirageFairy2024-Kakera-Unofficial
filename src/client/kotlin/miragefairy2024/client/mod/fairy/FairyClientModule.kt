@@ -36,7 +36,6 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 
 lateinit var soulStreamKey: KeyBinding
@@ -53,7 +52,7 @@ fun initFairyClientModule() {
     GainFairyDreamChannel.registerClientPacketReceiver { motif ->
         val itemStack = motif.createFairyItemStack()
         val component = Containers.horizontalFlow(Sizing.fixed(160), Sizing.fixed(32)).apply {
-            surface(Surface.tiled(Identifier(MirageFairy2024.modId, "textures/gui/fairy_dream_toast.png"), 160, 32))
+            surface(Surface.tiled(MirageFairy2024.identifier("textures/gui/fairy_dream_toast.png"), 160, 32))
             padding(Insets.of(0, 0, 8, 8))
             verticalAlignment(VerticalAlignment.CENTER)
             child(Components.item(itemStack))
@@ -106,7 +105,7 @@ fun initFairyClientModule() {
                     }
 
                     // ボタン
-                    val buttonTexture = Identifier(MirageFairy2024.modId, "textures/gui/sprites/soul_stream_button.png")
+                    val buttonTexture = MirageFairy2024.identifier("textures/gui/sprites/soul_stream_button.png")
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
                         lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
                         screen.close()

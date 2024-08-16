@@ -28,7 +28,7 @@ import net.minecraft.util.Identifier
 
 // Api
 
-val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.ofRegistry(Identifier(MirageFairy2024.modId, "extra_player_data_loader"))
+val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface ExtraPlayerDataCategory<T : Any> {
@@ -79,7 +79,7 @@ fun initExtraPlayerDataModule() {
 
     // セーブ・ロードイベント登録
     ModEvents.onInitialize {
-        object : CustomPlayerSave(Identifier(MirageFairy2024.modId, "extra_player_data")) {
+        object : CustomPlayerSave(MirageFairy2024.identifier("extra_player_data")) {
             override fun savePlayer(player: PlayerEntity) = player.extraPlayerDataContainer.toNbt()
             override fun loadPlayer(player: PlayerEntity, saveData: NbtCompound) = player.extraPlayerDataContainer.fromNbt(saveData)
         }
@@ -95,7 +95,7 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
     ExtraPlayerDataSynchronizationChannel.sendToClient(player, ExtraPlayerDataSynchronizationPacket(this, value))
 }
 
-object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(Identifier(MirageFairy2024.modId, "extra_player_data_synchronization")) {
+object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(MirageFairy2024.identifier("extra_player_data_synchronization")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
         buf.writeString(extraPlayerDataCategoryRegistry.getId(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {

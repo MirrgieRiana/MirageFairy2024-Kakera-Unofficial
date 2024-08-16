@@ -139,7 +139,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : DataProvider {
-                private val destination = Identifier(MirageFairy2024.modId, "sounds")
+                private val destination = MirageFairy2024.identifier("sounds")
                 override fun getName() = "Sounds"
                 override fun run(writer: DataWriter): CompletableFuture<*> {
 
