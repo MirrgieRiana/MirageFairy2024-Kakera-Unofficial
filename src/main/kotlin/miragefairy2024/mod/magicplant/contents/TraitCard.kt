@@ -367,8 +367,8 @@ class TraitCard(
         }
         val CARNIVOROUS_PLANT = !TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
-            "TODO", // TODO
-            "TODO", // TODO
+            "It captures small animals like insects and breaks them down with digestive fluids. This is one of the strategies for surviving in nutrient-poor soil.",
+            "昆虫などの小動物を捕らえ、消化液により分解する。栄養の少ない土壌で生活するための戦略の一つである。",
             listOf(TraitConditionCard.OUTDOOR), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { nether }
