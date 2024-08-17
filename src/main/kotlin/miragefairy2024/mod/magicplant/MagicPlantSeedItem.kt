@@ -44,6 +44,9 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
             return
         }
 
+        // 機能説明
+        tooltip += text { GUI_TRANSLATION().yellow }
+
         // プレイヤーのメインハンドの種子の特性を得る
         val otherTraitStacks = if (player.mainHandStack.item == this) player.mainHandStack.getTraitStacks() else null
 
