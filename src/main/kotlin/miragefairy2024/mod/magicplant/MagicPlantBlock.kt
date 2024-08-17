@@ -3,10 +3,13 @@ package miragefairy2024.mod.magicplant
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
+import miragefairy2024.util.text
 import miragefairy2024.util.toBlockPos
 import miragefairy2024.util.toBox
 import mirrg.kotlin.hydrogen.or
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
@@ -17,9 +20,14 @@ import net.minecraft.block.SideShapeType
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.ActionResult
@@ -212,9 +220,31 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     }
 
-    /** 右クリック時、収穫が可能であれば収穫する。 */
+    /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (player.isSneaking) {
+            if (world.isClient) {
+                return ActionResult.SUCCESS
+            } else {
+                val traitStacks = run {
+                    val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
+                    blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
+                }
+                player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+                    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
+                    }
+
+                    override fun getDisplayName() = text { traitListScreenTranslation() }
+
+                    override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
+                        TraitListScreenHandler.write(buf, traitStacks)
+                    }
+                })
+                return ActionResult.CONSUME
+            }
+        }
         if (!canPick(state)) return ActionResult.PASS
         if (world.isClient) return ActionResult.SUCCESS
         pick(world as ServerWorld, pos, player, player.mainHandStack, true)
