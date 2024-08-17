@@ -66,8 +66,8 @@ class TraitCard(
         }
         val PHAEOSYNTHESIS = !TraitCard(
             "phaeosynthesis", "Phaeosynthesis", "闇合成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "By fluctuations in aura concentration, ether crystals grow from organic elements in the environment. This process is the same as the formation of undead creatures.",
+            "オーラ濃度のゆらぎにより、環境中の有機元素からエーテル結晶を成長させる。これはアンデッド生物の形成と同じ作用である。",
             listOf(TraitConditionCard.DARKNESS), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.NORMAL) { nether }
