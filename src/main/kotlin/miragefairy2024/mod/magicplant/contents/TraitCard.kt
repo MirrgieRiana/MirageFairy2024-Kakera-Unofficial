@@ -400,8 +400,8 @@ class TraitCard(
         }
         val PROSPERITY_OF_SPECIES = !TraitCard(
             "prosperity_of_species", "Prosperity of Species", "種の繁栄",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Those who bear many offspring, those who are flexible to change, those who are greedy, those who eliminate their enemies, and those who, in the end, leave behind many descendants are the ones who win the struggle for survival.",
+            "多くの子を産む者、変化に柔軟な者、欲張りな者、敵を蹴落とす者、結果的に多くの子孫を遺せた者が生存競争を勝ち抜くのだ。",
             listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.MEDIUM }
