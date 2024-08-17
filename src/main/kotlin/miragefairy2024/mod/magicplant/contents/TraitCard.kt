@@ -389,8 +389,8 @@ class TraitCard(
         }
         val PAVEMENT_FLOWERS = !TraitCard(
             "pavement_flowers", "Pavement Flowers", "アスファルトに咲く花",
-            "TODO", // TODO
-            "TODO", // TODO
+            "The sight of a small flower piercing through hard ground and transforming bitumen into nutrients is known as a symbol of the powerful vitality possessed by plants.",
+            "小さな花が硬い地面を穿ち瀝青を栄養に変えるその姿は、植物の持つ力強い生命力の象徴として知られる。",
             listOf(TraitConditionCard.FLOOR_HARDNESS), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { nether }
