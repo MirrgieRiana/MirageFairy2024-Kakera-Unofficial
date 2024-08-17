@@ -121,15 +121,16 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
         if (user.isSneaking) {
             val itemStack = user.getStackInHand(hand)
             if (world.isClient) return TypedActionResult.success(itemStack)
+            val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos), itemStack.getTraitStacks() ?: TraitStacks.EMPTY)
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos), traitStacks)
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
 
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    TraitListScreenHandler.write(buf, itemStack.getTraitStacks() ?: TraitStacks.EMPTY)
+                    TraitListScreenHandler.write(buf, traitStacks)
                 }
             })
             return TypedActionResult.consume(itemStack)
