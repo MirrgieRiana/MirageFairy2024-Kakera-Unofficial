@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.AliasedBlockItem
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
+import net.minecraft.item.ItemUsageContext
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
@@ -106,6 +107,11 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
                 }
             }
 
+    }
+
+    override fun useOnBlock(context: ItemUsageContext): ActionResult {
+        if (context.player?.isSneaking == true) return ActionResult.PASS
+        return super.useOnBlock(context)
     }
 
     override fun place(context: ItemPlacementContext): ActionResult {
