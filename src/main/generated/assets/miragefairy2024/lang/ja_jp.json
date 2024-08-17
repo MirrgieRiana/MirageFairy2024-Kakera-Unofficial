@@ -103,6 +103,7 @@
   "item.miragefairy2024.haimeviska_sap.description": "食べると経験値を獲得",
   "item.miragefairy2024.haimeviska_sap.poem": "口福のアナムネシス。",
   "item.miragefairy2024.magic_plant.creativeOnly": "クリエイティブ専用",
+  "item.miragefairy2024.magic_plant.gui": "スニーク中に使用時、特性GUIを表示",
   "item.miragefairy2024.magic_plant.invalid": "無効",
   "item.miragefairy2024.magic_plant.trait": "特性",
   "item.miragefairy2024.mina.description": "使徒のステッキでミーニャと両替可能",
