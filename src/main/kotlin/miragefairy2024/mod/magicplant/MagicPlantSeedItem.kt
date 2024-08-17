@@ -124,7 +124,7 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
             user.openHandledScreen(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, user.blockPos), traitStacks)
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
