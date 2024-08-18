@@ -76,9 +76,9 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +BiomeKeys.DEEP_DARK }
         }
         val OSMOTIC_ABSORPTION = !TraitCard(
-            "osmotic_absorption", "Osmotic Absorption", "浸透吸収",
-            "TODO", // TODO
-            "TODO", // TODO
+            "osmotic_absorption", "Nutrient Absorption", "養分吸収",
+            "When the ion concentration in the root cells is higher than that in the surrounding soil, osmosis causes the water in the soil, along with nutrients, to be absorbed into the roots. This process requires the transpiration action of the leaves.",
+            "根の細胞のイオン濃度が周囲の土中に比べて高いとき、浸透圧によって土中の水分が養分とともに根に吸収される。この過程には葉の蒸散作用が不可欠である。",
             listOf(TraitConditionCard.FLOOR_MOISTURE), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.COMMON) { +BiomeKeys.SOUL_SAND_VALLEY }
