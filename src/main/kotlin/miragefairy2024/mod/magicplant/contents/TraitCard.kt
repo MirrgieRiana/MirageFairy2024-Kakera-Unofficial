@@ -99,10 +99,10 @@ class TraitCard(
         }
 
         val AIR_ADAPTATION = !TraitCard(
-            "air_adaptation", "Air Adaptation", "空気適応",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.HUMIDITY to 0.05),
+            "air_adaptation", "Spatial Adaptation", "空間適応",
+            "By decomposing ether with high-energy astral radiation, life support is maintained in outer space. This process is essential for the terraforming of rocky planets.",
+            "高エネルギーアストラル放射線によってエーテルを分解することで、宇宙空間での生命維持を行う。この作用は岩石惑星のテラフォーミングの上で重要である。",
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.03, TraitEffectKeyCard.TEMPERATURE to 0.03, TraitEffectKeyCard.HUMIDITY to 0.03),
         ) {
             register("1000", TraitSpawnRarity.ALWAYS)
             register("0100", TraitSpawnRarity.S_RARE)
