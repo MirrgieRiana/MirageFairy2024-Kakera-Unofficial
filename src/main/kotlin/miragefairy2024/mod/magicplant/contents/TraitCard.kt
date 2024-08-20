@@ -122,8 +122,8 @@ class TraitCard(
         }
         val WARM_ADAPTATION = !TraitCard(
             "warm_adaptation", "Warm Adaptation", "温暖適応",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Moderate temperatures provide comfort even in the life activities of plants, allowing a diverse range of species to thrive. Here, a straightforward struggle for survival is required, with no escape or hiding, no tricks. Winning in a normal environment is the most challenging of all.",
+            "極端でない気温は、植物の生命活動においても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の環境で勝利することが最も難しいのだ。",
             listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.MEDIUM }
