@@ -246,7 +246,7 @@ class TraitCard(
 
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
-            "The probability of finding a plant with a set of four leaves is typically less than 1 in 10,000, indicating the high luck of the person who discovers it. Therefore, by adjusting random number so that all plants have sets of four leaves, it is theoretically possible to maximize luck at all times.",
+            "The probability of a certain type of plant having a set of four leaves is typically less than 1 in 10,000, indicating the high luck of the person who discovers it. Therefore, by adjusting random number so that all plants have sets of four leaves, it is theoretically possible to maximize luck at all times.",
             "ある種の植物の葉が4枚組となる確率は通常1万分の1以下とされ、これを発見できた者の運気の高さを示している。したがって、すべての株で葉が4枚組となるように乱数調整を行うことで、理論上常に運気を最大化できる。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
