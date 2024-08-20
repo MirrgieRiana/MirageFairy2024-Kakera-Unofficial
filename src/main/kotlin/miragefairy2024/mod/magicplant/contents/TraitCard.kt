@@ -111,8 +111,8 @@ class TraitCard(
         }
         val COLD_ADAPTATION = !TraitCard(
             "cold_adaptation", "Cold Adaptation", "寒冷適応",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Only plants that have adapted to low solar radiation, low temperatures, water freezing, snow cover, and harsh cold environments can survive under the extreme cold of the ice.",
+            "低い日射量、低い気温、水分の凍結、雪による遮蔽、過酷な低温環境に適応した植物だけが極寒の氷の下で生き残ることができる。",
             listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.LOW }
