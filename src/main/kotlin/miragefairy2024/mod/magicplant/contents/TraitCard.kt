@@ -110,7 +110,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.S_RARE)
         }
         val COLD_ADAPTATION = !TraitCard(
-            "cold_adaptation", "Cold Adaptation", "寒冷適応",
+            "cold_adaptation", "Cold Adaptation", "低温適応",
             "Only plants that have adapted to low solar radiation, low temperatures, water freezing, snow cover, and harsh cold environments can survive under the extreme cold of the ice.",
             "低い日射量、低い気温、水分の凍結、雪による遮蔽、過酷な低温環境に適応した植物だけが極寒の氷の下で生き残ることができる。",
             listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
@@ -121,7 +121,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +TemperatureCategory.LOW }
         }
         val WARM_ADAPTATION = !TraitCard(
-            "warm_adaptation", "Warm Adaptation", "温暖適応",
+            "warm_adaptation", "Warm Adaptation", "中温適応",
             "Moderate temperatures provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
             "極端でない気温は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
             listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
@@ -132,9 +132,9 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +TemperatureCategory.MEDIUM }
         }
         val HOT_ADAPTATION = !TraitCard(
-            "hot_adaptation", "Hot Adaptation", "熱帯適応",
-            "TODO", // TODO
-            "TODO", // TODO
+            "hot_adaptation", "Hot Adaptation", "高温適応",
+            "The jungle, a paradise for plants, the scorching desert, the fiery inferno—though all these are high-temperature environments, their actual conditions vary greatly. This trait is merely a collection of minor techniques that prove useful across various high-temperature environments.",
+            "植物の楽園であるジャングル地帯、炎天下の砂漠、灼熱地獄、一口に高温環境といっても、その実態は様々である。この形質は、高温環境全般で役に立つ小技の寄せ集めにすぎない。",
             listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.HIGH }
