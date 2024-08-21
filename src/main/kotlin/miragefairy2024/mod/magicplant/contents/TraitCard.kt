@@ -247,7 +247,7 @@ class TraitCard(
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
             "The probability of a certain type of plant having a set of four leaves is typically less than 1 in 10,000, reflecting the high luck of the discoverer. Therefore, by adjusting random numbers so that all leaves are in sets of four, it is theoretically possible to maximize the luck of all humanity at all times.",
-            "ある種の植物の葉が4枚組となる確率は通常1万分の1以下であり、これは発見者の運気の高さを反映する。したがって、すべての葉が4枚組となるように乱数調整を行うことで、理論上全人類の運気を常に最大化できる。",
+            "ある種の植物の葉が4枚組となる確率は通常1万分の1以下であり、これは発見者の運気の高さを反映している。したがって、すべての葉が4枚組となるように乱数調整を行うことで、理論上全人類の運気を常に最大化できる。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             register("1000", TraitSpawnRarity.NORMAL) { +BiomeKeys.WARPED_FOREST }
