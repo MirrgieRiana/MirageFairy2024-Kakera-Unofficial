@@ -235,7 +235,7 @@ class TraitCard(
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
             "A powerful light illuminates the world. A gentle breeze sways the trees. Mirage petals brush against the cheeks. Swirling pollen comes together, transforming into the body of a fairy. The fairy knows. The fate of everything in this world.",
-            "力強い光が世界を照らす。柔らかな風が木々を揺らす。ミラージュの花びらが頬を撫でる。渦巻く花粉は一つになり、妖精へと姿を変える。妖精は知っている。この世のすべての運命を。",
+            "力強い光が世界を照らす。朗らかな風が木々を揺らす。ミラージュの花びらが頬を撫でる。渦巻く花粉は一つになり、妖精へと姿を変える。妖精は知っている。この世のすべての運命を。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             //register("1000", )
