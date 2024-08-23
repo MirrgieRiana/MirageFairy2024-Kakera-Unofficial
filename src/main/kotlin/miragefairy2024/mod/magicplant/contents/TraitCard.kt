@@ -258,8 +258,8 @@ class TraitCard(
         }
         val NODED_STEM = !TraitCard(
             "noded_stem", "Noded Stem", "節状の茎",
-            "TODO", // TODO
-            "TODO", // TODO
+            "The stems of plants in the order Miragales are known for having nodes, similar to bamboo or wheat. These nodes are deactivated growth points, and in principle, rapid growth is possible by activating growth at all nodes simultaneously.",
+            "妖花目の植物の茎は、竹や麦などと同様に節目を持つことで知られる。これらの節目は失活した成長点であり、原理的にはすべての節目で成長を行うことにより高速な生育が可能である。",
             listOf(), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         ) {
             //r("1000", )
