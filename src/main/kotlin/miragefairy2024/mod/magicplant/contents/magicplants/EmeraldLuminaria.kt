@@ -98,6 +98,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
         TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
         TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
         TraitCard.CROSSBREEDING.trait, // 交雑
+        //TraitCard.PLANTS_WITH_SELF_AWARENESS.trait, // 自我を持つ植物
     )
 
     val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")

@@ -2,6 +2,7 @@ package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.FAIRY_BIOME_TAG
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
@@ -453,6 +454,17 @@ class TraitCard(
             //register("0100", )
             register("0010", TraitSpawnRarity.RARE)
             register("0001", TraitSpawnRarity.RARE)
+        }
+        val PLANTS_WITH_SELF_AWARENESS = !TraitCard(
+            "plants_with_self_awareness", "Plants with Self-Awareness", "自我を持つ植物",
+            "On a colonized planet lacking native flying animals, giving mobility to airborne reproductive cells is beneficial in terms of increasing the probability of encounters between individual organisms.",
+            "固有の飛行性動物を欠いた開拓型惑星において、空中散布式の生殖細胞に運動能力を与えることは、個体同士の遭遇確率の点で有益である。",
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+        ) {
+            //register("1000", TraitSpawnRarity.COMMON)
+            register("0100", TraitSpawnRarity.S_RARE) { +FAIRY_BIOME_TAG }
+            register("0010", TraitSpawnRarity.RARE) { +BiomeCards.FAIRY_FOREST.registryKey }
+            register("0001", TraitSpawnRarity.COMMON)
         }
     }
 
