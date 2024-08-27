@@ -290,10 +290,10 @@ class TraitCard(
             register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.FOREST }
         }
         val SPINY_LEAVES = !TraitCard(
-            "spiny_leaves", "Spiny Leaves", "棘状の葉",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            "spiny_leaves", "Spiny Leaves", "棘のある葉",
+            "Spines prevent the loss of water through transpiration and are also used for defense against herbivorous animals. The spines of plants in the Miragaceae family are made of sharp tissues containing silicates, which can easily pierce human skin and cause mild inflammation.",
+            "棘は水分の蒸散を防ぎ、草食動物からの防御にも使われる。ミラージュ科の植物が持つ棘はケイ酸塩を含む鋭利な組織でできており、人間の皮膚を容易に傷つけ、軽度の炎症を引き起こす。",
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1), // TODO 接触ダメージ
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.MESA }

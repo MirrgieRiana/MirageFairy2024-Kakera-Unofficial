@@ -80,7 +80,7 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
         //TraitCard.NODED_STEM.trait, // 節状の茎
         //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        //TraitCard.SPINY_LEAVES.trait, // 棘状の葉
+        //TraitCard.SPINY_LEAVES.trait, // 棘のある葉
         //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
         TraitCard.HEATING_MECHANISM.trait, // 発熱機構
         //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
