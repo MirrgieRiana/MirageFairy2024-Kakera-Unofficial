@@ -268,9 +268,9 @@ class TraitCard(
             register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.JUNGLE }
         }
         val FRUIT_OF_KNOWLEDGE = !TraitCard(
-            "fruit_of_knowledge", "Fruit of Knowledge", "知識の果実",
-            "TODO", // TODO
-            "TODO", // TODO
+            "fruit_of_knowledge", "Forbidden Fruit", "禁断の果実",
+            "Consciousness, memory, soul, and genes--all this information is produced by the vortex motion of the gaseous etheric body. It is prophesied that the astral vortex, bound by the forbidden fruit, will connect to the Akashic demon, who possesses all knowledge beyond time and space.",
+            "意識、記憶、魂、遺伝子、これらすべての情報は、気相エーテル体の渦状運動によってもたらされる。禁断の果実に束縛されたアストラル渦は、時空を超えたありとあらゆる知識を持つというアカーシャの悪魔につながることが予言されている。",
             listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
