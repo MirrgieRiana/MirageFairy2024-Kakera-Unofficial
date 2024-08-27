@@ -280,8 +280,8 @@ class TraitCard(
         }
         val GOLDEN_APPLE = !TraitCard(
             "golden_apple", "Golden Apple", "金のリンゴ",
-            "TODO", // TODO
-            "TODO", // TODO
+            "When a sheep is dyed with lapis lazuli powder and then sheared, it will subsequently grow blue wool. This phenomenon is known as exogenous pigment induction.",
+            "ヒツジをラピスラズリの粉末で着色して毛を刈り取ると、そのヒツジは以後、青色の毛を生やすようになる。このような現象を外因性色素誘導と呼ぶ。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.FOREST }
