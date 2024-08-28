@@ -135,7 +135,7 @@ class TraitCard(
         val HOT_ADAPTATION = !TraitCard(
             "hot_adaptation", "Hot Adaptation", "高温適応",
             "The jungle, a paradise for plants, the scorching desert, the fiery inferno—though all these are high-temperature environments, their actual conditions vary greatly. This trait is merely a collection of minor techniques that prove useful across various high-temperature environments.",
-            "植物の楽園であるジャングル地帯、炎天下の砂漠、灼熱地獄、一口に高温環境といっても、その実態は様々である。この形質は、高温環境全般で役に立つ小技の寄せ集めにすぎない。",
+            "植物の楽園であるジャングル地帯、炎天下の砂漠、灼熱地獄、一口に高温環境といっても、その実態は様々である。この形質は、高温環境全般で役に立つテクニックの寄せ集めにすぎない。",
             listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.HIGH }
