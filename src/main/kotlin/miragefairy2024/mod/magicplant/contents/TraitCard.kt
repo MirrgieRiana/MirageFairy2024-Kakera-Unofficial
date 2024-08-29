@@ -223,8 +223,8 @@ class TraitCard(
         }
         val EXPERIENCE_PRODUCTION = !TraitCard(
             "experience_production", "Xp Production", "経験値生成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "The question of whether plants experience consciousness has long been a subject of debate. The discovery of plants that generate experience orbs has brought this discussion to a new stage.",
+            "植物は意識体験をするか？という問いかけは、長年の議論の対象であった。経験値オーブを生成する植物の発見は、この議論を新たな局面へと導いた。",
             listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE)
