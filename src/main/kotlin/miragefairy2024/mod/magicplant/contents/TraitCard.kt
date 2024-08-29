@@ -313,9 +313,9 @@ class TraitCard(
         }
         val HEATING_MECHANISM = !TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
+            "Bacteria symbiotic within the cells generate heat through their metabolism. This heat helps prevent growth from stalling in cold environments.",
+            "細胞内に共生するバクテリアが、代謝によって熱を発生させる。この熱によって低温環境で成長が停滞することを防ぐ。",
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.LOW }
             register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.SNOWY }
