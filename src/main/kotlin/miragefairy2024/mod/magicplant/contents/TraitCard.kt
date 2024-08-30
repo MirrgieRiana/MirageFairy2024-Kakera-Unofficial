@@ -324,9 +324,9 @@ class TraitCard(
         }
         val WATERLOGGING_TOLERANCE = !TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            "By developing hollow stems that actively transport oxygen, this plant prevents its roots from becoming oxygen-deprived even in waterlogged conditions. As a result, it can thrive in environments where other plants would suffer from root rot.",
+            "中空の茎を発達させ、能動的に酸素を送り込むことで、浸水状態にあっても根が酸欠状態になるのを防ぐ。これにより、他の植物が根腐れを起こすような環境でも生育できる。",
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.RIVER }
