@@ -214,7 +214,7 @@ class TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.003),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.RARE)
             register("0100", TraitSpawnRarity.S_RARE)
@@ -304,7 +304,7 @@ class TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
             "Legends of plants that bear beautiful gemstones can be found in various desert regions and are often revered. Physiologically, these gemstones are formed as a means for the plants to expel excess metal ions, absorbed due to the low moisture content in the soil.",
             "美しい宝石を実らせる植物の伝承は各地の砂漠地帯において見られ、信仰の対象とされる。生理学的には、土中の水分含有量が少ないために過剰に吸収した金属イオンを排出するために形成される。",
-            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1),
+            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.DESERT }
@@ -425,7 +425,7 @@ class TraitCard(
             "eternal_treasure", "Eternal Treasure", "悠久の秘宝",
             "A mysterious fruit shown by nature. Many greedy humans attempted to cultivate it, but not a single one succeeded, or so the story goes.",
             "自然が見せる神秘の果実。多くの欲深き人間がその栽培化を試みたものの、成功した者は誰一人として居なかったという。",
-            listOf(TraitConditionCard.NATURAL), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1),
+            listOf(TraitConditionCard.NATURAL), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.COMMON)
             //register("0100", )
@@ -436,7 +436,7 @@ class TraitCard(
             "treasure_of_xarpa", "Treasure of Xarpa", "シャルパの秘宝",
             "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.001),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.RARE) { +BiomeKeys.DEEP_DARK }
             //register("0100", )
