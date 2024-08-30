@@ -335,9 +335,9 @@ class TraitCard(
         }
         val ADVERSITY_FLOWER = !TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
+            "",
+            "逆境に咲く花は、どんな花よりも希少で美しい。
+            listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.MOUNTAIN }
             register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
