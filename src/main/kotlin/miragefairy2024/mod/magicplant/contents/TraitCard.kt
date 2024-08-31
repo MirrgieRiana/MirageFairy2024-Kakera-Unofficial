@@ -337,8 +337,7 @@ class TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "A flower that blooms in adversity is rarer and more beautiful than any other. Even if it shines only for a fleeting moment, it becomes an unattainable object of desire, forever etched in people's hearts.",
             "逆境に咲く花は、どんな花よりも希少で美しい。たとえそれが一瞬の輝きであったとしても、手に入れることのできない、あこがれの存在として人々の胸に刻まれる。",
-            listOf(TraitConditionCard.HIGH_ALTITUDE),
-            listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
+            listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.MOUNTAIN }
             register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
@@ -347,9 +346,9 @@ class TraitCard(
         }
         val FLESHY_LEAVES = !TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
+            "As a result of evolving to minimize surface area exposed to the air in order to prevent water loss, the leaves have become thick and are now capable of storing water internally.",
+            "水分の蒸発を防ぐために空気との接触面積を最小化するように進化した結果、葉は肉厚になり、内部に水分を蓄えるようになった。",
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.LEAVES_PRODUCTION to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.SAVANNA }
