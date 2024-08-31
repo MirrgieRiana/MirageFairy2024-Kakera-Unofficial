@@ -466,6 +466,17 @@ class TraitCard(
             register("0010", TraitSpawnRarity.RARE) { +BiomeCards.FAIRY_FOREST.registryKey }
             register("0001", TraitSpawnRarity.COMMON)
         }
+        val FLOWER_OF_THE_END = !TraitCard(
+            "flower_of_the_end", "Flower of the End", "終焉の花",
+            "When the vacuum decayed and the concept of the world met its end, that flower never lost its smile until the very last moment.",
+            "真空が崩壊し、世界という概念が消滅を迎えるとき、その花は最後の瞬間まで笑顔を絶やさなかった。",
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+        ) {
+            register("1000", TraitSpawnRarity.ALWAYS)
+            //register("0100", )
+            //register("0010", )
+            //register("0001", )
+        }
     }
 
     init {
