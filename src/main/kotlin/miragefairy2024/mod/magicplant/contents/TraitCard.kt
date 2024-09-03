@@ -381,7 +381,7 @@ class TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
             "All living beings possess an etheric soul. If that is the case, where do the souls of fairies come from? In a sense, the Mirage is a carnivorous plant.",
             "生きとし生ける者はみな、エーテルの魂を持つ。なれば、妖精の魂はどこから来るのか？ミラージュはある意味肉食植物だ。",
-            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.NUTRITION to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { end }
             register("0100", TraitSpawnRarity.NORMAL) { end }
