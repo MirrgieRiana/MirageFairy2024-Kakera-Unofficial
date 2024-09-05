@@ -387,6 +387,17 @@ fun initMaterialsModule() {
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
+    // ミナ
+    MaterialCard.MINA_1.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_5.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_10.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_50.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_100.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_500.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_1000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_5000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_10000.item.registerItemTagGeneration { WISP_TAG }
+
     // ミナ両替
     fun registerMinaRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
         registerShapelessRecipeGeneration(higherItem, count = 1) {
