@@ -97,7 +97,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
         //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
         TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
         TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
-        TraitCard.CROSSBREEDING.trait, // 交雑
+        //TraitCard.CROSSBREEDING.trait, // 交雑
         //TraitCard.PLANTS_WITH_SELF_AWARENESS.trait, // 自我を持つ植物
         //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
