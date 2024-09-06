@@ -123,8 +123,8 @@ class TraitCard(
         }
         val WARM_ADAPTATION = !TraitCard(
             "warm_adaptation", "Warm Adaptation", "中温適応",
-            "Moderate temperatures provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
-            "極端でない気温は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
+            "In environments with comfortable temperatures, plants can save evolutionary energy that would otherwise be allocated to cold or heat resistance. As a result, they are able to devote more energy to growth and reproduction.",
+            "快適な気温の環境では、耐寒や耐暑に割り当てる進化的エネルギーを節約できる。その結果、植物はより多くのエネルギーを成長や繁殖に割くことができる。",
             listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.MEDIUM }
@@ -156,8 +156,10 @@ class TraitCard(
         }
         val MESIC_ADAPTATION = !TraitCard(
             "mesic_adaptation", "Mesic Adaptation", "中湿適応",
-            "
-            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            "Moderate humidity provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
+            "極端でない湿度は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
+            listOf(TraitConditionCard.MEDIUM_HUMIDITY),
+            listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.MEDIUM }
             register("0100", TraitSpawnRarity.COMMON) { +HumidityCategory.MEDIUM }
