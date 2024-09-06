@@ -145,8 +145,8 @@ class TraitCard(
         }
         val ARID_ADAPTATION = !TraitCard(
             "arid_adaptation", "Arid Adaptation", "乾燥適応",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Evolution is often ruthless. The prosperity of the species as a whole does not necessarily lead to the happiness of each individual.",
+            "進化とは、ときに非情である。種という全体の繁栄が、必ずしも個々の個体の幸福に繋がるとは限らないのだ。",
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
