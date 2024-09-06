@@ -166,9 +166,10 @@ class TraitCard(
         }
         val HUMID_ADAPTATION = !TraitCard(
             "humid_adaptation", "Humid Adaptation", "湿潤適応",
-            "TODO", // TODO
-            "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            "The plant that designs and operates the most efficient flow for converting H2O and CO2 into O2 and organic matter will ultimately dominate humid environments.",
+            "H2OとCO2をO2と有機物に加工するフローを最も効率的に設計・運用した工場が、最終的に湿潤な環境を制覇する。",
+            listOf(TraitConditionCard.HIGH_HUMIDITY),
+            listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
             register("0100", TraitSpawnRarity.COMMON) { +HumidityCategory.HIGH }
