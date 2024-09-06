@@ -56,8 +56,8 @@ class TraitCard(
         }
         val PHOTOSYNTHESIS = !TraitCard(
             "photosynthesis", "Photosynthesis", "光合成",
-            "Through the energy of light, oxygen and organic matter are produced from water and carbon dioxide. Photosynthesis is a fundamental life activity of plants, alongside etheric respiration, and it supports the existence of many organisms, including herbivores, carnivores, and humans.",
-            "光のエネルギーにより、水と二酸化炭素から酸素と有機物が生産される。光合成はエーテル呼吸と並ぶ植物の生命活動の根幹であり、草食動物、肉食動物、人間など、多くの生物の存在を成り立たせている。",
+            "Through the Dephlogistication Reaction, oxygen and organic matter are produced from water and carbon dioxide. Photosynthesis is a fundamental life activity of plants, alongside etheric respiration, and it supports the existence of many organisms, including herbivores, carnivores, and humans.",
+            "脱フロギストン反応により、水と二酸化炭素から酸素と有機物が生産される。光合成はエーテル呼吸と並ぶ植物の生命活動の根幹であり、草食動物、肉食動物、人間など、多くの生物の存在を成り立たせている。",
             listOf(TraitConditionCard.LIGHT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.SNOWY }
