@@ -181,8 +181,8 @@ class TraitCard(
 
         val SEEDS_PRODUCTION = !TraitCard(
             "seeds_production", "Seeds Production", "種子生成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Strictly speaking, seeds refer to the reproductive structures formed in the lower part of the pistil. However, in many plants in the order Miragales, seeds tend to detach and disperse quickly. For convenience, bulbs are often treated as seeds in these plants.",
+            "種子とは、狭義にはめしべの下部に形成される繁殖組織をいう。しかし、妖花目の植物は種子がすぐに欠落し拡散されるものが多いため、便宜上球根を種子同然に扱うことが多い。",
             listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.RARE)

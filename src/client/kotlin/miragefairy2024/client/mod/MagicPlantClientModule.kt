@@ -30,6 +30,7 @@ import miragefairy2024.util.join
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
@@ -112,12 +113,22 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                 })
                 child(verticalSpace(5))
                 child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
+                    val player = MinecraftClient.getInstance().player
+                    val factor = if (player != null) {
+                        traitStack.trait.conditions
+                            .map { it.getFactor(player.world, player.blockPos) }
+                            .fold(1.0) { a, b -> a * b }
+                    } else {
+                        1.0
+                    }
                     child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 条件
                         horizontalAlignment(HorizontalAlignment.LEFT)
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
-                        traitStack.trait.conditions.forEach {
-                            child(Components.label(it.emoji).tooltip(it.name))
+                        traitStack.trait.conditions.forEach { condition ->
+                            val factor = if (player != null) condition.getFactor(player.world, player.blockPos) else 1.0
+                            val text = text { condition.emoji + " "() + (factor * 100.0 formatAs "%.1f%%")() }
+                            child(Components.label(text).tooltip(condition.name))
                         }
                     })
                     child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 特性アイコン
@@ -131,8 +142,8 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
-                            val tooltip = text { it.first.name }
+                            val text = text { (it.second * traitStack.level * factor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
+                            val tooltip = text { it.first.name + " ("() + (it.second * traitStack.level * 100.0 formatAs "%.1f%%")() + " x "() + (factor * 100.0 formatAs "%.1f%%")() + ")"() }
                             child(Components.label(text).tooltip(tooltip))
                         }
                     })
