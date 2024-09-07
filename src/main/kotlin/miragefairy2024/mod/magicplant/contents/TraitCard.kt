@@ -158,8 +158,7 @@ class TraitCard(
             "mesic_adaptation", "Mesic Adaptation", "中湿適応",
             "Moderate humidity provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
             "極端でない湿度は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
-            listOf(TraitConditionCard.MEDIUM_HUMIDITY),
-            listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.MEDIUM }
             register("0100", TraitSpawnRarity.COMMON) { +HumidityCategory.MEDIUM }
@@ -170,8 +169,7 @@ class TraitCard(
             "humid_adaptation", "Humid Adaptation", "湿潤適応",
             "The plant that designs and operates the most efficient flow for converting H2O and CO2 into O2 and organic matter will ultimately dominate humid environments.",
             "H2OとCO2をO2と有機物に加工するフローを最も効率的に設計・運用した工場が、最終的に湿潤な環境を制覇する。",
-            listOf(TraitConditionCard.HIGH_HUMIDITY),
-            listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
             register("0100", TraitSpawnRarity.COMMON) { +HumidityCategory.HIGH }
@@ -192,8 +190,8 @@ class TraitCard(
         }
         val FRUITS_PRODUCTION = !TraitCard(
             "fruits_production", "Fruits Production", "果実生成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Human ancestors lived arboreal lives and primarily consumed fruit. While humans cannot eat raw meat, they can eat raw fruit. Interestingly, the nutritional values of fairies shares many similarities with that of common fruit.",
+            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、妖精の栄養価は興味深いことに一般的な果実のそれと多くが共通している。",
             listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.RARE)
