@@ -191,7 +191,7 @@ class TraitCard(
         val FRUITS_PRODUCTION = !TraitCard(
             "fruits_production", "Fruits Production", "果実生成",
             "Human ancestors lived arboreal lives and primarily consumed fruit. While humans cannot eat raw meat, they can eat raw fruit. Interestingly, the nutritional values of fairies shares many similarities with that of common fruit.",
-            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、妖精の栄養価は興味深いことに一般的な果実のそれと多くが共通している。",
+            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、興味深いことに妖精の栄養価は一般的な果実のそれと多くが共通している。",
             listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.RARE)
@@ -201,8 +201,8 @@ class TraitCard(
         }
         val LEAVES_PRODUCTION = !TraitCard(
             "leaves_production", "Leaves Production", "葉面生成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "Between 1.2 and 0.8 billion years ago, green plants emerged and developed the ability to fix carbon, while simultaneously losing their symbiotic relationship with etherobacteria. The fact that most modern plants lack intelligence is said to be a remnant of this evolutionary change.",
+            "12-8億年前、緑色植物が出現し、炭素固定能力を発達させた一方で、エテロバクテリアとの細胞内共生を退化させた。現生植物の多くに知性が欠落している事実は、この進化の名残りと言われている。",
             listOf(), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.RARE)
