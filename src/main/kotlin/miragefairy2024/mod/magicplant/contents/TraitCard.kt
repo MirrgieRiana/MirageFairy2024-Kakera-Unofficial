@@ -212,8 +212,8 @@ class TraitCard(
         }
         val RARE_PRODUCTION = !TraitCard(
             "rare_production", "Rare Production", "希少品生成",
-            "TODO", // TODO
-            "TODO", // TODO
+            "This trait does not actually exist as a single gene, but is instead a collection of various genetic characteristics responsible for the formation of certain parts, such as the crystallization of phytoliths in the fruit, which humans deem rare or valuable.",
+            "この特性は、実際には遺伝子上には存在せず、果実部におけるプラントオパールの結晶化など、人間が希少と判断するいくつかの部位を形成する遺伝的形質をまとめたものである。",
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.RARE)
