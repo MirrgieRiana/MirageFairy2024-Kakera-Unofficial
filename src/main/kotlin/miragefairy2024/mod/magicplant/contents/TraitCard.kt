@@ -438,11 +438,10 @@ class TraitCard(
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
         ) {
-            register("1000", TraitSpawnRarity.RARE) { +BiomeKeys.DEEP_DARK }
-            //register("0100", )
-            register("0010", TraitSpawnRarity.RARE) { +BiomeKeys.LUSH_CAVES }
-            register("0001", TraitSpawnRarity.NORMAL) { +BiomeKeys.LUSH_CAVES }
-            // TODO シャルパの遺伝子改良
+            //register("1000", ) // TODO シャルパの遺伝子改良
+            register("0100", TraitSpawnRarity.S_RARE)
+            register("0010", TraitSpawnRarity.RARE)
+            register("0001", TraitSpawnRarity.NORMAL)
         }
         val CROSSBREEDING = !TraitCard(
             "crossbreeding", "Crossbreeding", "交雑",
