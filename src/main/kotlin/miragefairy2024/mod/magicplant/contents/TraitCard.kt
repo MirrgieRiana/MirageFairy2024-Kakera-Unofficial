@@ -2,6 +2,7 @@ package miragefairy2024.mod.magicplant.contents
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.FAIRY_BIOME_TAG
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
@@ -453,6 +454,28 @@ class TraitCard(
             //register("0100", )
             register("0010", TraitSpawnRarity.RARE)
             register("0001", TraitSpawnRarity.RARE)
+        }
+        val PLANTS_WITH_SELF_AWARENESS = !TraitCard(
+            "plants_with_self_awareness", "Plants with Self-Awareness", "自我を持つ植物",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+        ) {
+            //register("1000", TraitSpawnRarity.COMMON)
+            register("0100", TraitSpawnRarity.S_RARE) { +FAIRY_BIOME_TAG }
+            register("0010", TraitSpawnRarity.RARE) { +BiomeCards.FAIRY_FOREST.registryKey }
+            register("0001", TraitSpawnRarity.COMMON)
+        }
+        val FLOWER_OF_THE_END = !TraitCard(
+            "flower_of_the_end", "Flower of the End", "終焉の花",
+            "TODO", // TODO
+            "TODO", // TODO
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+        ) {
+            register("1000", TraitSpawnRarity.ALWAYS)
+            //register("0100", )
+            //register("0010", )
+            //register("0001", )
         }
     }
 
