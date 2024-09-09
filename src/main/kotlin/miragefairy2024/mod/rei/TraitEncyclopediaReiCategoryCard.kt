@@ -9,7 +9,7 @@ import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import mirrg.kotlin.hydrogen.Single
 
-object TraitReiCategoryCard : ReiCategoryCard<TraitReiCategoryCard.Display>("trait", "Trait", "特性") {
+object TraitEncyclopediaReiCategoryCard : ReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>("trait_encyclopedia", "Trait Encyclopedia", "特性図鑑") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ inputs, _, tag ->
             Display(

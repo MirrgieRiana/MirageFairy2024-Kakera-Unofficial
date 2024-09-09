@@ -36,7 +36,7 @@ import miragefairy2024.mod.magicplant.magicPlantCards
 import miragefairy2024.mod.magicplant.setTraitStacks
 import miragefairy2024.mod.magicplant.texture
 import miragefairy2024.mod.magicplant.traitRegistry
-import miragefairy2024.mod.rei.TraitReiCategoryCard
+import miragefairy2024.mod.rei.TraitEncyclopediaReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
 import miragefairy2024.util.sortedEntrySet
@@ -47,7 +47,7 @@ import miragefairy2024.util.toEntryStack
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.text.Text
 
-object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.Display>(TraitReiCategoryCard) {
+object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
         traitRegistry.sortedEntrySet.forEach { (_, trait) ->
             val seedItemStacks = magicPlantCards.filter { trait in it.possibleTraits }.map { card ->
@@ -55,7 +55,7 @@ object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.D
                     it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1)))
                 }
             }
-            registry.add(TraitReiCategoryCard.Display(seedItemStacks.map { it.toEntryStack().toEntryIngredient() }, trait))
+            registry.add(TraitEncyclopediaReiCategoryCard.Display(seedItemStacks.map { it.toEntryStack().toEntryIngredient() }, trait))
         }
     }
 
@@ -66,13 +66,13 @@ object TraitClientReiCategoryCard : ClientReiCategoryCard<TraitReiCategoryCard.D
         CARD,
     }
 
-    override fun createCategory() = object : DisplayCategory<TraitReiCategoryCard.Display> {
-        override fun getCategoryIdentifier() = TraitReiCategoryCard.identifier.first
-        override fun getTitle(): Text = TraitReiCategoryCard.translation()
+    override fun createCategory() = object : DisplayCategory<TraitEncyclopediaReiCategoryCard.Display> {
+        override fun getCategoryIdentifier() = TraitEncyclopediaReiCategoryCard.identifier.first
+        override fun getTitle(): Text = TraitEncyclopediaReiCategoryCard.translation()
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
-        override fun getDisplayWidth(display: TraitReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
+        override fun getDisplayWidth(display: TraitEncyclopediaReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
         override fun getDisplayHeight() = 140
-        override fun setupDisplay(display: TraitReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+        override fun setupDisplay(display: TraitEncyclopediaReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             lateinit var container: StackLayout
             lateinit var separatedView: Component
             lateinit var cardView: Component
