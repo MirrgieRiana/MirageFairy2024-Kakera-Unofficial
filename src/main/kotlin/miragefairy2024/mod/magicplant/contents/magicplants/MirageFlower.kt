@@ -89,7 +89,7 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
         TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
         TraitCard.NODED_STEM.trait, // 節状の茎
-        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         //TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.SPINY_LEAVES.trait, // 棘のある葉
         TraitCard.DESERT_GEM.trait, // 砂漠の宝石

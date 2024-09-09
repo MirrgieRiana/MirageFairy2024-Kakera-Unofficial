@@ -81,7 +81,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
         //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
         //TraitCard.NODED_STEM.trait, // 節状の茎
-        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
+        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         //TraitCard.SPINY_LEAVES.trait, // 棘のある葉
         //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
@@ -97,7 +97,7 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
         //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
         TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
         TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
-        TraitCard.CROSSBREEDING.trait, // 交雑
+        //TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
     val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")

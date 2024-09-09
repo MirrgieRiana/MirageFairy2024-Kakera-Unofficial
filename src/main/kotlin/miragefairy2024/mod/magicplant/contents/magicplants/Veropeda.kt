@@ -77,12 +77,12 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
         TraitCard.RARE_PRODUCTION.trait, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
         //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
-        //TraitCard.FOUR_LEAFED.trait, // 四つ葉
+        TraitCard.FOUR_LEAFED.trait, // 四つ葉
         //TraitCard.NODED_STEM.trait, // 節状の茎
-        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.SPINY_LEAVES.trait, // 棘のある葉
-        TraitCard.DESERT_GEM.trait, // 砂漠の宝石
+        //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
         //TraitCard.HEATING_MECHANISM.trait, // 発熱機構
         //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
         TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
