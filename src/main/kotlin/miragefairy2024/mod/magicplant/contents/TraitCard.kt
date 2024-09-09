@@ -214,7 +214,7 @@ class TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.003),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.RARE)
             register("0100", TraitSpawnRarity.S_RARE)
