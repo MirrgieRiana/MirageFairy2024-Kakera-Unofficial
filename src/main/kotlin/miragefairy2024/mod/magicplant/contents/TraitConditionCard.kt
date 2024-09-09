@@ -17,6 +17,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.temperatureCategory
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.Heightmap
@@ -42,6 +43,8 @@ enum class TraitConditionCard(
     HIGH_HUMIDITY("high_humidity", Emoji.HIGH_HUMIDITY, "High Humidity", "高い湿度", { world, blockPos -> if (world.getBiome(blockPos).humidityCategory == HumidityCategory.HIGH) 1.0 else 0.0 }),
     OUTDOOR("outdoor", Emoji.OUTDOOR, "Outdoor", "屋外", { world, blockPos -> if (blockPos.y >= world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, blockPos).y) 1.0 else 0.0 }),
     NATURAL("natural", Emoji.NATURAL, "Natural", "天然", { world, blockPos -> if (world.getMagicPlantBlockEntity(blockPos)?.isNatural() == true) 1.0 else 0.0 }),
+    HIGH_ALTITUDE("high_altitude", Emoji.UP, "High Altitude", "高地", { world, blockPos -> world.getHighAltitudeFactor(blockPos) }),
+    LOW_ALTITUDE("low_altitude", Emoji.DOWN, "Low Altitude", "低地", { world, blockPos -> world.getLowAltitudeFactor(blockPos) }),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -59,6 +62,24 @@ private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
     val hardness = blockState.getHardness(world, blockPos.down())
     if (hardness < 0) return 0.0
     return hardness / 2.0 atMost 2.0
+}
+
+private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
+    return when {
+        this.dimension.natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
+        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_NETHER) -> 0.0
+        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_THE_END) -> 1.0
+        else -> 0.0
+    }
+}
+
+private fun World.getLowAltitudeFactor(blockPos: BlockPos): Double {
+    return when {
+        this.dimension.natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
+        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_NETHER) -> 1.0
+        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_THE_END) -> 0.0
+        else -> 0.0
+    }
 }
 
 context(ModContext)
