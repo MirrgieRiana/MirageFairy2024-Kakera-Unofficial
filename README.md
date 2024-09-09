@@ -41,15 +41,15 @@ MODのある時点での仕様を網羅的に記述した公式のドキュメ�
 - Codes (Programs, Data Packs): **Apache License 2.0**
 - Media Files (Images, Models, Sounds, Translation Files): **Apache License 2.0** or **[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)** or **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)** or **[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)** or **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**
 
-Author: Fairy Rubber
+Author: The Developer of MirageFairy, Generation 7
 
-著者：夜のかけら
+著者：MirageFairy開発者-G7
 
 However, the copyright for textures derived from Minecraft textures and those contained in some layers of `*.pdn` files belongs to the original author.
 
 ## Copyright
 
-Copyright 2023 Fairy Rubber
+Copyright 2023 The Developer of MirageFairy, Generation 7
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
