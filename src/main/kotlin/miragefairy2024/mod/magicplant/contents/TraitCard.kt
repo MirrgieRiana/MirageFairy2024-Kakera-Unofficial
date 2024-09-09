@@ -103,7 +103,7 @@ class TraitCard(
             "air_adaptation", "Spatial Adaptation", "空間適応",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.HUMIDITY to 0.05),
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.03, TraitEffectKeyCard.TEMPERATURE to 0.03, TraitEffectKeyCard.HUMIDITY to 0.03),
         ) {
             register("1000", TraitSpawnRarity.ALWAYS)
             register("0100", TraitSpawnRarity.S_RARE)
@@ -304,7 +304,7 @@ class TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
+            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.DESERT }
@@ -315,7 +315,7 @@ class TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.LOW }
             register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.SNOWY }
@@ -326,7 +326,7 @@ class TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.RIVER }
@@ -337,7 +337,7 @@ class TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
+            listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.MOUNTAIN }
             register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
@@ -348,7 +348,7 @@ class TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.LEAVES_PRODUCTION to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.SAVANNA }
@@ -381,7 +381,7 @@ class TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.NUTRITION to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { end }
             register("0100", TraitSpawnRarity.NORMAL) { end }
@@ -436,7 +436,7 @@ class TraitCard(
             "treasure_of_xarpa", "Treasure of Xarpa", "シャルパの秘宝",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.001),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.RARE) { +BiomeKeys.DEEP_DARK }
             //register("0100", )
