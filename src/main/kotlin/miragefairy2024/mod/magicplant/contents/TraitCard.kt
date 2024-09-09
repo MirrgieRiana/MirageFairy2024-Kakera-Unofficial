@@ -438,11 +438,10 @@ class TraitCard(
             "TODO", // TODO
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
         ) {
-            register("1000", TraitSpawnRarity.RARE) { +BiomeKeys.DEEP_DARK }
-            //register("0100", )
-            register("0010", TraitSpawnRarity.RARE) { +BiomeKeys.LUSH_CAVES }
-            register("0001", TraitSpawnRarity.NORMAL) { +BiomeKeys.LUSH_CAVES }
-            // TODO シャルパの遺伝子改良
+            //register("1000", ) // TODO シャルパの遺伝子改良
+            register("0100", TraitSpawnRarity.S_RARE)
+            register("0010", TraitSpawnRarity.RARE)
+            register("0001", TraitSpawnRarity.NORMAL)
         }
         val CROSSBREEDING = !TraitCard(
             "crossbreeding", "Crossbreeding", "交雑",
