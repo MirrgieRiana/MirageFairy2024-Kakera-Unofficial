@@ -94,7 +94,7 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
         //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
         TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
         TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
-        TraitCard.CROSSBREEDING.trait, // 交雑
+        //TraitCard.CROSSBREEDING.trait, // 交雑
     )
 
     val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
