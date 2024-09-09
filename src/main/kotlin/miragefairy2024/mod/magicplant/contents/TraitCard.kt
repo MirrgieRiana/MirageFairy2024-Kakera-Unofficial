@@ -293,7 +293,7 @@ class TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘のある葉",
             "TODO", // TODO
             "TODO", // TODO
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1), // TODO 接触ダメージ
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
             register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.MESA }
