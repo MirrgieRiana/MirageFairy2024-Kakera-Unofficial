@@ -61,12 +61,12 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
         //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
         //TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
-        TraitCard.OSMOTIC_ABSORPTION.trait, // 浸透吸収
+        TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
         TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        //TraitCard.AIR_ADAPTATION.trait, // 空気適応
-        TraitCard.COLD_ADAPTATION.trait, // 寒冷適応
-        TraitCard.WARM_ADAPTATION.trait, // 温暖適応
-        TraitCard.HOT_ADAPTATION.trait, // 熱帯適応
+        //TraitCard.AIR_ADAPTATION.trait, // 空間適応
+        TraitCard.COLD_ADAPTATION.trait, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait, // 高温適応
         TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
         TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
         TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
@@ -78,9 +78,9 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
         //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         //TraitCard.FOUR_LEAFED.trait, // 四つ葉
         //TraitCard.NODED_STEM.trait, // 節状の茎
-        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 知識の果実
+        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        //TraitCard.SPINY_LEAVES.trait, // 棘状の葉
+        //TraitCard.SPINY_LEAVES.trait, // 棘のある葉
         //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
         TraitCard.HEATING_MECHANISM.trait, // 発熱機構
         //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性

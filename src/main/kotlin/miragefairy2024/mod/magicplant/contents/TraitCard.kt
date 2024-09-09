@@ -76,7 +76,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +BiomeKeys.DEEP_DARK }
         }
         val OSMOTIC_ABSORPTION = !TraitCard(
-            "osmotic_absorption", "Osmotic Absorption", "浸透吸収",
+            "osmotic_absorption", "Nutrient Absorption", "養分吸収",
             "TODO", // TODO
             "TODO", // TODO
             listOf(TraitConditionCard.FLOOR_MOISTURE), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
@@ -99,7 +99,7 @@ class TraitCard(
         }
 
         val AIR_ADAPTATION = !TraitCard(
-            "air_adaptation", "Air Adaptation", "空気適応",
+            "air_adaptation", "Spatial Adaptation", "空間適応",
             "TODO", // TODO
             "TODO", // TODO
             listOf(), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.HUMIDITY to 0.05),
@@ -110,7 +110,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.S_RARE)
         }
         val COLD_ADAPTATION = !TraitCard(
-            "cold_adaptation", "Cold Adaptation", "寒冷適応",
+            "cold_adaptation", "Cold Adaptation", "低温適応",
             "TODO", // TODO
             "TODO", // TODO
             listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
@@ -121,7 +121,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +TemperatureCategory.LOW }
         }
         val WARM_ADAPTATION = !TraitCard(
-            "warm_adaptation", "Warm Adaptation", "温暖適応",
+            "warm_adaptation", "Warm Adaptation", "中温適応",
             "TODO", // TODO
             "TODO", // TODO
             listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
@@ -132,7 +132,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.NORMAL) { +TemperatureCategory.MEDIUM }
         }
         val HOT_ADAPTATION = !TraitCard(
-            "hot_adaptation", "Hot Adaptation", "熱帯適応",
+            "hot_adaptation", "Hot Adaptation", "高温適応",
             "TODO", // TODO
             "TODO", // TODO
             listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
@@ -267,7 +267,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.JUNGLE }
         }
         val FRUIT_OF_KNOWLEDGE = !TraitCard(
-            "fruit_of_knowledge", "Fruit of Knowledge", "知識の果実",
+            "fruit_of_knowledge", "Forbidden Fruit", "禁断の果実",
             "TODO", // TODO
             "TODO", // TODO
             listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
@@ -289,7 +289,7 @@ class TraitCard(
             register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.FOREST }
         }
         val SPINY_LEAVES = !TraitCard(
-            "spiny_leaves", "Spiny Leaves", "棘状の葉",
+            "spiny_leaves", "Spiny Leaves", "棘のある葉",
             "TODO", // TODO
             "TODO", // TODO
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
