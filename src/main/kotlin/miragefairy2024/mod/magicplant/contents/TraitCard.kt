@@ -458,7 +458,7 @@ class TraitCard(
             "plants_with_self_awareness", "Plants with Self-Awareness", "自我を持つ植物",
             "On a colonized planet lacking native flying animals, giving mobility to airborne reproductive cells is beneficial in terms of increasing the probability of encounters between individual organisms.",
             "固有の飛行性動物を欠いた開拓型惑星において、空中散布式の生殖細胞に運動能力を与えることは、個体同士の遭遇確率の点で有益である。",
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.03, TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.03),
         ) {
             //register("1000", TraitSpawnRarity.COMMON)
             register("0100", TraitSpawnRarity.S_RARE) { +FAIRY_BIOME_TAG }
