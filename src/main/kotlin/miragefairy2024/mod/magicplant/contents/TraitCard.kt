@@ -25,6 +25,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.minecraft.text.Style
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.biome.BiomeKeys
@@ -37,7 +38,7 @@ class TraitCard(
     jaPoem: String,
     private val traitConditionCards: List<TraitConditionCard>,
     private val traitEffectKeyCardStacks: List<Pair<TraitEffectKeyCard, Double>>,
-    private val spawnSpecConfigurator: MutableList<TraitSpawnSpec>.() -> Unit,
+    private val spawnSpecConfigurator: MutableList<TraitSpawnSpec>.() -> Unit = {},
 ) {
     companion object {
         val entries = mutableListOf<TraitCard>()
@@ -476,6 +477,15 @@ class TraitCard(
             //register("0010", )
             //register("0001", )
         }
+
+        // Creative Only
+        val CREATIVE_GROWTH = !TraitCard(
+            "creative_growth", "Creative Growth", "アカーシャのお導き",
+            "The structural and physiological intricacy and imperfection of living organisms suggests that life was designed by a greater intelligence after drinking heavily.",
+            "生命組織の構造的・生理学的な精緻さおよび不完全さは、生命が大いなる知性によって、泥酔しながら設計されたことを示唆する。",
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 1.0, TraitEffectKeyCard.TEMPERATURE to 1.0, TraitEffectKeyCard.HUMIDITY to 1.0, TraitEffectKeyCard.GROWTH_BOOST to 1.0),
+        )
+
     }
 
     init {
@@ -484,7 +494,7 @@ class TraitCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val poemTranslation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait", "poem") }, enPoem, jaPoem)
-    val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style, text { poemTranslation() }) {
+    val trait: Trait = object : Trait(Style.EMPTY.withColor(traitEffectKeyCardStacks.first().first.traitEffectKey.color), text { poemTranslation() }) {
         override val spawnSpecs = mutableListOf<TraitSpawnSpec>().also { spawnSpecConfigurator(it) }
 
         override val conditions = traitConditionCards.map { it.traitCondition }

@@ -60,13 +60,6 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
 
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        card.item.registerItemGroup(magicPlantSeedItemGroupCard.itemGroupKey) {
-            traitRegistry.sortedEntrySet.flatMap { (_, trait) ->
-                (0..3).map { b ->
-                    card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1 shl b))) }
-                }
-            }
-        }
 
         // 見た目
         card.block.registerCutoutRenderLayer()
