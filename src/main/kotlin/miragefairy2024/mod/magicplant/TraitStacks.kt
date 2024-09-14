@@ -26,6 +26,8 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
 
         fun of(vararg traitStacks: TraitStack) = of(traitStacks.asIterable())
 
+        fun of(traitStacks: Map<Trait, Int>) = TraitStacks(traitStacks.toSortedMap())
+
         val EMPTY = of()
 
         fun readFromNbt(parent: NbtCompound, key: String = "TraitStacks"): TraitStacks? {
@@ -56,3 +58,24 @@ fun NbtList.toTraitStacks(): TraitStacks {
 fun TraitStacks.toNbt() = this.traitStackMap.map { TraitStack(it.key, it.value).toNbt() }.toNbtList()
 
 val TraitStacks.bitCount get() = this.traitStackList.sumOf { it.level.bitCount }
+
+operator fun TraitStacks.plus(other: TraitStacks): TraitStacks {
+    val map = this.traitStackMap.toMutableMap()
+    other.traitStackMap.forEach { (trait, level) ->
+        map[trait] = map.getOrDefault(trait, 0) or level
+    }
+    return TraitStacks.of(map)
+}
+
+operator fun TraitStacks.minus(other: TraitStacks): TraitStacks {
+    val map = this.traitStackMap.toMutableMap()
+    other.traitStackMap.forEach { (trait, level) ->
+        val level2 = map.getOrDefault(trait, 0) and level.inv()
+        if (level2 == 0) {
+            map.remove(trait)
+        } else {
+            map[trait] = level2
+        }
+    }
+    return TraitStacks.of(map)
+}

@@ -33,6 +33,7 @@ import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 
 fun initMagicPlantClientModule() {
@@ -86,7 +87,7 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                                             texts += traitStack.trait.getName().style(traitStack.trait.style)
                                             texts += traitStack.level.toString(2)().style(traitStack.trait.style)
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()
-                                            if (traitStack.trait.effectStacks.isNotEmpty()) texts += traitStack.trait.effectStacks.map { it.first.emoji.style(it.first.style) }.join()
+                                            if (traitStack.trait.effectStacks.isNotEmpty()) texts += traitStack.trait.effectStacks.map { it.first.emoji.style(Style.EMPTY.withColor(it.first.color)) }.join()
                                             texts.join(" "())
                                         })
                                     })
@@ -142,7 +143,7 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * traitStack.level * factor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
+                            val text = text { (it.second * traitStack.level * factor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(Style.EMPTY.withColor(it.first.color)) }
                             val tooltip = text { it.first.name + " ("() + (it.second * traitStack.level * 100.0 formatAs "%.1f%%")() + " x "() + (factor * 100.0 formatAs "%.1f%%")() + ")"() }
                             child(Components.label(text).tooltip(tooltip))
                         }
