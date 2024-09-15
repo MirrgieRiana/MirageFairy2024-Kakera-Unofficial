@@ -2,12 +2,14 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.ElementPassiveSkillEffect
@@ -604,6 +606,17 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + mana(1.0),
         MotifCardRecipes().overworld + MirageFlowerCard.block,
+    ),
+    PHANTOM_FLOWER(
+        "phantom_flower", 7, "Phantome Floweria", "幻花精ファントメフロウェーリャ", 0xB78EF5, 0xF2C4FF, 0xF2C4FF, 0x70B7D4,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + regeneration(0.4)
+            + regeneration(0.7) * food(MaterialCard.PHANTOM_DROP.item)
+            + mending(1.0) * ToolMaterialCard.PHANTOM_DROP()
+            + regeneration(2.0) * ToolMaterialCard.PHANTOM_DROP()
+            + regeneration(10.0) * ToolMaterialCard.PHANTOM_DROP() * fairyLevel.atLeast(12.0),
+        MotifCardRecipes().common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
     ),
     CACTUS(
         "cactus", 3, "Cactusia", "仙人掌精ツァツトゥーシャ", 0x008200, 0xB0FFAC, 0x00E100, 0x010000,

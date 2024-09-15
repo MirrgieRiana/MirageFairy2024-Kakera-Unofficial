@@ -28,6 +28,7 @@ enum class FairyToolMaterials(
     MIRAGE(48, 1.6F, 0.0F, MiningLevels.WOOD, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
     MIRAGIUM(87, 0.5F, 0.5F, MiningLevels.IRON, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     FAIRY_CRYSTAL(235, 5.0F, 1.5F, MiningLevels.IRON, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
+    PHANTOM_DROP(777, 9.0F, 2.0F, MiningLevels.NETHERITE, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
     XARPITE(283, 1.0F, 2.0F, MiningLevels.IRON, 20, MaterialCard.XARPITE.item.toIngredient()),
     MIRANAGITE(256, 6.5F, 2.0F, MiningLevels.IRON, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
     CHAOS_STONE(666, 2.0F, 2.0F, MiningLevels.NETHERITE, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
@@ -53,6 +54,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途
     MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", "Miragium Tool", "ミラジウムツール"),
     FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
+    PHANTOM_DROP(FairyToolMaterials.PHANTOM_DROP, "phantom_tool", "Phantom Tool", "幻想ツール"),
     XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", "Xarpite Tool", "紅天石ツール"),
     MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", "Miranagite Tool", "蒼天石ツール"),
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),

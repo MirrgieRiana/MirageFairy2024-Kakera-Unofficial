@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
-import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 

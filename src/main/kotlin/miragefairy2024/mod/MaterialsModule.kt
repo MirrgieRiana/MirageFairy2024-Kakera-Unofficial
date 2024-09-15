@@ -87,6 +87,16 @@ enum class MaterialCard(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
         PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
     ),
+    PHANTOM_DROP(
+        "phantom_drop", "Phantom Drop", "幻想の雫",
+        PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
+        foodComponent = FoodComponent.Builder()
+            .hunger(2)
+            .saturationModifier(0.3F)
+            .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+            .alwaysEdible()
+            .build(),
+    ),
     MIRAGIUM_NUGGET(
         "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
         PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
