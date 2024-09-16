@@ -41,8 +41,8 @@ val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
 ) { CreativeGeneAmpouleCard.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(TraitCard.AIR_ADAPTATION.trait, 1))) } }
 
 object CreativeGeneAmpouleCard {
-    val item = CreativeGeneAmpouleItem(Item.Settings().maxCount(1))
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
+    val item = CreativeGeneAmpouleItem(Item.Settings().maxCount(1))
 }
 
 context(ModContext)
