@@ -6,11 +6,13 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
 import miragefairy2024.mod.fairyquest.FairyQuestCardScreenHandler
-import miragefairy2024.mod.fairyquest.fairyQuestRecipeRegistry
+import miragefairy2024.mod.fairyquest.FairyQuestRecipe
+import miragefairy2024.mod.fairyquest.fairyQuestCardScreenHandlerType
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.isNotEmpty
@@ -22,9 +24,9 @@ import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
-import miragefairy2024.util.string
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -36,6 +38,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
+import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.Slot
@@ -51,7 +54,12 @@ import kotlin.math.roundToInt
 object SeedBagCard {
     val identifier = MirageFairy2024.identifier("seed_bag")
     val item = SeedBagItem(Item.Settings().maxCount(1))
+    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
+        val slotIndex = buf.readInt()
+        SeedBagScreenHandler(syncId, playerInventory, slotIndex, ScreenHandlerContext.EMPTY)
+    }
 }
+
 
 context(ModContext)
 fun initSeedBag() {
@@ -65,6 +73,8 @@ fun initSeedBag() {
             .description("Can store magic plant seeds", "魔法植物の種子を格納可能")
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
+
+        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
     }
 
     registerShapedRecipeGeneration(SeedBagCard.item) {
@@ -75,6 +85,7 @@ fun initSeedBag() {
         input('L', MaterialCard.MIRAGE_LEAVES.item)
     } on MaterialCard.MIRAGE_LEAVES.item
 }
+
 
 class SeedBagItem(settings: Settings) : Item(settings) {
     companion object {
@@ -125,15 +136,22 @@ class SeedBagItem(settings: Settings) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
         if (world.isClient) return TypedActionResult.success(itemStack)
+        val slotIndex = if (hand == Hand.MAIN_HAND) {
+            val selectedSlot = user.inventory.selectedSlot
+            if (!PlayerInventory.isValidHotbarIndex(selectedSlot)) return TypedActionResult.fail(itemStack)
+            selectedSlot
+        } else {
+            -1
+        }
         user.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPos))
+                return SeedBagScreenHandler(syncId, playerInventory, slotIndex, ScreenHandlerContext.create(world, player.blockPos))
             }
 
-            override fun getDisplayName() = recipe.title
+            override fun getDisplayName() = itemStack.name
 
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeString(fairyQuestRecipeRegistry.getId(recipe)!!.string)
+                buf.writeInt(slotIndex)
             }
         })
         return TypedActionResult.consume(itemStack)
@@ -225,4 +243,51 @@ fun ItemStack.getSeedBagInventory(): SeedBagInventory {
 fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
     val nbt = getOrCreateNbt()
     Inventories.writeNbt(nbt, inventory.stacks, false)
+}
+
+
+class SeedBagScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val slotIndex : Int , val context: ScreenHandlerContext) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
+    init {
+        repeat(3) { r ->
+            repeat(9) { c ->
+                addSlot(Slot(playerInventory, 9 + 9 * r + c, 0, 0))
+            }
+        }
+        repeat(9) { c ->
+            addSlot(Slot(playerInventory, c, 0, 0))
+        }
+        repeat(SeedBagItem.INVENTORY_SIZE) { i ->
+            addSlot(object : Slot(inputInventory, i, 0, 0) {
+                override fun canInsert(stack: ItemStack) =
+            })
+        }
+
+        slotIndex playerInventory.player.   SimpleInventory(SeedBagItem.INVENTORY_SIZE)
+    }
+
+    override fun canUse(player: PlayerEntity) = true
+
+    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
+        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
+
+        val newItemStack = slots[slot].stack
+        val originalItemStack = newItemStack.copy()
+
+        // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
+        if (slot < 9 * 4) {
+            if (!insertItem(newItemStack, 9 * 4, 9 * 4 + 4, false)) return EMPTY_ITEM_STACK
+        } else {
+            if (!insertItem(newItemStack, 0, 9 * 4, false)) return EMPTY_ITEM_STACK
+        }
+
+        // 終了処理
+        if (newItemStack.isEmpty) {
+            slots[slot].stack = EMPTY_ITEM_STACK
+        } else {
+            slots[slot].markDirty()
+        }
+
+        return originalItemStack
+    }
 }
