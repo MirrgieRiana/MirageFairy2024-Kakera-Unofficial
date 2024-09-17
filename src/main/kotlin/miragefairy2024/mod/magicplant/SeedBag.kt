@@ -39,7 +39,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundEvents
@@ -55,7 +54,7 @@ object SeedBagCard {
     val item = SeedBagItem(Item.Settings().maxCount(1))
     val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
         val slotIndex = buf.readInt()
-        SeedBagScreenHandler(syncId, playerInventory, slotIndex, ScreenHandlerContext.EMPTY)
+        SeedBagScreenHandler(syncId, playerInventory, slotIndex)
     }
 }
 
@@ -145,7 +144,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
         }
         user.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return SeedBagScreenHandler(syncId, playerInventory, slotIndex, ScreenHandlerContext.create(world, player.blockPos))
+                return SeedBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
             override fun getDisplayName() = itemStack.name
@@ -246,7 +245,7 @@ fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
 }
 
 
-class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int, private val context: ScreenHandlerContext) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
+class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
     private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
     private val seedBagInventory = itemStackInstance.getSeedBagInventory()
     private val inventoryDelegate = object : Inventory {
