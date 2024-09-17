@@ -97,6 +97,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         } else {
             if (!insertItem(newItemStack, 0, 9 * 4, false)) return EMPTY_ITEM_STACK
         }
+        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
 
         // 終了処理
         if (newItemStack.isEmpty) {

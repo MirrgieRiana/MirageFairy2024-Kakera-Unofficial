@@ -5,9 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
-import miragefairy2024.mod.fairyquest.FairyQuestCardScreenHandler
-import miragefairy2024.mod.fairyquest.FairyQuestRecipe
-import miragefairy2024.mod.fairyquest.fairyQuestCardScreenHandlerType
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -15,6 +12,8 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
+import miragefairy2024.util.insertItem
+import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.mergeTo
@@ -32,13 +31,13 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
+import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.inventory.StackReference
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
-import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.Slot
@@ -89,7 +88,8 @@ fun initSeedBag() {
 
 class SeedBagItem(settings: Settings) : Item(settings) {
     companion object {
-        val INVENTORY_SIZE = 19 * 6
+        val INVENTORY_WIDTH = 17
+        val INVENTORY_SIZE = INVENTORY_WIDTH * 6
     }
 
     override fun getName(stack: ItemStack): Text {
@@ -246,7 +246,16 @@ fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
 }
 
 
-class SeedBagScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val slotIndex : Int , val context: ScreenHandlerContext) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
+class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int, private val context: ScreenHandlerContext) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
+    private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+    private val seedBagInventory = itemStackInstance.getSeedBagInventory()
+    private val inventoryDelegate = object : Inventory by seedBagInventory {
+        override fun markDirty() {
+            seedBagInventory.markDirty()
+            itemStackInstance.setSeedBagInventory(seedBagInventory)
+        }
+    }
+
     init {
         repeat(3) { r ->
             repeat(9) { c ->
@@ -257,15 +266,13 @@ class SeedBagScreenHandler(syncId: Int, val playerInventory: PlayerInventory, va
             addSlot(Slot(playerInventory, c, 0, 0))
         }
         repeat(SeedBagItem.INVENTORY_SIZE) { i ->
-            addSlot(object : Slot(inputInventory, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) =
+            addSlot(object : Slot(inventoryDelegate, i, 0, 0) {
+                override fun canInsert(stack: ItemStack) = inventoryDelegate.isValid(i, stack)
             })
         }
-
-        slotIndex playerInventory.player.   SimpleInventory(SeedBagItem.INVENTORY_SIZE)
     }
 
-    override fun canUse(player: PlayerEntity) = true
+    override fun canUse(player: PlayerEntity) = (if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]) === itemStackInstance
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
@@ -274,12 +281,12 @@ class SeedBagScreenHandler(syncId: Int, val playerInventory: PlayerInventory, va
         val newItemStack = slots[slot].stack
         val originalItemStack = newItemStack.copy()
 
-        // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
-        if (slot < 9 * 4) {
-            if (!insertItem(newItemStack, 9 * 4, 9 * 4 + 4, false)) return EMPTY_ITEM_STACK
-        } else {
-            if (!insertItem(newItemStack, 0, 9 * 4, false)) return EMPTY_ITEM_STACK
+        if (slot < 9 * 4) { // 上へ
+            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
+        } else { // 下へ
+            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
         }
+        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
 
         // 終了処理
         if (newItemStack.isEmpty) {

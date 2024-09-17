@@ -610,8 +610,8 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
             if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
         } else { // 下へ
             if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
-            slots[slot].onQuickTransfer(newItemStack, originalItemStack)
         }
+        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
 
         // 終了処理
         if (newItemStack.isEmpty) {
