@@ -3,6 +3,7 @@
     <words>
       <w>andesite</w>
       <w>biome</w>
+      <w>blockbench</w>
       <w>continentalness</w>
       <w>cookingtime</w>
       <w>cooldown</w>
@@ -10,7 +11,9 @@
       <w>datagen</w>
       <w>decondensation</w>
       <w>deepslate</w>
+      <w>dest</w>
       <w>diorite</w>
+      <w>dripstone</w>
       <w>enchantability</w>
       <w>enderman</w>
       <w>entrypoints</w>
@@ -23,13 +26,16 @@
       <w>ifft</w>
       <w>lapis</w>
       <w>lateinit</w>
+      <w>luminariaceae</w>
       <w>magicplant</w>
       <w>mesic</w>
+      <w>minia</w>
       <w>miragaceae</w>
       <w>miragales</w>
       <w>miragefairy</w>
       <w>miragium</w>
       <w>miranagite</w>
+      <w>modrinth</w>
       <w>mycelium</w>
       <w>netherite</w>
       <w>netherrack</w>
