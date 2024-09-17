@@ -12,6 +12,7 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
+import miragefairy2024.util.hasSameItemAndNbtAndCount
 import miragefairy2024.util.insertItem
 import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.isNotEmpty
@@ -68,7 +69,8 @@ fun initSeedBag() {
         card.item.enJa("Seed Bag", "種子カバン")
         val poemList = PoemList(1)
             .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
-            .description("Can store magic plant seeds", "魔法植物の種子を格納可能")
+            .description("description1", "Display GUI when used", "使用時、GUIを表示")
+            .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
@@ -241,12 +243,13 @@ fun ItemStack.getSeedBagInventory(): SeedBagInventory {
 
 fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
     val nbt = getOrCreateNbt()
-    Inventories.writeNbt(nbt, inventory.stacks, false)
+    Inventories.writeNbt(nbt, inventory.stacks, true)
 }
 
 
 class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
     private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+    private var expectedItemStack = itemStackInstance.copy()
     private val seedBagInventory = itemStackInstance.getSeedBagInventory()
     private val inventoryDelegate = object : Inventory {
         override fun clear() = seedBagInventory.clear()
@@ -260,6 +263,7 @@ class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInven
         override fun markDirty() {
             seedBagInventory.markDirty()
             itemStackInstance.setSeedBagInventory(seedBagInventory)
+            expectedItemStack = itemStackInstance.copy()
         }
 
         override fun canPlayerUse(player: PlayerEntity) = seedBagInventory.canPlayerUse(player)
@@ -285,7 +289,10 @@ class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInven
         }
     }
 
-    override fun canUse(player: PlayerEntity) = (if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]) === itemStackInstance
+    override fun canUse(player: PlayerEntity): Boolean {
+        val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+        return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
+    }
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
