@@ -67,7 +67,7 @@ fun initSeedBag() {
         card.item.registerGeneratedModelGeneration()
         card.item.enJa("Seed Bag", "種子カバン")
         val poemList = PoemList(1)
-            .poem("", "") // TODO
+            .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
             .description("Can store magic plant seeds", "魔法植物の種子を格納可能")
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
