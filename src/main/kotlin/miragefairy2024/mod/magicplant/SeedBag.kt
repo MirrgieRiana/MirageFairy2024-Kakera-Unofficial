@@ -249,11 +249,25 @@ fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
 class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int, private val context: ScreenHandlerContext) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
     private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
     private val seedBagInventory = itemStackInstance.getSeedBagInventory()
-    private val inventoryDelegate = object : Inventory by seedBagInventory {
+    private val inventoryDelegate = object : Inventory {
+        override fun clear() = seedBagInventory.clear()
+        override fun size() = seedBagInventory.size()
+        override fun isEmpty() = seedBagInventory.isEmpty()
+        override fun getStack(slot: Int) = seedBagInventory.getStack(slot)
+        override fun removeStack(slot: Int, amount: Int) = seedBagInventory.removeStack(slot, amount)
+        override fun removeStack(slot: Int) = seedBagInventory.removeStack(slot)
+        override fun setStack(slot: Int, stack: ItemStack) = seedBagInventory.setStack(slot, stack)
+        override fun getMaxCountPerStack() = seedBagInventory.maxCountPerStack
         override fun markDirty() {
             seedBagInventory.markDirty()
             itemStackInstance.setSeedBagInventory(seedBagInventory)
         }
+
+        override fun canPlayerUse(player: PlayerEntity) = seedBagInventory.canPlayerUse(player)
+        override fun onOpen(player: PlayerEntity) = seedBagInventory.onOpen(player)
+        override fun onClose(player: PlayerEntity) = seedBagInventory.onClose(player)
+        override fun isValid(slot: Int, stack: ItemStack) = seedBagInventory.isValid(slot, stack)
+        override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = seedBagInventory.canTransferTo(hopperInventory, slot, stack)
     }
 
     init {
