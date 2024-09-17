@@ -66,11 +66,11 @@ object FairyCard {
     val item = FairyItem(Item.Settings().fireproof())
 }
 
-private val RARE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.rare" }, "Rare", "レア")
-private val MANA_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.mana" }, "Mana", "魔力")
-private val LEVEL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.level" }, "Level", "レベル")
-private val CONDENSATION_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.condensation" }, "Condensation", "凝縮数")
-private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+private val RARE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.rare" }, "Rare", "レア")
+private val MANA_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.mana" }, "Mana", "魔力")
+private val LEVEL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.level" }, "Level", "レベル")
+private val CONDENSATION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.condensation" }, "Condensation", "凝縮数")
+private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 val fairiesItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("fairies"), "Fairies", "妖精",

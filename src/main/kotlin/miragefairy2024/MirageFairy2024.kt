@@ -11,8 +11,8 @@ object ModEvents {
 }
 
 object MirageFairy2024 : ModInitializer {
-    val modId = "miragefairy2024"
-    fun identifier(path: String) = Identifier(modId, path)
+    const val MOD_ID = "miragefairy2024"
+    fun identifier(path: String) = Identifier(MOD_ID, path)
     override fun onInitialize() {
         Modules.init()
         ModEvents.onRegistration.fire { it() }

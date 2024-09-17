@@ -67,7 +67,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
+    val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
 
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
     override val text = translation()
@@ -121,7 +121,7 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     companion object {
         val identifier = MirageFairy2024.identifier("food_ingredient")
-        val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
+        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
     }
 
     override val text get() = translation(item.name)
@@ -159,7 +159,7 @@ enum class MainHandConditionCard(path: String, en: String, ja: String, val predi
     SWORD("sword", "Sword", "剣", { it.isIn(ItemTags.SWORDS) }),
     ;
 
-    val translation = Translation({ "${MirageFairy2024.modId}.passive_skill_condition.main_hand.$path" }, en, ja)
+    val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.main_hand.$path" }, en, ja)
 }
 
 class MainHandPassiveSkillCondition(private val card: MainHandConditionCard) : PassiveSkillCondition {

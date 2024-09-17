@@ -87,8 +87,8 @@ fun initSeedBag() {
 
 class SeedBagItem(settings: Settings) : Item(settings) {
     companion object {
-        val INVENTORY_WIDTH = 17
-        val INVENTORY_SIZE = INVENTORY_WIDTH * 6
+        const val INVENTORY_WIDTH = 17
+        const val INVENTORY_SIZE = INVENTORY_WIDTH * 6
     }
 
     override fun getName(stack: ItemStack): Text {

@@ -493,7 +493,7 @@ class TraitCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val poemTranslation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait", "poem") }, enPoem, jaPoem)
+    val poemTranslation = Translation({ identifier.toTranslationKey("${MirageFairy2024.MOD_ID}.trait", "poem") }, enPoem, jaPoem)
     val trait: Trait = object : Trait(Style.EMPTY.withColor(traitEffectKeyCardStacks.first().first.traitEffectKey.color), text { poemTranslation() }) {
         override val spawnSpecs = mutableListOf<TraitSpawnSpec>().also { spawnSpecConfigurator(it) }
 

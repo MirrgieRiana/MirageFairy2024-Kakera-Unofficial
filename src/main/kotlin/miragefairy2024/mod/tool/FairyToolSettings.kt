@@ -21,11 +21,11 @@ class FairyToolSettings<I : Item>(
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolSettings<I> {
     companion object {
-        val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
-        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
-        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
-        val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
-        val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
+        val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
+        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
+        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+        val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
+        val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
     }
 
     val tags = mutableListOf<TagKey<Item>>()

@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-fun loadImage(name: String): BufferedImage = ImageIO.read(File("src/main/resources/assets/${MirageFairy2024.modId}/textures/item/$name.png"))
+fun loadImage(name: String): BufferedImage = ImageIO.read(File("src/main/resources/assets/${MirageFairy2024.MOD_ID}/textures/item/$name.png"))
 
 object MainColorMaker {
     @JvmStatic
