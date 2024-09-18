@@ -40,6 +40,7 @@ class FairyToolSettings<I : Item>(
     var silkTouch = false
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
+    var basePower = 0F // TODO -> FairyShootingStaffSettings
 
     override fun createItem() = creator(this)
 
@@ -79,6 +80,10 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ Fair
     it.tags += ItemTags.PICKAXES
     it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
     it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+}
+
+fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.basePower = basePower
 }
 
 /**

@@ -298,7 +298,7 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *>, 
             override fun getDisplayName() = blockEntity.displayName
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
         })
-        player.incrementStat(Stats.INTERACT_WITH_BREWINGSTAND)
+        player.incrementStat(Stats.USED.getOrCreateStat(this.asItem()))
         return ActionResult.CONSUME
     }
 

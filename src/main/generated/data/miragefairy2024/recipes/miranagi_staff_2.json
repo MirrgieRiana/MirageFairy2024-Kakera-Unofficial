@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miranagi_staff_2",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miranagi_staff"
+    },
+    "G": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " IG",
+    " #I",
+    "N  "
+  ],
+  "result": {
+    "item": "miragefairy2024:miranagi_staff_2"
+  },
+  "show_notification": true
+}
