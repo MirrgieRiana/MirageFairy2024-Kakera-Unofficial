@@ -8,17 +8,31 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.en
 import miragefairy2024.util.enJa
+import miragefairy2024.util.ja
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerDamageTypeTagGeneration
+import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.with
 import net.minecraft.data.client.Models
+import net.minecraft.entity.damage.DamageType
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.registry.tag.DamageTypeTags
+
+object MagicDamageTypeCard {
+    val identifier = MirageFairy2024.identifier("magic")
+    val registryKey = RegistryKeys.DAMAGE_TYPE with identifier
+    val damageType = DamageType(identifier.toTranslationKey(), 0.1F)
+}
 
 context(ModContext)
 fun initToolModule() {
@@ -34,6 +48,20 @@ fun initToolModule() {
 
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
     ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
+
+    MagicDamageTypeCard.let { card ->
+        registerDynamicGeneration(card.registryKey) {
+            card.damageType
+        }
+        en { card.identifier.toTranslationKey("death.attack") to "%1\$s was killed by magic" }
+        ja { card.identifier.toTranslationKey("death.attack") to "%1\$sは魔法で殺された" }
+        en { card.identifier.toTranslationKey("death.attack", "player") to "%1\$s was killed by magic whilst trying to escape %2\$s" }
+        ja { card.identifier.toTranslationKey("death.attack", "player") to "%1\$sは%2\$sとの戦闘中に魔法で殺された" }
+        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.IS_PROJECTILE }
+        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.BYPASSES_ARMOR }
+        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.WITCH_RESISTANT_TO }
+        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.AVOIDS_GUARDIAN_THORNS }
+    }
 
     initToolMaterialModule()
 }
@@ -135,8 +163,8 @@ class ToolCard<I : Item>(
                 input('R', Items.STICK)
             } on MaterialCard.MIRANAGITE.item
         }.register()
-        val MIRANAGI_STAFF = ToolCard(
-            "miranagi_staff", "Miranagite Staff", "蒼天石のスタッフ",
+        val MIRANAGI_STAFF_0 = ToolCard(
+            "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
             "Inflating anti-entropy force", "膨張する秩序の力。",
             2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F).silkTouch(),
         ) {
@@ -149,8 +177,8 @@ class ToolCard<I : Item>(
                 input('I', Items.COPPER_INGOT)
             } on MaterialCard.MIRANAGITE.item
         }.register()
-        val MIRANAGI_STAFF_2 = ToolCard(
-            "miranagi_staff_2", "Staff of Miranagi", "みらなぎの杖",
+        val MIRANAGI_STAFF = ToolCard(
+            "miranagi_staff", "Staff of Miranagi", "みらなぎの杖",
             "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
             3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F).silkTouch(),
         ) {
@@ -158,7 +186,7 @@ class ToolCard<I : Item>(
                 pattern(" IG")
                 pattern(" #I")
                 pattern("N  ")
-                input('#', MIRANAGI_STAFF.item)
+                input('#', MIRANAGI_STAFF_0.item)
                 input('G', Items.DIAMOND)
                 input('I', Items.IRON_INGOT)
                 input('N', Items.IRON_NUGGET)

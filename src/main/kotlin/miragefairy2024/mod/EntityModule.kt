@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.tool.MagicDamageTypeCard
 import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
@@ -46,6 +47,10 @@ object AntimatterBoltCard {
 }
 
 class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: World, private val damage: Float, private var limitDistance: Double) : ProjectileEntity(entityType, world) {
+    companion object {
+        FUSE = DataTracker.registerData(TntEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    }
+
     private var prevPos: Vec3d? = null
     override fun tick() {
         super.tick()
@@ -122,7 +127,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
     }
 
     private fun attack(entity: Entity) {
-        entity.damage(world.damageSources.mobProjectile(this, owner as? LivingEntity), damage)
+        entity.damage(world.damageSources.create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
     }
 
     override fun initDataTracker() = Unit

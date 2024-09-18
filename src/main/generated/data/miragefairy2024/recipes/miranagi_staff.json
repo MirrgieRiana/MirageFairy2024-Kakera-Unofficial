@@ -3,20 +3,23 @@
   "category": "misc",
   "group": "miragefairy2024:miranagi_staff",
   "key": {
+    "#": {
+      "item": "miragefairy2024:miranagi_staff_0"
+    },
     "G": {
-      "item": "minecraft:glass"
+      "item": "minecraft:diamond"
     },
     "I": {
-      "item": "minecraft:copper_ingot"
+      "item": "minecraft:iron_ingot"
     },
-    "R": {
-      "item": "miragefairy2024:miranagite_rod"
+    "N": {
+      "item": "minecraft:iron_nugget"
     }
   },
   "pattern": [
     " IG",
-    " RI",
-    "I  "
+    " #I",
+    "N  "
   ],
   "result": {
     "item": "miragefairy2024:miranagi_staff"

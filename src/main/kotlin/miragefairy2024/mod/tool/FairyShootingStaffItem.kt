@@ -5,8 +5,11 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.AntimatterBoltCard
 import miragefairy2024.mod.AntimatterBoltEntity
+import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.util.Translation
+import miragefairy2024.util.getLevel
+import miragefairy2024.util.getRate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
@@ -76,10 +79,10 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
             }
         }
 
-        val damage = basePower
-        val limitDistance = 16.0
-        val speed = 4.0F
-        val frequency = 0.5
+        val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
+        val limitDistance = 16.0 + 3.0 * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
+        val speed = 2.0F + 2.0F * EnchantmentCard.MAGIC_REACH.enchantment.getRate(itemStack).toFloat()
+        val frequency = 0.5 + 0.5 * EnchantmentCard.MAGIC_ACCELERATION.enchantment.getRate(itemStack)
 
         // 生成
         val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world, damage, limitDistance)
