@@ -57,10 +57,10 @@ fun initToolModule() {
         ja { card.identifier.toTranslationKey("death.attack") to "%1\$sは魔法で殺された" }
         en { card.identifier.toTranslationKey("death.attack", "player") to "%1\$s was killed by magic whilst trying to escape %2\$s" }
         ja { card.identifier.toTranslationKey("death.attack", "player") to "%1\$sは%2\$sとの戦闘中に魔法で殺された" }
-        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.IS_PROJECTILE }
-        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.BYPASSES_ARMOR }
-        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.WITCH_RESISTANT_TO }
-        card.damageType.registerDamageTypeTagGeneration { DamageTypeTags.AVOIDS_GUARDIAN_THORNS }
+        card.identifier.registerDamageTypeTagGeneration { DamageTypeTags.IS_PROJECTILE }
+        card.identifier.registerDamageTypeTagGeneration { DamageTypeTags.BYPASSES_ARMOR }
+        card.identifier.registerDamageTypeTagGeneration { DamageTypeTags.WITCH_RESISTANT_TO }
+        card.identifier.registerDamageTypeTagGeneration { DamageTypeTags.AVOIDS_GUARDIAN_THORNS }
     }
 
     initToolMaterialModule()
@@ -166,7 +166,7 @@ class ToolCard<I : Item>(
         val MIRANAGI_STAFF_0 = ToolCard(
             "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
             "Inflating anti-entropy force", "膨張する秩序の力。",
-            2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F).silkTouch(),
+            2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" IG")
@@ -180,7 +180,7 @@ class ToolCard<I : Item>(
         val MIRANAGI_STAFF = ToolCard(
             "miranagi_staff", "Staff of Miranagi", "みらなぎの杖",
             "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
-            3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F).silkTouch(),
+            3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" IG")

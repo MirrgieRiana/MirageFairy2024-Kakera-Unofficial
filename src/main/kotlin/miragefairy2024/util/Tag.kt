@@ -51,7 +51,7 @@ fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> Tag
 }
 
 context(ModContext)
-fun DamageType.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
+fun Identifier.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
     it(tagProvider()).add(this)
 }
 

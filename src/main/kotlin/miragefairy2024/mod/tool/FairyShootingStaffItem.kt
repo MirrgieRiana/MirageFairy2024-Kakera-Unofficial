@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class FairyShootingStaffItem(override val fairyToolSettings: FairyToolSettings<FairyShootingStaffItem>, settings: Settings) :
-    ShootingStaffItem(fairyToolSettings.toolMaterialCard.toolMaterial, fairyToolSettings.basePower, settings),
+    ShootingStaffItem(fairyToolSettings.toolMaterialCard.toolMaterial, fairyToolSettings.basePower, fairyToolSettings.baseMaxDistance, settings),
     FairyToolItem<FairyShootingStaffItem>,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
@@ -57,7 +57,7 @@ class FairyShootingStaffItem(override val fairyToolSettings: FairyToolSettings<F
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(this, itemStack)
 }
 
-open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
+open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
     companion object {
         val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_tool_item.not_enough_experience" }, "Not enough experience", "経験値が足りません")
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.shooting_staff.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
@@ -80,15 +80,17 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         }
 
         val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
-        val limitDistance = 16.0 + 3.0 * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
+        val maxDistance = baseMaxDistance + 3F * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
         val speed = 2.0F + 2.0F * EnchantmentCard.MAGIC_REACH.enchantment.getRate(itemStack).toFloat()
         val frequency = 0.5 + 0.5 * EnchantmentCard.MAGIC_ACCELERATION.enchantment.getRate(itemStack)
 
         // 生成
-        val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world, damage, limitDistance)
+        val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world)
         entity.setPosition(user.x, user.eyeY - 0.3, user.z)
         entity.setVelocity(user, user.pitch, user.yaw, 0.0F, speed, 1.0F)
         entity.owner = user
+        entity.damage = damage
+        entity.maxDistance = maxDistance
         world.spawnEntity(entity)
 
         // 消費

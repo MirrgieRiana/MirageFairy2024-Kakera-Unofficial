@@ -41,6 +41,7 @@ class FairyToolSettings<I : Item>(
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
     var basePower = 0F // TODO -> FairyShootingStaffSettings
+    var baseMaxDistance = 0F // TODO -> FairyShootingStaffSettings
 
     override fun createItem() = creator(this)
 
@@ -82,8 +83,9 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ Fair
     it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
 }
 
-fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.basePower = basePower
+    it.baseMaxDistance = baseMaxDistance
 }
 
 /**

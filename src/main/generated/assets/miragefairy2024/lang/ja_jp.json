@@ -46,6 +46,8 @@
   "category.rei.miragefairy2024.item_fairy_dream_recipe": "妖精の夢：アイテム",
   "category.rei.miragefairy2024.trait_encyclopedia": "特性図鑑",
   "container.miragefairy2024.soul_stream": "ソウルストリーム",
+  "death.attack.miragefairy2024.magic": "%1$sは魔法で殺された",
+  "death.attack.miragefairy2024.magic.player": "%1$sは%2$sとの戦闘中に魔法で殺された",
   "effect.miragefairy2024.experience": "経験値獲得",
   "enchantment.miragefairy2024.magic_acceleration": "魔法加速",
   "enchantment.miragefairy2024.magic_power": "魔法ダメージ増加",
