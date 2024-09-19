@@ -87,11 +87,6 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ Fair
     it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
 }
 
-fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.basePower = basePower
-    it.baseMaxDistance = baseMaxDistance
-}
-
 /**
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
@@ -106,6 +101,18 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 // Hoe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
+
+fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyBattleAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = attackDamage
+    it.attackSpeed = attackSpeed
+    it.tags += ItemTags.AXES
+    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
+}
+
+fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.basePower = basePower
+    it.baseMaxDistance = baseMaxDistance
+}
 
 
 // Configurator

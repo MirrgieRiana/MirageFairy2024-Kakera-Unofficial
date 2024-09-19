@@ -19,7 +19,6 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.minecraft.data.client.Models
 import net.minecraft.entity.damage.DamageType
 import net.minecraft.item.Item
@@ -129,13 +128,26 @@ class ToolCard<I : Item>(
         }.register()
         val FAIRY_CRYSTAL_SWORD = ToolCard(
             "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
-            "Fairies are said to snack on this", "妖精はこれをおやつにするという",
+            "Nutrients for the soul", "妖精はこれをおやつにするという",
             2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairyWhenKilled(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
                 pattern("#")
                 pattern("R")
+                input('#', MaterialCard.FAIRY_CRYSTAL.item)
+                input('R', Items.STICK)
+            } on MaterialCard.FAIRY_CRYSTAL.item
+        }.register()
+        val FAIRY_CRYSTAL_BATTLE_AXE = ToolCard(
+            "fairy_crystal_battle_axe", "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
+            "The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。",
+            2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 7.0F, -3.2F).selfMending(10).obtainFairyWhenKilled(9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern("#R#")
+                pattern(" R ")
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
