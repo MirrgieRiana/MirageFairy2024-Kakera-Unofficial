@@ -26,8 +26,7 @@ class FairyToolSettings<I : Item>(
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
-        val OBTAIN_FAIRY_WHEN_MINED = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_mined" }, "Obtain a fairy when mined", "採掘時に妖精を入手")
-        val OBTAIN_FAIRY_WHEN_KILLED = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_killed" }, "Obtain a fairy when killed", "撃破時に妖精を入手")
+        val OBTAIN_FAIRY = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
     }
 
     val tags = mutableListOf<TagKey<Item>>()
@@ -44,8 +43,7 @@ class FairyToolSettings<I : Item>(
     val descriptions = mutableListOf<Translation>()
     var basePower = 0F // TODO -> FairyShootingStaffSettings
     var baseMaxDistance = 0F // TODO -> FairyShootingStaffSettings
-    var obtainFairyWhenMined: Double? = null
-    var obtainFairyWhenKilled: Double? = null
+    var obtainFairy: Double? = null
 
     override fun createItem() = creator(this)
 
@@ -142,12 +140,7 @@ fun FairyToolSettings<*>.selfMending(selfMending: Int) = this.also {
     it.descriptions += FairyToolSettings.SELF_MENDING_TRANSLATION
 }
 
-fun FairyToolSettings<*>.obtainFairyWhenMined(appearanceRateBonus: Double) = this.also {
-    it.obtainFairyWhenMined = appearanceRateBonus
-    it.descriptions += FairyToolSettings.OBTAIN_FAIRY_WHEN_MINED
-}
-
-fun FairyToolSettings<*>.obtainFairyWhenKilled(appearanceRateBonus: Double) = this.also {
-    it.obtainFairyWhenKilled = appearanceRateBonus
-    it.descriptions += FairyToolSettings.OBTAIN_FAIRY_WHEN_KILLED
+fun FairyToolSettings<*>.obtainFairy(appearanceRateBonus: Double) = this.also {
+    it.obtainFairy = appearanceRateBonus
+    it.descriptions += FairyToolSettings.OBTAIN_FAIRY
 }

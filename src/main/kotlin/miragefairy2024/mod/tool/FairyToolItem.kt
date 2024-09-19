@@ -189,14 +189,14 @@ fun <I> postMineImpl(item: I, stack: ItemStack, world: World, state: BlockState,
             }
         }
     }
-    item.fairyToolSettings.obtainFairyWhenMined?.let { obtainFairyWhenMined ->
+    item.fairyToolSettings.obtainFairy?.let { obtainFairy ->
         if (miner !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
 
         // モチーフの判定
         val motifSet = FairyDreamRecipes.BLOCK.test(state.block)
 
         // 抽選
-        val result = getRandomFairy(world.random, motifSet, obtainFairyWhenMined) ?: return@let
+        val result = getRandomFairy(world.random, motifSet, obtainFairy) ?: return@let
 
         // 入手
         val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
@@ -210,7 +210,7 @@ fun <I> postMineImpl(item: I, stack: ItemStack, world: World, state: BlockState,
 }
 
 fun <I> postHitImpl(item: I, stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem<I> {
-    item.fairyToolSettings.obtainFairyWhenKilled?.let { obtainFairyWhenKilled ->
+    item.fairyToolSettings.obtainFairy?.let { obtainFairy ->
         if (attacker !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
         if (!target.isDead) return@let // 撃破時でない
 
@@ -218,7 +218,7 @@ fun <I> postHitImpl(item: I, stack: ItemStack, target: LivingEntity, attacker: L
         val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(target.type)
 
         // 抽選
-        val result = getRandomFairy(target.world.random, motifSet, obtainFairyWhenKilled) ?: return@let
+        val result = getRandomFairy(target.world.random, motifSet, obtainFairy) ?: return@let
 
         // 入手
         val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)

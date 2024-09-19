@@ -45,8 +45,7 @@ fun initToolModule() {
     FairyToolSettings.CUT_ALL_TRANSLATION.enJa()
     FairyToolSettings.SILK_TOUCH_TRANSLATION.enJa()
     FairyToolSettings.SELF_MENDING_TRANSLATION.enJa()
-    FairyToolSettings.OBTAIN_FAIRY_WHEN_MINED.enJa()
-    FairyToolSettings.OBTAIN_FAIRY_WHEN_KILLED.enJa()
+    FairyToolSettings.OBTAIN_FAIRY.enJa()
 
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
     ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
@@ -116,7 +115,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
-            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairyWhenMined(9.0),
+            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -129,7 +128,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_SWORD = ToolCard(
             "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
             "Nutrients for the soul", "妖精はこれをおやつにするという",
-            2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairyWhenKilled(9.0),
+            2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
@@ -142,7 +141,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_BATTLE_AXE = ToolCard(
             "fairy_crystal_battle_axe", "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
             "The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。",
-            2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 7.0F, -3.2F).selfMending(10).obtainFairyWhenKilled(9.0),
+            2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -262,7 +261,7 @@ class ToolCard<I : Item>(
         val PHANTOM_PICKAXE = ToolCard(
             "phantom_pickaxe", "Phantom Pickaxe", "幻想のつるはし",
             "\"Creation\" is the true power.", "人間が手にした唯一の幻想。",
-            4, createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20),
+            4, createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -275,7 +274,7 @@ class ToolCard<I : Item>(
         val PHANTOM_SHOVEL = ToolCard(
             "phantom_shovel", "Phantom Shovel", "幻想のシャベル",
             "The sound of the world's end echoed", "破壊された世界の音――",
-            4, createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20),
+            4, createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
@@ -288,7 +287,7 @@ class ToolCard<I : Item>(
         val PHANTOM_SWORD = ToolCard(
             "phantom_sword", "Phantom Sword", "幻想の剣",
             "Pray. For rebirth.", "闇を切り裂く、再生の光。",
-            4, createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20),
+            4, createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
