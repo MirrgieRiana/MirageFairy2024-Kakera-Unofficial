@@ -26,6 +26,12 @@ class FairyMiningToolItem(override val fairyToolSettings: FairyToolSettings<Fair
         return true
     }
 
+    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
+        super.postHit(stack, target, attacker)
+        postHitImpl(this, stack, target, attacker)
+        return true
+    }
+
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(this, stack, world, entity, slot, selected)

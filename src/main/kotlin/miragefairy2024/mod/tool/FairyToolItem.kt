@@ -1,5 +1,11 @@
 package miragefairy2024.mod.tool
 
+import miragefairy2024.mod.fairy.FairyDreamRecipes
+import miragefairy2024.mod.fairy.FairyHistoryContainerExtraPlayerDataCategory
+import miragefairy2024.mod.fairy.createFairyItemStack
+import miragefairy2024.mod.fairy.fairyHistoryContainer
+import miragefairy2024.mod.fairy.getRandomFairy
+import miragefairy2024.mod.sync
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
@@ -14,6 +20,7 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -181,6 +188,46 @@ fun <I> postMineImpl(item: I, stack: ItemStack, world: World, state: BlockState,
                 }
             }
         }
+    }
+    item.fairyToolSettings.obtainFairyWhenMined?.let { obtainFairyWhenMined ->
+        if (miner !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
+
+        // モチーフの判定
+        val motifSet = FairyDreamRecipes.BLOCK.test(state.block)
+
+        // 抽選
+        val result = getRandomFairy(world.random, motifSet, obtainFairyWhenMined) ?: return@let
+
+        // 入手
+        val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
+        world.spawnEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
+
+        // 妖精召喚履歴に追加
+        miner.fairyHistoryContainer[result.motif] += result.condensation * result.count
+        FairyHistoryContainerExtraPlayerDataCategory.sync(miner)
+
+    }
+}
+
+fun <I> postHitImpl(item: I, stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem<I> {
+    item.fairyToolSettings.obtainFairyWhenKilled?.let { obtainFairyWhenKilled ->
+        if (attacker !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
+        if (!target.isDead) return@let // 撃破時でない
+
+        // モチーフの判定
+        val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(target.type)
+
+        // 抽選
+        val result = getRandomFairy(target.world.random, motifSet, obtainFairyWhenKilled) ?: return@let
+
+        // 入手
+        val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
+        target.world.spawnEntity(ItemEntity(target.world, target.x, target.y, target.z, fairyItemStack))
+
+        // 妖精召喚履歴に追加
+        attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count
+        FairyHistoryContainerExtraPlayerDataCategory.sync(attacker)
+
     }
 }
 

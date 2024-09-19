@@ -19,6 +19,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.with
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.minecraft.data.client.Models
 import net.minecraft.entity.damage.DamageType
 import net.minecraft.item.Item
@@ -45,6 +46,8 @@ fun initToolModule() {
     FairyToolSettings.CUT_ALL_TRANSLATION.enJa()
     FairyToolSettings.SILK_TOUCH_TRANSLATION.enJa()
     FairyToolSettings.SELF_MENDING_TRANSLATION.enJa()
+    FairyToolSettings.OBTAIN_FAIRY_WHEN_MINED.enJa()
+    FairyToolSettings.OBTAIN_FAIRY_WHEN_KILLED.enJa()
 
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
     ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
@@ -114,12 +117,25 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
-            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10),
+            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairyWhenMined(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
                 pattern(" R ")
                 pattern(" R ")
+                input('#', MaterialCard.FAIRY_CRYSTAL.item)
+                input('R', Items.STICK)
+            } on MaterialCard.FAIRY_CRYSTAL.item
+        }.register()
+        val FAIRY_CRYSTAL_SWORD = ToolCard(
+            "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
+            "Fairies are said to snack on this", "妖精はこれをおやつにするという",
+            2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairyWhenKilled(9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("#")
+                pattern("#")
+                pattern("R")
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
