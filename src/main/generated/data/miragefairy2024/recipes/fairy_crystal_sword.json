@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_crystal_sword",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:fairy_crystal"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "#",
+    "R"
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_crystal_sword"
+  },
+  "show_notification": true
+}

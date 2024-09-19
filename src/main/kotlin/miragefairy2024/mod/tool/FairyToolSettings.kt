@@ -72,14 +72,14 @@ fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyS
     it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
 }
 
-fun createShovel(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyMiningToolItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createShovel(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyShovelItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 1.5F
     it.attackSpeed = -3.0F
     it.tags += ItemTags.SHOVELS
     it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
 }
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyMiningToolItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 1F
     it.attackSpeed = -2.8F
     it.tags += ItemTags.PICKAXES
@@ -91,7 +91,7 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ Fair
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyMiningToolItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
     it.tags += ItemTags.AXES
