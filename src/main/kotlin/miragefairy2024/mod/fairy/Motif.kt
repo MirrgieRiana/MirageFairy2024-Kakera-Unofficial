@@ -513,7 +513,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
             + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
-            + overall.defence(0.2) * food.atLeast(12),
+            + magic.attack(0.6) * food.atLeast(12),
         MotifCardRecipes().overworld.nether + Blocks.RED_MUSHROOM + Items.RED_MUSHROOM,
     ),
     BROWN_MUSHROOM(
@@ -521,7 +521,7 @@ enum class MotifCard(
         ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
             + regeneration(1.0) * food(Items.BROWN_MUSHROOM)
-            + regeneration(0.2) * food.atLeast(12),
+            + magic.defence(0.6) * food.atLeast(12),
         MotifCardRecipes().overworld.nether + Blocks.BROWN_MUSHROOM + Items.BROWN_MUSHROOM,
     ),
 
