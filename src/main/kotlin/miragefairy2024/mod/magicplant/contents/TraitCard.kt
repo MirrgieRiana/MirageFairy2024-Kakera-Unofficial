@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.biome.BiomeKeys
 
+@Suppress("SpellCheckingInspection")
 class TraitCard(
     path: String,
     val enName: String,

@@ -73,6 +73,7 @@ interface Motif {
 }
 
 
+@Suppress("SpellCheckingInspection")
 enum class MotifCard(
     path: String,
     override val rare: Int,

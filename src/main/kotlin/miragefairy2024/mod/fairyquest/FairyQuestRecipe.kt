@@ -72,6 +72,7 @@ interface FairyQuestRecipe {
     val outputs: List<ItemStack>
 }
 
+@Suppress("SpellCheckingInspection")
 enum class FairyQuestRecipeCard(
     path: String,
     override val color: Int,
