@@ -276,6 +276,6 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 ),
             ),
         )
-        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MirageFairy2024.modId, rule)
+        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MirageFairy2024.MOD_ID, rule)
     }
 }

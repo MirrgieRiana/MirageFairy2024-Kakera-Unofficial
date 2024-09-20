@@ -44,7 +44,7 @@ enum class TraitEffectKeyCard(
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.modId}.trait_effect") }, enName, jaName)
+    val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.MOD_ID}.trait_effect") }, enName, jaName)
     val traitEffectKey = if (isLogScale) {
         object : TraitEffectKey<Double>() {
             override val emoji = emoji()

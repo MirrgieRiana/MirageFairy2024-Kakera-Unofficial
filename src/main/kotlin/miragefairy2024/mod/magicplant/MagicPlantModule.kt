@@ -23,10 +23,10 @@ val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     EmeraldLuminariaCard,
 )
 
-val TRAIT_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.magic_plant.trait" }, "Trait", "特性")
-val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.magic_plant.creativeOnly" }, "Creative Only", "クリエイティブ専用")
-val GUI_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.magic_plant.gui" }, "Use while sneaking to show traits", "スニーク中に使用時、特性GUIを表示")
-val INVALID_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.magic_plant.invalid" }, "Invalid", "無効")
+val TRAIT_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.trait" }, "Trait", "特性")
+val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.creativeOnly" }, "Creative Only", "クリエイティブ専用")
+val GUI_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.gui" }, "Use while sneaking to show traits", "スニーク中に使用時、特性GUIを表示")
+val INVALID_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.invalid" }, "Invalid", "無効")
 
 val magicPlantSeedItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("magic_plant_seeds"), "Magic Plant Seeds", "魔法植物の種子",

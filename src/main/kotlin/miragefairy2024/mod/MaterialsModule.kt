@@ -282,8 +282,8 @@ enum class MaterialCard(
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
 val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("wisp"))
 
-val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
-val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.mina.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
+val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.mirage_flour.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
+val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.mina.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
 
 context(ModContext)
 fun initMaterialsModule() {
@@ -344,7 +344,7 @@ fun initMaterialsModule() {
         pattern("#")
         pattern("#")
         input('#', MaterialCard.MIRAGE_STEM.item)
-    } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.modId from MaterialCard.MIRAGE_STEM.item
+    } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.MOD_ID from MaterialCard.MIRAGE_STEM.item
 
     // ミラジウム
     registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
@@ -352,8 +352,8 @@ fun initMaterialsModule() {
 
     // ヴェロペダの葉
     MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
-    registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
-    registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.modId from MaterialCard.VEROPEDA_LEAF.item
+    registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
+    registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
 
     // ヴェロペダの実
     MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
@@ -364,7 +364,7 @@ fun initMaterialsModule() {
         pattern("S")
         input('#', MaterialCard.HAIMEVISKA_SAP.item)
         input('S', Items.STICK)
-    } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_SAP.item
+    } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_SAP.item
 
     // 妖精の木の涙→粘着ピストン
     registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
@@ -372,7 +372,7 @@ fun initMaterialsModule() {
         pattern("P")
         input('P', Blocks.PISTON)
         input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
-    } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.modId from MaterialCard.HAIMEVISKA_ROSIN.item
+    } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_ROSIN.item
 
     // ミラージュの花粉
     MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }

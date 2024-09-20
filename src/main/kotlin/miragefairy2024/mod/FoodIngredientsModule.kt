@@ -77,7 +77,7 @@ enum class FoodIngredientCategoryCard(path: String, enName: String, jaName: Stri
     MUSHROOM("mushroom", "Mushroom", "キノコ"),
     ;
 
-    val translation = Translation({ "${MirageFairy2024.modId}.food_ingredient.$path" }, enName, jaName)
+    val translation = Translation({ "${MirageFairy2024.MOD_ID}.food_ingredient.$path" }, enName, jaName)
     override val text get() = translation()
 }
 

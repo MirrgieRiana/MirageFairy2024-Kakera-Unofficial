@@ -21,11 +21,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import kotlin.math.log
 
-val PASSIVE_SKILL_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
-val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.passive_skill.disabled" }, "Outside target slot", "対象スロット外")
-val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.passive_skill.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
-val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.passive_skill.supporting" }, "Supporting other item", "他のアイテムを支援中")
-val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.${MirageFairy2024.modId}.fairy.passive_skill.effective" }, "Effective", "発動中")
+val PASSIVE_SKILL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.passive_skill" }, "Passive Skills", "パッシブスキル")
+val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.passive_skill.disabled" }, "Outside target slot", "対象スロット外")
+val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.passive_skill.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
+val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.passive_skill.supporting" }, "Supporting other item", "他のアイテムを支援中")
+val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy.passive_skill.effective" }, "Effective", "発動中")
 
 context(ModContext)
 fun initPassiveSkillExecution() {

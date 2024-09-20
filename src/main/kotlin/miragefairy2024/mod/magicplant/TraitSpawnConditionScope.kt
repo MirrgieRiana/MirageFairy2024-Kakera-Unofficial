@@ -39,7 +39,7 @@ object TraitSpawnConditionScope
 
 // 特別な条件
 
-private val ANYWHERE_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.anywhere" }, "Anywhere", "どこでも")
+private val ANYWHERE_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.anywhere" }, "Anywhere", "どこでも")
 context(TraitSpawnConditionScope) val anywhere
     get() = object : TraitSpawnCondition {
         override val description = ANYWHERE_TRANSLATION()
@@ -49,9 +49,9 @@ context(TraitSpawnConditionScope) val anywhere
 
 // ディメンション
 
-private val OVERWORLD_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.overworld" }, "Overworld", "オーバーワールド")
-private val NETHER_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.nether" }, "Nether", "ネザー")
-private val END_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.end" }, "The End", "エンド")
+private val OVERWORLD_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.overworld" }, "Overworld", "オーバーワールド")
+private val NETHER_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.nether" }, "Nether", "ネザー")
+private val END_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.end" }, "The End", "エンド")
 
 context(TraitSpawnConditionScope) val overworld
     get() = object : TraitSpawnCondition {
@@ -85,11 +85,11 @@ context(TraitSpawnConditionScope) operator fun TagKey<Biome>.unaryPlus() = objec
 
 // 気温・湿度
 
-private val HIGH_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.high" }, "High %s", "高い%s")
-private val MEDIUM_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.medium" }, "Medium %s", "普通の%s")
-private val LOW_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.low" }, "Low %s", "低い%s")
-private val TEMPERATURE_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.temperature" }, "Temperature", "気温")
-private val HUMIDITY_TRANSLATION = Translation({ "${MirageFairy2024.modId}.trait_spawn_condition.humidity" }, "Humidity", "湿度")
+private val HIGH_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.high" }, "High %s", "高い%s")
+private val MEDIUM_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.medium" }, "Medium %s", "普通の%s")
+private val LOW_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.low" }, "Low %s", "低い%s")
+private val TEMPERATURE_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.temperature" }, "Temperature", "気温")
+private val HUMIDITY_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.humidity" }, "Humidity", "湿度")
 
 context(TraitSpawnConditionScope) operator fun TemperatureCategory.unaryPlus() = object : TraitSpawnCondition {
     override val description = when (this@unaryPlus) {
