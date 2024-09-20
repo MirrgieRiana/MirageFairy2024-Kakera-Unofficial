@@ -1,5 +1,6 @@
 package miragefairy2024
 
+import com.google.gson.JsonElement
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
@@ -52,6 +53,7 @@ object DataGenerationEvents {
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateNinePatchTexture = InitializationEventRegistry<((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
     val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
+    val onGenerateParticles = InitializationEventRegistry<((identifier: Identifier, jsonElement: JsonElement) -> Unit) -> Unit>()
 
     val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
 }
@@ -175,6 +177,28 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                     }.jsonObject
 
                     return DataProvider.writeToPath(writer, jsonElement, path)
+                }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput ->
+            object : DataProvider {
+                private val pathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "particles")
+                override fun getName() = "Particles"
+                override fun run(writer: DataWriter): CompletableFuture<*> {
+
+                    val map = mutableMapOf<Identifier, JsonElement>()
+                    DataGenerationEvents.onGenerateParticles.fire {
+                        it { identifier, jsonElement ->
+                            if (identifier in map) throw Exception("Duplicate particle definition for $identifier")
+                            map[identifier] = jsonElement
+                        }
+                    }
+
+                    val futures = mutableListOf<CompletableFuture<*>>()
+                    map.forEach { (identifier, jsonElement) ->
+                        futures.add(DataProvider.writeToPath(writer, jsonElement, pathResolver.resolveJson(identifier)))
+                    }
+                    return CompletableFuture.allOf(*futures.toTypedArray())
                 }
             }
         }
