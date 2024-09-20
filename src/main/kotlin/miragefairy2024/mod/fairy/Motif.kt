@@ -406,7 +406,7 @@ enum class MotifCard(
         MotifCardRecipes().common(ConventionalBiomeTags.TAIGA) + EntityType.WOLF,
     ),
     HUMAN(
-        "human", 5, "Humania", "人類精フマーニャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "human", 5, "Humania", "人類精フマーニャ", 0xFFCB4C, 0x00AAAA, 0x322976, 0x9E7F2F,
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + mana(5.0) { HUMAN },
@@ -430,7 +430,7 @@ enum class MotifCard(
         MotifCardRecipes().overworld + EntityType.VILLAGER,
     ),
     WITCH(
-        "witch", 6, "Witchia", "魔女精ウィツキャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "witch", 6, "Witchia", "魔女精ウィツキャ", 0x96856F, 0x4D2180, 0x193308, 0x242424,
         ParentMotifs() + { VILLAGER },
         PassiveSkillBuilder()
             + regeneration(0.1)
@@ -440,7 +440,7 @@ enum class MotifCard(
         MotifCardRecipes().overworld + EntityType.WITCH,
     ),
     EVOKER(
-        "evoker", 7, "Evokeria", "召喚士精エヴォケーリャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "evoker", 7, "Evokeria", "召喚士精エヴォケーリャ", 0x939E9E, 0x292623, 0xCCB34E, 0x363636,
         ParentMotifs() + { VILLAGER },
         PassiveSkillBuilder()
             + magic.attack(0.6)
@@ -455,7 +455,7 @@ enum class MotifCard(
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
     ),
     ENDER_EYE(
-        "ender_eye", 7, "Endere Ia", "終界眼精エンデーレッイャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "ender_eye", 7, "Endere Ia", "終界眼精エンデーレッイャ", 0x8BC452, 0x568E91, 0x568E91, 0x1E4835,
         ParentMotifs() + { ENDERMAN },
         PassiveSkillBuilder()
             + collection(0.5)
@@ -515,7 +515,7 @@ enum class MotifCard(
         MotifCardRecipes() + EntityType.WITHER_SKELETON,
     ),
     WITHER_SKELETON_SKULL(
-        "wither_skeleton_skull", 8, "Withere Skeletone Skullia", "枯頭蓋骨精ウィテーレスケレトーネスクッリャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "wither_skeleton_skull", 8, "Withere Skeletone Skullia", "枯頭蓋骨精ウィテーレスケレトーネスクッリャ", 0x2E2E2E, 0x2E2E2E, 0x2E2E2E, 0x2E2E2E,
         ParentMotifs() + { WITHER_SKELETON },
         PassiveSkillBuilder()
             + magic.attack(1.2) * food.atMost(6),
@@ -689,7 +689,7 @@ enum class MotifCard(
         MotifCardRecipes().common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
     ),
     PHANTOM_DROP(
-        "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0xF091FF, 0xD834E0, 0x9E34E0, 0x5C09B0,
         ParentMotifs() + { PHANTOM_FLOWER },
         PassiveSkillBuilder()
             + regeneration(0.4) * food(MaterialCard.PHANTOM_DROP.item)
@@ -875,7 +875,7 @@ enum class MotifCard(
 
     // ユーティリティ
     CANDLE(
-        "candle", 4, "Candlia", "蝋燭精ツァンドゥリャ", 0x000000, 0x000000, 0x000000, 0x000000,
+        "candle", 4, "Candlia", "蝋燭精ツァンドゥリャ", 0xE0DABF, 0xC9AF89, 0xC9AF89, 0x1B1A24,
         ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(0.4)
