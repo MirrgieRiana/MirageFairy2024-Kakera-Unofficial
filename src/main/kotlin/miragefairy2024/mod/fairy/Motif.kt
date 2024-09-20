@@ -444,7 +444,7 @@ enum class MotifCard(
     ),
     ROTTEN_FLESH(
         "rotten_flesh", 2, "Rottene Fleshia", "腐肉精ロッテーネフレーシャ", 0x846129, 0xBD5B2D, 0xBD5B2D, 0xBD422D,
-        ParentMotifs() + { FOOD },
+        ParentMotifs() + { ZOMBIE } + { FOOD },
         PassiveSkillBuilder()
             + overall.attack(1.0) * food(Items.ROTTEN_FLESH)
             + regeneration(0.4) * food.atMost(6)
