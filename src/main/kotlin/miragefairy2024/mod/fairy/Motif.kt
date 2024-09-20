@@ -534,7 +534,7 @@ enum class MotifCard(
     ),
     NETHER_STAR(
         "nether_star", 9, "Nethere Staria", "地獄星精ネテーレスターリャ", 0xD8D8FF, 0xF2E3FF, 0xD9E7FF, 0xFFFF68,
-        ParentMotifs() + { WITHER },
+        ParentMotifs() + { WITHER } + { STAR },
         PassiveSkillBuilder()
             + luck(0.6)
             + magic.attack(0.4),
@@ -876,7 +876,7 @@ enum class MotifCard(
     // ユーティリティ
     CANDLE(
         "candle", 4, "Candlia", "蝋燭精ツァンドゥリャ", 0xE0DABF, 0xC9AF89, 0xC9AF89, 0x1B1A24,
-        ParentMotifs(),
+        ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + magic.attack(0.4)
             + magic.attack(0.4) * indoor
