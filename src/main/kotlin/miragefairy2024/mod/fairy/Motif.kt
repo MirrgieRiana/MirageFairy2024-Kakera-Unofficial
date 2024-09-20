@@ -893,6 +893,21 @@ enum class MotifCard(
         MotifCardRecipes(),
     ),
     ;
+    幻想の雫
+    エンチャント
+    金リンゴ
+    エンチャントされた金のリンゴ
+    醸造台
+    魔女
+    ウィザースケルトンの頭蓋骨
+    エンダーアイ
+    ネザースター
+    ヴェロペダ
+    赤キノコ
+    茶キノコ
+    ろうそく
+    エヴォーカー
+
 
     val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.motif.${identifier.toTranslationKey()}" }, enName, jaName)
