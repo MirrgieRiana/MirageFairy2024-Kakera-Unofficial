@@ -92,7 +92,8 @@ enum class MotifCard(
     AIR(
         "air", 0, "Airia", "空気精アイリャ", 0xFFBE80, 0xDEFFFF, 0xDEFFFF, 0xB0FFFF,
         ParentMotifs(),
-        PassiveSkillBuilder() + speed(1.0),
+        PassiveSkillBuilder()
+            + speed(1.0),
         MotifCardRecipes().always + Blocks.AIR,
     ),
 
@@ -403,13 +404,15 @@ enum class MotifCard(
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
         ParentMotifs() + { CARRY },
-        PassiveSkillBuilder() + experience(1.0) * level.atMost(29),
+        PassiveSkillBuilder()
+            + experience(1.0) * level.atMost(29),
         MotifCardRecipes().always + EntityType.PLAYER,
     ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         ParentMotifs() + { CARRY },
-        PassiveSkillBuilder() + collection(1.2) * food.atLeast(12),
+        PassiveSkillBuilder()
+            + collection(1.2) * food.atLeast(12),
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
     ),
     PIGLIN_BRUTE(
@@ -681,7 +684,8 @@ enum class MotifCard(
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
         ParentMotifs() + { FOOD },
-        PassiveSkillBuilder() + mana(3.0) { FOOD },
+        PassiveSkillBuilder()
+            + mana(3.0) { FOOD },
         MotifCardRecipes() + Blocks.CAKE + Items.CAKE + BlockTags.CANDLE_CAKES,
     ),
 
@@ -689,13 +693,15 @@ enum class MotifCard(
     SWORD(
         "sword", 3, "Swordia", "剣精スウォルジャ", 0xFFFFFF, 0xFFC48E, 0xFF0300, 0xFFFFFF,
         ParentMotifs(),
-        PassiveSkillBuilder() + melee.attack(1.2) * MainHandConditionCard.SWORD(),
+        PassiveSkillBuilder()
+            + melee.attack(1.2) * MainHandConditionCard.SWORD(),
         MotifCardRecipes() + ItemTags.SWORDS,
     ),
     HOE(
         "hoe", 3, "Hia", "鍬精ヒャ", 0xFFFFFF, 0xFFC48E, 0x47FF00, 0xFFFFFF,
         ParentMotifs(),
-        PassiveSkillBuilder() + luck(1.2) * MainHandConditionCard.HOE(),
+        PassiveSkillBuilder()
+            + luck(1.2) * MainHandConditionCard.HOE(),
         MotifCardRecipes() + ItemTags.HOES,
     ),
     SHIELD(
@@ -709,7 +715,8 @@ enum class MotifCard(
     ARROW(
         "arrow", 3, "Arrowia", "矢精アッローウャ", 0xAD771F, 0xF2F2F2, 0xF2F2F2, 0x424242,
         ParentMotifs(),
-        PassiveSkillBuilder() + shooting.attack(1.2),
+        PassiveSkillBuilder()
+            + shooting.attack(1.2),
         MotifCardRecipes() + Items.ARROW,
     ),
 
@@ -717,7 +724,8 @@ enum class MotifCard(
     IRON_BARS(
         "iron_bars", 4, "Irone Barsia", "鉄格子精イローネバルシャ", 0xFFFFFF, 0xA1A1A3, 0x404040, 0x404040,
         ParentMotifs(),
-        PassiveSkillBuilder() + melee.defence(1.5),
+        PassiveSkillBuilder()
+            + melee.defence(1.5),
         MotifCardRecipes() + Blocks.IRON_BARS,
     ),
     GLASS(
@@ -851,7 +859,8 @@ enum class MotifCard(
     MAGNETISM(
         "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
         ParentMotifs() + { CARRY },
-        PassiveSkillBuilder() + collection(1.0),
+        PassiveSkillBuilder()
+            + collection(1.0),
         MotifCardRecipes().always,
     ),
     GRAVITY(
