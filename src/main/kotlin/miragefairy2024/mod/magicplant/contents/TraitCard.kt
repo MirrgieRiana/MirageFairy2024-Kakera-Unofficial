@@ -15,6 +15,7 @@ import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.end
 import miragefairy2024.mod.magicplant.nether
 import miragefairy2024.mod.magicplant.overworld
+import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.traitRegistry
 import miragefairy2024.mod.magicplant.unaryPlus
 import miragefairy2024.util.HumidityCategory

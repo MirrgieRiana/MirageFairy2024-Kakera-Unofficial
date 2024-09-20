@@ -18,7 +18,7 @@ abstract class TraitEffectKey<T : Any> {
     abstract val emoji: Text
     abstract val name: Text
     abstract val sortValue: Double
-    abstract val style: Style
+    abstract val color: Int
     abstract fun getValue(level: Double): T
     abstract fun renderValue(value: T): Text
     abstract fun plus(a: T, b: T): T
@@ -30,3 +30,4 @@ abstract class TraitEffectKey<T : Any> {
 
 fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getId(this)!!
 fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
+val TraitEffectKey<*>.style: Style get() = Style.EMPTY.withColor(this.color)

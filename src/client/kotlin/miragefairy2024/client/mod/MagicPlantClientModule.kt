@@ -22,6 +22,7 @@ import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.getName
+import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
 import miragefairy2024.mod.magicplant.traitListScreenHandlerType
 import miragefairy2024.mod.magicplant.traitListScreenTranslation

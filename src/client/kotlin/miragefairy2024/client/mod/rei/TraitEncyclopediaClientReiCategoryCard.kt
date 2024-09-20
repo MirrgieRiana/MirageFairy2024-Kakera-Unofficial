@@ -34,6 +34,7 @@ import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.magicPlantCards
 import miragefairy2024.mod.magicplant.setTraitStacks
+import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
 import miragefairy2024.mod.magicplant.traitRegistry
 import miragefairy2024.mod.rei.TraitEncyclopediaReiCategoryCard
