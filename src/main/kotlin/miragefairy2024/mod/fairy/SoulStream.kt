@@ -94,8 +94,8 @@ val PlayerEntity.soulStream get() = this.extraPlayerDataContainer.getOrInit(Soul
 
 class SoulStream : SimpleInventory(SLOT_COUNT) {
     companion object {
-        val SLOT_COUNT = 9 * 31
-        val PASSIVE_SKILL_SLOT_COUNT = 9
+        const val SLOT_COUNT = 9 * 31
+        const val PASSIVE_SKILL_SLOT_COUNT = 9
     }
 }
 
