@@ -14,8 +14,9 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
 
 class FairyMiningToolSettings(
+    val creator: (FairyMiningToolSettings) -> Item,
     val toolMaterialCard: ToolMaterialCard,
-) : ToolSettings<FairyPickaxeItem> {
+) : ToolSettings<Item> {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -35,10 +36,10 @@ class FairyMiningToolSettings(
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
 
-    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
+    override fun createItem() = creator(this)
 
     context(ModContext)
-    override fun init(card: ToolCard<FairyPickaxeItem>) {
+    override fun init(card: ToolCard<Item>) {
         tags.forEach {
             card.item.registerItemTagGeneration { it }
         }
@@ -54,7 +55,7 @@ class FairyMiningToolSettings(
 
 // Shovel 1.5, -3.0
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings(toolMaterialCard).also {
+fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 1F
     it.attackSpeed = -2.8F
     it.tags += ItemTags.PICKAXES
@@ -66,7 +67,7 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings(
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyMiningToolSettings(toolMaterialCard).also {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyMiningToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
     it.tags += ItemTags.AXES
