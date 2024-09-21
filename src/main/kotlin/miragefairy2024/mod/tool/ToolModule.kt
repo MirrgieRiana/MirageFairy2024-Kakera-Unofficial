@@ -36,23 +36,23 @@ fun initToolModule() {
 }
 
 
-interface ToolSettings<I : Item> {
-    fun createItem(): I
+interface ToolSettings {
+    fun createItem(): Item
     context(ModContext)
-    fun init(card: ToolCard<I>) = Unit
+    fun init(card: ToolCard) = Unit
 
     fun addPoems(poemList: PoemList) = poemList
 }
 
-class ToolCard<I : Item>(
+class ToolCard(
     path: String,
     private val enName: String,
     private val jaName: String,
     private val enPoem: String,
     private val jaPoem: String,
     private val tier: Int,
-    private val toolSettings: ToolSettings<I>,
-    private val initializer: context(ModContext)ToolCard<I>.() -> Unit = {},
+    private val toolSettings: ToolSettings,
+    private val initializer: context(ModContext)ToolCard.() -> Unit = {},
 ) {
     val identifier = MirageFairy2024.identifier(path)
     val item = toolSettings.createItem()
@@ -77,8 +77,8 @@ class ToolCard<I : Item>(
 
     @Suppress("unused")
     companion object {
-        val entries = mutableListOf<ToolCard<*>>()
-        private fun <I : Item> ToolCard<I>.register() = this.also { entries.add(this) }
+        val entries = mutableListOf<ToolCard>()
+        private fun ToolCard.register() = this.also { entries.add(this) }
 
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
