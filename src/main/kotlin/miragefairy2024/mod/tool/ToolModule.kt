@@ -31,6 +31,7 @@ fun initToolModule() {
     FairyToolSettings.CUT_ALL_TRANSLATION.enJa()
     FairyToolSettings.SILK_TOUCH_TRANSLATION.enJa()
     FairyToolSettings.SELF_MENDING_TRANSLATION.enJa()
+    FairyToolSettings.OBTAIN_FAIRY.enJa()
 
     initToolMaterialModule()
 }

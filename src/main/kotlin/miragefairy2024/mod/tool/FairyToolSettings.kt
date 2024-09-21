@@ -23,6 +23,7 @@ class FairyToolSettings(
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
+        val OBTAIN_FAIRY = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
     }
 
     val tags = mutableListOf<TagKey<Item>>()
@@ -37,6 +38,7 @@ class FairyToolSettings(
     var silkTouch = false
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
+    var obtainFairy: Double? = null
 
     override fun createItem() = creator(this)
 
@@ -103,4 +105,9 @@ fun FairyToolSettings.silkTouch() = this.also {
 fun FairyToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
     it.descriptions += FairyToolSettings.SELF_MENDING_TRANSLATION
+}
+
+fun FairyToolSettings.obtainFairy(appearanceRateBonus: Double) = this.also {
+    it.obtainFairy = appearanceRateBonus
+    it.descriptions += FairyToolSettings.OBTAIN_FAIRY
 }
