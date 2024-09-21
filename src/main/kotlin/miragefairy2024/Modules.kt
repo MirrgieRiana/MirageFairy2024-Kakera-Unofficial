@@ -13,6 +13,7 @@ import miragefairy2024.mod.initLastFoodModule
 import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
+import miragefairy2024.mod.initParticleModule
 import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initRecipeGroupModule
 import miragefairy2024.mod.initSoundEventModule
@@ -49,4 +50,5 @@ fun initModules() {
     initToolModule()
     initBiomeModule()
     initFairyBuildingModule()
+    initParticleModule()
 }
