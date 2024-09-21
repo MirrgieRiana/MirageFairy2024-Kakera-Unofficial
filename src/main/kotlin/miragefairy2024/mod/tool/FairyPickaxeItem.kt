@@ -18,6 +18,7 @@ class FairyPickaxeItem(val toolSettings: FairyMiningToolSettings, settings: Sett
     ItemPredicateConvertorCallback {
 
     override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
+
     override fun isSuitableFor(state: BlockState) = isSuitableForImpl(state)
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
@@ -26,7 +27,10 @@ class FairyPickaxeItem(val toolSettings: FairyMiningToolSettings, settings: Sett
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) = inventoryTickImpl(stack, world, entity, slot, selected)
+    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+        super.inventoryTick(stack, world, entity, slot, selected)
+        inventoryTickImpl(stack, world, entity, slot, selected)
+    }
 
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
