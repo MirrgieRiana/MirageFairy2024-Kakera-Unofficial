@@ -410,7 +410,7 @@ enum class MotifCard(
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + mana(5.0) { HUMAN },
-        MotifCardRecipes().always + EntityType.PLAYER,
+        MotifCardRecipes(),
     ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
