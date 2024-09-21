@@ -22,9 +22,9 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun FairyMiningToolItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
+fun FairyPickaxeItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
 
-fun FairyMiningToolItem.isSuitableForImpl(state: BlockState): Boolean {
+fun FairyPickaxeItem.isSuitableForImpl(state: BlockState): Boolean {
     val itemMiningLevel = material.miningLevel
     return when {
         itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
@@ -34,7 +34,7 @@ fun FairyMiningToolItem.isSuitableForImpl(state: BlockState): Boolean {
     }
 }
 
-fun FairyMiningToolItem.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) {
+fun FairyPickaxeItem.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) {
     if (toolSettings.areaMining) run fail@{
         if (world.isClient) return@fail
 
@@ -162,7 +162,7 @@ fun FairyMiningToolItem.postMineImpl(stack: ItemStack, world: World, state: Bloc
     }
 }
 
-fun FairyMiningToolItem.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+fun FairyPickaxeItem.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
     val selfMending = toolSettings.selfMending
     if (selfMending != null) run {
         if (world.isClient) return@run
@@ -172,14 +172,14 @@ fun FairyMiningToolItem.inventoryTickImpl(stack: ItemStack, world: World, entity
     }
 }
 
-fun FairyMiningToolItem.overrideEnchantmentLevelImpl(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
+fun FairyPickaxeItem.overrideEnchantmentLevelImpl(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
     if (toolSettings.silkTouch) {
         if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
     }
     return oldLevel
 }
 
-fun FairyMiningToolItem.convertItemStackImpl(itemStack: ItemStack): ItemStack {
+fun FairyPickaxeItem.convertItemStackImpl(itemStack: ItemStack): ItemStack {
     var itemStack2 = itemStack
     if (toolSettings.silkTouch) {
         itemStack2 = itemStack2.copy()

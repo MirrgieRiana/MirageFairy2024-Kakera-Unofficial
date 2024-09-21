@@ -15,7 +15,7 @@ import net.minecraft.registry.tag.TagKey
 
 class FairyMiningToolSettings(
     val toolMaterialCard: ToolMaterialCard,
-) : ToolSettings<FairyMiningToolItem> {
+) : ToolSettings<FairyPickaxeItem> {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -35,10 +35,10 @@ class FairyMiningToolSettings(
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
 
-    override fun createItem() = FairyMiningToolItem(this, Item.Settings())
+    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
 
     context(ModContext)
-    override fun init(card: ToolCard<FairyMiningToolItem>) {
+    override fun init(card: ToolCard<FairyPickaxeItem>) {
         tags.forEach {
             card.item.registerItemTagGeneration { it }
         }
