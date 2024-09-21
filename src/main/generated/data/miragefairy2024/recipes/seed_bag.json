@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:seed_bag",
+  "key": {
+    "L": {
+      "item": "miragefairy2024:mirage_leaves"
+    },
+    "S": {
+      "item": "miragefairy2024:mirage_stem"
+    }
+  },
+  "pattern": [
+    " S ",
+    "L L",
+    "LLL"
+  ],
+  "result": {
+    "item": "miragefairy2024:seed_bag"
+  },
+  "show_notification": true
+}
