@@ -22,7 +22,9 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun FairyPickaxeItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
+fun FairyPickaxeItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState): Float {
+    return if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
+}
 
 fun FairyPickaxeItem.isSuitableForImpl(state: BlockState): Boolean {
     val itemMiningLevel = toolSettings.toolMaterialCard.toolMaterial.miningLevel
