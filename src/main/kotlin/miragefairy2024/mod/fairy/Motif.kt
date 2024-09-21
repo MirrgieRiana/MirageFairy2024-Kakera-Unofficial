@@ -414,7 +414,7 @@ enum class MotifCard(
     ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
-        ParentMotifs() + { CARRY },
+        ParentMotifs() + { HUMAN },
         PassiveSkillBuilder()
             + experience(1.0) * level.atMost(29),
         MotifCardRecipes().always + EntityType.PLAYER,
