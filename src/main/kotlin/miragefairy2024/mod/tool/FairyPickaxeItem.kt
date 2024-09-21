@@ -7,13 +7,12 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.MiningToolItem
-import net.minecraft.registry.tag.BlockTags
+import net.minecraft.item.PickaxeItem
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class FairyPickaxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
-    MiningToolItem(toolSettings.attackDamage, toolSettings.attackSpeed, toolSettings.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings),
+    PickaxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage.toInt(), toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
