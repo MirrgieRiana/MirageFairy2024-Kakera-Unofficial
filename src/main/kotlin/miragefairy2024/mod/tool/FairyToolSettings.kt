@@ -8,6 +8,7 @@ import miragefairy2024.mod.translation
 import miragefairy2024.util.Translation
 import miragefairy2024.util.registerItemTagGeneration
 import net.minecraft.block.Block
+import net.minecraft.block.Blocks
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
@@ -55,9 +56,20 @@ class FairyToolSettings(
 }
 
 
-// Sword 3, -2.4
+fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairySwordItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 3.0F
+    it.attackSpeed = -2.4F
+    it.tags += ItemTags.SWORDS
+    it.superEffectiveBlocks += Blocks.COBWEB
+    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+}
 
-// Shovel 1.5, -3.0
+fun createShovel(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyShovelItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 1.5F
+    it.attackSpeed = -3.0F
+    it.tags += ItemTags.SHOVELS
+    it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
+}
 
 fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 1F
@@ -81,6 +93,13 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 // Hoe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
+
+fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyBattleAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = attackDamage
+    it.attackSpeed = attackSpeed
+    it.tags += ItemTags.AXES
+    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
+}
 
 fun FairyToolSettings.areaMining() = this.also {
     it.areaMining = true
