@@ -40,7 +40,7 @@ fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
-class TraitListScreen(handler: TraitListScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
+class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
     private lateinit var traitCardContainer: FlowLayout
 
     private fun setTraitCardContent(component: Component?) {
@@ -115,7 +115,7 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                 child(verticalSpace(5))
                 child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
                     val player = MinecraftClient.getInstance().player
-                    val factor = if (player != null) {
+                    val allFactor = if (player != null) {
                         traitStack.trait.conditions
                             .map { it.getFactor(player.world, player.blockPos) }
                             .fold(1.0) { a, b -> a * b }
@@ -143,8 +143,8 @@ class TraitListScreen(handler: TraitListScreenHandler, private val playerInvento
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * traitStack.level * factor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
-                            val tooltip = text { it.first.name + " ("() + (it.second * traitStack.level * 100.0 formatAs "%.1f%%")() + " x "() + (factor * 100.0 formatAs "%.1f%%")() + ")"() }
+                            val text = text { (it.second * traitStack.level * allFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
+                            val tooltip = text { it.first.name + " ("() + (it.second * traitStack.level * 100.0 formatAs "%.1f%%")() + " x "() + (allFactor * 100.0 formatAs "%.1f%%")() + ")"() }
                             child(Components.label(text).tooltip(tooltip))
                         }
                     })
