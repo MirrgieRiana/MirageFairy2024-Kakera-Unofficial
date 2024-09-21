@@ -7,6 +7,7 @@ import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBiomeModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
+import miragefairy2024.mod.initEntityModule
 import miragefairy2024.mod.initExtraPlayerDataModule
 import miragefairy2024.mod.initFoodIngredientsModule
 import miragefairy2024.mod.initLastFoodModule
@@ -50,5 +51,6 @@ fun initModules() {
     initToolModule()
     initBiomeModule()
     initFairyBuildingModule()
+    initEntityModule()
     initParticleModule()
 }
