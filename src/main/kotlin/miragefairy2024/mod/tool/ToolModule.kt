@@ -172,5 +172,44 @@ class ToolCard(
                 input('R', Items.STICK)
             } on MaterialCard.CHAOS_STONE.item
         }.register()
+        val PHANTOM_PICKAXE = ToolCard(
+            "phantom_pickaxe", "Phantom Pickaxe", "幻想のつるはし",
+            "\"Creation\" is the true power.", "人間が手にした唯一の幻想。",
+            4, createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern(" R ")
+                pattern(" R ")
+                input('#', MaterialCard.PHANTOM_DROP.item)
+                input('R', Items.STICK)
+            } on MaterialCard.PHANTOM_DROP.item
+        }.register()
+        val PHANTOM_SHOVEL = ToolCard(
+            "phantom_shovel", "Phantom Shovel", "幻想のシャベル",
+            "The sound of the world's end echoed", "破壊された世界の音――",
+            4, createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("#")
+                pattern("R")
+                pattern("R")
+                input('#', MaterialCard.PHANTOM_DROP.item)
+                input('R', Items.STICK)
+            } on MaterialCard.PHANTOM_DROP.item
+        }.register()
+        val PHANTOM_SWORD = ToolCard(
+            "phantom_sword", "Phantom Sword", "幻想の剣",
+            "Pray. For rebirth.", "闇を切り裂く、再生の光。",
+            4, createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("#")
+                pattern("#")
+                pattern("R")
+                input('#', MaterialCard.PHANTOM_DROP.item)
+                input('R', Items.STICK)
+            } on MaterialCard.PHANTOM_DROP.item
+        }.register()
     }
 }
