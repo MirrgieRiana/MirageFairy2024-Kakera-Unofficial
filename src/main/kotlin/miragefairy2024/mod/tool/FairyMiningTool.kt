@@ -48,7 +48,7 @@ class FairyMiningToolType(
     var mineAll = false
     var cutAll = false
     var silkTouch = false
-    var selfMending = false
+    var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
 
     override fun createItem() = FairyMiningToolItem(this, Item.Settings())
@@ -112,8 +112,8 @@ fun FairyMiningToolType.silkTouch() = this.also {
     it.descriptions += FairyMiningToolItem.SILK_TOUCH_TRANSLATION
 }
 
-fun FairyMiningToolType.selfMending() = this.also {
-    it.selfMending = true
+fun FairyMiningToolType.selfMending(selfMending: Int) = this.also {
+    it.selfMending = selfMending
     it.descriptions += FairyMiningToolItem.SELF_MENDING_TRANSLATION
 }
 
@@ -269,11 +269,12 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
     }
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
-        if (type.selfMending) run {
+        val selfMending = type.selfMending
+        if (selfMending != null) run {
             if (world.isClient) return@run
             if (entity !is PlayerEntity) return@run // プレイヤーじゃない
             if (stack !== entity.mainHandStack) return@run // メインハンドに持っていない
-            stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * 10)
+            stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * selfMending)
         }
     }
 

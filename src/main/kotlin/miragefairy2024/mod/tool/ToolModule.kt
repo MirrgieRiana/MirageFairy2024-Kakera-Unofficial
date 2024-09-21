@@ -83,7 +83,7 @@ class ToolCard<I : Item>(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
-            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(),
+            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -96,7 +96,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_PICKAXE = ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
-            3, createPickaxe(ToolMaterialCard.MIRAGIUM).selfMending().mineAll(),
+            3, createPickaxe(ToolMaterialCard.MIRAGIUM).selfMending(10).mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -109,7 +109,7 @@ class ToolCard<I : Item>(
         val MIRAGIUM_AXE = ToolCard(
             "miragium_axe", "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
-            3, createAxe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending().cutAll(),
+            3, createAxe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(10).cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
