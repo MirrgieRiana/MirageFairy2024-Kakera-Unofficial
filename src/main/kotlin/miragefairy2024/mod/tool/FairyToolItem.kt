@@ -25,7 +25,7 @@ import net.minecraft.world.World
 fun FairyPickaxeItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
 
 fun FairyPickaxeItem.isSuitableForImpl(state: BlockState): Boolean {
-    val itemMiningLevel = material.miningLevel
+    val itemMiningLevel = toolSettings.toolMaterialCard.toolMaterial.miningLevel
     return when {
         itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
         itemMiningLevel < MiningLevels.IRON && state.isIn(BlockTags.NEEDS_IRON_TOOL) -> false
