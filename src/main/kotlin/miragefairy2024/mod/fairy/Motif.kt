@@ -2,6 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FoodIngredientCategoryCard
@@ -9,6 +10,8 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.OreCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.mod.passiveskill.CategoryFoodIngredientPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.ElementPassiveSkillEffect
@@ -402,6 +405,13 @@ enum class MotifCard(
             + speed(0.4) * food.atLeast(12),
         MotifCardRecipes().common(ConventionalBiomeTags.TAIGA) + EntityType.WOLF,
     ),
+    HUMAN(
+        "human", 5, "Humania", "人類精フマーニャ", 0xFFCB4C, 0x00AAAA, 0x322976, 0x9E7F2F,
+        ParentMotifs() + { CARRY },
+        PassiveSkillBuilder()
+            + mana(5.0) { HUMAN },
+        MotifCardRecipes().always + EntityType.PLAYER,
+    ),
     PLAYER(
         "player", 5, "Playeria", "人精プライェーリャ", 0xB58D63, 0x00AAAA, 0x322976, 0x4B3422,
         ParentMotifs() + { CARRY },
@@ -409,12 +419,48 @@ enum class MotifCard(
             + experience(1.0) * level.atMost(29),
         MotifCardRecipes().always + EntityType.PLAYER,
     ),
+    VILLAGER(
+        "villager", 4, "Villageria", "村人精ヴィッラゲーリャ", 0xB58D63, 0x608C57, 0x608C57, 0x009800,
+        ParentMotifs() + { HUMAN },
+        PassiveSkillBuilder()
+            + experience(0.4) * level.atMost(29) * food(Items.WHEAT)
+            + experience(0.4) * level.atMost(29) * food(Items.POTATO)
+            + luck(0.6) * food.atLeast(12)
+            + mana(5.0 * 0.2) { HUMAN },
+        MotifCardRecipes().overworld + EntityType.VILLAGER,
+    ),
+    WITCH(
+        "witch", 6, "Witchia", "魔女精ウィツキャ", 0x96856F, 0x4D2180, 0x193308, 0x242424,
+        ParentMotifs() + { VILLAGER },
+        PassiveSkillBuilder()
+            + regeneration(0.1)
+            + fire.defence(2.0 * 0.3)
+            + magic.attack(0.4)
+            + magic.attack(0.4) * food.atLeast(12),
+        MotifCardRecipes().overworld + EntityType.WITCH,
+    ),
+    EVOKER(
+        "evoker", 7, "Evokeria", "召喚士精エヴォケーリャ", 0x939E9E, 0x292623, 0xCCB34E, 0x363636,
+        ParentMotifs() + { VILLAGER },
+        PassiveSkillBuilder()
+            + magic.attack(0.6)
+            + magic.attack(0.6) * food.atLeast(12),
+        MotifCardRecipes() + EntityType.EVOKER,
+    ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
             + collection(1.2) * food.atLeast(12),
         MotifCardRecipes().overworld.nether.end + EntityType.ENDERMAN,
+    ),
+    ENDER_EYE(
+        "ender_eye", 7, "Endere Ia", "終界眼精エンデーレッイャ", 0x8BC452, 0x568E91, 0x568E91, 0x1E4835,
+        ParentMotifs() + { ENDERMAN },
+        PassiveSkillBuilder()
+            + collection(0.5)
+            + magic.attack(0.5),
+        MotifCardRecipes() + Items.ENDER_EYE,
     ),
     PIGLIN_BRUTE(
         "piglin_brute", 7, "Pigline Brutia", "豚人畜生精ピグリーネブルーチャ", 0xEB9771, 0x403D11, 0x403D11, 0xE0B000,
@@ -459,6 +505,22 @@ enum class MotifCard(
             + shooting.attack(0.6) * indoor,
         MotifCardRecipes().overworld + EntityType.SKELETON,
     ),
+    WITHER_SKELETON(
+        "wither_skeleton", 7, "Withere Dkeletonia", "枯骸骨精ウィテーレスケレトーニャ", 0x505252, 0x1C1C1C, 0x1C1C1C, 0x060606,
+        ParentMotifs() + { SKELETON },
+        PassiveSkillBuilder()
+            + speed(0.4) * food.atMost(6)
+            + melee.attack(0.5) * food.atMost(6)
+            + melee.attack(0.5) * indoor,
+        MotifCardRecipes() + EntityType.WITHER_SKELETON,
+    ),
+    WITHER_SKELETON_SKULL(
+        "wither_skeleton_skull", 8, "Withere Skeletone Skullia", "枯頭蓋骨精ウィテーレスケレトーネスクッリャ", 0x2E2E2E, 0x2E2E2E, 0x2E2E2E, 0x2E2E2E,
+        ParentMotifs() + { WITHER_SKELETON },
+        PassiveSkillBuilder()
+            + magic.attack(1.2) * food.atMost(6),
+        MotifCardRecipes() + Blocks.WITHER_SKELETON_SKULL,
+    ),
     WITHER(
         "wither", 8, "Witheria", "枯精ウィテーリャ", 0x181818, 0x3C3C3C, 0x141414, 0x557272,
         ParentMotifs(),
@@ -469,6 +531,14 @@ enum class MotifCard(
             + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
             + StatusEffects.SLOWNESS(3) * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().nether + EntityType.WITHER,
+    ),
+    NETHER_STAR(
+        "nether_star", 9, "Nethere Staria", "地獄星精ネテーレスターリャ", 0xD8D8FF, 0xF2E3FF, 0xD9E7FF, 0xFFFF68,
+        ParentMotifs() + { WITHER } + { STAR },
+        PassiveSkillBuilder()
+            + luck(0.6)
+            + magic.attack(0.4),
+        MotifCardRecipes() + Items.NETHER_STAR,
     ),
 
     // 魔法生物
@@ -610,6 +680,31 @@ enum class MotifCard(
             + mana(1.0),
         MotifCardRecipes().overworld + MirageFlowerCard.block,
     ),
+    PHANTOM_FLOWER(
+        "phantom_flower", 7, "Phantomia", "幻花精ファントーミャ", 0xB78EF5, 0xF2C4FF, 0xF2C4FF, 0x70B7D4,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + mana(0.6)
+            + magic.defence(0.6),
+        MotifCardRecipes().common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
+    ),
+    PHANTOM_DROP(
+        "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0xF091FF, 0xD834E0, 0x9E34E0, 0x5C09B0,
+        ParentMotifs() + { PHANTOM_FLOWER },
+        PassiveSkillBuilder()
+            + regeneration(0.4) * food(MaterialCard.PHANTOM_DROP.item)
+            + regeneration(0.4) * food.atLeast(12)
+            + regeneration(1.0) * ToolMaterialCard.PHANTOM_DROP(),
+        MotifCardRecipes() + MaterialCard.PHANTOM_DROP.item,
+    ),
+    VELOPEDA(
+        "velopeda", 6, "Velopedia", "呪草精ヴェロページャ", 0x8BD100, 0xD52D2D, 0xB51414, 0x840707,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + magic.attack(0.8)
+            + magic.attack(0.4) * outdoor,
+        MotifCardRecipes().common(ConventionalBiomeTags.CLIMATE_DRY).nether + VeropedaCard.block,
+    ),
     CACTUS(
         "cactus", 3, "Cactusia", "仙人掌精ツァツトゥーシャ", 0x008200, 0xB0FFAC, 0x00E100, 0x010000,
         ParentMotifs(),
@@ -681,6 +776,26 @@ enum class MotifCard(
             + speed(0.8) * food(Items.SUGAR)
             + speed(0.4),
         MotifCardRecipes() + Items.SUGAR,
+    ),
+    GOLDEN_APPLE(
+        "golden_apple", 7, "Goldene Applia", "金林檎精ゴルデーネアップーリャ", 0xFF755D, 0xDEDE00, 0xDEDE00, 0x01A900,
+        ParentMotifs() + { APPLE } + { GOLD },
+        PassiveSkillBuilder()
+            + health(1.0) * food(Items.GOLDEN_APPLE)
+            + regeneration(0.5) * food(Items.GOLDEN_APPLE)
+            + luck(0.8) * food.atLeast(12),
+        MotifCardRecipes() + Items.GOLDEN_APPLE,
+    ),
+    ENCHANTED_GOLDEN_APPLE(
+        "enchanted_golden_apple", 9, "Enchantede Goldene Applia", "付魔金林檎精エンキャンテーデゴルデーネアップーリャ", 0xFF755D, 0xDEDE00, 0xDEDE00, 0xDE4FD7,
+        ParentMotifs() + { GOLDEN_APPLE } + { ENCHANT },
+        PassiveSkillBuilder()
+            + health(1.0) * food(Items.ENCHANTED_GOLDEN_APPLE)
+            + regeneration(0.5) * food(Items.ENCHANTED_GOLDEN_APPLE)
+            + StatusEffects.FIRE_RESISTANCE() * food(Items.ENCHANTED_GOLDEN_APPLE)
+            + overall.defence(1.0) * food(Items.ENCHANTED_GOLDEN_APPLE)
+            + magic.attack(0.8) * food.atLeast(12),
+        MotifCardRecipes() + Items.ENCHANTED_GOLDEN_APPLE,
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
@@ -759,6 +874,16 @@ enum class MotifCard(
     ),
 
     // ユーティリティ
+    CANDLE(
+        "candle", 4, "Candlia", "蝋燭精ツァンドゥリャ", 0xE0DABF, 0xC9AF89, 0xC9AF89, 0x1B1A24,
+        ParentMotifs() + { FIRE },
+        PassiveSkillBuilder()
+            + magic.attack(0.4)
+            + magic.attack(0.4) * indoor
+            + magic.attack(0.4) * light.atMost(5)
+            + magic.attack(0.4) * onFire,
+        MotifCardRecipes() + BlockTags.CANDLES + BlockTags.CANDLE_CAKES,
+    ),
     LIGHTNING_ROD(
         "lightning_rod", 4, "Lightninge Rodia", "避雷針精リグトニンゲロージャ", 0xFFFFFF, 0xF77653, 0xF77653, 0xF77653,
         ParentMotifs() + { COPPER } + { THUNDER },
@@ -797,6 +922,26 @@ enum class MotifCard(
             + experience(0.6) * level.atMost(29) * indoor
             + magic.attack(0.6) * indoor,
         MotifCardRecipes() + Blocks.ENCHANTING_TABLE,
+    ),
+    ENCHANT(
+        "enchant", 6, "Enchantia", "付魔精エンキャンチャ", 0xD0C2FF, 0xF055FF, 0xC381E3, 0xBE00FF,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + luck(0.2)
+            + overall.attack(0.2)
+            + magic.attack(0.6),
+        MotifCardRecipes() + Blocks.ENCHANTING_TABLE + Items.ENCHANTED_BOOK,
+    ),
+    BREWING_STAND(
+        "brewing_stand", 7, "Brewinge Standia", "醸造台精ブレウィンゲスタンジャ", 0xFFFFFF, 0xAE5B5B, 0x7E7E7E, 0xFFDF55,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + mana(0.4)
+            + speed(0.2) * indoor
+            + regeneration(0.2) * indoor
+            + overall.attack(0.2) * indoor
+            + overall.defence(0.2) * indoor,
+        MotifCardRecipes() + Blocks.BREWING_STAND,
     ),
     BEACON(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
