@@ -36,9 +36,9 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyMiningToolType(
+class FairyMiningToolSettings(
     val toolMaterialCard: ToolMaterialCard,
-) : ToolType<FairyMiningToolItem> {
+) : ToolSettings<FairyMiningToolItem> {
 
     val tags = mutableListOf<TagKey<Item>>()
     var attackDamage = 0F
@@ -69,7 +69,7 @@ class FairyMiningToolType(
 
 // Shovel 1.5, -3.0
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolType(toolMaterialCard).also {
+fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings(toolMaterialCard).also {
     it.attackDamage = 1F
     it.attackSpeed = -2.8F
     it.tags += ItemTags.PICKAXES
@@ -81,7 +81,7 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolType(tool
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyMiningToolType(toolMaterialCard).also {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyMiningToolSettings(toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
     it.tags += ItemTags.AXES
@@ -92,33 +92,33 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
 
-fun FairyMiningToolType.areaMining() = this.also {
+fun FairyMiningToolSettings.areaMining() = this.also {
     it.areaMining = true
     it.descriptions += FairyMiningToolItem.AREA_MINING_TRANSLATION
 }
 
-fun FairyMiningToolType.mineAll() = this.also {
+fun FairyMiningToolSettings.mineAll() = this.also {
     it.mineAll = true
     it.descriptions += FairyMiningToolItem.MINE_ALL_TRANSLATION
 }
 
-fun FairyMiningToolType.cutAll() = this.also {
+fun FairyMiningToolSettings.cutAll() = this.also {
     it.cutAll = true
     it.descriptions += FairyMiningToolItem.CUT_ALL_TRANSLATION
 }
 
-fun FairyMiningToolType.silkTouch() = this.also {
+fun FairyMiningToolSettings.silkTouch() = this.also {
     it.silkTouch = true
     it.descriptions += FairyMiningToolItem.SILK_TOUCH_TRANSLATION
 }
 
-fun FairyMiningToolType.selfMending(selfMending: Int) = this.also {
+fun FairyMiningToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
     it.descriptions += FairyMiningToolItem.SELF_MENDING_TRANSLATION
 }
 
 
-class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Settings) : MiningToolItem(type.attackDamage, type.attackSpeed, type.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings), OverrideEnchantmentLevelCallback, ItemPredicateConvertorCallback {
+class FairyMiningToolItem(private val toolSettings: FairyMiningToolSettings, settings: Settings) : MiningToolItem(toolSettings.attackDamage, toolSettings.attackSpeed, toolSettings.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings), OverrideEnchantmentLevelCallback, ItemPredicateConvertorCallback {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -127,20 +127,20 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
         val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
     }
 
-    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (type.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
+    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
     override fun isSuitableFor(state: BlockState): Boolean {
         val itemMiningLevel = material.miningLevel
         return when {
             itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
             itemMiningLevel < MiningLevels.IRON && state.isIn(BlockTags.NEEDS_IRON_TOOL) -> false
             itemMiningLevel < MiningLevels.STONE && state.isIn(BlockTags.NEEDS_STONE_TOOL) -> false
-            else -> type.effectiveBlockTags.any { state.isIn(it) }
+            else -> toolSettings.effectiveBlockTags.any { state.isIn(it) }
         }
     }
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.postMine(stack, world, state, pos, miner)
-        if (type.areaMining) run fail@{
+        if (toolSettings.areaMining) run fail@{
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -178,7 +178,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 }
             }
         }
-        if (type.mineAll) run fail@{
+        if (toolSettings.mineAll) run fail@{
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -210,7 +210,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
                 }
             }
         }
-        if (type.cutAll) run fail@{
+        if (toolSettings.cutAll) run fail@{
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -269,7 +269,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
     }
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
-        val selfMending = type.selfMending
+        val selfMending = toolSettings.selfMending
         if (selfMending != null) run {
             if (world.isClient) return@run
             if (entity !is PlayerEntity) return@run // プレイヤーじゃない
@@ -279,7 +279,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
     }
 
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
-        if (type.silkTouch) {
+        if (toolSettings.silkTouch) {
             if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
         }
         return oldLevel
@@ -287,7 +287,7 @@ class FairyMiningToolItem(private val type: FairyMiningToolType, settings: Setti
 
     override fun convertItemStack(itemStack: ItemStack): ItemStack {
         var itemStack2 = itemStack
-        if (type.silkTouch) {
+        if (toolSettings.silkTouch) {
             itemStack2 = itemStack2.copy()
             val enchantments = EnchantmentHelper.get(itemStack2)
             enchantments[Enchantments.SILK_TOUCH] = enchantments.getOrElse(Enchantments.SILK_TOUCH) { 0 } atLeast 1

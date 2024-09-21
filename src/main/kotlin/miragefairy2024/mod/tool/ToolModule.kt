@@ -36,7 +36,7 @@ fun initToolModule() {
 }
 
 
-interface ToolType<I : Item> {
+interface ToolSettings<I : Item> {
     fun createItem(): I
     context(ModContext)
     fun init(card: ToolCard<I>) = Unit
@@ -51,11 +51,11 @@ class ToolCard<I : Item>(
     private val enPoem: String,
     private val jaPoem: String,
     private val tier: Int,
-    private val type: ToolType<I>,
+    private val toolSettings: ToolSettings<I>,
     private val initializer: context(ModContext)ToolCard<I>.() -> Unit = {},
 ) {
     val identifier = MirageFairy2024.identifier(path)
-    val item = type.createItem()
+    val item = toolSettings.createItem()
 
     context(ModContext)
     fun init() {
@@ -67,11 +67,11 @@ class ToolCard<I : Item>(
 
         item.enJa(enName, jaName)
 
-        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { type.addPoems(it) }
+        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { toolSettings.addPoems(it) }
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        type.init(this)
+        toolSettings.init(this)
         initializer(this@ModContext, this)
     }
 
