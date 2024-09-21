@@ -13,8 +13,8 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
 
-class FairyMiningToolSettings(
-    val creator: (FairyMiningToolSettings) -> Item,
+class FairyToolSettings(
+    val creator: (FairyToolSettings) -> Item,
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolSettings<Item> {
     companion object {
@@ -55,7 +55,7 @@ class FairyMiningToolSettings(
 
 // Shovel 1.5, -3.0
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 1F
     it.attackSpeed = -2.8F
     it.tags += ItemTags.PICKAXES
@@ -67,7 +67,7 @@ fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyMiningToolSettings(
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyMiningToolSettings({ FairyAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
     it.tags += ItemTags.AXES
@@ -78,27 +78,27 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
 
-fun FairyMiningToolSettings.areaMining() = this.also {
+fun FairyToolSettings.areaMining() = this.also {
     it.areaMining = true
-    it.descriptions += FairyMiningToolSettings.AREA_MINING_TRANSLATION
+    it.descriptions += FairyToolSettings.AREA_MINING_TRANSLATION
 }
 
-fun FairyMiningToolSettings.mineAll() = this.also {
+fun FairyToolSettings.mineAll() = this.also {
     it.mineAll = true
-    it.descriptions += FairyMiningToolSettings.MINE_ALL_TRANSLATION
+    it.descriptions += FairyToolSettings.MINE_ALL_TRANSLATION
 }
 
-fun FairyMiningToolSettings.cutAll() = this.also {
+fun FairyToolSettings.cutAll() = this.also {
     it.cutAll = true
-    it.descriptions += FairyMiningToolSettings.CUT_ALL_TRANSLATION
+    it.descriptions += FairyToolSettings.CUT_ALL_TRANSLATION
 }
 
-fun FairyMiningToolSettings.silkTouch() = this.also {
+fun FairyToolSettings.silkTouch() = this.also {
     it.silkTouch = true
-    it.descriptions += FairyMiningToolSettings.SILK_TOUCH_TRANSLATION
+    it.descriptions += FairyToolSettings.SILK_TOUCH_TRANSLATION
 }
 
-fun FairyMiningToolSettings.selfMending(selfMending: Int) = this.also {
+fun FairyToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
-    it.descriptions += FairyMiningToolSettings.SELF_MENDING_TRANSLATION
+    it.descriptions += FairyToolSettings.SELF_MENDING_TRANSLATION
 }

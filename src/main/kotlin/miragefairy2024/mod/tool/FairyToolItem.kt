@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 interface FairyToolItem {
-    val toolSettings: FairyMiningToolSettings
+    val toolSettings: FairyToolSettings
 }
 
 
