@@ -478,6 +478,15 @@ class TraitCard(
             //register("0010", )
             //register("0001", )
         }
+
+        // Creative Only
+        val CREATIVE_GROWTH = !TraitCard(
+            "creative_growth", "Creative Growth", "アカーシャのお導き",
+            "The structural and physiological intricacy and imperfection of living organisms suggests that life was designed by a greater intelligence after drinking heavily.",
+            "生命組織の構造的・生理学的な精緻さおよび不完全さは、生命が大いなる知性によって、泥酔しながら設計されたことを示唆する。",
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 1.0, TraitEffectKeyCard.TEMPERATURE to 1.0, TraitEffectKeyCard.HUMIDITY to 1.0, TraitEffectKeyCard.GROWTH_BOOST to 1.0),
+        )
+
     }
 
     init {
