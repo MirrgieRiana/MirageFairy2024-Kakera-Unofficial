@@ -1,5 +1,6 @@
 package miragefairy2024.mod.tool
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
@@ -15,6 +16,13 @@ import net.minecraft.registry.tag.TagKey
 class FairyMiningToolSettings(
     val toolMaterialCard: ToolMaterialCard,
 ) : ToolSettings<FairyMiningToolItem> {
+    companion object {
+        val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
+        val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
+        val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+        val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
+        val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
+    }
 
     val tags = mutableListOf<TagKey<Item>>()
     var attackDamage = 0F
@@ -71,25 +79,25 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 
 fun FairyMiningToolSettings.areaMining() = this.also {
     it.areaMining = true
-    it.descriptions += FairyMiningToolItem.AREA_MINING_TRANSLATION
+    it.descriptions += FairyMiningToolSettings.AREA_MINING_TRANSLATION
 }
 
 fun FairyMiningToolSettings.mineAll() = this.also {
     it.mineAll = true
-    it.descriptions += FairyMiningToolItem.MINE_ALL_TRANSLATION
+    it.descriptions += FairyMiningToolSettings.MINE_ALL_TRANSLATION
 }
 
 fun FairyMiningToolSettings.cutAll() = this.also {
     it.cutAll = true
-    it.descriptions += FairyMiningToolItem.CUT_ALL_TRANSLATION
+    it.descriptions += FairyMiningToolSettings.CUT_ALL_TRANSLATION
 }
 
 fun FairyMiningToolSettings.silkTouch() = this.also {
     it.silkTouch = true
-    it.descriptions += FairyMiningToolItem.SILK_TOUCH_TRANSLATION
+    it.descriptions += FairyMiningToolSettings.SILK_TOUCH_TRANSLATION
 }
 
 fun FairyMiningToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
-    it.descriptions += FairyMiningToolItem.SELF_MENDING_TRANSLATION
+    it.descriptions += FairyMiningToolSettings.SELF_MENDING_TRANSLATION
 }

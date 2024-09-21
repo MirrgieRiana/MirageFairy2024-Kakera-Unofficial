@@ -26,11 +26,11 @@ fun initToolModule() {
         it.init()
     }
 
-    FairyMiningToolItem.AREA_MINING_TRANSLATION.enJa()
-    FairyMiningToolItem.MINE_ALL_TRANSLATION.enJa()
-    FairyMiningToolItem.CUT_ALL_TRANSLATION.enJa()
-    FairyMiningToolItem.SILK_TOUCH_TRANSLATION.enJa()
-    FairyMiningToolItem.SELF_MENDING_TRANSLATION.enJa()
+    FairyMiningToolSettings.AREA_MINING_TRANSLATION.enJa()
+    FairyMiningToolSettings.MINE_ALL_TRANSLATION.enJa()
+    FairyMiningToolSettings.CUT_ALL_TRANSLATION.enJa()
+    FairyMiningToolSettings.SILK_TOUCH_TRANSLATION.enJa()
+    FairyMiningToolSettings.SELF_MENDING_TRANSLATION.enJa()
 
     initToolMaterialModule()
 }
