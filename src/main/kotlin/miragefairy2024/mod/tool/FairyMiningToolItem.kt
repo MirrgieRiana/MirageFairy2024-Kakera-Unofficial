@@ -14,7 +14,10 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyMiningToolItem(val toolSettings: FairyMiningToolSettings, settings: Settings) : MiningToolItem(toolSettings.attackDamage, toolSettings.attackSpeed, toolSettings.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings), OverrideEnchantmentLevelCallback, ItemPredicateConvertorCallback {
+class FairyMiningToolItem(val toolSettings: FairyMiningToolSettings, settings: Settings) :
+    MiningToolItem(toolSettings.attackDamage, toolSettings.attackSpeed, toolSettings.toolMaterialCard.toolMaterial, BlockTags.PICKAXE_MINEABLE/* dummy */, settings),
+    OverrideEnchantmentLevelCallback,
+    ItemPredicateConvertorCallback {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
