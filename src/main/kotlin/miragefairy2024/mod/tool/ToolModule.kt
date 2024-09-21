@@ -94,6 +94,32 @@ class ToolCard(
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
         }.register()
+        val FAIRY_CRYSTAL_SWORD = ToolCard(
+            "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
+            "Nutrients for the soul", "妖精はこれをおやつにするという",
+            2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("#")
+                pattern("#")
+                pattern("R")
+                input('#', MaterialCard.FAIRY_CRYSTAL.item)
+                input('R', Items.STICK)
+            } on MaterialCard.FAIRY_CRYSTAL.item
+        }.register()
+        val FAIRY_CRYSTAL_BATTLE_AXE = ToolCard(
+            "fairy_crystal_battle_axe", "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
+            "The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。",
+            2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("###")
+                pattern("#R#")
+                pattern(" R ")
+                input('#', MaterialCard.FAIRY_CRYSTAL.item)
+                input('R', Items.STICK)
+            } on MaterialCard.FAIRY_CRYSTAL.item
+        }.register()
         val MIRAGIUM_PICKAXE = ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
