@@ -39,7 +39,7 @@ class TraitCard(
     jaPoem: String,
     private val traitConditionCards: List<TraitConditionCard>,
     private val traitEffectKeyCardStacks: List<Pair<TraitEffectKeyCard, Double>>,
-    private val spawnSpecConfigurator: MutableList<TraitSpawnSpec>.() -> Unit,
+    private val spawnSpecConfigurator: MutableList<TraitSpawnSpec>.() -> Unit = {},
 ) {
     companion object {
         val entries = mutableListOf<TraitCard>()
