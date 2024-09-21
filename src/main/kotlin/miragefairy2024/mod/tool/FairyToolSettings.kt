@@ -96,6 +96,14 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
 // @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
 
+fun createKnife(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyKnifeItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 2.0F
+    it.attackSpeed = -2.4F
+    it.tags += ItemTags.SWORDS
+    it.superEffectiveBlocks += Blocks.COBWEB
+    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+}
+
 fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyBattleAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
