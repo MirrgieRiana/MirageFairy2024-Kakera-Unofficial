@@ -29,7 +29,12 @@ interface FairyToolItem {
 
 
 fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
-    return if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
+    return when {
+        toolSettings.superEffectiveBlocks.any { state.isOf(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier * 10F
+        toolSettings.effectiveBlocks.any { state.isOf(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier
+        toolSettings.effectiveBlockTags.any { state.isIn(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier
+        else -> 1.0F
+    }
 }
 
 fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
@@ -38,7 +43,12 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
         itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
         itemMiningLevel < MiningLevels.IRON && state.isIn(BlockTags.NEEDS_IRON_TOOL) -> false
         itemMiningLevel < MiningLevels.STONE && state.isIn(BlockTags.NEEDS_STONE_TOOL) -> false
-        else -> toolSettings.effectiveBlockTags.any { state.isIn(it) }
+        else -> when {
+            toolSettings.superEffectiveBlocks.any { state.isOf(it) } -> true
+            toolSettings.effectiveBlocks.any { state.isOf(it) } -> true
+            toolSettings.effectiveBlockTags.any { state.isIn(it) } -> true
+            else -> false
+        }
     }
 }
 
