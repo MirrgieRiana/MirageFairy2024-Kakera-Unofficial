@@ -39,6 +39,8 @@ class FairyToolSettings(
     var silkTouch = false
     var selfMending: Int? = null
     val descriptions = mutableListOf<Translation>()
+    var basePower = 0F // TODO -> FairyShootingStaffSettings
+    var baseMaxDistance = 0F // TODO -> FairyShootingStaffSettings
     var obtainFairy: Double? = null
 
     override fun createItem() = creator(this)
@@ -100,6 +102,12 @@ fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, att
     it.tags += ItemTags.AXES
     it.effectiveBlockTags += BlockTags.AXE_MINEABLE
 }
+
+fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.basePower = basePower
+    it.baseMaxDistance = baseMaxDistance
+}
+
 
 fun FairyToolSettings.areaMining() = this.also {
     it.areaMining = true

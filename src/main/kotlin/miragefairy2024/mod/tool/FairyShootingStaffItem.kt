@@ -1,6 +1,8 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
+import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.AntimatterBoltCard
 import miragefairy2024.mod.AntimatterBoltEntity
 import miragefairy2024.mod.EnchantmentCard
@@ -14,6 +16,8 @@ import miragefairy2024.util.text
 import miragefairy2024.util.yellow
 import net.minecraft.block.BlockState
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.enchantment.Enchantment
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -28,6 +32,39 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+
+class FairyShootingStaffItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+    ShootingStaffItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.basePower, toolSettings.baseMaxDistance, settings),
+    FairyToolItem,
+    OverrideEnchantmentLevelCallback,
+    ItemPredicateConvertorCallback {
+
+    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
+
+    override fun isSuitableFor(state: BlockState) = isSuitableForImpl(state)
+
+    override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+        super.postMine(stack, world, state, pos, miner)
+        postMineImpl(stack, world, state, pos, miner)
+        return true
+    }
+
+    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
+        super.postHit(stack, target, attacker)
+        postHitImpl(stack, target, attacker)
+        return true
+    }
+
+    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+        super.inventoryTick(stack, world, entity, slot, selected)
+        inventoryTickImpl(stack, world, entity, slot, selected)
+    }
+
+    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+
+    override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
+
+}
 
 open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
     companion object {
