@@ -46,6 +46,8 @@
   "category.rei.miragefairy2024.item_fairy_dream_recipe": "Fairy Dream: Item",
   "category.rei.miragefairy2024.trait_encyclopedia": "Trait Encyclopedia",
   "container.miragefairy2024.soul_stream": "Soul Stream",
+  "death.attack.miragefairy2024.magic": "%1$s was killed by magic",
+  "death.attack.miragefairy2024.magic.player": "%1$s was killed by magic whilst trying to escape %2$s",
   "effect.miragefairy2024.experience": "Experience",
   "gui.miragefairy2024.common_motif_recipe.always": "Always",
   "gui.miragefairy2024.fairy_building.folia": "Folia",
