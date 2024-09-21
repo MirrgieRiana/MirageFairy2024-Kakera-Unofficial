@@ -40,4 +40,5 @@ class FairyMiningToolItem(val toolSettings: FairyMiningToolSettings, settings: S
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
+
 }
