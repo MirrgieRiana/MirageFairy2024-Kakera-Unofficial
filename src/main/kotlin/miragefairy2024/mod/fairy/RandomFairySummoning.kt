@@ -40,6 +40,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
+import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 import kotlin.math.pow
 
@@ -167,36 +168,50 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
             }
         }
 
-        // 提供割合の生成
+        // モチーフの判定
         val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.entries
-        val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { Chance(it.rate, Single(it)) }.toMutableList()
-        val totalWeight = chanceTable.totalWeight
-        if (totalWeight < 1.0) chanceTable += Chance(1.0 - totalWeight, Single(null))
 
-        // ガチャ
-        val condensedMotif = chanceTable.weightedRandom(world.random)?.first ?: return
-
-        // actualCondensation は condensation を超えない最大の3の整数乗
-        // condensation = 11.46 の場合、 actualCondensation = 9
-        val actualCondensation = getNiceCondensation(condensedMotif.condensation).second
-
-        // 上の場合、 count ≒ 1.27
-        val count = condensedMotif.condensation / actualCondensation
-        val actualCount = world.random.randomInt(count)
-
-        val resultItemStack = condensedMotif.motif.createFairyItemStack(condensation = actualCondensation, count = actualCount)
+        // 抽選
+        val result = getRandomFairy(world.random, motifSet, appearanceRateBonus) ?: return
 
         // 入手
-        player.obtain(resultItemStack)
+        player.obtain(result.motif.createFairyItemStack(condensation = result.condensation, count = result.count))
 
         // 妖精召喚履歴に追加
-        player.fairyHistoryContainer[condensedMotif.motif] += actualCondensation * actualCount
+        player.fairyHistoryContainer[result.motif] += result.condensation * result.count
         FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
         // エフェクト
         world.playSound(null, player.x, player.y, player.z, SoundEvents.BLOCK_DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
 
     }
+}
+
+class RandomFairyResult(val motif: Motif, val condensation: Int, val count: Int)
+
+fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
+
+    // 提供割合の生成
+    val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { Chance(it.rate, Single(it)) }.toMutableList()
+    val totalWeight = chanceTable.totalWeight
+    if (totalWeight < 1.0) chanceTable += Chance(1.0 - totalWeight, Single(null))
+
+    // ガチャ
+    val condensedMotif = chanceTable.weightedRandom(random)?.first ?: return null
+
+    // actualCondensation は condensation を超えない最大の3の整数乗
+    // condensation = 11.46 の場合、 actualCondensation = 9
+    val actualCondensation = getNiceCondensation(condensedMotif.condensation).second
+
+    // 上の場合、 count ≒ 1.27
+    val count = condensedMotif.condensation / actualCondensation
+    val actualCount = random.randomInt(count)
+
+    return RandomFairyResult(
+        motif = condensedMotif.motif,
+        condensation = actualCondensation,
+        count = actualCount,
+    )
 }
 
 fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
