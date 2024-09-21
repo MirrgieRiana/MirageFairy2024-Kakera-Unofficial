@@ -84,7 +84,7 @@ class ToolCard(
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
-            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10),
+            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
