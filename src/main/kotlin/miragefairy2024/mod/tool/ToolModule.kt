@@ -177,6 +177,18 @@ class ToolCard(
                 input('R', Items.STICK)
             } on MaterialCard.MIRAGIUM_INGOT.item
         }.register()
+        val MIRANAGITE_KNIFE = ToolCard(
+            "miranagite_knife", "Miranagite Knife", "蒼天石のナイフ",
+            "Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。",
+            2, createKnife(ToolMaterialCard.MIRANAGITE).silkTouch(),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern("#")
+                pattern("R")
+                input('#', MaterialCard.MIRANAGITE.item)
+                input('R', Items.STICK)
+            } on MaterialCard.MIRANAGITE.item
+        }.register()
         val MIRANAGITE_PICKAXE = ToolCard(
             "miranagite_pickaxe", "Miranagite Pickaxe", "蒼天石のつるはし",
             "Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。",
