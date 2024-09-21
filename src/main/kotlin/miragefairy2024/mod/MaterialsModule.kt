@@ -68,6 +68,10 @@ enum class MaterialCard(
         PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
         // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
     ),
+    MIRANAGITE_ROD(
+        "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
+        PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
+    ),
     CHAOS_STONE(
         "chaos_stone", "Chaos Stone", "混沌の石",
         PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
@@ -322,6 +326,14 @@ fun initMaterialsModule() {
     // 紅天石
     MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
     MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
+
+    // 蒼天石の棒
+    registerShapedRecipeGeneration(MaterialCard.MIRANAGITE_ROD.item) {
+        pattern("  #")
+        pattern(" # ")
+        pattern("#  ")
+        input('#', MaterialCard.MIRANAGITE.item)
+    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
 
     // 混沌の石
     MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.SIMPLE_DUNGEON_CHEST }, 10, 3..5)
