@@ -16,17 +16,23 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun FairyPickaxeItem.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState): Float {
+interface FairyToolItem {
+    val toolSettings: FairyMiningToolSettings
+}
+
+
+fun <I> I.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
     return if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
 }
 
-fun FairyPickaxeItem.isSuitableForImpl(state: BlockState): Boolean {
+fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
     val itemMiningLevel = toolSettings.toolMaterialCard.toolMaterial.miningLevel
     return when {
         itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
@@ -36,7 +42,7 @@ fun FairyPickaxeItem.isSuitableForImpl(state: BlockState): Boolean {
     }
 }
 
-fun FairyPickaxeItem.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) {
+fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
     if (toolSettings.areaMining) run fail@{
         if (world.isClient) return@fail
 
@@ -164,7 +170,7 @@ fun FairyPickaxeItem.postMineImpl(stack: ItemStack, world: World, state: BlockSt
     }
 }
 
-fun FairyPickaxeItem.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) where I : Item, I : FairyToolItem {
     val selfMending = toolSettings.selfMending
     if (selfMending != null) run {
         if (world.isClient) return@run
@@ -174,14 +180,14 @@ fun FairyPickaxeItem.inventoryTickImpl(stack: ItemStack, world: World, entity: E
     }
 }
 
-fun FairyPickaxeItem.overrideEnchantmentLevelImpl(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
+fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
     if (toolSettings.silkTouch) {
         if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
     }
     return oldLevel
 }
 
-fun FairyPickaxeItem.convertItemStackImpl(itemStack: ItemStack): ItemStack {
+fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
     var itemStack2 = itemStack
     if (toolSettings.silkTouch) {
         itemStack2 = itemStack2.copy()
