@@ -28,7 +28,7 @@ interface FairyToolItem {
 }
 
 
-fun <I> I.getMiningSpeedMultiplierImpl(stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
+fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
     return if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
 }
 
@@ -170,7 +170,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
     }
 }
 
-fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) where I : Item, I : FairyToolItem {
+fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Suppress("UNUSED_PARAMETER") slot: Int, @Suppress("UNUSED_PARAMETER") selected: Boolean) where I : Item, I : FairyToolItem {
     val selfMending = toolSettings.selfMending
     if (selfMending != null) run {
         if (world.isClient) return@run
@@ -180,7 +180,7 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot
     }
 }
 
-fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
+fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
     if (toolSettings.silkTouch) {
         if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
     }
