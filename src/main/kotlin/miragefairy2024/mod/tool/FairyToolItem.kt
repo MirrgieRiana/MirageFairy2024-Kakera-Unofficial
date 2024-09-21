@@ -180,6 +180,10 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
     }
 }
 
+fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem {
+
+}
+
 fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Suppress("UNUSED_PARAMETER") slot: Int, @Suppress("UNUSED_PARAMETER") selected: Boolean) where I : Item, I : FairyToolItem {
     val selfMending = toolSettings.selfMending
     if (selfMending != null) run {
