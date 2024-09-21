@@ -127,7 +127,7 @@ class FairyMiningToolItem(private val toolSettings: FairyMiningToolSettings, set
         val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
     }
 
-    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) miningSpeed else 1.0F
+    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = if (toolSettings.effectiveBlockTags.any { state.isIn(it) }) toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier else 1.0F
     override fun isSuitableFor(state: BlockState): Boolean {
         val itemMiningLevel = material.miningLevel
         return when {
