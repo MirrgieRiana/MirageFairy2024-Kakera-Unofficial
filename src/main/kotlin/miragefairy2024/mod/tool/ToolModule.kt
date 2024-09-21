@@ -190,6 +190,35 @@ class ToolCard(
                 input('R', Items.STICK)
             } on MaterialCard.MIRANAGITE.item
         }.register()
+        val MIRANAGI_STAFF_0 = ToolCard(
+            "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
+            "Inflating anti-entropy force", "膨張する秩序の力。",
+            2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" IG")
+                pattern(" RI")
+                pattern("I  ")
+                input('R', MaterialCard.MIRANAGITE_ROD.item)
+                input('G', Items.GLASS)
+                input('I', Items.COPPER_INGOT)
+            } on MaterialCard.MIRANAGITE.item
+        }.register()
+        val MIRANAGI_STAFF = ToolCard(
+            "miranagi_staff", "Staff of Miranagi", "みらなぎの杖",
+            "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
+            3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" IG")
+                pattern(" #I")
+                pattern("N  ")
+                input('#', MIRANAGI_STAFF_0.item)
+                input('G', Items.DIAMOND)
+                input('I', Items.IRON_INGOT)
+                input('N', Items.IRON_NUGGET)
+            } on MaterialCard.MIRANAGITE.item
+        }.register()
         val XARPITE_PICKAXE = ToolCard(
             "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
             "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
