@@ -18,6 +18,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.repair
 import miragefairy2024.util.text
+import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttribute
@@ -156,7 +157,7 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
         return value.map.map { (statusEffect, entry) ->
             buildText {
                 !statusEffect.name
-                if (entry.level in 2..10) !(" "() + translate("enchantment.level.${entry.level}"))
+                if (entry.level >= 2) !(" "() + entry.level.toRomanText())
             }
         }.join(text { ","() })
     }
