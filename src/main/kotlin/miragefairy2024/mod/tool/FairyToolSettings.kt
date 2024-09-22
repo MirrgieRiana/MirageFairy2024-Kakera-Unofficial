@@ -30,6 +30,7 @@ class FairyToolSettings(
     val tags = mutableListOf<TagKey<Item>>()
     var attackDamage = 0F
     var attackSpeed = 0F
+    var miningSpeedMultiplierOverride: Float? = null
     val superEffectiveBlocks = mutableListOf<Block>()
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()

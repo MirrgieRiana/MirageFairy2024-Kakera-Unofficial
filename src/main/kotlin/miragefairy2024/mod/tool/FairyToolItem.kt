@@ -36,10 +36,11 @@ interface FairyToolItem {
 
 
 fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
+    val miningSpeedMultiplier = toolSettings.miningSpeedMultiplierOverride ?: toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier
     return when {
-        toolSettings.superEffectiveBlocks.any { state.isOf(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier * 10F
-        toolSettings.effectiveBlocks.any { state.isOf(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier
-        toolSettings.effectiveBlockTags.any { state.isIn(it) } -> toolSettings.toolMaterialCard.toolMaterial.miningSpeedMultiplier
+        toolSettings.superEffectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier * 10F
+        toolSettings.effectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier
+        toolSettings.effectiveBlockTags.any { state.isIn(it) } -> miningSpeedMultiplier
         else -> 1.0F
     }
 }
