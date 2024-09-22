@@ -48,6 +48,7 @@ fun initToolModule() {
     FairyToolSettings.SELF_MENDING_TRANSLATION.enJa()
     FairyToolSettings.OBTAIN_FAIRY.enJa()
 
+    ScytheItem.DESCRIPTION_TRANSLATION.enJa()
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
     ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
 

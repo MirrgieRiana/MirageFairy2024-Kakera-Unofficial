@@ -1,10 +1,16 @@
 package miragefairy2024.mod.tool
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
+import miragefairy2024.util.Translation
+import miragefairy2024.util.invoke
+import miragefairy2024.util.text
+import miragefairy2024.util.yellow
 import net.minecraft.block.BlockState
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
@@ -13,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolMaterial
+import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
@@ -53,6 +60,15 @@ class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Se
 }
 
 open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
+    companion object {
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.scythe.description" }, "Perform area harvesting when used", "使用時、範囲収穫")
+    }
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        tooltip += text { DESCRIPTION_TRANSLATION().yellow }
+    }
+
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
 
         val itemStack = user.getStackInHand(hand)
