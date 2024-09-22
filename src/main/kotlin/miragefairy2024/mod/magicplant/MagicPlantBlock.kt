@@ -191,6 +191,14 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
     }
 
+    fun tryPick(world: World, pos: BlockPos, player: PlayerEntity?, tool: ItemStack?): Boolean {
+        val state = world.getBlockState(pos)
+        if (!canPick(state)) return false
+        if (world.isClient) return true
+        pick(world as ServerWorld, pos, player, tool, true)
+        return true
+    }
+
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
     private fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean) {
 
@@ -245,10 +253,8 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
                 return ActionResult.CONSUME
             }
         }
-        if (!canPick(state)) return ActionResult.PASS
-        if (world.isClient) return ActionResult.SUCCESS
-        pick(world as ServerWorld, pos, player, player.mainHandStack, true)
-        return ActionResult.CONSUME
+        if (!tryPick(world, pos, player, player.mainHandStack)) return ActionResult.PASS
+        return ActionResult.success(world.isClient)
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
