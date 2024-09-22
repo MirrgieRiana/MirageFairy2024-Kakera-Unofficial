@@ -242,6 +242,12 @@ fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUS
     if (toolSettings.silkTouch) {
         if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
     }
+    run {
+        val fortune = toolSettings.fortune
+        if (fortune != null) {
+            if (enchantment == Enchantments.FORTUNE) return oldLevel atLeast fortune
+        }
+    }
     return oldLevel
 }
 

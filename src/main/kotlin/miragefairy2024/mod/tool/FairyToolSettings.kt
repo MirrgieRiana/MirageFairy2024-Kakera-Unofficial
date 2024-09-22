@@ -8,6 +8,8 @@ import miragefairy2024.mod.text
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.text
+import miragefairy2024.util.toRomanText
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.item.Item
@@ -25,6 +27,7 @@ class FairyToolSettings(
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
         val CUT_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SILK_TOUCH_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.silk_touch" }, "Silk Touch", "シルクタッチ")
+        val FORTUNE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.fortune" }, "Fortune", "幸運")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
         val OBTAIN_FAIRY = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
     }
@@ -40,6 +43,7 @@ class FairyToolSettings(
     var mineAll = false
     var cutAll = false
     var silkTouch = false
+    var fortune: Int? = null
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
     var basePower = 0F // TODO -> FairyShootingStaffSettings
@@ -138,6 +142,12 @@ fun FairyToolSettings.cutAll() = this.also {
 fun FairyToolSettings.silkTouch() = this.also {
     it.silkTouch = true
     it.descriptions += FairyToolSettings.SILK_TOUCH_TRANSLATION()
+}
+
+fun FairyToolSettings.fortune(fortune: Int) = this.also {
+    check(fortune >= 1)
+    it.fortune = fortune
+    it.descriptions += text { FairyToolSettings.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
 }
 
 fun FairyToolSettings.selfMending(selfMending: Int) = this.also {
