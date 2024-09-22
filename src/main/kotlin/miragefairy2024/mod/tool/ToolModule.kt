@@ -46,7 +46,7 @@ object MagicDamageTypeCard {
 
 context(ModContext)
 fun initToolModule() {
-    FairyToolCard.entries.forEach {
+    ToolCard.entries.forEach {
         it.init()
     }
 
@@ -83,12 +83,12 @@ fun initToolModule() {
 interface ToolSettings {
     fun createItem(): Item
     context(ModContext)
-    fun init(card: FairyToolCard) = Unit
+    fun init(card: ToolCard) = Unit
 
     fun addPoems(poemList: PoemList) = poemList
 }
 
-class FairyToolCard(
+open class FairyToolCard(
     path: String,
     private val enName: String,
     private val jaName: String,
@@ -97,12 +97,12 @@ class FairyToolCard(
     private val tier: Int,
     private val toolSettings: ToolSettings,
     private val initializer: context(ModContext)FairyToolCard.() -> Unit = {},
-) {
+) : ToolCard() {
     val identifier = MirageFairy2024.identifier(path)
-    val item = toolSettings.createItem()
+    override val item = toolSettings.createItem()
 
     context(ModContext)
-    fun init() {
+    override fun init() {
         item.register(Registries.ITEM, identifier)
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -118,11 +118,18 @@ class FairyToolCard(
         toolSettings.init(this)
         initializer(this@ModContext, this)
     }
+}
+
+abstract class ToolCard {
+    abstract val item: Item
+
+    context(ModContext)
+    open fun init() = Unit
 
     @Suppress("unused")
     companion object {
-        val entries = mutableListOf<FairyToolCard>()
-        private operator fun FairyToolCard.not() = this.also { entries.add(this) }
+        val entries = mutableListOf<ToolCard>()
+        private operator fun <T : ToolCard> T.not() = this.also { entries.add(this) }
 
         val IRON_SCYTHE = !FairyToolCard(
             "iron_scythe", "Iron Scythe", "鉄の大鎌",
