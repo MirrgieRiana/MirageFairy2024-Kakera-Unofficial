@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:iron_scythe",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "miragefairy2024:mirage_stem"
+    }
+  },
+  "pattern": [
+    " ##",
+    "# R",
+    "  R"
+  ],
+  "result": {
+    "item": "miragefairy2024:iron_scythe"
+  },
+  "show_notification": true
+}

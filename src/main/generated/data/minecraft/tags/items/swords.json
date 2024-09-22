@@ -1,8 +1,12 @@
 {
   "replace": false,
   "values": [
+    "miragefairy2024:iron_scythe",
+    "miragefairy2024:fairy_crystal_scythe",
     "miragefairy2024:fairy_crystal_sword",
     "miragefairy2024:miranagite_knife",
+    "miragefairy2024:miranagite_scythe",
+    "miragefairy2024:diamond_scythe",
     "miragefairy2024:phantom_sword"
   ]
 }

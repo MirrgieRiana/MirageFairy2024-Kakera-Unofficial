@@ -113,6 +113,19 @@ class ToolCard(
         val entries = mutableListOf<ToolCard>()
         private fun ToolCard.register() = this.also { entries.add(this) }
 
+        val IRON_SCYTHE = ToolCard(
+            "iron_scythe", "Iron Scythe", "鉄の大鎌",
+            "For cutting grass and harvesting crops.", "草や農作物を刈り取るための道具。",
+            2, createScythe(ToolMaterialCard.IRON, 1),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" ##")
+                pattern("# R")
+                pattern("  R")
+                input('#', Items.IRON_INGOT)
+                input('R', MaterialCard.MIRAGE_STEM.item)
+            } on Items.IRON_INGOT
+        }.register()
         val FAIRY_CRYSTAL_PICKAXE = ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
@@ -124,6 +137,19 @@ class ToolCard(
                 pattern(" R ")
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
+            } on MaterialCard.FAIRY_CRYSTAL.item
+        }.register()
+        val FAIRY_CRYSTAL_SCYTHE = ToolCard(
+            "fairy_crystal_scythe", "Fairy Crystal Scythe", "フェアリークリスタルの大鎌",
+            "What color is fairy blood?", "妖精を刈り取るための道具。",
+            2, createScythe(ToolMaterialCard.FAIRY_CRYSTAL, 2).selfMending(10).obtainFairy(9.0),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" ##")
+                pattern("# R")
+                pattern("  R")
+                input('#', MaterialCard.FAIRY_CRYSTAL.item)
+                input('R', MaterialCard.MIRAGE_STEM.item)
             } on MaterialCard.FAIRY_CRYSTAL.item
         }.register()
         val FAIRY_CRYSTAL_SWORD = ToolCard(
@@ -203,6 +229,19 @@ class ToolCard(
                 input('R', Items.STICK)
             } on MaterialCard.MIRANAGITE.item
         }.register()
+        val MIRANAGITE_SCYTHE = ToolCard(
+            "miranagite_scythe", "Miranagite Scythe", "蒼天石の大鎌",
+            "Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。",
+            2, createScythe(ToolMaterialCard.MIRANAGITE, 3).silkTouch(),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" ##")
+                pattern("# R")
+                pattern("  R")
+                input('#', MaterialCard.MIRANAGITE.item)
+                input('R', MaterialCard.MIRAGE_STEM.item)
+            } on MaterialCard.MIRANAGITE.item
+        }.register()
         val MIRANAGI_STAFF_0 = ToolCard(
             "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
             "Inflating anti-entropy force", "膨張する秩序の力。",
@@ -257,6 +296,19 @@ class ToolCard(
                 input('#', MaterialCard.XARPITE.item)
                 input('R', Items.STICK)
             } on MaterialCard.XARPITE.item
+        }.register()
+        val DIAMOND_SCYTHE = ToolCard(
+            "diamond_scythe", "Diamond Scythe", "ダイヤモンドの大鎌",
+            "A highly durable scythe made of diamond.", "ダイヤモンドを加工した高耐久の大鎌。",
+            3, createScythe(ToolMaterialCard.DIAMOND, 3),
+        ) {
+            registerShapedRecipeGeneration(item) {
+                pattern(" ##")
+                pattern("# R")
+                pattern("  R")
+                input('#', Items.DIAMOND)
+                input('R', MaterialCard.MIRAGE_STEM.item)
+            } on Items.DIAMOND
         }.register()
         val CHAOS_STONE_PICKAXE = ToolCard(
             "chaos_stone_pickaxe", "Chaos Stone Pickaxe", "混沌のつるはし",
