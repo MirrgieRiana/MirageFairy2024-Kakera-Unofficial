@@ -48,3 +48,5 @@ fun Iterable<Text>.join(vararg separators: Text): Text {
     }
     return result
 }
+
+fun Int.toRomanText() = if (this in 1..10) text { translate("enchantment.level.${this@toRomanText}") } else text { "$this"() }
