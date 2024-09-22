@@ -51,7 +51,7 @@ class FairyToolSettings(
     override fun createItem() = creator(this)
 
     context(ModContext)
-    override fun init(card: ToolCard) {
+    override fun init(card: FairyToolCard) {
         tags.forEach {
             card.item.registerItemTagGeneration { it }
         }
