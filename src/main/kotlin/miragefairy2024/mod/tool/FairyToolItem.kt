@@ -12,6 +12,7 @@ import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.repair
 import mirrg.kotlin.hydrogen.atLeast
+import mirrg.kotlin.hydrogen.ceilToInt
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.BlockState
@@ -79,7 +80,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
                         val targetBlockPos = pos.add(x, y, z)
                         if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+                            if (stack.maxDamage - stack.damage <= toolSettings.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                             // 採掘を続行
 
@@ -88,8 +89,11 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
                             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                             if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                 if (targetHardness > 0) {
-                                    stack.damage(1, miner) {
-                                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                    val damage = world.random.randomInt(toolSettings.miningDamage)
+                                    if (damage > 0) {
+                                        stack.damage(damage, miner) {
+                                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                        }
                                     }
                                 }
                             }
@@ -115,7 +119,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).block === state.block
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+            if (stack.maxDamage - stack.damage <= toolSettings.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -124,8 +128,11 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    stack.damage(1, miner) {
-                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    val damage = world.random.randomInt(toolSettings.miningDamage)
+                    if (damage > 0) {
+                        stack.damage(damage, miner) {
+                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        }
                     }
                 }
             }
@@ -148,7 +155,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+            if (stack.maxDamage - stack.damage <= toolSettings.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -157,8 +164,11 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    stack.damage(1, miner) {
-                        it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                    val damage = world.random.randomInt(toolSettings.miningDamage)
+                    if (damage > 0) {
+                        stack.damage(damage, miner) {
+                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        }
                     }
                 }
                 logBlockPosList += blockPos
@@ -168,7 +178,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= 1) return@fail // ツールの耐久値が残り1
+            if (stack.maxDamage - stack.damage <= toolSettings.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -178,8 +188,11 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
                     if (miner.random.nextFloat() < 0.1F) {
-                        stack.damage(1, miner) {
-                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                        val damage = world.random.randomInt(toolSettings.miningDamage)
+                        if (damage > 0) {
+                            stack.damage(damage, miner) {
+                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                            }
                         }
                     }
                 }

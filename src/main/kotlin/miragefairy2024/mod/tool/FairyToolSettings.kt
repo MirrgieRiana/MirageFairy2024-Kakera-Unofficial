@@ -39,6 +39,7 @@ class FairyToolSettings(
     val superEffectiveBlocks = mutableListOf<Block>()
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
+    var miningDamage = 1.0
     var areaMining = false
     var mineAll = false
     var cutAll = false
