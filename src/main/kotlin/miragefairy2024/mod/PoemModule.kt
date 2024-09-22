@@ -69,6 +69,10 @@ class ExternalPoem(override val type: PoemType, private val keyGetter: () -> Str
     override fun getText(item: Item) = text { translate(keyGetter()).formatted(type.color) }
 }
 
+class TextPoem(override val type: PoemType, private val text: Text) : Poem {
+    override fun getText(item: Item) = text.formatted(type.color)
+}
+
 
 // PoemList
 
@@ -81,6 +85,7 @@ fun PoemList.poem(en: String, ja: String) = this + InternalPoem(PoemType.POEM, "
 fun PoemList.description(key: String, en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, key, en, ja)
 fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
 fun PoemList.translation(type: PoemType, translation: Translation) = this + ExternalPoem(type) { translation.keyGetter() }
+fun PoemList.text(type: PoemType, text: Text) = this + TextPoem(type, text)
 
 
 // Util
