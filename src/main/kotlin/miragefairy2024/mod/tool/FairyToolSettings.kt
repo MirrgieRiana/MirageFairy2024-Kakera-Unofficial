@@ -68,6 +68,7 @@ class FairyToolSettings(
 fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairySwordItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = 3.0F
     it.attackSpeed = -2.4F
+    it.miningSpeedMultiplierOverride = 1.5F
     it.tags += ItemTags.SWORDS
     it.superEffectiveBlocks += Blocks.COBWEB
     it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
