@@ -191,9 +191,9 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
     }
 
-    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, causingEvent: Boolean): Boolean {
+    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
         val result = canPick(world.getBlockState(blockPos))
-        if (result && !world.isClient) pick(world as ServerWorld, blockPos, player, tool, true)
+        if (result && !world.isClient) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
         if (causingEvent) {
             if (tool != null) {
                 val toolItem = tool.item
@@ -259,7 +259,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
                 return ActionResult.CONSUME
             }
         }
-        if (!tryPick(world, pos, player, player.mainHandStack, true)) return ActionResult.PASS
+        if (!tryPick(world, pos, player, player.mainHandStack, true, true)) return ActionResult.PASS
         return ActionResult.success(world.isClient)
     }
 
