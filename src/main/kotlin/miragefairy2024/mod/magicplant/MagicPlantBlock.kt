@@ -192,7 +192,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
     }
 
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
-    protected fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean) {
+    private fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean) {
 
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
