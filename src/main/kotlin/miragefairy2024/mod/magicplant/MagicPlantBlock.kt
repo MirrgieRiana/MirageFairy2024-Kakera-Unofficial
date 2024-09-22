@@ -194,8 +194,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
     fun tryPick(world: World, pos: BlockPos, player: PlayerEntity?, tool: ItemStack?): Boolean {
         val state = world.getBlockState(pos)
         if (!canPick(state)) return false
-        if (world.isClient) return true
-        pick(world as ServerWorld, pos, player, tool, true)
+        if (!world.isClient) pick(world as ServerWorld, pos, player, tool, true)
         return true
     }
 
