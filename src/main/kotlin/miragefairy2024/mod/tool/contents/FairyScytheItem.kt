@@ -1,10 +1,19 @@
-package miragefairy2024.mod.tool
+package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
+import miragefairy2024.mod.tool.FairyToolItem
+import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.convertItemStackImpl
+import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
+import miragefairy2024.mod.tool.inventoryTickImpl
+import miragefairy2024.mod.tool.isSuitableForImpl
+import miragefairy2024.mod.tool.overrideEnchantmentLevelImpl
+import miragefairy2024.mod.tool.postHitImpl
+import miragefairy2024.mod.tool.postMineImpl
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text

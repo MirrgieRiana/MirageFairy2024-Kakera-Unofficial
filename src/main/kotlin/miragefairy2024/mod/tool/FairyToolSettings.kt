@@ -5,6 +5,14 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
+import miragefairy2024.mod.tool.contents.FairyAxeItem
+import miragefairy2024.mod.tool.contents.FairyBattleAxeItem
+import miragefairy2024.mod.tool.contents.FairyKnifeItem
+import miragefairy2024.mod.tool.contents.FairyPickaxeItem
+import miragefairy2024.mod.tool.contents.FairyScytheItem
+import miragefairy2024.mod.tool.contents.FairyShootingStaffItem
+import miragefairy2024.mod.tool.contents.FairyShovelItem
+import miragefairy2024.mod.tool.contents.FairySwordItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.registerItemTagGeneration

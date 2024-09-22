@@ -1,20 +1,27 @@
-package miragefairy2024.mod.tool
+package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyToolItem
+import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.convertItemStackImpl
+import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
+import miragefairy2024.mod.tool.inventoryTickImpl
+import miragefairy2024.mod.tool.isSuitableForImpl
+import miragefairy2024.mod.tool.overrideEnchantmentLevelImpl
+import miragefairy2024.mod.tool.postHitImpl
+import miragefairy2024.mod.tool.postMineImpl
 import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.AxeItem
 import net.minecraft.item.ItemStack
-import net.minecraft.item.ToolMaterial
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyBattleAxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
-    BattleAxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
+class FairyAxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+    AxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
@@ -44,22 +51,4 @@ class FairyBattleAxeItem(override val toolSettings: FairyToolSettings, settings:
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
-}
-
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
-    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.damage(1, attacker) { e ->
-            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-        }
-        return true
-    }
-
-    override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getHardness(world, pos) != 0.0F) {
-            stack.damage(2, miner) { e ->
-                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-            }
-        }
-        return true
-    }
 }

@@ -8,6 +8,8 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.tool.contents.ScytheItem
+import miragefairy2024.mod.tool.contents.ShootingStaffItem
 import miragefairy2024.util.en
 import miragefairy2024.util.enJa
 import miragefairy2024.util.ja

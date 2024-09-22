@@ -1,18 +1,27 @@
-package miragefairy2024.mod.tool
+package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyToolItem
+import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.convertItemStackImpl
+import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
+import miragefairy2024.mod.tool.inventoryTickImpl
+import miragefairy2024.mod.tool.isSuitableForImpl
+import miragefairy2024.mod.tool.overrideEnchantmentLevelImpl
+import miragefairy2024.mod.tool.postHitImpl
+import miragefairy2024.mod.tool.postMineImpl
 import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.SwordItem
+import net.minecraft.item.PickaxeItem
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairySwordItem(override val toolSettings: FairyToolSettings, settings: Settings) :
-    SwordItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage.toInt(), toolSettings.attackSpeed, settings),
+class FairyPickaxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+    PickaxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage.toInt(), toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
