@@ -191,10 +191,18 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
     }
 
-    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?): Boolean {
-        if (!canPick(world.getBlockState(blockPos))) return false
-        if (!world.isClient) pick(world as ServerWorld, blockPos, player, tool, true)
-        return true
+    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, causingEvent: Boolean): Boolean {
+        val result = canPick(world.getBlockState(blockPos))
+        if (result && !world.isClient) pick(world as ServerWorld, blockPos, player, tool, true)
+        if (causingEvent) {
+            if (tool != null) {
+                val toolItem = tool.item
+                if (toolItem is PostTryPickHandlerItem) {
+                    toolItem.postTryPick(world, blockPos, player, tool, result)
+                }
+            }
+        }
+        return result
     }
 
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
@@ -251,7 +259,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
                 return ActionResult.CONSUME
             }
         }
-        if (!tryPick(world, pos, player, player.mainHandStack)) return ActionResult.PASS
+        if (!tryPick(world, pos, player, player.mainHandStack, true)) return ActionResult.PASS
         return ActionResult.success(world.isClient)
     }
 
@@ -307,4 +315,8 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     // TODO パーティクル
 
+}
+
+interface PostTryPickHandlerItem {
+    fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean)
 }
