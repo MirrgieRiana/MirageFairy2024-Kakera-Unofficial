@@ -4,6 +4,7 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.tool.FairyToolItem
 import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
@@ -12,13 +13,26 @@ import miragefairy2024.mod.tool.overrideEnchantmentLevelImpl
 import miragefairy2024.mod.tool.postHitImpl
 import miragefairy2024.mod.tool.postMineImpl
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
+import net.minecraft.registry.tag.BlockTags
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+
+fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairySwordItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 3.0F
+    it.attackSpeed = -2.4F
+    it.miningSpeedMultiplierOverride = 1.5F
+    it.tags += ItemTags.SWORDS
+    it.superEffectiveBlocks += Blocks.COBWEB
+    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+}
 
 class FairySwordItem(override val toolSettings: FairyToolSettings, settings: Settings) :
     SwordItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage.toInt(), toolSettings.attackSpeed, settings),

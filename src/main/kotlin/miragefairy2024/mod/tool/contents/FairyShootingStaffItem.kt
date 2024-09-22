@@ -9,6 +9,7 @@ import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.FairyToolItem
 import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
@@ -30,6 +31,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ToolItem
 import net.minecraft.item.ToolMaterial
@@ -41,6 +43,11 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+
+fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.basePower = basePower
+    it.baseMaxDistance = baseMaxDistance
+}
 
 class FairyShootingStaffItem(override val toolSettings: FairyToolSettings, settings: Settings) :
     ShootingStaffItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.basePower, toolSettings.baseMaxDistance, settings),

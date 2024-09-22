@@ -7,7 +7,10 @@ import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
 import miragefairy2024.mod.tool.FairyToolItem
 import miragefairy2024.mod.tool.FairyToolSettings
+import miragefairy2024.mod.tool.ToolMaterialCard
+import miragefairy2024.mod.tool.areaMining
 import miragefairy2024.mod.tool.convertItemStackImpl
+import miragefairy2024.mod.tool.fortune
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
 import miragefairy2024.mod.tool.isSuitableForImpl
@@ -19,21 +22,36 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolMaterial
+import net.minecraft.registry.tag.BlockTags
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.World
+
+fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = FairyToolSettings({ FairyScytheItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 4.0F
+    it.attackSpeed = -3.2F
+    it.miningDamage = 0.2
+    it.areaMining()
+    it.fortune(fortune)
+    it.tags += ItemTags.SWORDS
+    it.superEffectiveBlocks += Blocks.COBWEB
+    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+}
 
 class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Settings) :
     ScytheItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),

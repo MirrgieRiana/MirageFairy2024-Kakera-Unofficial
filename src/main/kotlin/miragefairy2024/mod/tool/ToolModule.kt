@@ -10,6 +10,14 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.tool.contents.ScytheItem
 import miragefairy2024.mod.tool.contents.ShootingStaffItem
+import miragefairy2024.mod.tool.contents.createAxe
+import miragefairy2024.mod.tool.contents.createBattleAxe
+import miragefairy2024.mod.tool.contents.createKnife
+import miragefairy2024.mod.tool.contents.createPickaxe
+import miragefairy2024.mod.tool.contents.createScythe
+import miragefairy2024.mod.tool.contents.createShootingStaff
+import miragefairy2024.mod.tool.contents.createShovel
+import miragefairy2024.mod.tool.contents.createSword
 import miragefairy2024.util.en
 import miragefairy2024.util.enJa
 import miragefairy2024.util.ja

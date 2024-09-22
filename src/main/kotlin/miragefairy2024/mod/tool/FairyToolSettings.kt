@@ -5,24 +5,13 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
-import miragefairy2024.mod.tool.contents.FairyAxeItem
-import miragefairy2024.mod.tool.contents.FairyBattleAxeItem
-import miragefairy2024.mod.tool.contents.FairyKnifeItem
-import miragefairy2024.mod.tool.contents.FairyPickaxeItem
-import miragefairy2024.mod.tool.contents.FairyScytheItem
-import miragefairy2024.mod.tool.contents.FairyShootingStaffItem
-import miragefairy2024.mod.tool.contents.FairyShovelItem
-import miragefairy2024.mod.tool.contents.FairySwordItem
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import net.minecraft.block.Block
-import net.minecraft.block.Blocks
 import net.minecraft.item.Item
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
@@ -71,77 +60,6 @@ class FairyToolSettings(
 
     override fun addPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
 
-}
-
-
-fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairySwordItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = 3.0F
-    it.attackSpeed = -2.4F
-    it.miningSpeedMultiplierOverride = 1.5F
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
-}
-
-fun createShovel(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyShovelItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = 1.5F
-    it.attackSpeed = -3.0F
-    it.tags += ItemTags.SHOVELS
-    it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
-}
-
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = 1F
-    it.attackSpeed = -2.8F
-    it.tags += ItemTags.PICKAXES
-    it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-    it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
-}
-
-/**
- * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
- * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
- */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = attackDamage
-    it.attackSpeed = attackSpeed
-    it.tags += ItemTags.AXES
-    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
-}
-
-// Hoe
-// @param attackDamage wood: 0.0, stone: -1.0, gold: 0.0, iron: -2.0, diamond: -3.0, netherite: -4.0
-// @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
-
-fun createKnife(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyKnifeItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = 2.0F
-    it.attackSpeed = -2.4F
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
-}
-
-fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = FairyToolSettings({ FairyScytheItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = 4.0F
-    it.attackSpeed = -3.2F
-    it.miningDamage = 0.2
-    it.areaMining()
-    it.fortune(fortune)
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
-}
-
-fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyBattleAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.attackDamage = attackDamage
-    it.attackSpeed = attackSpeed
-    it.tags += ItemTags.AXES
-    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
-}
-
-fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = FairyToolSettings({ FairyShootingStaffItem(it, Item.Settings()) }, toolMaterialCard).also {
-    it.basePower = basePower
-    it.baseMaxDistance = baseMaxDistance
 }
 
 
