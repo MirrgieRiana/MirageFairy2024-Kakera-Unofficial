@@ -191,10 +191,9 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
         return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
     }
 
-    fun tryPick(world: World, pos: BlockPos, player: PlayerEntity?, tool: ItemStack?): Boolean {
-        val state = world.getBlockState(pos)
-        if (!canPick(state)) return false
-        if (!world.isClient) pick(world as ServerWorld, pos, player, tool, true)
+    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?): Boolean {
+        if (!canPick(world.getBlockState(blockPos))) return false
+        if (!world.isClient) pick(world as ServerWorld, blockPos, player, tool, true)
         return true
     }
 
