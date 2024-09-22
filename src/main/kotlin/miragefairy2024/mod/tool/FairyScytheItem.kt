@@ -13,7 +13,10 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolMaterial
+import net.minecraft.util.Hand
+import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.World
 
 class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Settings) :
@@ -50,6 +53,29 @@ class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Se
 }
 
 open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+
+        val itemStack = user.getStackInHand(hand)
+        val blockHitResult = raycast(world, user, FluidHandling.NONE)
+        val blockPos = blockHitResult.blockPos
+        var effective = false
+        (-1..1).forEach { x ->
+            (-1..1).forEach { y ->
+                (-1..1).forEach { z ->
+                    val targetBlockPos = blockPos.add(x, y, z)
+                    val targetBlockState = world.getBlockState(targetBlockPos)
+                    val targetBlock = targetBlockState.block
+                    if (targetBlock is MagicPlantBlock) {
+                        if (targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)) effective = true
+                    }
+                }
+            }
+        }
+        if (effective) return TypedActionResult.success(itemStack)
+
+        return super.use(world, user, hand)
+    }
+
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.damage(2, attacker) { e ->
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
