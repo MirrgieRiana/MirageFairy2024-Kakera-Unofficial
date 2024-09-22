@@ -122,9 +122,9 @@ class ToolCard(
     @Suppress("unused")
     companion object {
         val entries = mutableListOf<ToolCard>()
-        private fun ToolCard.register() = this.also { entries.add(this) }
+        private operator fun ToolCard.not() = this.also { entries.add(this) }
 
-        val IRON_SCYTHE = ToolCard(
+        val IRON_SCYTHE = !ToolCard(
             "iron_scythe", "Iron Scythe", "鉄の大鎌",
             "For cutting grass and harvesting crops.", "草や農作物を刈り取るための道具。",
             2, createScythe(ToolMaterialCard.IRON, 1),
@@ -136,8 +136,8 @@ class ToolCard(
                 input('#', Items.IRON_INGOT)
                 input('R', MaterialCard.MIRAGE_STEM.item)
             } on Items.IRON_INGOT
-        }.register()
-        val FAIRY_CRYSTAL_PICKAXE = ToolCard(
+        }
+        val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
             "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
             2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
@@ -149,8 +149,8 @@ class ToolCard(
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
-        }.register()
-        val FAIRY_CRYSTAL_SCYTHE = ToolCard(
+        }
+        val FAIRY_CRYSTAL_SCYTHE = !ToolCard(
             "fairy_crystal_scythe", "Fairy Crystal Scythe", "フェアリークリスタルの大鎌",
             "What color is fairy blood?", "妖精を刈り取るための道具。",
             2, createScythe(ToolMaterialCard.FAIRY_CRYSTAL, 2).selfMending(10).obtainFairy(9.0),
@@ -162,8 +162,8 @@ class ToolCard(
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', MaterialCard.MIRAGE_STEM.item)
             } on MaterialCard.FAIRY_CRYSTAL.item
-        }.register()
-        val FAIRY_CRYSTAL_SWORD = ToolCard(
+        }
+        val FAIRY_CRYSTAL_SWORD = !ToolCard(
             "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
             "Nutrients for the soul", "妖精はこれをおやつにするという",
             2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
@@ -175,8 +175,8 @@ class ToolCard(
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
-        }.register()
-        val FAIRY_CRYSTAL_BATTLE_AXE = ToolCard(
+        }
+        val FAIRY_CRYSTAL_BATTLE_AXE = !ToolCard(
             "fairy_crystal_battle_axe", "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
             "The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。",
             2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
@@ -188,8 +188,8 @@ class ToolCard(
                 input('#', MaterialCard.FAIRY_CRYSTAL.item)
                 input('R', Items.STICK)
             } on MaterialCard.FAIRY_CRYSTAL.item
-        }.register()
-        val MIRAGIUM_PICKAXE = ToolCard(
+        }
+        val MIRAGIUM_PICKAXE = !ToolCard(
             "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
             3, createPickaxe(ToolMaterialCard.MIRAGIUM).selfMending(20).mineAll(),
@@ -201,8 +201,8 @@ class ToolCard(
                 input('#', MaterialCard.MIRAGIUM_INGOT.item)
                 input('R', Items.STICK)
             } on MaterialCard.MIRAGIUM_INGOT.item
-        }.register()
-        val MIRAGIUM_AXE = ToolCard(
+        }
+        val MIRAGIUM_AXE = !ToolCard(
             "miragium_axe", "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
             3, createAxe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
@@ -214,8 +214,8 @@ class ToolCard(
                 input('#', MaterialCard.MIRAGIUM_INGOT.item)
                 input('R', Items.STICK)
             } on MaterialCard.MIRAGIUM_INGOT.item
-        }.register()
-        val MIRANAGITE_KNIFE = ToolCard(
+        }
+        val MIRANAGITE_KNIFE = !ToolCard(
             "miranagite_knife", "Miranagite Knife", "蒼天石のナイフ",
             "Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。",
             2, createKnife(ToolMaterialCard.MIRANAGITE).silkTouch(),
@@ -226,8 +226,8 @@ class ToolCard(
                 input('#', MaterialCard.MIRANAGITE.item)
                 input('R', Items.STICK)
             } on MaterialCard.MIRANAGITE.item
-        }.register()
-        val MIRANAGITE_PICKAXE = ToolCard(
+        }
+        val MIRANAGITE_PICKAXE = !ToolCard(
             "miranagite_pickaxe", "Miranagite Pickaxe", "蒼天石のつるはし",
             "Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。",
             2, createPickaxe(ToolMaterialCard.MIRANAGITE).silkTouch(),
@@ -239,8 +239,8 @@ class ToolCard(
                 input('#', MaterialCard.MIRANAGITE.item)
                 input('R', Items.STICK)
             } on MaterialCard.MIRANAGITE.item
-        }.register()
-        val MIRANAGITE_SCYTHE = ToolCard(
+        }
+        val MIRANAGITE_SCYTHE = !ToolCard(
             "miranagite_scythe", "Miranagite Scythe", "蒼天石の大鎌",
             "Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。",
             2, createScythe(ToolMaterialCard.MIRANAGITE, 3).silkTouch(),
@@ -252,8 +252,8 @@ class ToolCard(
                 input('#', MaterialCard.MIRANAGITE.item)
                 input('R', MaterialCard.MIRAGE_STEM.item)
             } on MaterialCard.MIRANAGITE.item
-        }.register()
-        val MIRANAGI_STAFF_0 = ToolCard(
+        }
+        val MIRANAGI_STAFF_0 = !ToolCard(
             "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
             "Inflating anti-entropy force", "膨張する秩序の力。",
             2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
@@ -266,8 +266,8 @@ class ToolCard(
                 input('G', Items.GLASS)
                 input('I', Items.COPPER_INGOT)
             } on MaterialCard.MIRANAGITE.item
-        }.register()
-        val MIRANAGI_STAFF = ToolCard(
+        }
+        val MIRANAGI_STAFF = !ToolCard(
             "miranagi_staff", "Staff of Miranagi", "みらなぎの杖",
             "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
             3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
@@ -281,8 +281,8 @@ class ToolCard(
                 input('I', Items.IRON_INGOT)
                 input('N', Items.IRON_NUGGET)
             } on MaterialCard.MIRANAGITE.item
-        }.register()
-        val XARPITE_PICKAXE = ToolCard(
+        }
+        val XARPITE_PICKAXE = !ToolCard(
             "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
             "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
             2, createPickaxe(ToolMaterialCard.XARPITE).mineAll(),
@@ -294,8 +294,8 @@ class ToolCard(
                 input('#', MaterialCard.XARPITE.item)
                 input('R', Items.STICK)
             } on MaterialCard.XARPITE.item
-        }.register()
-        val XARPITE_AXE = ToolCard(
+        }
+        val XARPITE_AXE = !ToolCard(
             "xarpite_axe", "Xarpite Axe", "紅天石の斧",
             "Strip the log from the space", "空間にこびりついた丸太の除去に。",
             2, createAxe(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
@@ -307,8 +307,8 @@ class ToolCard(
                 input('#', MaterialCard.XARPITE.item)
                 input('R', Items.STICK)
             } on MaterialCard.XARPITE.item
-        }.register()
-        val DIAMOND_SCYTHE = ToolCard(
+        }
+        val DIAMOND_SCYTHE = !ToolCard(
             "diamond_scythe", "Diamond Scythe", "ダイヤモンドの大鎌",
             "A highly durable scythe made of diamond.", "ダイヤモンドを加工した高耐久の大鎌。",
             3, createScythe(ToolMaterialCard.DIAMOND, 3),
@@ -320,8 +320,8 @@ class ToolCard(
                 input('#', Items.DIAMOND)
                 input('R', MaterialCard.MIRAGE_STEM.item)
             } on Items.DIAMOND
-        }.register()
-        val CHAOS_STONE_PICKAXE = ToolCard(
+        }
+        val CHAOS_STONE_PICKAXE = !ToolCard(
             "chaos_stone_pickaxe", "Chaos Stone Pickaxe", "混沌のつるはし",
             "Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。",
             4, createPickaxe(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE }.areaMining(),
@@ -333,8 +333,8 @@ class ToolCard(
                 input('#', MaterialCard.CHAOS_STONE.item)
                 input('R', Items.STICK)
             } on MaterialCard.CHAOS_STONE.item
-        }.register()
-        val PHANTOM_PICKAXE = ToolCard(
+        }
+        val PHANTOM_PICKAXE = !ToolCard(
             "phantom_pickaxe", "Phantom Pickaxe", "幻想のつるはし",
             "\"Creation\" is the true power.", "人間が手にした唯一の幻想。",
             4, createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
@@ -346,8 +346,8 @@ class ToolCard(
                 input('#', MaterialCard.PHANTOM_DROP.item)
                 input('R', Items.STICK)
             } on MaterialCard.PHANTOM_DROP.item
-        }.register()
-        val PHANTOM_SHOVEL = ToolCard(
+        }
+        val PHANTOM_SHOVEL = !ToolCard(
             "phantom_shovel", "Phantom Shovel", "幻想のシャベル",
             "The sound of the world's end echoed", "破壊された世界の音――",
             4, createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
@@ -359,8 +359,8 @@ class ToolCard(
                 input('#', MaterialCard.PHANTOM_DROP.item)
                 input('R', Items.STICK)
             } on MaterialCard.PHANTOM_DROP.item
-        }.register()
-        val PHANTOM_SWORD = ToolCard(
+        }
+        val PHANTOM_SWORD = !ToolCard(
             "phantom_sword", "Phantom Sword", "幻想の剣",
             "Pray. For rebirth.", "闇を切り裂く、再生の光。",
             4, createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
@@ -372,6 +372,6 @@ class ToolCard(
                 input('#', MaterialCard.PHANTOM_DROP.item)
                 input('R', Items.STICK)
             } on MaterialCard.PHANTOM_DROP.item
-        }.register()
+        }
     }
 }
