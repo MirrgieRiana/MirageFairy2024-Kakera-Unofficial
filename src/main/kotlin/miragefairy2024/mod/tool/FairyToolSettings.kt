@@ -113,6 +113,17 @@ fun createKnife(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyK
     it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
 }
 
+fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = FairyToolSettings({ FairyScytheItem(it, Item.Settings()) }, toolMaterialCard).also {
+    it.attackDamage = 4.0F
+    it.attackSpeed = -3.2F
+    it.miningDamage = 0.2
+    it.areaMining()
+    it.fortune(fortune)
+    it.tags += ItemTags.SWORDS
+    it.superEffectiveBlocks += Blocks.COBWEB
+    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+}
+
 fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyBattleAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
