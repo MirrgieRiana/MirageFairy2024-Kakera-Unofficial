@@ -53,6 +53,7 @@ fun initToolCardModule() {
 
 interface ToolSettings {
     fun createItem(): Item
+
     context(ModContext)
     fun init(card: ToolCard) = Unit
 
