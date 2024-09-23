@@ -2,8 +2,8 @@ package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyMiningToolSettings
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
@@ -29,7 +29,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyMiningToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyKnifeItem(this, Item.Settings())
 
@@ -42,7 +42,7 @@ fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings
     }
 }
 
-class FairyKnifeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyKnifeItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
     KnifeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

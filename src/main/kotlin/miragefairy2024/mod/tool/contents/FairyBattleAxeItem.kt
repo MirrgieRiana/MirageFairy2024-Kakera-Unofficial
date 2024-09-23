@@ -2,8 +2,8 @@ package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyMiningToolSettings
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
@@ -26,7 +26,7 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyToolSettings() {
+fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyMiningToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyBattleAxeItem(this, Item.Settings())
 
@@ -38,7 +38,7 @@ fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, att
     }
 }
 
-class FairyBattleAxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyBattleAxeItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
     BattleAxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

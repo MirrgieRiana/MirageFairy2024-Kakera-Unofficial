@@ -2,8 +2,8 @@ package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyMiningToolSettings
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
@@ -24,7 +24,7 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createShovel(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+fun createShovel(toolMaterialCard: ToolMaterialCard) = object : FairyMiningToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyShovelItem(this, Item.Settings())
 
@@ -36,7 +36,7 @@ fun createShovel(toolMaterialCard: ToolMaterialCard) = object : FairyToolSetting
     }
 }
 
-class FairyShovelItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyShovelItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
     ShovelItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
