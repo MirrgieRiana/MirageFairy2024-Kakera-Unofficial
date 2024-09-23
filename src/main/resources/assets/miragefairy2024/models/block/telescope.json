@@ -1,0 +1,407 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "stand": "miragefairy2024:block/telescope_stand",
+    "particle": "miragefairy2024:block/telescope_body",
+    "body": "miragefairy2024:block/telescope_body"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        11,
+        8
+      ],
+      "to": [
+        9,
+        13,
+        16
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          8,
+          12,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            4,
+            10,
+            6
+          ],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            16,
+            2
+          ],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [
+            8,
+            4,
+            10,
+            6
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            8,
+            2,
+            16,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            16,
+            2
+          ],
+          "rotation": 270,
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            8,
+            0,
+            16,
+            2
+          ],
+          "rotation": 90,
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        10,
+        0
+      ],
+      "to": [
+        10,
+        14,
+        8
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          8,
+          12,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            4,
+            8
+          ],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            4
+          ],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [
+            0,
+            4,
+            4,
+            8
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            8,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            4
+          ],
+          "rotation": 270,
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            4
+          ],
+          "rotation": 90,
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "texture": "#stand"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "texture": "#stand"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            0,
+            0
+          ],
+          "rotation": 90,
+          "texture": "#stand"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "rotation": 270,
+          "texture": "#stand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "texture": "#stand"
+        },
+        "south": {
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "texture": "#stand"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            0,
+            0
+          ],
+          "rotation": 90,
+          "texture": "#stand"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "rotation": 270,
+          "texture": "#stand"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        8,
+        16,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "east": {
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#stand"
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            0,
+            0
+          ],
+          "texture": "#stand"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            16
+          ],
+          "texture": "#stand"
+        }
+      }
+    }
+  ],
+  "display": {}
+}
