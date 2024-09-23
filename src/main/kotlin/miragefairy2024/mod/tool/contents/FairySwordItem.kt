@@ -25,7 +25,10 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createSword(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairySwordItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createSword(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairySwordItem(this, Item.Settings())
+}.also {
     it.attackDamage = 3.0F
     it.attackSpeed = -2.4F
     it.miningSpeedMultiplierOverride = 1.5F

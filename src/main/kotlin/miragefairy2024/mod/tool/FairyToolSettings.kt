@@ -15,10 +15,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
-class FairyToolSettings(
-    val creator: (FairyToolSettings) -> Item,
-    val toolMaterialCard: ToolMaterialCard,
-) : ToolSettings {
+abstract class FairyToolSettings : ToolSettings {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -29,6 +26,7 @@ class FairyToolSettings(
         val OBTAIN_FAIRY = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
     }
 
+    abstract val toolMaterialCard: ToolMaterialCard
     val tags = mutableListOf<TagKey<Item>>()
     var attackDamage = 0F
     var attackSpeed = 0F
@@ -47,8 +45,6 @@ class FairyToolSettings(
     var basePower = 0F // TODO -> FairyShootingStaffSettings
     var baseMaxDistance = 0F // TODO -> FairyShootingStaffSettings
     var obtainFairy: Double? = null
-
-    override fun createItem() = creator(this)
 
     context(ModContext)
     override fun init(card: ToolCard) {

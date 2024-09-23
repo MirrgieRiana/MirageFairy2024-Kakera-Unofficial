@@ -24,7 +24,10 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createShovel(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyShovelItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createShovel(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairyShovelItem(this, Item.Settings())
+}.also {
     it.attackDamage = 1.5F
     it.attackSpeed = -3.0F
     it.tags += ItemTags.SHOVELS

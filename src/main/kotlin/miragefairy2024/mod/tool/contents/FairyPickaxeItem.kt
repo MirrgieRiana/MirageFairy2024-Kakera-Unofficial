@@ -24,7 +24,10 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyPickaxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createPickaxe(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
+}.also {
     it.attackDamage = 1F
     it.attackSpeed = -2.8F
     it.tags += ItemTags.PICKAXES

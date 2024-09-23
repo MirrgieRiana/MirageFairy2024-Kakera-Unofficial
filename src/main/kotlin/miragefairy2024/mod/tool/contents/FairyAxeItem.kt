@@ -28,7 +28,10 @@ import net.minecraft.world.World
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = FairyToolSettings({ FairyAxeItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairyAxeItem(this, Item.Settings())
+}.also {
     it.attackDamage = attackDamage
     it.attackSpeed = attackSpeed
     it.tags += ItemTags.AXES

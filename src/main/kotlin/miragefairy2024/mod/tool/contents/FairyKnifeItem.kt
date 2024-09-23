@@ -29,7 +29,10 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createKnife(toolMaterialCard: ToolMaterialCard) = FairyToolSettings({ FairyKnifeItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairyKnifeItem(this, Item.Settings())
+}.also {
     it.attackDamage = 2.0F
     it.attackSpeed = -2.4F
     it.tags += ItemTags.SWORDS

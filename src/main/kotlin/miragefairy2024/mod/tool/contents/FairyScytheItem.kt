@@ -42,7 +42,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.World
 
-fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = FairyToolSettings({ FairyScytheItem(it, Item.Settings()) }, toolMaterialCard).also {
+fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : FairyToolSettings() {
+    override val toolMaterialCard = toolMaterialCard
+    override fun createItem() = FairyScytheItem(this, Item.Settings())
+}.also {
     it.attackDamage = 4.0F
     it.attackSpeed = -3.2F
     it.miningDamage = 0.2
