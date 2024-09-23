@@ -32,12 +32,14 @@ import net.minecraft.world.World
 fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyKnifeItem(this, Item.Settings())
-}.also {
-    it.attackDamage = 2.0F
-    it.attackSpeed = -2.4F
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+
+    init {
+        this.attackDamage = 2.0F
+        this.attackSpeed = -2.4F
+        this.tags += ItemTags.SWORDS
+        this.superEffectiveBlocks += Blocks.COBWEB
+        this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+    }
 }
 
 class FairyKnifeItem(override val toolSettings: FairyToolSettings, settings: Settings) :

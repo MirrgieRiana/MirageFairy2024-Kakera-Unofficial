@@ -27,12 +27,14 @@ import net.minecraft.world.World
 fun createPickaxe(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyPickaxeItem(this, Item.Settings())
-}.also {
-    it.attackDamage = 1F
-    it.attackSpeed = -2.8F
-    it.tags += ItemTags.PICKAXES
-    it.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-    it.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+
+    init {
+        this.attackDamage = 1F
+        this.attackSpeed = -2.8F
+        this.tags += ItemTags.PICKAXES
+        this.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
+        this.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+    }
 }
 
 class FairyPickaxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
