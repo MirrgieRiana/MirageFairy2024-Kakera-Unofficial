@@ -91,7 +91,7 @@ class ToolCard(
     }
 }
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 object ToolCards {
     val entries = mutableListOf<ToolCard>()
     private operator fun ToolCard.not() = this.also { entries.add(this) }
