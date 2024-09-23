@@ -36,7 +36,7 @@ import net.minecraft.world.World
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
 
 interface FairyToolItem {
-    val toolSettings: FairyToolSettings
+    val toolSettings: ToolSettings
 }
 
 
