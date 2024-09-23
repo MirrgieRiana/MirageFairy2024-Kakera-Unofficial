@@ -28,8 +28,6 @@ abstract class FairyToolSettings : ToolSettings {
 
     abstract val toolMaterialCard: ToolMaterialCard
     val tags = mutableListOf<TagKey<Item>>()
-    var attackDamage = 0F
-    var attackSpeed = 0F
     var miningSpeedMultiplierOverride: Float? = null
     val superEffectiveBlocks = mutableListOf<Block>()
     val effectiveBlocks = mutableListOf<Block>()
@@ -54,6 +52,11 @@ abstract class FairyToolSettings : ToolSettings {
 
     override fun appendPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
 
+}
+
+abstract class FairyMiningToolSettings : FairyToolSettings() {
+    var attackDamage = 0F
+    var attackSpeed = 0F
 }
 
 

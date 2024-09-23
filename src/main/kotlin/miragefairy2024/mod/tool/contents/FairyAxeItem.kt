@@ -2,8 +2,8 @@ package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.tool.FairyMiningToolSettings
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
@@ -28,7 +28,7 @@ import net.minecraft.world.World
  * @param attackDamage wood: 6.0, stone: 7.0, gold: 6.0, iron: 6.0, diamond: 5.0, netherite: 5.0
  * @param attackSpeed wood: -3.2, stone: -3.2, gold: -3.0, iron: -3.1, diamond: -3.0, netherite: -3.0
  */
-fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyToolSettings() {
+fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyMiningToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyAxeItem(this, Item.Settings())
 
@@ -40,7 +40,7 @@ fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpe
     }
 }
 
-class FairyAxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyAxeItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
     AxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

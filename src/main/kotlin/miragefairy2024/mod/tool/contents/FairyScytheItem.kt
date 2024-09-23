@@ -5,8 +5,8 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
+import miragefairy2024.mod.tool.FairyMiningToolSettings
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.areaMining
 import miragefairy2024.mod.tool.convertItemStackImpl
@@ -42,7 +42,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.World
 
-fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : FairyToolSettings() {
+fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : FairyMiningToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyScytheItem(this, Item.Settings())
 
@@ -58,7 +58,7 @@ fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : Fa
     }
 }
 
-class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyScytheItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
     ScytheItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage, toolSettings.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
