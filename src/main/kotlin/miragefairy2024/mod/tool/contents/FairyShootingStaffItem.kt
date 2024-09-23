@@ -8,8 +8,8 @@ import miragefairy2024.mod.AntimatterBoltEntity
 import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.FairyToolItem
-import miragefairy2024.mod.tool.FairyToolSettings
 import miragefairy2024.mod.tool.ToolMaterialCard
+import miragefairy2024.mod.tool.ToolSettings
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
@@ -48,7 +48,7 @@ class FairyShootingStaffSettings(
     override val toolMaterialCard: ToolMaterialCard,
     var basePower: Float,
     var baseMaxDistance: Float,
-) : FairyToolSettings() {
+) : ToolSettings() {
     override fun createItem() = FairyShootingStaffItem(this, Item.Settings())
 }
 

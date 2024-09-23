@@ -15,7 +15,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
-abstract class FairyToolSettings : ToolSettings {
+abstract class ToolSettings {
     companion object {
         val AREA_MINING_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_mining_tool.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
@@ -42,56 +42,58 @@ abstract class FairyToolSettings : ToolSettings {
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
 
+    abstract fun createItem(): Item
+
     context(ModContext)
-    override fun init(card: ToolCard) {
+    fun init(card: ToolCard) {
         tags.forEach {
             card.item.registerItemTagGeneration { it }
         }
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    override fun appendPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+    fun appendPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
 
 }
 
-abstract class FairyMiningToolSettings : FairyToolSettings() {
+abstract class FairyMiningToolSettings : ToolSettings() {
     var attackDamage = 0F
     var attackSpeed = 0F
 }
 
 
-fun FairyToolSettings.areaMining() = this.also {
+fun ToolSettings.areaMining() = this.also {
     it.areaMining = true
-    it.descriptions += FairyToolSettings.AREA_MINING_TRANSLATION()
+    it.descriptions += ToolSettings.AREA_MINING_TRANSLATION()
 }
 
-fun FairyToolSettings.mineAll() = this.also {
+fun ToolSettings.mineAll() = this.also {
     it.mineAll = true
-    it.descriptions += FairyToolSettings.MINE_ALL_TRANSLATION()
+    it.descriptions += ToolSettings.MINE_ALL_TRANSLATION()
 }
 
-fun FairyToolSettings.cutAll() = this.also {
+fun ToolSettings.cutAll() = this.also {
     it.cutAll = true
-    it.descriptions += FairyToolSettings.CUT_ALL_TRANSLATION()
+    it.descriptions += ToolSettings.CUT_ALL_TRANSLATION()
 }
 
-fun FairyToolSettings.silkTouch() = this.also {
+fun ToolSettings.silkTouch() = this.also {
     it.silkTouch = true
-    it.descriptions += FairyToolSettings.SILK_TOUCH_TRANSLATION()
+    it.descriptions += ToolSettings.SILK_TOUCH_TRANSLATION()
 }
 
-fun FairyToolSettings.fortune(fortune: Int) = this.also {
+fun ToolSettings.fortune(fortune: Int) = this.also {
     check(fortune >= 1)
     it.fortune = fortune
-    it.descriptions += text { FairyToolSettings.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
+    it.descriptions += text { ToolSettings.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
 }
 
-fun FairyToolSettings.selfMending(selfMending: Int) = this.also {
+fun ToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
-    it.descriptions += FairyToolSettings.SELF_MENDING_TRANSLATION()
+    it.descriptions += ToolSettings.SELF_MENDING_TRANSLATION()
 }
 
-fun FairyToolSettings.obtainFairy(appearanceRateBonus: Double) = this.also {
+fun ToolSettings.obtainFairy(appearanceRateBonus: Double) = this.also {
     it.obtainFairy = appearanceRateBonus
-    it.descriptions += FairyToolSettings.OBTAIN_FAIRY()
+    it.descriptions += ToolSettings.OBTAIN_FAIRY()
 }
