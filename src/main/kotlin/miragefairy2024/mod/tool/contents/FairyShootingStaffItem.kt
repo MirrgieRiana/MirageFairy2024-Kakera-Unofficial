@@ -44,15 +44,15 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createShootingStaff(toolMaterialCard: ToolMaterialCard, basePower: Float, baseMaxDistance: Float) = object : FairyToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairyShootingStaffSettings(
+    override val toolMaterialCard: ToolMaterialCard,
+    var basePower: Float,
+    var baseMaxDistance: Float,
+) : FairyToolSettings() {
     override fun createItem() = FairyShootingStaffItem(this, Item.Settings())
-}.also {
-    it.basePower = basePower
-    it.baseMaxDistance = baseMaxDistance
 }
 
-class FairyShootingStaffItem(override val toolSettings: FairyToolSettings, settings: Settings) :
+class FairyShootingStaffItem(override val toolSettings: FairyShootingStaffSettings, settings: Settings) :
     ShootingStaffItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.basePower, toolSettings.baseMaxDistance, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

@@ -8,6 +8,7 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.tool.contents.FairyShootingStaffSettings
 import miragefairy2024.mod.tool.contents.ScytheItem
 import miragefairy2024.mod.tool.contents.ShootingStaffItem
 import miragefairy2024.mod.tool.contents.createAxe
@@ -15,7 +16,6 @@ import miragefairy2024.mod.tool.contents.createBattleAxe
 import miragefairy2024.mod.tool.contents.createKnife
 import miragefairy2024.mod.tool.contents.createPickaxe
 import miragefairy2024.mod.tool.contents.createScythe
-import miragefairy2024.mod.tool.contents.createShootingStaff
 import miragefairy2024.mod.tool.contents.createShovel
 import miragefairy2024.mod.tool.contents.createSword
 import miragefairy2024.util.enJa
@@ -229,7 +229,7 @@ object ToolCards {
     val MIRANAGI_STAFF_0 = !ToolCard(
         "miranagi_staff_0", 2, "Miranagite Staff", "蒼天石のスタッフ",
         "Inflating anti-entropy force", "膨張する秩序の力。",
-        createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
+        FairyShootingStaffSettings(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")
@@ -243,7 +243,7 @@ object ToolCards {
     val MIRANAGI_STAFF = !ToolCard(
         "miranagi_staff", 3, "Staff of Miranagi", "みらなぎの杖",
         "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
-        createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
+        FairyShootingStaffSettings(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")

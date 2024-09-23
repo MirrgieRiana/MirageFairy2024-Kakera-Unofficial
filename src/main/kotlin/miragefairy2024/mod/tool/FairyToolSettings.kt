@@ -42,8 +42,6 @@ abstract class FairyToolSettings : ToolSettings {
     var fortune: Int? = null
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
-    var basePower = 0F // TODO -> FairyShootingStaffSettings
-    var baseMaxDistance = 0F // TODO -> FairyShootingStaffSettings
     var obtainFairy: Double? = null
 
     context(ModContext)
