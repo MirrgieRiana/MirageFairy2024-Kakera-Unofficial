@@ -61,11 +61,11 @@ interface ToolSettings {
 
 open class FairyToolCard(
     path: String,
+    private val tier: Int,
     private val enName: String,
     private val jaName: String,
     private val enPoem: String,
     private val jaPoem: String,
-    private val tier: Int,
     private val toolSettings: ToolSettings,
     private val initializer: context(ModContext)FairyToolCard.() -> Unit = {},
 ) : ToolCard() {
@@ -103,9 +103,9 @@ abstract class ToolCard {
         private operator fun <T : ToolCard> T.not() = this.also { entries.add(this) }
 
         val IRON_SCYTHE = !FairyToolCard(
-            "iron_scythe", "Iron Scythe", "鉄の大鎌",
+            "iron_scythe", 2, "Iron Scythe", "鉄の大鎌",
             "For cutting grass and harvesting crops.", "草や農作物を刈り取るための道具。",
-            2, createScythe(ToolMaterialCard.IRON, 1),
+            createScythe(ToolMaterialCard.IRON, 1),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" ##")
@@ -116,9 +116,9 @@ abstract class ToolCard {
             } on Items.IRON_INGOT
         }
         val FAIRY_CRYSTAL_PICKAXE = !FairyToolCard(
-            "fairy_crystal_pickaxe", "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
+            "fairy_crystal_pickaxe", 2, "Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし",
             "A brain frozen in crystal", "闇を打ち砕く、透き通る心。",
-            2, createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
+            createPickaxe(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -129,9 +129,9 @@ abstract class ToolCard {
             } on MaterialCard.FAIRY_CRYSTAL.item
         }
         val FAIRY_CRYSTAL_SCYTHE = !FairyToolCard(
-            "fairy_crystal_scythe", "Fairy Crystal Scythe", "フェアリークリスタルの大鎌",
+            "fairy_crystal_scythe", 2, "Fairy Crystal Scythe", "フェアリークリスタルの大鎌",
             "What color is fairy blood?", "妖精を刈り取るための道具。",
-            2, createScythe(ToolMaterialCard.FAIRY_CRYSTAL, 2).selfMending(10).obtainFairy(9.0),
+            createScythe(ToolMaterialCard.FAIRY_CRYSTAL, 2).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" ##")
@@ -142,9 +142,9 @@ abstract class ToolCard {
             } on MaterialCard.FAIRY_CRYSTAL.item
         }
         val FAIRY_CRYSTAL_SWORD = !FairyToolCard(
-            "fairy_crystal_sword", "Fairy Crystal Sword", "フェアリークリスタルの剣",
+            "fairy_crystal_sword", 2, "Fairy Crystal Sword", "フェアリークリスタルの剣",
             "Nutrients for the soul", "妖精はこれをおやつにするという",
-            2, createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
+            createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
@@ -155,9 +155,9 @@ abstract class ToolCard {
             } on MaterialCard.FAIRY_CRYSTAL.item
         }
         val FAIRY_CRYSTAL_BATTLE_AXE = !FairyToolCard(
-            "fairy_crystal_battle_axe", "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
+            "fairy_crystal_battle_axe", 2, "Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧",
             "The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。",
-            2, createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
+            createBattleAxe(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -168,9 +168,9 @@ abstract class ToolCard {
             } on MaterialCard.FAIRY_CRYSTAL.item
         }
         val MIRAGIUM_PICKAXE = !FairyToolCard(
-            "miragium_pickaxe", "Miragium Pickaxe", "ミラジウムのつるはし",
+            "miragium_pickaxe", 3, "Miragium Pickaxe", "ミラジウムのつるはし",
             "More durable than gold", "妖精の肉体労働",
-            3, createPickaxe(ToolMaterialCard.MIRAGIUM).selfMending(20).mineAll(),
+            createPickaxe(ToolMaterialCard.MIRAGIUM).selfMending(20).mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -181,9 +181,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRAGIUM_INGOT.item
         }
         val MIRAGIUM_AXE = !FairyToolCard(
-            "miragium_axe", "Miragium Axe", "ミラジウムの斧",
+            "miragium_axe", 3, "Miragium Axe", "ミラジウムの斧",
             "Crack! Squish!", "バキッ！ぐにっ",
-            3, createAxe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
+            createAxe(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
@@ -194,9 +194,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRAGIUM_INGOT.item
         }
         val MIRANAGITE_KNIFE = !FairyToolCard(
-            "miranagite_knife", "Miranagite Knife", "蒼天石のナイフ",
+            "miranagite_knife", 2, "Miranagite Knife", "蒼天石のナイフ",
             "Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。",
-            2, createKnife(ToolMaterialCard.MIRANAGITE).silkTouch(),
+            createKnife(ToolMaterialCard.MIRANAGITE).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
@@ -206,9 +206,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRANAGITE.item
         }
         val MIRANAGITE_PICKAXE = !FairyToolCard(
-            "miranagite_pickaxe", "Miranagite Pickaxe", "蒼天石のつるはし",
+            "miranagite_pickaxe", 2, "Miranagite Pickaxe", "蒼天石のつるはし",
             "Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。",
-            2, createPickaxe(ToolMaterialCard.MIRANAGITE).silkTouch(),
+            createPickaxe(ToolMaterialCard.MIRANAGITE).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -219,9 +219,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRANAGITE.item
         }
         val MIRANAGITE_SCYTHE = !FairyToolCard(
-            "miranagite_scythe", "Miranagite Scythe", "蒼天石の大鎌",
+            "miranagite_scythe", 2, "Miranagite Scythe", "蒼天石の大鎌",
             "Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。",
-            2, createScythe(ToolMaterialCard.MIRANAGITE, 3).silkTouch(),
+            createScythe(ToolMaterialCard.MIRANAGITE, 3).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" ##")
@@ -232,9 +232,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRANAGITE.item
         }
         val MIRANAGI_STAFF_0 = !FairyToolCard(
-            "miranagi_staff_0", "Miranagite Staff", "蒼天石のスタッフ",
+            "miranagi_staff_0", 2, "Miranagite Staff", "蒼天石のスタッフ",
             "Inflating anti-entropy force", "膨張する秩序の力。",
-            2, createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
+            createShootingStaff(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" IG")
@@ -246,9 +246,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRANAGITE.item
         }
         val MIRANAGI_STAFF = !FairyToolCard(
-            "miranagi_staff", "Staff of Miranagi", "みらなぎの杖",
+            "miranagi_staff", 3, "Staff of Miranagi", "みらなぎの杖",
             "Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。",
-            3, createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
+            createShootingStaff(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" IG")
@@ -261,9 +261,9 @@ abstract class ToolCard {
             } on MaterialCard.MIRANAGITE.item
         }
         val XARPITE_PICKAXE = !FairyToolCard(
-            "xarpite_pickaxe", "Xarpite Pickaxe", "紅天石のつるはし",
+            "xarpite_pickaxe", 2, "Xarpite Pickaxe", "紅天石のつるはし",
             "Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。",
-            2, createPickaxe(ToolMaterialCard.XARPITE).mineAll(),
+            createPickaxe(ToolMaterialCard.XARPITE).mineAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -274,9 +274,9 @@ abstract class ToolCard {
             } on MaterialCard.XARPITE.item
         }
         val XARPITE_AXE = !FairyToolCard(
-            "xarpite_axe", "Xarpite Axe", "紅天石の斧",
+            "xarpite_axe", 2, "Xarpite Axe", "紅天石の斧",
             "Strip the log from the space", "空間にこびりついた丸太の除去に。",
-            2, createAxe(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
+            createAxe(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("##")
@@ -287,9 +287,9 @@ abstract class ToolCard {
             } on MaterialCard.XARPITE.item
         }
         val DIAMOND_SCYTHE = !FairyToolCard(
-            "diamond_scythe", "Diamond Scythe", "ダイヤモンドの大鎌",
+            "diamond_scythe", 3, "Diamond Scythe", "ダイヤモンドの大鎌",
             "A highly durable scythe made of diamond.", "ダイヤモンドを加工した高耐久の大鎌。",
-            3, createScythe(ToolMaterialCard.DIAMOND, 3),
+            createScythe(ToolMaterialCard.DIAMOND, 3),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" ##")
@@ -300,9 +300,9 @@ abstract class ToolCard {
             } on Items.DIAMOND
         }
         val CHAOS_STONE_PICKAXE = !FairyToolCard(
-            "chaos_stone_pickaxe", "Chaos Stone Pickaxe", "混沌のつるはし",
+            "chaos_stone_pickaxe", 4, "Chaos Stone Pickaxe", "混沌のつるはし",
             "Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。",
-            4, createPickaxe(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE }.areaMining(),
+            createPickaxe(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE }.areaMining(),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -313,9 +313,9 @@ abstract class ToolCard {
             } on MaterialCard.CHAOS_STONE.item
         }
         val PHANTOM_PICKAXE = !FairyToolCard(
-            "phantom_pickaxe", "Phantom Pickaxe", "幻想のつるはし",
+            "phantom_pickaxe", 4, "Phantom Pickaxe", "幻想のつるはし",
             "\"Creation\" is the true power.", "人間が手にした唯一の幻想。",
-            4, createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+            createPickaxe(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("###")
@@ -326,9 +326,9 @@ abstract class ToolCard {
             } on MaterialCard.PHANTOM_DROP.item
         }
         val PHANTOM_SHOVEL = !FairyToolCard(
-            "phantom_shovel", "Phantom Shovel", "幻想のシャベル",
+            "phantom_shovel", 4, "Phantom Shovel", "幻想のシャベル",
             "The sound of the world's end echoed", "破壊された世界の音――",
-            4, createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+            createShovel(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
@@ -339,9 +339,9 @@ abstract class ToolCard {
             } on MaterialCard.PHANTOM_DROP.item
         }
         val PHANTOM_SWORD = !FairyToolCard(
-            "phantom_sword", "Phantom Sword", "幻想の剣",
+            "phantom_sword", 4, "Phantom Sword", "幻想の剣",
             "Pray. For rebirth.", "闇を切り裂く、再生の光。",
-            4, createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+            createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("#")
