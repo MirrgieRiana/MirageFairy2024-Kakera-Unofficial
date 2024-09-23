@@ -25,8 +25,7 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createSword(toolMaterialCard: ToolMaterialCard) = object : FairyMiningToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairySwordSettings(override val toolMaterialCard: ToolMaterialCard) : FairyMiningToolSettings() {
     override fun createItem() = FairySwordItem(this, Item.Settings())
 
     init {

@@ -9,6 +9,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.tool.contents.FairyShootingStaffSettings
+import miragefairy2024.mod.tool.contents.FairySwordSettings
 import miragefairy2024.mod.tool.contents.ScytheItem
 import miragefairy2024.mod.tool.contents.ShootingStaffItem
 import miragefairy2024.mod.tool.contents.createAxe
@@ -17,7 +18,6 @@ import miragefairy2024.mod.tool.contents.createKnife
 import miragefairy2024.mod.tool.contents.createPickaxe
 import miragefairy2024.mod.tool.contents.createScythe
 import miragefairy2024.mod.tool.contents.createShovel
-import miragefairy2024.mod.tool.contents.createSword
 import miragefairy2024.util.enJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -129,7 +129,7 @@ object ToolCards {
     val FAIRY_CRYSTAL_SWORD = !ToolCard(
         "fairy_crystal_sword", 2, "Fairy Crystal Sword", "フェアリークリスタルの剣",
         "Nutrients for the soul", "妖精はこれをおやつにするという",
-        createSword(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
+        FairySwordSettings(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern("#")
@@ -326,7 +326,7 @@ object ToolCards {
     val PHANTOM_SWORD = !ToolCard(
         "phantom_sword", 4, "Phantom Sword", "幻想の剣",
         "Pray. For rebirth.", "闇を切り裂く、再生の光。",
-        createSword(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
+        FairySwordSettings(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern("#")
