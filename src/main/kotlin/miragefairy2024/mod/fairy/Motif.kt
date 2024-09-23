@@ -1206,3 +1206,12 @@ fun initMotif() {
         writeAction(player, "dump_fairy_motifs.txt", Emoji.entries.fold(sb.toString()) { s, e -> s.replace(e.charCode, e.string) })
     }
 }
+
+/*
+小麦
+大鎌
+
+
+
+
+*/
