@@ -28,13 +28,15 @@ import net.minecraft.world.World
 fun createSword(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairySwordItem(this, Item.Settings())
-}.also {
-    it.attackDamage = 3.0F
-    it.attackSpeed = -2.4F
-    it.miningSpeedMultiplierOverride = 1.5F
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+
+    init {
+        this.attackDamage = 3.0F
+        this.attackSpeed = -2.4F
+        this.miningSpeedMultiplierOverride = 1.5F
+        this.tags += ItemTags.SWORDS
+        this.superEffectiveBlocks += Blocks.COBWEB
+        this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+    }
 }
 
 class FairySwordItem(override val toolSettings: FairyToolSettings, settings: Settings) :

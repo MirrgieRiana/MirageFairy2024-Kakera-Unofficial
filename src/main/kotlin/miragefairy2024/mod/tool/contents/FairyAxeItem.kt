@@ -31,11 +31,13 @@ import net.minecraft.world.World
 fun createAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyAxeItem(this, Item.Settings())
-}.also {
-    it.attackDamage = attackDamage
-    it.attackSpeed = attackSpeed
-    it.tags += ItemTags.AXES
-    it.effectiveBlockTags += BlockTags.AXE_MINEABLE
+
+    init {
+        this.attackDamage = attackDamage
+        this.attackSpeed = attackSpeed
+        this.tags += ItemTags.AXES
+        this.effectiveBlockTags += BlockTags.AXE_MINEABLE
+    }
 }
 
 class FairyAxeItem(override val toolSettings: FairyToolSettings, settings: Settings) :

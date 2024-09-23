@@ -27,11 +27,13 @@ import net.minecraft.world.World
 fun createShovel(toolMaterialCard: ToolMaterialCard) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyShovelItem(this, Item.Settings())
-}.also {
-    it.attackDamage = 1.5F
-    it.attackSpeed = -3.0F
-    it.tags += ItemTags.SHOVELS
-    it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
+
+    init {
+        this.attackDamage = 1.5F
+        this.attackSpeed = -3.0F
+        this.tags += ItemTags.SHOVELS
+        this.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
+    }
 }
 
 class FairyShovelItem(override val toolSettings: FairyToolSettings, settings: Settings) :

@@ -45,15 +45,17 @@ import net.minecraft.world.World
 fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : FairyToolSettings() {
     override val toolMaterialCard = toolMaterialCard
     override fun createItem() = FairyScytheItem(this, Item.Settings())
-}.also {
-    it.attackDamage = 4.0F
-    it.attackSpeed = -3.2F
-    it.miningDamage = 0.2
-    it.areaMining()
-    it.fortune(fortune)
-    it.tags += ItemTags.SWORDS
-    it.superEffectiveBlocks += Blocks.COBWEB
-    it.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+
+    init {
+        this.attackDamage = 4.0F
+        this.attackSpeed = -3.2F
+        this.miningDamage = 0.2
+        this.areaMining()
+        this.fortune(fortune)
+        this.tags += ItemTags.SWORDS
+        this.superEffectiveBlocks += Blocks.COBWEB
+        this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+    }
 }
 
 class FairyScytheItem(override val toolSettings: FairyToolSettings, settings: Settings) :
