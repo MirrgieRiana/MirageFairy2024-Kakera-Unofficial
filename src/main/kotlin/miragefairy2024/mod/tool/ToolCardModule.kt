@@ -57,7 +57,7 @@ interface ToolSettings {
     context(ModContext)
     fun init(card: ToolCard) = Unit
 
-    fun addPoems(poemList: PoemList) = poemList
+    fun appendPoems(poemList: PoemList) = poemList
 }
 
 class ToolCard(
@@ -83,7 +83,7 @@ class ToolCard(
 
         item.enJa(enName, jaName)
 
-        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { toolSettings.addPoems(it) }
+        val poemList = PoemList(tier).poem(enPoem, jaPoem).let { toolSettings.appendPoems(it) }
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 

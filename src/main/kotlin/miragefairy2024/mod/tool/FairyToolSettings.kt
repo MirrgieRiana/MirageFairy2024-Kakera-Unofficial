@@ -58,7 +58,7 @@ class FairyToolSettings(
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    override fun addPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+    override fun appendPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
 
 }
 
