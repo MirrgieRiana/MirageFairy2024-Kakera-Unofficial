@@ -25,7 +25,6 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.data.client.Models
-import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
@@ -33,13 +32,13 @@ import net.minecraft.registry.tag.BlockTags
 context(ModContext)
 fun initToolCardModule() {
 
-    FairyToolSettings.AREA_MINING_TRANSLATION.enJa()
-    FairyToolSettings.MINE_ALL_TRANSLATION.enJa()
-    FairyToolSettings.CUT_ALL_TRANSLATION.enJa()
-    FairyToolSettings.SILK_TOUCH_TRANSLATION.enJa()
-    FairyToolSettings.FORTUNE_TRANSLATION.enJa()
-    FairyToolSettings.SELF_MENDING_TRANSLATION.enJa()
-    FairyToolSettings.OBTAIN_FAIRY.enJa()
+    ToolSettings.AREA_MINING_TRANSLATION.enJa()
+    ToolSettings.MINE_ALL_TRANSLATION.enJa()
+    ToolSettings.CUT_ALL_TRANSLATION.enJa()
+    ToolSettings.SILK_TOUCH_TRANSLATION.enJa()
+    ToolSettings.FORTUNE_TRANSLATION.enJa()
+    ToolSettings.SELF_MENDING_TRANSLATION.enJa()
+    ToolSettings.OBTAIN_FAIRY.enJa()
 
     ScytheItem.DESCRIPTION_TRANSLATION.enJa()
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
@@ -49,15 +48,6 @@ fun initToolCardModule() {
         it.init()
     }
 
-}
-
-interface ToolSettings {
-    fun createItem(): Item
-
-    context(ModContext)
-    fun init(card: ToolCard) = Unit
-
-    fun appendPoems(poemList: PoemList) = poemList
 }
 
 class ToolCard(
