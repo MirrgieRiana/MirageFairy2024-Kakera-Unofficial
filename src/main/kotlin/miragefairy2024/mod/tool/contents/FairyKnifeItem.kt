@@ -29,8 +29,9 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createKnife(toolMaterialCard: ToolMaterialCard) = object : FairyMiningToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairyKnifeSettings(
+    override val toolMaterialCard: ToolMaterialCard,
+) : FairyMiningToolSettings() {
     override fun createItem() = FairyKnifeItem(this, Item.Settings())
 
     init {
