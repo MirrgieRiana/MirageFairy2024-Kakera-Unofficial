@@ -42,8 +42,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.World
 
-fun createScythe(toolMaterialCard: ToolMaterialCard, fortune: Int) = object : FairyMiningToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairyScytheSettings(
+    override val toolMaterialCard: ToolMaterialCard,
+    fortune: Int,
+) : FairyMiningToolSettings() {
     override fun createItem() = FairyScytheItem(this, Item.Settings())
 
     init {

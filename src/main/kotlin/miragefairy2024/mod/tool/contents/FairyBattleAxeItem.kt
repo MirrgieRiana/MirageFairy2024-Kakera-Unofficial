@@ -26,8 +26,11 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createBattleAxe(toolMaterialCard: ToolMaterialCard, attackDamage: Float, attackSpeed: Float) = object : FairyMiningToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairyBattleAxeSettings(
+    override val toolMaterialCard: ToolMaterialCard,
+    attackDamage: Float,
+    attackSpeed: Float,
+) : FairyMiningToolSettings() {
     override fun createItem() = FairyBattleAxeItem(this, Item.Settings())
 
     init {

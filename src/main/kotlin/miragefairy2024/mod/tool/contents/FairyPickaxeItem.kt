@@ -24,8 +24,9 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-fun createPickaxe(toolMaterialCard: ToolMaterialCard) = object : FairyMiningToolSettings() {
-    override val toolMaterialCard = toolMaterialCard
+class FairyPickaxeSettings(
+    override val toolMaterialCard: ToolMaterialCard,
+) : FairyMiningToolSettings() {
     override fun createItem() = FairyPickaxeItem(this, Item.Settings())
 
     init {
