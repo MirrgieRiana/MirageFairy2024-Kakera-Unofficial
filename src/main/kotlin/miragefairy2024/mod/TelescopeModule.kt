@@ -20,6 +20,7 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.item.BlockItem
@@ -27,6 +28,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
@@ -34,7 +36,7 @@ import net.minecraft.world.BlockView
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create()) // TODO
+    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
     val item = BlockItem(block, Item.Settings())
 }
 
@@ -61,7 +63,7 @@ fun initTelescopeModule() {
         card.block.enJa("Minia's Telescope", "ミーニャの望遠鏡")
         val poemList = PoemList(2)
             .poem("Tell me more about the human world!", "きみは妖精には見えないものが見えるんだね。")
-            .description("Use once a day to obtain Minia Crystals", "1日1回使用時にミーニャクリスタルを獲得")
+            .description("Use once a day to obtain Fairy Jewels", "1日1回使用時にフェアリージュエルを獲得")
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
