@@ -6,7 +6,9 @@ import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.long
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.register
@@ -17,22 +19,26 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.entity.ai.pathing.NavigationType
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.Items
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registries
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import java.time.Instant
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
@@ -42,6 +48,9 @@ object TelescopeCard {
 
 context(ModContext)
 fun initTelescopeModule() {
+
+    TelescopeMissionExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission"))
+
     TelescopeCard.let { card ->
 
         card.block.register(Registries.BLOCK, card.identifier)
@@ -105,3 +114,33 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
     // TODO パーティクル
 
 }
+
+val PlayerEntity.telescopeMission get() = this.extraPlayerDataContainer.getOrInit(TelescopeMissionExtraPlayerDataCategory)
+
+object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<TelescopeMission> {
+    override fun create() = TelescopeMission()
+    override fun castOrThrow(value: Any) = value as TelescopeMission
+    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<TelescopeMission> {
+        override fun fromNbt(nbt: NbtCompound): TelescopeMission {
+            val data = TelescopeMission()
+            data.lastUsedTime = nbt.wrapper["LastUsedTime"].long.get()
+            return data
+        }
+
+        override fun toNbt(data: TelescopeMission): NbtCompound {
+            val nbt = NbtCompound()
+            nbt.wrapper["LastUsedTime"].long.set(data.lastUsedTime)
+            return nbt
+        }
+    }
+}
+
+class TelescopeMission {
+    var lastUsedTime: Long? = null
+}
+
+var TelescopeMission.lastUsedInstant
+    get() = lastUsedTime?.let { Instant.ofEpochMilli(it) }
+    set(value) {
+        lastUsedTime = value?.toEpochMilli()
+    }
