@@ -202,6 +202,13 @@ enum class MaterialCard(
         creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
     ),
 
+    FAIRY_SCALES(
+        "fairy_scales", "Fairy Scales", "妖精の鱗粉",
+        PoemList(1)
+            .poem("TODO", "TODO"), // TODO
+        // TODO レシピ
+        // TODO 用途
+    ),
     FRACTAL_WISP(
         "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
         PoemList(1)
@@ -214,6 +221,14 @@ enum class MaterialCard(
     FAIRY_QUEST_CARD_BASE(
         "fairy_quest_card_base", "Fairy Quest Card Base", "フェアリークエストカードベース",
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
+    ),
+
+    SPHERE_BASE(
+        "sphere_base", "Sphere Base", "スフィアベース",
+        PoemList(2)
+            .poem("TODO", "前世が見える。              （らしい）"), // TODO
+        // TODO レシピ
+        // TODO 用途
     ),
 
     MINA_1(
