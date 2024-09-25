@@ -231,7 +231,7 @@ enum class MaterialCard(
     ),
     SPHERE_BASE(
         "sphere_base", "Sphere Base", "スフィアベース",
-        PoemList(1)
+        PoemList(2)
             .poem("TODO", "前世が見える。              （らしい）"), // TODO
         // TODO 用途
     ),
