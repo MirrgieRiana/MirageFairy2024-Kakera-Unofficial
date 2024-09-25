@@ -51,7 +51,7 @@ enum class MaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
-    val poemList: PoemList,
+    val poemList: PoemList?,
     val fuelValue: Int? = null,
     val foodComponent: FoodComponent? = null,
     val creator: (Item.Settings) -> Item = ::Item,
@@ -206,7 +206,8 @@ enum class MaterialCard(
         "fairy_scales", "Fairy Scales", "妖精の鱗粉",
         PoemList(1)
             .poem("TODO", "TODO"), // TODO
-        // TODO レシピ
+        // TODO レシピ 妖精の森バイオームの雑草
+        // TODO 妖精からクラフト
         // TODO 用途
     ),
     FRACTAL_WISP(
@@ -223,11 +224,15 @@ enum class MaterialCard(
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
     ),
 
+    FLUORITE(
+        "fluorite", "Fluorite", "蛍石",
+        null,
+        // TODO レシピ
+    ),
     SPHERE_BASE(
         "sphere_base", "Sphere Base", "スフィアベース",
-        PoemList(2)
+        PoemList(1)
             .poem("TODO", "前世が見える。              （らしい）"), // TODO
-        // TODO レシピ
         // TODO 用途
     ),
 
@@ -321,8 +326,10 @@ fun initMaterialsModule() {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.enName, card.jaName)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        if (card.poemList != null) {
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
+        }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
@@ -421,8 +428,20 @@ fun initMaterialsModule() {
     MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
     MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
 
+    // 妖精の鱗粉
+    MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
+
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
+
+    // 蛍石→フェアリークエストカードベース
+    registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
+        pattern(" R ")
+        pattern("RFR")
+        pattern(" R ")
+        input('F', MaterialCard.FLUORITE.item)
+        input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
+    } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
 
     // ミナ
     MaterialCard.MINA_1.item.registerItemTagGeneration { WISP_TAG }
