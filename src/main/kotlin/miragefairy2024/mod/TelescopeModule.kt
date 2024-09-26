@@ -20,6 +20,7 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.java.hydrogen.floorMod
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
@@ -38,13 +39,17 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import java.time.DayOfWeek
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
     val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
     val item = BlockItem(block, Item.Settings())
 }
+
 
 context(ModContext)
 fun initTelescopeModule() {
@@ -91,8 +96,11 @@ fun initTelescopeModule() {
 
 }
 
+
 class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
     companion object {
+        val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
+        val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
         private val FACING_TO_SHAPE: Map<Direction, VoxelShape> = mapOf(
             Direction.NORTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
             Direction.SOUTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
@@ -110,10 +118,75 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
 
     // TODO 使用時効果
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (world.isClient) return ActionResult.SUCCESS
+        player as ServerPlayerEntity
+
+        val now = Instant.now()
+        val actions = getTelescopeActions(now, player)
+        if (actions.isEmpty()) return ActionResult.CONSUME
+
+        actions.forEach {
+            it()
+        }
+
+        world.playSound(null, player.x, player.y, player.z, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+
+        player.lastTelescopeUseTimeProperty.set(now.toEpochMilli())
+        player.syncCustomData()
+
+        return ActionResult.CONSUME
+    }
 
     // TODO パーティクル
+    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+        val player = MirageFairy2023.clientProxy?.getClientPlayer() ?: return
+
+        val now = Instant.now()
+        val actions = getTelescopeActions(now, player)
+        if (actions.isEmpty()) return
+
+        addAvailableParticle(world, pos)
+    }
 
 }
+
+fun getTelescopeActions(now: Instant, player: PlayerEntity): List<() -> Unit> {
+    val actions = mutableListOf<() -> Unit>()
+
+    val lastUsedInstant = player.telescopeMission.lastUsedInstant
+    if (lastUsedInstant != null) {
+
+        val time: LocalDateTime = LocalDateTime.ofInstant(lastUsedInstant, TelescopeBlock.ZONE_OFFSET)
+        val lastMonthlyLimit: LocalDateTime = time.toLocalDate().withDayOfMonth(1).atStartOfDay()
+        val lastWeeklyLimit: LocalDateTime = time.toLocalDate().minusDays((time.dayOfWeek.value - TelescopeBlock.DAY_OF_WEEK_ORIGIN.value floorMod 7).toLong()).atStartOfDay()
+        val lastDailyLimit: LocalDateTime = time.toLocalDate().atStartOfDay()
+        val nextMonthlyLimit = lastMonthlyLimit.plusMonths(1)
+        val nextWeeklyLimit = lastWeeklyLimit.plusDays(7)
+        val nextDailyLimit = lastDailyLimit.plusDays(1)
+
+        val now2 = now.toLocalDateTime(Telescope.ZONE_OFFSET)
+        if (now2 >= nextMonthlyLimit) {
+            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(5)) }
+        }
+        if (now2 >= nextWeeklyLimit) {
+            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(1)) }
+            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_50.item.createItemStack(5)) }
+        }
+        if (now2 >= nextDailyLimit) {
+            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_50.item.createItemStack(3)) }
+        }
+
+    } else {
+
+        actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(1)) }
+
+    }
+
+    return actions
+}
+
 
 val PlayerEntity.telescopeMission get() = this.extraPlayerDataContainer.getOrInit(TelescopeMissionExtraPlayerDataCategory)
 
