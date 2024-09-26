@@ -62,11 +62,22 @@ infix fun Long.formatAs(format: String) = String.format(format, this)
 infix fun Float.formatAs(format: String) = String.format(format, this)
 infix fun Double.formatAs(format: String) = String.format(format, this)
 
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}d\""))
 infix fun Byte.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}d"
+
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}d\""))
 infix fun Short.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}d"
+
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}d\""))
 infix fun Int.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}d"
+
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}d\""))
 infix fun Long.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}d"
+
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}f\""))
 infix fun Float.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}f"
+
+@Deprecated("removing", ReplaceWith("this formatAs \"%\${formatSpecifier}f\""))
 infix fun Double.formatBy(formatSpecifier: String) = this formatAs "%${formatSpecifier}f"
 
 

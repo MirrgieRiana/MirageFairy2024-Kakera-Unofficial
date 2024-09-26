@@ -109,3 +109,6 @@ class JsonWrapper(val jsonElement: JsonElement?, val path: String = "$") {
 }
 
 fun JsonElement?.toJsonWrapper() = JsonWrapper(this)
+
+val JsonWrapper.isDefined get() = !this.isUndefined
+val JsonWrapper.isNonnullValue get() = !this.isUndefined && !this.isNull

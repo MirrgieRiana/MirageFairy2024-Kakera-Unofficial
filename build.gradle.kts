@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
     id("fabric-loom") version "1.7-SNAPSHOT"
     id("maven-publish")
@@ -17,6 +19,9 @@ java {
 // 生成されたリソースをメイン ソース セットに追加します。
 sourceSets {
     main {
+        java {
+            srcDir("lib/mirrg.kotlin")
+        }
         resources {
             srcDir(
                 "src/main/generated"
@@ -109,6 +114,26 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         jvmTarget = "17"
         freeCompilerArgs = listOf("-Xcontext-receivers")
+    }
+}
+
+tasks.register("fetchMirrgKotlin") {
+    doFirst {
+        fun fetch(fileName: String) {
+            val file = project.rootDir.resolve("lib/mirrg.kotlin").resolve(fileName)
+            when {
+                file.parentFile.isDirectory -> Unit
+                file.parentFile.exists() -> throw RuntimeException("Already exists: ${file.parentFile}")
+                !file.parentFile.mkdirs() -> throw RuntimeException("Could not create the directory: ${file.parentFile}")
+            }
+            file.writeBytes(URL("https://raw.githubusercontent.com/MirrgieRiana/mirrg.kotlin/main/src/main/java/$fileName").readBytes())
+        }
+        fetch("mirrg/kotlin/gson/hydrogen/Gson.kt")
+        fetch("mirrg/kotlin/gson/hydrogen/JsonWrapper.kt")
+        fetch("mirrg/kotlin/hydrogen/Lang.kt")
+        fetch("mirrg/kotlin/hydrogen/Number.kt")
+        fetch("mirrg/kotlin/hydrogen/String.kt")
+        fetch("mirrg/kotlin/slf4j/hydrogen/Logging.kt")
     }
 }
 

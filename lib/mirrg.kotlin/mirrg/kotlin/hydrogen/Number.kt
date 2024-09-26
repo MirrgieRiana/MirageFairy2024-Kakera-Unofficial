@@ -24,6 +24,9 @@ import kotlin.math.floor
 
 fun List<Double>.averageOrNull() = if (isEmpty()) null else this.average()
 
+/** 小数部の末尾の `0` を削除し、小数部がなくなった場合は小数点も削除します。 */
+fun String.stripTrailingZeros() = if ("." in this) this.replace("""\.?0+$""".toRegex(), "") else this
+
 
 // 上限・下限
 infix fun Byte.atMost(other: Byte) = coerceAtMost(other)
