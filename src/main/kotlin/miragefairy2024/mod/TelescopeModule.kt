@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantRotation
@@ -9,6 +10,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.long
+import miragefairy2024.util.obtain
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.register
@@ -34,11 +36,19 @@ import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registries
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.BlockSoundGroup
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
+import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
+import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.random.Random
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import net.minecraft.world.World
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDateTime
@@ -117,7 +127,6 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
 
-    // TODO 使用時効果
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClient) return ActionResult.SUCCESS
@@ -133,21 +142,31 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
 
         world.playSound(null, player.x, player.y, player.z, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
-        player.lastTelescopeUseTimeProperty.set(now.toEpochMilli())
-        player.syncCustomData()
+        player.telescopeMission.lastUsedInstant = now
+        TelescopeMissionExtraPlayerDataCategory.sync(player)
 
         return ActionResult.CONSUME
     }
 
-    // TODO パーティクル
     override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
-        val player = MirageFairy2023.clientProxy?.getClientPlayer() ?: return
+        val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()
         val actions = getTelescopeActions(now, player)
         if (actions.isEmpty()) return
 
-        addAvailableParticle(world, pos)
+        if (random.nextInt(1) == 0) {
+            val x = pos.x.toDouble() + 0.0 + random.nextDouble() * 1.0
+            val y = pos.y.toDouble() + 0.0 + random.nextDouble() * 0.5
+            val z = pos.z.toDouble() + 0.0 + random.nextDouble() * 1.0
+            world.addParticle(
+                ParticleTypeCard.MISSION.particleType,
+                x, y, z,
+                random.nextGaussian() * 0.00,
+                random.nextGaussian() * 0.00 + 0.4,
+                random.nextGaussian() * 0.00,
+            )
+        }
     }
 
 }
@@ -166,21 +185,21 @@ fun getTelescopeActions(now: Instant, player: PlayerEntity): List<() -> Unit> {
         val nextWeeklyLimit = lastWeeklyLimit.plusDays(7)
         val nextDailyLimit = lastDailyLimit.plusDays(1)
 
-        val now2 = now.toLocalDateTime(Telescope.ZONE_OFFSET)
+        val now2: LocalDateTime = LocalDateTime.ofInstant(now, TelescopeBlock.ZONE_OFFSET)
         if (now2 >= nextMonthlyLimit) {
-            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(5)) }
+            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(5)) }
         }
         if (now2 >= nextWeeklyLimit) {
-            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(1)) }
-            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_50.item.createItemStack(5)) }
+            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(1)) }
+            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_50.item.createItemStack(5)) }
         }
         if (now2 >= nextDailyLimit) {
-            actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_50.item.createItemStack(3)) }
+            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_50.item.createItemStack(3)) }
         }
 
     } else {
 
-        actions += { player.obtain(DemonItemCard.FAIRY_CRYSTAL_500.item.createItemStack(1)) }
+        actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(1)) }
 
     }
 
