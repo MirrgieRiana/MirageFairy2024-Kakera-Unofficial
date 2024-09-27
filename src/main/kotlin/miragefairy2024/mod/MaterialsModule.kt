@@ -221,63 +221,63 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(1, it) },
+        creator = { MinaItem(1, it.fireproof()) },
     ),
     MINA_5(
         "mina_5", "5 Mina", "5ミナ",
         PoemList(0)
             .poem("Fairy snack", "ご縁があるよ")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(5, it) },
+        creator = { MinaItem(5, it.fireproof()) },
     ),
     MINA_10(
         "mina_10", "10 Mina", "10ミナ",
         PoemList(0)
             .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(10, it) },
+        creator = { MinaItem(10, it.fireproof()) },
     ),
     MINA_50(
         "mina_50", "50 Mina", "50ミナ",
         PoemList(0)
             .poem("The Society failed to replicate this.", "形而上学的有機結晶")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(50, it) },
+        creator = { MinaItem(50, it.fireproof()) },
     ),
     MINA_100(
         "mina_100", "100 Mina", "100ミナ",
         PoemList(0)
             .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(100, it) },
+        creator = { MinaItem(100, it.fireproof()) },
     ),
     MINA_500(
         "mina_500", "500 Mina", "500ミナ",
         PoemList(0)
             .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(500, it) },
+        creator = { MinaItem(500, it.fireproof()) },
     ),
     MINA_1000(
         "mina_1000", "1000 Mina", "1000ミナ",
         PoemList(0)
             .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(1000, it) },
+        creator = { MinaItem(1000, it.fireproof()) },
     ),
     MINA_5000(
         "mina_5000", "5000 Mina", "5000ミナ",
         PoemList(0)
             .poem("The price of a soul.", "魂の値段。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(5000, it) },
+        creator = { MinaItem(5000, it.fireproof()) },
     ),
     MINA_10000(
         "mina_10000", "10000 Mina", "10000ミナ",
         PoemList(0)
             .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        creator = { MinaItem(10000, it) },
+        creator = { MinaItem(10000, it.fireproof()) },
     ),
 
     APOSTLE_WAND(
