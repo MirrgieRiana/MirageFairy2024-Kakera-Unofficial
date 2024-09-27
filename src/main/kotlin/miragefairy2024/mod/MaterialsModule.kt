@@ -477,6 +477,15 @@ fun initMaterialsModule() {
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
+    // 蛍石→フェアリークエストカードベース
+    registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
+        pattern(" R ")
+        pattern("RFR")
+        pattern(" R ")
+        input('F', MaterialCard.FLUORITE.item)
+        input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
+    } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
+
     // ミナ
     MaterialCard.MINA_1.item.registerItemTagGeneration { WISP_TAG }
     MaterialCard.MINA_5.item.registerItemTagGeneration { WISP_TAG }
