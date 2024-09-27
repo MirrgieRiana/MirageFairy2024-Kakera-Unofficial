@@ -57,7 +57,7 @@ enum class OreCard(
     path: String,
     val enName: String,
     val jaName: String,
-    val poemList: PoemList,
+    val poemList: PoemList?,
     val baseStoneType: BaseStoneType,
     texturePath: String,
     val dropItem: Item,
@@ -139,8 +139,10 @@ fun initOresModule() {
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(card.enName, card.jaName)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        if (card.poemList != null) {
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
+        }
 
         card.block.registerOreLootTableGeneration(card.dropItem)
 
