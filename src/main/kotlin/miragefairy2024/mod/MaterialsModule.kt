@@ -202,6 +202,14 @@ enum class MaterialCard(
         creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
     ),
 
+    FAIRY_SCALES(
+        "fairy_scales", "Fairy Scales", "妖精の鱗粉",
+        PoemList(1)
+            .poem("A catalyst that converts mana into erg", "湧き上がる、エルグの誘い。"),
+        // TODO レシピ 妖精の森バイオームの雑草
+        // TODO 妖精からクラフト
+        // TODO 用途
+    ),
     FRACTAL_WISP(
         "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
         PoemList(1)
