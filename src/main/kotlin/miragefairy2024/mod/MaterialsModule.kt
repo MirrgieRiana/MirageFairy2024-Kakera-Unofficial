@@ -51,7 +51,7 @@ enum class MaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
-    val poemList: PoemList,
+    val poemList: PoemList?,
     val fuelValue: Int? = null,
     val foodComponent: FoodComponent? = null,
     val creator: (Item.Settings) -> Item = ::Item,
@@ -306,8 +306,10 @@ fun initMaterialsModule() {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.enName, card.jaName)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        if (card.poemList != null) {
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
+        }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
     }
 
