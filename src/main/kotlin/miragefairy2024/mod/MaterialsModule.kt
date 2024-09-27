@@ -482,6 +482,9 @@ fun initMaterialsModule() {
     MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
     MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
 
+    // 妖精の鱗粉
+    MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
+
     // フラクタルウィスプ
     MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
 
