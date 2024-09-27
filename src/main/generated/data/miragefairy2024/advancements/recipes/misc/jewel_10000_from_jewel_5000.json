@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_jewel_5000": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "miragefairy2024:jewel_5000"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:jewel_10000_from_jewel_5000"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_jewel_5000",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:jewel_10000_from_jewel_5000"
+    ]
+  },
+  "sends_telemetry_event": false
+}

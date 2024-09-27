@@ -6,6 +6,7 @@ import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantRotation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
@@ -187,19 +188,18 @@ fun getTelescopeActions(now: Instant, player: PlayerEntity): List<() -> Unit> {
 
         val now2: LocalDateTime = LocalDateTime.ofInstant(now, TelescopeBlock.ZONE_OFFSET)
         if (now2 >= nextMonthlyLimit) {
-            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(5)) }
+            actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(20)) }
         }
         if (now2 >= nextWeeklyLimit) {
-            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(1)) }
-            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_50.item.createItemStack(5)) }
+            actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(5)) }
         }
         if (now2 >= nextDailyLimit) {
-            actions += { player.obtain(MaterialCard.FAIRY_JEWEL_50.item.createItemStack(3)) }
+            actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(2)) }
         }
 
     } else {
 
-        actions += { player.obtain(MaterialCard.FAIRY_JEWEL_500.item.createItemStack(1)) }
+        actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(10)) }
 
     }
 
