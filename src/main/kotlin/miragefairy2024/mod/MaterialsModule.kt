@@ -520,6 +520,16 @@ fun initMaterialsModule() {
         }
     }
 
+    // フェアリージュエル両替
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item, MaterialCard.JEWEL_5.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5.item, MaterialCard.JEWEL_10.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_10.item, MaterialCard.JEWEL_50.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_50.item, MaterialCard.JEWEL_100.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_100.item, MaterialCard.JEWEL_500.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_500.item, MaterialCard.JEWEL_1000.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1000.item, MaterialCard.JEWEL_5000.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5000.item, MaterialCard.JEWEL_10000.item, 2)
+
     // 使徒のステッキ
     registerShapedRecipeGeneration(MaterialCard.APOSTLE_WAND.item) {
         pattern(" G")
