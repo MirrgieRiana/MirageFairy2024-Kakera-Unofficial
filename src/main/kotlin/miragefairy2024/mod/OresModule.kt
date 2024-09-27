@@ -73,6 +73,16 @@ enum class OreCard(
         PoemList(1).poem("Singularities built by the Creator", "楽園が楽園であるための奇跡。"),
         DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
     ),
+    FLUORITE_ORE(
+        "fluorite_ore", "Fluorite Ore", "蛍石鉱石",
+        null,
+        STONE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+    ),
+    DEEPSLATE_FLUORITE_ORE(
+        "deepslate_fluorite_ore", "Deepslate Fluorite Ore", "深層蛍石鉱石",
+        null,
+        DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -160,6 +170,8 @@ fun initOresModule() {
     }
     worldGen(OreCard.MIRANAGITE_ORE, 12, 8, -64, 128)
     worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE, 12, 8, -64, 128)
+    worldGen(OreCard.FLUORITE_ORE, 8, 4, 0, 32)
+    worldGen(OreCard.DEEPSLATE_FLUORITE_ORE, 8, 4, 0, 32)
 
 }
 
