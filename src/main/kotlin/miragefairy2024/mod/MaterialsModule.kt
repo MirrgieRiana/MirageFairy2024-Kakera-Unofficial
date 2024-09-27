@@ -423,24 +423,14 @@ fun initMaterialsModule() {
     MaterialCard.MINA_10000.item.registerItemTagGeneration { WISP_TAG }
 
     // ミナ両替
-    fun registerMinaRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
-        registerShapelessRecipeGeneration(higherItem, count = 1) {
-            repeat(count) {
-                input(lowerItem)
-            }
-        } on lowerItem from lowerItem
-        registerShapelessRecipeGeneration(lowerItem, count = count) {
-            input(higherItem)
-        } on higherItem from higherItem
-    }
-    registerMinaRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
-    registerMinaRecipeGeneration(MaterialCard.MINA_5.item, MaterialCard.MINA_10.item, 2)
-    registerMinaRecipeGeneration(MaterialCard.MINA_10.item, MaterialCard.MINA_50.item, 5)
-    registerMinaRecipeGeneration(MaterialCard.MINA_50.item, MaterialCard.MINA_100.item, 2)
-    registerMinaRecipeGeneration(MaterialCard.MINA_100.item, MaterialCard.MINA_500.item, 5)
-    registerMinaRecipeGeneration(MaterialCard.MINA_500.item, MaterialCard.MINA_1000.item, 2)
-    registerMinaRecipeGeneration(MaterialCard.MINA_1000.item, MaterialCard.MINA_5000.item, 5)
-    registerMinaRecipeGeneration(MaterialCard.MINA_5000.item, MaterialCard.MINA_10000.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_5.item, MaterialCard.MINA_10.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_10.item, MaterialCard.MINA_50.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_50.item, MaterialCard.MINA_100.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_100.item, MaterialCard.MINA_500.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_500.item, MaterialCard.MINA_1000.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_1000.item, MaterialCard.MINA_5000.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_5000.item, MaterialCard.MINA_10000.item, 2)
 
     // ミーニャ⇔ミナ両替
     registerSpecialRecipe("minia_from_mina", 1) { inventory ->
@@ -483,6 +473,18 @@ fun initMaterialsModule() {
         input('G', Items.GOLD_INGOT)
     } on MaterialCard.MIRAGE_STEM.item
 
+}
+
+context(ModContext)
+private fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
+    registerShapelessRecipeGeneration(higherItem, count = 1) {
+        repeat(count) {
+            input(lowerItem)
+        }
+    } on lowerItem from lowerItem
+    registerShapelessRecipeGeneration(lowerItem, count = count) {
+        input(higherItem)
+    } on higherItem from higherItem
 }
 
 class MinaItem(val mina: Int, settings: Settings) : Item(settings)
