@@ -216,12 +216,17 @@ enum class MaterialCard(
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
     ),
 
+    FLUORITE(
+        "fluorite", "Fluorite", "蛍石",
+        null,
+    ),
     SPHERE_BASE(
         "sphere_base", "Sphere Base", "スフィアベース",
         PoemList(2)
             .poem("A mirror that reflects sadistic desires", "前世が見える。              （らしい）"),
         // TODO 用途
     ),
+
     MINA_1(
         "mina_1", "1 Mina", "1ミナ",
         PoemList(0)
