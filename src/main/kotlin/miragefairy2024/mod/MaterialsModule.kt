@@ -531,6 +531,17 @@ fun initMaterialsModule() {
         }
     }
 
+    // フェアリージュエル
+    MaterialCard.JEWEL_1.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_5.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_10.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_50.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_100.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_500.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_1000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_5000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_10000.item.registerItemTagGeneration { WISP_TAG }
+
     // フェアリージュエル両替
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item, MaterialCard.JEWEL_5.item, 5)
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_5.item, MaterialCard.JEWEL_10.item, 2)
