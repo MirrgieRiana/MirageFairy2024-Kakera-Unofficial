@@ -280,6 +280,52 @@ enum class MaterialCard(
         creator = { MinaItem(10000, it.fireproof()) },
     ),
 
+    JEWEL_1(
+        "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
+        PoemList(0)
+            .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
+    ),
+    JEWEL_5(
+        "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
+        PoemList(0)
+            .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
+    ),
+    JEWEL_10(
+        "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
+        PoemList(0)
+            .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
+    ),
+    JEWEL_50(
+        "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
+        PoemList(0)
+            .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
+    ),
+    JEWEL_100(
+        "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
+        PoemList(0)
+            .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
+    ),
+    JEWEL_500(
+        "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
+        PoemList(0)
+            .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
+    ),
+    JEWEL_1000(
+        "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
+        PoemList(0)
+            .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
+    ),
+    JEWEL_5000(
+        "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
+        PoemList(0)
+            .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
+    ),
+    JEWEL_10000(
+        "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
+        PoemList(0)
+            .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
+    ),
+
     APOSTLE_WAND(
         "apostle_wand", "Apostle's Wand", "使徒のステッキ",
         PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
