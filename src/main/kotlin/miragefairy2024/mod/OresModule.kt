@@ -140,26 +140,26 @@ fun initOresModule() {
 
     }
 
-    fun worldGen(card: OreCard) {
+    fun worldGen(card: OreCard, size: Int, count: Int, min: Int, max: Int) {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
                 STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
                 DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
             }
-            Feature.ORE with OreFeatureConfig(targets, 12)
+            Feature.ORE with OreFeatureConfig(targets, size)
         }
 
         registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-            val placementModifiers = placementModifiers { count(8) + uniformOre(-64, 128) }
+            val placementModifiers = placementModifiers { count(count) + uniformOre(min, max) }
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
         }
 
     }
-    worldGen(OreCard.MIRANAGITE_ORE)
-    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE)
+    worldGen(OreCard.MIRANAGITE_ORE, 12, 8, -64, 128)
+    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE, 12, 8, -64, 128)
 
 }
 
