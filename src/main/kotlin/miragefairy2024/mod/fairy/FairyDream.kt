@@ -14,7 +14,11 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
+import net.minecraft.block.ChestBlock
+import net.minecraft.block.InventoryProvider
+import net.minecraft.block.entity.ChestBlockEntity
 import net.minecraft.entity.EntityType
+import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -84,6 +88,28 @@ fun initFairyDream() {
                         blocks += block
 
                         if (block is FairyDreamProviderBlock) motifs += block.getFairyDreamMotifs(world, blockPos)
+
+                        run noInventory@{
+                            val inventory = if (block is InventoryProvider) {
+                                block.getInventory(blockState, world, blockPos)
+                            } else if (blockState.hasBlockEntity()) {
+                                val blockEntity = world.getBlockEntity(blockPos)
+                                if (blockEntity is Inventory) {
+                                    if (blockEntity is ChestBlockEntity && block is ChestBlock) {
+                                        ChestBlock.getInventory(block, blockState, world, blockPos, true) ?: return@noInventory
+                                    } else {
+                                        blockEntity
+                                    }
+                                } else {
+                                    return@noInventory
+                                }
+                            } else {
+                                return@noInventory
+                            }
+                            inventory.itemStacks.forEach { itemStack ->
+                                insertItem(itemStack)
+                            }
+                        }
 
                     }
 
