@@ -16,6 +16,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
@@ -56,26 +57,35 @@ fun initFairyDream() {
                 val world = player.world
                 val random = world.random
 
+                val motifs = mutableSetOf<Motif>()
+
                 val items = mutableSetOf<Item>()
                 val blocks = mutableSetOf<Block>()
                 val entityTypes = mutableSetOf<EntityType<*>>()
                 run {
 
-                    fun insertItem(item: Item) {
+                    fun insertItem(itemStack: ItemStack) {
+                        val item = itemStack.item
+
                         items += item
 
                         val block = Block.getBlockFromItem(item)
                         if (block != Blocks.AIR) blocks += block
+
                     }
 
                     fun insertBlockPos(blockPos: BlockPos) {
-                        blocks += world.getBlockState(blockPos).block
+                        val blockState = world.getBlockState(blockPos)
+                        val block = blockState.block
+
+                        blocks += block
+
                     }
 
 
                     // インベントリ判定
                     player.inventory.itemStacks.forEach { itemStack ->
-                        insertItem(itemStack.item)
+                        insertItem(itemStack)
                     }
 
                     // 足元判定
@@ -104,8 +114,6 @@ fun initFairyDream() {
                     insertBlockPos(player.eyeBlockPos.add(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
 
                 }
-
-                val motifs = mutableSetOf<Motif>()
                 items.forEach {
                     motifs += FairyDreamRecipes.ITEM.test(it)
                 }
