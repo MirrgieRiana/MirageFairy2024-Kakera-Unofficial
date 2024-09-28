@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.RaycastContext
+import net.minecraft.world.World
 
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_dream.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
 val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_dream.gain_fairy" }, "%s found!", "%sを発見した！")
@@ -69,6 +70,8 @@ fun initFairyDream() {
 
                         items += item
 
+                        if (item is FairyDreamProviderItem) motifs += item.getFairyDreamMotifs(itemStack)
+
                         val block = Block.getBlockFromItem(item)
                         if (block != Blocks.AIR) blocks += block
 
@@ -79,6 +82,8 @@ fun initFairyDream() {
                         val block = blockState.block
 
                         blocks += block
+
+                        if (block is FairyDreamProviderBlock) motifs += block.getFairyDreamMotifs(world, blockPos)
 
                     }
 
@@ -134,4 +139,13 @@ fun initFairyDream() {
     GAIN_FAIRY_DREAM_TRANSLATION.enJa()
     GAIN_FAIRY_TRANSLATION.enJa()
 
+}
+
+
+interface FairyDreamProviderItem {
+    fun getFairyDreamMotifs(itemStack: ItemStack): List<Motif>
+}
+
+interface FairyDreamProviderBlock {
+    fun getFairyDreamMotifs(world: World, blockPos: BlockPos): List<Motif>
 }
