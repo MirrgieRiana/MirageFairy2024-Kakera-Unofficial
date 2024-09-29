@@ -2,10 +2,10 @@
   "credit": "Made with Blockbench",
   "parent": "minecraft:block/block",
   "textures": {
+    "particle": "miragefairy2024:block/fairy_statue_base",
     "0": "miragefairy2024:block/fairy_statue_case",
     "1": "miragefairy2024:block/fairy_statue_base",
-    "2": "miragefairy2024:block/fairy_statue_end",
-    "particle": "miragefairy2024:block/fairy_statue_case"
+    "2": "miragefairy2024:block/fairy_statue_end"
   },
   "elements": [
     {
