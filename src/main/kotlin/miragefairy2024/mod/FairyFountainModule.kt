@@ -146,8 +146,8 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
-                    showingItemStack = it.item.first?.let { motif -> FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motif) } ?: Items.IRON_INGOT.createItemStack(),
-                    motif = it.item.first ?: MotifCard.AIR,
+                    showingItemStack = it.item.first?.let { entry -> FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(entry.first) } ?: Items.IRON_INGOT.createItemStack(),
+                    motif = it.item.first?.first ?: MotifCard.AIR,
                     rate = it.weight,
                     count = 1.0,
                 )
@@ -191,8 +191,8 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             if (world.isServer) {
                 val outputItemStack = run {
                     val chanceTable = getChanceTable()
-                    val motif = chanceTable.weightedRandom(world.random)?.first
-                    motif?.let { FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(it) } ?: Items.IRON_INGOT.createItemStack()
+                    val entry = chanceTable.weightedRandom(world.random)?.first
+                    entry?.let { FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
                 }
                 player.obtain(outputItemStack)
             }
@@ -219,8 +219,8 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
     }
 
     /** 確率の合計が1.0+εであることが保証されます。 */
-    private fun getChanceTable(): List<Chance<Single<Motif?>>> {
-        val chanceTable = mutableListOf<Chance<Single<Motif?>>>()
+    private fun getChanceTable(): List<Chance<Single<Pair<Motif, Rarity>?>>> {
+        val chanceTable = mutableListOf<Chance<Single<Pair<Motif, Rarity>?>>>()
 
         var consumedChance = 0.0
 
@@ -228,7 +228,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             val recipes2 = recipes.filter { it.rarity == rarity }
             if (recipes2.isEmpty()) return
             val chancePerRecipe = (threshold - consumedChance) / recipes2.size.toDouble()
-            chanceTable += recipes2.map { Chance(chancePerRecipe, Single(it.motif)) }
+            chanceTable += recipes2.map { Chance(chancePerRecipe, Single(Pair(it.motif, rarity))) }
             consumedChance = threshold
         }
         f(0.01, Rarity.PICKUP_SSR)
