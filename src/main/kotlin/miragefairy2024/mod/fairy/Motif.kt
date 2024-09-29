@@ -248,7 +248,7 @@ enum class MotifCard(
             + overall.defence(0.6)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
             + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
-        MotifCardRecipes() + Blocks.COPPER_BLOCK + Items.COPPER_INGOT + Blocks.COPPER_ORE,
+        MotifCardRecipes() + Blocks.COPPER_BLOCK + Items.COPPER_INGOT + BlockTags.COPPER_ORES,
     ),
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
@@ -258,7 +258,7 @@ enum class MotifCard(
             + melee.defence(1.0)
             + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
             + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
-        MotifCardRecipes() + Blocks.IRON_BLOCK + Items.IRON_INGOT + Blocks.IRON_ORE,
+        MotifCardRecipes() + Blocks.IRON_BLOCK + Items.IRON_INGOT + BlockTags.IRON_ORES,
     ),
     GOLD(
         "gold", 6, "Goldia", "金精ゴルジャ", 0xEFE642, 0xF4CC17, 0xF4CC17, 0xFDB61E,
@@ -268,7 +268,7 @@ enum class MotifCard(
             + magic.defence(1.0)
             + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
             + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().nether + Blocks.GOLD_BLOCK + Items.GOLD_INGOT + Blocks.GOLD_ORE,
+        MotifCardRecipes() + Blocks.GOLD_BLOCK + Items.GOLD_INGOT + BlockTags.GOLD_ORES,
     ),
     NETHERITE(
         "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
@@ -309,7 +309,7 @@ enum class MotifCard(
             + mana(0.4)
             + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
             + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes() + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item + OreCard.MIRANAGITE_ORE.block,
+        MotifCardRecipes() + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item + OreCard.MIRANAGITE_ORE.block + OreCard.DEEPSLATE_MIRANAGITE_ORE.block, // TODO タグ化
     ),
     CHAOS_STONE(
         "chaos_stone", 8, "Chaose Stonia", "混沌石精キャオセストーニャ", 0xDB5F00, 0xB36229, 0x78421C, 0xFFBF40,
@@ -339,14 +339,14 @@ enum class MotifCard(
             + melee.attack(0.2)
             + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
             + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes() + Blocks.DIAMOND_BLOCK + Items.DIAMOND + Blocks.DIAMOND_ORE,
+        MotifCardRecipes() + Blocks.DIAMOND_BLOCK + Items.DIAMOND + BlockTags.DIAMOND_ORES,
     ),
     EMERALD(
         "emerald", 6, "Emeraldia", "翠玉精エメラルジャ", 0x9FF9B5, 0x81F99E, 0x17DD62, 0x008A25,
         ParentMotifs(),
         PassiveSkillBuilder()
             + luck(1.0),
-        MotifCardRecipes() + Blocks.EMERALD_BLOCK + Items.EMERALD + Blocks.EMERALD_ORE,
+        MotifCardRecipes() + Blocks.EMERALD_BLOCK + Items.EMERALD + BlockTags.EMERALD_ORES,
     ),
 
     // 動物
