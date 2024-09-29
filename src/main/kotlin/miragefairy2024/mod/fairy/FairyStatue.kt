@@ -121,7 +121,7 @@ class FairyStatueCard(
             "fairy_statue",
             Pair("Broken Fairy Statue", "破損した妖精の像"),
             Pair("%s Statue", "%sの像"),
-            Pair("Mysterious Method of Creation", "その製法は誰にも知られていない…"),
+            Pair("Mysterious Method of Creation", "その製法は誰にも知られていない"),
             MapColor.IRON_GRAY,
         ).also { entries += it }
         val GOLDEN_FAIRY_STATUE = FairyStatueCard(
