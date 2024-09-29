@@ -74,24 +74,30 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-object FairyStatueCard {
-    val identifier = MirageFairy2024.identifier("fairy_statue")
-    val itemGroupCard = ItemGroupCard(identifier, "Fairy Statue", "妖精の像") {
-        item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
+object FairyStatue {
+    val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
+        FairyStatueCard.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
+}
+
+object FairyStatueCard {
+    val brokenName = Pair("Broken Fairy Statue", "破損した妖精の像")
+    val identifier = MirageFairy2024.identifier("fairy_statue")
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(MapColor.IRON_GRAY).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
+    val formatTranslation = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.format" }, "%s Statue", "%sの像")
+    val poemList = PoemList(0)
+        .poem("Mysterious Method of Creation", "その製法は誰にも知られていない…")
+        .description("Fairy dream can be obtained", "妖精の夢を獲得可能")
 }
 
 context(ModContext)
 fun initFairyStatue() {
-    FairyStatueBlock.FORMAT_TRANSLATION.enJa()
+
+    FairyStatue.itemGroupCard.init()
 
     FairyStatueCard.let { card ->
-
-        // アイテムグループ設定
-        card.itemGroupCard.init()
 
         // 登録
         card.block.register(Registries.BLOCK, card.identifier)
@@ -99,7 +105,7 @@ fun initFairyStatue() {
         card.item.register(Registries.ITEM, card.identifier)
 
         // アイテムグループ
-        card.item.registerItemGroup(card.itemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { card.item.createItemStack().setFairyStatueMotif(it.value) }
         }
 
@@ -118,12 +124,10 @@ fun initFairyStatue() {
         card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa("Broken Fairy Statue", "破損した妖精の像")
-        val poemList = PoemList(0)
-            .poem("Mysterious Method of Creation", "その製法は誰にも知られていない…")
-            .description("Fairy dream can be obtained", "妖精の夢を獲得可能")
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        card.block.enJa(card.brokenName.first, card.brokenName.second)
+        card.formatTranslation.enJa()
+        card.item.registerPoem(card.poemList)
+        card.item.registerPoemGeneration(card.poemList)
 
         // タグ
         card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
@@ -140,12 +144,12 @@ fun initFairyStatue() {
         }
 
     }
+
 }
 
 
 class FairyStatueBlock(private val card: FairyStatueCard, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
-        val FORMAT_TRANSLATION = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.format" }, "%s Statue", "%sの像")
         private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
 
@@ -226,7 +230,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
 
 class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Settings) : BlockItem(block, settings), FairyDreamProviderItem {
 
-    override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { FairyStatueBlock.FORMAT_TRANSLATION(it.displayName) } ?: super.getName(stack).red
+    override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { card.formatTranslation(it.displayName) } ?: super.getName(stack).red
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
