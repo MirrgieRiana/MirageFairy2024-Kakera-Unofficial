@@ -1,0 +1,9 @@
+{
+  "parent": "miragefairy2024:block/fairy_statue_template",
+  "textures": {
+    "base": "miragefairy2024:block/fantastic_fairy_statue_base",
+    "case": "miragefairy2024:block/fantastic_fairy_statue_case",
+    "end": "miragefairy2024:block/fantastic_fairy_statue_end",
+    "particle": "miragefairy2024:block/fantastic_fairy_statue_base"
+  }
+}

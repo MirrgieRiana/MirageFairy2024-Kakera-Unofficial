@@ -124,6 +124,20 @@ class FairyStatueCard(
             Pair("Mysterious Method of Creation", "その製法は誰にも知られていない…"),
             MapColor.IRON_GRAY,
         ).also { entries += it }
+        val GOLDEN_FAIRY_STATUE = FairyStatueCard(
+            "golden_fairy_statue",
+            Pair("Broken Fairy Statue", "破損した妖精の像"),
+            Pair("%s Statue", "%sの像"),
+            Pair("Was their hair always this long...?", "妖精の髪が伸びている気がする…"),
+            MapColor.GOLD,
+        ).also { entries += it }
+        val FANTASTIC_FAIRY_STATUE = FairyStatueCard(
+            "fantastic_fairy_statue",
+            Pair("Broken Fairy Statue", "破損した妖精の像"),
+            Pair("%s Statue", "%sの像"),
+            Pair("Glossier and more beautiful.", "その翅は艶やかで、本物よりも美しい。"),
+            MapColor.MAGENTA,
+        ).also { entries += it }
     }
 }
 
