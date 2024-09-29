@@ -448,6 +448,15 @@ enum class MotifCard(
             + magic.attack(0.6) * food.atLeast(12),
         MotifCardRecipes().R + EntityType.EVOKER,
     ),
+    CUPID(
+        "cupid", 13, "Cupidia", "恋射手精ツピージャ", 0xCDBBAD, 0xE4F4FF, 0xDDEEFF, 0x893F1E,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + shooting.attack(1.0) * health.atLeast(18.0)
+            + StatusEffects.SLOW_FALLING() * health.atLeast(18.0)
+            + StatusEffects.JUMP_BOOST(5) * health.atLeast(18.0),
+        MotifCardRecipes().SSR,
+    ),
     ENDERMAN(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         ParentMotifs() + { CARRY },
