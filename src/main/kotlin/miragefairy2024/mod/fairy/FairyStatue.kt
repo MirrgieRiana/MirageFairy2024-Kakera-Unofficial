@@ -79,8 +79,8 @@ object FairyStatueCard {
     val itemGroupCard = ItemGroupCard(identifier, "Fairy Statue", "妖精の像") {
         item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
-    val block = FairyStatueBlock(FabricBlockSettings.create().mapColor(MapColor.IRON_GRAY).strength(0.5F).nonOpaque())
-    val blockEntityType = BlockEntityType(::FairyStatueBlockEntity, setOf(block), null)
+    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(MapColor.IRON_GRAY).strength(0.5F).nonOpaque())
+    val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
 }
 
@@ -143,13 +143,13 @@ fun initFairyStatue() {
 }
 
 
-class FairyStatueBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
+class FairyStatueBlock(private val card: FairyStatueCard, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
         val FORMAT_TRANSLATION = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.format" }, "%s Statue", "%sの像")
         private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
@@ -182,7 +182,7 @@ class FairyStatueBlock(settings: Settings) : SimpleHorizontalFacingBlock(setting
 
 }
 
-class FairyStatueBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(FairyStatueCard.blockEntityType, pos, state), RenderingProxyBlockEntity {
+class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = EMPTY_ITEM_STACK
     }
