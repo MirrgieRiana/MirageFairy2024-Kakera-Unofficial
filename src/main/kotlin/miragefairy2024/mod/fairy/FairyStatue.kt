@@ -76,28 +76,44 @@ import net.minecraft.world.World
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
+        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
 }
 
-object FairyStatueCard {
-    val brokenName = Pair("Broken Fairy Statue", "破損した妖精の像")
-    val identifier = MirageFairy2024.identifier("fairy_statue")
-    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(MapColor.IRON_GRAY).strength(0.5F).nonOpaque())
+class FairyStatueCard(
+    path: String,
+    val brokenName: Pair<String, String>,
+    poem: Pair<String, String>,
+    mapColor: MapColor,
+) {
+    val identifier = MirageFairy2024.identifier(path)
+    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.format" }, "%s Statue", "%sの像")
+    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, "%s Statue", "%sの像")
     val poemList = PoemList(0)
-        .poem("Mysterious Method of Creation", "その製法は誰にも知られていない…")
+        .poem(poem.first, poem.second)
         .description("Fairy dream can be obtained", "妖精の夢を獲得可能")
+
+    companion object {
+        val entries = mutableListOf<FairyStatueCard>()
+
+        val FAIRY_STATUE = FairyStatueCard(
+            "fairy_statue",
+            Pair("Broken Fairy Statue", "破損した妖精の像"),
+            Pair("Mysterious Method of Creation", "その製法は誰にも知られていない…"),
+            MapColor.IRON_GRAY,
+        ).also { entries += it }
+    }
 }
+
 
 context(ModContext)
 fun initFairyStatue() {
 
     FairyStatue.itemGroupCard.init()
 
-    FairyStatueCard.let { card ->
+    FairyStatueCard.entries.forEach { card ->
 
         // 登録
         card.block.register(Registries.BLOCK, card.identifier)
