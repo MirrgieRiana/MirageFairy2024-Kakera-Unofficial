@@ -962,6 +962,18 @@ enum class MotifCard(
         MotifCardRecipes().R + Blocks.BEACON,
     ),
 
+    // 場所
+    AVALON(
+        "avalon", 9, "Avalonia", "阿瓦隆精アヴァローニャ", 0xFFE4CA, 0xE1FFCE, 0xD0FFE6, 0xFFCAFF,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + luck(1.0) * overworld
+            + magic.attack(1.0) * overworld
+            + overall.defence(0.5) * overworld
+            + regeneration(0.5) * overworld,
+        MotifCardRecipes().SSR,
+    ),
+
     // 時間
     TIME(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
