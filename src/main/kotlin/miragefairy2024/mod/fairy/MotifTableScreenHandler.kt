@@ -14,10 +14,11 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
     val length = buf.readInt()
     val chanceTable = mutableListOf<CondensedMotifChance>()
     repeat(length) {
+        val showingItemStack = buf.readItemStack()
         val motifId = buf.readString()
         val rate = buf.readDouble()
         val count = buf.readDouble()
-        chanceTable += CondensedMotifChance(motifRegistry.get(motifId.toIdentifier())!!, rate, count)
+        chanceTable += CondensedMotifChance(showingItemStack, motifRegistry.get(motifId.toIdentifier())!!, rate, count)
     }
     MotifTableScreenHandler(syncId, chanceTable)
 }

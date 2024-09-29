@@ -84,6 +84,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
+                        buf.writeItemStack(it.showingItemStack)
                         buf.writeString(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)
@@ -229,7 +230,7 @@ class MotifChance(val motif: Motif, val rate: Double)
 
 fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { MotifChance(it, (1.0 / 3.0).pow(it.rare - 1) * amplifier) } // 通常花粉・レア度1で100%になる
 
-class CondensedMotifChance(val motif: Motif, val rate: Double, val count: Double) : Comparable<CondensedMotifChance> {
+class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, val rate: Double, val count: Double) : Comparable<CondensedMotifChance> {
     override fun compareTo(other: CondensedMotifChance): Int {
         (rate cmp other.rate).let { if (it != 0) return it }
         (count cmp other.count).let { if (it != 0) return it }
@@ -274,12 +275,12 @@ fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
 
             (currentIndex downTo 0).forEach { index ->
                 val entry = sortedMotifChanceList[index]
-                condensedMotifChanceList += CondensedMotifChance(entry.motif, actualRatePerRemainingEntry, entry.rate / actualRatePerRemainingEntry)
+                condensedMotifChanceList += CondensedMotifChance(entry.motif.createFairyItemStack(condensation = getNiceCondensation(entry.rate / actualRatePerRemainingEntry).second), entry.motif, actualRatePerRemainingEntry, entry.rate / actualRatePerRemainingEntry)
             }
 
             break
         } else { // 現在のエントリーをそのまま受理出来る
-            condensedMotifChanceList += CondensedMotifChance(currentEntry.motif, currentEntry.rate, 1.0)
+            condensedMotifChanceList += CondensedMotifChance(currentEntry.motif.createFairyItemStack(condensation = getNiceCondensation(1.0).second), currentEntry.motif, currentEntry.rate, 1.0)
             rateOfLastEntry = rateOfCurrentEntry
             rateOfConsumedEntries = estimatedRateOfNextConsumedEntries
         }
