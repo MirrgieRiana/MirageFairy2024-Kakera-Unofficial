@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.tool.MagicDamageTypeCard
 import miragefairy2024.util.getValue
+import miragefairy2024.util.isServer
 import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
@@ -142,7 +143,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
 
     override fun onCollision(hitResult: HitResult) {
         super.onCollision(hitResult)
-        if (!world.isClient) {
+        if (world.isServer) {
             world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES)
             discard()
         }

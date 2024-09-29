@@ -17,6 +17,8 @@ import net.minecraft.util.math.Direction
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
+val World.isServer get() = !this.isClient
+
 fun BlockView.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
     if (blockState.isOf(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.get(FarmlandBlock.MOISTURE) / 7.0)

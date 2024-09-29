@@ -4,6 +4,7 @@ import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
+import miragefairy2024.util.isServer
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.toBlockPos
@@ -193,7 +194,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
 
     fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
         val result = canPick(world.getBlockState(blockPos))
-        if (result && !world.isClient) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
+        if (result && world.isServer) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
         if (causingEvent) {
             if (tool != null) {
                 val toolItem = tool.item

@@ -18,6 +18,7 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.invoke
+import miragefairy2024.util.isServer
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
@@ -171,11 +172,11 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             // 入力判定
             val inputItemStack = player.getStackInHand(hand)
             if (!inputItemStack.isOf(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-                if (!world.isClient) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
+                if (world.isServer) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
             if (inputItemStack.count < 1) { // 個数が足りない
-                if (!world.isClient) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
+                if (world.isServer) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
 
@@ -183,11 +184,11 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
 
             // 消費
             if (!player.isCreative) {
-                if (!world.isClient) inputItemStack.decrement(1)
+                if (world.isServer) inputItemStack.decrement(1)
             }
 
             // 生産
-            if (!world.isClient) {
+            if (world.isServer) {
                 val outputItemStack = run {
                     val chanceTable = getChanceTable()
                     val motif = chanceTable.weightedRandom(world.random)?.first
@@ -197,7 +198,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             }
 
             // エフェクト
-            if (!world.isClient) world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
+            if (world.isServer) world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
             if (world.isClient) {
                 // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
                 repeat(3) {

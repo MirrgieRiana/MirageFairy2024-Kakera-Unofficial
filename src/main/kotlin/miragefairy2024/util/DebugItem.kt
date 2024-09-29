@@ -37,7 +37,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
 context(ModContext)
 fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
-        if (!world.isClient) return@registerDebugItem
+        if (world.isServer) return@registerDebugItem
         action(world, player, hand, itemStack)
     }
 }
