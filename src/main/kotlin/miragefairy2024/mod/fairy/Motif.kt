@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.FairyStatueFountainBlock
 import miragefairy2024.mod.FoodIngredientCategoryCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.OreCard
@@ -1064,6 +1065,13 @@ class MotifCardRecipes {
         return this
     }
 }
+
+private fun MotifCardRecipes.fairyStatueFountainRecipe(rarity: FairyStatueFountainBlock.Rarity) = this.onInit { FairyStatueFountainBlock.recipes += FairyStatueFountainBlock.Recipe(it, rarity) }
+private val MotifCardRecipes.R get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.R)
+private val MotifCardRecipes.SR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.SR)
+private val MotifCardRecipes.PICKUP_SR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.PICKUP_SR).SR
+private val MotifCardRecipes.SSR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.SSR)
+private val MotifCardRecipes.PICKUP_SSR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.PICKUP_SSR).SSR
 
 private fun MotifCardRecipes.common() = this.onInit { COMMON_MOTIF_RECIPES += AlwaysCommonMotifRecipe(it) }
 private fun MotifCardRecipes.common(biome: RegistryKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
