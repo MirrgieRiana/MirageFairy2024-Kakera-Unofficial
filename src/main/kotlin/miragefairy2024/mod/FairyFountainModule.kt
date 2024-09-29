@@ -146,7 +146,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
-                    showingItemStack = it.item.first?.let { entry -> FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(entry.first) } ?: Items.IRON_INGOT.createItemStack(),
+                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(entry.first) } ?: Items.IRON_INGOT.createItemStack(),
                     motif = it.item.first?.first ?: MotifCard.AIR,
                     rate = it.weight,
                     count = 1.0,
@@ -192,7 +192,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
                 val outputItemStack = run {
                     val chanceTable = getChanceTable()
                     val entry = chanceTable.weightedRandom(world.random)?.first
-                    entry?.let { FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
+                    entry?.let { it.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
                 }
                 player.obtain(outputItemStack)
             }
@@ -243,4 +243,12 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
         return chanceTable
     }
 
+}
+
+fun FairyStatueFountainBlock.Rarity.getFairyStatueCard() = when (this) {
+    FairyStatueFountainBlock.Rarity.R -> FairyStatueCard.FAIRY_STATUE
+    FairyStatueFountainBlock.Rarity.SR -> FairyStatueCard.GOLDEN_FAIRY_STATUE
+    FairyStatueFountainBlock.Rarity.PICKUP_SR -> FairyStatueCard.GOLDEN_FAIRY_STATUE
+    FairyStatueFountainBlock.Rarity.SSR -> FairyStatueCard.FANTASTIC_FAIRY_STATUE
+    FairyStatueFountainBlock.Rarity.PICKUP_SSR -> FairyStatueCard.FANTASTIC_FAIRY_STATUE
 }
