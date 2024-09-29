@@ -86,7 +86,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
                     chanceTable.forEach {
                         buf.writeString(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
-                        buf.writeDouble(it.condensation)
+                        buf.writeDouble(it.count)
                     }
                 }
             })
@@ -201,10 +201,10 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 
     // actualCondensation は condensation を超えない最大の3の整数乗
     // condensation = 11.46 の場合、 actualCondensation = 9
-    val actualCondensation = getNiceCondensation(condensedMotif.condensation).second
+    val actualCondensation = getNiceCondensation(condensedMotif.count).second
 
     // 上の場合、 count ≒ 1.27
-    val count = condensedMotif.condensation / actualCondensation
+    val count = condensedMotif.count / actualCondensation
     val actualCount = random.randomInt(count)
 
     return RandomFairyResult(
@@ -229,10 +229,10 @@ class MotifChance(val motif: Motif, val rate: Double)
 
 fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { MotifChance(it, (1.0 / 3.0).pow(it.rare - 1) * amplifier) } // 通常花粉・レア度1で100%になる
 
-class CondensedMotifChance(val motif: Motif, val rate: Double, val condensation: Double) : Comparable<CondensedMotifChance> {
+class CondensedMotifChance(val motif: Motif, val rate: Double, val count: Double) : Comparable<CondensedMotifChance> {
     override fun compareTo(other: CondensedMotifChance): Int {
         (rate cmp other.rate).let { if (it != 0) return it }
-        (condensation cmp other.condensation).let { if (it != 0) return it }
+        (count cmp other.count).let { if (it != 0) return it }
         (motif.getIdentifier()!! cmp other.motif.getIdentifier()!!).let { if (it != 0) return it }
         return 0
     }

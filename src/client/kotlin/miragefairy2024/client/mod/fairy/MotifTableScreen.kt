@@ -54,7 +54,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    val itemStack = chance.motif.createFairyItemStack(condensation = getNiceCondensation(chance.condensation).second)
+                                    val itemStack = chance.motif.createFairyItemStack(condensation = getNiceCondensation(chance.count).second)
                                     tooltip(ItemComponent.tooltipFromItem(itemStack, MinecraftClient.getInstance().player, null))
 
                                     child(Components.item(itemStack))
@@ -71,7 +71,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
                                     })
-                                    child(Components.label(text { "x"() + (chance.condensation formatAs "%.2f")() }).apply {
+                                    child(Components.label(text { "x"() + (chance.count formatAs "%.2f")() }).apply {
                                         sizing(Sizing.fixed(80), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
