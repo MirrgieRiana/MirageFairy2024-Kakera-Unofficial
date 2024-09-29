@@ -6,10 +6,11 @@ import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.description
+import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.text
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EMPTY_ITEM_STACK
@@ -78,11 +79,13 @@ object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
         FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
+    val descriptionTranslation = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
 }
 
 class FairyStatueCard(
     path: String,
     val brokenName: Pair<String, String>,
+    format: Pair<String, String>,
     poem: Pair<String, String>,
     mapColor: MapColor,
 ) {
@@ -90,10 +93,10 @@ class FairyStatueCard(
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, "%s Statue", "%sの像")
+    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format.first, format.second)
     val poemList = PoemList(0)
         .poem(poem.first, poem.second)
-        .description("Fairy dream can be obtained", "妖精の夢を獲得可能")
+        .text(PoemType.DESCRIPTION, FairyStatue.descriptionTranslation())
 
     companion object {
         val entries = mutableListOf<FairyStatueCard>()
@@ -101,6 +104,7 @@ class FairyStatueCard(
         val FAIRY_STATUE = FairyStatueCard(
             "fairy_statue",
             Pair("Broken Fairy Statue", "破損した妖精の像"),
+            Pair("%s Statue", "%sの像"),
             Pair("Mysterious Method of Creation", "その製法は誰にも知られていない…"),
             MapColor.IRON_GRAY,
         ).also { entries += it }
@@ -112,6 +116,8 @@ context(ModContext)
 fun initFairyStatue() {
 
     FairyStatue.itemGroupCard.init()
+
+    FairyStatue.descriptionTranslation.enJa()
 
     FairyStatueCard.entries.forEach { card ->
 
