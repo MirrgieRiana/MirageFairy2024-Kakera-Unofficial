@@ -35,6 +35,7 @@ import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
+import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.with
@@ -50,6 +51,7 @@ import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.item.BlockItem
@@ -64,6 +66,7 @@ import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -222,8 +225,20 @@ class FairyStatueBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Fai
 
 
 class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Settings) : BlockItem(block, settings), FairyDreamProviderItem {
+
     override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { FairyStatueBlock.FORMAT_TRANSLATION(it.displayName) } ?: super.getName(stack).red
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        val motif = stack.getFairyStatueMotif() ?: return
+        val fairyItemStack = motif.createFairyItemStack()
+
+        tooltip += text { empty() }
+        fairyItemStack.item.appendTooltip(fairyItemStack, world, tooltip, context)
+    }
+
     override fun getFairyDreamMotifs(itemStack: ItemStack) = itemStack.getFairyStatueMotif()?.let { listOf(it) } ?: listOf()
+
 }
 
 fun ItemStack.getFairyStatueMotifId(): Identifier? = this.nbt.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
