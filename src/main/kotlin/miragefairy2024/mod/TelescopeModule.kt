@@ -23,6 +23,7 @@ import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.text
@@ -131,6 +132,12 @@ fun initTelescopeModule() {
     TelescopeBlock.HOURS_TRANSLATION.enJa()
     TelescopeBlock.MINUTES_TRANSLATION.enJa()
     TelescopeBlock.SECONDS_TRANSLATION.enJa()
+
+    registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xDDC442) { world, player, _, _ ->
+        player.telescopeMission.lastUsedInstant = null
+        TelescopeMissionExtraPlayerDataCategory.sync(player)
+        player.sendMessage(text { "The last time the telescope was used has been reset"() }, true)
+    }
 
 }
 
