@@ -18,6 +18,7 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
+import miragefairy2024.util.Model
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -32,6 +33,7 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerLootTableGeneration
+import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.sortedEntrySet
@@ -53,6 +55,8 @@ import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.data.client.TextureKey
+import net.minecraft.data.client.TexturedModel
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.item.BlockItem
@@ -80,6 +84,9 @@ object FairyStatue {
         FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
+    val CASE: TextureKey = TextureKey.of("case")
+    val BASE: TextureKey = TextureKey.of("base")
+    val END: TextureKey = TextureKey.of("end")
 }
 
 class FairyStatueCard(
@@ -97,6 +104,15 @@ class FairyStatueCard(
     val poemList = PoemList(0)
         .poem(poem.first, poem.second)
         .text(PoemType.DESCRIPTION, FairyStatue.descriptionTranslation())
+    val texturedModelFactory = TexturedModel.Factory {
+        val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
+        model.with(
+            TextureKey.PARTICLE to "block/" * identifier * "_base",
+            FairyStatue.CASE to "block/" * identifier * "_case",
+            FairyStatue.BASE to "block/" * identifier * "_base",
+            FairyStatue.END to "block/" * identifier * "_end",
+        )
+    }
 
     companion object {
         val entries = mutableListOf<FairyStatueCard>()
@@ -141,6 +157,7 @@ fun initFairyStatue() {
                 propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
             )
         }
+        card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
         card.item.registerGeneratedModelGeneration()
