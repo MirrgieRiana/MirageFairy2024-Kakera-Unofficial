@@ -275,12 +275,12 @@ fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
 
             (currentIndex downTo 0).forEach { index ->
                 val entry = sortedMotifChanceList[index]
-                condensedMotifChanceList += CondensedMotifChance(entry.motif.createFairyItemStack(condensation = getNiceCondensation(entry.rate / actualRatePerRemainingEntry).second), entry.motif, actualRatePerRemainingEntry, entry.rate / actualRatePerRemainingEntry)
+                condensedMotifChanceList += CondensedMotifChance(entry.motif.createFairyItemStack(), entry.motif, actualRatePerRemainingEntry, entry.rate / actualRatePerRemainingEntry)
             }
 
             break
         } else { // 現在のエントリーをそのまま受理出来る
-            condensedMotifChanceList += CondensedMotifChance(currentEntry.motif.createFairyItemStack(condensation = getNiceCondensation(1.0).second), currentEntry.motif, currentEntry.rate, 1.0)
+            condensedMotifChanceList += CondensedMotifChance(currentEntry.motif.createFairyItemStack(), currentEntry.motif, currentEntry.rate, 1.0)
             rateOfLastEntry = rateOfCurrentEntry
             rateOfConsumedEntries = estimatedRateOfNextConsumedEntries
         }
