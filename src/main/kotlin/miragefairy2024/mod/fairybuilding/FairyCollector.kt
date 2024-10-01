@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairybuilding
 import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -25,10 +26,8 @@ import net.minecraft.world.World
 object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override val path = "fairy_collector"
     override val tier = 2
-    override val enName = "Fairy Collector"
-    override val jaName = "いたずら妖精エンデルマーニャの隠れ家"
-    override val enPoem = "An attractor of curiosity"
-    override val jaPoem = "あれ？ここにあったリモコン知らない？"
+    override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
+    override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
     override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyCollectorCard }, settings)
 

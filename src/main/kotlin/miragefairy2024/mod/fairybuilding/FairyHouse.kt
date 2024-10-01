@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -18,10 +19,8 @@ import net.minecraft.world.World
 object FairyHouseSettings : FairyFactorySettings<FairyHouseBlockEntity, FairyFactoryScreenHandler>() {
     override val path = "fairy_house"
     override val tier = 2
-    override val enName = "Fairy House"
-    override val jaName = "妖精の家"
-    override val enPoem = "Home sweet home"
-    override val jaPoem = "あたたかいおうち"
+    override val name = EnJa("Fairy House", "妖精の家")
+    override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
     override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyHouseCard }, settings)
 

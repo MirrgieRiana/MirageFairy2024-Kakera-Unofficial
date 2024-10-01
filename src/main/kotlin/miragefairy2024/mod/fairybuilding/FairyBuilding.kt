@@ -99,10 +99,8 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
 
     abstract val path: String
     abstract val tier: Int
-    abstract val enName: String
-    abstract val jaName: String
-    abstract val enPoem: String
-    abstract val jaPoem: String
+    abstract val name: EnJa
+    abstract val poem: EnJa
 
 
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
@@ -212,8 +210,8 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        block.enJa(EnJa(settings.enName, settings.jaName))
-        val poemList = PoemList(settings.tier).poem(settings.enPoem, settings.jaPoem)
+        block.enJa(settings.name)
+        val poemList = PoemList(settings.tier).poem(settings.poem)
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
