@@ -8,7 +8,6 @@ import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.invoke
 import miragefairy2024.util.Translation
-import miragefairy2024.util.buildText
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
@@ -155,10 +154,7 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
 
     override fun getText(value: Value): Text {
         return value.map.map { (statusEffect, entry) ->
-            buildText {
-                !statusEffect.name
-                if (entry.level >= 2) !(" "() + entry.level.toRomanText())
-            }
+            text { statusEffect.name + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
         }.join(text { ","() })
     }
 

@@ -18,15 +18,3 @@ open class TextScope {
         it.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_FILE, absoluteFile.canonicalPath))
     }.underline
 }
-
-fun buildText(block: BuildTextScope.() -> Unit) = BuildTextScope().also { block(it) }.build()
-
-class BuildTextScope : TextScope() {
-    private val texts = mutableListOf<Text>()
-
-    operator fun Text.not() {
-        texts += this
-    }
-
-    fun build() = texts.join()
-}

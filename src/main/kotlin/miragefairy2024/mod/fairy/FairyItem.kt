@@ -23,7 +23,6 @@ import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
-import miragefairy2024.util.buildText
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.enJa
@@ -247,17 +246,19 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
-                    return buildText {
-                        !text { " "() }
-                        !text { specification.effect.getText(specification.valueProvider(actualMana)) }
+                    return run {
+                        val texts = mutableListOf<Text>()
+                        texts += text { " "() }
+                        texts += specification.effect.getText(specification.valueProvider(actualMana))
                         if (conditionValidityList.isNotEmpty()) {
-                            !text { " ["() }
+                            texts += text { " ["() }
                             conditionValidityList.forEachIndexed { index, (condition, isValidCondition) ->
-                                if (index != 0) !text { ","() }
-                                !text { condition.text }.let { if (!isValidCondition) it.red else it }
+                                if (index != 0) texts += text { ","() }
+                                texts += condition.text.let { if (!isValidCondition) it.red else it }
                             }
-                            !text { "]"() }
+                            texts += text { "]"() }
                         }
+                        texts.join()
                     }.let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
                 }
                 tooltip += getSpecificationText(specification)
