@@ -100,9 +100,9 @@ class FairyStatueCard(
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format.en, format.ja)
+    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format)
     val poemList = PoemList(0)
-        .poem(poem.en, poem.ja)
+        .poem(poem)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
     val texturedModelFactory = TexturedModel.Factory {
         val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
