@@ -33,6 +33,7 @@ import miragefairy2024.mod.magicplant.traitListScreenHandlerType
 import miragefairy2024.mod.magicplant.traitListScreenTranslation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
+import miragefairy2024.util.plus
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs

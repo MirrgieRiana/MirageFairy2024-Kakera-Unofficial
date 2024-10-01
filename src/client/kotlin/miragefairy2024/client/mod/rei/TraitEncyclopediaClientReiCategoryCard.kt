@@ -40,6 +40,7 @@ import miragefairy2024.mod.magicplant.traitRegistry
 import miragefairy2024.mod.rei.TraitEncyclopediaReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
+import miragefairy2024.util.plus
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.style
 import miragefairy2024.util.text

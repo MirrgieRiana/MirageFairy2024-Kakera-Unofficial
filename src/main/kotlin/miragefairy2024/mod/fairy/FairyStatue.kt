@@ -19,6 +19,7 @@ import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier

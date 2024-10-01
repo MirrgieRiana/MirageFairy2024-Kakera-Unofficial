@@ -13,6 +13,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
+import miragefairy2024.util.plus
 import miragefairy2024.util.removeTrailingZeros
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs

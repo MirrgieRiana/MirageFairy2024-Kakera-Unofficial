@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 
 enum class Emoji(val string: String, val charCode: String) {

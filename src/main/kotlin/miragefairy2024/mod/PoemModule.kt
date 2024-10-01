@@ -7,8 +7,10 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
 import miragefairy2024.util.formatted
+import miragefairy2024.util.invoke
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
+import miragefairy2024.util.translate
 import net.minecraft.item.Item
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting

@@ -16,6 +16,8 @@ import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
+import miragefairy2024.util.invoke
+import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.MinecraftClient

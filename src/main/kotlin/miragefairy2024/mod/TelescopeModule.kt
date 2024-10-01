@@ -16,6 +16,7 @@ import miragefairy2024.util.long
 import miragefairy2024.util.normal
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
+import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer

@@ -10,6 +10,7 @@ import miragefairy2024.util.humidityCategory
 import miragefairy2024.util.invoke
 import miragefairy2024.util.temperatureCategory
 import miragefairy2024.util.text
+import miragefairy2024.util.translate
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.entry.RegistryEntry

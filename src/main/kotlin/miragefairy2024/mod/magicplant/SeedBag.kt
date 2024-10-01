@@ -15,10 +15,12 @@ import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbtAndCount
 import miragefairy2024.util.insertItem
 import miragefairy2024.util.inventoryAccessor
+import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.mergeTo
 import miragefairy2024.util.on
+import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup

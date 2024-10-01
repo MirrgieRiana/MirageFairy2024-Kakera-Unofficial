@@ -13,6 +13,7 @@ import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
+import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.set
 import miragefairy2024.util.size

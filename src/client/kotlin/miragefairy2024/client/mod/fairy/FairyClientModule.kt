@@ -26,6 +26,7 @@ import miragefairy2024.mod.fairy.soulStreamScreenHandlerType
 import miragefairy2024.util.black
 import miragefairy2024.util.darkBlue
 import miragefairy2024.util.invoke
+import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents

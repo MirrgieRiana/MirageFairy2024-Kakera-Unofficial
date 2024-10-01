@@ -25,6 +25,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.darkGray
+import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
@@ -34,6 +35,7 @@ import miragefairy2024.util.green
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
+import miragefairy2024.util.plus
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider

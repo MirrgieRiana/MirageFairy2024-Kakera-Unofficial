@@ -6,6 +6,7 @@ import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.invoke
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.opposite
 import miragefairy2024.util.registerServerDebugItem

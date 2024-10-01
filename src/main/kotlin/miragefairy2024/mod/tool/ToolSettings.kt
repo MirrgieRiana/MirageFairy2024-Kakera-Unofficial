@@ -7,6 +7,7 @@ import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
+import miragefairy2024.util.plus
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
