@@ -6,6 +6,7 @@ import miragefairy2024.ModEvents
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
+import miragefairy2024.util.text
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.text.Text
@@ -78,7 +79,7 @@ enum class FoodIngredientCategoryCard(path: String, enName: String, jaName: Stri
     ;
 
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.food_ingredient.$path" }, enName, jaName)
-    override val text get() = translation()
+    override val text get() = text { translation() }
 }
 
 context(ModContext)

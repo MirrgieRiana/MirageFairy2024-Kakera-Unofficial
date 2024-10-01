@@ -59,7 +59,7 @@ fun initFairyClientModule() {
             child(Components.item(itemStack))
             child(horizontalSpace(6))
             child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
-                child(Components.label(GAIN_FAIRY_DREAM_TRANSLATION().black))
+                child(Components.label(text { GAIN_FAIRY_DREAM_TRANSLATION().black }))
                 child(verticalSpace(2))
                 child(LimitedLabelComponent(itemStack.name.darkBlue).horizontalSizing(Sizing.fixed(160 - 8 - 16 - 6 - 10 - 8)).margins(Insets.of(0, 0, 4, 0)))
             })

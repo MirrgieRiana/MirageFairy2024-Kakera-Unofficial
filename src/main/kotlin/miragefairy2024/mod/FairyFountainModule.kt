@@ -28,6 +28,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
@@ -161,11 +162,11 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             // 入力判定
             val inputItemStack = player.getStackInHand(hand)
             if (!inputItemStack.isOf(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-                if (world.isServer) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
+                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
             if (inputItemStack.count < 1) { // 個数が足りない
-                if (world.isServer) player.sendMessage(USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name), true)
+                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
 

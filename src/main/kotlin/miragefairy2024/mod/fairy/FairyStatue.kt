@@ -102,7 +102,7 @@ class FairyStatueCard(
     val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format.first, format.second)
     val poemList = PoemList(0)
         .poem(poem.first, poem.second)
-        .text(PoemType.DESCRIPTION, FairyStatue.descriptionTranslation())
+        .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
     val texturedModelFactory = TexturedModel.Factory {
         val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
         model.with(
@@ -274,7 +274,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
 
 class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Settings) : BlockItem(block, settings), FairyDreamProviderItem {
 
-    override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { card.formatTranslation(it.displayName) } ?: super.getName(stack).red
+    override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)

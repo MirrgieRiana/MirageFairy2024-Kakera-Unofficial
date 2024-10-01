@@ -25,6 +25,7 @@ import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.string
+import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.weightedRandom
@@ -212,9 +213,9 @@ enum class FairyQuestRecipeCard(
     val messageTranslation = Translation({ "${MirageFairy2024.MOD_ID}.fairyQuestRecipe.$path.message" }, enMessage, jaMessage)
     val clientTranslation = Translation({ "${MirageFairy2024.MOD_ID}.fairyQuestRecipe.$path.client" }, enClient, jaClient)
 
-    override val title get() = titleTranslation()
-    override val message get() = messageTranslation()
-    override val client get() = clientTranslation()
+    override val title get() = text { titleTranslation() }
+    override val message get() = text { messageTranslation() }
+    override val client get() = text { clientTranslation() }
 
     enum class LootCategory {
         NONE,

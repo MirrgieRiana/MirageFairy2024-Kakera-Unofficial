@@ -36,6 +36,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerClientDebugItem
+import miragefairy2024.util.text
 import miragefairy2024.util.writeAction
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
@@ -1059,7 +1060,7 @@ enum class MotifCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.motif.${identifier.toTranslationKey()}" }, enName, jaName)
-    override val displayName = translation()
+    override val displayName = text { translation() }
     override val parents get() = parentMotifs.get()
     override val passiveSkillSpecifications = passiveSkillBuilder.specifications
 }

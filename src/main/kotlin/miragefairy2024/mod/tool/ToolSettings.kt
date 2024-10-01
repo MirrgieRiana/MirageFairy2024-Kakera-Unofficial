@@ -65,22 +65,22 @@ abstract class FairyMiningToolSettings : ToolSettings() {
 
 fun ToolSettings.areaMining() = this.also {
     it.areaMining = true
-    it.descriptions += ToolSettings.AREA_MINING_TRANSLATION()
+    it.descriptions += text { ToolSettings.AREA_MINING_TRANSLATION() }
 }
 
 fun ToolSettings.mineAll() = this.also {
     it.mineAll = true
-    it.descriptions += ToolSettings.MINE_ALL_TRANSLATION()
+    it.descriptions += text { ToolSettings.MINE_ALL_TRANSLATION() }
 }
 
 fun ToolSettings.cutAll() = this.also {
     it.cutAll = true
-    it.descriptions += ToolSettings.CUT_ALL_TRANSLATION()
+    it.descriptions += text { ToolSettings.CUT_ALL_TRANSLATION() }
 }
 
 fun ToolSettings.silkTouch() = this.also {
     it.silkTouch = true
-    it.descriptions += ToolSettings.SILK_TOUCH_TRANSLATION()
+    it.descriptions += text { ToolSettings.SILK_TOUCH_TRANSLATION() }
 }
 
 fun ToolSettings.fortune(fortune: Int) = this.also {
@@ -91,10 +91,10 @@ fun ToolSettings.fortune(fortune: Int) = this.also {
 
 fun ToolSettings.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
-    it.descriptions += ToolSettings.SELF_MENDING_TRANSLATION()
+    it.descriptions += text { ToolSettings.SELF_MENDING_TRANSLATION() }
 }
 
 fun ToolSettings.obtainFairy(appearanceRateBonus: Double) = this.also {
     it.obtainFairy = appearanceRateBonus
-    it.descriptions += ToolSettings.OBTAIN_FAIRY()
+    it.descriptions += text { ToolSettings.OBTAIN_FAIRY() }
 }

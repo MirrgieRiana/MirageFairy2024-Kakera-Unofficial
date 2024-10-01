@@ -41,7 +41,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
 
     override fun createCategory() = object : DisplayCategory<CommonMotifRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = CommonMotifRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = CommonMotifRecipeReiCategoryCard.translation()
+        override fun getTitle(): Text = text { CommonMotifRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.WATER.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: CommonMotifRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 3 + 2 + 18 + 2 + 3
@@ -50,7 +50,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             return listOf(
                 Widgets.createRecipeBase(bounds),
                 Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
-                    is AlwaysCommonMotifRecipe -> COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION()
+                    is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
                     is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toTranslationKey("biome")) }
                     is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.id.path() }
                 })

@@ -39,7 +39,7 @@ class ItemGroupCard(
     val itemGroupKey = RegistryKeys.ITEM_GROUP with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
-        .displayName(translation())
+        .displayName(text { translation() })
         .build()
 
     context(ModContext)

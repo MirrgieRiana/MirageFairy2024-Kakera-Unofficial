@@ -70,7 +70,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
 
     override fun createCategory() = object : DisplayCategory<TraitEncyclopediaReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = TraitEncyclopediaReiCategoryCard.identifier.first
-        override fun getTitle(): Text = TraitEncyclopediaReiCategoryCard.translation()
+        override fun getTitle(): Text = text { TraitEncyclopediaReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: TraitEncyclopediaReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
         override fun getDisplayHeight() = 140

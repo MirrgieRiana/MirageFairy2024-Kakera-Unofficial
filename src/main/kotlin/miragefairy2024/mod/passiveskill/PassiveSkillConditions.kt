@@ -71,7 +71,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
 
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
-    override val text = translation()
+    override val text = text { translation() }
 
     context(ModContext)
     fun init() {
@@ -125,7 +125,7 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveS
         val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
     }
 
-    override val text get() = translation(item.name)
+    override val text get() = text { translation(item.name) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item)) return false
         val time = context.player.lastFood.time ?: return false
@@ -135,7 +135,7 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveS
 }
 
 class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngredientCategory) : PassiveSkillCondition {
-    override val text get() = ItemFoodIngredientPassiveSkillCondition.translation(category.text)
+    override val text get() = text { ItemFoodIngredientPassiveSkillCondition.translation(category.text) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient category)) return false
         val time = context.player.lastFood.time ?: return false
@@ -148,7 +148,7 @@ class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngr
 // tool material card
 
 class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) : PassiveSkillCondition {
-    override val text: Text get() = card.translation()
+    override val text: Text get() = text { card.translation() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.mainHandStack.isIn(card.tag)
 }
 
@@ -164,7 +164,7 @@ enum class MainHandConditionCard(path: String, en: String, ja: String, val predi
 }
 
 class MainHandPassiveSkillCondition(private val card: MainHandConditionCard) : PassiveSkillCondition {
-    override val text: Text get() = card.translation()
+    override val text: Text get() = text { card.translation() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = card.predicate(context.player.mainHandStack)
 }
 

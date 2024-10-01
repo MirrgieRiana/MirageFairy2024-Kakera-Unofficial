@@ -43,7 +43,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
 
     override fun createCategory() = object : DisplayCategory<ItemFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = ItemFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = ItemFairyDreamRecipeReiCategoryCard.translation()
+        override fun getTitle(): Text = text { ItemFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.CARROT.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: ItemFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
@@ -78,7 +78,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
 
     override fun createCategory() = object : DisplayCategory<BlockFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = BlockFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = BlockFairyDreamRecipeReiCategoryCard.translation()
+        override fun getTitle(): Text = text { BlockFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: BlockFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
@@ -113,7 +113,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
 
     override fun createCategory() = object : DisplayCategory<EntityTypeFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = EntityTypeFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = EntityTypeFairyDreamRecipeReiCategoryCard.translation()
+        override fun getTitle(): Text = text { EntityTypeFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.ENDERMAN.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28

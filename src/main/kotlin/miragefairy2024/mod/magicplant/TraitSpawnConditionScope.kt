@@ -43,7 +43,7 @@ object TraitSpawnConditionScope
 private val ANYWHERE_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spawn_condition.anywhere" }, "Anywhere", "どこでも")
 context(TraitSpawnConditionScope) val anywhere
     get() = object : TraitSpawnCondition {
-        override val description = ANYWHERE_TRANSLATION()
+        override val description = text { ANYWHERE_TRANSLATION() }
         override fun canSpawn(biome: RegistryEntry<Biome>) = true
     }
 
@@ -56,17 +56,17 @@ private val END_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spa
 
 context(TraitSpawnConditionScope) val overworld
     get() = object : TraitSpawnCondition {
-        override val description = OVERWORLD_TRANSLATION()
+        override val description = text { OVERWORLD_TRANSLATION() }
         override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_OVERWORLD)
     }
 context(TraitSpawnConditionScope) val nether
     get() = object : TraitSpawnCondition {
-        override val description = NETHER_TRANSLATION()
+        override val description = text { NETHER_TRANSLATION() }
         override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_NETHER)
     }
 context(TraitSpawnConditionScope) val end
     get() = object : TraitSpawnCondition {
-        override val description = END_TRANSLATION()
+        override val description = text { END_TRANSLATION() }
         override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_THE_END)
     }
 

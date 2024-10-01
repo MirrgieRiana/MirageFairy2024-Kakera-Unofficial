@@ -309,7 +309,7 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
         ;
 
         val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.elements.$path" }, enName, jaName)
-        override val text = translation()
+        override val text = text { translation() }
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
 

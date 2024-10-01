@@ -15,6 +15,7 @@ import miragefairy2024.util.getMoisture
 import miragefairy2024.util.humidityCategory
 import miragefairy2024.util.invoke
 import miragefairy2024.util.temperatureCategory
+import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
@@ -51,7 +52,7 @@ enum class TraitConditionCard(
     val translation = Translation({ identifier.toTranslationKey("${MirageFairy2024.MOD_ID}.trait_condition") }, enName, jaName)
     val traitCondition = object : TraitCondition {
         override val emoji = emoji()
-        override val name = translation()
+        override val name = text { translation() }
         override fun getFactor(world: World, blockPos: BlockPos) = function(world, blockPos)
     }
 }

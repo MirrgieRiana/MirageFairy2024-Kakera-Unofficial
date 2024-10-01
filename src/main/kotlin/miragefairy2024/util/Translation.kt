@@ -32,8 +32,10 @@ fun Item.enJa(enName: String, jaName: String) {
 
 class Translation(val keyGetter: () -> String, val en: String, val ja: String)
 
+context(TextScope)
 operator fun Translation.invoke() = text { translate(this@invoke.keyGetter()) }
 
+context(TextScope)
 operator fun Translation.invoke(vararg args: Any?) = text { translate(this@invoke.keyGetter(), *args) }
 
 context(ModContext)

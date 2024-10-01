@@ -14,6 +14,7 @@ import miragefairy2024.mod.rei.HarvestReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
+import miragefairy2024.util.text
 import miragefairy2024.util.toEntryStack
 import net.minecraft.text.Text
 
@@ -26,7 +27,7 @@ object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCa
 
     override fun createCategory() = object : DisplayCategory<HarvestReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = HarvestReiCategoryCard.identifier.first
-        override fun getTitle(): Text = HarvestReiCategoryCard.translation()
+        override fun getTitle(): Text = text { HarvestReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: HarvestReiCategoryCard.Display) = 136
         override fun getDisplayHeight() = 36

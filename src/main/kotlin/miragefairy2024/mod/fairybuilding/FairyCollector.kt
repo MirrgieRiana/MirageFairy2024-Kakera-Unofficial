@@ -11,6 +11,7 @@ import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
+import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
@@ -41,7 +42,7 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
     override fun createSlots(): List<SlotSettings> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlots() + listOf(
-            SlotSettings(15, 35, toolTipGetter = { listOf(SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName)) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            SlotSettings(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
             SlotSettings(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
             SlotSettings(81, 35, appearance = Appearance(true, run {
                 listOf(

@@ -47,7 +47,7 @@ enum class TraitEffectKeyCard(
     val traitEffectKey = if (isLogScale) {
         object : TraitEffectKey<Double>() {
             override val emoji = emoji()
-            override val name = translation()
+            override val name = text { translation() }
             override val sortValue = sortValue
             override val color = color
             override fun getValue(level: Double) = 1 - 0.5.pow(level)
@@ -64,7 +64,7 @@ enum class TraitEffectKeyCard(
     } else {
         object : TraitEffectKey<Double>() {
             override val emoji = emoji()
-            override val name = translation()
+            override val name = text { translation() }
             override val sortValue = sortValue
             override val color = color
             override fun getValue(level: Double) = level

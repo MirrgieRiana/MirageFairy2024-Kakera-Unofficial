@@ -92,7 +92,7 @@ fun initFairyQuestCardItem() {
 class FairyQuestCardItem(settings: Settings) : Item(settings) {
     override fun getName(stack: ItemStack): Text {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
-        return fairyQuestCardFairyQuestTranslation(recipe.title)
+        return text { fairyQuestCardFairyQuestTranslation(recipe.title) }
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

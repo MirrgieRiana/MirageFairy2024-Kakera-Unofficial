@@ -68,7 +68,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                 padding(Insets.of(7))
 
                 child(Containers.verticalFlow(Sizing.fixed(18 * 9), Sizing.content()).apply { // 内枠
-                    child(inventoryNameLabel(traitListScreenTranslation(), HorizontalAlignment.CENTER)) // GUI名
+                    child(inventoryNameLabel(text { traitListScreenTranslation() }, HorizontalAlignment.CENTER)) // GUI名
                     child(verticalSpace(3))
                     traitCardContainer = Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(18 * 6)).apply { // 特性カードコンテナ
                         surface(NinePatchTextureCard.TRAIT_BACKGROUND.surface)

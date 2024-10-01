@@ -58,8 +58,8 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
-        tooltip += MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow
-        tooltip += MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow
+        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
+        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
     override fun getUseAction(stack: ItemStack) = UseAction.BOW

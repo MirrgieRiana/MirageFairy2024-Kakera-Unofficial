@@ -18,6 +18,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerServerPacketReceiver
 import miragefairy2024.util.size
+import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
@@ -51,7 +52,7 @@ fun initSoulStream() {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
                 }
 
-                override fun getDisplayName() = SOUL_STREAM_TRANSLATION()
+                override fun getDisplayName() = text { SOUL_STREAM_TRANSLATION() }
 
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
             })

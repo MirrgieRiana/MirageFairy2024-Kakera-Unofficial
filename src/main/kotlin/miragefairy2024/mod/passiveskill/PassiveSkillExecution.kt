@@ -14,6 +14,7 @@ import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
@@ -79,10 +80,10 @@ enum class PassiveSkillStatus {
 
 val PassiveSkillStatus.description
     get() = when (this) {
-        PassiveSkillStatus.DISABLED -> PASSIVE_SKILL_DISABLED_TRANSLATION()
-        PassiveSkillStatus.OVERFLOWED -> PASSIVE_SKILL_OVERFLOWED_TRANSLATION()
-        PassiveSkillStatus.SUPPORTING -> PASSIVE_SKILL_SUPPORTING_TRANSLATION()
-        PassiveSkillStatus.EFFECTIVE -> PASSIVE_SKILL_EFFECTIVE_TRANSLATION()
+        PassiveSkillStatus.DISABLED -> text { PASSIVE_SKILL_DISABLED_TRANSLATION() }
+        PassiveSkillStatus.OVERFLOWED -> text { PASSIVE_SKILL_OVERFLOWED_TRANSLATION() }
+        PassiveSkillStatus.SUPPORTING -> text { PASSIVE_SKILL_SUPPORTING_TRANSLATION() }
+        PassiveSkillStatus.EFFECTIVE -> text { PASSIVE_SKILL_EFFECTIVE_TRANSLATION() }
     }
 
 class PassiveSkillProviders(val providers: List<Triple<ItemStack, PassiveSkillStatus, PassiveSkill>>, val passiveSkills: List<PassiveSkill>)
