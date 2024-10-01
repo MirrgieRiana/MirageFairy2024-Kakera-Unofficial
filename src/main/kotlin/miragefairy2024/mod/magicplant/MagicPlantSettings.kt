@@ -30,16 +30,12 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     abstract val card: C
 
     abstract val blockPath: String
-    abstract val blockEnName: String
-    abstract val blockJaName: String
+    abstract val blockName: EnJa
     abstract val itemPath: String
-    abstract val itemEnName: String
-    abstract val itemJaName: String
+    abstract val itemName: EnJa
     abstract val tier: Int
-    abstract val enPoem: String
-    abstract val jaPoem: String
-    abstract val enClassification: String
-    abstract val jaClassification: String
+    abstract val poem: EnJa
+    abstract val classification: EnJa
 
     abstract fun createBlock(): B
 
@@ -65,11 +61,11 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
         card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa(EnJa(blockEnName, blockJaName))
-        card.item.enJa(EnJa(itemEnName, itemJaName))
+        card.block.enJa(blockName)
+        card.item.enJa(itemName)
         val seedPoemList = PoemList(tier)
-            .poem(enPoem, jaPoem)
-            .poem("classification", enClassification, jaClassification)
+            .poem(poem)
+            .poem("classification", classification)
         card.item.registerPoem(seedPoemList)
         card.item.registerPoemGeneration(seedPoemList)
 

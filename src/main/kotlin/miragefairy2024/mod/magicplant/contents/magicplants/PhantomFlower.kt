@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -31,16 +32,12 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
     override val card get() = PhantomFlowerCard
 
     override val blockPath = "phantom_flower"
-    override val blockEnName = "Phantom Flower"
-    override val blockJaName = "幻花ファントム"
+    override val blockName = EnJa("Phantom Flower", "幻花ファントム")
     override val itemPath = "phantom_bulb"
-    override val itemEnName = "Phantom Bulb"
-    override val itemJaName = "ファントムの球根"
+    override val itemName = EnJa("Phantom Bulb", "ファントムの球根")
     override val tier = 3
-    override val enPoem = "Illusory telepathy"
-    override val jaPoem = "――おいでよ、僕たちのところへ"
-    override val enClassification = "Order Miragales, family Miragaceae"
-    override val jaClassification = "妖花目ミラージュ科"
+    override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
+    override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
     override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.PINK).sounds(BlockSoundGroup.GLASS))
 

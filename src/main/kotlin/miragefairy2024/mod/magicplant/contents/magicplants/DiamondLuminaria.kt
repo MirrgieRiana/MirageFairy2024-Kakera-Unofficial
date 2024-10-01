@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -33,16 +34,12 @@ object DiamondLuminariaSettings : SimpleMagicPlantSettings<DiamondLuminariaCard,
     override val card get() = DiamondLuminariaCard
 
     override val blockPath = "diamond_luminaria"
-    override val blockEnName = "Diamond Luminaria"
-    override val blockJaName = "金剛石輝草ダイヤモンドルミナリア"
+    override val blockName = EnJa("Diamond Luminaria", "金剛石輝草ダイヤモンドルミナリア")
     override val itemPath = "diamond_luminaria_bulb"
-    override val itemEnName = "Diamond Luminaria Bulb"
-    override val itemJaName = "ダイヤモンドルミナリアの球根"
+    override val itemName = EnJa("Diamond Luminaria Bulb", "ダイヤモンドルミナリアの球根")
     override val tier = 3
-    override val enPoem = "Fruits the crystallized carbon"
-    override val jaPoem = "表土を飾る、凍てつく星。"
-    override val enClassification = "Order Miragales, family Luminariaceae"
-    override val jaClassification = "妖花目ルミナリア科"
+    override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
+    override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).luminance { getLuminance(it.getOr(Properties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.CROP))
 

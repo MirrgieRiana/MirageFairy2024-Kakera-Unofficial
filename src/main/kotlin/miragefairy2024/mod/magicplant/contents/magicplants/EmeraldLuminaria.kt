@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -36,16 +37,12 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
     override val card get() = EmeraldLuminariaCard
 
     override val blockPath = "emerald_luminaria"
-    override val blockEnName = "Emerald Luminaria"
-    override val blockJaName = "翠玉輝草エメラルドルミナリア"
+    override val blockName = EnJa("Emerald Luminaria", "翠玉輝草エメラルドルミナリア")
     override val itemPath = "emerald_luminaria_bulb"
-    override val itemEnName = "Emerald Luminaria Bulb"
-    override val itemJaName = "エメラルドルミナリアの球根"
+    override val itemName = EnJa("Emerald Luminaria Bulb", "エメラルドルミナリアの球根")
     override val tier = 3
-    override val enPoem = "Makes Berryllium by unknown means"
-    override val jaPoem = "幸福もたらす、栄光の樹。"
-    override val enClassification = "Order Miragales, family Luminariaceae"
-    override val jaClassification = "妖花目ルミナリア科"
+    override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
+    override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).luminance { getLuminance(it.getOr(Properties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD_GREEN).sounds(BlockSoundGroup.CROP))
 

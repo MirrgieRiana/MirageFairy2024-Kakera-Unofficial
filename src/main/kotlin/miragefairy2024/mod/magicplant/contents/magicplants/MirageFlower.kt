@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -42,16 +43,12 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     override val card get() = MirageFlowerCard
 
     override val blockPath = "mirage_flower"
-    override val blockEnName = "Mirage Flower"
-    override val blockJaName = "妖花ミラージュ"
+    override val blockName = EnJa("Mirage Flower", "妖花ミラージュ")
     override val itemPath = "mirage_bulb"
-    override val itemEnName = "Mirage Bulb"
-    override val itemJaName = "ミラージュの球根"
+    override val itemName = EnJa("Mirage Bulb", "ミラージュの球根")
     override val tier = 1
-    override val enPoem = "Evolution to escape extermination"
-    override val jaPoem = "可憐にして人畜無害たる魔物。"
-    override val enClassification = "Order Miragales, family Miragaceae"
-    override val jaClassification = "妖花目ミラージュ科"
+    override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
+    override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
 

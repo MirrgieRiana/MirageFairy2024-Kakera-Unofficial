@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -33,16 +34,12 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     override val card get() = VeropedaCard
 
     override val blockPath = "veropeda"
-    override val blockEnName = "Veropeda"
-    override val blockJaName = "呪草ヴェロペダ"
+    override val blockName = EnJa("Veropeda", "呪草ヴェロペダ")
     override val itemPath = "veropeda_bulb"
-    override val itemEnName = "Veropeda Bulb"
-    override val itemJaName = "ヴェロペダの球根"
+    override val itemName = EnJa("Veropeda Bulb", "ヴェロペダの球根")
     override val tier = 1
-    override val enPoem = "Contains strong acids made from insects"
-    override val jaPoem = "毒を喰らい、毒と化す。"
-    override val enClassification = "Order Miragales, family Veropedaceae"
-    override val jaClassification = "妖花目ヴェロペダ科"
+    override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
+    override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
 
