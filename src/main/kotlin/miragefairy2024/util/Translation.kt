@@ -30,6 +30,9 @@ fun Item.enJa(enName: String, jaName: String) {
 }
 
 
+class EnJa(val en: String, val ja: String)
+
+
 class Translation(val keyGetter: () -> String, val en: String, val ja: String)
 
 context(TextScope)
