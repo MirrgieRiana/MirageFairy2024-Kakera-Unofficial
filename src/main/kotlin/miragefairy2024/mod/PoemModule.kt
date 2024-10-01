@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
@@ -83,9 +84,13 @@ class PoemList(val tier: Int?, val poems: List<Poem>)
 fun PoemList(tier: Int?) = PoemList(tier, listOf())
 operator fun PoemList.plus(poem: Poem) = PoemList(this.tier, this.poems + poem)
 fun PoemList.poem(key: String, en: String, ja: String) = this + InternalPoem(PoemType.POEM, key, en, ja)
+fun PoemList.poem(key: String, enJa: EnJa) = this.poem(key, enJa.en, enJa.ja)
 fun PoemList.poem(en: String, ja: String) = this + InternalPoem(PoemType.POEM, "poem", en, ja)
+fun PoemList.poem(enJa: EnJa) = this.poem(enJa.en, enJa.ja)
 fun PoemList.description(key: String, en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, key, en, ja)
+fun PoemList.description(key: String, enJa: EnJa) = this.description(key, enJa.en, enJa.ja)
 fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
+fun PoemList.description(enJa: EnJa) = this.description(enJa.en, enJa.ja)
 fun PoemList.translation(type: PoemType, translation: Translation) = this + ExternalPoem(type) { translation.keyGetter() }
 fun PoemList.text(type: PoemType, text: Text) = this + TextPoem(type, text)
 

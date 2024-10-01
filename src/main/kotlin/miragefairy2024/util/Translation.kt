@@ -35,6 +35,8 @@ class EnJa(val en: String, val ja: String)
 
 class Translation(val keyGetter: () -> String, val en: String, val ja: String)
 
+fun Translation(keyGetter: () -> String, enJa: EnJa) = Translation(keyGetter, enJa.en, enJa.ja)
+
 context(TextScope)
 operator fun Translation.invoke() = text { translate(this@invoke.keyGetter()) }
 
