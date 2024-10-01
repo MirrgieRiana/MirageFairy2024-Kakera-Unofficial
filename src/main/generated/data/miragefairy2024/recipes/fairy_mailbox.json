@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_mailbox",
+  "key": {
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "H": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "M": {
+      "item": "miragefairy2024:miranagite"
+    }
+  },
+  "pattern": [
+    "HHH",
+    "CMC",
+    "HHH"
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_mailbox"
+  },
+  "show_notification": true
+}
