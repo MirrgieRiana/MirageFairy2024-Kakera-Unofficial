@@ -11,8 +11,6 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.text
-import miragefairy2024.util.BlockStateVariant
-import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.ItemLootPoolEntry
@@ -25,7 +23,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.invoke
-import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -74,7 +71,6 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
@@ -162,15 +158,7 @@ fun initFairyStatue() {
         }
 
         // レンダリング
-        card.block.registerVariantsBlockStateGeneration {
-            val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
-            listOf(
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
-            )
-        }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()

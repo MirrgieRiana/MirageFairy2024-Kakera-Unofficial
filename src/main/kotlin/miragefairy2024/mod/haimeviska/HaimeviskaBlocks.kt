@@ -13,7 +13,6 @@ import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.BlockStateVariant
-import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
@@ -193,15 +192,7 @@ context(ModContext)
 private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    card.block.registerVariantsBlockStateGeneration {
-        val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
-        listOf(
-            propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
-            propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
-            propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
-            propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
-        )
-    }
+    card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
     card.block.registerModelGeneration {
         Models.ORIENTABLE.with(
             TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier() * "_top",

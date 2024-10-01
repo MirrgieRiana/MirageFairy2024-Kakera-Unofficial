@@ -11,8 +11,6 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
-import miragefairy2024.util.BlockStateVariant
-import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
@@ -20,7 +18,6 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.insertItem
 import miragefairy2024.util.inventoryAccessor
-import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -31,7 +28,6 @@ import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
 import miragefairy2024.util.times
-import miragefairy2024.util.with
 import miragefairy2024.util.writeToNbt
 import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -209,15 +205,7 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        block.registerVariantsBlockStateGeneration {
-            val normal = BlockStateVariant(model = "block/" * block.getIdentifier())
-            listOf(
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
-            )
-        }
+        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 

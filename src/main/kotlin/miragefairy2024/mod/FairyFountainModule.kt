@@ -10,8 +10,6 @@ import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.setFairyStatueMotif
-import miragefairy2024.util.BlockStateVariant
-import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
@@ -21,7 +19,6 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.isServer
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
-import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -33,7 +30,6 @@ import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
-import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.Single
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -57,7 +53,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
@@ -79,15 +74,7 @@ fun initFairyFountainModule() {
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration {
-            val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
-            listOf(
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.NORTH) to normal.with(y = BlockStateVariantRotation.R0),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.EAST) to normal.with(y = BlockStateVariantRotation.R90),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.SOUTH) to normal.with(y = BlockStateVariantRotation.R180),
-                propertiesOf(HorizontalFacingBlock.FACING with Direction.WEST) to normal.with(y = BlockStateVariantRotation.R270),
-            )
-        }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa("Fairy Statue Fountain", "妖精の像の泉")

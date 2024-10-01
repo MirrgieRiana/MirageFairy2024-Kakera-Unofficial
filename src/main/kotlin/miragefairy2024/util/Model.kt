@@ -21,6 +21,7 @@ import net.minecraft.data.client.TexturedModel
 import net.minecraft.item.Item
 import net.minecraft.state.property.Property
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Direction
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
@@ -219,6 +220,22 @@ class VariantsBlockStateGenerationRegistrationScope {
             this.map { (properties, variant) ->
                 val entry = property with value
                 propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
+            }
+        }
+    }
+
+    fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation(property: Property<Direction>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
+        return property.values.flatMap { value ->
+            this.map { (properties, variant) ->
+                val entry = property with value
+                val y = when (value) {
+                    Direction.NORTH -> BlockStateVariantRotation.R0
+                    Direction.EAST -> BlockStateVariantRotation.R90
+                    Direction.SOUTH -> BlockStateVariantRotation.R180
+                    Direction.WEST -> BlockStateVariantRotation.R270
+                    else -> BlockStateVariantRotation.R0
+                }
+                propertiesOf(*properties.toTypedArray(), entry) to variant.with(y = y)
             }
         }
     }
