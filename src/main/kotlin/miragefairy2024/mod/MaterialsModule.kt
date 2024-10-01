@@ -8,6 +8,7 @@ import miragefairy2024.mod.fairy.RandomFairySummoningItem
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
@@ -379,7 +380,7 @@ fun initMaterialsModule() {
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
-        card.item.enJa(card.enName, card.jaName)
+        card.item.enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
             card.item.registerPoem(card.poemList)
             card.item.registerPoemGeneration(card.poemList)

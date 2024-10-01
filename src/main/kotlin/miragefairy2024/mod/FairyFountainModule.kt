@@ -11,6 +11,7 @@ import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.setFairyStatueMotif
 import miragefairy2024.util.Chance
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -80,7 +81,7 @@ fun initFairyFountainModule() {
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
-        card.block.enJa("Fairy Statue Fountain", "妖精の像の泉")
+        card.block.enJa(EnJa("Fairy Statue Fountain", "妖精の像の泉"))
         val poemList = PoemList(1)
             .poem("Where does this water spring from...?", "この水は一体どこから湧いてくるのだろう…")
             .description("description1", "Can draw lottery with 100 Fairy Jewels", "100フェアリージュエルで抽選ができる")

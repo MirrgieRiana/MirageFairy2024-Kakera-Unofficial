@@ -10,6 +10,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbtAndCount
@@ -68,7 +69,7 @@ fun initSeedBag() {
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
-        card.item.enJa("Seed Bag", "種子カバン")
+        card.item.enJa(EnJa("Seed Bag", "種子カバン"))
         val poemList = PoemList(1)
             .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
             .description("description1", "Display GUI when used", "使用時、GUIを表示")

@@ -18,15 +18,15 @@ fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapa
 }
 
 context(ModContext)
-fun Block.enJa(enName: String, jaName: String) {
-    en { this.translationKey to enName }
-    ja { this.translationKey to jaName }
+fun Block.enJa(name: EnJa) {
+    en { this.translationKey to name.en }
+    ja { this.translationKey to name.ja }
 }
 
 context(ModContext)
-fun Item.enJa(enName: String, jaName: String) {
-    en { this.translationKey to enName }
-    ja { this.translationKey to jaName }
+fun Item.enJa(name: EnJa) {
+    en { this.translationKey to name.en }
+    ja { this.translationKey to name.ja }
 }
 
 

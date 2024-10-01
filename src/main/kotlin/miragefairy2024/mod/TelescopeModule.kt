@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -89,7 +90,7 @@ fun initTelescopeModule() {
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
-        card.block.enJa("Minia's Telescope", "ミーニャの望遠鏡")
+        card.block.enJa(EnJa("Minia's Telescope", "ミーニャの望遠鏡"))
         val poemList = PoemList(2)
             .poem("Tell me more about the human world!", "きみは妖精には見えないものが見えるんだね。")
             .description("Use once a day to obtain Fairy Jewels", "1日1回使用時にフェアリージュエルを獲得")

@@ -17,6 +17,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillStatus
 import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -126,7 +127,7 @@ fun initFairyItem() {
             }
         }
 
-        card.item.enJa(card.enName, card.jaName)
+        card.item.enJa(EnJa(card.enName, card.jaName))
     }
 
     RARE_TRANSLATION.enJa()

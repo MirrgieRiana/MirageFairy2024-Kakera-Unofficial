@@ -169,7 +169,7 @@ fun initFairyStatue() {
         card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa(card.brokenName.en, card.brokenName.ja)
+        card.block.enJa(card.brokenName)
         card.formatTranslation.enJa()
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)

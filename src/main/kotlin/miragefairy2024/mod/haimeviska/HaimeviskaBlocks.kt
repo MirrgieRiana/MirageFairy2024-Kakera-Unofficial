@@ -13,6 +13,7 @@ import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.BlockStateVariant
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
@@ -269,7 +270,7 @@ fun initHaimeviskaBlocks() {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
-        card.block.enJa(card.settings.enName, card.settings.jaName)
+        card.block.enJa(EnJa(card.settings.enName, card.settings.jaName))
         card.item.registerPoem(card.settings.poemList)
         card.item.registerPoemGeneration(card.settings.poemList)
 

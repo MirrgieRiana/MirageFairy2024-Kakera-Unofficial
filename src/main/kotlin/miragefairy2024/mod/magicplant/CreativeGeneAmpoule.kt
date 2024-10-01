@@ -8,6 +8,7 @@ import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -65,7 +66,7 @@ fun initCreativeGeneAmpoule() {
                 0xFFFFFF
             }
         }
-        card.item.enJa("Creative Gene Ampoule", "アカーシャによる生命創造の針")
+        card.item.enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命創造の針"))
         val poemList = PoemList(99)
             .poem("This allows you to freely edit traits.", "種類に従って球根を持つ草を生えさせよ。")
             .description("description1", "Use: Grant the trait", "使用時、特性を付与")

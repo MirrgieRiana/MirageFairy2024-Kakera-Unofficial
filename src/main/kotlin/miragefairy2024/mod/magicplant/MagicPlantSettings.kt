@@ -7,6 +7,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -64,8 +65,8 @@ abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
         card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa(blockEnName, blockJaName)
-        card.item.enJa(itemEnName, itemJaName)
+        card.block.enJa(EnJa(blockEnName, blockJaName))
+        card.item.enJa(EnJa(itemEnName, itemJaName))
         val seedPoemList = PoemList(tier)
             .poem(enPoem, jaPoem)
             .poem("classification", enClassification, jaClassification)

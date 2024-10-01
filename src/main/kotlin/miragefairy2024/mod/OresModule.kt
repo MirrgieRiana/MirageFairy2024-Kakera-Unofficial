@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BaseStoneType.DEEPSLATE
 import miragefairy2024.mod.BaseStoneType.STONE
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
@@ -138,7 +139,7 @@ fun initOresModule() {
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
 
-        card.block.enJa(card.enName, card.jaName)
+        card.block.enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
             card.item.registerPoem(card.poemList)
             card.item.registerPoemGeneration(card.poemList)

@@ -12,6 +12,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
@@ -211,7 +212,7 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        block.enJa(settings.enName, settings.jaName)
+        block.enJa(EnJa(settings.enName, settings.jaName))
         val poemList = PoemList(settings.tier).poem(settings.enPoem, settings.jaPoem)
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)

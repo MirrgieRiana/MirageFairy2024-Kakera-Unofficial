@@ -18,6 +18,7 @@ import miragefairy2024.mod.tool.contents.FairyShovelSettings
 import miragefairy2024.mod.tool.contents.FairySwordSettings
 import miragefairy2024.mod.tool.contents.ScytheItem
 import miragefairy2024.mod.tool.contents.ShootingStaffItem
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -71,7 +72,7 @@ class ToolCard(
 
         item.registerModelGeneration(Models.HANDHELD)
 
-        item.enJa(enName, jaName)
+        item.enJa(EnJa(enName, jaName))
 
         val poemList = PoemList(tier).poem(enPoem, jaPoem).let { toolSettings.appendPoems(it) }
         item.registerPoem(poemList)

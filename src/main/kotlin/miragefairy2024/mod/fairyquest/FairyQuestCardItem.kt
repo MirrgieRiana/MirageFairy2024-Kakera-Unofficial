@@ -6,6 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
@@ -75,7 +76,7 @@ fun initFairyQuestCardItem() {
                 0xFFFFFF
             }
         }
-        card.item.enJa(card.enName, card.jaName)
+        card.item.enJa(EnJa(card.enName, card.jaName))
     }
 
     fairyQuestCardFairyQuestTranslation.enJa()
