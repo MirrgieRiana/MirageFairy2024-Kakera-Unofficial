@@ -12,6 +12,7 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.text
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -90,18 +91,18 @@ object FairyStatue {
 
 class FairyStatueCard(
     path: String,
-    val brokenName: Pair<String, String>,
-    format: Pair<String, String>,
-    poem: Pair<String, String>,
+    val brokenName: EnJa,
+    format: EnJa,
+    poem: EnJa,
     mapColor: MapColor,
 ) {
     val identifier = MirageFairy2024.identifier(path)
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format.first, format.second)
+    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format.en, format.ja)
     val poemList = PoemList(0)
-        .poem(poem.first, poem.second)
+        .poem(poem.en, poem.ja)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
     val texturedModelFactory = TexturedModel.Factory {
         val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
@@ -118,23 +119,23 @@ class FairyStatueCard(
 
         val FAIRY_STATUE = FairyStatueCard(
             "fairy_statue",
-            Pair("Broken Fairy Statue", "破損した妖精の像"),
-            Pair("%s Statue", "%sの像"),
-            Pair("Mysterious Method of Creation", "その製法は誰にも知られていない"),
+            EnJa("Broken Fairy Statue", "破損した妖精の像"),
+            EnJa("%s Statue", "%sの像"),
+            EnJa("Mysterious Method of Creation", "その製法は誰にも知られていない"),
             MapColor.IRON_GRAY,
         ).also { entries += it }
         val GOLDEN_FAIRY_STATUE = FairyStatueCard(
             "golden_fairy_statue",
-            Pair("Broken Fairy Statue", "破損した妖精の像"),
-            Pair("%s Statue", "%sの像"),
-            Pair("Was their hair always this long...?", "妖精の髪が伸びている気がする…"),
+            EnJa("Broken Fairy Statue", "破損した妖精の像"),
+            EnJa("%s Statue", "%sの像"),
+            EnJa("Was their hair always this long...?", "妖精の髪が伸びている気がする…"),
             MapColor.GOLD,
         ).also { entries += it }
         val FANTASTIC_FAIRY_STATUE = FairyStatueCard(
             "fantastic_fairy_statue",
-            Pair("Broken Fairy Statue", "破損した妖精の像"),
-            Pair("%s Statue", "%sの像"),
-            Pair("Glossier and more beautiful.", "その翅は艶やかで、本物よりも美しい。"),
+            EnJa("Broken Fairy Statue", "破損した妖精の像"),
+            EnJa("%s Statue", "%sの像"),
+            EnJa("Glossier and more beautiful.", "その翅は艶やかで、本物よりも美しい。"),
             MapColor.MAGENTA,
         ).also { entries += it }
     }
@@ -168,7 +169,7 @@ fun initFairyStatue() {
         card.item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa(card.brokenName.first, card.brokenName.second)
+        card.block.enJa(card.brokenName.en, card.brokenName.ja)
         card.formatTranslation.enJa()
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
