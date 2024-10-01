@@ -150,8 +150,8 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerVariantsBlockStateGeneration {
         val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
         listOf(
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) to normal.with(model = "block/charged_" * card.block.getIdentifier()),
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) to normal.with(model = "block/uncharged_" * card.block.getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) with normal.with(model = "block/charged_" * card.block.getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) with normal.with(model = "block/uncharged_" * card.block.getIdentifier()),
         )
     }
     registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })

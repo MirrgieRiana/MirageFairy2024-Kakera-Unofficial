@@ -27,7 +27,7 @@ fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerat
 }
 
 context(ModContext)
-fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
+fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<BlockStateVariantEntry>) = this.registerBlockStateGeneration {
     jsonObject(
         "variants" to jsonObject(
             *entriesGetter(VariantsBlockStateGenerationRegistrationScope)
@@ -49,6 +49,13 @@ context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
     it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
 }
+
+
+// BlockStateVariantEntry
+
+data class BlockStateVariantEntry(val properties: List<PropertyEntry<*>>, val variant: BlockStateVariant)
+
+infix fun List<PropertyEntry<*>>.with(variant: BlockStateVariant) = BlockStateVariantEntry(this, variant)
 
 
 // BlockStateVariant
@@ -116,20 +123,20 @@ fun propertiesOf(vararg properties: PropertyEntry<*>) = listOf(*properties)
 object VariantsBlockStateGenerationRegistrationScope
 
 context(VariantsBlockStateGenerationRegistrationScope)
-fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
+fun normal(model: Identifier) = listOf(propertiesOf() with BlockStateVariant(model = model))
 
 context(VariantsBlockStateGenerationRegistrationScope)
-infix fun <T : Comparable<T>> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.with(property: Property<T>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
+infix fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>): List<BlockStateVariantEntry> {
     return property.values.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
-            propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
+            propertiesOf(*properties.toTypedArray(), entry) with variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
         }
     }
 }
 
 context(VariantsBlockStateGenerationRegistrationScope)
-fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation(property: Property<Direction>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
+fun List<BlockStateVariantEntry>.withHorizontalRotation(property: Property<Direction>): List<BlockStateVariantEntry> {
     return property.values.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
@@ -140,7 +147,7 @@ fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation
                 Direction.WEST -> BlockStateVariantRotation.R270
                 else -> BlockStateVariantRotation.R0
             }
-            propertiesOf(*properties.toTypedArray(), entry) to variant.with(y = y)
+            propertiesOf(*properties.toTypedArray(), entry) with variant.with(y = y)
         }
     }
 }
