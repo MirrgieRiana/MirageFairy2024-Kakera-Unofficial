@@ -106,7 +106,7 @@ fun initFairyFountainModule() {
 
 class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
     companion object {
-        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue_fountain.usage" }, "Please use it while holding %s", "%sを持って使用してください")
+        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toTranslationKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
         private val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
         val recipes = mutableListOf<Recipe>()
     }

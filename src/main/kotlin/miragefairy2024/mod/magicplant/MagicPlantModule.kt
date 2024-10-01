@@ -21,10 +21,11 @@ val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     EmeraldLuminariaCard,
 )
 
-val TRAIT_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.trait" }, "Trait", "特性")
-val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.creativeOnly" }, "Creative Only", "クリエイティブ専用")
-val GUI_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.gui" }, "Use while sneaking to show traits", "スニーク中に使用時、特性GUIを表示")
-val INVALID_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.magic_plant.invalid" }, "Invalid", "無効")
+private val identifier = MirageFairy2024.identifier("magic_plant")
+val TRAIT_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.trait" }, "Trait", "特性")
+val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.creativeOnly" }, "Creative Only", "クリエイティブ専用")
+val GUI_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.gui" }, "Use while sneaking to show traits", "スニーク中に使用時、特性GUIを表示")
+val INVALID_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.invalid" }, "Invalid", "無効")
 
 context(ModContext)
 fun initMagicPlantModule() {

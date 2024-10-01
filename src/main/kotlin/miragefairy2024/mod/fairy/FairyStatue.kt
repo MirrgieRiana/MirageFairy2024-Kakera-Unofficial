@@ -82,7 +82,7 @@ object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
         FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
-    val descriptionTranslation = Translation({ "block.${MirageFairy2024.MOD_ID}.fairy_statue.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
+    val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toTranslationKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.of("case")
     val BASE: TextureKey = TextureKey.of("base")
     val END: TextureKey = TextureKey.of("end")

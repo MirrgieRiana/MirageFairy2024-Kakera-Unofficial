@@ -28,7 +28,7 @@ val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, player
     FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readString()))!!, ScreenHandlerContext.EMPTY)
 }
 
-val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_quest_card.fullScreen" }, "Click to full screen", "クリックで全画面表示")
+val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toTranslationKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {

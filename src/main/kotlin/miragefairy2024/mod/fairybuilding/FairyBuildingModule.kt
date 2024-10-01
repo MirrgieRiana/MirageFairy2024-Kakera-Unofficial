@@ -16,8 +16,9 @@ val fairyBuildingCards: List<FairyBuildingCard<*, *, *>> = listOf(
     FairyCollectorCard,
 )
 
-val FOLIA_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_building.folia" }, "Folia", "フォリア")
-val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_building.specified_fairy_slot" }, "Only %s Family", "%s系統のみ")
+private val identifier = MirageFairy2024.identifier("fairy_building")
+val FOLIA_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.folia" }, "Folia", "フォリア")
+val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.specified_fairy_slot" }, "Only %s Family", "%s系統のみ")
 
 context(ModContext)
 fun initFairyBuildingModule() {

@@ -95,7 +95,7 @@ class FairyScytheItem(override val toolSettings: FairyMiningToolSettings, settin
 
 open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
     companion object {
-        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.scythe.description" }, "Perform area harvesting when used", "使用時、範囲収穫")
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toTranslationKey()}.description" }, "Perform area harvesting when used", "使用時、範囲収穫")
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

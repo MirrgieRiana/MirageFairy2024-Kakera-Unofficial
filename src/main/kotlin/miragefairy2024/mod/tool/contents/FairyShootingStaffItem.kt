@@ -87,8 +87,8 @@ class FairyShootingStaffItem(override val toolSettings: FairyShootingStaffSettin
 
 open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
     companion object {
-        val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.fairy_tool_item.not_enough_experience" }, "Not enough experience", "経験値が足りません")
-        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.MOD_ID}.shooting_staff.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
+        val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toTranslationKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toTranslationKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

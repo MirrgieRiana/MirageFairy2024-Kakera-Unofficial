@@ -30,8 +30,9 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.World
 
-val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_dream.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
-val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${MirageFairy2024.MOD_ID}.fairy_dream.gain_fairy" }, "%s found!", "%sを発見した！")
+private val identifier = MirageFairy2024.identifier("fairy_dream")
+val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
+val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
 
 context(ModContext)
 fun initFairyDream() {
