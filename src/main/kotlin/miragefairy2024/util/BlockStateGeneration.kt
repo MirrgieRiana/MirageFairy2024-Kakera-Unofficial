@@ -15,6 +15,9 @@ import net.minecraft.state.property.Property
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Direction
 
+
+// registerBlockStateGeneration
+
 context(ModContext)
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
     it.blockStateCollector.accept(object : BlockStateSupplier {
@@ -22,6 +25,33 @@ fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerat
         override fun getBlock() = this@registerBlockStateGeneration
     })
 }
+
+context(ModContext)
+fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
+    jsonObject(
+        "variants" to jsonObject(
+            *entriesGetter(VariantsBlockStateGenerationRegistrationScope)
+                .map { (propertiesMap, modelId) ->
+                    val propertiesString = propertiesMap
+                        .sortedBy { it.keyName }
+                        .map { "${it.keyName}=${it.valueName}" }
+                        .join(",")
+                    propertiesString to modelId
+                }
+                .sortedBy { (propertiesString, _) -> propertiesString }
+                .map { (propertiesString, value) -> propertiesString to value.toJson() }
+                .toTypedArray()
+        )
+    )
+}
+
+context(ModContext)
+fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
+    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
+}
+
+
+// BlockStateVariant
 
 enum class BlockStateVariantRotation(val degrees: Int) {
     R0(0),
@@ -68,6 +98,9 @@ fun BlockStateVariant.toJson(): JsonElement = jsonObjectNotNull(
     getWeight()?.let { "weight" to it.jsonElement },
 )
 
+
+// PropertyEntry
+
 class PropertyEntry<T : Comparable<T>>(val key: Property<T>, val value: T)
 
 val PropertyEntry<*>.keyName: String get() = this.key.name
@@ -77,7 +110,13 @@ infix fun <T : Comparable<T>> Property<T>.with(value: T) = PropertyEntry(this, v
 
 fun propertiesOf(vararg properties: PropertyEntry<*>) = listOf(*properties)
 
+
+// VariantsBlockStateGeneration
+
 object VariantsBlockStateGenerationRegistrationScope
+
+context(VariantsBlockStateGenerationRegistrationScope)
+fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
 
 context(VariantsBlockStateGenerationRegistrationScope)
 infix fun <T : Comparable<T>> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.with(property: Property<T>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
@@ -104,31 +143,4 @@ fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation
             propertiesOf(*properties.toTypedArray(), entry) to variant.with(y = y)
         }
     }
-}
-
-context(VariantsBlockStateGenerationRegistrationScope)
-fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
-
-context(ModContext)
-fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
-    jsonObject(
-        "variants" to jsonObject(
-            *entriesGetter(VariantsBlockStateGenerationRegistrationScope)
-                .map { (propertiesMap, modelId) ->
-                    val propertiesString = propertiesMap
-                        .sortedBy { it.keyName }
-                        .map { "${it.keyName}=${it.valueName}" }
-                        .join(",")
-                    propertiesString to modelId
-                }
-                .sortedBy { (propertiesString, _) -> propertiesString }
-                .map { (propertiesString, value) -> propertiesString to value.toJson() }
-                .toTypedArray()
-        )
-    )
-}
-
-context(ModContext)
-fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
 }
