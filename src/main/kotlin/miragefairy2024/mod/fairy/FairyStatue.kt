@@ -23,6 +23,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.invoke
+import miragefairy2024.util.normal
 import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -39,6 +40,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.with
+import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
 import mirrg.kotlin.hydrogen.or

@@ -214,40 +214,43 @@ infix fun <T : Comparable<T>> Property<T>.with(value: T) = PropertyEntry(this, v
 
 fun propertiesOf(vararg properties: PropertyEntry<*>) = listOf(*properties)
 
-class VariantsBlockStateGenerationRegistrationScope {
-    infix fun <T : Comparable<T>> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.with(property: Property<T>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
-        return property.values.flatMap { value ->
-            this.map { (properties, variant) ->
-                val entry = property with value
-                propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
-            }
+object VariantsBlockStateGenerationRegistrationScope
+
+context(VariantsBlockStateGenerationRegistrationScope)
+infix fun <T : Comparable<T>> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.with(property: Property<T>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
+    return property.values.flatMap { value ->
+        this.map { (properties, variant) ->
+            val entry = property with value
+            propertiesOf(*properties.toTypedArray(), entry) to variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
         }
     }
-
-    fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation(property: Property<Direction>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
-        return property.values.flatMap { value ->
-            this.map { (properties, variant) ->
-                val entry = property with value
-                val y = when (value) {
-                    Direction.NORTH -> BlockStateVariantRotation.R0
-                    Direction.EAST -> BlockStateVariantRotation.R90
-                    Direction.SOUTH -> BlockStateVariantRotation.R180
-                    Direction.WEST -> BlockStateVariantRotation.R270
-                    else -> BlockStateVariantRotation.R0
-                }
-                propertiesOf(*properties.toTypedArray(), entry) to variant.with(y = y)
-            }
-        }
-    }
-
-    fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
 }
+
+context(VariantsBlockStateGenerationRegistrationScope)
+fun List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>.withHorizontalRotation(property: Property<Direction>): List<Pair<List<PropertyEntry<*>>, BlockStateVariant>> {
+    return property.values.flatMap { value ->
+        this.map { (properties, variant) ->
+            val entry = property with value
+            val y = when (value) {
+                Direction.NORTH -> BlockStateVariantRotation.R0
+                Direction.EAST -> BlockStateVariantRotation.R90
+                Direction.SOUTH -> BlockStateVariantRotation.R180
+                Direction.WEST -> BlockStateVariantRotation.R270
+                else -> BlockStateVariantRotation.R0
+            }
+            propertiesOf(*properties.toTypedArray(), entry) to variant.with(y = y)
+        }
+    }
+}
+
+context(VariantsBlockStateGenerationRegistrationScope)
+fun normal(model: Identifier) = listOf(propertiesOf() to BlockStateVariant(model = model))
 
 context(ModContext)
 fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<Pair<List<PropertyEntry<*>>, BlockStateVariant>>) = this.registerBlockStateGeneration {
     jsonObject(
         "variants" to jsonObject(
-            *entriesGetter(VariantsBlockStateGenerationRegistrationScope())
+            *entriesGetter(VariantsBlockStateGenerationRegistrationScope)
                 .map { (propertiesMap, modelId) ->
                     val propertiesString = propertiesMap
                         .sortedBy { it.keyName }

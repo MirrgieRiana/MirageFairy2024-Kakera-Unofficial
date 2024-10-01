@@ -18,6 +18,7 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.insertItem
 import miragefairy2024.util.inventoryAccessor
+import miragefairy2024.util.normal
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -28,6 +29,7 @@ import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
 import miragefairy2024.util.times
+import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.writeToNbt
 import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings

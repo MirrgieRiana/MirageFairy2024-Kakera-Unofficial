@@ -17,6 +17,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isServer
+import miragefairy2024.util.normal
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -30,6 +31,7 @@ import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
+import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.Single
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory

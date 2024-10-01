@@ -8,6 +8,7 @@ import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.normal
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration

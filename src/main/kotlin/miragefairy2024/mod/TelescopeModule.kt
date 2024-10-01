@@ -13,6 +13,7 @@ import miragefairy2024.util.gray
 import miragefairy2024.util.green
 import miragefairy2024.util.invoke
 import miragefairy2024.util.long
+import miragefairy2024.util.normal
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -25,6 +26,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
+import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod

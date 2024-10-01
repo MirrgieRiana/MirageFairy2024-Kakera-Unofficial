@@ -21,6 +21,7 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.normal
 import miragefairy2024.util.on
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomBoolean
@@ -43,6 +44,7 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
