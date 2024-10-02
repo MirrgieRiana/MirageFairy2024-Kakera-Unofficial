@@ -1,8 +1,14 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.logistics
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
+import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.mod.poem
+import miragefairy2024.mod.registerPoem
+import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
@@ -40,7 +46,7 @@ object FairyMailboxCard {
 }
 
 context(ModContext)
-fun initFairMailbox() {
+fun initMailBox() {
     FairyMailboxCard.let { card ->
 
         card.block.register(Registries.BLOCK, card.identifier)
