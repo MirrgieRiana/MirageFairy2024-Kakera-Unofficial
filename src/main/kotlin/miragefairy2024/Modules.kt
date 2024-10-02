@@ -10,7 +10,6 @@ import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initEnchantmentModule
 import miragefairy2024.mod.initEntityModule
 import miragefairy2024.mod.initExtraPlayerDataModule
-import miragefairy2024.mod.initFairMailbox
 import miragefairy2024.mod.initFairyFountainModule
 import miragefairy2024.mod.initFoodIngredientsModule
 import miragefairy2024.mod.initLastFoodModule
@@ -24,6 +23,7 @@ import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initTelescopeModule
 import miragefairy2024.mod.initVanillaModule
+import miragefairy2024.mod.logistics.initLogisticsModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule
@@ -60,5 +60,5 @@ fun initModules() {
     initEnchantmentModule()
     initTelescopeModule()
     initFairyFountainModule()
-    initFairMailbox()
+    initLogisticsModule()
 }
