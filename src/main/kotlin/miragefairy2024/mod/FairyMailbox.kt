@@ -36,7 +36,7 @@ object FairyMailboxCard {
     val identifier = MirageFairy2024.identifier("fairy_mailbox")
     val block = FairyMailboxBlock(FabricBlockSettings.create()) // TODO
     val item = BlockItem(block, Item.Settings())
-    val poemList = PoemList(2).poem("TODO", "TODO") // TODO
+    val poemList = PoemList(3).poem("TODO", "TODO") // TODO
 }
 
 context(ModContext)
@@ -62,13 +62,13 @@ fun initFairMailbox() {
     }
 
     registerShapedRecipeGeneration(FairyMailboxCard.item) {
-        pattern("HHH")
+        pattern("PPP")
         pattern("CMC")
-        pattern("HHH")
-        input('H', ItemTags.WOODEN_SLABS)
+        pattern("PPP")
+        input('P', ItemTags.PLANKS)
         input('C', Blocks.CHEST)
-        input('M', MaterialCard.MIRANAGITE.item) // TODO
-    } on MaterialCard.MIRANAGITE.item // TODO
+        input('M', BlockMaterialCard.AURA_STONE.item)
+    } on BlockMaterialCard.AURA_STONE.item
 }
 
 class FairyMailboxBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) { // TODO 上下面にも
