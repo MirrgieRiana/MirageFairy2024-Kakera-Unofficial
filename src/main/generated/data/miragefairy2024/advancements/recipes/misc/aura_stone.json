@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_aura_stone": {
+    "has_miranagite": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:aura_stone"
+              "miragefairy2024:miranagite"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:fairy_mailbox"
+        "recipe": "miragefairy2024:aura_stone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_aura_stone",
+      "has_miranagite",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:fairy_mailbox"
+      "miragefairy2024:aura_stone"
     ]
   },
   "sends_telemetry_event": false

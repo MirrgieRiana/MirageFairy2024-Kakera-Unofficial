@@ -6,17 +6,17 @@
     "C": {
       "item": "minecraft:chest"
     },
-    "H": {
-      "tag": "minecraft:wooden_slabs"
-    },
     "M": {
-      "item": "miragefairy2024:miranagite"
+      "item": "miragefairy2024:aura_stone"
+    },
+    "P": {
+      "tag": "minecraft:planks"
     }
   },
   "pattern": [
-    "HHH",
+    "PPP",
     "CMC",
-    "HHH"
+    "PPP"
   ],
   "result": {
     "item": "miragefairy2024:fairy_mailbox"
