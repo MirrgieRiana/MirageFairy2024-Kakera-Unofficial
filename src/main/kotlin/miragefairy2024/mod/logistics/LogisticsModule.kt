@@ -5,4 +5,5 @@ import miragefairy2024.ModContext
 context(ModContext)
 fun initLogisticsModule() {
     initMailBox()
+    initFairyDistributionCenter()
 }
