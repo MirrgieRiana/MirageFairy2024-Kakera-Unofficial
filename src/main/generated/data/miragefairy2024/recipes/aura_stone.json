@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:aura_stone",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "F": {
+      "item": "miragefairy2024:fairy_crystal"
+    },
+    "M": {
+      "item": "miragefairy2024:miranagite"
+    }
+  },
+  "pattern": [
+    "FMF",
+    "MDM",
+    "FMF"
+  ],
+  "result": {
+    "item": "miragefairy2024:aura_stone"
+  },
+  "show_notification": true
+}

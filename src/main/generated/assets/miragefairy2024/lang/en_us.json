@@ -1,6 +1,8 @@
 {
   "biome.miragefairy2024.deep_fairy_forest": "Deep Fairy Forest",
   "biome.miragefairy2024.fairy_forest": "Fairy Forest",
+  "block.miragefairy2024.aura_stone": "Aura Stone",
+  "block.miragefairy2024.aura_stone.poem": "TODO",
   "block.miragefairy2024.deepslate_fluorite_ore": "Deepslate Fluorite Ore",
   "block.miragefairy2024.deepslate_miranagite_ore": "Deepslate Miranagite Ore",
   "block.miragefairy2024.deepslate_miranagite_ore.poem": "Singularities built by the Creator",
@@ -13,6 +15,8 @@
   "block.miragefairy2024.emerald_luminaria": "Emerald Luminaria",
   "block.miragefairy2024.fairy_collector": "Fairy Collector",
   "block.miragefairy2024.fairy_collector.poem": "An attractor of curiosity",
+  "block.miragefairy2024.fairy_distribution_center": "Fairy Distribution Center",
+  "block.miragefairy2024.fairy_distribution_center.poem": "TODO",
   "block.miragefairy2024.fairy_house": "Fairy House",
   "block.miragefairy2024.fairy_house.poem": "Home sweet home",
   "block.miragefairy2024.fairy_mailbox": "Fairy Mailbox",
