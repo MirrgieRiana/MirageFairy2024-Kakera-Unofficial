@@ -101,9 +101,6 @@ class FairyMailboxBlock(settings: Settings) : SimpleHorizontalFacingBlock(settin
     */
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
-
-    @Suppress("OVERRIDE_DEPRECATION")
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE // TODO
 
 }
