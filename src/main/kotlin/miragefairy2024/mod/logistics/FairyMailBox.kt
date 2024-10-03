@@ -28,7 +28,6 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.ShapeContext
-import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
@@ -39,6 +38,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
 object FairyMailboxCard {
+    val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
     val identifier = MirageFairy2024.identifier("fairy_mailbox")
     val block = FairyMailboxBlock(FabricBlockSettings.create()) // TODO
     val item = BlockItem(block, Item.Settings())
@@ -57,7 +57,7 @@ fun initMailBox() {
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
-        card.block.enJa(EnJa("Fairy Mailbox", "妖精の郵便ポスト"))
+        card.block.enJa(card.name)
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
 
