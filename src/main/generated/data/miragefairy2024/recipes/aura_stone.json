@@ -6,17 +6,17 @@
     "D": {
       "item": "minecraft:diamond"
     },
-    "F": {
-      "item": "miragefairy2024:fairy_crystal"
-    },
     "M": {
       "item": "miragefairy2024:miranagite"
+    },
+    "X": {
+      "item": "miragefairy2024:xarpite"
     }
   },
   "pattern": [
-    "FMF",
+    "XMX",
     "MDM",
-    "FMF"
+    "XMX"
   ],
   "result": {
     "item": "miragefairy2024:aura_stone"

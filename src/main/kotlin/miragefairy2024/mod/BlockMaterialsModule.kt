@@ -86,7 +86,7 @@ enum class BlockMaterialCard(
     ),
     AURA_STONE(
         "aura_stone", "Aura Stone", "霊氣石",
-        PoemList(3).poem("TODO", "TODO"), // TODO
+        PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
         MapColor.DIAMOND_BLUE, 5.0F, 6.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL),
         blockSoundGroup = BlockSoundGroup.METAL,
@@ -149,10 +149,10 @@ fun initBlockMaterialsModule() {
     // TODO 加工機械での製造に
     // オーラストーン
     registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
-        pattern("FMF")
+        pattern("XMX")
         pattern("MDM")
-        pattern("FMF")
-        input('F', MaterialCard.FAIRY_CRYSTAL.item)
+        pattern("XMX")
+        input('X', MaterialCard.XARPITE.item)
         input('M', MaterialCard.MIRANAGITE.item)
         input('D', Items.DIAMOND)
     } on MaterialCard.MIRANAGITE.item
