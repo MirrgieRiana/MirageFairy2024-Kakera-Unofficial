@@ -1,20 +1,28 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "miragefairy2024:block/fairy_distribution_center",
-      "y": 90
-    },
-    "facing=north": {
+    "facing=down": {
       "model": "miragefairy2024:block/fairy_distribution_center",
       "y": 0
     },
-    "facing=south": {
+    "facing=east": {
+      "model": "miragefairy2024:block/fairy_distribution_center",
+      "y": 270
+    },
+    "facing=north": {
       "model": "miragefairy2024:block/fairy_distribution_center",
       "y": 180
     },
+    "facing=south": {
+      "model": "miragefairy2024:block/fairy_distribution_center",
+      "y": 0
+    },
+    "facing=up": {
+      "model": "miragefairy2024:block/fairy_distribution_center",
+      "y": 0
+    },
     "facing=west": {
       "model": "miragefairy2024:block/fairy_distribution_center",
-      "y": 270
+      "y": 90
     }
   }
 }

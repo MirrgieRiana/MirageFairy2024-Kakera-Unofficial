@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "miragefairy2024:fairy_mailbox",
+  "group": "miragefairy2024:fairy_distribution_center",
   "key": {
     "#": {
-      "item": "minecraft:iron_ingot"
+      "tag": "minecraft:planks"
     },
     "A": {
       "item": "miragefairy2024:aura_stone"
     },
     "C": {
-      "item": "minecraft:item_frame"
+      "item": "minecraft:barrel"
     },
     "D": {
-      "item": "minecraft:light_blue_dye"
+      "item": "minecraft:pink_dye"
     }
   },
   "pattern": [
@@ -22,7 +22,7 @@
     "###"
   ],
   "result": {
-    "item": "miragefairy2024:fairy_mailbox"
+    "item": "miragefairy2024:fairy_distribution_center"
   },
   "show_notification": true
 }
