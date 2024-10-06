@@ -38,7 +38,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
-
+// TODO 他の奴もConfigurationに変える
 abstract class FairyLogisticsBlockConfiguration {
     abstract val path: String
     abstract val name: EnJa
