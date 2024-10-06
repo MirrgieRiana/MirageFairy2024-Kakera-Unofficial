@@ -1,86 +1,44 @@
 package miragefairy2024.mod.logistics
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.BlockMaterialCard
-import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.mirageFairy2024ItemGroupCard
-import miragefairy2024.mod.poem
-import miragefairy2024.mod.registerPoem
-import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.enJa
-import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.normal
 import miragefairy2024.util.on
-import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
-import miragefairy2024.util.registerCutoutRenderLayer
-import miragefairy2024.util.registerDefaultLootTableGeneration
-import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
-import miragefairy2024.util.registerVariantsBlockStateGeneration
-import miragefairy2024.util.times
-import miragefairy2024.util.withHorizontalRotation
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.ShapeContext
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
+import net.minecraft.block.MapColor
+import net.minecraft.item.Items
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
+import net.minecraft.sound.BlockSoundGroup
 
-object FairyMailboxCard {
-    val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
-    val identifier = MirageFairy2024.identifier("fairy_mailbox")
-    val block = FairyMailboxBlock(FabricBlockSettings.create()) // TODO
-    val item = BlockItem(block, Item.Settings())
-    val poemList = PoemList(3).poem("TODO", "TODO") // TODO
-}
+object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
+    override val path = "fairy_mailbox"
+    override val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
+    override val tier = 3
+    override val poem = EnJa("TODO", "TODO") // TODO
+    override fun createBlock() = FairyMailboxBlock(createFairyLogisticsBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
 
-context(ModContext)
-fun initMailBox() {
-    FairyMailboxCard.let { card ->
-
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
-
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
-        card.block.registerCutoutRenderLayer()
-
-        card.block.enJa(card.name)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+    context(ModContext)
+    override fun init(card: FairyLogisticsBlockCard) {
+        super.init(card)
 
         card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
 
-        card.block.registerDefaultLootTableGeneration()
-
+        registerShapedRecipeGeneration(card.item) {
+            pattern("#A#")
+            pattern("DCD")
+            pattern("###")
+            input('A', BlockMaterialCard.AURA_STONE.item)
+            input('#', Items.IRON_INGOT)
+            input('C', Items.ITEM_FRAME)
+            input('D', Items.LIGHT_BLUE_DYE)
+        } on BlockMaterialCard.AURA_STONE.item
     }
-
-    registerShapedRecipeGeneration(FairyMailboxCard.item) {
-        pattern("PPP")
-        pattern("CMC")
-        pattern("PPP")
-        input('P', ItemTags.PLANKS)
-        input('C', Blocks.CHEST)
-        input('M', BlockMaterialCard.AURA_STONE.item)
-    } on BlockMaterialCard.AURA_STONE.item
 }
 
-class FairyMailboxBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) { // TODO 上下面にも
-    companion object {
-        private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0) // TODO
-    }
+object FairyMailboxCard : FairyLogisticsBlockCard(FairyMailboxConfiguration)
+
+class FairyMailboxBlock(settings: Settings) : FairyLogisticsBlock(settings) { // TODO 上下面にも
 
     // TODO
     //override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
@@ -99,8 +57,5 @@ class FairyMailboxBlock(settings: Settings) : SimpleHorizontalFacingBlock(settin
         blockEntity.setMotif(itemStack.getFairyStatueMotif())
     }
     */
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE // TODO
 
 }
