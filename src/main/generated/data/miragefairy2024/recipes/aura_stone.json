@@ -3,8 +3,8 @@
   "category": "misc",
   "group": "miragefairy2024:aura_stone",
   "key": {
-    "D": {
-      "item": "minecraft:diamond"
+    "C": {
+      "item": "miragefairy2024:fairy_crystal"
     },
     "M": {
       "item": "miragefairy2024:miranagite"
@@ -15,7 +15,7 @@
   },
   "pattern": [
     "XMX",
-    "MDM",
+    "MCM",
     "XMX"
   ],
   "result": {

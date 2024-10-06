@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_miranagite": {
+    "has_fairy_crystal": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:miranagite"
+              "miragefairy2024:fairy_crystal"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_miranagite",
+      "has_fairy_crystal",
       "has_the_recipe"
     ]
   ],

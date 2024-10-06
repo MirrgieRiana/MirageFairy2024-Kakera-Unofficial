@@ -35,7 +35,6 @@ import net.minecraft.data.client.TexturedModel
 import net.minecraft.entity.Entity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.TagKey
@@ -146,16 +145,15 @@ fun initBlockMaterialsModule() {
         input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
     } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
 
-    // TODO 加工機械での製造に
     // オーラストーン
     registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
         pattern("XMX")
-        pattern("MDM")
+        pattern("MCM")
         pattern("XMX")
         input('X', MaterialCard.XARPITE.item)
         input('M', MaterialCard.MIRANAGITE.item)
-        input('D', Items.DIAMOND)
-    } on MaterialCard.MIRANAGITE.item
+        input('C', MaterialCard.FAIRY_CRYSTAL.item)
+    } on MaterialCard.FAIRY_CRYSTAL.item
 
 }
 
