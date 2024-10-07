@@ -22,7 +22,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 
-abstract class MagicPlantSettings<C : MagicPlantCard<B>, B : MagicPlantBlock> {
+abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }

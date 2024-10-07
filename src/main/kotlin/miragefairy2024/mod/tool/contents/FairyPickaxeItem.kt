@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool.contents
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
-import miragefairy2024.mod.tool.FairyMiningToolSettings
+import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.FairyToolItem
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.convertItemStackImpl
@@ -24,9 +24,9 @@ import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyPickaxeSettings(
+class FairyPickaxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
-) : FairyMiningToolSettings() {
+) : FairyMiningToolConfiguration() {
     override fun createItem() = FairyPickaxeItem(this, Item.Settings())
 
     init {
@@ -38,8 +38,8 @@ class FairyPickaxeSettings(
     }
 }
 
-class FairyPickaxeItem(override val toolSettings: FairyMiningToolSettings, settings: Settings) :
-    PickaxeItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.attackDamage.toInt(), toolSettings.attackSpeed, settings),
+class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    PickaxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

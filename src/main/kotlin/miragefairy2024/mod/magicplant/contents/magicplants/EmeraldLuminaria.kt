@@ -33,7 +33,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard, EmeraldLuminariaBlock>() {
+object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLuminariaCard, EmeraldLuminariaBlock>() {
     override val card get() = EmeraldLuminariaCard
 
     override val blockPath = "emerald_luminaria"
@@ -131,8 +131,8 @@ object EmeraldLuminariaSettings : SimpleMagicPlantSettings<EmeraldLuminariaCard,
     }
 }
 
-object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaSettings)
+object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
 
-class EmeraldLuminariaBlock(settings: Settings) : SimpleMagicPlantBlock(EmeraldLuminariaSettings, settings) {
+class EmeraldLuminariaBlock(settings: Settings) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }

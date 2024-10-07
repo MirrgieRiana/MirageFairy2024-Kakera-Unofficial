@@ -41,11 +41,11 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldView
 
-abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSettings<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(magicPlantSettings, pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(configuration, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
@@ -108,7 +108,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
             val temperature = traitEffects[TraitEffectKeyCard.TEMPERATURE.traitEffectKey]
             val humidity = traitEffects[TraitEffectKeyCard.HUMIDITY.traitEffectKey]
             val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
-            val actualGrowthAmount = world.random.randomInt(magicPlantSettings.baseGrowth * 0.2 * nutrition * temperature * (0.2 + humidity) * (1 + growthBoost) * speed)
+            val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * 0.2 * nutrition * temperature * (0.2 + humidity) * (1 + growthBoost) * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlockState(blockPos, newBlockState, NOTIFY_LISTENERS)
@@ -169,7 +169,7 @@ abstract class MagicPlantBlock(private val magicPlantSettings: MagicPlantSetting
                     return@run
                 }
                 if (crossbreedingRate > 0.0) {
-                    if (targetBlock.magicPlantSettings.family == this.magicPlantSettings.family) {
+                    if (targetBlock.configuration.family == this.configuration.family) {
                         if (world.random.nextDouble() < crossbreedingRate) {
                             return@run
                         }
