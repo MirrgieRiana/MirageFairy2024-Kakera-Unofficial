@@ -28,7 +28,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, PhantomFlowerBlock>() {
+object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerCard, PhantomFlowerBlock>() {
     override val card get() = PhantomFlowerCard
 
     override val blockPath = "phantom_flower"
@@ -119,9 +119,9 @@ object PhantomFlowerSettings : SimpleMagicPlantSettings<PhantomFlowerCard, Phant
     }
 }
 
-object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerSettings)
+object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerConfiguration)
 
-class PhantomFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(PhantomFlowerSettings, settings) {
+class PhantomFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 

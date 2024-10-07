@@ -42,8 +42,8 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
     class Arguments<H : FairyBuildingScreenHandler>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
 
     init {
-        backgroundWidth = card.settings.guiWidth
-        backgroundHeight = card.settings.guiHeight
+        backgroundWidth = card.configuration.guiWidth
+        backgroundHeight = card.configuration.guiHeight
         playerInventoryTitleY = backgroundHeight - 94
     }
 
@@ -67,8 +67,8 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
         run {
             val slot = focusedSlot ?: return@run
             if (slot.hasStack()) return@run
-            val slotSettings = card.slots.getOrNull(slot.index) ?: return@run
-            val toolTipGetter = slotSettings.toolTipGetter ?: return@run
+            val slotConfiguration = card.slots.getOrNull(slot.index) ?: return@run
+            val toolTipGetter = slotConfiguration.toolTipGetter ?: return@run
             context.drawTooltip(textRenderer, toolTipGetter(), Optional.empty(), x, y)
         }
     }
@@ -78,7 +78,7 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
 open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, H>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
-        val h = (9.0 * (handler.folia / card.settings.maxFolia.toDouble() atMost 1.0)).roundToInt()
+        val h = (9.0 * (handler.folia / card.configuration.maxFolia.toDouble() atMost 1.0)).roundToInt()
         context.drawTexture(SPRITES_TEXTURE, x + 164, y + backgroundHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
     }
 
@@ -88,7 +88,7 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
             if (x in this.x + 164 until this.x + 164 + 5 && y in this.y + backgroundHeight - 94 until this.y + backgroundHeight - 94 + 9) {
                 val texts = listOf(
                     text { FOLIA_TRANSLATION() },
-                    text { "${handler.folia} / ${card.settings.maxFolia}"() },
+                    text { "${handler.folia} / ${card.configuration.maxFolia}"() },
                 )
                 context.drawTooltip(textRenderer, texts, Optional.empty(), x, y)
             }

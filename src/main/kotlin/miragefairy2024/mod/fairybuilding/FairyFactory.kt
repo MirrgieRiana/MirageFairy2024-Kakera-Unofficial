@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.log
 
-abstract class FairyFactorySettings<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingSettings<E, H>() {
+abstract class FairyFactoryConfiguration<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingConfiguration<E, H>() {
     companion object {
         val FOLIA_PROPERTY = PropertySettings<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
 
@@ -45,7 +45,7 @@ abstract class FairyFactorySettings<E : FairyFactoryBlockEntity<E>, H : FairyFac
     abstract val maxFolia: Int
 }
 
-open class FairyFactoryCard<S : FairyFactorySettings<E, H>, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler>(settings: S) : FairyBuildingCard<S, E, H>(settings)
+open class FairyFactoryCard<S : FairyFactoryConfiguration<E, H>, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler>(settings: S) : FairyBuildingCard<S, E, H>(settings)
 
 open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *, *>, settings: Settings) : FairyBuildingBlock(cardGetter, settings) {
     companion object {
@@ -112,7 +112,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--
         } else {
-            if (folia < card.settings.collectingFolia) {
+            if (folia < card.configuration.collectingFolia) {
                 foliaCollectionCooldown = 200
                 collectFolia()
             }
@@ -138,7 +138,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
                     folia += 1000
                     changed = true
                     world.setBlockState(blockPos, blockState.with(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
-                    if (folia >= card.settings.maxFolia) return@finished
+                    if (folia >= card.configuration.maxFolia) return@finished
                 }
             }
         }
@@ -160,5 +160,5 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 }
 
 open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
-    var folia by Property(FairyFactorySettings.FOLIA_PROPERTY)
+    var folia by Property(FairyFactoryConfiguration.FOLIA_PROPERTY)
 }

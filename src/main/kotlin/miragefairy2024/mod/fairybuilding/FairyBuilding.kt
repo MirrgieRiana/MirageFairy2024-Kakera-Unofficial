@@ -87,7 +87,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
+abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
         inline fun <reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
             override fun create(blockPos: BlockPos, blockState: BlockState) = creator(blockPos, blockState)
@@ -124,9 +124,9 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
     abstract val guiHeight: Int
 
 
-    open fun createSlots(): List<SlotSettings> = listOf()
+    open fun createSlots(): List<SlotConfiguration> = listOf()
 
-    class SlotSettings(
+    class SlotConfiguration(
         val x: Int,
         val y: Int,
         val dropItem: Boolean = true,
@@ -160,12 +160,12 @@ abstract class FairyBuildingSettings<E : FairyBuildingBlockEntity<E>, H : FairyB
 
 }
 
-open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val settings: S) {
-    val identifier = MirageFairy2024.identifier(settings.path)
+open class FairyBuildingCard<S : FairyBuildingConfiguration<E, H>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
+    val identifier = MirageFairy2024.identifier(configuration.path)
 
-    val block = settings.createBlock(settings.createBlockSettings())
+    val block = configuration.createBlock(configuration.createBlockSettings())
 
-    val blockEntityAccessor = settings.createBlockEntityAccessor()
+    val blockEntityAccessor = configuration.createBlockEntityAccessor()
     val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
 
     val item = BlockItem(block, Item.Settings())
@@ -178,10 +178,10 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
             ArrayPropertyDelegate(properties.size),
             ScreenHandlerContext.EMPTY,
         )
-        settings.createScreenHandler(arguments)
+        configuration.createScreenHandler(arguments)
     }
 
-    val slots = settings.createSlots()
+    val slots = configuration.createSlots()
     val availableSlotsTable = arrayOf(
         slots.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
         slots.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
@@ -191,7 +191,7 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
         slots.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
     )
 
-    val properties = settings.createProperties()
+    val properties = configuration.createProperties()
     val propertyIndexTable = properties.withIndex().associate { (index, it) -> it to index }
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
@@ -210,8 +210,8 @@ open class FairyBuildingCard<S : FairyBuildingSettings<E, H>, E : FairyBuildingB
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        block.enJa(settings.name)
-        val poemList = PoemList(settings.tier).poem(settings.poem)
+        block.enJa(configuration.name)
+        val poemList = PoemList(configuration.tier).poem(configuration.poem)
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
@@ -419,7 +419,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         if (appearance != null) FairyAnimator(appearance) else null
     }
 
-    private inner class FairyAnimator(val appearance: FairyBuildingSettings.Appearance) {
+    private inner class FairyAnimator(val appearance: FairyBuildingConfiguration.Appearance) {
         init {
             check(appearance.positions.isNotEmpty())
         }
@@ -548,7 +548,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             propertyDelegate,
             ScreenHandlerContext.create(world, pos),
         )
-        return card.settings.createScreenHandler(arguments)
+        return card.configuration.createScreenHandler(arguments)
     }
 
 }
@@ -567,7 +567,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         checkSize(arguments.inventory, card.slots.size)
         checkDataCount(arguments.propertyDelegate, card.properties.size)
 
-        val y = card.settings.guiHeight - 82
+        val y = card.configuration.guiHeight - 82
         repeat(3) { r ->
             repeat(9) { c ->
                 addSlot(Slot(arguments.playerInventory, 9 + r * 9 + c, 8 + c * 18, y + r * 18))
@@ -612,7 +612,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         return originalItemStack
     }
 
-    inner class Property(private val property: FairyBuildingSettings.PropertySettings<*>) {
+    inner class Property(private val property: FairyBuildingConfiguration.PropertySettings<*>) {
         operator fun getValue(thisRef: Any?, property: Any?): Int {
             val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
             return this.property.decoder(arguments.propertyDelegate.get(propertyIndex).toShort())
