@@ -4,11 +4,9 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
-import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.MapColor
 import net.minecraft.item.Items
-import net.minecraft.registry.tag.BlockTags
 import net.minecraft.sound.BlockSoundGroup
 
 object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
@@ -21,8 +19,6 @@ object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
     context(ModContext)
     override fun init(card: FairyLogisticsBlockCard) {
         super.init(card)
-
-        card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
 
         registerShapedRecipeGeneration(card.item) {
             pattern("#A#")
