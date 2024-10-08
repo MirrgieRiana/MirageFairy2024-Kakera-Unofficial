@@ -123,7 +123,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
     val FAIRY_CRYSTAL_SWORD = !ToolCard(
@@ -213,7 +213,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', MaterialCard.MIRANAGITE.item)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on MaterialCard.MIRANAGITE.item
     }
     val MIRANAGI_STAFF_0 = !ToolCard(
