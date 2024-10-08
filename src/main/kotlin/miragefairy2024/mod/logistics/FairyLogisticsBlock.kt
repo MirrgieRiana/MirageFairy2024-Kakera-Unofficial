@@ -2,7 +2,6 @@ package miragefairy2024.mod.logistics
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
@@ -24,7 +23,9 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.FacingBlock
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.piston.PistonBehavior
@@ -33,6 +34,9 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.state.StateManager
+import net.minecraft.util.BlockMirror
+import net.minecraft.util.BlockRotation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
@@ -54,12 +58,12 @@ abstract class FairyLogisticsBlockConfiguration {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerVariantsBlockStateGeneration {
-            fun f(direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
+            fun f(direction: Direction, suffix: String, y: BlockStateVariantRotation?): BlockStateVariantEntry {
                 return propertiesOf(HorizontalFacingBlock.FACING with direction) with BlockStateVariant(model = "block/" * card.block.getIdentifier() * suffix).with(y = y)
             }
             listOf(
-                f(Direction.UP, "", BlockStateVariantRotation.R0),
-                f(Direction.DOWN, "", BlockStateVariantRotation.R0),
+                f(Direction.UP, "_up", null),
+                f(Direction.DOWN, "_down", null),
                 f(Direction.NORTH, "", BlockStateVariantRotation.R180),
                 f(Direction.EAST, "", BlockStateVariantRotation.R270),
                 f(Direction.SOUTH, "", BlockStateVariantRotation.R0),
@@ -88,7 +92,7 @@ open class FairyLogisticsBlockCard(val configuration: FairyLogisticsBlockConfigu
     val poemList = PoemList(configuration.tier).poem(configuration.poem)
 }
 
-open class FairyLogisticsBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) { // TODO
+open class FairyLogisticsBlock(settings: Settings) : FacingBlock(settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             createCuboidShape(2.0, 2.0, 0.0, 14.0, 14.0, 8.0), // DOWN
@@ -100,9 +104,23 @@ open class FairyLogisticsBlock(settings: Settings) : SimpleHorizontalFacingBlock
         )
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = if (ctx.side.axis == Direction.Axis.Y) super.getPlacementState(ctx) else defaultState.with(FACING, ctx.side.opposite)
+    init {
+        defaultState = defaultState.with(FACING, Direction.NORTH)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(FACING)
+    }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[state.get(FACING).id]
+    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = state.with(FACING, rotation.rotate(state[FACING]))
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = state.rotate(mirror.getRotation(state[FACING]))
+
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.side.opposite)
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[state[FACING].id]
 
 }
