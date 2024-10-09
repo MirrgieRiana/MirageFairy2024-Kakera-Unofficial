@@ -1,27 +1,51 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "miragefairy2024:block/fairy_mailbox",
-      "y": 0
+    "facing=east,vertical_facing=down": {
+      "model": "miragefairy2024:block/fairy_mailbox_down",
+      "y": 270
     },
-    "facing=east": {
+    "facing=east,vertical_facing=side": {
       "model": "miragefairy2024:block/fairy_mailbox",
       "y": 270
     },
-    "facing=north": {
+    "facing=east,vertical_facing=up": {
+      "model": "miragefairy2024:block/fairy_mailbox_up",
+      "y": 270
+    },
+    "facing=north,vertical_facing=down": {
+      "model": "miragefairy2024:block/fairy_mailbox_down",
+      "y": 180
+    },
+    "facing=north,vertical_facing=side": {
       "model": "miragefairy2024:block/fairy_mailbox",
       "y": 180
     },
-    "facing=south": {
+    "facing=north,vertical_facing=up": {
+      "model": "miragefairy2024:block/fairy_mailbox_up",
+      "y": 180
+    },
+    "facing=south,vertical_facing=down": {
+      "model": "miragefairy2024:block/fairy_mailbox_down",
+      "y": 0
+    },
+    "facing=south,vertical_facing=side": {
       "model": "miragefairy2024:block/fairy_mailbox",
       "y": 0
     },
-    "facing=up": {
-      "model": "miragefairy2024:block/fairy_mailbox",
+    "facing=south,vertical_facing=up": {
+      "model": "miragefairy2024:block/fairy_mailbox_up",
       "y": 0
     },
-    "facing=west": {
+    "facing=west,vertical_facing=down": {
+      "model": "miragefairy2024:block/fairy_mailbox_down",
+      "y": 90
+    },
+    "facing=west,vertical_facing=side": {
       "model": "miragefairy2024:block/fairy_mailbox",
+      "y": 90
+    },
+    "facing=west,vertical_facing=up": {
+      "model": "miragefairy2024:block/fairy_mailbox_up",
       "y": 90
     }
   }
