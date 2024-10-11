@@ -135,7 +135,8 @@ open class FairyLogisticsBlock(settings: Settings) : Block(settings) {
             Direction.DOWN -> VerticalFacing.UP
             else -> VerticalFacing.SIDE
         }
-        return defaultState.with(VERTICAL_FACING, verticalFacing).with(FACING, ctx.horizontalPlayerFacing)
+        val facing = if (verticalFacing == VerticalFacing.SIDE) ctx.side.opposite else ctx.horizontalPlayerFacing
+        return defaultState.with(VERTICAL_FACING, verticalFacing).with(FACING, facing)
     }
 
 }
