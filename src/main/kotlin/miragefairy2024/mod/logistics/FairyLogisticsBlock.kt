@@ -25,7 +25,6 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.ShapeContext
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -39,10 +38,7 @@ import net.minecraft.state.property.Properties
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
 import net.minecraft.util.StringIdentifiable
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
 
 abstract class FairyLogisticsBlockConfiguration {
     abstract val path: String
@@ -107,25 +103,6 @@ open class FairyLogisticsBlock(settings: Settings) : Block(settings) {
     companion object {
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.of("vertical_facing", VerticalFacing::class.java)
         val FACING: DirectionProperty = Properties.HORIZONTAL_FACING
-        private val SHAPES: Array<VoxelShape> = arrayOf(
-            // UP
-            createCuboidShape(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 4.0, 2.0, 8.0, 16.0, 14.0), // WEST
-            createCuboidShape(2.0, 4.0, 0.0, 14.0, 16.0, 8.0), // NORTH
-            createCuboidShape(8.0, 4.0, 2.0, 16.0, 16.0, 14.0), // EAST
-
-            // SIDE
-            createCuboidShape(2.0, 2.0, 8.0, 14.0, 14.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 2.0, 2.0, 8.0, 14.0, 14.0), // WEST
-            createCuboidShape(2.0, 2.0, 0.0, 14.0, 14.0, 8.0), // NORTH
-            createCuboidShape(8.0, 2.0, 2.0, 16.0, 14.0, 14.0), // EAST
-
-            // DOWN
-            createCuboidShape(2.0, 0.0, 8.0, 14.0, 12.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 0.0, 2.0, 8.0, 12.0, 14.0), // WEST
-            createCuboidShape(2.0, 0.0, 0.0, 14.0, 12.0, 8.0), // NORTH
-            createCuboidShape(8.0, 0.0, 2.0, 16.0, 12.0, 14.0), // EAST
-        )
     }
 
     enum class VerticalFacing(val string: String, val id: Int) : StringIdentifiable {
@@ -160,8 +137,5 @@ open class FairyLogisticsBlock(settings: Settings) : Block(settings) {
         }
         return defaultState.with(VERTICAL_FACING, verticalFacing).with(FACING, ctx.horizontalPlayerFacing)
     }
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].horizontal]
 
 }
