@@ -57,6 +57,7 @@ import net.minecraft.world.Heightmap
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.feature.DefaultFeatureConfig
 import net.minecraft.world.gen.feature.Feature
+import net.minecraft.world.gen.feature.FeatureConfig
 import net.minecraft.world.gen.feature.util.FeatureContext
 
 val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("fairy_quest_recipe"))
@@ -300,14 +301,17 @@ fun initFairyQuestRecipe() {
 
 }
 
-class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<DefaultFeatureConfig>(codec) {
-    override fun generate(context: FeatureContext<DefaultFeatureConfig>): Boolean {
+// TODO refactor move
+abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C>(codec) {
+    abstract fun getCount(context: FeatureContext<C>): Int
+    abstract fun createItemStack(context: FeatureContext<C>): ItemStack?
+    override fun generate(context: FeatureContext<C>): Boolean {
         val random = context.random
         val world = context.world
 
         var count = 0
         val currentBlockPos = BlockPos.Mutable()
-        repeat(2) {
+        repeat(getCount(context)) {
             currentBlockPos.set(
                 context.origin,
                 random.nextInt(3) - random.nextInt(3),
@@ -320,22 +324,14 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<Defaul
 
             // 生成環境判定
             if (!world.getBlockState(actualBlockPos).isReplaceable) return@repeat // 配置先が埋まっている
+            if (!world.getBlockState(actualBlockPos.down()).isOpaqueFullCube(world, actualBlockPos.down())) return@repeat // 配置先が地面でない
 
-            // レシピ抽選
-            val table = mutableListOf<Chance<Identifier>>()
-            FairyQuestRecipeCard.entries.forEach { recipe ->
-                when (recipe.lootCategory) {
-                    FairyQuestRecipeCard.LootCategory.NONE -> Unit
-                    FairyQuestRecipeCard.LootCategory.COMMON -> table += Chance(5.0, recipe.identifier)
-                    FairyQuestRecipeCard.LootCategory.RARE -> table += Chance(1.0, recipe.identifier)
-                }
-            }
-            val recipeId = table.weightedRandom(random) ?: return@repeat // 有効なレシピが一つもない
+            // アイテム判定
+            val itemStack = createItemStack(context) ?: return@repeat // アイテムを決定できなかった
 
             // 成功
 
             world.setBlockState(actualBlockPos, PlacedItemCard.block.defaultState, Block.NOTIFY_LISTENERS)
-            val itemStack = FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipeId(recipeId) }
             val blockEntity = world.getBlockEntity(actualBlockPos) as? PlacedItemBlockEntity ?: return@repeat // ブロックの配置に失敗した
             blockEntity.itemStack = itemStack
             blockEntity.itemX = 0.25 + 0.5 * random.nextDouble()
@@ -346,6 +342,25 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : Feature<Defaul
             count++
         }
         return count > 0
+    }
+}
+
+class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeature<DefaultFeatureConfig>(codec) {
+    override fun getCount(context: FeatureContext<DefaultFeatureConfig>) = 2
+    override fun createItemStack(context: FeatureContext<DefaultFeatureConfig>): ItemStack? {
+
+        // レシピ抽選
+        val table = mutableListOf<Chance<Identifier>>()
+        FairyQuestRecipeCard.entries.forEach { recipe ->
+            when (recipe.lootCategory) {
+                FairyQuestRecipeCard.LootCategory.NONE -> Unit
+                FairyQuestRecipeCard.LootCategory.COMMON -> table += Chance(5.0, recipe.identifier)
+                FairyQuestRecipeCard.LootCategory.RARE -> table += Chance(1.0, recipe.identifier)
+            }
+        }
+        val recipeId = table.weightedRandom(context.random) ?: return null // 有効なレシピが一つもない
+
+        return FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipeId(recipeId) }
     }
 }
 
