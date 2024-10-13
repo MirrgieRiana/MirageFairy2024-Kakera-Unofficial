@@ -9,6 +9,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
@@ -22,7 +23,8 @@ object FairyDistributionCenterConfiguration : FairyLogisticsBlockConfiguration()
     override val name = EnJa("Fairy Distribution Center", "妖精のお届けもの屋")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
-    override fun createBlock() = FairyDistributionCenterBlock(createFairyLogisticsBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD))
+    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyDistributionCenterBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD))
+    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyDistributionCenterBlockEntity(card.blockEntityType, blockPos, blockState)
 
     context(ModContext)
     override fun init(card: FairyLogisticsBlockCard) {
@@ -44,7 +46,7 @@ object FairyDistributionCenterConfiguration : FairyLogisticsBlockConfiguration()
 
 object FairyDistributionCenterCard : FairyLogisticsBlockCard(FairyDistributionCenterConfiguration)
 
-class FairyDistributionCenterBlock(settings: Settings) : FairyLogisticsBlock(settings) {
+class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
@@ -69,6 +71,12 @@ class FairyDistributionCenterBlock(settings: Settings) : FairyLogisticsBlock(set
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].horizontal]
+
+    // TODO
+
+}
+
+class FairyDistributionCenterBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
 
     // TODO
 
