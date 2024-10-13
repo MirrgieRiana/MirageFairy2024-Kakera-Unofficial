@@ -35,21 +35,21 @@ enum class DebrisCard(
     path: String,
     val perChunks: Int,
     val count: IntRange,
-    val itemStack: ItemStack,
+    val itemStackGetter: () -> ItemStack,
     val biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>,
 ) {
-    STICK("stick", 16, 2..6, Items.STICK.createItemStack(), { overworld }),
-    STICK_DENSE("stick_dense", 16 / 8, 2..6, Items.STICK.createItemStack(), { +BiomeTags.IS_FOREST }),
-    BONE("bone", 32, 2..6, Items.BONE.createItemStack(), { overworld }),
-    STRING("string", 32, 2..6, Items.STRING.createItemStack(), { overworld }),
-    FLINT("flint", 32, 2..6, Items.FLINT.createItemStack(), { overworld }),
-    RAW_IRON("raw_iron", 64, 2..6, Items.RAW_IRON.createItemStack(), { overworld }),
-    RAW_IRON_DENSE("raw_iron_dense", 64 / 8, 2..6, Items.RAW_IRON.createItemStack(), { +BiomeTags.IS_MOUNTAIN }),
-    RAW_COPPER("raw_copper", 64, 2..6, Items.RAW_COPPER.createItemStack(), { overworld }),
-    RAW_COPPER_DENSE("raw_copper_dense", 64 / 8, 2..6, Items.RAW_COPPER.createItemStack(), { +BiomeTags.IS_MOUNTAIN }),
-    XARPITE("xarpite", 64, 2..6, MaterialCard.XARPITE.item.createItemStack(), { overworld }),
-    FAIRY_SCALES("fairy_scales", 64, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { overworld }),
-    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 8, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { +FAIRY_BIOME_TAG }),
+    STICK("stick", 16, 2..6, { Items.STICK.createItemStack() }, { overworld }),
+    STICK_DENSE("stick_dense", 16 / 8, 2..6, { Items.STICK.createItemStack() }, { +BiomeTags.IS_FOREST }),
+    BONE("bone", 32, 2..6, { Items.BONE.createItemStack() }, { overworld }),
+    STRING("string", 32, 2..6, { Items.STRING.createItemStack() }, { overworld }),
+    FLINT("flint", 32, 2..6, { Items.FLINT.createItemStack() }, { overworld }),
+    RAW_IRON("raw_iron", 64, 2..6, { Items.RAW_IRON.createItemStack() }, { overworld }),
+    RAW_IRON_DENSE("raw_iron_dense", 64 / 8, 2..6, { Items.RAW_IRON.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
+    RAW_COPPER("raw_copper", 64, 2..6, { Items.RAW_COPPER.createItemStack() }, { overworld }),
+    RAW_COPPER_DENSE("raw_copper_dense", 64 / 8, 2..6, { Items.RAW_COPPER.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
+    XARPITE("xarpite", 64, 2..6, { MaterialCard.XARPITE.item.createItemStack() }, { overworld }),
+    FAIRY_SCALES("fairy_scales", 64, 2..6, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { overworld }),
+    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 8, 2..6, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { +FAIRY_BIOME_TAG }),
     ;
 
     val identifier = MirageFairy2024.identifier("${path}_debris")
@@ -64,7 +64,7 @@ fun initDebrisModule() {
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {
-            DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.create(card.count.first, card.count.last), card.itemStack)
+            DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.create(card.count.first, card.count.last), card.itemStackGetter())
         }
         registerDynamicGeneration(card.placedFeatureKey) {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower }
