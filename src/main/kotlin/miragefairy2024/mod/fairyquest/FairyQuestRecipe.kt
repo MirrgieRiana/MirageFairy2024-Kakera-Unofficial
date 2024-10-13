@@ -283,7 +283,7 @@ fun initFairyQuestRecipe() {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
     val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
-        val placementModifiers = placementModifiers { per(256) + flower }
+        val placementModifiers = placementModifiers { per(128) + flower }
         it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredFeatureKey) with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
