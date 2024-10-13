@@ -29,7 +29,6 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -179,12 +178,6 @@ open class FairyLogisticsBlock(private val cardGetter: () -> FairyLogisticsBlock
             super.onStateReplaced(state, world, pos, newState, moved)
         }
     }
-
-
-    // Rendering
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
 
 }
 
