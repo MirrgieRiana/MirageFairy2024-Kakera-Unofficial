@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.fairyquest.PlacedItemFeature
+import miragefairy2024.lib.PlacedItemFeature
 import miragefairy2024.util.BiomeSelectorScope
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -38,16 +38,18 @@ enum class DebrisCard(
     val itemStack: ItemStack,
     val biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>,
 ) {
-    STICK("stick", 32, 2..6, Items.STICK.createItemStack(), { overworld }),
-    STICK_DENSE("stick_dense", 4, 2..6, Items.STICK.createItemStack(), { +BiomeTags.IS_FOREST }),
-    BONE("bone", 64, 2..6, Items.BONE.createItemStack(), { overworld }),
-    STRING("string", 64, 2..6, Items.STRING.createItemStack(), { overworld }),
-    FLINT("flint", 64, 2..6, Items.FLINT.createItemStack(), { overworld }),
+    STICK("stick", 16, 2..6, Items.STICK.createItemStack(), { overworld }),
+    STICK_DENSE("stick_dense", 16 / 8, 2..6, Items.STICK.createItemStack(), { +BiomeTags.IS_FOREST }),
+    BONE("bone", 32, 2..6, Items.BONE.createItemStack(), { overworld }),
+    STRING("string", 32, 2..6, Items.STRING.createItemStack(), { overworld }),
+    FLINT("flint", 32, 2..6, Items.FLINT.createItemStack(), { overworld }),
     RAW_IRON("raw_iron", 64, 2..6, Items.RAW_IRON.createItemStack(), { overworld }),
+    RAW_IRON_DENSE("raw_iron_dense", 64 / 8, 2..6, Items.RAW_IRON.createItemStack(), { +BiomeTags.IS_MOUNTAIN }),
     RAW_COPPER("raw_copper", 64, 2..6, Items.RAW_COPPER.createItemStack(), { overworld }),
-    XARPITE("xarpite", 128, 2..6, MaterialCard.XARPITE.item.createItemStack(), { overworld }),
-    FAIRY_SCALES("fairy_scales", 128, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { overworld }),
-    FAIRY_SCALES_DENSE("fairy_scales_dense", 16, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { +FAIRY_BIOME_TAG }),
+    RAW_COPPER_DENSE("raw_copper_dense", 64 / 8, 2..6, Items.RAW_COPPER.createItemStack(), { +BiomeTags.IS_MOUNTAIN }),
+    XARPITE("xarpite", 64, 2..6, MaterialCard.XARPITE.item.createItemStack(), { overworld }),
+    FAIRY_SCALES("fairy_scales", 64, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { overworld }),
+    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 8, 2..6, MaterialCard.FAIRY_SCALES.item.createItemStack(), { +FAIRY_BIOME_TAG }),
     ;
 
     val identifier = MirageFairy2024.identifier("${path}_debris")

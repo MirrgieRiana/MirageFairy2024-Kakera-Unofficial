@@ -1,9 +1,9 @@
 {
-  "feature": "miragefairy2024:bone_debris",
+  "feature": "miragefairy2024:raw_copper_dense_debris",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 32
+      "chance": 8
     },
     {
       "type": "minecraft:in_square"

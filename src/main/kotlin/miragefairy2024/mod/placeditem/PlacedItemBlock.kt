@@ -10,7 +10,6 @@ import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.compound
-import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.double
 import miragefairy2024.util.get
@@ -23,13 +22,16 @@ import miragefairy2024.util.string
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.atLeast
+import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.castOrNull
+import mirrg.kotlin.hydrogen.max
+import mirrg.kotlin.hydrogen.min
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -45,13 +47,11 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import net.minecraft.world.WorldAccess
-import net.minecraft.world.WorldView
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
@@ -85,9 +85,6 @@ fun initPlacedItemBlock() {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider {
-    companion object {
-        private val SHAPE: VoxelShape = createCuboidShape(6.0, 2.0)
-    }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
@@ -100,14 +97,9 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
 
     // レンダリング
     override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
-
-    // 真下が空気だと壊れる
-    override fun canPlaceAt(state: BlockState?, world: WorldView, pos: BlockPos) = !world.isAir(pos.down())
-    override fun getStateForNeighborUpdate(state: BlockState, direction: Direction, neighborState: BlockState, world: WorldAccess, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        if (!state.canPlaceAt(world, pos)) return Blocks.AIR.defaultState
-        @Suppress("DEPRECATION")
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos)
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
+        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.fullCube()
+        return blockEntity.shapeCache ?: VoxelShapes.fullCube()
     }
 
     // 格納されているアイテムをドロップする
@@ -130,11 +122,12 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
 
 
     var itemStack = EMPTY_ITEM_STACK
-    var itemX = 0.5
+    var itemX = 8.0 / 16.0
     var itemY = 0.5 / 16.0
-    var itemZ = 0.5
-    var itemRotateX = MathHelper.TAU * 0.25
+    var itemZ = 8.0 / 16.0
+    var itemRotateX = -MathHelper.TAU * 0.25
     var itemRotateY = 0.0
+    var shapeCache: VoxelShape? = null
 
 
     override fun writeNbt(nbt: NbtCompound) {
@@ -155,6 +148,64 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0
         itemRotateX = nbt.wrapper["ItemRotateX"].double.get() ?: 0.0
         itemRotateY = nbt.wrapper["ItemRotateY"].double.get() ?: 0.0
+        updateShapeCache()
+    }
+
+    fun updateShapeCache() {
+        shapeCache = run {
+
+            var minX = 0.0
+            var minY = 0.0
+            var minZ = 0.0
+            var maxX = 0.0
+            var maxY = 0.0
+            var maxZ = 0.0
+
+            fun f(x: Double, y: Double, z: Double) {
+                var x2 = x
+                var y2 = y
+                var z2 = z
+
+                run {
+                    val y3 = MathHelper.sin(-itemRotateX.toFloat()).toDouble() * z2 + MathHelper.cos(-itemRotateX.toFloat()).toDouble() * y2
+                    val z3 = MathHelper.cos(-itemRotateX.toFloat()).toDouble() * z2 - MathHelper.sin(-itemRotateX.toFloat()).toDouble() * y2
+                    y2 = y3
+                    z2 = z3
+                }
+
+                run {
+                    val x3 = MathHelper.sin(itemRotateY.toFloat()).toDouble() * z2 + MathHelper.cos(itemRotateY.toFloat()).toDouble() * x2
+                    val z3 = MathHelper.cos(itemRotateY.toFloat()).toDouble() * z2 - MathHelper.sin(itemRotateY.toFloat()).toDouble() * x2
+                    x2 = x3
+                    z2 = z3
+                }
+
+                minX = minX min x2
+                minY = minY min y2
+                minZ = minZ min z2
+                maxX = maxX max x2
+                maxY = maxY max y2
+                maxZ = maxZ max z2
+            }
+
+            f(-5.0, -5.0, -0.5)
+            f(-5.0, -5.0, +1.5)
+            f(-5.0, +5.0, -0.5)
+            f(-5.0, +5.0, +1.5)
+            f(+5.0, -5.0, -0.5)
+            f(+5.0, -5.0, +1.5)
+            f(+5.0, +5.0, -0.5)
+            f(+5.0, +5.0, +1.5)
+
+            Block.createCuboidShape(
+                itemX * 16.0 + minX atLeast 0.0,
+                itemY * 16.0 + minY atLeast 0.0,
+                itemZ * 16.0 + minZ atLeast 0.0,
+                itemX * 16.0 + maxX atMost 16.0,
+                itemY * 16.0 + maxY atMost 16.0,
+                itemZ * 16.0 + maxZ atMost 16.0,
+            )
+        }
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
@@ -166,6 +217,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
             renderingProxy.translate(itemX, itemY, itemZ)
             renderingProxy.rotateY(itemRotateY.toFloat())
             renderingProxy.rotateX(itemRotateX.toFloat())
+            renderingProxy.translate(0.0, -2.0 / 16.0, 0.0)
             renderingProxy.renderItemStack(if (itemStack.isEmpty) INVALID_ITEM_STACK else itemStack)
         }
     }
