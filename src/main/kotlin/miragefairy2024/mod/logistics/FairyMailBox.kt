@@ -8,6 +8,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Items
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
@@ -19,7 +20,8 @@ object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
     override val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
-    override fun createBlock() = FairyMailboxBlock(createFairyLogisticsBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
+    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyMailboxBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
+    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyMailboxBlockEntity(card.blockEntityType, blockPos, blockState)
 
     context(ModContext)
     override fun init(card: FairyLogisticsBlockCard) {
@@ -39,7 +41,7 @@ object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
 
 object FairyMailboxCard : FairyLogisticsBlockCard(FairyMailboxConfiguration)
 
-class FairyMailboxBlock(settings: Settings) : FairyLogisticsBlock(settings) {
+class FairyMailboxBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
@@ -67,22 +69,10 @@ class FairyMailboxBlock(settings: Settings) : FairyLogisticsBlock(settings) {
 
     // TODO
 
-    //override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
+}
 
-    /*
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
-        val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
-    }
+class FairyMailboxBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
 
-    override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack)
-        if (world.isClient) return
-        val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
-        blockEntity.setMotif(itemStack.getFairyStatueMotif())
-    }
-    */
+    // TODO
 
 }
