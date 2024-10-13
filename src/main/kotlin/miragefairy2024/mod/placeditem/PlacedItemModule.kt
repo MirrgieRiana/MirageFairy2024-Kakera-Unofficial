@@ -11,6 +11,8 @@ import miragefairy2024.util.obtain
 import miragefairy2024.util.registerServerPacketReceiver
 import net.minecraft.block.Block
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
@@ -65,6 +67,8 @@ fun initPlacedItemModule() {
             blockEntity.updateShapeCache()
             blockEntity.markDirty()
 
+            world.playSound(null, blockPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
+
         }
     }
     ModEvents.onInitialize {
@@ -94,6 +98,9 @@ fun initPlacedItemModule() {
             blockEntity.itemStack = EMPTY_ITEM_STACK
             world.removeBlock(blockPos, false)
             player.obtain(itemStack)
+
+            // これを入れるとSEが2重に流れる
+            //world.playSound(null, blockPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
 
         }
     }
