@@ -1,52 +1,47 @@
-package miragefairy2024.mod.logistics
+package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
-import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Items
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
-object FairyDistributionCenterConfiguration : FairyLogisticsBlockConfiguration() {
-    override val path = "fairy_distribution_center"
-    override val name = EnJa("Fairy Distribution Center", "妖精のお届けもの屋")
+object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
+    override val path = "fairy_mailbox"
+    override val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
-    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyDistributionCenterBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD))
-    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyDistributionCenterBlockEntity(card.blockEntityType, blockPos, blockState)
+    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyMailboxBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
+    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyMailboxBlockEntity(card.blockEntityType, blockPos, blockState)
 
     context(ModContext)
     override fun init(card: FairyLogisticsBlockCard) {
         super.init(card)
-
-        card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
 
         registerShapedRecipeGeneration(card.item) {
             pattern("#A#")
             pattern("DCD")
             pattern("###")
             input('A', BlockMaterialCard.AURA_STONE.item)
-            input('#', ItemTags.PLANKS)
-            input('C', Items.BARREL)
-            input('D', Items.PINK_DYE)
+            input('#', Items.IRON_INGOT)
+            input('C', Items.ITEM_FRAME)
+            input('D', Items.LIGHT_BLUE_DYE)
         } on BlockMaterialCard.AURA_STONE.item
     }
 }
 
-object FairyDistributionCenterCard : FairyLogisticsBlockCard(FairyDistributionCenterConfiguration)
+object FairyMailboxCard : FairyLogisticsBlockCard(FairyMailboxConfiguration)
 
-class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
+class FairyMailboxBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
@@ -76,7 +71,7 @@ class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsBlockCard, se
 
 }
 
-class FairyDistributionCenterBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
+class FairyMailboxBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
 
     // TODO
 

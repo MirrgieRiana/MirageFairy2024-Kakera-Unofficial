@@ -586,7 +586,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         addProperties(arguments.propertyDelegate)
     }
 
-    override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
+    override fun canUse(player: PlayerEntity) = canUse(arguments.context, player, card.block)
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK

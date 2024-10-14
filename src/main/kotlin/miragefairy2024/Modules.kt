@@ -2,6 +2,7 @@ package miragefairy2024
 
 import miragefairy2024.mod.fairy.initFairyModule
 import miragefairy2024.mod.fairybuilding.initFairyBuildingModule
+import miragefairy2024.mod.fairylogistics.initLogisticsModule
 import miragefairy2024.mod.fairyquest.initFairyQuestModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBiomeModule
@@ -24,7 +25,6 @@ import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initTelescopeModule
 import miragefairy2024.mod.initVanillaModule
-import miragefairy2024.mod.logistics.initLogisticsModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule

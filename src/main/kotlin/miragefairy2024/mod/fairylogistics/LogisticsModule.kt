@@ -1,4 +1,4 @@
-package miragefairy2024.mod.logistics
+package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
 
