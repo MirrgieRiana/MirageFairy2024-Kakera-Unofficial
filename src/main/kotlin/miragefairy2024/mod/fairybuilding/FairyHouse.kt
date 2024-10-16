@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.SimpleMachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
@@ -16,23 +17,23 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseBlockEntity, FairyFactoryScreenHandler>() {
+object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
     override val path = "fairy_house"
     override val tier = 2
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyHouseCard }, settings)
+    override fun createBlock(cardGetter: () -> FairyHouseCard, settings: FabricBlockSettings) = FairyHouseBlock(cardGetter, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyFactoryScreenHandler(FairyHouseCard, arguments)
+    override fun createScreenHandler(card: FairyHouseCard, arguments: SimpleMachineScreenHandler.Arguments<SimpleMachineScreenHandler.Configuration>) = FairyHouseScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 178
 
-    override fun createSlots(): List<SlotConfiguration> {
-        return super.createSlots() + listOf(
+    override fun createSlotConfigurations(): List<SlotConfiguration> {
+        return super.createSlotConfigurations() + listOf(
             SlotConfiguration(8, 39, appearance = Appearance(false, listOf(Position(10.0, 9.5, 14.5, 0.0F, 180.0F, 200)))), // 本棚の上
             SlotConfiguration(61, 17, appearance = Appearance(true, listOf(Position(4.5, 2.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
             SlotConfiguration(61, 41, appearance = Appearance(true, listOf(Position(4.5, 7.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
@@ -65,13 +66,11 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseBlockEntity
 
     override val collectingFolia = 2_000
     override val maxFolia = 4_000
-}
 
-object FairyHouseCard : FairyFactoryCard<FairyHouseConfiguration, FairyHouseBlockEntity, FairyFactoryScreenHandler>(FairyHouseConfiguration) {
     context(ModContext)
-    override fun init() {
-        super.init()
-        registerShapedRecipeGeneration(item) {
+    override fun init(card: FairyHouseCard) {
+        super.init(card)
+        registerShapedRecipeGeneration(card.item) {
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")
@@ -85,7 +84,13 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseConfiguration, FairyHouseBloc
     }
 }
 
-class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(FairyHouseCard, pos, state) {
+object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
+    override val self = this
+}
+
+class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: FabricBlockSettings) : FairyFactoryBlock<FairyHouseCard>(cardGetter, settings)
+
+class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseCard, FairyHouseBlockEntity>(card, pos, state) {
     override val self = this
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
@@ -100,3 +105,5 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBloc
         setStatus(FairyFactoryBlock.Status.PROCESSING)
     }
 }
+
+class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments<Configuration>) : FairyFactoryScreenHandler<FairyHouseCard>(card, arguments)

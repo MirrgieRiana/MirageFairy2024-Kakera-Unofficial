@@ -1,6 +1,8 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.SimpleMachineScreenHandler
+import miragefairy2024.lib.delegate
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
@@ -14,6 +16,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
@@ -23,24 +26,24 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
+object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override val path = "fairy_collector"
     override val tier = 2
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyCollectorCard }, settings)
+    override fun createBlock(cardGetter: () -> FairyCollectorCard, settings: FabricBlockSettings) = FairyCollectorBlock(cardGetter, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(arguments)
+    override fun createScreenHandler(card: FairyCollectorCard, arguments: SimpleMachineScreenHandler.Arguments<SimpleMachineScreenHandler.Configuration>) = FairyCollectorScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
 
-    override fun createSlots(): List<SlotConfiguration> {
+    override fun createSlotConfigurations(): List<SlotConfiguration> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
-        return super.createSlots() + listOf(
+        return super.createSlotConfigurations() + listOf(
             SlotConfiguration(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
             SlotConfiguration(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
             SlotConfiguration(81, 35, appearance = Appearance(true, run {
@@ -66,11 +69,32 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlo
     val TABLE_SLOT_INDICES = listOf(1, 9, 10, 11)
     val CHEST_SLOT_INDICES = 3..8
 
-    val COLLECTION_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
-    val SORT_PROGRESS_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
-    val COLLECTION_SPEED_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ collectionSpeed }, { collectionSpeed = it })
-    val SORT_SPEED_PROPERTY = PropertySettings<FairyCollectorBlockEntity>({ sortSpeed }, { sortSpeed = it })
-    override fun createProperties() = super.createProperties() + listOf(
+    val COLLECTION_PROGRESS_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+            override fun get() = blockEntity.collectionProgress
+            override fun set(value: Int) = unit { blockEntity.collectionProgress = value }
+        }
+    }
+    val SORT_PROGRESS_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+            override fun get() = blockEntity.sortProgress
+            override fun set(value: Int) = unit { blockEntity.sortProgress = value }
+        }
+    }
+    val COLLECTION_SPEED_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+            override fun get() = blockEntity.collectionSpeed
+            override fun set(value: Int) = unit { blockEntity.collectionSpeed = value }
+        }
+    }
+    val SORT_SPEED_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+            override fun get() = blockEntity.sortSpeed
+            override fun set(value: Int) = unit { blockEntity.sortSpeed = value }
+        }
+    }
+
+    override fun createPropertyConfigurations() = super.createPropertyConfigurations() + listOf(
         COLLECTION_PROGRESS_PROPERTY,
         SORT_PROGRESS_PROPERTY,
         COLLECTION_SPEED_PROPERTY,
@@ -79,13 +103,11 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlo
 
     override val collectingFolia = 10_000
     override val maxFolia = 20_000
-}
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorConfiguration, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
     context(ModContext)
-    override fun init() {
-        super.init()
-        registerShapedRecipeGeneration(FairyCollectorCard.item) {
+    override fun init(card: FairyCollectorCard) {
+        super.init(card)
+        registerShapedRecipeGeneration(card.item) {
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
@@ -95,7 +117,13 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorConfiguration, FairyC
     }
 }
 
-class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
+    override val self = this
+}
+
+class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: FabricBlockSettings) : FairyFactoryBlock<FairyCollectorCard>(cardGetter, settings)
+
+class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorCard, FairyCollectorBlockEntity>(card, pos, state) {
 
     override val self = this
 
@@ -182,9 +210,9 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
 }
 
-class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
-    var collectionProgress by Property(FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY)
-    var sortProgress by Property(FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY)
-    var collectionSpeed by Property(FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY)
-    var sortSpeed by Property(FairyCollectorConfiguration.SORT_SPEED_PROPERTY)
+class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments<Configuration>) : FairyFactoryScreenHandler<FairyCollectorCard>(card, arguments) {
+    var collectionProgress by FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY.delegate
+    var sortProgress by FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY.delegate
+    var collectionSpeed by FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY.delegate
+    var sortSpeed by FairyCollectorConfiguration.SORT_SPEED_PROPERTY.delegate
 }

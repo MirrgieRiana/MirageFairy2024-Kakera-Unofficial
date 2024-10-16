@@ -10,6 +10,7 @@ import miragefairy2024.mod.fairybuilding.FairyCollectorScreenHandler
 import miragefairy2024.mod.fairybuilding.FairyFactoryCard
 import miragefairy2024.mod.fairybuilding.FairyFactoryScreenHandler
 import miragefairy2024.mod.fairybuilding.FairyHouseCard
+import miragefairy2024.mod.fairybuilding.FairyHouseScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
@@ -29,17 +30,17 @@ fun initFairyBuildingClientModule() {
         }
     }
 
-    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, FairyBuildingScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, FairyBuildingScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, H>, arguments: Arguments<H>) :
+open class FairyBuildingScreen<C : FairyBuildingCard<C, *, *, *, H>, H : FairyBuildingScreenHandler<C>>(private val card: C, arguments: Arguments<H>) :
     HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
 
-    class Arguments<H : FairyBuildingScreenHandler>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
+    class Arguments<H : FairyBuildingScreenHandler<*>>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
 
     init {
         backgroundWidth = card.configuration.guiWidth
@@ -67,7 +68,7 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
         run {
             val slot = focusedSlot ?: return@run
             if (slot.hasStack()) return@run
-            val slotConfiguration = card.slots.getOrNull(slot.index) ?: return@run
+            val slotConfiguration = card.slotConfigurations.getOrNull(slot.index) ?: return@run
             val toolTipGetter = slotConfiguration.toolTipGetter ?: return@run
             context.drawTooltip(textRenderer, toolTipGetter(), Optional.empty(), x, y)
         }
@@ -75,7 +76,7 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
 
 }
 
-open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, H>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
+open class FairyFactoryScreen<C : FairyFactoryCard<C, *, *, *, H>, H : FairyFactoryScreenHandler<C>>(private val card: C, arguments: Arguments<H>) : FairyBuildingScreen<C, H>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
         val h = (9.0 * (handler.folia / card.configuration.maxFolia.toDouble() atMost 1.0)).roundToInt()
@@ -96,9 +97,9 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
     }
 }
 
-class FairyHouseScreen(arguments: Arguments<FairyFactoryScreenHandler>) : FairyFactoryScreen<FairyFactoryScreenHandler>(FairyHouseCard, arguments)
+class FairyHouseScreen(card: FairyHouseCard, arguments: Arguments<FairyHouseScreenHandler>) : FairyFactoryScreen<FairyHouseCard, FairyHouseScreenHandler>(card, arguments)
 
-class FairyCollectorScreen(arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(FairyCollectorCard, arguments) {
+class FairyCollectorScreen(card: FairyCollectorCard, arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorCard, FairyCollectorScreenHandler>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
         context.drawTexture(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)

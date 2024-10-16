@@ -7,6 +7,7 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.slot.Slot
 import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
@@ -14,6 +15,15 @@ operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, st
 val Inventory.size get() = this.size()
 val Inventory.indices get() = 0 until this.size
 val Inventory.itemStacks get() = this.indices.map { this[it] }
+
+class FilteringSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
+    override fun canInsert(stack: ItemStack) = inventory.isValid(index, stack)
+}
+
+class OutputSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
+    override fun canInsert(stack: ItemStack) = false
+}
+
 
 // Merge
 
