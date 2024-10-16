@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
+import miragefairy2024.lib.SimpleMachineScreenHandler
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
@@ -12,13 +13,10 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantEntry
 import miragefairy2024.util.BlockStateVariantRotation
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.insertItem
-import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -27,7 +25,6 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
-import miragefairy2024.util.size
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -35,22 +32,18 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.screen.slot.Slot
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.EnumProperty
@@ -198,7 +191,7 @@ open class FairyLogisticsBlock(private val cardGetter: () -> FairyLogisticsBlock
 
 }
 
-abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(type, pos, state), RenderingProxyBlockEntity {
+abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(type, pos, state), RenderingProxyBlockEntity {
 
     fun dropItems() {
         // TODO
@@ -217,58 +210,8 @@ abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos
 
 }
 
-open class FairyLogisticsScreenHandler(private val card: FairyLogisticsBlockCard, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
-
-    class Arguments(
-        val syncId: Int,
-        val playerInventory: PlayerInventory,
-        val inventory: Inventory,
-        val context: ScreenHandlerContext,
-    )
-
-    init {
-        checkSize(arguments.inventory, card.configuration.slots.size)
-
-        repeat(3) { r ->
-            repeat(9) { c ->
-                addSlot(Slot(arguments.playerInventory, 9 + r * 9 + c, 0, 0))
-            }
-        }
-        repeat(9) { c ->
-            addSlot(Slot(arguments.playerInventory, c, 0, 0))
-        }
-        repeat(arguments.inventory.size) { index ->
-            addSlot(object : Slot(arguments.inventory, index, 0, 0) {
-                override fun canInsert(stack: ItemStack) = arguments.inventory.isValid(index, stack)
-            })
-        }
-
-    }
+open class FairyLogisticsScreenHandler(private val card: FairyLogisticsBlockCard, arguments: Arguments<Configuration>) : SimpleMachineScreenHandler<SimpleMachineScreenHandler.Configuration>(arguments) {
 
     override fun canUse(player: PlayerEntity?) = canUse(arguments.context, player, card.block)
-
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
-        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
-
-        val newItemStack = slots[slot].stack
-        val originalItemStack = newItemStack.copy()
-
-        if (slot < 9 * 4) { // 上へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
-        } else { // 下へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
-        }
-        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
-
-        // 終了処理
-        if (newItemStack.isEmpty) {
-            slots[slot].stack = EMPTY_ITEM_STACK
-        } else {
-            slots[slot].markDirty()
-        }
-
-        return originalItemStack
-    }
 
 }
