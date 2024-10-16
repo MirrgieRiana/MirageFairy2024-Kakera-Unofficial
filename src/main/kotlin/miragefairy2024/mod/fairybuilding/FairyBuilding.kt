@@ -210,7 +210,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
         override val width = configuration.guiWidth
         override val height = configuration.guiHeight
         override val machineSlotConfigurations = slotConfigurations.map {
-            SimpleMachineScreenHandler.SlotConfiguration(it.x, it.y)
+            SimpleMachineScreenHandler.SlotConfiguration(it.x, it.y) / TODO
         }
         override val propertyConfigurations = this@FairyBuildingCard.propertyConfigurations
     }
