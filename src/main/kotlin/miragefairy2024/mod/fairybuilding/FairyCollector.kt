@@ -36,17 +36,17 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(card: FairyCollectorCard, arguments: SimpleMachineScreenHandler.Arguments<SimpleMachineScreenHandler.Configuration>) = FairyCollectorScreenHandler(card, arguments)
+    override fun createScreenHandler(card: FairyCollectorCard, arguments: SimpleMachineScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
 
-    override fun createSlotConfigurations(): List<SlotConfiguration> {
+    override fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlotConfigurations() + listOf(
-            SlotConfiguration(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
-            SlotConfiguration(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
-            SlotConfiguration(81, 35, appearance = Appearance(true, run {
+            FairyBuildingSlotConfiguration(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            FairyBuildingSlotConfiguration(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
+            FairyBuildingSlotConfiguration(81, 35, appearance = Appearance(true, run {
                 listOf(
                     Position(11.5, 0.1, 6.0, 0.0F, 90.0F, 40),
                     Position(7.0, 0.1, 8.0, 0.0F, 275.0F, 40),
@@ -54,15 +54,15 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
                     Position(8.0, 0.1, 6.0, 0.0F, 20.0F, 40),
                 )
             })) { it.isOf(FairyCard.item) }, // 仕分け妖精
-            SlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
-            SlotConfiguration(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotConfiguration(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
-            SlotConfiguration(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotConfiguration(106 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotConfiguration(106 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
-            SlotConfiguration(37 + 18 * 1, 17 + 18 * 0), // 机
-            SlotConfiguration(37 + 18 * 0, 17 + 18 * 1), // 机
-            SlotConfiguration(37 + 18 * 1, 17 + 18 * 1), // 机
+            FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 1, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 2, 26 + 18 * 1, extractDirections = extractDirections), // 箱
+            FairyBuildingSlotConfiguration(37 + 18 * 1, 17 + 18 * 0), // 机
+            FairyBuildingSlotConfiguration(37 + 18 * 0, 17 + 18 * 1), // 机
+            FairyBuildingSlotConfiguration(37 + 18 * 1, 17 + 18 * 1), // 机
         )
     }
 
@@ -210,7 +210,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
 
 }
 
-class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments<Configuration>) : FairyFactoryScreenHandler<FairyCollectorCard>(card, arguments) {
+class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler<FairyCollectorCard>(card, arguments) {
     var collectionProgress by FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY.delegate
     var sortProgress by FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY.delegate
     var collectionSpeed by FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY.delegate
