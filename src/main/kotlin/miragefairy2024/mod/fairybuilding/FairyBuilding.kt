@@ -128,7 +128,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
         override val shouldDropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
-        val animationConfiguration: SimpleMachineBlockEntity.AnimationConfiguration? = null,
+        val animation: SlotAnimationConfiguration? = null,
         val toolTipGetter: (() -> List<Text>)? = null,
         private val filter: (ItemStack) -> Boolean = { true },
     ) : SimpleMachineScreenHandler.SlotConfiguration, SimpleMachineBlockEntity.SlotConfiguration {
@@ -136,6 +136,8 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
         override fun canInsertTo(direction: Direction) = direction in insertDirections
         override fun canExtractFrom(direction: Direction) = direction in extractDirections
     }
+
+    class SlotAnimationConfiguration(val motion: SimpleMachineBlockEntity.Motion, val positions: List<SimpleMachineBlockEntity.Position>)
 
 
     open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
@@ -186,8 +188,6 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
     val item = BlockItem(block, Item.Settings())
 
     val slotConfigurations = configuration.createSlotConfigurations()
-
-    class
 
     val propertyConfigurations = configuration.createPropertyConfigurations()
 
@@ -613,21 +613,13 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     override fun createProperties() = card.createProperties(self)
 
-    override fun createAnimationConfigurations() = card.slotConfigurations.mapIndexed { slotIndex, slotConfiguration ->
+    override fun createAnimationConfigurations(): List<AnimationConfiguration> = card.slotConfigurations.mapIndexedNotNull { slotIndex, slotConfiguration ->
+        val slotAnimationConfiguration = slotConfiguration.animation ?: return@mapIndexedNotNull null
         object : AnimationConfiguration {
-            override fun getItemStack(): ItemStack {
-                TODO("Not yet implemented")
-            }
-
-            override val motion: Motion
-                get() = TODO("Not yet implemented")
-            override val positions: List<Position>
-                get() = TODO("Not yet implemented")
-
-            override fun getSpeed(): Double {
-                TODO("Not yet implemented")
-            }
-
+            override fun getItemStack() = getStack(slotIndex)
+            override val motion = slotAnimationConfiguration.motion
+            override val positions = slotAnimationConfiguration.positions
+            override fun getSpeed() = a
             override val slotIndex = slotIndex
         }
     }
