@@ -15,13 +15,13 @@ import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 
-abstract class SimpleMachineScreenHandler<C : SimpleMachineScreenHandler.Configuration>(val arguments: Arguments<C>) : ScreenHandler(arguments.configuration.type, arguments.syncId) {
+abstract class SimpleMachineScreenHandler(val arguments: Arguments) : ScreenHandler(arguments.configuration.type, arguments.syncId) {
 
-    class Arguments<C : Configuration>(
-        val configuration: C,
+    class Arguments(
+        val configuration: Configuration,
         val syncId: Int,
         val playerInventory: PlayerInventory,
-        val machineInventory: Inventory,
+        val machineInventory: Inventory, // TODO プレイヤースロットも包含
         val properties: List<Property>,
         val context: ScreenHandlerContext,
     )
@@ -30,11 +30,14 @@ abstract class SimpleMachineScreenHandler<C : SimpleMachineScreenHandler.Configu
         val type: ScreenHandlerType<*>
         val width: Int
         val height: Int
-        val machineSlotConfigurations: List<SlotConfiguration>
+        val machineSlotConfigurations: List<SlotConfiguration> // TODO プレイヤースロットも包含
         val propertyConfigurations: List<PropertyConfiguration>
     }
 
-    class SlotConfiguration(val x: Int, val y: Int)
+    interface SlotConfiguration {
+        val x: Int
+        val y: Int
+    }
 
     interface PropertyConfiguration {
         fun encode(value: Int): Short = value.toShort()
@@ -86,7 +89,7 @@ abstract class SimpleMachineScreenHandler<C : SimpleMachineScreenHandler.Configu
 
 }
 
-fun <H : ScreenHandler, C : SimpleMachineScreenHandler.Configuration> C.createScreenHandlerType(screenHandlerCreator: (arguments: SimpleMachineScreenHandler.Arguments<C>, buf: ByteBuf) -> H): ExtendedScreenHandlerType<H> {
+fun <H : ScreenHandler> SimpleMachineScreenHandler.Configuration.createScreenHandlerType(screenHandlerCreator: (arguments: SimpleMachineScreenHandler.Arguments, buf: ByteBuf) -> H): ExtendedScreenHandlerType<H> {
     return ExtendedScreenHandlerType { syncId, playerInventory, buf ->
         val arguments = SimpleMachineScreenHandler.Arguments(
             this,
@@ -107,7 +110,7 @@ fun <H : ScreenHandler, C : SimpleMachineScreenHandler.Configuration> C.createSc
 }
 
 
-class SimpleMachineScreenHandlerDelegate(private val screenHandler: SimpleMachineScreenHandler<*>, private val propertyConfiguration: SimpleMachineScreenHandler.PropertyConfiguration) {
+class SimpleMachineScreenHandlerDelegate(private val screenHandler: SimpleMachineScreenHandler, private val propertyConfiguration: SimpleMachineScreenHandler.PropertyConfiguration) {
     private val index = screenHandler.arguments.configuration.propertyConfigurations.indexOf(propertyConfiguration)
 
     init {
@@ -118,6 +121,6 @@ class SimpleMachineScreenHandlerDelegate(private val screenHandler: SimpleMachin
     operator fun setValue(thisRef: Any?, property: Any?, value: Int) = screenHandler.arguments.properties[index].set(propertyConfiguration.encode(value).toInt())
 }
 
-context(SimpleMachineScreenHandler<*>)
+context(SimpleMachineScreenHandler)
 val SimpleMachineScreenHandler.PropertyConfiguration.delegate
     get() = SimpleMachineScreenHandlerDelegate(this@SimpleMachineScreenHandler, this)

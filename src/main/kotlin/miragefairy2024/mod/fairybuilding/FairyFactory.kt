@@ -172,7 +172,7 @@ abstract class FairyFactoryBlockEntity<C : FairyFactoryCard<C, *, *, E, *>, E : 
 
 }
 
-open class FairyFactoryScreenHandler<C : FairyFactoryCard<C, *, *, *, *>>(card: C, arguments: Arguments<Configuration>) :
+open class FairyFactoryScreenHandler<C : FairyFactoryCard<C, *, *, *, *>>(card: C, arguments: Arguments) :
     FairyBuildingScreenHandler<C>(card, arguments) {
     var folia by FairyFactoryConfiguration.FOLIA_PROPERTY.delegate
 }
