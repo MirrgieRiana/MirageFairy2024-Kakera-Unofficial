@@ -15,7 +15,7 @@ import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 
-abstract class SimpleMachineScreenHandler(val arguments: Arguments) : ScreenHandler(arguments.configuration.type, arguments.syncId) {
+abstract class RichMachineScreenHandler(val arguments: Arguments) : ScreenHandler(arguments.configuration.type, arguments.syncId) {
 
     class Arguments(
         val configuration: Configuration,
@@ -89,15 +89,15 @@ abstract class SimpleMachineScreenHandler(val arguments: Arguments) : ScreenHand
 
 }
 
-fun <H : ScreenHandler> SimpleMachineScreenHandler.Configuration.createScreenHandlerType(screenHandlerCreator: (arguments: SimpleMachineScreenHandler.Arguments, buf: ByteBuf) -> H): ExtendedScreenHandlerType<H> {
+fun <H : ScreenHandler> RichMachineScreenHandler.Configuration.createScreenHandlerType(screenHandlerCreator: (arguments: RichMachineScreenHandler.Arguments, buf: ByteBuf) -> H): ExtendedScreenHandlerType<H> {
     return ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-        val arguments = SimpleMachineScreenHandler.Arguments(
+        val arguments = RichMachineScreenHandler.Arguments(
             this,
             syncId,
             playerInventory,
             SimpleInventory(this.machineSlotConfigurations.size),
             (0 until this.propertyConfigurations.size).map {
-                object : SimpleMachineScreenHandler.Property {
+                object : RichMachineScreenHandler.Property {
                     private var value = 0
                     override fun get() = value
                     override fun set(value: Int) = unit { this.value = value }
@@ -110,7 +110,7 @@ fun <H : ScreenHandler> SimpleMachineScreenHandler.Configuration.createScreenHan
 }
 
 
-class SimpleMachineScreenHandlerDelegate(private val screenHandler: SimpleMachineScreenHandler, private val propertyConfiguration: SimpleMachineScreenHandler.PropertyConfiguration) {
+class SimpleMachineScreenHandlerDelegate(private val screenHandler: RichMachineScreenHandler, private val propertyConfiguration: RichMachineScreenHandler.PropertyConfiguration) {
     private val index = screenHandler.arguments.configuration.propertyConfigurations.indexOf(propertyConfiguration)
 
     init {
@@ -121,6 +121,6 @@ class SimpleMachineScreenHandlerDelegate(private val screenHandler: SimpleMachin
     operator fun setValue(thisRef: Any?, property: Any?, value: Int) = screenHandler.arguments.properties[index].set(propertyConfiguration.encode(value).toInt())
 }
 
-context(SimpleMachineScreenHandler)
-val SimpleMachineScreenHandler.PropertyConfiguration.delegate
-    get() = SimpleMachineScreenHandlerDelegate(this@SimpleMachineScreenHandler, this)
+context(RichMachineScreenHandler)
+val RichMachineScreenHandler.PropertyConfiguration.delegate
+    get() = SimpleMachineScreenHandlerDelegate(this@RichMachineScreenHandler, this)
