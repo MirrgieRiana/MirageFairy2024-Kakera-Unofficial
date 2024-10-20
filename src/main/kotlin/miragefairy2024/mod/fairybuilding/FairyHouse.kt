@@ -1,7 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
-import miragefairy2024.lib.SimpleMachineScreenHandler
+import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
@@ -27,7 +27,7 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
-    override fun createScreenHandler(card: FairyHouseCard, arguments: SimpleMachineScreenHandler.Arguments) = FairyHouseScreenHandler(card, arguments)
+    override fun createScreenHandler(card: FairyHouseCard, arguments: RichMachineScreenHandler.Arguments) = FairyHouseScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 178

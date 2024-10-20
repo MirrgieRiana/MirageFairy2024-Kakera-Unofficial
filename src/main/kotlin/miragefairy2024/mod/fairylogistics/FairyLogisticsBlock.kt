@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
-import miragefairy2024.lib.SimpleMachineScreenHandler
+import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
@@ -210,7 +210,7 @@ abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos
 
 }
 
-open class FairyLogisticsScreenHandler(private val card: FairyLogisticsBlockCard, arguments: Arguments<Configuration>) : SimpleMachineScreenHandler<SimpleMachineScreenHandler.Configuration>(arguments) {
+open class FairyLogisticsScreenHandler(private val card: FairyLogisticsBlockCard, arguments: Arguments<Configuration>) : RichMachineScreenHandler<RichMachineScreenHandler.Configuration>(arguments) {
 
     override fun canUse(player: PlayerEntity?) = canUse(arguments.context, player, card.block)
 

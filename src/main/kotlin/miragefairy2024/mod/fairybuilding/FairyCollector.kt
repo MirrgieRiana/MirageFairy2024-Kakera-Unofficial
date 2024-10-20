@@ -1,7 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
-import miragefairy2024.lib.SimpleMachineScreenHandler
+import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.lib.delegate
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
@@ -36,7 +36,7 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(card: FairyCollectorCard, arguments: SimpleMachineScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
+    override fun createScreenHandler(card: FairyCollectorCard, arguments: RichMachineScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
@@ -70,25 +70,25 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
     val CHEST_SLOT_INDICES = 3..8
 
     val COLLECTION_PROGRESS_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
-        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : RichMachineScreenHandler.Property {
             override fun get() = blockEntity.collectionProgress
             override fun set(value: Int) = unit { blockEntity.collectionProgress = value }
         }
     }
     val SORT_PROGRESS_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
-        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : RichMachineScreenHandler.Property {
             override fun get() = blockEntity.sortProgress
             override fun set(value: Int) = unit { blockEntity.sortProgress = value }
         }
     }
     val COLLECTION_SPEED_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
-        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : RichMachineScreenHandler.Property {
             override fun get() = blockEntity.collectionSpeed
             override fun set(value: Int) = unit { blockEntity.collectionSpeed = value }
         }
     }
     val SORT_SPEED_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity> {
-        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : SimpleMachineScreenHandler.Property {
+        override fun createProperty(blockEntity: FairyCollectorBlockEntity) = object : RichMachineScreenHandler.Property {
             override fun get() = blockEntity.sortSpeed
             override fun set(value: Int) = unit { blockEntity.sortSpeed = value }
         }

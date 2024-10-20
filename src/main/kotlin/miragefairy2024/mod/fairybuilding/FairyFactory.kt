@@ -1,7 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.RenderingProxy
-import miragefairy2024.lib.SimpleMachineScreenHandler
+import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.lib.delegate
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.Motif
@@ -35,7 +35,7 @@ abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S 
         val FOLIA_PROPERTY = object : FairyBuildingPropertyConfiguration<FairyFactoryBlockEntity<*, *>> {
             override fun encode(value: Int) = (value / 10).toShort()
             override fun decode(data: Short) = data.toInt() * 10
-            override fun createProperty(blockEntity: FairyFactoryBlockEntity<*, *>) = object : SimpleMachineScreenHandler.Property {
+            override fun createProperty(blockEntity: FairyFactoryBlockEntity<*, *>) = object : RichMachineScreenHandler.Property {
                 override fun get() = blockEntity.folia
                 override fun set(value: Int) = unit { blockEntity.folia = value }
             }
