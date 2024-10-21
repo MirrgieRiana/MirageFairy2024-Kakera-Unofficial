@@ -163,7 +163,7 @@ abstract class RichMachineBlockEntity(val arguments: Arguments) : LockableContai
 
     interface AnimationConfiguration {
         fun getItemStack(): ItemStack
-        val motion: Motion
+        fun getMotion(): Motion
         val positions: List<Position>
         fun getSpeed(): Double
         val slotIndex: Int?
