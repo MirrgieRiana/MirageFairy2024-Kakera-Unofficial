@@ -261,11 +261,11 @@ abstract class RichMachineBlockEntity(val arguments: Arguments) : LockableContai
                 val z = animator.z + animator.zSpeed * tickDelta.toDouble()
                 val yaw = animator.yaw + animator.yawSpeed * tickDelta
                 val pitch = animator.pitch + animator.pitchSpeed * tickDelta
-                val yawOffset = when (animator.animationConfiguration.motion) {
+                val yawOffset = when (animator.animationConfiguration.getMotion()) {
                     Motion.FAIRY -> MathHelper.sin((animator.ticks.toFloat() + tickDelta) * 0.03F) * 3F
                     Motion.NONE -> 0F
                 }
-                val pitchOffset = when (animator.animationConfiguration.motion) {
+                val pitchOffset = when (animator.animationConfiguration.getMotion()) {
                     Motion.FAIRY -> MathHelper.sin((animator.ticks.toFloat() + tickDelta) * 0.08F) * 5F
                     Motion.NONE -> 0F
                 }
@@ -276,7 +276,7 @@ abstract class RichMachineBlockEntity(val arguments: Arguments) : LockableContai
                     renderingProxy.rotateX(-pitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
                     renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
 
-                    when (animator.animationConfiguration.motion) {
+                    when (animator.animationConfiguration.getMotion()) {
                         Motion.FAIRY -> {
                             renderingProxy.translate(0.0, 0.25, 0.0)
                             renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転

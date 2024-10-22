@@ -110,7 +110,7 @@ fun <H : ScreenHandler> RichMachineScreenHandler.Configuration.createScreenHandl
 }
 
 
-class SimpleMachineScreenHandlerDelegate(private val screenHandler: RichMachineScreenHandler, private val propertyConfiguration: RichMachineScreenHandler.PropertyConfiguration) {
+class RichMachineScreenHandlerDelegate(private val screenHandler: RichMachineScreenHandler, private val propertyConfiguration: RichMachineScreenHandler.PropertyConfiguration) {
     private val index = screenHandler.arguments.configuration.propertyConfigurations.indexOf(propertyConfiguration)
 
     init {
@@ -123,4 +123,4 @@ class SimpleMachineScreenHandlerDelegate(private val screenHandler: RichMachineS
 
 context(RichMachineScreenHandler)
 val RichMachineScreenHandler.PropertyConfiguration.delegate
-    get() = SimpleMachineScreenHandlerDelegate(this@RichMachineScreenHandler, this)
+    get() = RichMachineScreenHandlerDelegate(this@RichMachineScreenHandler, this)
