@@ -13,15 +13,54 @@ fun Waveform.toSpectrogram(bits: Int, m: Double): Spectrogram {
     check(bits >= 4)
     val windowSize = 1 shl bits
     logger.info("Window Size: $windowSize")
-    logger.info("Input Waveform Length: ${this.doubleArray.size}")
-    val width = this.doubleArray.size - windowSize + 1
-    check(width >= 1)
+    val length = this.doubleArray.size
+    logger.info("Input Waveform Length: $length")
+    val width = length + windowSize - 1
     val height = windowSize / 2 + 1
 
     val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
     repeat(width) { x ->
 
-        val complexWindowedSubWaveform = this.doubleArray.sliceArray(x until x + windowSize).mapIndexed { i, it ->
+        // windowSize = 4
+        // length = 10
+        //
+        //        0
+        //        ##########
+        // x=0 ***#        |      <- range = -3, -2, -1, 0
+        // x=1  **##       |               = -3 until 1
+        // x=2   *###      |               = -3 until -3 + 4
+        // x=3    ####     |               = -(windowSize - 1) until -(windowSize - 1) + windowSize
+        // x=9          ####               = -(windowSize - 1) until -windowSize + 1 + windowSize
+        // x=10          ###*              = -(windowSize - 1) until 1
+        // x=11           ##**             = -(windowSize - 1) .. 0
+        // x=12            #***            = x - (windowSize - 1) .. x
+        //
+        // 開始が負の場合、その分だけcountを減らし、destPosを増やす
+        // 終了が余る場合、その分だけcountを減らす
+        // xが1増えるごとに、開始と終了が1増える
+        val subWaveform = DoubleArray(windowSize)
+        run {
+            var start = x - (windowSize - 1)
+            var end = x
+            var count = windowSize
+            var dest = 0
+            if (start < 0) {
+                val amount = -start
+                start = 0
+                count -= amount
+                dest += amount
+            } else if (end >= length) {
+                // length = 10; end = 10; amount = 1 = 10 - 10 + 1
+                // length = 10; end = 11; amount = 2 = 11 - 10 + 1
+                // length = 11; end = 10; amount = 0 = 10 - 11 + 1 = end - length + 1
+                val amount = end - length + 1
+                end = length - 1
+                count -= amount
+            }
+            System.arraycopy(this.doubleArray, start, subWaveform, dest, end - start + 1)
+        }
+
+        val complexWindowedSubWaveform = subWaveform.mapIndexed { i, it ->
             val w = hanningWindow(i.toDouble(), windowSize.toDouble())
             Complex(it * w, 0.0)
         }.toTypedArray()
@@ -29,10 +68,10 @@ fun Waveform.toSpectrogram(bits: Int, m: Double): Spectrogram {
 
         repeat(height) { y ->
             val r = outputSpectrum[y].re * m
-            val g = -128.0 + outputSpectrum[y].abs() * m
+            val g = outputSpectrum[y].abs() * m
             val b = outputSpectrum[y].im * m
             val rgb = (r.toInt().coerceIn(-128, 127) + 128 and 0xFF shl 16) or
-                (g.toInt().coerceIn(-128, 127) + 128 and 0xFF shl 8) or
+                (g.toInt().coerceIn(0, 255) and 0xFF shl 8) or
                 (b.toInt().coerceIn(-128, 127) + 128 and 0xFF shl 0)
             image.setRGB(x, height - 1 - y, rgb)
         }

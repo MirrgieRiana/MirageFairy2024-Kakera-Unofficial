@@ -3,9 +3,35 @@ package miragefairy2024.wave
 import java.awt.image.BufferedImage
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.random.Random
 
+fun Spectrogram.generatePhaseSimple(): Spectrogram {
+    val windowSize = (this.bufferedImage.height - 1) * 2 // 256
+
+    val image = BufferedImage(this.bufferedImage.width, this.bufferedImage.height, BufferedImage.TYPE_INT_RGB)
+    repeat(this.bufferedImage.width) { x ->
+        repeat(this.bufferedImage.height) { imageY -> // height = 129, imageY = 0 .. 128
+            val y = this.bufferedImage.height - 1 - imageY // 128 .. 0
+            val w = 2.0 * PI / windowSize * y
+
+            val inputRgb = this.bufferedImage.getRGB(x, imageY)
+            val g = (inputRgb shr 8 and 0xFF).toDouble()
+
+            val r = g * cos(w * x)
+            val b = g * sin(w * x)
+            val outputRgb = (r.roundToInt().coerceIn(-128, 127) + 128 and 0xFF shl 16) or
+                (g.toInt().coerceIn(0, 255) and 0xFF shl 8) or
+                (b.roundToInt().coerceIn(-128, 127) + 128 and 0xFF shl 0)
+
+            image.setRGB(x, imageY, outputRgb)
+        }
+    }
+    return Spectrogram(image)
+}
+
+@Deprecated("generatePhaseGriffinLim is better")
 fun Spectrogram.generatePhase(): Spectrogram {
     val windowSize = (this.bufferedImage.height - 1) * 2 // 256
 
@@ -93,14 +119,14 @@ fun Spectrogram.generatePhaseGriffinLim(times: Int, toWaveform: (Spectrogram) ->
                 val g = (rgb shr 8 and 0xFF).toDouble()
                 val b = ((rgb shr 0 and 0xFF) - 128).toDouble()
 
-                val rate = doubleCorrectGTable[y][x] / g
+                val rate = if (g == 0.0) 10000.0 else doubleCorrectGTable[y][x] / g
 
                 val trueR = r * rate
                 val trueB = b * rate
 
-                val trueRgb = (trueR.toInt().coerceIn(-128, 127) + 128 and 0xFF shl 16) or
+                val trueRgb = (trueR.roundToInt().coerceIn(-128, 127) + 128 and 0xFF shl 16) or
                     (correctGTable[y][x].coerceIn(0, 255) and 0xFF shl 8) or
-                    (trueB.toInt().coerceIn(-128, 127) + 128 and 0xFF shl 0)
+                    (trueB.roundToInt().coerceIn(-128, 127) + 128 and 0xFF shl 0)
 
                 spectrogram.bufferedImage.setRGB(x, y, trueRgb)
             }

@@ -60,6 +60,7 @@ fun convert(inputFile: File) {
             inputFile
                 .readSpectrogram()
                 .resize(imageWidth, imageHeight)
+                .generatePhaseSimple()
                 .generatePhaseGriffinLim(20, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
                 .also { it.writeTo(inputFile.resolveSibling("dump.png")) }
                 .toWaveform(bits, 1 / amplifier)
