@@ -299,18 +299,20 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     override fun getContainerName(): Text = card.block.name
 
-    override fun createProperties() = card.createProperties(self)
+    open val doMovePosition get() = false
 
     override fun createAnimationConfigurations(): List<AnimationConfiguration> = card.slotConfigurations.mapIndexedNotNull { slotIndex, slotConfiguration ->
         val slotAnimationConfiguration = slotConfiguration.animation ?: return@mapIndexedNotNull null
         object : AnimationConfiguration {
             override fun getItemStack() = getStack(slotIndex)
-            override val motion = slotAnimationConfiguration.motion
+            override fun getMotion() = slotAnimationConfiguration.motion
             override val positions = slotAnimationConfiguration.positions
-            override fun getSpeed() = a
+            override fun getSpeed() = if (doMovePosition) 1.0 else 0.0
             override val slotIndex = slotIndex
         }
     }
+
+    override fun createProperties() = card.createProperties(self)
 
     override fun createScreenHandler(screenHandlerArguments: RichMachineScreenHandler.Arguments) = card.createScreenHandler(screenHandlerArguments)
 

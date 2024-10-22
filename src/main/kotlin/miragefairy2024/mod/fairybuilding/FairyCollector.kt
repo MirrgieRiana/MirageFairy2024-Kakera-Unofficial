@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.RichMachineBlockEntity
 import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.lib.delegate
 import miragefairy2024.mod.fairy.FairyCard
@@ -45,16 +46,16 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlotConfigurations() + listOf(
             FairyBuildingSlotConfiguration(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
-            FairyBuildingSlotConfiguration(37 + 18 * 0, 17 + 18 * 0, appearance = Appearance(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
-            FairyBuildingSlotConfiguration(81, 35, appearance = Appearance(true, run {
+            FairyBuildingSlotConfiguration(37 + 18 * 0, 17 + 18 * 0, animation = SlotAnimationConfiguration(RichMachineBlockEntity.Motion.NONE, listOf(RichMachineBlockEntity.Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200.0)))), // 机
+            FairyBuildingSlotConfiguration(81, 35, animation = SlotAnimationConfiguration(RichMachineBlockEntity.Motion.FAIRY, run {
                 listOf(
-                    Position(11.5, 0.1, 6.0, 0.0F, 90.0F, 40),
-                    Position(7.0, 0.1, 8.0, 0.0F, 275.0F, 40),
-                    Position(12.0, 0.1, 8.0, 0.0F, 265.0F, 40),
-                    Position(8.0, 0.1, 6.0, 0.0F, 20.0F, 40),
+                    RichMachineBlockEntity.Position(11.5, 0.1, 6.0, 0.0F, 90.0F, 40.0),
+                    RichMachineBlockEntity.Position(7.0, 0.1, 8.0, 0.0F, 275.0F, 40.0),
+                    RichMachineBlockEntity.Position(12.0, 0.1, 8.0, 0.0F, 265.0F, 40.0),
+                    RichMachineBlockEntity.Position(8.0, 0.1, 6.0, 0.0F, 20.0F, 40.0),
                 )
             })) { it.isOf(FairyCard.item) }, // 仕分け妖精
-            FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, appearance = Appearance(false, listOf(Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200)))), // 箱
+            FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, animation = SlotAnimationConfiguration(RichMachineBlockEntity.Motion.NONE, listOf(RichMachineBlockEntity.Position(4.0, 2.0, 4.5, 0.0F, 270.0F, 200.0)))), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 1, extractDirections = extractDirections), // 箱
