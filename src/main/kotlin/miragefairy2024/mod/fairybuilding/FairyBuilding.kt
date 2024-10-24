@@ -206,15 +206,15 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
         defaultState = defaultState.with(FACING, Direction.NORTH)
     }
 
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(FACING)
+    }
+
     @Suppress("OVERRIDE_DEPRECATION")
     override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = state.with(FACING, rotation.rotate(state[FACING]))
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = state.rotate(mirror.getRotation(state[FACING]))
-
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        builder.add(FACING)
-    }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
 
@@ -246,7 +246,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     abstract val self: E
 
-    override fun getHorizontalFacing() = cachedState.getOrNull(HorizontalFacingBlock.FACING) ?: Direction.NORTH
+    override fun getHorizontalFacing() = cachedState.getOrNull(FairyBuildingBlock.FACING) ?: Direction.NORTH
 
     override fun getContainerName(): Text = card.block.name
 

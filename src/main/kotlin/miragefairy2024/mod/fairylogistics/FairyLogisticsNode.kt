@@ -2,8 +2,8 @@ package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.RenderingProxy
-import miragefairy2024.RenderingProxyBlockEntity
+import miragefairy2024.lib.RichMachineBlock
+import miragefairy2024.lib.RichMachineBlockEntity
 import miragefairy2024.lib.RichMachineScreenHandler
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -14,9 +14,9 @@ import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.BlockStateVariantEntry
 import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -30,17 +30,15 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
-import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
+import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ScreenHandler
@@ -48,12 +46,12 @@ import net.minecraft.state.StateManager
 import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
+import net.minecraft.text.Text
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
 import net.minecraft.util.StringIdentifiable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.world.World
 
 abstract class FairyLogisticsNodeConfiguration {
     abstract val path: String
@@ -123,7 +121,11 @@ open class FairyLogisticsNodeCard(val configuration: FairyLogisticsNodeConfigura
     }
 }
 
-open class FairyLogisticsNodeBlock(private val cardGetter: () -> FairyLogisticsNodeCard, settings: Settings) : Block(settings), BlockEntityProvider {
+open class FairyLogisticsNodeBlock<C : FairyLogisticsNodeCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) :
+    RichMachineBlock(object : Arguments {
+        override val settings = settings
+        override val blockEntityType = cardGetter().blockEntityType
+    }) {
     companion object {
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.of("vertical_facing", VerticalFacing::class.java)
         val FACING: DirectionProperty = Properties.HORIZONTAL_FACING
@@ -171,46 +173,27 @@ open class FairyLogisticsNodeBlock(private val cardGetter: () -> FairyLogisticsN
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = cardGetter().configuration.createBlockEntity(cardGetter(), pos, state)
 
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
-        val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
-    }
+}
 
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.isOf(newState.block)) {
-            run {
-                val blockEntity = world.getBlockEntity(pos) as? FairyLogisticsNodeBlockEntity ?: return@run
-                blockEntity.dropItems()
-            }
-            super.onStateReplaced(state, world, pos, newState, moved)
-        }
-    }
+abstract class FairyLogisticsNodeBlockEntity<C : FairyLogisticsNodeCard<C, *, *, *, *>>(val card: C, pos: BlockPos, state: BlockState) :
+    RichMachineBlockEntity(Arguments(object : Configuration {
+        override val type = card.blockEntityType
+    }, pos, state)) {
+
+    override fun getHorizontalFacing() = cachedState.getOrNull(HorizontalFacingBlock.FACING) ?: Direction.NORTH
+
+    override fun getContainerName(): Text = card.block.name
+
+    override fun createAnimationConfigurations(): List<AnimationConfiguration> = TODO()
+
+    override fun createProperties() = TODO()
+
+    override fun createScreenHandler(screenHandlerArguments: RichMachineScreenHandler.Arguments) = card.createScreenHandler(screenHandlerArguments)
 
 }
 
-abstract class FairyLogisticsNodeBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(type, pos, state), RenderingProxyBlockEntity {
-
-    fun dropItems() {
-        // TODO
-    }
-
-    override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        // TODO
-        val facing = cachedState[FairyLogisticsNodeBlock.FACING]
-        renderingProxy.stack {
-            renderingProxy.translate(0.5, 0.5, 0.5)
-            renderingProxy.rotateY(-((facing.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
-            renderingProxy.rotateX(0F)
-            renderingProxy.renderItemStack(Items.IRON_INGOT.createItemStack())
-        }
-    }
-
-}
-
-open class FairyLogisticsNodeScreenHandler(private val card: FairyLogisticsNodeCard, arguments: Arguments<Configuration>) : RichMachineScreenHandler<RichMachineScreenHandler.Configuration>(arguments) {
+open class FairyLogisticsNodeScreenHandler<C : FairyLogisticsNodeCard<C, *, *, *, *>>(val card: C, arguments: Arguments) :
+    RichMachineScreenHandler(arguments) {
 
     override fun canUse(player: PlayerEntity?) = canUse(arguments.context, player, card.block)
 
