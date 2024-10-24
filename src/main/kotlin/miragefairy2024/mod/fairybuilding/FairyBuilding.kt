@@ -2,9 +2,9 @@ package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.lib.RichMachineBlock
 import miragefairy2024.lib.RichMachineBlockEntity
 import miragefairy2024.lib.RichMachineScreenHandler
-import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.lib.createScreenHandlerType
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS
@@ -13,7 +13,6 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
@@ -28,41 +27,35 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.block.BlockEntityProvider
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.enums.Instrument
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.screen.NamedScreenHandlerFactory
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.stat.Stats
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.DirectionProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.text.Text
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
+import net.minecraft.util.BlockMirror
+import net.minecraft.util.BlockRotation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
-import net.minecraft.world.World
 
 abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>> {
     companion object {
@@ -190,9 +183,12 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
 }
 
 open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) :
-    SimpleHorizontalFacingBlock(settings),
-    BlockEntityProvider {
+    RichMachineBlock(object : Arguments {
+        override val settings = settings
+        override val blockEntityType = cardGetter().blockEntityType
+    }) {
     companion object {
+        val FACING: DirectionProperty = Properties.HORIZONTAL_FACING
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
@@ -204,79 +200,34 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
     }
 
 
+    // Block State
+
+    init {
+        defaultState = defaultState.with(FACING, Direction.NORTH)
+    }
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = state.with(FACING, rotation.rotate(state[FACING]))
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = state.rotate(mirror.getRotation(state[FACING]))
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(FACING)
+    }
+
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
+
+
     // Block Entity
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = cardGetter().createBlockEntity(pos, state)
-
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
-        val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
-    }
-
-    override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
-        if (itemStack.hasCustomName()) {
-            val blockEntity = cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return
-            blockEntity.customName = itemStack.name
-        }
-    }
-
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.isOf(newState.block)) {
-            cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.dropItems()
-            super.onStateReplaced(state, world, pos, newState, moved)
-        }
-    }
-
-
-    // Move
-
-    override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return if (world.isClient) {
-            checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
-                blockEntity.clientTick(world2, pos, state2)
-            }
-        } else {
-            checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
-                blockEntity.serverTick(world2, pos, state2)
-            }
-        }
-    }
-
-
-    // Gui
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos) = world.getBlockEntity(pos) as? NamedScreenHandlerFactory
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClient) return ActionResult.SUCCESS
-        val blockEntity = cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return ActionResult.CONSUME
-        player.openHandledScreen(object : ExtendedScreenHandlerFactory {
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
-            override fun getDisplayName() = blockEntity.displayName
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
-        })
-        player.incrementStat(Stats.USED.getOrCreateStat(this.asItem()))
-        return ActionResult.CONSUME
-    }
 
 
     // Status
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 6
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun hasComparatorOutput(state: BlockState) = true
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
-        return cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
-    }
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
