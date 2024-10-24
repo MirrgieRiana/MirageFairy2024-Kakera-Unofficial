@@ -18,16 +18,16 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
-object FairyDistributionCenterConfiguration : FairyLogisticsBlockConfiguration() {
+object FairyDistributionCenterConfiguration : FairyLogisticsNodeConfiguration() {
     override val path = "fairy_distribution_center"
     override val name = EnJa("Fairy Distribution Center", "妖精のお届けもの屋")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
-    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyDistributionCenterBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD))
-    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyDistributionCenterBlockEntity(card.blockEntityType, blockPos, blockState)
+    override fun createBlock(cardGetter: () -> FairyLogisticsNodeCard) = FairyDistributionCenterBlock(cardGetter, createFairyLogisticsNodeBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD))
+    override fun createBlockEntity(card: FairyLogisticsNodeCard, blockPos: BlockPos, blockState: BlockState) = FairyDistributionCenterBlockEntity(card.blockEntityType, blockPos, blockState)
 
     context(ModContext)
-    override fun init(card: FairyLogisticsBlockCard) {
+    override fun init(card: FairyLogisticsNodeCard) {
         super.init(card)
 
         card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
@@ -44,9 +44,9 @@ object FairyDistributionCenterConfiguration : FairyLogisticsBlockConfiguration()
     }
 }
 
-object FairyDistributionCenterCard : FairyLogisticsBlockCard(FairyDistributionCenterConfiguration)
+object FairyDistributionCenterCard : FairyLogisticsNodeCard(FairyDistributionCenterConfiguration)
 
-class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
+class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsNodeCard, settings: Settings) : FairyLogisticsNodeBlock(cardGetter, settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
@@ -76,7 +76,7 @@ class FairyDistributionCenterBlock(cardGetter: () -> FairyLogisticsBlockCard, se
 
 }
 
-class FairyDistributionCenterBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
+class FairyDistributionCenterBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsNodeBlockEntity(type, pos, state) {
 
     // TODO
 

@@ -2,14 +2,14 @@ package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
 
-val fairyLogisticsBlockCards = listOf(
+val fairyLogisticsNodeCards = listOf(
     FairyMailboxCard,
     FairyDistributionCenterCard,
 )
 
 context(ModContext)
 fun initLogisticsModule() {
-    fairyLogisticsBlockCards.forEach {
+    fairyLogisticsNodeCards.forEach {
         it.configuration.init(it)
     }
 }

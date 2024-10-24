@@ -55,18 +55,18 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-abstract class FairyLogisticsBlockConfiguration {
+abstract class FairyLogisticsNodeConfiguration {
     abstract val path: String
     abstract val name: EnJa
     abstract val tier: Int
     abstract val poem: EnJa
-    abstract fun createBlock(cardGetter: () -> FairyLogisticsBlockCard): FairyLogisticsBlock
-    abstract fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState): FairyLogisticsBlockEntity
+    abstract fun createBlock(cardGetter: () -> FairyLogisticsNodeCard): FairyLogisticsNodeBlock
+    abstract fun createBlockEntity(card: FairyLogisticsNodeCard, blockPos: BlockPos, blockState: BlockState): FairyLogisticsNodeBlockEntity
     abstract val slots: List<Unit>
-    abstract fun createScreenHandler(card: FairyLogisticsBlockCard, syncId: Int, playerInventory: PlayerInventory): ScreenHandler
+    abstract fun createScreenHandler(card: FairyLogisticsNodeCard, syncId: Int, playerInventory: PlayerInventory): ScreenHandler
 
     context(ModContext)
-    open fun init(card: FairyLogisticsBlockCard) {
+    open fun init(card: FairyLogisticsNodeCard) {
 
         card.block.register(Registries.BLOCK, card.identifier)
         card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
@@ -75,25 +75,25 @@ abstract class FairyLogisticsBlockConfiguration {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerVariantsBlockStateGeneration {
-            fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
+            fun f(verticalFacing: FairyLogisticsNodeBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
                 return propertiesOf(
-                    FairyLogisticsBlock.VERTICAL_FACING with verticalFacing,
-                    FairyLogisticsBlock.FACING with direction,
+                    FairyLogisticsNodeBlock.VERTICAL_FACING with verticalFacing,
+                    FairyLogisticsNodeBlock.FACING with direction,
                 ) with BlockStateVariant(model = "block/" * card.block.getIdentifier() * suffix).with(y = y)
             }
             listOf(
-                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.NORTH, "_up", BlockStateVariantRotation.R180),
-                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.EAST, "_up", BlockStateVariantRotation.R270),
-                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.SOUTH, "_up", BlockStateVariantRotation.R0),
-                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.WEST, "_up", BlockStateVariantRotation.R90),
-                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.NORTH, "", BlockStateVariantRotation.R180),
-                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.EAST, "", BlockStateVariantRotation.R270),
-                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.SOUTH, "", BlockStateVariantRotation.R0),
-                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.WEST, "", BlockStateVariantRotation.R90),
-                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.NORTH, "_down", BlockStateVariantRotation.R180),
-                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.EAST, "_down", BlockStateVariantRotation.R270),
-                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.SOUTH, "_down", BlockStateVariantRotation.R0),
-                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.WEST, "_down", BlockStateVariantRotation.R90),
+                f(FairyLogisticsNodeBlock.VerticalFacing.UP, Direction.NORTH, "_up", BlockStateVariantRotation.R180),
+                f(FairyLogisticsNodeBlock.VerticalFacing.UP, Direction.EAST, "_up", BlockStateVariantRotation.R270),
+                f(FairyLogisticsNodeBlock.VerticalFacing.UP, Direction.SOUTH, "_up", BlockStateVariantRotation.R0),
+                f(FairyLogisticsNodeBlock.VerticalFacing.UP, Direction.WEST, "_up", BlockStateVariantRotation.R90),
+                f(FairyLogisticsNodeBlock.VerticalFacing.SIDE, Direction.NORTH, "", BlockStateVariantRotation.R180),
+                f(FairyLogisticsNodeBlock.VerticalFacing.SIDE, Direction.EAST, "", BlockStateVariantRotation.R270),
+                f(FairyLogisticsNodeBlock.VerticalFacing.SIDE, Direction.SOUTH, "", BlockStateVariantRotation.R0),
+                f(FairyLogisticsNodeBlock.VerticalFacing.SIDE, Direction.WEST, "", BlockStateVariantRotation.R90),
+                f(FairyLogisticsNodeBlock.VerticalFacing.DOWN, Direction.NORTH, "_down", BlockStateVariantRotation.R180),
+                f(FairyLogisticsNodeBlock.VerticalFacing.DOWN, Direction.EAST, "_down", BlockStateVariantRotation.R270),
+                f(FairyLogisticsNodeBlock.VerticalFacing.DOWN, Direction.SOUTH, "_down", BlockStateVariantRotation.R0),
+                f(FairyLogisticsNodeBlock.VerticalFacing.DOWN, Direction.WEST, "_down", BlockStateVariantRotation.R90),
             )
         }
         card.block.registerCutoutRenderLayer()
@@ -110,9 +110,9 @@ abstract class FairyLogisticsBlockConfiguration {
     }
 }
 
-fun createFairyLogisticsBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
+fun createFairyLogisticsNodeBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
 
-open class FairyLogisticsBlockCard(val configuration: FairyLogisticsBlockConfiguration) {
+open class FairyLogisticsNodeCard(val configuration: FairyLogisticsNodeConfiguration) {
     val identifier = MirageFairy2024.identifier(configuration.path)
     val block = configuration.createBlock { this }
     val blockEntityType = BlockEntityType({ pos, state -> configuration.createBlockEntity(this, pos, state) }, setOf(block), null)
@@ -123,7 +123,7 @@ open class FairyLogisticsBlockCard(val configuration: FairyLogisticsBlockConfigu
     }
 }
 
-open class FairyLogisticsBlock(private val cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : Block(settings), BlockEntityProvider {
+open class FairyLogisticsNodeBlock(private val cardGetter: () -> FairyLogisticsNodeCard, settings: Settings) : Block(settings), BlockEntityProvider {
     companion object {
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.of("vertical_facing", VerticalFacing::class.java)
         val FACING: DirectionProperty = Properties.HORIZONTAL_FACING
@@ -182,7 +182,7 @@ open class FairyLogisticsBlock(private val cardGetter: () -> FairyLogisticsBlock
     override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.isOf(newState.block)) {
             run {
-                val blockEntity = world.getBlockEntity(pos) as? FairyLogisticsBlockEntity ?: return@run
+                val blockEntity = world.getBlockEntity(pos) as? FairyLogisticsNodeBlockEntity ?: return@run
                 blockEntity.dropItems()
             }
             super.onStateReplaced(state, world, pos, newState, moved)
@@ -191,7 +191,7 @@ open class FairyLogisticsBlock(private val cardGetter: () -> FairyLogisticsBlock
 
 }
 
-abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(type, pos, state), RenderingProxyBlockEntity {
+abstract class FairyLogisticsNodeBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(type, pos, state), RenderingProxyBlockEntity {
 
     fun dropItems() {
         // TODO
@@ -199,7 +199,7 @@ abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         // TODO
-        val facing = cachedState[FairyLogisticsBlock.FACING]
+        val facing = cachedState[FairyLogisticsNodeBlock.FACING]
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
             renderingProxy.rotateY(-((facing.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
@@ -210,7 +210,7 @@ abstract class FairyLogisticsBlockEntity(type: BlockEntityType<*>, pos: BlockPos
 
 }
 
-open class FairyLogisticsScreenHandler(private val card: FairyLogisticsBlockCard, arguments: Arguments<Configuration>) : RichMachineScreenHandler<RichMachineScreenHandler.Configuration>(arguments) {
+open class FairyLogisticsNodeScreenHandler(private val card: FairyLogisticsNodeCard, arguments: Arguments<Configuration>) : RichMachineScreenHandler<RichMachineScreenHandler.Configuration>(arguments) {
 
     override fun canUse(player: PlayerEntity?) = canUse(arguments.context, player, card.block)
 

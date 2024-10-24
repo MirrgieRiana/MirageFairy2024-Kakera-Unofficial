@@ -15,16 +15,16 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
-object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
+object FairyMailboxConfiguration : FairyLogisticsNodeConfiguration() {
     override val path = "fairy_mailbox"
     override val name = EnJa("Fairy Mailbox", "妖精の郵便受け")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
-    override fun createBlock(cardGetter: () -> FairyLogisticsBlockCard) = FairyMailboxBlock(cardGetter, createFairyLogisticsBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
-    override fun createBlockEntity(card: FairyLogisticsBlockCard, blockPos: BlockPos, blockState: BlockState) = FairyMailboxBlockEntity(card.blockEntityType, blockPos, blockState)
+    override fun createBlock(cardGetter: () -> FairyLogisticsNodeCard) = FairyMailboxBlock(cardGetter, createFairyLogisticsNodeBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL))
+    override fun createBlockEntity(card: FairyLogisticsNodeCard, blockPos: BlockPos, blockState: BlockState) = FairyMailboxBlockEntity(card.blockEntityType, blockPos, blockState)
 
     context(ModContext)
-    override fun init(card: FairyLogisticsBlockCard) {
+    override fun init(card: FairyLogisticsNodeCard) {
         super.init(card)
 
         registerShapedRecipeGeneration(card.item) {
@@ -39,9 +39,9 @@ object FairyMailboxConfiguration : FairyLogisticsBlockConfiguration() {
     }
 }
 
-object FairyMailboxCard : FairyLogisticsBlockCard(FairyMailboxConfiguration)
+object FairyMailboxCard : FairyLogisticsNodeCard(FairyMailboxConfiguration)
 
-class FairyMailboxBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Settings) : FairyLogisticsBlock(cardGetter, settings) {
+class FairyMailboxBlock(cardGetter: () -> FairyLogisticsNodeCard, settings: Settings) : FairyLogisticsNodeBlock(cardGetter, settings) {
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
@@ -71,7 +71,7 @@ class FairyMailboxBlock(cardGetter: () -> FairyLogisticsBlockCard, settings: Set
 
 }
 
-class FairyMailboxBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity(type, pos, state) {
+class FairyMailboxBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FairyLogisticsNodeBlockEntity(type, pos, state) {
 
     // TODO
 
