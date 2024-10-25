@@ -27,7 +27,6 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
@@ -156,7 +155,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
     val block = configuration.createBlock({ self }, configuration.createBlockSettings())
 
     val blockEntityAccessor = configuration.createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(self, pos, state) }, setOf(block), null)
+    val blockEntityType = BlockEntityType({ pos, state -> createBlockEntity(pos, state) }, setOf(block), null)
     fun createBlockEntity(pos: BlockPos, state: BlockState) = blockEntityAccessor.create(self, pos, state)
 
     val item = BlockItem(block, Item.Settings())
@@ -167,14 +166,14 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
-    val screenHandlerConfiguration = object : RichMachineScreenHandler.Configuration {
-        override val type = run { this@FairyBuildingCard }.screenHandlerType
+    val screenHandlerConfiguration: RichMachineScreenHandler.Configuration = object : RichMachineScreenHandler.Configuration {
+        override val type get() = screenHandlerType
         override val width = configuration.guiWidth
         override val height = configuration.guiHeight
         override val machineSlotConfigurations = this@FairyBuildingCard.slotConfigurations
         override val propertyConfigurations = this@FairyBuildingCard.propertyConfigurations
     }
-    val screenHandlerType: ExtendedScreenHandlerType<H> = screenHandlerConfiguration.createScreenHandlerType { arguments, _ -> createScreenHandler(arguments) }
+    val screenHandlerType = screenHandlerConfiguration.createScreenHandlerType { arguments, _ -> createScreenHandler(arguments) }
     fun createProperties(blockEntity: E) = propertyConfigurations.map { it.createProperty(blockEntity) }
     fun createScreenHandler(arguments: RichMachineScreenHandler.Arguments) = configuration.createScreenHandler(self, arguments)
 
