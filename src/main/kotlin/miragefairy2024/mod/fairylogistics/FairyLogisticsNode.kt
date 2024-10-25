@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.lib.RichMachineBlock
 import miragefairy2024.lib.RichMachineBlockEntity
 import miragefairy2024.lib.RichMachineScreenHandler
+import miragefairy2024.lib.createScreenHandlerType
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
@@ -28,20 +29,17 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.EnumProperty
@@ -53,22 +51,27 @@ import net.minecraft.util.StringIdentifiable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 
-abstract class FairyLogisticsNodeConfiguration {
+abstract class FairyLogisticsNodeConfiguration<C : FairyLogisticsNodeCard<C, S, B, E, H>, S : FairyLogisticsNodeConfiguration<C, S, B, E, H>, B : FairyLogisticsNodeBlock<C>, E : FairyLogisticsNodeBlockEntity<C>, H : FairyLogisticsNodeScreenHandler<C>> {
+    companion object {
+        fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
+    }
+
     abstract val path: String
     abstract val name: EnJa
     abstract val tier: Int
     abstract val poem: EnJa
-    abstract fun createBlock(cardGetter: () -> FairyLogisticsNodeCard): FairyLogisticsNodeBlock
-    abstract fun createBlockEntity(card: FairyLogisticsNodeCard, blockPos: BlockPos, blockState: BlockState): FairyLogisticsNodeBlockEntity
+    abstract fun createBlock(card: C): B
+    abstract fun createBlockEntity(card: C, blockPos: BlockPos, blockState: BlockState): E
     abstract val slots: List<Unit>
-    abstract fun createScreenHandler(card: FairyLogisticsNodeCard, syncId: Int, playerInventory: PlayerInventory): ScreenHandler
+    abstract fun createScreenHandler(card: C, arguments: RichMachineScreenHandler.Arguments): H
 
     context(ModContext)
-    open fun init(card: FairyLogisticsNodeCard) {
+    open fun init(card: C) {
 
         card.block.register(Registries.BLOCK, card.identifier)
         card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
         card.item.register(Registries.ITEM, card.identifier)
+        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -97,9 +100,10 @@ abstract class FairyLogisticsNodeConfiguration {
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.enJa(card.configuration.name)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        card.block.enJa(name)
+        val poemList = PoemList(tier).poem(poem)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
 
         card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
 
@@ -108,17 +112,22 @@ abstract class FairyLogisticsNodeConfiguration {
     }
 }
 
-fun createFairyLogisticsNodeBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
-
-open class FairyLogisticsNodeCard(val configuration: FairyLogisticsNodeConfiguration) {
+abstract class FairyLogisticsNodeCard<C : FairyLogisticsNodeCard<C, S, B, E, H>, S : FairyLogisticsNodeConfiguration<C, S, B, E, H>, B : FairyLogisticsNodeBlock<C>, E : FairyLogisticsNodeBlockEntity<C>, H : FairyLogisticsNodeScreenHandler<C>>(val configuration: S) {
+    abstract val self: C
     val identifier = MirageFairy2024.identifier(configuration.path)
-    val block = configuration.createBlock { this }
-    val blockEntityType = BlockEntityType({ pos, state -> configuration.createBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = BlockItem(block, Item.Settings())
-    val poemList = PoemList(configuration.tier).poem(configuration.poem)
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
-        configuration.createScreenHandler(this, syncId, playerInventory)
+    val block by lazy { configuration.createBlock(self) }
+    val blockEntityType = BlockEntityType({ pos, state -> configuration.createBlockEntity(self, pos, state) }, setOf(block), null)
+    val item by lazy { BlockItem(block, Item.Settings()) }
+    val screenHandlerConfiguration: RichMachineScreenHandler.Configuration = object : RichMachineScreenHandler.Configuration {
+        override val type get() = screenHandlerType
+        override val width = 5 + 18 * 9 + 5 // TODO
+        override val height = 200 // TODO
     }
+    val screenHandlerType = screenHandlerConfiguration.createScreenHandlerType { arguments, _ -> createScreenHandler(arguments) }
+    fun createScreenHandler(arguments: RichMachineScreenHandler.Arguments) = configuration.createScreenHandler(self, arguments)
+
+    context(ModContext)
+    fun init() = configuration.init(self)
 }
 
 open class FairyLogisticsNodeBlock<C : FairyLogisticsNodeCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) :
