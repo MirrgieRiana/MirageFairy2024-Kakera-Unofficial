@@ -1,4 +1,4 @@
-# MOD: MirageFairy2024-Kakera-Unofficial
+# Kakera's MirageFairy2024 (Unofficial Fork)
 
 This MOD is an unofficial fork of "MirageFairy2024" by Yoruno Kakera.
 
