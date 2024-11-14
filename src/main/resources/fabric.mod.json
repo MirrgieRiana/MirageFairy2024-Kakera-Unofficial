@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "id": "miragefairy2024",
   "version": "${version}",
-  "name": "MirageFairy2024",
-  "description": "MirageFairy2024: The Minecraft MOD for the MirageFairy project in 2024.",
+  "name": "MirageFairy2024-Kakera-Unofficial",
+  "description": "An unofficial fork of \"MirageFairy2024,\" a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.",
   "authors": [
-    "The Developer of MirageFairy, Generation 7"
+    "Yoruno Kakera"
   ],
   "contact": {
-    "homepage": "https://miragefairy.notion.site/",
-    "sources": "https://github.com/MirageFairy/MirageFairy2024"
+    "_homepage": "https://miragefairy.notion.site/",
+    "sources": "https://github.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial"
   },
   "license": "Apache License 2.0",
   "icon": "assets/miragefairy2024/icon.png",
