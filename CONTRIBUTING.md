@@ -38,7 +38,7 @@ Pull Requestはいつでも歓迎しております。
 コントリビューションは、以下のドキュメントによる記載により、プロジェクトと同じライセンスとして取り込まれます。
 
 - [GitHub のサービス使用条件 - D - 6](https://docs.github.com/ja/site-policy/github-terms/github-terms-of-service#6-contributions-under-repository-license)
-- [Apache License 2.0 - 5](https://github.com/MirageFairy/MirageFairy2024/blob/main/LICENSE#L130)
+- [Apache License 2.0 - 5](https://github.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/blob/main/LICENSE#L130)
 
 著作権が発生する程度の規模のコントリビューションでは、コントリビューターがその部分の著作権を保持します。
 
