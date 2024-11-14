@@ -2,7 +2,7 @@
 
 An unofficial fork of "MirageFairy2024," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
 
-# MirageFairy Official Website
+# ~MirageFairy Official Website~
 
 ~https://miragefairy.notion.site/~
 
@@ -12,11 +12,11 @@ The specifications of this MOD are officially documented in Japanese only in [CH
 
 There is currently no comprehensive official documentation explaining the specifications of this MOD at a specific point in time, and the only available resources are unofficial wikis.
 
-The unofficial wikis currently identified are as follows:
+~The unofficial wikis currently identified are as follows:~
 
 - ~[MirageFairy2024非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)~
 
-There is a Japanese database that collects official settings related to the world view.
+~There is a Japanese database that collects official settings related to the world view.~
 
 - ~[MirageFairy世界観データベース](https://miragefairy.github.io/MirageFairy2024/)~
 
