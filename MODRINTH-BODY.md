@@ -2,6 +2,10 @@
 
 An unofficial fork of "MirageFairy2024," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
 
+This MOD is compatible with save data from the original MirageFairy2024.
+
+Therefore, it cannot be installed simultaneously due to conflicts.
+
 ## Current Status(November 2024)
 
 - The original MirageFairy2024 began development in Japan in November 2023.
