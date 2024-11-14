@@ -166,7 +166,7 @@ tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
 // https://github.com/modrinth/minotaur
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
-    projectId = "miragefairy2024"
+    projectId = "miragefairy2024-kakera-unofficial"
     //versionNumber = project.mod_version
     versionType = "beta"
     uploadFile = tasks["remapJar"]
