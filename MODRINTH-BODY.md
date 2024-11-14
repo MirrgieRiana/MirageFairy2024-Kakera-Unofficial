@@ -1,6 +1,6 @@
 # MirageFairy2024-Kakera-Unofficial
 
-This MOD is an unofficial fork of "MirageFairy2024" by Yoruno Kakera.
+An unofficial fork of "MirageFairy2024," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
 
 ## Current Status(November 2024)
 
