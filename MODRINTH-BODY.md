@@ -4,9 +4,11 @@ This MOD is an unofficial fork of "MirageFairy2024" by Yoruno Kakera.
 
 ## Current Status
 
-- Development of this MOD started in Japan in November 2023.
-- Currently in beta with the official release planned for 2024.
-- During the beta phase, some or most features may not be available.
+- The original MirageFairy2024 began development in Japan in November 2023.
+- MirageFairy2024-Kakera-Unofficial is a MOD derived from MirageFairy2024 in November 2024.
+- With 14 releases, the MOD's content is moderately rich.
+- But, there are still many planned contents yet to be developed.
+- This MOD is still in beta, with a full release planned for 2025 or later.
 
 ## Experience provided by this MOD
 
