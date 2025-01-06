@@ -6,7 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
-import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerSettings
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
@@ -177,7 +177,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultVegetation(lookupBackedBuilder)
                 DefaultBiomeFeatures.addSweetBerryBushes(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
@@ -245,7 +245,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerSettings.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 

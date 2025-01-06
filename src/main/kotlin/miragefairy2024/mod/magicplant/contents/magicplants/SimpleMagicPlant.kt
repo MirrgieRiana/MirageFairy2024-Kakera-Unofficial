@@ -3,7 +3,7 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.MagicPlantCard
-import miragefairy2024.mod.magicplant.MagicPlantSettings
+import miragefairy2024.mod.magicplant.MagicPlantConfiguration
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
@@ -34,7 +34,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantSettings<C, B>() {
+abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantConfiguration<C, B>() {
     abstract val outlineShapes: List<VoxelShape>
 
     open val baseSeedGeneration = 1.0
@@ -61,9 +61,9 @@ abstract class SimpleMagicPlantSettings<C : SimpleMagicPlantCard<B>, B : SimpleM
     }
 }
 
-abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(settings: SimpleMagicPlantSettings<*, B>) : MagicPlantCard<B>(settings)
+abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(configuration: SimpleMagicPlantConfiguration<*, B>) : MagicPlantCard<B>(configuration)
 
-abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagicPlantSettings<*, *>, settings: Settings) : MagicPlantBlock(magicPlantSettings, settings) {
+abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantConfiguration<*, *>, settings: Settings) : MagicPlantBlock(configuration, settings) {
 
     // Property
 
@@ -89,7 +89,7 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
 
     // Shape
 
-    private val outlineShapesCache = magicPlantSettings.outlineShapes.toTypedArray()
+    private val outlineShapesCache = configuration.outlineShapes.toTypedArray()
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
@@ -118,25 +118,25 @@ abstract class SimpleMagicPlantBlock(private val magicPlantSettings: SimpleMagic
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
 
         if (isMaxAge(blockState)) {
-            val seedCount = world.random.randomInt(magicPlantSettings.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val seedCount = world.random.randomInt(configuration.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             repeat(seedCount) {
                 drops += calculateCrossedSeed(world, blockPos, traitStacks, crossbreeding)
             }
         }
 
         if (isMaxAge(blockState)) {
-            val fruitCount = world.random.randomInt(magicPlantSettings.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += magicPlantSettings.getFruitDrops(fruitCount, world.random)
+            val fruitCount = world.random.randomInt(configuration.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (fruitCount > 0) drops += configuration.getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val leafCount = world.random.randomInt(magicPlantSettings.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += magicPlantSettings.getLeafDrops(leafCount, world.random)
+            val leafCount = world.random.randomInt(configuration.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (leafCount > 0) drops += configuration.getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val rareCount = world.random.randomInt(magicPlantSettings.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += magicPlantSettings.getRareDrops(rareCount, world.random)
+            val rareCount = world.random.randomInt(configuration.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (rareCount > 0) drops += configuration.getRareDrops(rareCount, world.random)
         }
 
         return drops

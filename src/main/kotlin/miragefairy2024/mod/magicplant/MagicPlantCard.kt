@@ -7,7 +7,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Item
 import net.minecraft.util.math.BlockPos
 
-open class MagicPlantCard<B : MagicPlantBlock>(private val settings: MagicPlantSettings<*, B>) {
+open class MagicPlantCard<B : MagicPlantBlock>(private val settings: MagicPlantConfiguration<*, B>) {
     val blockIdentifier = MirageFairy2024.identifier(settings.blockPath)
     val itemIdentifier = MirageFairy2024.identifier(settings.itemPath)
     val block = settings.createBlock()
