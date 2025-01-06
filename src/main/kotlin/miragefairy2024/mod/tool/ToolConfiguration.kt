@@ -16,7 +16,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
-abstract class ToolSettings {
+abstract class ToolConfiguration {
     companion object {
         private val identifier = MirageFairy2024.identifier("fairy_mining_tool")
         val AREA_MINING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.area_mining" }, "Area mining", "範囲採掘")
@@ -58,44 +58,44 @@ abstract class ToolSettings {
 
 }
 
-abstract class FairyMiningToolSettings : ToolSettings() {
+abstract class FairyMiningToolConfiguration : ToolConfiguration() {
     var attackDamage = 0F
     var attackSpeed = 0F
 }
 
 
-fun ToolSettings.areaMining() = this.also {
+fun ToolConfiguration.areaMining() = this.also {
     it.areaMining = true
-    it.descriptions += text { ToolSettings.AREA_MINING_TRANSLATION() }
+    it.descriptions += text { ToolConfiguration.AREA_MINING_TRANSLATION() }
 }
 
-fun ToolSettings.mineAll() = this.also {
+fun ToolConfiguration.mineAll() = this.also {
     it.mineAll = true
-    it.descriptions += text { ToolSettings.MINE_ALL_TRANSLATION() }
+    it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
 }
 
-fun ToolSettings.cutAll() = this.also {
+fun ToolConfiguration.cutAll() = this.also {
     it.cutAll = true
-    it.descriptions += text { ToolSettings.CUT_ALL_TRANSLATION() }
+    it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
-fun ToolSettings.silkTouch() = this.also {
+fun ToolConfiguration.silkTouch() = this.also {
     it.silkTouch = true
-    it.descriptions += text { ToolSettings.SILK_TOUCH_TRANSLATION() }
+    it.descriptions += text { ToolConfiguration.SILK_TOUCH_TRANSLATION() }
 }
 
-fun ToolSettings.fortune(fortune: Int) = this.also {
+fun ToolConfiguration.fortune(fortune: Int) = this.also {
     check(fortune >= 1)
     it.fortune = fortune
-    it.descriptions += text { ToolSettings.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
+    it.descriptions += text { ToolConfiguration.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
 }
 
-fun ToolSettings.selfMending(selfMending: Int) = this.also {
+fun ToolConfiguration.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
-    it.descriptions += text { ToolSettings.SELF_MENDING_TRANSLATION() }
+    it.descriptions += text { ToolConfiguration.SELF_MENDING_TRANSLATION() }
 }
 
-fun ToolSettings.obtainFairy(appearanceRateBonus: Double) = this.also {
+fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
     it.obtainFairy = appearanceRateBonus
-    it.descriptions += text { ToolSettings.OBTAIN_FAIRY() }
+    it.descriptions += text { ToolConfiguration.OBTAIN_FAIRY() }
 }
