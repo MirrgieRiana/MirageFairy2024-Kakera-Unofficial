@@ -54,7 +54,7 @@ fun initToolCardModule() {
 class ToolCard(
     path: String,
     private val name: EnJa,
-    private val poemList: PoemList,
+    private val poemList: PoemList?,
     private val configuration: ToolConfiguration,
     private val initializer: context(ModContext)ToolCard.() -> Unit = {},
 ) {
@@ -71,9 +71,11 @@ class ToolCard(
 
         item.enJa(name)
 
-        val poemList2 = configuration.appendPoems(poemList)
-        item.registerPoem(poemList2)
-        item.registerPoemGeneration(poemList2)
+        if (poemList != null) {
+            val poemList2 = configuration.appendPoems(poemList)
+            item.registerPoem(poemList2)
+            item.registerPoemGeneration(poemList2)
+        }
 
         configuration.init(this)
         initializer(this@ModContext, this)
@@ -87,7 +89,7 @@ object ToolCards {
 
     val IRON_SCYTHE = !ToolCard(
         "iron_scythe", EnJa("Iron Scythe", "鉄の大鎌"),
-        PoemList(2).poem(EnJa("For cutting grass and harvesting crops.", "草や農作物を刈り取るための道具。")),
+        null,
         FairyScytheConfiguration(ToolMaterialCard.IRON, 1),
     ) {
         registerShapedRecipeGeneration(item) {
@@ -95,7 +97,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', Items.IRON_INGOT)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on Items.IRON_INGOT
     }
     val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
@@ -121,7 +123,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
     val FAIRY_CRYSTAL_SWORD = !ToolCard(
@@ -211,7 +213,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', MaterialCard.MIRANAGITE.item)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on MaterialCard.MIRANAGITE.item
     }
     val MIRANAGI_STAFF_0 = !ToolCard(
@@ -271,7 +273,7 @@ object ToolCards {
     }
     val DIAMOND_SCYTHE = !ToolCard(
         "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
-        PoemList(3).poem(EnJa("A highly durable scythe made of diamond.", "ダイヤモンドを加工した高耐久の大鎌。")),
+        null,
         FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
     ) {
         registerShapedRecipeGeneration(item) {
@@ -279,7 +281,7 @@ object ToolCards {
             pattern("# R")
             pattern("  R")
             input('#', Items.DIAMOND)
-            input('R', MaterialCard.MIRAGE_STEM.item)
+            input('R', Items.STICK)
         } on Items.DIAMOND
     }
     val CHAOS_STONE_PICKAXE = !ToolCard(
