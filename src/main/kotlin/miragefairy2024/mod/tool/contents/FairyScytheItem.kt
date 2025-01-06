@@ -60,8 +60,8 @@ class FairyScytheConfiguration(
     }
 }
 
-class FairyScytheItem(override val toolConfiguration: FairyMiningToolConfiguration, settings: Settings) :
-    ScytheItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.attackDamage, toolConfiguration.attackSpeed, settings),
+class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

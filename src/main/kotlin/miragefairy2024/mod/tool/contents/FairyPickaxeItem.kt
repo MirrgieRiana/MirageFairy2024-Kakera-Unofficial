@@ -38,8 +38,8 @@ class FairyPickaxeConfiguration(
     }
 }
 
-class FairyPickaxeItem(override val toolConfiguration: FairyMiningToolConfiguration, settings: Settings) :
-    PickaxeItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.attackDamage.toInt(), toolConfiguration.attackSpeed, settings),
+class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    PickaxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
