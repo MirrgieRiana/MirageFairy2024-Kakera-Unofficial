@@ -30,7 +30,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>() {
+object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, VeropedaBlock>() {
     override val card get() = VeropedaCard
 
     override val blockPath = "veropeda"
@@ -141,8 +141,8 @@ object VeropedaSettings : SimpleMagicPlantSettings<VeropedaCard, VeropedaBlock>(
     }
 }
 
-object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaSettings)
+object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaSettings, settings) {
+class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }

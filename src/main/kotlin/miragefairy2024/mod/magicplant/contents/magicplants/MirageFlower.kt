@@ -39,7 +39,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 
-object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageFlowerBlock>() {
+object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCard, MirageFlowerBlock>() {
     override val card get() = MirageFlowerCard
 
     override val blockPath = "mirage_flower"
@@ -171,9 +171,9 @@ object MirageFlowerSettings : SimpleMagicPlantSettings<MirageFlowerCard, MirageF
     }
 }
 
-object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerSettings)
+object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerConfiguration)
 
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerSettings, settings) {
+class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 

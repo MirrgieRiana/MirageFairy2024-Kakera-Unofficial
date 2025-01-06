@@ -13,7 +13,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.biome.Biome
 
-class MagicPlantBlockEntity(private val settings: MagicPlantSettings<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
+class MagicPlantBlockEntity(private val settings: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
 
     private var traitStacks: TraitStacks? = null
 
