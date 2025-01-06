@@ -37,8 +37,8 @@ class FairyShovelConfiguration(
     }
 }
 
-class FairyShovelItem(override val toolConfiguration: FairyMiningToolConfiguration, settings: Settings) :
-    ShovelItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.attackDamage, toolConfiguration.attackSpeed, settings),
+class FairyShovelItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    ShovelItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

@@ -36,37 +36,37 @@ import net.minecraft.world.World
 // @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
 
 interface FairyToolItem {
-    val toolConfiguration: ToolConfiguration
+    val configuration: ToolConfiguration
 }
 
 
 fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
-    val miningSpeedMultiplier = toolConfiguration.miningSpeedMultiplierOverride ?: toolConfiguration.toolMaterialCard.toolMaterial.miningSpeedMultiplier
+    val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.miningSpeedMultiplier
     return when {
-        toolConfiguration.superEffectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier * 10F
-        toolConfiguration.effectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier
-        toolConfiguration.effectiveBlockTags.any { state.isIn(it) } -> miningSpeedMultiplier
+        configuration.superEffectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier * 10F
+        configuration.effectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier
+        configuration.effectiveBlockTags.any { state.isIn(it) } -> miningSpeedMultiplier
         else -> 1.0F
     }
 }
 
 fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
-    val itemMiningLevel = toolConfiguration.toolMaterialCard.toolMaterial.miningLevel
+    val itemMiningLevel = configuration.toolMaterialCard.toolMaterial.miningLevel
     return when {
         itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
         itemMiningLevel < MiningLevels.IRON && state.isIn(BlockTags.NEEDS_IRON_TOOL) -> false
         itemMiningLevel < MiningLevels.STONE && state.isIn(BlockTags.NEEDS_STONE_TOOL) -> false
         else -> when {
-            toolConfiguration.superEffectiveBlocks.any { state.isOf(it) } -> true
-            toolConfiguration.effectiveBlocks.any { state.isOf(it) } -> true
-            toolConfiguration.effectiveBlockTags.any { state.isIn(it) } -> true
+            configuration.superEffectiveBlocks.any { state.isOf(it) } -> true
+            configuration.effectiveBlocks.any { state.isOf(it) } -> true
+            configuration.effectiveBlockTags.any { state.isIn(it) } -> true
             else -> false
         }
     }
 }
 
 fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
-    if (toolConfiguration.areaMining) run fail@{
+    if (configuration.areaMining) run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -84,7 +84,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
                         val targetBlockPos = pos.add(x, y, z)
                         if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                            if (stack.maxDamage - stack.damage <= toolConfiguration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                             // 採掘を続行
 
@@ -93,7 +93,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
                             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                             if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                 if (targetHardness > 0) {
-                                    val damage = world.random.randomInt(toolConfiguration.miningDamage)
+                                    val damage = world.random.randomInt(configuration.miningDamage)
                                     if (damage > 0) {
                                         stack.damage(damage, miner) {
                                             it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -107,7 +107,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
-    if (toolConfiguration.mineAll) run fail@{
+    if (configuration.mineAll) run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -123,7 +123,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).block === state.block
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= toolConfiguration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -132,7 +132,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    val damage = world.random.randomInt(toolConfiguration.miningDamage)
+                    val damage = world.random.randomInt(configuration.miningDamage)
                     if (damage > 0) {
                         stack.damage(damage, miner) {
                             it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -142,7 +142,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
-    if (toolConfiguration.cutAll) run fail@{
+    if (configuration.cutAll) run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -159,7 +159,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= toolConfiguration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -168,7 +168,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    val damage = world.random.randomInt(toolConfiguration.miningDamage)
+                    val damage = world.random.randomInt(configuration.miningDamage)
                     if (damage > 0) {
                         stack.damage(damage, miner) {
                             it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -182,7 +182,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= toolConfiguration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -192,7 +192,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
                     if (miner.random.nextFloat() < 0.1F) {
-                        val damage = world.random.randomInt(toolConfiguration.miningDamage)
+                        val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
                             stack.damage(damage, miner) {
                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -203,7 +203,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
-    toolConfiguration.obtainFairy?.let { obtainFairy ->
+    configuration.obtainFairy?.let { obtainFairy ->
         if (miner !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
 
         // モチーフの判定
@@ -224,7 +224,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
 }
 
 fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem {
-    toolConfiguration.obtainFairy?.let { obtainFairy ->
+    configuration.obtainFairy?.let { obtainFairy ->
         if (attacker !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
         if (!target.isDead) return@let // 撃破時でない
 
@@ -246,7 +246,7 @@ fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: Li
 }
 
 fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Suppress("UNUSED_PARAMETER") slot: Int, @Suppress("UNUSED_PARAMETER") selected: Boolean) where I : Item, I : FairyToolItem {
-    val selfMending = toolConfiguration.selfMending
+    val selfMending = configuration.selfMending
     if (selfMending != null) run {
         if (world.isClient) return@run
         if (entity !is PlayerEntity) return@run // プレイヤーじゃない
@@ -256,11 +256,11 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Sup
 }
 
 fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
-    if (toolConfiguration.silkTouch) {
+    if (configuration.silkTouch) {
         if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
     }
     run {
-        val fortune = toolConfiguration.fortune
+        val fortune = configuration.fortune
         if (fortune != null) {
             if (enchantment == Enchantments.FORTUNE) return oldLevel atLeast fortune
         }
@@ -270,7 +270,7 @@ fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUS
 
 fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
     var itemStack2 = itemStack
-    if (toolConfiguration.silkTouch) {
+    if (configuration.silkTouch) {
         itemStack2 = itemStack2.copy()
         val enchantments = EnchantmentHelper.get(itemStack2)
         enchantments[Enchantments.SILK_TOUCH] = enchantments.getOrElse(Enchantments.SILK_TOUCH) { 0 } atLeast 1

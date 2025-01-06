@@ -43,8 +43,8 @@ class FairyKnifeConfiguration(
     }
 }
 
-class FairyKnifeItem(override val toolConfiguration: FairyMiningToolConfiguration, settings: Settings) :
-    KnifeItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.attackDamage, toolConfiguration.attackSpeed, settings),
+class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    KnifeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

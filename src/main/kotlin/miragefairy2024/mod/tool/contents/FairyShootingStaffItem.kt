@@ -52,8 +52,8 @@ class FairyShootingStaffConfiguration(
     override fun createItem() = FairyShootingStaffItem(this, Item.Settings())
 }
 
-class FairyShootingStaffItem(override val toolConfiguration: FairyShootingStaffConfiguration, settings: Settings) :
-    ShootingStaffItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.basePower, toolConfiguration.baseMaxDistance, settings),
+class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfiguration, settings: Settings) :
+    ShootingStaffItem(configuration.toolMaterialCard.toolMaterial, configuration.basePower, configuration.baseMaxDistance, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

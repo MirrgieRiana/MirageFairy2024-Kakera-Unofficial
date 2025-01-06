@@ -43,8 +43,8 @@ class FairyAxeConfiguration(
     }
 }
 
-class FairyAxeItem(override val toolConfiguration: FairyMiningToolConfiguration, settings: Settings) :
-    AxeItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.attackDamage, toolConfiguration.attackSpeed, settings),
+class FairyAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    AxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
