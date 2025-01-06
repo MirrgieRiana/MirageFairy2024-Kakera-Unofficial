@@ -11,6 +11,7 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbtAndCount
@@ -286,9 +287,7 @@ class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInven
             addSlot(Slot(playerInventory, c, 0, 0))
         }
         repeat(SeedBagItem.INVENTORY_SIZE) { i ->
-            addSlot(object : Slot(inventoryDelegate, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = inventoryDelegate.isValid(i, stack)
-            })
+            addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
         }
     }
 
