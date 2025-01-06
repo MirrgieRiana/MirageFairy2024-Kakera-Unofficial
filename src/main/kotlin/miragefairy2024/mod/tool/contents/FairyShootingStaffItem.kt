@@ -8,8 +8,8 @@ import miragefairy2024.mod.AntimatterBoltEntity
 import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.FairyToolItem
+import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
-import miragefairy2024.mod.tool.ToolSettings
 import miragefairy2024.mod.tool.convertItemStackImpl
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
@@ -44,16 +44,16 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyShootingStaffSettings(
+class FairyShootingStaffConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     var basePower: Float,
     var baseMaxDistance: Float,
-) : ToolSettings() {
+) : ToolConfiguration() {
     override fun createItem() = FairyShootingStaffItem(this, Item.Settings())
 }
 
-class FairyShootingStaffItem(override val toolSettings: FairyShootingStaffSettings, settings: Settings) :
-    ShootingStaffItem(toolSettings.toolMaterialCard.toolMaterial, toolSettings.basePower, toolSettings.baseMaxDistance, settings),
+class FairyShootingStaffItem(override val toolConfiguration: FairyShootingStaffConfiguration, settings: Settings) :
+    ShootingStaffItem(toolConfiguration.toolMaterialCard.toolMaterial, toolConfiguration.basePower, toolConfiguration.baseMaxDistance, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
