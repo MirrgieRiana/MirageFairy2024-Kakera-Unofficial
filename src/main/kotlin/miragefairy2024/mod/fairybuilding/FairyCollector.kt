@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
+object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override val path = "fairy_collector"
     override val tier = 2
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
@@ -81,7 +81,7 @@ object FairyCollectorSettings : FairyFactorySettings<FairyCollectorBlockEntity, 
     override val maxFolia = 20_000
 }
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorSettings, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorSettings) {
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorConfiguration, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
     context(ModContext)
     override fun init() {
         super.init()
@@ -145,7 +145,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
         if (collectionProgress >= 10000) {
             collectionProgress = 0
 
-            val indices = FairyCollectorSettings.TABLE_SLOT_INDICES.filter { this[it].isEmpty }.toCollection(ArrayDeque())
+            val indices = FairyCollectorConfiguration.TABLE_SLOT_INDICES.filter { this[it].isEmpty }.toCollection(ArrayDeque())
             if (indices.isNotEmpty()) {
 
                 folia -= 1000
@@ -172,7 +172,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
             folia -= 200
 
-            val result = mergeInventory(this, FairyCollectorSettings.TABLE_SLOT_INDICES, this, FairyCollectorSettings.CHEST_SLOT_INDICES)
+            val result = mergeInventory(this, FairyCollectorConfiguration.TABLE_SLOT_INDICES, this, FairyCollectorConfiguration.CHEST_SLOT_INDICES)
             folia -= 20 * result.movedItemCount
 
         }
@@ -183,8 +183,8 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 }
 
 class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
-    var collectionProgress by Property(FairyCollectorSettings.COLLECTION_PROGRESS_PROPERTY)
-    var sortProgress by Property(FairyCollectorSettings.SORT_PROGRESS_PROPERTY)
-    var collectionSpeed by Property(FairyCollectorSettings.COLLECTION_SPEED_PROPERTY)
-    var sortSpeed by Property(FairyCollectorSettings.SORT_SPEED_PROPERTY)
+    var collectionProgress by Property(FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY)
+    var sortProgress by Property(FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY)
+    var collectionSpeed by Property(FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY)
+    var sortSpeed by Property(FairyCollectorConfiguration.SORT_SPEED_PROPERTY)
 }
