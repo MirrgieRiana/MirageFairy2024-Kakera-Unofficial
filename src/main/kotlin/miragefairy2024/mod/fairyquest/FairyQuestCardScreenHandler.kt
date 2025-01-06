@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairyquest
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.OutputSlot
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -75,9 +76,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
             })
         }
         repeat(4) { i ->
-            addSlot(object : Slot(outputInventory, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = false
-            })
+            addSlot(OutputSlot(outputInventory, i, 0, 0))
         }
         addProperties(propertyDelegate)
     }
