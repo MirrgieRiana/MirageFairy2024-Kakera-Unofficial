@@ -23,8 +23,9 @@ fun convert(inputFile: File) {
     when (inputFile.extension) {
         "wav" -> {
             inputFile
-                .readWaveform()
-                .getSpectrogram(8, 1 / 4000.0)
+                .readBytes()
+                .toWaveformAsWav()
+                .toSpectrogram(8, 1 / 4000.0)
                 .writeTo(inputFile.resolveSibling("${inputFile.nameWithoutExtension}.png"))
         }
 
@@ -57,14 +58,15 @@ fun convert(inputFile: File) {
             logger.info("amplifier    = $amplifier")
 
             inputFile
-                .readImage()
+                .readSpectrogram()
                 .resize(imageWidth, imageHeight)
-                .generatePhase()
+                .generatePhaseSimple()
+                .generatePhaseGriffinLim(20, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
                 .also { it.writeTo(inputFile.resolveSibling("dump.png")) }
-                .fromSpectrogram(bits, 1 / amplifier)
-                .toWav()
+                .toWaveform(bits, 1 / amplifier)
+                .toWavByteArray()
                 .also { it.writeTo(inputFile.resolveSibling("dump.wav")) }
-                .wavToOgg()
+                .toOggAsWav()
                 .writeTo(outputFile)
         }
     }
