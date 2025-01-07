@@ -7,6 +7,7 @@ import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBiomeModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
+import miragefairy2024.mod.initDebrisModule
 import miragefairy2024.mod.initEnchantmentModule
 import miragefairy2024.mod.initEntityModule
 import miragefairy2024.mod.initExtraPlayerDataModule
@@ -59,4 +60,5 @@ fun initModules() {
     initEnchantmentModule()
     initTelescopeModule()
     initFairyFountainModule()
+    initDebrisModule()
 }
