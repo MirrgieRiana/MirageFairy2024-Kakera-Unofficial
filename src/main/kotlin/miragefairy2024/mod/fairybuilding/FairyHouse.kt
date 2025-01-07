@@ -16,17 +16,17 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, FairyHouseConfiguration, FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>() {
+object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
     override val path = "fairy_house"
     override val tier = 2
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyHouseCard }, settings)
+    override fun createBlock(settings: FabricBlockSettings) = FairyHouseBlock({ FairyHouseCard }, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyFactoryScreenHandler(FairyHouseCard, arguments)
+    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(FairyHouseCard, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 178
@@ -67,7 +67,7 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
     override val maxFolia = 4_000
 }
 
-object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>(FairyHouseConfiguration) {
+object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
     context(ModContext)
     override fun init() {
         super.init()
@@ -85,6 +85,8 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration
     }
 }
 
+class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock(cardGetter, settings)
+
 class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(FairyHouseCard, pos, state) {
     override val self = this
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
@@ -100,3 +102,5 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBloc
         setStatus(FairyFactoryBlock.Status.PROCESSING)
     }
 }
+
+class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments)
