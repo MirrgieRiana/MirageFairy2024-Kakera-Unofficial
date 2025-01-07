@@ -82,6 +82,8 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
 }
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
+    override val self = this
+
     context(ModContext)
     override fun init() {
         super.init()
@@ -95,9 +97,9 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorC
     }
 }
 
-class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock(cardGetter, settings)
+class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock<FairyCollectorCard>(cardGetter, settings)
 
-class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
+class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 
     override val self = this
 

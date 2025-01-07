@@ -68,6 +68,8 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
 }
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
+    override val self = this
+
     context(ModContext)
     override fun init() {
         super.init()
@@ -85,9 +87,9 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration
     }
 }
 
-class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock(cardGetter, settings)
+class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock<FairyHouseCard>(cardGetter, settings)
 
-class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(FairyHouseCard, pos, state) {
+class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
     override val self = this
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
