@@ -65,15 +65,11 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
 
     override val collectingFolia = 2_000
     override val maxFolia = 4_000
-}
-
-object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
-    override val self = this
 
     context(ModContext)
-    override fun init() {
-        super.init()
-        registerShapedRecipeGeneration(item) {
+    override fun init(card: FairyHouseCard) {
+        super.init(card)
+        registerShapedRecipeGeneration(card.item) {
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")
@@ -85,6 +81,10 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration
             input('*', MaterialCard.FAIRY_CRYSTAL.item)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
+}
+
+object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
+    override val self = this
 }
 
 class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock<FairyHouseCard>(cardGetter, settings)

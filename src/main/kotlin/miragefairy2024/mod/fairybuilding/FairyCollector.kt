@@ -79,15 +79,11 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
 
     override val collectingFolia = 10_000
     override val maxFolia = 20_000
-}
-
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
-    override val self = this
 
     context(ModContext)
-    override fun init() {
-        super.init()
-        registerShapedRecipeGeneration(FairyCollectorCard.item) {
+    override fun init(card: FairyCollectorCard) {
+        super.init(card)
+        registerShapedRecipeGeneration(card.item) {
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
@@ -95,6 +91,10 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorC
             input('C', Items.CHEST)
         } on FairyHouseCard.item
     }
+}
+
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
+    override val self = this
 }
 
 class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock<FairyCollectorCard>(cardGetter, settings)
