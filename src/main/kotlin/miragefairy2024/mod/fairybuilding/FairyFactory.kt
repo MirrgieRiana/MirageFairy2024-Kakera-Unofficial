@@ -28,7 +28,7 @@ import kotlin.math.log
 
 abstract class FairyFactoryConfiguration<E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingConfiguration<E, H>() {
     companion object {
-        val FOLIA_PROPERTY = PropertySettings<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
+        val FOLIA_PROPERTY = FairyBuildingPropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
 
         fun isFairy(itemStack: ItemStack, motif: Motif): Boolean {
             if (!itemStack.isOf(FairyCard.item)) return false
@@ -39,7 +39,7 @@ abstract class FairyFactoryConfiguration<E : FairyFactoryBlockEntity<E>, H : Fai
 
     override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().luminance { blockState -> if (blockState[FairyFactoryBlock.STATUS].isLit) 8 else 0 }
 
-    override fun createProperties() = super.createProperties() + FOLIA_PROPERTY
+    override fun createPropertyConfigurations() = super.createPropertyConfigurations() + FOLIA_PROPERTY
 
     abstract val collectingFolia: Int
     abstract val maxFolia: Int

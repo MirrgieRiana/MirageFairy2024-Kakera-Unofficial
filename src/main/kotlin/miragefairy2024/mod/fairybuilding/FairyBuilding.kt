@@ -123,20 +123,20 @@ abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : F
     abstract val guiHeight: Int
 
 
-    open fun createSlots(): List<SlotSettings> = listOf()
+    open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
 
-    class SlotSettings(
+    class FairyBuildingSlotConfiguration(
         val x: Int,
         val y: Int,
         val dropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
-        val appearance: Appearance? = null,
+        val animation: SlotAnimationConfiguration? = null,
         val toolTipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     )
 
-    class Appearance(val isFairy: Boolean, val positions: List<Position>)
+    class SlotAnimationConfiguration(val isFairy: Boolean, val positions: List<Position>)
 
     /**
      * @param x 1/16 scale
@@ -148,9 +148,9 @@ abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : F
     class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
 
-    open fun createProperties(): List<PropertySettings<E>> = listOf()
+    open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
 
-    class PropertySettings<in E : FairyBuildingBlockEntity<*>>(
+    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*>>(
         val getter: E.() -> Int,
         val setter: E.(Int) -> Unit,
         val encoder: (Int) -> Short = { it.toShort() },
@@ -180,7 +180,7 @@ open class FairyBuildingCard<S : FairyBuildingConfiguration<E, H>, E : FairyBuil
         configuration.createScreenHandler(arguments)
     }
 
-    val slots = configuration.createSlots()
+    val slots = configuration.createSlotConfigurations()
     val availableSlotsTable = arrayOf(
         slots.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
         slots.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
@@ -190,7 +190,7 @@ open class FairyBuildingCard<S : FairyBuildingConfiguration<E, H>, E : FairyBuil
         slots.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
     )
 
-    val properties = configuration.createProperties()
+    val properties = configuration.createPropertyConfigurations()
     val propertyIndexTable = properties.withIndex().associate { (index, it) -> it to index }
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
@@ -350,18 +350,18 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
-        if (card.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
     }
 
     override fun removeStack(slot: Int, amount: Int): ItemStack {
-        if (card.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
         return Inventories.splitStack(inventory, slot, amount)
     }
 
     override fun removeStack(slot: Int): ItemStack {
-        if (card.slots[slot].appearance != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
         return Inventories.removeStack(inventory, slot)
     }
@@ -414,17 +414,17 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     protected open val doMovePosition get() = false
 
     private val fairyAnimators = Array(card.slots.size) { index ->
-        val appearance = card.slots[index].appearance
-        if (appearance != null) FairyAnimator(appearance) else null
+        val animation = card.slots[index].animation
+        if (animation != null) FairyAnimator(animation) else null
     }
 
-    private inner class FairyAnimator(val appearance: FairyBuildingConfiguration.Appearance) {
+    private inner class FairyAnimator(val animation: FairyBuildingConfiguration.SlotAnimationConfiguration) {
         init {
-            check(appearance.positions.isNotEmpty())
+            check(animation.positions.isNotEmpty())
         }
 
         private var index = 0
-        private var position = appearance.positions[index]
+        private var position = animation.positions[index]
         private var countdown = position.duration
 
         var ticks = (Math.random() * 1000).toInt()
@@ -448,10 +448,10 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 if (countdown <= 0) {
 
                     index++
-                    if (index >= appearance.positions.size) index = 0
+                    if (index >= animation.positions.size) index = 0
 
-                    position = appearance.positions[index]
-                    countdown = (appearance.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
+                    position = animation.positions[index]
+                    countdown = (animation.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
 
                 }
             }
@@ -498,8 +498,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 val z = fairyAnimator.z + fairyAnimator.zSpeed * tickDelta.toDouble()
                 val yaw = fairyAnimator.yaw + fairyAnimator.yawSpeed * tickDelta
                 val pitch = fairyAnimator.pitch + fairyAnimator.pitchSpeed * tickDelta
-                val yawOffset = if (fairyAnimator.appearance.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
-                val pitchOffset = if (fairyAnimator.appearance.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
+                val yawOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
+                val pitchOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
 
                 renderingProxy.stack {
                     renderingProxy.translate(x / 16.0, y / 16.0, z / 16.0) // 移動
@@ -507,7 +507,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                     renderingProxy.rotateX(-pitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
                     renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
 
-                    if (fairyAnimator.appearance.isFairy) {
+                    if (fairyAnimator.animation.isFairy) {
                         renderingProxy.translate(0.0, 0.25, 0.0)
                         renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
                         renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
@@ -594,7 +594,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         return quickMove(slot, destinationIndices)
     }
 
-    inner class Property(private val property: FairyBuildingConfiguration.PropertySettings<*>) {
+    inner class Property(private val property: FairyBuildingConfiguration.FairyBuildingPropertyConfiguration<*>) {
         operator fun getValue(thisRef: Any?, property: Any?): Int {
             val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
             return this.property.decoder(arguments.propertyDelegate.get(propertyIndex).toShort())
