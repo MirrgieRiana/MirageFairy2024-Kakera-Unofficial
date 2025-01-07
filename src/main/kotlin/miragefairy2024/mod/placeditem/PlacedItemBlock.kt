@@ -48,6 +48,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
@@ -85,9 +86,6 @@ fun initPlacedItemBlock() {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider {
-    companion object {
-        private val SHAPE: VoxelShape = createCuboidShape(6.0, 2.0)
-    }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
@@ -100,7 +98,10 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
 
     // レンダリング
     override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
+        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.fullCube()
+        return blockEntity.shapeCache ?: VoxelShapes.fullCube()
+    }
 
     // 真下が空気だと壊れる
     override fun canPlaceAt(state: BlockState?, world: WorldView, pos: BlockPos) = !world.isAir(pos.down())
@@ -135,6 +136,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var itemZ = 8.0 / 16.0
     var itemRotateX = -MathHelper.TAU * 0.25
     var itemRotateY = 0.0
+    var shapeCache: VoxelShape? = null
 
 
     override fun writeNbt(nbt: NbtCompound) {
@@ -155,6 +157,11 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0
         itemRotateX = nbt.wrapper["ItemRotateX"].double.get() ?: 0.0
         itemRotateY = nbt.wrapper["ItemRotateY"].double.get() ?: 0.0
+        updateShapeCache()
+    }
+
+    fun updateShapeCache() {
+        shapeCache = createCuboidShape(6.0, 2.0)
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
