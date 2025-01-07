@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.log
 
-abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingConfiguration<C, S, B, E, H>() {
+abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler<C>> : FairyBuildingConfiguration<C, S, B, E, H>() {
     companion object {
         val FOLIA_PROPERTY = FairyBuildingPropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
 
@@ -45,7 +45,7 @@ abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S 
     abstract val maxFolia: Int
 }
 
-open class FairyFactoryCard<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler>(settings: S) : FairyBuildingCard<C, S, B, E, H>(settings)
+open class FairyFactoryCard<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler<C>>(settings: S) : FairyBuildingCard<C, S, B, E, H>(settings)
 
 open class FairyFactoryBlock(cardGetter: () -> FairyFactoryCard<*, *, *, *, *>, settings: Settings) : FairyBuildingBlock(cardGetter, settings) {
     companion object {
@@ -159,6 +159,6 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
 }
 
-open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
+open class FairyFactoryScreenHandler<C : FairyFactoryCard<*, *, *, *, *>>(card: C, arguments: Arguments) : FairyBuildingScreenHandler<C>(card, arguments) {
     var folia by Property(FairyFactoryConfiguration.FOLIA_PROPERTY)
 }

@@ -86,7 +86,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
+abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>> {
     companion object {
         inline fun <reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
             override fun create(blockPos: BlockPos, blockState: BlockState) = creator(blockPos, blockState)
@@ -159,7 +159,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
 }
 
-open class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
+open class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
     val identifier = MirageFairy2024.identifier(configuration.path)
 
     val block = configuration.createBlock(configuration.createBlockSettings())
@@ -539,7 +539,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     override fun getContainerName(): Text = card.block.name
 
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler {
+    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler<*> {
         val arguments = FairyBuildingScreenHandler.Arguments(
             syncId,
             playerInventory,
@@ -552,7 +552,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler<C : FairyBuildingCard<*, *, *, *, *>>(val card: C, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,

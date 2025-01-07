@@ -103,4 +103,4 @@ class FairyHouseBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBloc
     }
 }
 
-class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments)
+class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments) : FairyFactoryScreenHandler<FairyHouseCard>(card, arguments)

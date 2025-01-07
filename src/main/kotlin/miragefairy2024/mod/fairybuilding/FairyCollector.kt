@@ -184,7 +184,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
 }
 
-class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments) {
+class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler<FairyCollectorCard>(card, arguments) {
     var collectionProgress by Property(FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY)
     var sortProgress by Property(FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY)
     var collectionSpeed by Property(FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY)
