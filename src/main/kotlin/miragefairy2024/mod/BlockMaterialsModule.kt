@@ -127,6 +127,7 @@ fun initBlockMaterialsModule() {
         }
     }
 
+    // 蒼天石ブロック
     registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
         pattern("###")
         pattern("###")
