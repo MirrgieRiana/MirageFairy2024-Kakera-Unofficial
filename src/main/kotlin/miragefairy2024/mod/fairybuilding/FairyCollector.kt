@@ -99,7 +99,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorC
 
 class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock<FairyCollectorCard>(cardGetter, settings)
 
-class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
+class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorCard, FairyCollectorBlockEntity>(card, pos, state) {
 
     override val self = this
 

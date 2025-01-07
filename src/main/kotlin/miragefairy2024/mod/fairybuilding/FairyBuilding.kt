@@ -86,9 +86,9 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>> {
+abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>> {
     companion object {
-        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<C, E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
             override fun create(card: C, blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
@@ -109,7 +109,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
 
-    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<E>> {
+    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<C, E>> {
         fun create(card: C, blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
         fun castOrNull(blockEntity: BlockEntity?): E?
@@ -150,7 +150,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
 
-    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*>>(
+    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*, *>>(
         val getter: E.() -> Int,
         val setter: E.(Int) -> Unit,
         val encoder: (Int) -> Short = { it.toShort() },
@@ -159,7 +159,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
 }
 
-abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
+abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
     abstract val self: C
 
     val identifier = MirageFairy2024.identifier(configuration.path)
@@ -314,7 +314,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, *, E, *>, pos: BlockPos, state: BlockState) :
+abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<C, E>>(val card: C, pos: BlockPos, state: BlockState) :
     LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract val self: E

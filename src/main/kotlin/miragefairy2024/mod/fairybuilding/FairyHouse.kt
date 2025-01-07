@@ -89,7 +89,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration
 
 class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock<FairyHouseCard>(cardGetter, settings)
 
-class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
+class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseCard, FairyHouseBlockEntity>(card, pos, state) {
     override val self = this
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
