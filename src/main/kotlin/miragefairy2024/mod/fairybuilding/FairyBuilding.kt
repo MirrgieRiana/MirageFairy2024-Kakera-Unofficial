@@ -86,10 +86,10 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>> {
+abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>> {
     companion object {
-        inline fun <reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
-            override fun create(blockPos: BlockPos, blockState: BlockState) = creator(blockPos, blockState)
+        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+            override fun create(card: C, blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
         }
@@ -107,10 +107,10 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
     abstract fun createBlock(settings: FabricBlockSettings): B
 
 
-    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
+    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
 
-    interface BlockEntityAccessor<E : FairyBuildingBlockEntity<E>> {
-        fun create(blockPos: BlockPos, blockState: BlockState): E
+    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<E>> {
+        fun create(card: C, blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
         fun castOrNull(blockEntity: BlockEntity?): E?
     }
@@ -159,13 +159,15 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
 }
 
-open class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
+abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
+    abstract val self: C
+
     val identifier = MirageFairy2024.identifier(configuration.path)
 
     val block = configuration.createBlock(configuration.createBlockSettings())
 
     val blockEntityAccessor = configuration.createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
+    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(self, pos, state) }, setOf(block), null)
 
     val item = BlockItem(block, Item.Settings())
 
@@ -222,7 +224,7 @@ open class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuil
     }
 }
 
-open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -236,7 +238,7 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *, *
 
     // Block Entity
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = cardGetter().blockEntityAccessor.create(pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = cardGetter().blockEntityAccessor.create(cardGetter(), pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
