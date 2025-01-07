@@ -22,11 +22,11 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyHouseBlock({ FairyHouseCard }, settings)
+    override fun createBlock(cardGetter: () -> FairyHouseCard, settings: FabricBlockSettings) = FairyHouseBlock(cardGetter, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(FairyHouseCard, arguments)
+    override fun createScreenHandler(card: FairyHouseCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 178
