@@ -104,7 +104,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
-    abstract fun createBlock(settings: FabricBlockSettings): B
+    abstract fun createBlock(cardGetter: () -> C, settings: FabricBlockSettings): B
 
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
@@ -116,7 +116,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
     }
 
 
-    abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
+    abstract fun createScreenHandler(card: C, arguments: FairyBuildingScreenHandler.Arguments): H
 
 
     abstract val guiWidth: Int
@@ -164,7 +164,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
 
     val identifier = MirageFairy2024.identifier(configuration.path)
 
-    val block = configuration.createBlock(configuration.createBlockSettings())
+    val block = configuration.createBlock({ self }, configuration.createBlockSettings())
 
     val blockEntityAccessor = configuration.createBlockEntityAccessor()
     val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(self, pos, state) }, setOf(block), null)
@@ -179,7 +179,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
             ArrayPropertyDelegate(properties.size),
             ScreenHandlerContext.EMPTY,
         )
-        configuration.createScreenHandler(arguments)
+        configuration.createScreenHandler(self, arguments)
     }
 
     val slots = configuration.createSlotConfigurations()
@@ -194,6 +194,8 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
 
     val properties = configuration.createPropertyConfigurations()
     val propertyIndexTable = properties.withIndex().associate { (index, it) -> it to index }
+
+    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = configuration.createScreenHandler(self, arguments)
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
@@ -549,7 +551,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
             propertyDelegate,
             ScreenHandlerContext.create(world, pos),
         )
-        return card.configuration.createScreenHandler(arguments)
+        return card.createScreenHandler(arguments)
     }
 
 }

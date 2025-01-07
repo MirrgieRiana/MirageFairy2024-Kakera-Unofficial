@@ -29,11 +29,11 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyCollectorBlock({ FairyCollectorCard }, settings)
+    override fun createBlock(cardGetter: () -> FairyCollectorCard, settings: FabricBlockSettings) = FairyCollectorBlock(cardGetter, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(FairyCollectorCard, arguments)
+    override fun createScreenHandler(card: FairyCollectorCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
