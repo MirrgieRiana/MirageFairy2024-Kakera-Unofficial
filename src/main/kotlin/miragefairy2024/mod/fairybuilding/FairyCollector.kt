@@ -23,17 +23,17 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCard, FairyCollectorConfiguration, FairyFactoryBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
+object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override val path = "fairy_collector"
     override val tier = 2
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyFactoryBlock({ FairyCollectorCard }, settings)
+    override fun createBlock(settings: FabricBlockSettings) = FairyCollectorBlock({ FairyCollectorCard }, settings)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(arguments)
+    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(FairyCollectorCard, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
@@ -81,7 +81,7 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
     override val maxFolia = 20_000
 }
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyFactoryBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
     context(ModContext)
     override fun init() {
         super.init()
@@ -94,6 +94,8 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorC
         } on FairyHouseCard.item
     }
 }
+
+class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock(cardGetter, settings)
 
 class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(FairyCollectorCard, pos, state) {
 
@@ -182,7 +184,7 @@ class FairyCollectorBlockEntity(pos: BlockPos, state: BlockState) : FairyFactory
 
 }
 
-class FairyCollectorScreenHandler(arguments: Arguments) : FairyFactoryScreenHandler(FairyCollectorCard, arguments) {
+class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments) {
     var collectionProgress by Property(FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY)
     var sortProgress by Property(FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY)
     var collectionSpeed by Property(FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY)
