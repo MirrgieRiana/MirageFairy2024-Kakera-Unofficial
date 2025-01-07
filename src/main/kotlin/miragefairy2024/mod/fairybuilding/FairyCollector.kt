@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
+object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyFactoryBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override val path = "fairy_collector"
     override val tier = 2
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
@@ -81,7 +81,7 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorBlo
     override val maxFolia = 20_000
 }
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorConfiguration, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorConfiguration, FairyFactoryBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
     context(ModContext)
     override fun init() {
         super.init()
