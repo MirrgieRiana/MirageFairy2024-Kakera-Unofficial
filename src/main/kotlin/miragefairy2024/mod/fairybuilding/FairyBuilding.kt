@@ -201,25 +201,25 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
         val arguments = FairyBuildingScreenHandler.Arguments(
             syncId,
             playerInventory,
-            SimpleInventory(slots.size),
-            ArrayPropertyDelegate(properties.size),
+            SimpleInventory(slotConfigurations.size),
+            ArrayPropertyDelegate(propertyConfigurations.size),
             ScreenHandlerContext.EMPTY,
         )
         configuration.createScreenHandler(self, arguments)
     }
 
-    val slots = configuration.createSlotConfigurations()
+    val slotConfigurations = configuration.createSlotConfigurations()
     val availableSlotsTable = arrayOf(
-        slots.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slots.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slots.withIndex().filter { Direction.NORTH in it.value.insertDirections || Direction.NORTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slots.withIndex().filter { Direction.SOUTH in it.value.insertDirections || Direction.SOUTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slots.withIndex().filter { Direction.WEST in it.value.insertDirections || Direction.WEST in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slots.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.NORTH in it.value.insertDirections || Direction.NORTH in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.SOUTH in it.value.insertDirections || Direction.SOUTH in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.WEST in it.value.insertDirections || Direction.WEST in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
     )
 
-    val properties = configuration.createPropertyConfigurations()
-    val propertyIndexTable = properties.withIndex().associate { (index, it) -> it to index }
+    val propertyConfigurations = configuration.createPropertyConfigurations()
+    val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
 
     fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = configuration.createScreenHandler(self, arguments)
 
@@ -345,7 +345,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     // Inventory
 
-    private val inventory = MutableList(card.slots.size) { EMPTY_ITEM_STACK }
+    private val inventory = MutableList(card.slotConfigurations.size) { EMPTY_ITEM_STACK }
 
     override fun size() = inventory.size
 
@@ -357,23 +357,23 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
-        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
     }
 
     override fun removeStack(slot: Int, amount: Int): ItemStack {
-        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
         return Inventories.splitStack(inventory, slot, amount)
     }
 
     override fun removeStack(slot: Int): ItemStack {
-        if (card.slots[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
         return Inventories.removeStack(inventory, slot)
     }
 
-    override fun isValid(slot: Int, stack: ItemStack) = card.slots[slot].filter(stack)
+    override fun isValid(slot: Int, stack: ItemStack) = card.slotConfigurations[slot].filter(stack)
 
     private fun getActualSide(side: Direction): Direction {
         return when (side) {
@@ -390,9 +390,9 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
         return card.availableSlotsTable[getActualSide(side).id]
     }
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || (getActualSide(dir) in card.slots[slot].insertDirections)) && isValid(slot, stack)
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || (getActualSide(dir) in card.slotConfigurations[slot].insertDirections)) && isValid(slot, stack)
 
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = getActualSide(dir) in card.slots[slot].extractDirections
+    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = getActualSide(dir) in card.slotConfigurations[slot].extractDirections
 
     override fun clear() {
         world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
@@ -402,7 +402,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
-            if (card.slots[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
+            if (card.slotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
         }
         world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
@@ -420,8 +420,8 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     protected open val doMovePosition get() = false
 
-    private val fairyAnimators = Array(card.slots.size) { index ->
-        val animation = card.slots[index].animation
+    private val fairyAnimators = Array(card.slotConfigurations.size) { index ->
+        val animation = card.slotConfigurations[index].animation
         if (animation != null) FairyAnimator(animation) else null
     }
 
@@ -497,7 +497,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
             renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
-            card.slots.forEachIndexed { index, _ ->
+            card.slotConfigurations.forEachIndexed { index, _ ->
                 val fairyAnimator = fairyAnimators[index] ?: return@forEachIndexed
 
                 val x = fairyAnimator.x + fairyAnimator.xSpeed * tickDelta.toDouble()
@@ -537,9 +537,9 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
     // Gui
 
     private val propertyDelegate = object : PropertyDelegate {
-        override fun size() = card.properties.size
-        override fun get(index: Int) = card.properties.getOrNull(index)?.let { it.encoder(it.getter.invoke(self)).toInt() } ?: 0
-        override fun set(index: Int, value: Int) = unit { card.properties.getOrNull(index)?.let { it.setter.invoke(self, it.decoder(value.toShort())) } }
+        override fun size() = card.propertyConfigurations.size
+        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encoder(it.getter.invoke(self)).toInt() } ?: 0
+        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.setter.invoke(self, it.decoder(value.toShort())) } }
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
@@ -570,8 +570,8 @@ open class FairyBuildingScreenHandler<C : FairyBuildingCard<*, *, *, *, *>>(val 
     )
 
     init {
-        checkSize(arguments.inventory, card.slots.size)
-        checkDataCount(arguments.propertyDelegate, card.properties.size)
+        checkSize(arguments.inventory, card.slotConfigurations.size)
+        checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
         val y = card.configuration.guiHeight - 82
         repeat(3) { r ->
@@ -582,7 +582,7 @@ open class FairyBuildingScreenHandler<C : FairyBuildingCard<*, *, *, *, *>>(val 
         repeat(9) { c ->
             addSlot(Slot(arguments.playerInventory, c, 8 + c * 18, y + 18 * 3 + 4))
         }
-        card.slots.forEachIndexed { index, slot ->
+        card.slotConfigurations.forEachIndexed { index, slot ->
             addSlot(object : Slot(arguments.inventory, index, slot.x, slot.y) {
                 override fun canInsert(stack: ItemStack) = slot.filter(stack)
             })
