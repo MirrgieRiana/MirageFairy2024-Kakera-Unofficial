@@ -1,6 +1,8 @@
 {
   "biome.miragefairy2024.deep_fairy_forest": "Deep Fairy Forest",
   "biome.miragefairy2024.fairy_forest": "Fairy Forest",
+  "block.miragefairy2024.aura_stone": "Aura Stone",
+  "block.miragefairy2024.aura_stone.poem": "It absorbs auras and seals them away",
   "block.miragefairy2024.deepslate_fluorite_ore": "Deepslate Fluorite Ore",
   "block.miragefairy2024.deepslate_miranagite_ore": "Deepslate Miranagite Ore",
   "block.miragefairy2024.deepslate_miranagite_ore.poem": "Singularities built by the Creator",
