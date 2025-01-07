@@ -90,39 +90,39 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
-class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
+class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
-        val LEAVES = Settings(
+        val LEAVES = Configuration(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
             PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
         ).let { HaimeviskaBlockCard(it, { HaimeviskaLeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
-        val LOG = Settings(
+        val LOG = Configuration(
             "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
             PoemList(1)
                 .poem("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。")
                 .description("Can be incised with a sword", "剣を使って傷を付けられる"),
         ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock) }
-        val INCISED_LOG = Settings(
+        val INCISED_LOG = Configuration(
             "incised_haimeviska_log", "Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木",
             PoemList(1)
                 .poem("Do fairy trees have qualia of pain?", "動物を守るということ。")
                 .description("Produces sap over time", "時間経過で樹液を生産")
         ).let { HaimeviskaBlockCard(it, { IncisedHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val DRIPPING_LOG = Settings(
+        val DRIPPING_LOG = Configuration(
             "dripping_haimeviska_log", "Dripping Haimeviska Log", "滴るハイメヴィスカの原木",
             PoemList(1)
                 .poem("A spirit named 'glucose'", "霊界より降りしもの。")
                 .description("Harvest sap when used", "使用時、樹液を収穫"),
         ).let { HaimeviskaBlockCard(it, { DrippingHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val HOLLOW_LOG = Settings(
+        val HOLLOW_LOG = Configuration(
             "hollow_haimeviska_log", "Hollow Haimeviska Log", "ハイメヴィスカの樹洞",
             PoemList(1).poem("Auric conceptual attractor", "限界巡回アステリア。"),
         ).let { HaimeviskaBlockCard(it, { SimpleHorizontalFacingBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val PLANKS = Settings(
+        val PLANKS = Configuration(
             "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
             PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
         ).let { HaimeviskaBlockCard(it, { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock) }
-        val SAPLING = Settings(
+        val SAPLING = Configuration(
             "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
             PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
         ).let { HaimeviskaBlockCard(it, { SaplingBlock(HaimeviskaSaplingGenerator(), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
@@ -130,9 +130,9 @@ class HaimeviskaBlockCard(val settings: Settings, blockCreator: () -> Block, val
         val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SAPLING)
     }
 
-    class Settings(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
+    class Configuration(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
 
-    val identifier = MirageFairy2024.identifier(settings.path)
+    val identifier = MirageFairy2024.identifier(configuration.path)
     val block = blockCreator()
     val item = BlockItem(block, Item.Settings())
 }
@@ -270,9 +270,9 @@ fun initHaimeviskaBlocks() {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
-        card.block.enJa(EnJa(card.settings.enName, card.settings.jaName))
-        card.item.registerPoem(card.settings.poemList)
-        card.item.registerPoemGeneration(card.settings.poemList)
+        card.block.enJa(EnJa(card.configuration.enName, card.configuration.jaName))
+        card.item.registerPoem(card.configuration.poemList)
+        card.item.registerPoemGeneration(card.configuration.poemList)
 
         card.initializer(this@ModContext, card)
     }
