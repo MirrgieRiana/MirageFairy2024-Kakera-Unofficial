@@ -9,12 +9,12 @@ import miragefairy2024.mod.WISP_TAG
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.Channel
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
 import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
+import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
 import miragefairy2024.util.registerServerPacketReceiver
 import miragefairy2024.util.size
@@ -134,27 +134,9 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
 
     override fun canUse(player: PlayerEntity) = true
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-
-        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
-        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
-
-        val newItemStack = slots[slot].stack
-        val originalItemStack = newItemStack.copy()
-
-        if (slot < 9 * 4) {
-            if (!insertItem(newItemStack, 9 * 4 + 9, 9 * 4 + SoulStream.SLOT_COUNT, false)) return EMPTY_ITEM_STACK
-        } else {
-            if (!insertItem(newItemStack, 0, 9 * 4, true)) return EMPTY_ITEM_STACK
-        }
-        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
-
-        // 終了処理
-        if (newItemStack.isEmpty) {
-            slots[slot].stack = EMPTY_ITEM_STACK
-        } else {
-            slots[slot].markDirty()
-        }
-
-        return originalItemStack
+        val playerIndices = 9 * 4 - 1 downTo 0
+        val utilityIndices = 9 * 4 + 9 until 9 * 4 + SoulStream.SLOT_COUNT
+        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
+        return quickMove(slot, destinationIndices)
     }
 }

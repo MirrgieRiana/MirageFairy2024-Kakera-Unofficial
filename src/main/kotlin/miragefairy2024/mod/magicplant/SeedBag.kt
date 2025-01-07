@@ -9,20 +9,18 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbtAndCount
-import miragefairy2024.util.insertItem
-import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.mergeTo
 import miragefairy2024.util.on
 import miragefairy2024.util.plus
+import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
@@ -297,26 +295,9 @@ class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInven
     }
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
-        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
-
-        val newItemStack = slots[slot].stack
-        val originalItemStack = newItemStack.copy()
-
-        if (slot < 9 * 4) { // 上へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
-        } else { // 下へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
-        }
-        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
-
-        // 終了処理
-        if (newItemStack.isEmpty) {
-            slots[slot].stack = EMPTY_ITEM_STACK
-        } else {
-            slots[slot].markDirty()
-        }
-
-        return originalItemStack
+        val playerIndices = 9 * 4 - 1 downTo 0
+        val utilityIndices = 9 * 4 until slots.size
+        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
+        return quickMove(slot, destinationIndices)
     }
 }
