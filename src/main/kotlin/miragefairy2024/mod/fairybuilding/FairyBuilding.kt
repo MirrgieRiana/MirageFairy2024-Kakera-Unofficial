@@ -157,6 +157,32 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
         val decoder: (Short) -> Int = { it.toInt() },
     )
 
+    context(ModContext)
+    open fun init(card: C) {
+
+        card.block.register(Registries.BLOCK, card.identifier)
+        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
+        card.item.register(Registries.ITEM, card.identifier)
+        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
+
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerCutoutRenderLayer()
+        card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
+
+        card.block.enJa(card.configuration.name)
+        val poemList = PoemList(card.configuration.tier).poem(card.configuration.poem)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
+
+        card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
+
+        card.block.registerDefaultLootTableGeneration()
+
+    }
+
 }
 
 abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
@@ -200,30 +226,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
     context(ModContext)
-    open fun init() {
-
-        block.register(Registries.BLOCK, identifier)
-        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
-        item.register(Registries.ITEM, identifier)
-        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
-
-        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
-        block.registerCutoutRenderLayer()
-        blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
-
-        block.enJa(configuration.name)
-        val poemList = PoemList(configuration.tier).poem(configuration.poem)
-        item.registerPoem(poemList)
-        item.registerPoemGeneration(poemList)
-
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
-        block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-
-        block.registerDefaultLootTableGeneration()
-
-    }
+    fun init() = configuration.init(self)
 }
 
 open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
