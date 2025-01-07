@@ -171,8 +171,8 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.enJa(card.configuration.name)
-        val poemList = PoemList(card.configuration.tier).poem(card.configuration.poem)
+        card.block.enJa(name)
+        val poemList = PoemList(tier).poem(poem)
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
