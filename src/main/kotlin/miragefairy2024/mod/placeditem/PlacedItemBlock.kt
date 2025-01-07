@@ -130,9 +130,9 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
 
 
     var itemStack = EMPTY_ITEM_STACK
-    var itemX = 0.5
+    var itemX = 8.0 / 16.0
     var itemY = 0.5 / 16.0
-    var itemZ = 0.5
+    var itemZ = 8.0 / 16.0
     var itemRotateX = MathHelper.TAU * 0.25
     var itemRotateY = 0.0
 
