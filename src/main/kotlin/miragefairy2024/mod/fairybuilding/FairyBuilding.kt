@@ -17,9 +17,8 @@ import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
-import miragefairy2024.util.insertItem
-import miragefairy2024.util.inventoryAccessor
 import miragefairy2024.util.normal
+import miragefairy2024.util.quickMove
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -589,27 +588,10 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
     override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
-        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
-
-        val newItemStack = slots[slot].stack
-        val originalItemStack = newItemStack.copy()
-
-        if (slot < 9 * 4) { // 上へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 until slots.size)) return EMPTY_ITEM_STACK
-        } else { // 下へ
-            if (!inventoryAccessor.insertItem(newItemStack, 9 * 4 - 1 downTo 0)) return EMPTY_ITEM_STACK
-        }
-        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
-
-        // 終了処理
-        if (newItemStack.isEmpty) {
-            slots[slot].stack = EMPTY_ITEM_STACK
-        } else {
-            slots[slot].markDirty()
-        }
-
-        return originalItemStack
+        val playerIndices = 9 * 4 - 1 downTo 0
+        val utilityIndices = 9 * 4 until slots.size
+        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
+        return quickMove(slot, destinationIndices)
     }
 
     inner class Property(private val property: FairyBuildingConfiguration.PropertySettings<*>) {

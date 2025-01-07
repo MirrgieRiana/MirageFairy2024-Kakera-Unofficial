@@ -2,12 +2,12 @@ package miragefairy2024.mod.fairyquest
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.OutputSlot
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.mergeTo
+import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
@@ -84,28 +84,10 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
     override fun canUse(player: PlayerEntity) = true
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        if (slot < 0 || slot >= slots.size) return EMPTY_ITEM_STACK
-        if (!slots[slot].hasStack()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
-
-        val newItemStack = slots[slot].stack
-        val originalItemStack = newItemStack.copy()
-
-        // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
-        if (slot < 9 * 4) {
-            if (!insertItem(newItemStack, 9 * 4, 9 * 4 + 4, false)) return EMPTY_ITEM_STACK
-        } else {
-            if (!insertItem(newItemStack, 0, 9 * 4, false)) return EMPTY_ITEM_STACK
-        }
-        slots[slot].onQuickTransfer(newItemStack, originalItemStack)
-
-        // 終了処理
-        if (newItemStack.isEmpty) {
-            slots[slot].stack = EMPTY_ITEM_STACK
-        } else {
-            slots[slot].markDirty()
-        }
-
-        return originalItemStack
+        val playerIndices = 9 * 4 - 1 downTo 0
+        val utilityIndices = 9 * 4 until 9 * 4 + 4 // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
+        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
+        return quickMove(slot, destinationIndices)
     }
 
     override fun sendContentUpdates() {
