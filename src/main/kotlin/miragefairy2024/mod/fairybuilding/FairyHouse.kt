@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyHouseConfiguration : FairyFactoryConfiguration<FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>() {
+object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, FairyHouseConfiguration, FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>() {
     override val path = "fairy_house"
     override val tier = 2
     override val name = EnJa("Fairy House", "妖精の家")
@@ -67,7 +67,7 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyFactoryBlock, Fa
     override val maxFolia = 4_000
 }
 
-object FairyHouseCard : FairyFactoryCard<FairyHouseConfiguration, FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>(FairyHouseConfiguration) {
+object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyFactoryBlock, FairyHouseBlockEntity, FairyFactoryScreenHandler>(FairyHouseConfiguration) {
     context(ModContext)
     override fun init() {
         super.init()
