@@ -86,7 +86,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
+abstract class FairyBuildingConfiguration<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
         inline fun <reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
             override fun create(blockPos: BlockPos, blockState: BlockState) = creator(blockPos, blockState)
@@ -104,7 +104,7 @@ abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : F
 
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
-    abstract fun createBlock(settings: FabricBlockSettings): FairyBuildingBlock
+    abstract fun createBlock(settings: FabricBlockSettings): B
 
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
@@ -159,7 +159,7 @@ abstract class FairyBuildingConfiguration<E : FairyBuildingBlockEntity<E>, H : F
 
 }
 
-open class FairyBuildingCard<S : FairyBuildingConfiguration<E, H>, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
+open class FairyBuildingCard<S : FairyBuildingConfiguration<B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
     val identifier = MirageFairy2024.identifier(configuration.path)
 
     val block = configuration.createBlock(configuration.createBlockSettings())
@@ -222,7 +222,7 @@ open class FairyBuildingCard<S : FairyBuildingConfiguration<E, H>, E : FairyBuil
     }
 }
 
-open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -312,7 +312,7 @@ open class FairyBuildingBlock(val cardGetter: () -> FairyBuildingCard<*, *, *>, 
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) :
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) :
     LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract val self: E
@@ -552,7 +552,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
