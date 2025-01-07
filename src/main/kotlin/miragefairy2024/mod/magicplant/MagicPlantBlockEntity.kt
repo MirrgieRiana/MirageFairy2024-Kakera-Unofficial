@@ -13,7 +13,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.biome.Biome
 
-class MagicPlantBlockEntity(private val settings: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(settings.card.blockEntityType, pos, state) {
+class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType, pos, state) {
 
     private var traitStacks: TraitStacks? = null
 
@@ -48,7 +48,7 @@ class MagicPlantBlockEntity(private val settings: MagicPlantConfiguration<*, *>,
     override fun setWorld(world: World) {
         super.setWorld(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(settings.possibleTraits, world.getBiome(pos), world.random)
+            val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(pos), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
