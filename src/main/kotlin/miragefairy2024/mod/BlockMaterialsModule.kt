@@ -83,6 +83,13 @@ enum class BlockMaterialCard(
         tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
         texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
     ),
+    AURA_STONE(
+        "aura_stone", "Aura Stone", "霊氣石",
+        PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
+        MapColor.DIAMOND_BLUE, 5.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL),
+        blockSoundGroup = BlockSoundGroup.METAL,
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -137,6 +144,16 @@ fun initBlockMaterialsModule() {
     registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
         input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
     } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
+
+    // 霊氣石
+    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
+        pattern("XMX")
+        pattern("MCM")
+        pattern("XMX")
+        input('X', MaterialCard.XARPITE.item)
+        input('M', MaterialCard.MIRANAGITE.item)
+        input('C', MaterialCard.FAIRY_CRYSTAL.item)
+    } on MaterialCard.FAIRY_CRYSTAL.item
 
 }
 
