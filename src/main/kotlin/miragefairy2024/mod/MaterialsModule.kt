@@ -92,6 +92,11 @@ enum class MaterialCard(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
         PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
     ),
+    PHANTOM_LEAVES(
+        "phantom_leaves", "Phantom Leaves", "ファントムの葉",
+        PoemList(3).poem("The eroding reality", "析出する空想"),
+        fuelValue = 100,
+    ),
     PHANTOM_DROP(
         "phantom_drop", "Phantom Drop", "幻想の雫",
         PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
