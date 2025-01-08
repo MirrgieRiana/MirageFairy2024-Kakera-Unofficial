@@ -45,7 +45,7 @@ abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S 
     abstract val maxFolia: Int
 }
 
-abstract class FairyFactoryCard<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock<C>, E : FairyFactoryBlockEntity<C, E>, H : FairyFactoryScreenHandler<C>>(settings: S) : FairyBuildingCard<C, S, B, E, H>(settings)
+abstract class FairyFactoryCard<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock<C>, E : FairyFactoryBlockEntity<C, E>, H : FairyFactoryScreenHandler<C>>(configuration: S) : FairyBuildingCard<C, S, B, E, H>(configuration)
 
 open class FairyFactoryBlock<C : FairyFactoryCard<C, *, *, *, *>>(cardGetter: () -> C, settings: Settings) : FairyBuildingBlock<C>(cardGetter, settings) {
     companion object {
