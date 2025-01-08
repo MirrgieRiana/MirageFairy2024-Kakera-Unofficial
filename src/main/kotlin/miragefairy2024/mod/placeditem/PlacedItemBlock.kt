@@ -29,7 +29,6 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -45,14 +44,11 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import net.minecraft.world.WorldAccess
-import net.minecraft.world.WorldView
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
@@ -101,14 +97,6 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
         val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.fullCube()
         return blockEntity.shapeCache ?: VoxelShapes.fullCube()
-    }
-
-    // 真下が空気だと壊れる
-    override fun canPlaceAt(state: BlockState?, world: WorldView, pos: BlockPos) = !world.isAir(pos.down())
-    override fun getStateForNeighborUpdate(state: BlockState, direction: Direction, neighborState: BlockState, world: WorldAccess, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        if (!state.canPlaceAt(world, pos)) return Blocks.AIR.defaultState
-        @Suppress("DEPRECATION")
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos)
     }
 
     // 格納されているアイテムをドロップする
