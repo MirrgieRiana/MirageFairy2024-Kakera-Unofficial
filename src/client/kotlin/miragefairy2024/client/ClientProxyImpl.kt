@@ -102,6 +102,10 @@ class RenderingProxyBlockEntityRenderer<T>(
                 MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
             }
 
+            override fun renderFixedItemStack(itemStack: ItemStack) {
+                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
+            }
+
             override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
                 val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getCutout())
                 val bakedModel = if (variant != null) {

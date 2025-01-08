@@ -45,6 +45,7 @@ interface RenderingProxy {
     fun rotateZ(rad: Float)
 
     fun renderItemStack(itemStack: ItemStack)
+    fun renderFixedItemStack(itemStack: ItemStack)
     fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
 }
 
