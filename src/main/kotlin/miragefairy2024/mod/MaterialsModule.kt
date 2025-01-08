@@ -94,7 +94,7 @@ enum class MaterialCard(
     ),
     PHANTOM_LEAVES(
         "phantom_leaves", "Phantom Leaves", "ファントムの葉",
-        PoemList(3).poem("The eroding reality", "析出する空想"),
+        PoemList(3).poem("The eroding reality", "析出する空想。"),
         fuelValue = 100,
     ),
     PHANTOM_DROP(
