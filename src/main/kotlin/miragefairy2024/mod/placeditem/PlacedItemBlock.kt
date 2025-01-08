@@ -10,7 +10,6 @@ import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.compound
-import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.double
 import miragefairy2024.util.get
@@ -23,7 +22,11 @@ import miragefairy2024.util.string
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
+import mirrg.kotlin.hydrogen.atLeast
+import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.castOrNull
+import mirrg.kotlin.hydrogen.max
+import mirrg.kotlin.hydrogen.min
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
@@ -149,7 +152,60 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     }
 
     fun updateShapeCache() {
-        shapeCache = createCuboidShape(6.0, 2.0)
+        shapeCache = run {
+
+            var minX = 0.0
+            var minY = 0.0
+            var minZ = 0.0
+            var maxX = 0.0
+            var maxY = 0.0
+            var maxZ = 0.0
+
+            fun extend(x: Double, y: Double, z: Double) {
+                var x2 = x
+                var y2 = y
+                var z2 = z
+
+                run {
+                    val y3 = MathHelper.sin(-itemRotateX.toFloat()).toDouble() * z2 + MathHelper.cos(-itemRotateX.toFloat()).toDouble() * y2
+                    val z3 = MathHelper.cos(-itemRotateX.toFloat()).toDouble() * z2 - MathHelper.sin(-itemRotateX.toFloat()).toDouble() * y2
+                    y2 = y3
+                    z2 = z3
+                }
+
+                run {
+                    val x3 = MathHelper.sin(itemRotateY.toFloat()).toDouble() * z2 + MathHelper.cos(itemRotateY.toFloat()).toDouble() * x2
+                    val z3 = MathHelper.cos(itemRotateY.toFloat()).toDouble() * z2 - MathHelper.sin(itemRotateY.toFloat()).toDouble() * x2
+                    x2 = x3
+                    z2 = z3
+                }
+
+                minX = minX min x2
+                minY = minY min y2
+                minZ = minZ min z2
+                maxX = maxX max x2
+                maxY = maxY max y2
+                maxZ = maxZ max z2
+            }
+
+            extend(-5.0, -5.0, -0.5)
+            extend(-5.0, -5.0, +1.5)
+            extend(-5.0, +5.0, -0.5)
+            extend(-5.0, +5.0, +1.5)
+            extend(+5.0, -5.0, -0.5)
+            extend(+5.0, -5.0, +1.5)
+            extend(+5.0, +5.0, -0.5)
+            extend(+5.0, +5.0, +1.5)
+
+            Block.createCuboidShape(
+                itemX * 16.0 + minX atLeast 0.0,
+                itemY * 16.0 + minY atLeast 0.0,
+                itemZ * 16.0 + minZ atLeast 0.0,
+                itemX * 16.0 + maxX atMost 16.0,
+                itemY * 16.0 + maxY atMost 16.0,
+                itemZ * 16.0 + maxZ atMost 16.0,
+            )
+        }
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
