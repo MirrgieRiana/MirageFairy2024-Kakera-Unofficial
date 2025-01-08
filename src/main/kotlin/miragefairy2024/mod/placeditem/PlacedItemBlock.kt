@@ -218,6 +218,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
             renderingProxy.rotateY(itemRotateY.toFloat())
             renderingProxy.rotateX(itemRotateX.toFloat())
             renderingProxy.scale(0.5F, 0.5F, 0.5F)
+            renderingProxy.rotateY(MathHelper.PI)
             renderingProxy.renderFixedItemStack(if (itemStack.isEmpty) INVALID_ITEM_STACK else itemStack)
         }
     }
