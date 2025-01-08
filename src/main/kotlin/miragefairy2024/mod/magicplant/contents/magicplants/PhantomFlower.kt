@@ -53,6 +53,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.PHANTOM_DROP.item)
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item.createItemStack(count))
 
     override val family = MirageFairy2024.identifier("mirage")
@@ -71,11 +72,11 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
         TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
         TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
-        //TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
+        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
         TraitCard.RARE_PRODUCTION.trait, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
         //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
-        //TraitCard.FOUR_LEAFED.trait, // 四つ葉
+        TraitCard.FOUR_LEAFED.trait, // 四つ葉
         //TraitCard.NODED_STEM.trait, // 節状の茎
         //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         //TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
