@@ -29,9 +29,9 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(cardGetter: () -> FairyCollectorCard, settings: FabricBlockSettings) = FairyCollectorBlock(cardGetter, settings)
+    override fun createBlock(card: FairyCollectorCard, settings: FabricBlockSettings) = FairyCollectorBlock(card, settings)
 
-    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
+    override fun createBlockEntityAccessor(card: FairyCollectorCard) = BlockEntityAccessor(card, ::FairyCollectorBlockEntity)
 
     override fun createScreenHandler(card: FairyCollectorCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
 
@@ -94,14 +94,14 @@ object FairyCollectorConfiguration : FairyFactoryConfiguration<FairyCollectorCar
 }
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorConfiguration, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>(FairyCollectorConfiguration) {
-    override val self = this
+    override fun getThis() = this
 }
 
-class FairyCollectorBlock(cardGetter: () -> FairyCollectorCard, settings: Settings) : FairyFactoryBlock<FairyCollectorCard>(cardGetter, settings)
+class FairyCollectorBlock(card: FairyCollectorCard, settings: Settings) : FairyFactoryBlock(card, settings)
 
-class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorCard, FairyCollectorBlockEntity>(card, pos, state) {
+class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 
-    override val self = this
+    override fun getThis() = this
 
 
     override fun readNbt(nbt: NbtCompound) {
@@ -186,7 +186,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
 
 }
 
-class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler<FairyCollectorCard>(card, arguments) {
+class FairyCollectorScreenHandler(card: FairyCollectorCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments) {
     var collectionProgress by Property(FairyCollectorConfiguration.COLLECTION_PROGRESS_PROPERTY)
     var sortProgress by Property(FairyCollectorConfiguration.SORT_PROGRESS_PROPERTY)
     var collectionSpeed by Property(FairyCollectorConfiguration.COLLECTION_SPEED_PROPERTY)

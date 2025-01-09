@@ -86,10 +86,10 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>> {
+abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
-        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<C, E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
-            override fun create(card: C, blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
+        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(card: C, crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+            override fun create(blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
         }
@@ -104,13 +104,13 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
-    abstract fun createBlock(cardGetter: () -> C, settings: FabricBlockSettings): B
+    abstract fun createBlock(card: C, settings: FabricBlockSettings): B
 
 
-    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
+    abstract fun createBlockEntityAccessor(card: C): BlockEntityAccessor<C, E>
 
-    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<C, E>> {
-        fun create(card: C, blockPos: BlockPos, blockState: BlockState): E
+    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<E>> {
+        fun create(blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
         fun castOrNull(blockEntity: BlockEntity?): E?
     }
@@ -150,7 +150,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
 
-    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*, *>>(
+    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*>>(
         val getter: E.() -> Int,
         val setter: E.(Int) -> Unit,
         val encoder: (Int) -> Short = { it.toShort() },
@@ -185,15 +185,17 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
 }
 
-abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock<C>, E : FairyBuildingBlockEntity<C, E>, H : FairyBuildingScreenHandler<C>>(val configuration: S) {
-    abstract val self: C
+abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
+    abstract fun getThis(): C
 
     val identifier = MirageFairy2024.identifier(configuration.path)
 
-    val block = configuration.createBlock({ self }, configuration.createBlockSettings())
+    @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
+    val block = configuration.createBlock(getThis(), configuration.createBlockSettings())
 
-    val blockEntityAccessor = configuration.createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(self, pos, state) }, setOf(block), null)
+    @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
+    val blockEntityAccessor = configuration.createBlockEntityAccessor(getThis())
+    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
 
     val item = BlockItem(block, Item.Settings())
 
@@ -205,7 +207,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
             ArrayPropertyDelegate(propertyConfigurations.size),
             ScreenHandlerContext.EMPTY,
         )
-        configuration.createScreenHandler(self, arguments)
+        configuration.createScreenHandler(getThis(), arguments)
     }
 
     val slotConfigurations = configuration.createSlotConfigurations()
@@ -221,15 +223,15 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
     val propertyConfigurations = configuration.createPropertyConfigurations()
     val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
 
-    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = configuration.createScreenHandler(self, arguments)
+    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = configuration.createScreenHandler(getThis(), arguments)
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
     context(ModContext)
-    fun init() = configuration.init(self)
+    fun init() = configuration.init(getThis())
 }
 
-open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGetter: () -> C, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -243,7 +245,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
 
     // Block Entity
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = cardGetter().blockEntityAccessor.create(cardGetter(), pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = card.blockEntityAccessor.create(pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
@@ -254,7 +256,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
 
     override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
         if (itemStack.hasCustomName()) {
-            val blockEntity = cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return
+            val blockEntity = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return
             blockEntity.customName = itemStack.name
         }
     }
@@ -262,7 +264,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.isOf(newState.block)) {
-            cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.dropItems()
+            card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.dropItems()
             super.onStateReplaced(state, world, pos, newState, moved)
         }
     }
@@ -271,9 +273,9 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
     // Move
 
     override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return if (world.isClient) checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
+        return if (world.isClient) checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
             blockEntity.clientTick(world2, pos, state2)
-        } else checkType(type, cardGetter().blockEntityType) { world2, pos, state2, blockEntity ->
+        } else checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
             blockEntity.serverTick(world2, pos, state2)
         }
     }
@@ -287,7 +289,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClient) return ActionResult.SUCCESS
-        val blockEntity = cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return ActionResult.CONSUME
+        val blockEntity = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return ActionResult.CONSUME
         player.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
             override fun getDisplayName() = blockEntity.displayName
@@ -308,7 +310,7 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
-        return cardGetter().blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
+        return card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -319,10 +321,10 @@ open class FairyBuildingBlock<C : FairyBuildingCard<C, *, *, *, *>>(val cardGett
 
 }
 
-abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<C, E>>(val card: C, pos: BlockPos, state: BlockState) :
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, *, E, *>, pos: BlockPos, state: BlockState) :
     LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
-    abstract val self: E
+    abstract fun getThis(): E
 
 
     // Data
@@ -538,15 +540,15 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
     private val propertyDelegate = object : PropertyDelegate {
         override fun size() = card.propertyConfigurations.size
-        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encoder(it.getter.invoke(self)).toInt() } ?: 0
-        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.setter.invoke(self, it.decoder(value.toShort())) } }
+        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encoder(it.getter.invoke(getThis())).toInt() } ?: 0
+        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.setter.invoke(getThis(), it.decoder(value.toShort())) } }
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
 
     override fun getContainerName(): Text = card.block.name
 
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler<*> {
+    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler {
         val arguments = FairyBuildingScreenHandler.Arguments(
             syncId,
             playerInventory,
@@ -559,7 +561,7 @@ abstract class FairyBuildingBlockEntity<C : FairyBuildingCard<C, *, *, E, *>, E 
 
 }
 
-open class FairyBuildingScreenHandler<C : FairyBuildingCard<*, *, *, *, *>>(val card: C, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
