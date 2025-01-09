@@ -22,9 +22,9 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(cardGetter: () -> FairyHouseCard, settings: FabricBlockSettings) = FairyHouseBlock(cardGetter, settings)
+    override fun createBlock(card: FairyHouseCard, settings: FabricBlockSettings) = FairyHouseBlock(card, settings)
 
-    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
+    override fun createBlockEntityAccessor(card: FairyHouseCard) = BlockEntityAccessor(card, ::FairyHouseBlockEntity)
 
     override fun createScreenHandler(card: FairyHouseCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(card, arguments)
 
@@ -84,13 +84,13 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
 }
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
-    override val self = this
+    override fun getThis() = this
 }
 
-class FairyHouseBlock(cardGetter: () -> FairyHouseCard, settings: Settings) : FairyFactoryBlock<FairyHouseCard>(cardGetter, settings)
+class FairyHouseBlock(card: FairyHouseCard, settings: Settings) : FairyFactoryBlock(card, settings)
 
-class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseCard, FairyHouseBlockEntity>(card, pos, state) {
-    override val self = this
+class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
+    override fun getThis() = this
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
@@ -105,4 +105,4 @@ class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockSta
     }
 }
 
-class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments) : FairyFactoryScreenHandler<FairyHouseCard>(card, arguments)
+class FairyHouseScreenHandler(card: FairyHouseCard, arguments: Arguments) : FairyFactoryScreenHandler(card, arguments)
