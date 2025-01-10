@@ -86,9 +86,9 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
+abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
-        inline fun <C : FairyBuildingCard<C, *, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(card: C, crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+        inline fun <C : FairyBuildingCard<C, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(card: C, crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
             override fun create(blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
@@ -96,7 +96,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
     }
 
 
-    abstract val path: String
+    abstract fun getPath(): String
     abstract val tier: Int
     abstract val name: EnJa
     abstract val poem: EnJa
@@ -109,7 +109,7 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     abstract fun createBlockEntityAccessor(card: C): BlockEntityAccessor<C, E>
 
-    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, *, E, *>, E : FairyBuildingBlockEntity<E>> {
+    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, E, *>, E : FairyBuildingBlockEntity<E>> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
         fun castOrNull(blockEntity: BlockEntity?): E?
@@ -183,18 +183,15 @@ abstract class FairyBuildingConfiguration<C : FairyBuildingCard<C, S, B, E, H>, 
 
     }
 
-}
-
-abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : FairyBuildingConfiguration<C, S, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler>(val configuration: S) {
     abstract fun getThis(): C
 
-    val identifier = MirageFairy2024.identifier(configuration.path)
+    val identifier = MirageFairy2024.identifier(getPath())
 
     @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val block = configuration.createBlock(getThis(), configuration.createBlockSettings())
+    val block = createBlock(getThis(), createBlockSettings())
 
     @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val blockEntityAccessor = configuration.createBlockEntityAccessor(getThis())
+    val blockEntityAccessor = createBlockEntityAccessor(getThis())
     val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
 
     val item = BlockItem(block, Item.Settings())
@@ -207,10 +204,10 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
             ArrayPropertyDelegate(propertyConfigurations.size),
             ScreenHandlerContext.EMPTY,
         )
-        configuration.createScreenHandler(getThis(), arguments)
+        createScreenHandler(getThis(), arguments)
     }
 
-    val slotConfigurations = configuration.createSlotConfigurations()
+    val slotConfigurations = createSlotConfigurations()
     val availableSlotsTable = arrayOf(
         slotConfigurations.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
         slotConfigurations.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
@@ -220,18 +217,18 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, S, B, E, H>, S : Fairy
         slotConfigurations.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
     )
 
-    val propertyConfigurations = configuration.createPropertyConfigurations()
+    val propertyConfigurations = createPropertyConfigurations()
     val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
 
-    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = configuration.createScreenHandler(getThis(), arguments)
+    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = createScreenHandler(getThis(), arguments)
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
     context(ModContext)
-    fun init() = configuration.init(getThis())
+    fun init() = init(getThis())
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -321,7 +318,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *, *>
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, *, E, *>, pos: BlockPos, state: BlockState) :
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) :
     LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract fun getThis(): E
@@ -427,7 +424,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         if (animation != null) FairyAnimator(animation) else null
     }
 
-    private inner class FairyAnimator(val animation: FairyBuildingConfiguration.SlotAnimationConfiguration) {
+    private inner class FairyAnimator(val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -561,7 +558,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
@@ -575,7 +572,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         checkSize(arguments.inventory, card.slotConfigurations.size)
         checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
-        val y = card.configuration.guiHeight - 82
+        val y = card.guiHeight - 82
         repeat(3) { r ->
             repeat(9) { c ->
                 addSlot(Slot(arguments.playerInventory, 9 + r * 9 + c, 8 + c * 18, y + r * 18))
@@ -603,7 +600,7 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         return quickMove(slot, destinationIndices)
     }
 
-    inner class Property(private val property: FairyBuildingConfiguration.FairyBuildingPropertyConfiguration<*>) {
+    inner class Property(private val property: FairyBuildingCard.FairyBuildingPropertyConfiguration<*>) {
         operator fun getValue(thisRef: Any?, property: Any?): Int {
             val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
             return this.property.decoder(arguments.propertyDelegate.get(propertyIndex).toShort())

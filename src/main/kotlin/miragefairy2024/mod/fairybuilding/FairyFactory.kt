@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.log
 
-abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingConfiguration<C, S, B, E, H>() {
+abstract class FairyFactoryCard<C : FairyFactoryCard<C, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<C, B, E, H>() {
     companion object {
         val FOLIA_PROPERTY = FairyBuildingPropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
 
@@ -45,9 +45,7 @@ abstract class FairyFactoryConfiguration<C : FairyFactoryCard<C, S, B, E, H>, S 
     abstract val maxFolia: Int
 }
 
-abstract class FairyFactoryCard<C : FairyFactoryCard<C, S, B, E, H>, S : FairyFactoryConfiguration<C, S, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler>(configuration: S) : FairyBuildingCard<C, S, B, E, H>(configuration)
-
-open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *, *>, settings: Settings) : FairyBuildingBlock(card, settings) {
+open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *>, settings: Settings) : FairyBuildingBlock(card, settings) {
     companion object {
         val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
     }
@@ -71,7 +69,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *, *>, settings: Se
     }
 }
 
-abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, *, *, E, *>, pos: BlockPos, state: BlockState) :
+abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, *, E, *>, pos: BlockPos, state: BlockState) :
     FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
@@ -112,7 +110,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--
         } else {
-            if (folia < card.configuration.collectingFolia) {
+            if (folia < card.collectingFolia) {
                 foliaCollectionCooldown = 200
                 collectFolia()
             }
@@ -138,7 +136,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
                     folia += 1000
                     changed = true
                     world.setBlockState(blockPos, blockState.with(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
-                    if (folia >= card.configuration.maxFolia) return@finished
+                    if (folia >= card.maxFolia) return@finished
                 }
             }
         }
@@ -159,6 +157,6 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
 }
 
-open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
-    var folia by Property(FairyFactoryConfiguration.FOLIA_PROPERTY)
+open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
+    var folia by Property(FairyFactoryCard.FOLIA_PROPERTY)
 }
