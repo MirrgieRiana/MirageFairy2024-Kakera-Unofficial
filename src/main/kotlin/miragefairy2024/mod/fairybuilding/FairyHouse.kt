@@ -17,6 +17,8 @@ import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
+    override fun getThis() = this
+
     override fun getPath() = "fairy_house"
     override val tier = 2
     override val name = EnJa("Fairy House", "妖精の家")
@@ -81,8 +83,6 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyH
             input('*', MaterialCard.FAIRY_CRYSTAL.item)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
-
-    override fun getThis() = this
 }
 
 class FairyHouseBlock(card: FairyHouseCard, settings: Settings) : FairyFactoryBlock(card, settings)

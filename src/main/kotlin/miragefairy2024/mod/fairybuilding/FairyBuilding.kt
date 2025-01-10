@@ -86,6 +86,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
+@Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
         context(C)
@@ -96,19 +97,27 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
         }
     }
 
+    abstract fun getThis(): C
+
+
+    // Specification
 
     abstract fun getPath(): String
+    val identifier = MirageFairy2024.identifier(getPath())
+
     abstract val tier: Int
     abstract val name: EnJa
     abstract val poem: EnJa
 
 
+    // Block
+
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
-
     abstract fun createBlock(settings: FabricBlockSettings): B
+    val block = createBlock(createBlockSettings())
 
 
-    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
+    // BlockEntity
 
     interface BlockEntityAccessor<C : FairyBuildingCard<C, *, E, *>, E : FairyBuildingBlockEntity<E>> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
@@ -116,15 +125,41 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
         fun castOrNull(blockEntity: BlockEntity?): E?
     }
 
+    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
+    val blockEntityAccessor = createBlockEntityAccessor()
+    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
+
+
+    // Item
+
+    val item = BlockItem(block, Item.Settings())
+
+
+    // ScreenHandler
 
     abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
 
+    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
+        val arguments = FairyBuildingScreenHandler.Arguments(
+            syncId,
+            playerInventory,
+            SimpleInventory(slotConfigurations.size),
+            ArrayPropertyDelegate(propertyConfigurations.size),
+            ScreenHandlerContext.EMPTY,
+        )
+        createScreenHandler(arguments)
+    }
+
+
+    // Gui
 
     abstract val guiWidth: Int
     abstract val guiHeight: Int
 
+    val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
-    open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
+
+    // Slot
 
     class FairyBuildingSlotConfiguration(
         val x: Int,
@@ -148,8 +183,20 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
      */
     class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
+    open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
+    val slotConfigurations = createSlotConfigurations()
 
-    open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
+    val availableSlotsTable = arrayOf(
+        slotConfigurations.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.NORTH in it.value.insertDirections || Direction.NORTH in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.SOUTH in it.value.insertDirections || Direction.SOUTH in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.WEST in it.value.insertDirections || Direction.WEST in it.value.extractDirections }.map { it.index }.toIntArray(),
+        slotConfigurations.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
+    )
+
+
+    // Property
 
     class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*>>(
         val getter: E.() -> Int,
@@ -157,6 +204,12 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
         val encoder: (Int) -> Short = { it.toShort() },
         val decoder: (Short) -> Int = { it.toInt() },
     )
+
+    open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
+    val propertyConfigurations = createPropertyConfigurations()
+
+    val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
+
 
     context(ModContext)
     open fun init() {
@@ -183,45 +236,6 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
         block.registerDefaultLootTableGeneration()
 
     }
-
-    abstract fun getThis(): C
-
-    val identifier = MirageFairy2024.identifier(getPath())
-
-    @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val block = createBlock(createBlockSettings())
-
-    @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val blockEntityAccessor = createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
-
-    val item = BlockItem(block, Item.Settings())
-
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
-        val arguments = FairyBuildingScreenHandler.Arguments(
-            syncId,
-            playerInventory,
-            SimpleInventory(slotConfigurations.size),
-            ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.EMPTY,
-        )
-        createScreenHandler(arguments)
-    }
-
-    val slotConfigurations = createSlotConfigurations()
-    val availableSlotsTable = arrayOf(
-        slotConfigurations.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.NORTH in it.value.insertDirections || Direction.NORTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.SOUTH in it.value.insertDirections || Direction.SOUTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.WEST in it.value.insertDirections || Direction.WEST in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
-    )
-
-    val propertyConfigurations = createPropertyConfigurations()
-    val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
-
-    val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 }
 
 open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
