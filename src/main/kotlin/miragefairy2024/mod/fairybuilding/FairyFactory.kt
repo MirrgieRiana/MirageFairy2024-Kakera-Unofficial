@@ -69,8 +69,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *>, settings: Setti
     }
 }
 
-abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, *, E, *>, pos: BlockPos, state: BlockState) :
-    FairyBuildingBlockEntity<E>(card, pos, state) {
+abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, *, E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
             if (!itemStack.isOf(FairyCard.item)) return 0.0
