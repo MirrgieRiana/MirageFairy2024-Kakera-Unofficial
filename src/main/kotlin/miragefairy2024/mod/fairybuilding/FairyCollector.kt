@@ -29,11 +29,11 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorB
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(card: FairyCollectorCard, settings: FabricBlockSettings) = FairyCollectorBlock(card, settings)
+    override fun createBlock(settings: FabricBlockSettings) = FairyCollectorBlock(this, settings)
 
-    override fun createBlockEntityAccessor(card: FairyCollectorCard) = BlockEntityAccessor(card, ::FairyCollectorBlockEntity)
+    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(card: FairyCollectorCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(card, arguments)
+    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(this, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
@@ -81,9 +81,9 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorB
     override val maxFolia = 20_000
 
     context(ModContext)
-    override fun init(card: FairyCollectorCard) {
-        super.init(card)
-        registerShapedRecipeGeneration(card.item) {
+    override fun init() {
+        super.init()
+        registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
