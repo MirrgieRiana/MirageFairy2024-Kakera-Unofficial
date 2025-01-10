@@ -238,7 +238,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: FabricBlockSettings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),

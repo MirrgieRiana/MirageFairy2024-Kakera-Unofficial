@@ -95,7 +95,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorB
     }
 }
 
-class FairyCollectorBlock(card: FairyCollectorCard, settings: Settings) : FairyFactoryBlock(card, settings)
+class FairyCollectorBlock(card: FairyCollectorCard, settings: FabricBlockSettings) : FairyFactoryBlock(card, settings)
 
 class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 

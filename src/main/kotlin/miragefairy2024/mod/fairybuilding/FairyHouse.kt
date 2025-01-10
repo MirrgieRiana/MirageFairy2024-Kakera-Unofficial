@@ -85,7 +85,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyH
     }
 }
 
-class FairyHouseBlock(card: FairyHouseCard, settings: Settings) : FairyFactoryBlock(card, settings)
+class FairyHouseBlock(card: FairyHouseCard, settings: FabricBlockSettings) : FairyFactoryBlock(card, settings)
 
 class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
     override fun getThis() = this
