@@ -328,8 +328,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, s
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) :
-    LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract fun getThis(): E
 
