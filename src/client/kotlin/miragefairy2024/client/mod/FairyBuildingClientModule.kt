@@ -34,7 +34,7 @@ fun initFairyBuildingClientModule() {
     HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, *, H>, arguments: Arguments<H>) :
+open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, H>, arguments: Arguments<H>) :
     HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
@@ -43,8 +43,8 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
     class Arguments<H : FairyBuildingScreenHandler>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
 
     init {
-        backgroundWidth = card.configuration.guiWidth
-        backgroundHeight = card.configuration.guiHeight
+        backgroundWidth = card.guiWidth
+        backgroundHeight = card.guiHeight
         playerInventoryTitleY = backgroundHeight - 94
     }
 
@@ -76,10 +76,10 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
 
 }
 
-open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *, *, H>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
+open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *, H>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
-        val h = (9.0 * (handler.folia / card.configuration.maxFolia.toDouble() atMost 1.0)).roundToInt()
+        val h = (9.0 * (handler.folia / card.maxFolia.toDouble() atMost 1.0)).roundToInt()
         context.drawTexture(SPRITES_TEXTURE, x + 164, y + backgroundHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
     }
 
@@ -89,7 +89,7 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
             if (x in this.x + 164 until this.x + 164 + 5 && y in this.y + backgroundHeight - 94 until this.y + backgroundHeight - 94 + 9) {
                 val texts = listOf(
                     text { FOLIA_TRANSLATION() },
-                    text { "${handler.folia} / ${card.configuration.maxFolia}"() },
+                    text { "${handler.folia} / ${card.maxFolia}"() },
                 )
                 context.drawTooltip(textRenderer, texts, Optional.empty(), x, y)
             }

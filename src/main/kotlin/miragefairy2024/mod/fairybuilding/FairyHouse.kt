@@ -16,8 +16,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
-    override val path = "fairy_house"
+object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
+    override fun getPath() = "fairy_house"
     override val tier = 2
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
@@ -81,9 +81,7 @@ object FairyHouseConfiguration : FairyFactoryConfiguration<FairyHouseCard, Fairy
             input('*', MaterialCard.FAIRY_CRYSTAL.item)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
-}
 
-object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseConfiguration, FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>(FairyHouseConfiguration) {
     override fun getThis() = this
 }
 
