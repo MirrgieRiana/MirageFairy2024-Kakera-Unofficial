@@ -34,7 +34,7 @@ fun initFairyBuildingClientModule() {
     HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, H>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
+open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
@@ -75,7 +75,7 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
 
 }
 
-open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *, H>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
+open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *, *>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
         val h = (9.0 * (handler.folia / card.maxFolia.toDouble() atMost 1.0)).roundToInt()
