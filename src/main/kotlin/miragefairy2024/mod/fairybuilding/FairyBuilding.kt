@@ -90,7 +90,7 @@ import net.minecraft.world.World
 abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
         context(C)
-        inline fun <C : FairyBuildingCard<C, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+        inline fun <C, reified E> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
             override fun create(blockPos: BlockPos, blockState: BlockState) = creator(this@C, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
@@ -119,13 +119,13 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
 
     // BlockEntity
 
-    interface BlockEntityAccessor<C : FairyBuildingCard<C, *, E, *>, E : FairyBuildingBlockEntity<E>> {
+    interface BlockEntityAccessor<E> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
         fun castOrNull(blockEntity: BlockEntity?): E?
     }
 
-    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
+    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
     val blockEntityAccessor = createBlockEntityAccessor()
     val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
 
