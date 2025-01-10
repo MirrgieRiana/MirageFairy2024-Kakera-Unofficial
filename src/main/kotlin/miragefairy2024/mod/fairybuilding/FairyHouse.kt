@@ -22,11 +22,11 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyH
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(card: FairyHouseCard, settings: FabricBlockSettings) = FairyHouseBlock(card, settings)
+    override fun createBlock(settings: FabricBlockSettings) = FairyHouseBlock(this, settings)
 
-    override fun createBlockEntityAccessor(card: FairyHouseCard) = BlockEntityAccessor(card, ::FairyHouseBlockEntity)
+    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
-    override fun createScreenHandler(card: FairyHouseCard, arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(card, arguments)
+    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyHouseScreenHandler(this, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 178
@@ -67,9 +67,9 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseCard, FairyHouseBlock, FairyH
     override val maxFolia = 4_000
 
     context(ModContext)
-    override fun init(card: FairyHouseCard) {
-        super.init(card)
-        registerShapedRecipeGeneration(card.item) {
+    override fun init() {
+        super.init()
+        registerShapedRecipeGeneration(item) {
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")

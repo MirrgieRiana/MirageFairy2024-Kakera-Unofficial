@@ -88,8 +88,9 @@ import net.minecraft.world.World
 
 abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
     companion object {
-        inline fun <C : FairyBuildingCard<C, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(card: C, crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
-            override fun create(blockPos: BlockPos, blockState: BlockState) = creator(card, blockPos, blockState)
+        context(C)
+        inline fun <C : FairyBuildingCard<C, *, E, *>, reified E : FairyBuildingBlockEntity<E>> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<C, E> {
+            override fun create(blockPos: BlockPos, blockState: BlockState) = creator(this@C, blockPos, blockState)
             override fun castOrThrow(blockEntity: BlockEntity?) = blockEntity as E
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
         }
@@ -104,10 +105,10 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
 
     open fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
-    abstract fun createBlock(card: C, settings: FabricBlockSettings): B
+    abstract fun createBlock(settings: FabricBlockSettings): B
 
 
-    abstract fun createBlockEntityAccessor(card: C): BlockEntityAccessor<C, E>
+    abstract fun createBlockEntityAccessor(): BlockEntityAccessor<C, E>
 
     interface BlockEntityAccessor<C : FairyBuildingCard<C, *, E, *>, E : FairyBuildingBlockEntity<E>> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
@@ -116,7 +117,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     }
 
 
-    abstract fun createScreenHandler(card: C, arguments: FairyBuildingScreenHandler.Arguments): H
+    abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
 
 
     abstract val guiWidth: Int
@@ -158,28 +159,28 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     )
 
     context(ModContext)
-    open fun init(card: C) {
+    open fun init() {
 
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
-        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
+        block.register(Registries.BLOCK, identifier)
+        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
+        item.register(Registries.ITEM, identifier)
+        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
-        card.block.registerCutoutRenderLayer()
-        card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
+        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        block.registerCutoutRenderLayer()
+        blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.enJa(name)
+        block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
-        card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
+        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
-        card.block.registerDefaultLootTableGeneration()
+        block.registerDefaultLootTableGeneration()
 
     }
 
@@ -188,10 +189,10 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     val identifier = MirageFairy2024.identifier(getPath())
 
     @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val block = createBlock(getThis(), createBlockSettings())
+    val block = createBlock(createBlockSettings())
 
     @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-    val blockEntityAccessor = createBlockEntityAccessor(getThis())
+    val blockEntityAccessor = createBlockEntityAccessor()
     val blockEntityType = BlockEntityType({ pos, state -> blockEntityAccessor.create(pos, state) }, setOf(block), null)
 
     val item = BlockItem(block, Item.Settings())
@@ -204,7 +205,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
             ArrayPropertyDelegate(propertyConfigurations.size),
             ScreenHandlerContext.EMPTY,
         )
-        createScreenHandler(getThis(), arguments)
+        createScreenHandler(arguments)
     }
 
     val slotConfigurations = createSlotConfigurations()
@@ -220,12 +221,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     val propertyConfigurations = createPropertyConfigurations()
     val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
 
-    fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = createScreenHandler(getThis(), arguments)
-
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
-
-    context(ModContext)
-    fun init() = init(getThis())
 }
 
 open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
