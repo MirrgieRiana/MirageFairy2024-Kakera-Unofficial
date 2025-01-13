@@ -59,7 +59,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
         super.writeNbt(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
-        if (isNatural) nbt.putBoolean("Natural", false)
+        if (isNatural) nbt.putBoolean("Natural", true)
     }
 
     override fun readNbt(nbt: NbtCompound) {
