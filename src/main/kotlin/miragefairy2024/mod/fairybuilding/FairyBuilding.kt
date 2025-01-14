@@ -88,7 +88,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<C, B, E, H>() {
+abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
         context(C)
         inline fun <C, reified E> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
@@ -97,9 +97,6 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
             override fun castOrNull(blockEntity: BlockEntity?) = blockEntity as? E
         }
     }
-
-    abstract fun getThis(): C
-
 
     // Specification
 
@@ -239,7 +236,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: FabricBlockSettings) : HorizontalFacingMachineBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>, settings: FabricBlockSettings) : HorizontalFacingMachineBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -329,7 +326,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, s
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract fun getThis(): E
 
@@ -568,7 +565,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *>, val arguments: Arguments) : MachineScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
