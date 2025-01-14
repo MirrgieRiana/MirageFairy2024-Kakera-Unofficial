@@ -1,5 +1,6 @@
 package miragefairy2024.lib
 
+import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
@@ -72,5 +73,13 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         )
         createScreenHandler(arguments)
     }
+
+
+    // Gui
+
+    abstract val guiWidth: Int
+    abstract val guiHeight: Int
+
+    val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
 }
