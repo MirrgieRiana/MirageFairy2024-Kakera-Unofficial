@@ -106,14 +106,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     override fun getPropertyCount() = propertyConfigurations.size
 
 
-    // Gui
-
-    abstract val guiWidth: Int
-    abstract val guiHeight: Int
-
-    val backgroundTexture = "textures/gui/container/" * identifier * ".png"
-
-
     // Slot
 
     class FairyBuildingSlotConfiguration(
