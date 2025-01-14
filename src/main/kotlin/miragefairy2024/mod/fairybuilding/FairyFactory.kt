@@ -45,7 +45,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
     abstract val maxFolia: Int
 }
 
-open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>, settings: FabricBlockSettings) : FairyBuildingBlock(card, settings) {
+open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlock(card) {
     companion object {
         val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
     }

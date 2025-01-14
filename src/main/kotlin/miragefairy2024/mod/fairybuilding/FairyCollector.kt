@@ -14,7 +14,6 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
@@ -29,7 +28,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
     override val poem = EnJa("An attractor of curiosity", "あれ？ここにあったリモコン知らない？")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyCollectorBlock(this, settings)
+    override fun createBlock() = FairyCollectorBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
@@ -93,7 +92,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     }
 }
 
-class FairyCollectorBlock(card: FairyCollectorCard, settings: FabricBlockSettings) : FairyFactoryBlock(card, settings)
+class FairyCollectorBlock(card: FairyCollectorCard) : FairyFactoryBlock(card)
 
 class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 
