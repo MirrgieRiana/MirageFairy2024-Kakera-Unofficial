@@ -23,7 +23,6 @@ import miragefairy2024.util.getOrNull
 import miragefairy2024.util.normal
 import miragefairy2024.util.quickMove
 import miragefairy2024.util.readFromNbt
-import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
@@ -60,7 +59,6 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
@@ -159,12 +157,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
 
     context(ModContext)
-    open fun init() {
-
-        block.register(Registries.BLOCK, identifier)
-        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
-        item.register(Registries.ITEM, identifier)
-        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
+    override fun init() {
+        super.init()
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
