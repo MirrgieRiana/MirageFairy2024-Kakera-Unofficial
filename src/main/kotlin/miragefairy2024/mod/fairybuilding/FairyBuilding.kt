@@ -37,7 +37,6 @@ import miragefairy2024.util.writeToNbt
 import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
@@ -55,9 +54,6 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SidedInventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
@@ -66,7 +62,6 @@ import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
@@ -107,18 +102,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // ScreenHandler
 
-    abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
-
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
-        val arguments = FairyBuildingScreenHandler.Arguments(
-            syncId,
-            playerInventory,
-            SimpleInventory(slotConfigurations.size),
-            ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.EMPTY,
-        )
-        createScreenHandler(arguments)
-    }
+    override fun getSlotCount() = slotConfigurations.size
+    override fun getPropertyCount() = propertyConfigurations.size
 
 
     // Gui
@@ -525,7 +510,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     override fun getContainerName(): Text = card.block.name
 
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler {
-        val arguments = FairyBuildingScreenHandler.Arguments(
+        val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
             this,
@@ -537,15 +522,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, card.screenHandlerType, arguments.syncId) {
-
-    class Arguments(
-        val syncId: Int,
-        val playerInventory: PlayerInventory,
-        val inventory: Inventory,
-        val propertyDelegate: PropertyDelegate,
-        val context: ScreenHandlerContext,
-    )
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, arguments) {
 
     init {
         checkSize(arguments.inventory, card.slotConfigurations.size)

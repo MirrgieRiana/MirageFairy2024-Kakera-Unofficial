@@ -1,12 +1,16 @@
 package miragefairy2024.lib
 
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.screen.ArrayPropertyDelegate
+import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
@@ -51,5 +55,22 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     // Item
 
     val item = BlockItem(block, Item.Settings())
+
+
+    // ScreenHandler
+
+    abstract fun getSlotCount(): Int
+    abstract fun getPropertyCount(): Int
+    abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
+    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
+        val arguments = MachineScreenHandler.Arguments(
+            syncId,
+            playerInventory,
+            SimpleInventory(getSlotCount()),
+            ArrayPropertyDelegate(getPropertyCount()),
+            ScreenHandlerContext.EMPTY,
+        )
+        createScreenHandler(arguments)
+    }
 
 }
