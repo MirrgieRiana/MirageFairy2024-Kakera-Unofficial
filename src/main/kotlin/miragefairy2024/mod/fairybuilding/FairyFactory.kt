@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.log
 
-abstract class FairyFactoryCard<C : FairyFactoryCard<C, B, E, H>, B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<C, B, E, H>() {
+abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {
     companion object {
         val FOLIA_PROPERTY = FairyBuildingPropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
 
@@ -45,7 +45,7 @@ abstract class FairyFactoryCard<C : FairyFactoryCard<C, B, E, H>, B : FairyFacto
     abstract val maxFolia: Int
 }
 
-open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *>, settings: FabricBlockSettings) : FairyBuildingBlock(card, settings) {
+open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>, settings: FabricBlockSettings) : FairyBuildingBlock(card, settings) {
     companion object {
         val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
     }
@@ -69,7 +69,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *, *>, settings: Fabri
     }
 }
 
-abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, *, E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
+abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
             if (!itemStack.isOf(FairyCard.item)) return 0.0
@@ -156,6 +156,6 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
 }
 
-open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
+open class FairyFactoryScreenHandler(card: FairyFactoryCard<*, *, *>, arguments: Arguments) : FairyBuildingScreenHandler(card, arguments) {
     var folia by Property(FairyFactoryCard.FOLIA_PROPERTY)
 }

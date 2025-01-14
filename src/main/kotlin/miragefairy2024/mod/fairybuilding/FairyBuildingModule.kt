@@ -11,7 +11,7 @@ enum class FairyBuildingModelCard(val identifier: Identifier) {
     LANTERN_OFF(MirageFairy2024.identifier("block/fairy_building/lantern_off")),
 }
 
-val fairyBuildingCards: List<FairyBuildingCard<*, *, *, *>> = listOf(
+val fairyBuildingCards: List<FairyBuildingCard<*, *, *>> = listOf(
     FairyHouseCard,
     FairyCollectorCard,
 )
