@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
@@ -32,7 +33,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyCollectorBlockEntity)
 
-    override fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments) = FairyCollectorScreenHandler(this, arguments)
+    override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyCollectorScreenHandler(this, arguments)
 
     override val guiWidth = 176
     override val guiHeight = 162
