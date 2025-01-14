@@ -101,7 +101,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     // Specification
 
     abstract fun getPath(): String
-    val identifier = MirageFairy2024.identifier(getPath())
+    override fun createIdentifier() = MirageFairy2024.identifier(getPath())
 
     abstract val tier: Int
     abstract val name: EnJa
