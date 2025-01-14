@@ -5,6 +5,8 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
@@ -44,5 +46,10 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
     val blockEntityAccessor = createBlockEntityAccessor()
     val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
+
+
+    // Item
+
+    val item = BlockItem(block, Item.Settings())
 
 }
