@@ -236,7 +236,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>, settings: FabricBlockSettings) : HorizontalFacingMachineBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>, settings: FabricBlockSettings) : HorizontalFacingMachineBlock(card, settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -326,7 +326,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>, sett
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract fun getThis(): E
 
@@ -565,7 +565,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,

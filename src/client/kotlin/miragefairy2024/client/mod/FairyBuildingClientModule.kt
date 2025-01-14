@@ -34,7 +34,7 @@ fun initFairyBuildingClientModule() {
     HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
+open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
