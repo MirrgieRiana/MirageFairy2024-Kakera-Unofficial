@@ -5,4 +5,4 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.util.math.BlockPos
 
-abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(blockEntityType, pos, state)
+abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, *, *>, blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(blockEntityType, pos, state)
