@@ -23,9 +23,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-object FairyCollectorCard : FairyFactoryCard<FairyCollectorCard, FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
-    override fun getThis() = this
-
+object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"
     override val tier = 2
     override val name = EnJa("Fairy Collector", "いたずら妖精エンデルマーニャの隠れ家")
