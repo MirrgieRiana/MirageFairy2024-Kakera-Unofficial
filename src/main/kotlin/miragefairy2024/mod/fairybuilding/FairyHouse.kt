@@ -7,7 +7,6 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
@@ -22,7 +21,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     override val name = EnJa("Fairy House", "妖精の家")
     override val poem = EnJa("Home sweet home", "あたたかいおうち")
 
-    override fun createBlock(settings: FabricBlockSettings) = FairyHouseBlock(this, settings)
+    override fun createBlock() = FairyHouseBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyHouseBlockEntity)
 
@@ -83,7 +82,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     }
 }
 
-class FairyHouseBlock(card: FairyHouseCard, settings: FabricBlockSettings) : FairyFactoryBlock(card, settings)
+class FairyHouseBlock(card: FairyHouseCard) : FairyFactoryBlock(card)
 
 class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
     override fun getThis() = this
