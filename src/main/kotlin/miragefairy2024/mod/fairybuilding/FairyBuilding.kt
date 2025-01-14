@@ -4,7 +4,10 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
-import miragefairy2024.lib.SimpleHorizontalFacingBlock
+import miragefairy2024.lib.HorizontalFacingMachineBlock
+import miragefairy2024.lib.MachineBlockEntity
+import miragefairy2024.lib.MachineCard
+import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -44,7 +47,6 @@ import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.block.enums.Instrument
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
@@ -67,7 +69,6 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
@@ -87,7 +88,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
-abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> {
+abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<C, B, E, H>() {
     companion object {
         context(C)
         inline fun <C, reified E> BlockEntityAccessor(crossinline creator: (card: C, blockPos: BlockPos, blockState: BlockState) -> E) = object : BlockEntityAccessor<E> {
@@ -238,7 +239,7 @@ abstract class FairyBuildingCard<C : FairyBuildingCard<C, B, E, H>, B : FairyBui
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: FabricBlockSettings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider {
+open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, settings: FabricBlockSettings) : HorizontalFacingMachineBlock(settings), BlockEntityProvider {
     companion object {
         private val SHAPE = VoxelShapes.union(
             createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -328,7 +329,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *, *>, s
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, *, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
 
     abstract fun getThis(): E
 
@@ -567,7 +568,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *>, val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *, *>, val arguments: Arguments) : MachineScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,

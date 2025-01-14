@@ -1,6 +1,7 @@
 package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.client.lib.MachineScreen
 import miragefairy2024.mod.fairybuilding.FOLIA_TRANSLATION
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingModelCard
@@ -16,7 +17,6 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
@@ -34,7 +34,7 @@ fun initFairyBuildingClientModule() {
     HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
+open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *, *>, arguments: Arguments<H>) : MachineScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
