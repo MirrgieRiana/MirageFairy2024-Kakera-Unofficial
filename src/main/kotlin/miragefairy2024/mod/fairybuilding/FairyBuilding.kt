@@ -105,11 +105,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
 
-    // Item
-
-    val item = BlockItem(block, Item.Settings())
-
-
     // ScreenHandler
 
     abstract fun createScreenHandler(arguments: FairyBuildingScreenHandler.Arguments): H
