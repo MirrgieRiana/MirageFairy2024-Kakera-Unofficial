@@ -1,5 +1,7 @@
 package miragefairy2024.lib
 
+import miragefairy2024.ModContext
+import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
@@ -10,6 +12,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.registry.Registries
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.util.Identifier
@@ -82,4 +85,12 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
+
+    context(ModContext)
+    open fun init() {
+        block.register(Registries.BLOCK, identifier)
+        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
+        item.register(Registries.ITEM, identifier)
+        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
+    }
 }
