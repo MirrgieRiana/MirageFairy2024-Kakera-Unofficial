@@ -335,9 +335,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         }
     }
 
-    override fun getAvailableSlots(side: Direction): IntArray {
-        return card.availableSlotsTable[getActualSide(side).id]
-    }
+    override fun getAvailableSlots(side: Direction) = card.availableSlotsTable[getActualSide(side).id]
 
     override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || (getActualSide(dir) in card.slotConfigurations[slot].insertDirections)) && isValid(slot, stack)
 
