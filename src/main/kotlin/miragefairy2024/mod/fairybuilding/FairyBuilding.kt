@@ -207,7 +207,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         Animator(inventorySlotIndex, animation)
     }
 
-    private class Animator(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private class Animator(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) : Animation<FairyBuildingBlockEntity<*>> {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -228,7 +228,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         var yaw = position.yaw
         var pitch = position.pitch
 
-        fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
+        override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
             val world = blockEntity.world ?: return
 
             // 定位置の切り替え
@@ -260,7 +260,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
         }
 
-        fun render(blockEntity: FairyBuildingBlockEntity<*>, renderingProxy: RenderingProxy, tickDelta: Float) {
+        override fun render(blockEntity: FairyBuildingBlockEntity<*>, renderingProxy: RenderingProxy, tickDelta: Float) {
             val cX = x + xSpeed * tickDelta.toDouble()
             val cY = y + ySpeed * tickDelta.toDouble()
             val cZ = z + zSpeed * tickDelta.toDouble()
