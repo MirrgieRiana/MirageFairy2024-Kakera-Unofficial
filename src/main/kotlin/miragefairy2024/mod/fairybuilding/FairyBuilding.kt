@@ -314,9 +314,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
-            card.slotConfigurations.forEachIndexed { index, _ ->
-                val fairyAnimator = animators[index] ?: return@forEachIndexed
-                fairyAnimator.render(renderingProxy, tickDelta)
+            animators.forEach {
+                it?.render(renderingProxy, tickDelta)
             }
 
             renderExtra(renderingProxy, tickDelta, light, overlay)
