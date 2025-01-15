@@ -82,15 +82,21 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     // Slot
 
     class FairyBuildingSlotConfiguration(
-        val x: Int,
-        val y: Int,
-        val dropItem: Boolean = true,
+        override val x: Int,
+        override val y: Int,
+        override val dropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
         val animation: SlotAnimationConfiguration? = null,
         val tooltipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
-    )
+    ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
+        override fun isValid(itemStack: ItemStack) = filter(itemStack)
+        override fun canInsert(direction: Direction) = direction in insertDirections
+        override fun canExtract(direction: Direction) = direction in extractDirections
+        override val isObservable = animation != null
+        override fun getTooltip() = tooltipGetter?.invoke()
+    }
 
     class SlotAnimationConfiguration(val isFairy: Boolean, val positions: List<Position>)
 
@@ -132,25 +138,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
         block.registerDefaultLootTableGeneration()
 
-        slotConfigurations.forEach {
-            inventorySlotConfigurations += object : MachineBlockEntity.InventorySlotConfiguration {
-                override fun isValid(itemStack: ItemStack) = it.filter(itemStack)
-                override fun canInsert(direction: Direction) = direction in it.insertDirections
-                override fun canExtract(direction: Direction) = direction in it.extractDirections
-                override val isObservable = it.animation != null
-                override val dropItem = it.dropItem
-            }
-        }
-
-        slotConfigurations.forEach {
-            guiSlotConfigurations += object : MachineScreenHandler.GuiSlotConfiguration {
-                override val x = it.x
-                override val y = it.y
-                override fun isValid(itemStack: ItemStack) = it.filter(itemStack)
-                override fun getTooltip() = it.tooltipGetter?.invoke()
-            }
-        }
-
+        inventorySlotConfigurations += slotConfigurations
+        guiSlotConfigurations += slotConfigurations
         propertyConfigurations += createPropertyConfigurations()
 
     }
