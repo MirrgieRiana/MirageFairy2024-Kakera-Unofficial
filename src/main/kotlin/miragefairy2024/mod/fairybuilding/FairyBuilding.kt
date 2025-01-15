@@ -214,10 +214,10 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     private val animators = Array(card.slotConfigurations.size) { index ->
         val animation = card.slotConfigurations[index].animation
-        if (animation != null) Animator(animation) else null
+        if (animation != null) Animator({ getStack(index) }, animation) else null
     }
 
-    private inner class Animator(private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private inner class Animator(private val itemStackGetter: () -> ItemStack, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -293,7 +293,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 }
 
                 renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-                renderingProxy.renderItemStack(getStack(index))
+                renderingProxy.renderItemStack(itemStackGetter())
             }
         }
     }
