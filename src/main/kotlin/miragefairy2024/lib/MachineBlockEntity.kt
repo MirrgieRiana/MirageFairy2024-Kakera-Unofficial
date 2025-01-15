@@ -17,6 +17,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.world.World
 
 abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, *, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory {
 
@@ -100,5 +101,12 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         markDirty()
     }
+
+
+    // Move
+
+    abstract fun serverTick(world: World, pos: BlockPos, state: BlockState)
+
+    abstract fun clientTick(world: World, pos: BlockPos, state: BlockState)
 
 }
