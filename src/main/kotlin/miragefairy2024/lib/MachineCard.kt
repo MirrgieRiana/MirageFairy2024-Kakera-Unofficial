@@ -17,6 +17,7 @@ import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScreenHandler> {
@@ -44,6 +45,17 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
 
     // BlockEntity
+
+    val inventorySlotConfigurations = mutableListOf<MachineBlockEntity.InventorySlotConfiguration>()
+
+    val availableSlotsTable by lazy {
+        Direction.entries.map { direction ->
+            inventorySlotConfigurations.withIndex()
+                .filter { it.value.canInsert(direction) || it.value.canExtract(direction) }
+                .map { it.index }
+                .toIntArray()
+        }.toTypedArray()
+    }
 
     interface BlockEntityAccessor<E> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
