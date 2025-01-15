@@ -291,18 +291,18 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             card.slotConfigurations.forEachIndexed { index, _ ->
                 val fairyAnimator = fairyAnimators[index] ?: return@forEachIndexed
 
-                val x = fairyAnimator.x + fairyAnimator.xSpeed * tickDelta.toDouble()
-                val y = fairyAnimator.y + fairyAnimator.ySpeed * tickDelta.toDouble()
-                val z = fairyAnimator.z + fairyAnimator.zSpeed * tickDelta.toDouble()
-                val yaw = fairyAnimator.yaw + fairyAnimator.yawSpeed * tickDelta
-                val pitch = fairyAnimator.pitch + fairyAnimator.pitchSpeed * tickDelta
+                val cX = fairyAnimator.x + fairyAnimator.xSpeed * tickDelta.toDouble()
+                val cY = fairyAnimator.y + fairyAnimator.ySpeed * tickDelta.toDouble()
+                val cZ = fairyAnimator.z + fairyAnimator.zSpeed * tickDelta.toDouble()
+                val cYaw = fairyAnimator.yaw + fairyAnimator.yawSpeed * tickDelta
+                val cPitch = fairyAnimator.pitch + fairyAnimator.pitchSpeed * tickDelta
                 val yawOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
                 val pitchOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
 
                 renderingProxy.stack {
-                    renderingProxy.translate(x / 16.0, y / 16.0, z / 16.0) // 移動
-                    renderingProxy.rotateY(-yaw / 180F * MathHelper.PI) // 横回転
-                    renderingProxy.rotateX(-pitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
+                    renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
+                    renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
+                    renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
                     renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
 
                     if (fairyAnimator.animation.isFairy) {
