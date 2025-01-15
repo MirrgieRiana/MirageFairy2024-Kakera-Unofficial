@@ -1,6 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.RenderingProxy
+import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.reset
@@ -28,7 +29,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory {
+abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory, RenderingProxyBlockEntity {
 
     interface InventorySlotConfiguration {
         fun isValid(itemStack: ItemStack): Boolean
@@ -118,8 +119,6 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     abstract fun serverTick(world: World, pos: BlockPos, state: BlockState)
 
-    abstract fun clientTick(world: World, pos: BlockPos, state: BlockState)
-
 
     // Rendering
 
@@ -130,6 +129,24 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     interface Animation<in E> {
         fun tick(blockEntity: E)
         fun render(blockEntity: E, renderingProxy: RenderingProxy, tickDelta: Float)
+    }
+
+    private val animations = card.animationConfigurations.mapNotNull { it.createAnimation() }
+
+    open fun clientTick(world: World, pos: BlockPos, state: BlockState) {
+        animations.forEach {
+            it.tick(getThis())
+        }
+    }
+
+    override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
+        renderRotated(renderingProxy, tickDelta, light, overlay)
+    }
+
+    open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
+        animations.forEach {
+            it.render(getThis(), renderingProxy, tickDelta)
+        }
     }
 
 

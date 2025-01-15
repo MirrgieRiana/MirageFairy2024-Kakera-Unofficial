@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairybuilding
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
-import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.lib.HorizontalFacingMachineBlock
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
@@ -185,7 +184,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state), RenderingProxyBlockEntity {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
     // Inventory
 
@@ -212,14 +211,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     open val doMovePosition get() = false
 
-    private val animations = card.animationConfigurations.mapNotNull { it.createAnimation() }
-
-    override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
-        animations.forEach {
-            it.tick(getThis())
-        }
-    }
-
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = world ?: return
         val blockState = world.getBlockState(pos)
@@ -233,12 +224,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
             renderRotated(renderingProxy, tickDelta, light, overlay)
 
-        }
-    }
-
-    open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        animations.forEach {
-            it.render(getThis(), renderingProxy, tickDelta)
         }
     }
 
