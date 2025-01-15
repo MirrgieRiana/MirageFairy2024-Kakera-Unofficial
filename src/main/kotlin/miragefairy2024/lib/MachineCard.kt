@@ -75,14 +75,13 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // ScreenHandler
 
-    abstract fun getPropertyCount(): Int
     abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
     val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
             SimpleInventory(inventorySlotConfigurations.size),
-            ArrayPropertyDelegate(getPropertyCount()),
+            ArrayPropertyDelegate(propertyConfigurations.size),
             ScreenHandlerContext.EMPTY,
         )
         createScreenHandler(arguments)
@@ -97,6 +96,11 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
     val guiSlotConfigurations = mutableListOf<MachineScreenHandler.GuiSlotConfiguration>()
+    val propertyConfigurations = mutableListOf<MachineScreenHandler.PropertyConfiguration<E>>()
+
+    val propertyIndexTable by lazy {
+        propertyConfigurations.withIndex().associate { (index, it) -> it to index }
+    }
 
 
     context(ModContext)
