@@ -53,10 +53,14 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
     // Move
 
     override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return if (world.isClient) checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
-            blockEntity.clientTick(world2, pos, state2)
-        } else checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
-            blockEntity.serverTick(world2, pos, state2)
+        return if (world.isClient) {
+            checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
+                blockEntity.clientTick(world2, pos, state2)
+            }
+        } else {
+            checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
+                blockEntity.serverTick(world2, pos, state2)
+            }
         }
     }
 
