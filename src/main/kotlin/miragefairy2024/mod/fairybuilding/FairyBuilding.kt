@@ -203,11 +203,11 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     private val animators = card.slotConfigurations.mapNotNull {
         val animation = it.animation ?: return@mapNotNull null
-        val index = card.inventorySlotIndexTable[it] ?: return@mapNotNull null
-        Animator({ getStack(index) }, animation)
+        val inventorySlotIndex = card.inventorySlotIndexTable[it] ?: return@mapNotNull null
+        Animator(inventorySlotIndex, animation)
     }
 
-    private class Animator(private val itemStackGetter: () -> ItemStack, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private class Animator(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -283,7 +283,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 }
 
                 renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-                renderingProxy.renderItemStack(itemStackGetter())
+                renderingProxy.renderItemStack(blockEntity.getStack(inventorySlotIndex))
             }
         }
     }
