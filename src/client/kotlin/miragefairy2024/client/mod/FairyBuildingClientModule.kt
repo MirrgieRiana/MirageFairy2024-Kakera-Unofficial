@@ -18,8 +18,6 @@ import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
 import java.util.Optional
 import kotlin.math.roundToInt
 
@@ -30,16 +28,14 @@ fun initFairyBuildingClientModule() {
         }
     }
 
-    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyBuildingScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(MachineScreen.Arguments(gui, inventory, title)) }
 }
 
-open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments.handler, arguments.playerInventory, arguments.title) {
+open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
-
-    class Arguments<H : FairyBuildingScreenHandler>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
 
     init {
         backgroundWidth = card.guiWidth
