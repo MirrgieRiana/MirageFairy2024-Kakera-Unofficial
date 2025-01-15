@@ -75,7 +75,6 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // ScreenHandler
 
-    abstract fun getSlotCount(): Int
     abstract fun getPropertyCount(): Int
     abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
     val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
@@ -96,6 +95,8 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     abstract val guiHeight: Int
 
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
+
+    val guiSlotConfigurations = mutableListOf<MachineScreenHandler.GuiSlotConfiguration>()
 
 
     context(ModContext)

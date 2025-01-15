@@ -63,9 +63,9 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
         run {
             val slot = focusedSlot ?: return@run
             if (slot.hasStack()) return@run
-            val slotConfiguration = card.slotConfigurations.getOrNull(slot.index) ?: return@run
-            val tooltipGetter = slotConfiguration.tooltipGetter ?: return@run
-            context.drawTooltip(textRenderer, tooltipGetter(), Optional.empty(), x, y)
+            val guiSlotConfiguration = card.guiSlotConfigurations.getOrNull(slot.index) ?: return@run
+            val tooltip = guiSlotConfiguration.getTooltip() ?: return@run
+            context.drawTooltip(textRenderer, tooltip, Optional.empty(), x, y)
         }
     }
 
