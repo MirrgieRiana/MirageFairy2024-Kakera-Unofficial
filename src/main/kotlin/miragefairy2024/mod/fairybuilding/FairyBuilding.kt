@@ -142,6 +142,17 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         guiSlotConfigurations += slotConfigurations
         propertyConfigurations += createPropertyConfigurations()
 
+        slotConfigurations.forEach {
+            if (it.animation != null) {
+                animationConfigurations += object : MachineBlockEntity.AnimationConfiguration<E> {
+                    override fun createAnimation(): MachineBlockEntity.Animation<E>? {
+                        val inventorySlotIndex = inventorySlotIndexTable[it] ?: return null
+                        return FairyAnimation(inventorySlotIndex, it.animation)
+                    }
+                }
+            }
+        }
+
     }
 }
 
@@ -201,15 +212,11 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     open val doMovePosition get() = false
 
-    private val animations = card.slotConfigurations.mapNotNull {
-        val animation = it.animation ?: return@mapNotNull null
-        val inventorySlotIndex = card.inventorySlotIndexTable[it] ?: return@mapNotNull null
-        FairyAnimation(inventorySlotIndex, animation)
-    }
+    private val animations = card.animationConfigurations.mapNotNull { it.createAnimation() }
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
         animations.forEach {
-            it.tick(this)
+            it.tick(getThis())
         }
     }
 
@@ -231,7 +238,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         animations.forEach {
-            it.render(this, renderingProxy, tickDelta)
+            it.render(getThis(), renderingProxy, tickDelta)
         }
     }
 

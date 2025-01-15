@@ -123,6 +123,10 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Rendering
 
+    interface AnimationConfiguration<in E> {
+        fun createAnimation(): Animation<E>?
+    }
+
     interface Animation<in E> {
         fun tick(blockEntity: E)
         fun render(blockEntity: E, renderingProxy: RenderingProxy, tickDelta: Float)
