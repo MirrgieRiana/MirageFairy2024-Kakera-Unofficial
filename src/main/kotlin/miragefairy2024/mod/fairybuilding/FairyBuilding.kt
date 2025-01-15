@@ -19,7 +19,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.normal
-import miragefairy2024.util.quickMove
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
@@ -43,7 +42,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.screen.slot.Slot
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
@@ -362,58 +360,4 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, arguments) {
-
-    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
-        override fun canInsert(stack: ItemStack) = configuration.isValid(stack)
-    }
-
-    init {
-        checkSize(arguments.inventory, card.guiSlotConfigurations.size)
-        checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
-
-        val y = card.guiHeight - 82
-        repeat(3) { r ->
-            repeat(9) { c ->
-                addSlot(Slot(arguments.playerInventory, 9 + r * 9 + c, 8 + c * 18, y + r * 18))
-            }
-        }
-        repeat(9) { c ->
-            addSlot(Slot(arguments.playerInventory, c, 8 + c * 18, y + 18 * 3 + 4))
-        }
-        card.guiSlotConfigurations.forEachIndexed { index, configuration ->
-            addSlot(MachineSlot(configuration, arguments.inventory, index))
-        }
-
-        @Suppress("LeakingThis")
-        addProperties(arguments.propertyDelegate)
-    }
-
-    override fun getTooltip(slot: Slot): List<Text>? {
-        if (slot.hasStack()) return null // アイテムのツールチップを優先
-        if (slot !is MachineSlot) return null
-        return slot.configuration.getTooltip()
-    }
-
-    override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
-
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        val playerIndices = 9 * 4 - 1 downTo 0
-        val utilityIndices = 9 * 4 until slots.size
-        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
-        return quickMove(slot, destinationIndices)
-    }
-
-    inner class Property(private val property: PropertyConfiguration<*>) {
-        operator fun getValue(thisRef: Any?, property: Any?): Int {
-            val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
-            return this.property.decode(arguments.propertyDelegate.get(propertyIndex).toShort())
-        }
-
-        operator fun setValue(thisRef: Any?, property: Any?, value: Int) {
-            val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
-            arguments.propertyDelegate.set(propertyIndex, this.property.encode(value).toInt())
-        }
-    }
-
-}
+open class FairyBuildingScreenHandler(card: FairyBuildingCard<*, *, *>, arguments: Arguments) : MachineScreenHandler(card, arguments)
