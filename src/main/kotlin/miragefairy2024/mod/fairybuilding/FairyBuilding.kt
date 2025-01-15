@@ -362,6 +362,10 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, arguments) {
 
+    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
+        override fun canInsert(stack: ItemStack) = configuration.isValid(stack)
+    }
+
     init {
         checkSize(arguments.inventory, card.guiSlotConfigurations.size)
         checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
@@ -375,14 +379,18 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         repeat(9) { c ->
             addSlot(Slot(arguments.playerInventory, c, 8 + c * 18, y + 18 * 3 + 4))
         }
-        card.guiSlotConfigurations.forEachIndexed { index, slot ->
-            addSlot(object : Slot(arguments.inventory, index, slot.x, slot.y) {
-                override fun canInsert(stack: ItemStack) = slot.isValid(stack)
-            })
+        card.guiSlotConfigurations.forEachIndexed { index, configuration ->
+            addSlot(MachineSlot(configuration, arguments.inventory, index))
         }
 
         @Suppress("LeakingThis")
         addProperties(arguments.propertyDelegate)
+    }
+
+    override fun getTooltip(slot: Slot): List<Text>? {
+        if (slot.hasStack()) return null // アイテムのツールチップを優先
+        if (slot !is MachineSlot) return null
+        return slot.configuration.getTooltip()
     }
 
     override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)

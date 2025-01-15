@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.screen.slot.Slot
 import net.minecraft.text.Text
 
 abstract class MachineScreenHandler(private val card: MachineCard<*, *, *>, arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
@@ -24,5 +25,7 @@ abstract class MachineScreenHandler(private val card: MachineCard<*, *, *>, argu
         fun isValid(itemStack: ItemStack): Boolean
         fun getTooltip(): List<Text>?
     }
+
+    abstract fun getTooltip(slot: Slot): List<Text>?
 
 }
