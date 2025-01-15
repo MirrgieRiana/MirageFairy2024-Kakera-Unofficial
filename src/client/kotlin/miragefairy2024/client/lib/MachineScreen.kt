@@ -37,9 +37,7 @@ abstract class MachineScreen<H : MachineScreenHandler>(private val card: Machine
         super.drawMouseoverTooltip(context, x, y)
         run {
             val slot = focusedSlot ?: return@run
-            if (slot.hasStack()) return@run
-            val guiSlotConfiguration = card.guiSlotConfigurations.getOrNull(slot.index) ?: return@run
-            val tooltip = guiSlotConfiguration.getTooltip() ?: return@run
+            val tooltip = handler.getTooltip(slot) ?: return@run
             context.drawTooltip(textRenderer, tooltip, Optional.empty(), x, y)
         }
     }
