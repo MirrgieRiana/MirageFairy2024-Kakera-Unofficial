@@ -82,7 +82,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
-            SimpleInventory(getSlotCount()),
+            SimpleInventory(inventorySlotConfigurations.size),
             ArrayPropertyDelegate(getPropertyCount()),
             ScreenHandlerContext.EMPTY,
         )
