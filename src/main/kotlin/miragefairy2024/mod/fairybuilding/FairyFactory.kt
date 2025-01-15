@@ -146,7 +146,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
     override val doMovePosition get() = cachedState[FairyFactoryBlock.STATUS].doMovePosition
 
-    override fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
+    override fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         if (cachedState[FairyFactoryBlock.STATUS].isLit) {
             renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN.identifier, null, 1.0F, 1.0F, 1.0F, (light and 0x0000FF) or 0xF00000, overlay)
         } else {

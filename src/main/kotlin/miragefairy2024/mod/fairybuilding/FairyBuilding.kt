@@ -308,12 +308,12 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 it.render(renderingProxy, tickDelta)
             }
 
-            renderExtra(renderingProxy, tickDelta, light, overlay)
+            renderRotated(renderingProxy, tickDelta, light, overlay)
 
         }
     }
 
-    open fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) = Unit
+    open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) = Unit
 
 }
 
