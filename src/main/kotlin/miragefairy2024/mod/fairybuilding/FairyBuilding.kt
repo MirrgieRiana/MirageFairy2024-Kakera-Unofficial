@@ -269,6 +269,33 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             pitch += pitchSpeed
 
         }
+
+        fun render(renderingProxy: RenderingProxy, tickDelta: Float) {
+            val cX = x + xSpeed * tickDelta.toDouble()
+            val cY = y + ySpeed * tickDelta.toDouble()
+            val cZ = z + zSpeed * tickDelta.toDouble()
+            val cYaw = yaw + yawSpeed * tickDelta
+            val cPitch = pitch + pitchSpeed * tickDelta
+            val yawOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
+            val pitchOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
+
+            renderingProxy.stack {
+                renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
+                renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
+                renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
+                renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
+
+                if (animation.isFairy) {
+                    renderingProxy.translate(0.0, 0.25, 0.0)
+                    renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
+                    renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
+                    renderingProxy.translate(0.0, -0.25, 0.0)
+                }
+
+                renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
+                renderingProxy.renderItemStack(getStack(index))
+            }
+        }
     }
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
@@ -290,31 +317,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
             card.slotConfigurations.forEachIndexed { index, _ ->
                 val fairyAnimator = fairyAnimators[index] ?: return@forEachIndexed
-
-                val cX = fairyAnimator.x + fairyAnimator.xSpeed * tickDelta.toDouble()
-                val cY = fairyAnimator.y + fairyAnimator.ySpeed * tickDelta.toDouble()
-                val cZ = fairyAnimator.z + fairyAnimator.zSpeed * tickDelta.toDouble()
-                val cYaw = fairyAnimator.yaw + fairyAnimator.yawSpeed * tickDelta
-                val cPitch = fairyAnimator.pitch + fairyAnimator.pitchSpeed * tickDelta
-                val yawOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
-                val pitchOffset = if (fairyAnimator.animation.isFairy) MathHelper.sin((fairyAnimator.ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
-
-                renderingProxy.stack {
-                    renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
-                    renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
-                    renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
-                    renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
-
-                    if (fairyAnimator.animation.isFairy) {
-                        renderingProxy.translate(0.0, 0.25, 0.0)
-                        renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
-                        renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
-                        renderingProxy.translate(0.0, -0.25, 0.0)
-                    }
-
-                    renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-                    renderingProxy.renderItemStack(getStack(index))
-                }
+                fairyAnimator.render(renderingProxy, tickDelta)
             }
 
             renderExtra(renderingProxy, tickDelta, light, overlay)
