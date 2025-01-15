@@ -1,5 +1,6 @@
 package miragefairy2024.lib
 
+import miragefairy2024.RenderingProxy
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.reset
@@ -118,6 +119,14 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     abstract fun serverTick(world: World, pos: BlockPos, state: BlockState)
 
     abstract fun clientTick(world: World, pos: BlockPos, state: BlockState)
+
+
+    // Rendering
+
+    interface Animation<in E> {
+        fun tick(blockEntity: E)
+        fun render(blockEntity: E, renderingProxy: RenderingProxy, tickDelta: Float)
+    }
 
 
     // Gui
