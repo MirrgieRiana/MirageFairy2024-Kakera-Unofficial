@@ -86,7 +86,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         override val dropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
-        val animation: SlotAnimationConfiguration? = null,
+        val animation: FairyBuildingSlotAnimationConfiguration? = null,
         val tooltipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
@@ -97,7 +97,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         override fun getTooltip() = tooltipGetter?.invoke()
     }
 
-    class SlotAnimationConfiguration(val isFairy: Boolean, val positions: List<Position>)
+    class FairyBuildingSlotAnimationConfiguration(val isFairy: Boolean, val positions: List<Position>)
 
     /**
      * @param x 1/16 scale
@@ -231,7 +231,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
+class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.FairyBuildingSlotAnimationConfiguration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
     init {
         check(animation.positions.isNotEmpty())
     }
