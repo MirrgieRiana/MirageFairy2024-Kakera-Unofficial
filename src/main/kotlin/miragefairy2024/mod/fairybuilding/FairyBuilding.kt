@@ -74,7 +74,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // ScreenHandler
 
-    override fun getSlotCount() = slotConfigurations.size
     override fun getPropertyCount() = propertyConfigurations.size
 
 
@@ -148,6 +147,15 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
                 override fun canExtract(direction: Direction) = direction in it.extractDirections
                 override val isObservable = it.animation != null
                 override val dropItem = it.dropItem
+            }
+        }
+
+        slotConfigurations.forEach {
+            guiSlotConfigurations += object : MachineScreenHandler.GuiSlotConfiguration {
+                override val x = it.x
+                override val y = it.y
+                override fun isValid(itemStack: ItemStack) = it.filter(itemStack)
+                override fun getTooltip() = it.tooltipGetter?.invoke()
             }
         }
 
@@ -355,7 +363,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, *>, val arguments: Arguments) : MachineScreenHandler(card, arguments) {
 
     init {
-        checkSize(arguments.inventory, card.slotConfigurations.size)
+        checkSize(arguments.inventory, card.guiSlotConfigurations.size)
         checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
         val y = card.guiHeight - 82
@@ -367,9 +375,9 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         repeat(9) { c ->
             addSlot(Slot(arguments.playerInventory, c, 8 + c * 18, y + 18 * 3 + 4))
         }
-        card.slotConfigurations.forEachIndexed { index, slot ->
+        card.guiSlotConfigurations.forEachIndexed { index, slot ->
             addSlot(object : Slot(arguments.inventory, index, slot.x, slot.y) {
-                override fun canInsert(stack: ItemStack) = slot.filter(stack)
+                override fun canInsert(stack: ItemStack) = slot.isValid(stack)
             })
         }
 
