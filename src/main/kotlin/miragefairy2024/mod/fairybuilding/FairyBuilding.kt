@@ -217,7 +217,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         if (animation != null) Animator({ getStack(index) }, animation) else null
     }
 
-    private inner class Animator(private val itemStackGetter: () -> ItemStack, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private class Animator(private val itemStackGetter: () -> ItemStack, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -238,8 +238,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         var yaw = position.yaw
         var pitch = position.pitch
 
-        fun tick(doMovePosition: Boolean) {
-            val world = world ?: return
+        fun tick(world: World, doMovePosition: Boolean) {
 
             // 定位置の切り替え
             if (doMovePosition) {
@@ -300,7 +299,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
         animators.forEach {
-            it?.tick(doMovePosition)
+            it?.tick(world, doMovePosition)
         }
     }
 
