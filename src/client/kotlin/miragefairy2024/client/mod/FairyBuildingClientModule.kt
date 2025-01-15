@@ -36,39 +36,6 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(private val card:
     companion object {
         val SPRITES_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fairy_building.png")
     }
-
-    init {
-        backgroundWidth = card.guiWidth
-        backgroundHeight = card.guiHeight
-        playerInventoryTitleY = backgroundHeight - 94
-    }
-
-    override fun init() {
-        super.init()
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
-    }
-
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(context)
-        super.render(context, mouseX, mouseY, delta)
-        drawMouseoverTooltip(context, mouseX, mouseY)
-    }
-
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        context.drawTexture(card.backgroundTexture, x, y, 0, 0, backgroundWidth, backgroundHeight)
-    }
-
-    override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
-        super.drawMouseoverTooltip(context, x, y)
-        run {
-            val slot = focusedSlot ?: return@run
-            if (slot.hasStack()) return@run
-            val guiSlotConfiguration = card.guiSlotConfigurations.getOrNull(slot.index) ?: return@run
-            val tooltip = guiSlotConfiguration.getTooltip() ?: return@run
-            context.drawTooltip(textRenderer, tooltip, Optional.empty(), x, y)
-        }
-    }
-
 }
 
 open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
