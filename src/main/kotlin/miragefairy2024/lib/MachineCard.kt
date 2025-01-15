@@ -61,6 +61,8 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         }.toTypedArray()
     }
 
+    val animationConfigurations = mutableListOf<MachineBlockEntity.AnimationConfiguration<E>>()
+
     interface BlockEntityAccessor<E> {
         fun create(blockPos: BlockPos, blockState: BlockState): E
         fun castOrThrow(blockEntity: BlockEntity?): E
