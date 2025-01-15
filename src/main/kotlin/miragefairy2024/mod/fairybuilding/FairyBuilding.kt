@@ -212,12 +212,12 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     protected open val doMovePosition get() = false
 
-    private val fairyAnimators = Array(card.slotConfigurations.size) { index ->
+    private val animators = Array(card.slotConfigurations.size) { index ->
         val animation = card.slotConfigurations[index].animation
-        if (animation != null) FairyAnimator(animation) else null
+        if (animation != null) Animator(animation) else null
     }
 
-    private inner class FairyAnimator(val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private inner class Animator(val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
@@ -299,7 +299,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     }
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
-        fairyAnimators.forEach {
+        animators.forEach {
             it?.tick(doMovePosition)
         }
     }
@@ -316,7 +316,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
             card.slotConfigurations.forEachIndexed { index, _ ->
-                val fairyAnimator = fairyAnimators[index] ?: return@forEachIndexed
+                val fairyAnimator = animators[index] ?: return@forEachIndexed
                 fairyAnimator.render(renderingProxy, tickDelta)
             }
 
