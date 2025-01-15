@@ -199,93 +199,12 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Rendering
 
-    protected open val doMovePosition get() = false
+    open val doMovePosition get() = false
 
     private val animations = card.slotConfigurations.mapNotNull {
         val animation = it.animation ?: return@mapNotNull null
         val inventorySlotIndex = card.inventorySlotIndexTable[it] ?: return@mapNotNull null
         FairyAnimation(inventorySlotIndex, animation)
-    }
-
-    private class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) : Animation<FairyBuildingBlockEntity<*>> {
-        init {
-            check(animation.positions.isNotEmpty())
-        }
-
-        private var index = 0
-        private var position = animation.positions[index]
-        private var countdown = position.duration
-
-        var ticks = (Math.random() * 1000).toInt()
-        var xSpeed = 0.0
-        var ySpeed = 0.0
-        var zSpeed = 0.0
-        var yawSpeed = 0.0F
-        var pitchSpeed = 0.0F
-        var x = position.x
-        var y = position.y
-        var z = position.z
-        var yaw = position.yaw
-        var pitch = position.pitch
-
-        override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
-            val world = blockEntity.world ?: return
-
-            // 定位置の切り替え
-            if (blockEntity.doMovePosition) {
-                countdown--
-                if (countdown <= 0) {
-
-                    index++
-                    if (index >= animation.positions.size) index = 0
-
-                    position = animation.positions[index]
-                    countdown = (animation.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
-
-                }
-            }
-
-            // 妖精の移動
-            ticks++
-            xSpeed = (position.x - x) * 0.1
-            ySpeed = (position.y - y) * 0.1
-            zSpeed = (position.z - z) * 0.1
-            yawSpeed = (position.yaw - yaw) * 0.1F
-            pitchSpeed = (position.pitch - pitch) * 0.1F
-            x += xSpeed
-            y += ySpeed
-            z += zSpeed
-            yaw += yawSpeed
-            pitch += pitchSpeed
-
-        }
-
-        override fun render(blockEntity: FairyBuildingBlockEntity<*>, renderingProxy: RenderingProxy, tickDelta: Float) {
-            val cX = x + xSpeed * tickDelta.toDouble()
-            val cY = y + ySpeed * tickDelta.toDouble()
-            val cZ = z + zSpeed * tickDelta.toDouble()
-            val cYaw = yaw + yawSpeed * tickDelta
-            val cPitch = pitch + pitchSpeed * tickDelta
-            val yawOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
-            val pitchOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
-
-            renderingProxy.stack {
-                renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
-                renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
-                renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
-                renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
-
-                if (animation.isFairy) {
-                    renderingProxy.translate(0.0, 0.25, 0.0)
-                    renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
-                    renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
-                    renderingProxy.translate(0.0, -0.25, 0.0)
-                }
-
-                renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-                renderingProxy.renderItemStack(blockEntity.getStack(inventorySlotIndex))
-            }
-        }
     }
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
@@ -316,6 +235,87 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         }
     }
 
+}
+
+class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.SlotAnimationConfiguration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
+    init {
+        check(animation.positions.isNotEmpty())
+    }
+
+    private var index = 0
+    private var position = animation.positions[index]
+    private var countdown = position.duration
+
+    var ticks = (Math.random() * 1000).toInt()
+    var xSpeed = 0.0
+    var ySpeed = 0.0
+    var zSpeed = 0.0
+    var yawSpeed = 0.0F
+    var pitchSpeed = 0.0F
+    var x = position.x
+    var y = position.y
+    var z = position.z
+    var yaw = position.yaw
+    var pitch = position.pitch
+
+    override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
+        val world = blockEntity.world ?: return
+
+        // 定位置の切り替え
+        if (blockEntity.doMovePosition) {
+            countdown--
+            if (countdown <= 0) {
+
+                index++
+                if (index >= animation.positions.size) index = 0
+
+                position = animation.positions[index]
+                countdown = (animation.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
+
+            }
+        }
+
+        // 妖精の移動
+        ticks++
+        xSpeed = (position.x - x) * 0.1
+        ySpeed = (position.y - y) * 0.1
+        zSpeed = (position.z - z) * 0.1
+        yawSpeed = (position.yaw - yaw) * 0.1F
+        pitchSpeed = (position.pitch - pitch) * 0.1F
+        x += xSpeed
+        y += ySpeed
+        z += zSpeed
+        yaw += yawSpeed
+        pitch += pitchSpeed
+
+    }
+
+    override fun render(blockEntity: FairyBuildingBlockEntity<*>, renderingProxy: RenderingProxy, tickDelta: Float) {
+        val cX = x + xSpeed * tickDelta.toDouble()
+        val cY = y + ySpeed * tickDelta.toDouble()
+        val cZ = z + zSpeed * tickDelta.toDouble()
+        val cYaw = yaw + yawSpeed * tickDelta
+        val cPitch = pitch + pitchSpeed * tickDelta
+        val yawOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
+        val pitchOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
+
+        renderingProxy.stack {
+            renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
+            renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
+            renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
+            renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
+
+            if (animation.isFairy) {
+                renderingProxy.translate(0.0, 0.25, 0.0)
+                renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
+                renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
+                renderingProxy.translate(0.0, -0.25, 0.0)
+            }
+
+            renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
+            renderingProxy.renderItemStack(blockEntity.getStack(inventorySlotIndex))
+        }
+    }
 }
 
 open class FairyBuildingScreenHandler(card: FairyBuildingCard<*, *, *>, arguments: Arguments) : MachineScreenHandler(card, arguments)
