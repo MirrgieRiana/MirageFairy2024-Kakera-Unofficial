@@ -212,9 +212,9 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     protected open val doMovePosition get() = false
 
-    private val animators = Array(card.slotConfigurations.size) { index ->
-        val animation = card.slotConfigurations[index].animation
-        if (animation != null) Animator({ getStack(index) }, animation) else null
+    private val animators = card.slotConfigurations.mapIndexedNotNull { index, it ->
+        val animation = it.animation ?: return@mapIndexedNotNull null
+        Animator({ getStack(index) }, animation)
     }
 
     private class Animator(private val itemStackGetter: () -> ItemStack, private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
