@@ -107,7 +107,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Property
 
-    class FairyBuildingPropertyConfiguration<in E : FairyBuildingBlockEntity<*>>(
+    class FairyBuildingPropertyConfiguration<in E>(
         val getter: E.() -> Int,
         val setter: E.(Int) -> Unit,
         val encoder: (Int) -> Short = { it.toShort() },
