@@ -6,7 +6,6 @@ import miragefairy2024.util.reset
 import miragefairy2024.util.writeToNbt
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
@@ -19,7 +18,7 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 
-abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, *, *>, blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(blockEntityType, pos, state), SidedInventory {
+abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, *, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory {
 
     interface InventorySlotConfiguration {
         fun isValid(itemStack: ItemStack): Boolean
