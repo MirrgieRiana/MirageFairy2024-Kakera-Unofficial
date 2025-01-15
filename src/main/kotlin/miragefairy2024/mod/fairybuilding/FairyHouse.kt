@@ -33,32 +33,28 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
 
     override fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> {
         return super.createSlotConfigurations() + listOf(
-            FairyBuildingSlotConfiguration(8, 39, animation = FairyBuildingSlotAnimationConfiguration(false, listOf(Position(10.0, 9.5, 14.5, 0.0F, 180.0F, 200)))), // 本棚の上
-            FairyBuildingSlotConfiguration(61, 17, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(4.5, 2.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
-            FairyBuildingSlotConfiguration(61, 41, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(4.5, 7.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
-            FairyBuildingSlotConfiguration(61, 65, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(4.5, 12.2, 14.0, 90.0F, 270.0F, 200)))) { it.isOf(FairyCard.item) }, // ベッド
-            FairyBuildingSlotConfiguration(82, 48, animation = FairyBuildingSlotAnimationConfiguration(false, listOf(Position(1.5, 5.5, 2.0, 0.0F, 270.0F, 200)))), // タンスの上
-            FairyBuildingSlotConfiguration(104, 27, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(12.0, 0.1, 3.0, 0.0F, 280.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
-            FairyBuildingSlotConfiguration(128, 17, animation = FairyBuildingSlotAnimationConfiguration(false, listOf(Position(11.5, 1.5, 7.5, 0.0F, 270.0F, 200)))), // テーブルの上
-            FairyBuildingSlotConfiguration(152, 17, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(13.0, 0.1, 12.0, 0.0F, 70.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
-            FairyBuildingSlotConfiguration(152, 37, animation = FairyBuildingSlotAnimationConfiguration(true, listOf(Position(9.0, 0.1, 12.0, 0.0F, 110.0F, 200)))) { it.isOf(FairyCard.item) }, // テーブル
-            FairyBuildingSlotConfiguration(108, 60, animation = FairyBuildingSlotAnimationConfiguration(true, run {
-                listOf(
-                    Position(2.0, 0.1, 10.0, 0.0F, 110.0F, 140),
-                    Position(6.0, 0.1, 10.0, 0.0F, 60.0F, 140),
-                )
+            FairyBuildingSlotConfiguration(8, 39, animation = ac(false, p(10.0, 9.5, 14.5, 0.0F, 180.0F, 200))), // 本棚の上
+            FairyBuildingSlotConfiguration(61, 17, animation = ac(true, p(4.5, 2.2, 14.0, 90.0F, 270.0F, 200))) { it.isOf(FairyCard.item) }, // ベッド
+            FairyBuildingSlotConfiguration(61, 41, animation = ac(true, p(4.5, 7.2, 14.0, 90.0F, 270.0F, 200))) { it.isOf(FairyCard.item) }, // ベッド
+            FairyBuildingSlotConfiguration(61, 65, animation = ac(true, p(4.5, 12.2, 14.0, 90.0F, 270.0F, 200))) { it.isOf(FairyCard.item) }, // ベッド
+            FairyBuildingSlotConfiguration(82, 48, animation = ac(false, p(1.5, 5.5, 2.0, 0.0F, 270.0F, 200))), // タンスの上
+            FairyBuildingSlotConfiguration(104, 27, animation = ac(true, p(12.0, 0.1, 3.0, 0.0F, 280.0F, 200))) { it.isOf(FairyCard.item) }, // テーブル
+            FairyBuildingSlotConfiguration(128, 17, animation = ac(false, p(11.5, 1.5, 7.5, 0.0F, 270.0F, 200))), // テーブルの上
+            FairyBuildingSlotConfiguration(152, 17, animation = ac(true, p(13.0, 0.1, 12.0, 0.0F, 70.0F, 200))) { it.isOf(FairyCard.item) }, // テーブル
+            FairyBuildingSlotConfiguration(152, 37, animation = ac(true, p(9.0, 0.1, 12.0, 0.0F, 110.0F, 200))) { it.isOf(FairyCard.item) }, // テーブル
+            FairyBuildingSlotConfiguration(108, 60, animation = ac(true, buildList {
+                this += p(2.0, 0.1, 10.0, 0.0F, 110.0F, 140)
+                this += p(6.0, 0.1, 10.0, 0.0F, 60.0F, 140)
             })) { it.isOf(FairyCard.item) }, // 床（左下）
             FairyBuildingSlotConfiguration(
                 128, 60,
-                animation = FairyBuildingSlotAnimationConfiguration(false, listOf(Position(4.0, 0.1, 7.0, 0.0F, 90.0F, 200))),
+                animation = ac(false, p(4.0, 0.1, 7.0, 0.0F, 90.0F, 200)),
                 insertDirections = setOf(Direction.UP, Direction.WEST),
                 extractDirections = setOf(Direction.DOWN, Direction.EAST),
             ), // 床の上
-            FairyBuildingSlotConfiguration(148, 60, animation = FairyBuildingSlotAnimationConfiguration(true, run {
-                listOf(
-                    Position(5.0, 0.1, 4.0, 0.0F, 290.0F, 180),
-                    Position(7.0, 0.1, 6.0, 0.0F, 320.0F, 180),
-                )
+            FairyBuildingSlotConfiguration(148, 60, animation = ac(true, buildList {
+                this += p(5.0, 0.1, 4.0, 0.0F, 290.0F, 180)
+                this += p(7.0, 0.1, 6.0, 0.0F, 320.0F, 180)
             })) { it.isOf(FairyCard.item) }, // 床（右上）
         )
     }

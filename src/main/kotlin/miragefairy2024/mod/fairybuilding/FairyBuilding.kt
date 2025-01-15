@@ -61,6 +61,12 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
                 override fun decode(data: Short) = decoder(data)
             }
         }
+
+        fun ac(isFairy: Boolean, positions: List<Position>): FairyBuildingSlotAnimationConfiguration {
+            return FairyBuildingSlotAnimationConfiguration(isFairy, positions)
+        }
+
+        fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Int) = listOf(Position(x, y, z, pitch, yaw, duration))
     }
 
     // Specification
