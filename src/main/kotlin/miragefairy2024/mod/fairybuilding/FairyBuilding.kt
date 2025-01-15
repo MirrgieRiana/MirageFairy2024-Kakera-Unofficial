@@ -173,9 +173,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     override fun hasComparatorOutput(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
-        return card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
-    }
+    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
