@@ -304,16 +304,16 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
             renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
-            animators.forEach {
-                it.render(renderingProxy, tickDelta)
-            }
-
             renderRotated(renderingProxy, tickDelta, light, overlay)
 
         }
     }
 
-    open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) = Unit
+    open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
+        animators.forEach {
+            it.render(renderingProxy, tickDelta)
+        }
+    }
 
 }
 
