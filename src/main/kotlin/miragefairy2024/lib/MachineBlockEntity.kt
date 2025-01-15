@@ -82,7 +82,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     abstract fun getActualSide(side: Direction): Direction
 
-    override fun getAvailableSlots(side: Direction) = card.availableSlotsTable[getActualSide(side).id]
+    override fun getAvailableSlots(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).id]
 
     override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && isValid(slot, stack)
 
