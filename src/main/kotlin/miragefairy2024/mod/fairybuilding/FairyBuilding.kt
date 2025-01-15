@@ -217,7 +217,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         if (animation != null) Animator(animation) else null
     }
 
-    private inner class Animator(val animation: FairyBuildingCard.SlotAnimationConfiguration) {
+    private inner class Animator(private val animation: FairyBuildingCard.SlotAnimationConfiguration) {
         init {
             check(animation.positions.isNotEmpty())
         }
