@@ -228,10 +228,11 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         var yaw = position.yaw
         var pitch = position.pitch
 
-        fun tick(world: World, doMovePosition: Boolean) {
+        fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
+            val world = blockEntity.world ?: return
 
             // 定位置の切り替え
-            if (doMovePosition) {
+            if (blockEntity.doMovePosition) {
                 countdown--
                 if (countdown <= 0) {
 
@@ -259,7 +260,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
         }
 
-        fun render(renderingProxy: RenderingProxy, tickDelta: Float) {
+        fun render(blockEntity: FairyBuildingBlockEntity<*>, renderingProxy: RenderingProxy, tickDelta: Float) {
             val cX = x + xSpeed * tickDelta.toDouble()
             val cY = y + ySpeed * tickDelta.toDouble()
             val cZ = z + zSpeed * tickDelta.toDouble()
@@ -289,7 +290,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
         animators.forEach {
-            it.tick(world, doMovePosition)
+            it.tick(this)
         }
     }
 
@@ -311,7 +312,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     open fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         animators.forEach {
-            it.render(renderingProxy, tickDelta)
+            it.render(this, renderingProxy, tickDelta)
         }
     }
 
