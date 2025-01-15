@@ -48,6 +48,10 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     val inventorySlotConfigurations = mutableListOf<MachineBlockEntity.InventorySlotConfiguration>()
 
+    val inventorySlotIndexTable by lazy {
+        inventorySlotConfigurations.withIndex().associate { (index, it) -> it to index }
+    }
+
     val availableInventorySlotsTable by lazy {
         Direction.entries.map { direction ->
             inventorySlotConfigurations.withIndex()
