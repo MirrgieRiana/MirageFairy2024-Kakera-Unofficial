@@ -201,7 +201,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     protected open val doMovePosition get() = false
 
-    private val animators = card.slotConfigurations.mapNotNull { it ->
+    private val animators = card.slotConfigurations.mapNotNull {
         val animation = it.animation ?: return@mapNotNull null
         val index = card.inventorySlotIndexTable[it] ?: return@mapNotNull null
         Animator({ getStack(index) }, animation)
