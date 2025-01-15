@@ -469,7 +469,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                     }
 
                     renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-                    renderingProxy.renderItemStack(inventory[index])
+                    renderingProxy.renderItemStack(getStack(index))
                 }
             }
 
