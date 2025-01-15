@@ -272,7 +272,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     }
 
     override fun clientTick(world: World, pos: BlockPos, state: BlockState) {
-        cachedState
         fairyAnimators.forEach {
             it?.tick(doMovePosition)
         }
