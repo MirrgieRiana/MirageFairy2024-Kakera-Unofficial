@@ -155,7 +155,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     private val propertyDelegate = object : PropertyDelegate {
         override fun size() = card.propertyConfigurations.size
         override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
-        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } }
+        override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
