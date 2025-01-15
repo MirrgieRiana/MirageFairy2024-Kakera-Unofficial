@@ -131,14 +131,12 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
     val slotConfigurations = createSlotConfigurations()
 
-    val availableSlotsTable = arrayOf(
-        slotConfigurations.withIndex().filter { Direction.DOWN in it.value.insertDirections || Direction.DOWN in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.UP in it.value.insertDirections || Direction.UP in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.NORTH in it.value.insertDirections || Direction.NORTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.SOUTH in it.value.insertDirections || Direction.SOUTH in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.WEST in it.value.insertDirections || Direction.WEST in it.value.extractDirections }.map { it.index }.toIntArray(),
-        slotConfigurations.withIndex().filter { Direction.EAST in it.value.insertDirections || Direction.EAST in it.value.extractDirections }.map { it.index }.toIntArray(),
-    )
+    val availableSlotsTable = Direction.entries.map { direction ->
+        slotConfigurations.withIndex()
+            .filter { direction in it.value.insertDirections || direction in it.value.extractDirections }
+            .map { it.index }
+            .toIntArray()
+    }.toTypedArray()
 
 
     // Property
