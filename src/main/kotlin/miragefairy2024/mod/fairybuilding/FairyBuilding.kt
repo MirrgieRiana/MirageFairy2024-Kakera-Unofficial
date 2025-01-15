@@ -27,7 +27,6 @@ import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
-import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
@@ -35,13 +34,8 @@ import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
 import net.minecraft.block.enums.Instrument
 import net.minecraft.entity.ai.pathing.NavigationType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
@@ -193,9 +187,6 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
 
 abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state), RenderingProxyBlockEntity {
 
-    abstract fun getThis(): E
-
-
     // Inventory
 
     override fun getActualSide(side: Direction): Direction {
@@ -333,30 +324,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     }
 
     open fun renderExtra(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) = Unit
-
-
-    // Gui
-
-    private val propertyDelegate = object : PropertyDelegate {
-        override fun size() = card.propertyConfigurations.size
-        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
-        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } }
-    }
-
-    override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
-
-    override fun getContainerName(): Text = card.block.name
-
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): FairyBuildingScreenHandler {
-        val arguments = MachineScreenHandler.Arguments(
-            syncId,
-            playerInventory,
-            this,
-            propertyDelegate,
-            ScreenHandlerContext.create(world, pos),
-        )
-        return card.createScreenHandler(arguments)
-    }
 
 }
 
