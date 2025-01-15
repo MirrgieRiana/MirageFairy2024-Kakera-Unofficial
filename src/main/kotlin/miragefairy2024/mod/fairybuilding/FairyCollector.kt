@@ -41,7 +41,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     override fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> {
         val extractDirections = setOf(Direction.UP, Direction.DOWN, Direction.SOUTH, Direction.WEST, Direction.EAST)
         return super.createSlotConfigurations() + listOf(
-            FairyBuildingSlotConfiguration(15, 35, toolTipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
+            FairyBuildingSlotConfiguration(15, 35, tooltipGetter = { listOf(text { SPECIFIED_FAIRY_SLOT_TRANSLATION(MotifCard.CARRY.displayName) }) }) { isFairy(it, MotifCard.CARRY) }, // 回収妖精 // TODO 妖精パーティクル
             FairyBuildingSlotConfiguration(37 + 18 * 0, 17 + 18 * 0, animation = SlotAnimationConfiguration(false, listOf(Position(11.5, 1.5, 2.5, 0.0F, 180.0F, 200)))), // 机
             FairyBuildingSlotConfiguration(81, 35, animation = SlotAnimationConfiguration(true, run {
                 listOf(

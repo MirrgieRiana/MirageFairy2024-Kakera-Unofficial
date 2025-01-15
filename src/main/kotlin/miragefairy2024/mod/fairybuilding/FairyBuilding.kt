@@ -87,7 +87,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
         val animation: SlotAnimationConfiguration? = null,
-        val toolTipGetter: (() -> List<Text>)? = null,
+        val tooltipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     )
 
