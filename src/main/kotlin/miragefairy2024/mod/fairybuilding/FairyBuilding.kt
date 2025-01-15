@@ -56,6 +56,21 @@ import net.minecraft.world.World
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
+    companion object {
+        fun <E> PropertyConfiguration(
+            getter: E.() -> Int,
+            setter: E.(Int) -> Unit,
+            encoder: (Int) -> Short = { it.toShort() },
+            decoder: (Short) -> Int = { it.toInt() },
+        ): MachineScreenHandler.PropertyConfiguration<E> {
+            return object : MachineScreenHandler.PropertyConfiguration<E> {
+                override fun get(blockEntity: E) = getter(blockEntity)
+                override fun set(blockEntity: E, value: Int) = setter(blockEntity, value)
+                override fun encode(value: Int) = encoder(value)
+                override fun decode(data: Short) = decoder(data)
+            }
+        }
+    }
 
     // Specification
 
@@ -107,14 +122,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Property
 
-    class FairyBuildingPropertyConfiguration<in E>(
-        val getter: E.() -> Int,
-        val setter: E.(Int) -> Unit,
-        val encoder: (Int) -> Short = { it.toShort() },
-        val decoder: (Short) -> Int = { it.toInt() },
-    )
-
-    open fun createPropertyConfigurations(): List<FairyBuildingPropertyConfiguration<E>> = listOf()
+    open fun createPropertyConfigurations(): List<MachineScreenHandler.PropertyConfiguration<E>> = listOf()
     val propertyConfigurations = createPropertyConfigurations()
 
     val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
@@ -339,8 +347,8 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     private val propertyDelegate = object : PropertyDelegate {
         override fun size() = card.propertyConfigurations.size
-        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encoder(it.getter.invoke(getThis())).toInt() } ?: 0
-        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.setter.invoke(getThis(), it.decoder(value.toShort())) } }
+        override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
+        override fun set(index: Int, value: Int) = unit { card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } }
     }
 
     override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
@@ -402,15 +410,15 @@ open class FairyBuildingScreenHandler(private val card: FairyBuildingCard<*, *, 
         return quickMove(slot, destinationIndices)
     }
 
-    inner class Property(private val property: FairyBuildingCard.FairyBuildingPropertyConfiguration<*>) {
+    inner class Property(private val property: PropertyConfiguration<*>) {
         operator fun getValue(thisRef: Any?, property: Any?): Int {
             val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
-            return this.property.decoder(arguments.propertyDelegate.get(propertyIndex).toShort())
+            return this.property.decode(arguments.propertyDelegate.get(propertyIndex).toShort())
         }
 
         operator fun setValue(thisRef: Any?, property: Any?, value: Int) {
             val propertyIndex = card.propertyIndexTable[this.property] ?: throw NullPointerException("No such property")
-            arguments.propertyDelegate.set(propertyIndex, this.property.encoder(value).toInt())
+            arguments.propertyDelegate.set(propertyIndex, this.property.encode(value).toInt())
         }
     }
 

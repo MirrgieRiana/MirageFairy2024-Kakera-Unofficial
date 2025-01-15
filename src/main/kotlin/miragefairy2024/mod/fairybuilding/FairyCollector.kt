@@ -66,10 +66,10 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     val TABLE_SLOT_INDICES = listOf(1, 9, 10, 11)
     val CHEST_SLOT_INDICES = 3..8
 
-    val COLLECTION_PROGRESS_PROPERTY = FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
-    val SORT_PROGRESS_PROPERTY = FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
-    val COLLECTION_SPEED_PROPERTY = FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity>({ collectionSpeed }, { collectionSpeed = it })
-    val SORT_SPEED_PROPERTY = FairyBuildingPropertyConfiguration<FairyCollectorBlockEntity>({ sortSpeed }, { sortSpeed = it })
+    val COLLECTION_PROGRESS_PROPERTY = PropertyConfiguration<FairyCollectorBlockEntity>({ collectionProgress }, { collectionProgress = it })
+    val SORT_PROGRESS_PROPERTY = PropertyConfiguration<FairyCollectorBlockEntity>({ sortProgress }, { sortProgress = it })
+    val COLLECTION_SPEED_PROPERTY = PropertyConfiguration<FairyCollectorBlockEntity>({ collectionSpeed }, { collectionSpeed = it })
+    val SORT_SPEED_PROPERTY = PropertyConfiguration<FairyCollectorBlockEntity>({ sortSpeed }, { sortSpeed = it })
     override fun createPropertyConfigurations() = super.createPropertyConfigurations() + listOf(
         COLLECTION_PROGRESS_PROPERTY,
         SORT_PROGRESS_PROPERTY,

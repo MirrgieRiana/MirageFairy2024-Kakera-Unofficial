@@ -26,6 +26,13 @@ abstract class MachineScreenHandler(private val card: MachineCard<*, *, *>, argu
         fun getTooltip(): List<Text>?
     }
 
+    interface PropertyConfiguration<in E> {
+        fun get(blockEntity: E): Int
+        fun set(blockEntity: E, value: Int)
+        fun encode(value: Int): Short
+        fun decode(data: Short): Int
+    }
+
     abstract fun getTooltip(slot: Slot): List<Text>?
 
 }
