@@ -14,7 +14,6 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.checkType
 import miragefairy2024.util.enJa
@@ -22,21 +21,17 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.normal
 import miragefairy2024.util.quickMove
-import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
-import miragefairy2024.util.reset
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
-import miragefairy2024.util.writeToNbt
 import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
@@ -50,15 +45,9 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
@@ -70,7 +59,6 @@ import net.minecraft.stat.Stats
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -131,13 +119,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
     val slotConfigurations = createSlotConfigurations()
 
-    val availableSlotsTable = Direction.entries.map { direction ->
-        slotConfigurations.withIndex()
-            .filter { direction in it.value.insertDirections || direction in it.value.extractDirections }
-            .map { it.index }
-            .toIntArray()
-    }.toTypedArray()
-
 
     // Property
 
@@ -173,6 +154,16 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
         block.registerDefaultLootTableGeneration()
+
+        inventorySlotConfigurations += slotConfigurations.map {
+            object : MachineBlockEntity.InventorySlotConfiguration {
+                override fun isValid(itemStack: ItemStack) = it.filter(itemStack)
+                override fun canInsert(direction: Direction) = direction in it.insertDirections
+                override fun canExtract(direction: Direction) = direction in it.extractDirections
+                override val isObservable = it.animation != null
+                override val dropItem = it.dropItem
+            }
+        }
 
     }
 }
@@ -267,62 +258,14 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
 
 }
 
-abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, card.blockEntityType, pos, state), RenderingProxyBlockEntity, SidedInventory {
+abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, card.blockEntityType, pos, state), RenderingProxyBlockEntity {
 
     abstract fun getThis(): E
 
 
-    // Data
-
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
-        inventory.reset()
-        inventory.readFromNbt(nbt)
-    }
-
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
-        inventory.writeToNbt(nbt)
-    }
-
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
-
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
-
-
     // Inventory
 
-    private val inventory = MutableList(card.slotConfigurations.size) { EMPTY_ITEM_STACK }
-
-    override fun size() = inventory.size
-
-    override fun isEmpty() = inventory.all { it.isEmpty }
-
-    override fun getStack(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
-
-    override fun setStack(slot: Int, stack: ItemStack) {
-        if (slot in inventory.indices) {
-            inventory[slot] = stack
-        }
-        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
-        markDirty()
-    }
-
-    override fun removeStack(slot: Int, amount: Int): ItemStack {
-        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
-        markDirty()
-        return Inventories.splitStack(inventory, slot, amount)
-    }
-
-    override fun removeStack(slot: Int): ItemStack {
-        if (card.slotConfigurations[slot].animation != null) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
-        markDirty()
-        return Inventories.removeStack(inventory, slot)
-    }
-
-    override fun isValid(slot: Int, stack: ItemStack) = card.slotConfigurations[slot].filter(stack)
-
-    private fun getActualSide(side: Direction): Direction {
+    override fun getActualSide(side: Direction): Direction {
         return when (side) {
             Direction.UP, Direction.DOWN -> side
 
@@ -331,26 +274,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
                 Direction.fromHorizontal((direction.horizontal + side.horizontal) % 4)
             }
         }
-    }
-
-    override fun getAvailableSlots(side: Direction) = card.availableSlotsTable[getActualSide(side).id]
-
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || (getActualSide(dir) in card.slotConfigurations[slot].insertDirections)) && isValid(slot, stack)
-
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = getActualSide(dir) in card.slotConfigurations[slot].extractDirections
-
-    override fun clear() {
-        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
-        markDirty()
-        inventory.replaceAll { EMPTY_ITEM_STACK }
-    }
-
-    fun dropItems() {
-        inventory.forEachIndexed { index, itemStack ->
-            if (card.slotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
-        }
-        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
-        markDirty()
     }
 
 
