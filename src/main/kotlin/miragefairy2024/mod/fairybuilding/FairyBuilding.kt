@@ -109,7 +109,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
     open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
-    val slotConfigurations = createSlotConfigurations()
 
 
     // Property
@@ -136,6 +135,9 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
         block.registerDefaultLootTableGeneration()
+
+
+        val slotConfigurations = createSlotConfigurations()
 
         inventorySlotConfigurations += slotConfigurations
         guiSlotConfigurations += slotConfigurations
