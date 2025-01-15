@@ -141,8 +141,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
         block.registerDefaultLootTableGeneration()
 
-        inventorySlotConfigurations += slotConfigurations.map {
-            object : MachineBlockEntity.InventorySlotConfiguration {
+        slotConfigurations.forEach {
+            inventorySlotConfigurations += object : MachineBlockEntity.InventorySlotConfiguration {
                 override fun isValid(itemStack: ItemStack) = it.filter(itemStack)
                 override fun canInsert(direction: Direction) = direction in it.insertDirections
                 override fun canExtract(direction: Direction) = direction in it.extractDirections
