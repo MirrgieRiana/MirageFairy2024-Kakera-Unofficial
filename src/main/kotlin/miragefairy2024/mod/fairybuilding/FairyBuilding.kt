@@ -87,11 +87,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
 
-    // ScreenHandler
-
-    override fun getPropertyCount() = propertyConfigurations.size
-
-
     // Slot
 
     class FairyBuildingSlotConfiguration(
@@ -123,9 +118,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     // Property
 
     open fun createPropertyConfigurations(): List<MachineScreenHandler.PropertyConfiguration<E>> = listOf()
-    val propertyConfigurations = createPropertyConfigurations()
-
-    val propertyIndexTable = propertyConfigurations.withIndex().associate { (index, it) -> it to index }
 
 
     context(ModContext)
@@ -166,6 +158,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
                 override fun getTooltip() = it.tooltipGetter?.invoke()
             }
         }
+
+        propertyConfigurations += createPropertyConfigurations()
 
     }
 }
