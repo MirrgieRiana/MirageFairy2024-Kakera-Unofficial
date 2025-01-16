@@ -41,6 +41,7 @@ import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
@@ -128,6 +129,8 @@ fun initFairyItem() {
         }
 
         card.item.enJa(EnJa(card.enName, card.jaName))
+
+        card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
     }
 
     RARE_TRANSLATION.enJa()
