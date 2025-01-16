@@ -93,6 +93,7 @@ enum class MaterialCard(
     FAIRY_CRYSTAL(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
         PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
+        soulStreamContainable = true,
     ),
     PHANTOM_LEAVES(
         "phantom_leaves", "Phantom Leaves", "ファントムの葉",
@@ -102,6 +103,7 @@ enum class MaterialCard(
     PHANTOM_DROP(
         "phantom_drop", "Phantom Drop", "幻想の雫",
         PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
+        soulStreamContainable = true,
         foodComponent = FoodComponent.Builder()
             .hunger(2)
             .saturationModifier(0.3F)
@@ -112,10 +114,12 @@ enum class MaterialCard(
     MIRAGIUM_NUGGET(
         "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
         PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
+        soulStreamContainable = true,
     ),
     MIRAGIUM_INGOT(
         "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
         PoemList(3).poem("Metallic body", "妖精インゴット。"),
+        soulStreamContainable = true,
     ),
     VEROPEDA_LEAF(
         "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
@@ -168,31 +172,37 @@ enum class MaterialCard(
     TINY_MIRAGE_FLOUR(
         "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
         PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
     ),
     MIRAGE_FLOUR(
         "mirage_flour", "Mirage Flour", "ミラージュの花粉",
         PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
     ),
     MIRAGE_FLOUR_OF_NATURE(
         "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
         PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
     ),
     MIRAGE_FLOUR_OF_EARTH(
         "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
         PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
     ),
     MIRAGE_FLOUR_OF_UNDERWORLD(
         "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
         PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
     ),
     MIRAGE_FLOUR_OF_SKY(
         "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
         PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
     ),
     MIRAGE_FLOUR_OF_UNIVERSE(
@@ -200,6 +210,7 @@ enum class MaterialCard(
         PoemList(3)
             .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
             .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
     ),
     MIRAGE_FLOUR_OF_TIME(
@@ -207,6 +218,7 @@ enum class MaterialCard(
         PoemList(4)
             .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
             .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
+        soulStreamContainable = true,
         creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
     ),
 
@@ -214,6 +226,7 @@ enum class MaterialCard(
         "fairy_scales", "Fairy Scales", "妖精の鱗粉",
         PoemList(1)
             .poem("A catalyst that converts mana into erg", "湧き上がる、エルグの誘い。"),
+        soulStreamContainable = true,
         // TODO レシピ 妖精の森バイオームの雑草
         // TODO 妖精からクラフト
         // TODO 用途
