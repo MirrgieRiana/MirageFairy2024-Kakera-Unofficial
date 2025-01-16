@@ -131,7 +131,7 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         }
         repeat(soulStream.size) { i ->
             addSlot(object : Slot(soulStream, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = stack.isOf(FairyCard.item) || stack.isIn(SOUL_STREAM_CONTAINABLE_TAG)
+                override fun canInsert(stack: ItemStack) = stack.isIn(SOUL_STREAM_CONTAINABLE_TAG)
             })
         }
     }
