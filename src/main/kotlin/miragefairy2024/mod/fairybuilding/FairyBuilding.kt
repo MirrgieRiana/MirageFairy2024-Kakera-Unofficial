@@ -45,7 +45,6 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-@Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
         fun <E> PropertyConfiguration(
