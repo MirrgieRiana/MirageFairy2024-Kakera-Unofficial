@@ -5,6 +5,7 @@ import miragefairy2024.mod.fairybuilding.initFairyBuildingModule
 import miragefairy2024.mod.fairylogistics.initFairyLogisticsModule
 import miragefairy2024.mod.fairyquest.initFairyQuestModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
+import miragefairy2024.mod.initBagModule
 import miragefairy2024.mod.initBiomeModule
 import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
@@ -21,7 +22,6 @@ import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initParticleModule
 import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initRecipeGroupModule
-import miragefairy2024.mod.initSeedBag
 import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initTelescopeModule
@@ -64,5 +64,5 @@ fun initModules() {
     initFairyFountainModule()
     initFairyLogisticsModule()
     initDebrisModule()
-    initSeedBag()
+    initBagModule()
 }

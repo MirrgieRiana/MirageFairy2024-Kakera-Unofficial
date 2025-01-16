@@ -46,34 +46,34 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.roundToInt
 
-object SeedBagCard {
+object BagCard {
     val identifier = MirageFairy2024.identifier("seed_bag")
-    val item = SeedBagItem(Item.Settings().maxCount(1))
+    val item = BagItem(Item.Settings().maxCount(1))
     val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
         val slotIndex = buf.readInt()
-        SeedBagScreenHandler(syncId, playerInventory, slotIndex)
+        BagScreenHandler(syncId, playerInventory, slotIndex)
     }
 }
 
 
 context(ModContext)
-fun initSeedBag() {
-    SeedBagCard.let { card ->
-        SeedBagCard.item.register(Registries.ITEM, SeedBagCard.identifier)
-        SeedBagCard.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        SeedBagCard.item.registerGeneratedModelGeneration()
-        SeedBagCard.item.enJa(EnJa("Seed Bag", "種子カバン"))
+fun initBagModule() {
+    BagCard.let { card ->
+        BagCard.item.register(Registries.ITEM, BagCard.identifier)
+        BagCard.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        BagCard.item.registerGeneratedModelGeneration()
+        BagCard.item.enJa(EnJa("Seed Bag", "種子カバン"))
         val poemList = PoemList(1)
             .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
             .description("description1", "Display GUI when used", "使用時、GUIを表示")
             .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
-        SeedBagCard.item.registerPoem(poemList)
-        SeedBagCard.item.registerPoemGeneration(poemList)
+        BagCard.item.registerPoem(poemList)
+        BagCard.item.registerPoemGeneration(poemList)
 
-        SeedBagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, SeedBagCard.identifier)
+        BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, BagCard.identifier)
     }
 
-    registerShapedRecipeGeneration(SeedBagCard.item) {
+    registerShapedRecipeGeneration(BagCard.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
@@ -83,21 +83,21 @@ fun initSeedBag() {
 }
 
 
-class SeedBagItem(settings: Settings) : Item(settings) {
+class BagItem(settings: Settings) : Item(settings) {
     companion object {
         const val INVENTORY_WIDTH = 17
         const val INVENTORY_SIZE = INVENTORY_WIDTH * 6
     }
 
     override fun getName(stack: ItemStack): Text {
-        val count = stack.getSeedBagInventory().itemStacks.count { it.isNotEmpty }
+        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
         return text { super.getName(stack) + (if (count > 0) " ($count / $INVENTORY_SIZE)"() else ""()) }
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
 
-        val inventory = stack.getSeedBagInventory()
+        val inventory = stack.getBagInventory()
         var first = true
         var itemCount = 0
         inventory.itemStacks.forEach { itemStack ->
@@ -116,17 +116,17 @@ class SeedBagItem(settings: Settings) : Item(settings) {
     }
 
     override fun isItemBarVisible(stack: ItemStack): Boolean {
-        val count = stack.getSeedBagInventory().itemStacks.count { it.isNotEmpty }
+        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
         return count > 0
     }
 
     override fun getItemBarStep(stack: ItemStack): Int {
-        val count = stack.getSeedBagInventory().itemStacks.count { it.isNotEmpty }
+        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
         return (13.0 * count.toDouble() / INVENTORY_SIZE.toDouble()).roundToInt()
     }
 
     override fun getItemBarColor(stack: ItemStack): Int {
-        val count = stack.getSeedBagInventory().itemStacks.count { it.isNotEmpty }
+        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
         return if (count >= INVENTORY_SIZE) 0xFF0000 else 0x00FF00
     }
 
@@ -142,7 +142,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
         }
         user.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return SeedBagScreenHandler(syncId, playerInventory, slotIndex)
+                return BagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
             override fun getDisplayName() = itemStack.name
@@ -165,7 +165,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
         srcInventory[0] = slot.stack.copy()
-        val destInventory = stack.getSeedBagInventory()
+        val destInventory = stack.getBagInventory()
 
         // マージをシミュレートする
         val result = srcInventory.mergeTo(destInventory)
@@ -180,7 +180,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
 
         // シミュレートした結果を適用する
         slot.stack = srcInventory[0]
-        stack.setSeedBagInventory(destInventory)
+        stack.setBagInventory(destInventory)
 
         return true
     }
@@ -196,7 +196,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
         srcInventory[0] = cursorStackReference.get().copy()
-        val destInventory = stack.getSeedBagInventory()
+        val destInventory = stack.getBagInventory()
 
         // マージをシミュレートする
         val result = srcInventory.mergeTo(destInventory)
@@ -209,7 +209,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
 
         // シミュレートした結果を適用する
         cursorStackReference.set(srcInventory[0])
-        stack.setSeedBagInventory(destInventory)
+        stack.setBagInventory(destInventory)
 
         return true
     }
@@ -219,54 +219,54 @@ class SeedBagItem(settings: Settings) : Item(settings) {
     override fun onItemEntityDestroyed(entity: ItemEntity) {
         val world = entity.world
         if (world.isClient) return
-        entity.stack.getSeedBagInventory().stacks.forEach { itemStack ->
+        entity.stack.getBagInventory().stacks.forEach { itemStack ->
             world.spawnEntity(ItemEntity(world, entity.x, entity.y, entity.z, itemStack))
         }
     }
 
 }
 
-class SeedBagInventory : SimpleInventory(SeedBagItem.INVENTORY_SIZE) {
+class BagInventory : SimpleInventory(BagItem.INVENTORY_SIZE) {
     override fun isValid(slot: Int, stack: ItemStack) = stack.item is MagicPlantSeedItem && stack.item.canBeNested()
 }
 
-fun ItemStack.getSeedBagInventory(): SeedBagInventory {
-    val inventory = SeedBagInventory()
+fun ItemStack.getBagInventory(): BagInventory {
+    val inventory = BagInventory()
     val nbt = this.nbt
     if (nbt != null) Inventories.readNbt(nbt, inventory.stacks)
     return inventory
 }
 
-fun ItemStack.setSeedBagInventory(inventory: SeedBagInventory) {
+fun ItemStack.setBagInventory(inventory: BagInventory) {
     val nbt = getOrCreateNbt()
     Inventories.writeNbt(nbt, inventory.stacks, true)
 }
 
 
-class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int) : ScreenHandler(SeedBagCard.screenHandlerType, syncId) {
+class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
     private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
     private var expectedItemStack = itemStackInstance.copy()
-    private val seedBagInventory = itemStackInstance.getSeedBagInventory()
+    private val bagInventory = itemStackInstance.getBagInventory()
     private val inventoryDelegate = object : Inventory {
-        override fun clear() = seedBagInventory.clear()
-        override fun size() = seedBagInventory.size()
-        override fun isEmpty() = seedBagInventory.isEmpty()
-        override fun getStack(slot: Int) = seedBagInventory.getStack(slot)
-        override fun removeStack(slot: Int, amount: Int) = seedBagInventory.removeStack(slot, amount)
-        override fun removeStack(slot: Int) = seedBagInventory.removeStack(slot)
-        override fun setStack(slot: Int, stack: ItemStack) = seedBagInventory.setStack(slot, stack)
-        override fun getMaxCountPerStack() = seedBagInventory.maxCountPerStack
+        override fun clear() = bagInventory.clear()
+        override fun size() = bagInventory.size()
+        override fun isEmpty() = bagInventory.isEmpty()
+        override fun getStack(slot: Int) = bagInventory.getStack(slot)
+        override fun removeStack(slot: Int, amount: Int) = bagInventory.removeStack(slot, amount)
+        override fun removeStack(slot: Int) = bagInventory.removeStack(slot)
+        override fun setStack(slot: Int, stack: ItemStack) = bagInventory.setStack(slot, stack)
+        override fun getMaxCountPerStack() = bagInventory.maxCountPerStack
         override fun markDirty() {
-            seedBagInventory.markDirty()
-            itemStackInstance.setSeedBagInventory(seedBagInventory)
+            bagInventory.markDirty()
+            itemStackInstance.setBagInventory(bagInventory)
             expectedItemStack = itemStackInstance.copy()
         }
 
-        override fun canPlayerUse(player: PlayerEntity) = seedBagInventory.canPlayerUse(player)
-        override fun onOpen(player: PlayerEntity) = seedBagInventory.onOpen(player)
-        override fun onClose(player: PlayerEntity) = seedBagInventory.onClose(player)
-        override fun isValid(slot: Int, stack: ItemStack) = seedBagInventory.isValid(slot, stack)
-        override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = seedBagInventory.canTransferTo(hopperInventory, slot, stack)
+        override fun canPlayerUse(player: PlayerEntity) = bagInventory.canPlayerUse(player)
+        override fun onOpen(player: PlayerEntity) = bagInventory.onOpen(player)
+        override fun onClose(player: PlayerEntity) = bagInventory.onClose(player)
+        override fun isValid(slot: Int, stack: ItemStack) = bagInventory.isValid(slot, stack)
+        override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTransferTo(hopperInventory, slot, stack)
     }
 
     init {
@@ -278,7 +278,7 @@ class SeedBagScreenHandler(syncId: Int, private val playerInventory: PlayerInven
         repeat(9) { c ->
             addSlot(Slot(playerInventory, c, 0, 0))
         }
-        repeat(SeedBagItem.INVENTORY_SIZE) { i ->
+        repeat(BagItem.INVENTORY_SIZE) { i ->
             addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
         }
     }
