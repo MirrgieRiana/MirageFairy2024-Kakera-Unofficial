@@ -101,7 +101,8 @@ fun initBagModule() {
 class BagItem(settings: Settings) : Item(settings) {
     companion object {
         const val INVENTORY_WIDTH = 17
-        const val INVENTORY_SIZE = INVENTORY_WIDTH * 6
+        const val INVENTORY_HEIGHT = 6
+        const val INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT
     }
 
     override fun getName(stack: ItemStack): Text {

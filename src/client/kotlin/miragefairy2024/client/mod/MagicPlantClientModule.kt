@@ -188,7 +188,7 @@ class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerIn
                     child(verticalSpace(3))
 
                     // カバンインベントリ
-                    repeat(6) { r ->
+                    repeat(BagItem.INVENTORY_HEIGHT) { r ->
                         child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                             repeat(BagItem.INVENTORY_WIDTH) { c ->
                                 child(slotContainer(slotAsComponent(9 * 4 + BagItem.INVENTORY_WIDTH * r + c)))
