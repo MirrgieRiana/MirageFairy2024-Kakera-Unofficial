@@ -59,18 +59,18 @@ object BagCard {
 context(ModContext)
 fun initBagModule() {
     BagCard.let { card ->
-        BagCard.item.register(Registries.ITEM, BagCard.identifier)
-        BagCard.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        BagCard.item.registerGeneratedModelGeneration()
-        BagCard.item.enJa(EnJa("Seed Bag", "種子カバン"))
+        card.item.register(Registries.ITEM, card.identifier)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerGeneratedModelGeneration()
+        card.item.enJa(EnJa("Seed Bag", "種子カバン"))
         val poemList = PoemList(1)
             .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
             .description("description1", "Display GUI when used", "使用時、GUIを表示")
             .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
-        BagCard.item.registerPoem(poemList)
-        BagCard.item.registerPoemGeneration(poemList)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
 
-        BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, BagCard.identifier)
+        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
     }
 
     registerShapedRecipeGeneration(BagCard.item) {
