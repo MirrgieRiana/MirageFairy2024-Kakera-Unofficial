@@ -126,7 +126,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Move
 
-    abstract fun serverTick(world: World, pos: BlockPos, state: BlockState)
+    open fun serverTick(world: World, pos: BlockPos, state: BlockState) = Unit
 
 
     // Rendering
