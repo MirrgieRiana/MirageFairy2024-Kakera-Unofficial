@@ -58,15 +58,16 @@ enum class BagCard(
     ),
     ;
 
-    val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(Item.Settings().maxCount(1))
-
     companion object {
         val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
             val slotIndex = buf.readInt()
             BagScreenHandler(syncId, playerInventory, slotIndex)
         }
     }
+
+    val identifier = MirageFairy2024.identifier(path)
+    val item = BagItem(Item.Settings().maxCount(1))
+
 }
 
 
