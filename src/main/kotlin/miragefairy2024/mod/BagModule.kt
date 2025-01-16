@@ -46,19 +46,25 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.roundToInt
 
-object BagCard {
+enum class BagCard {
+    SEED_BAG,
+    ;
+
     val identifier = MirageFairy2024.identifier("seed_bag")
     val item = BagItem(Item.Settings().maxCount(1))
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-        val slotIndex = buf.readInt()
-        BagScreenHandler(syncId, playerInventory, slotIndex)
+
+    companion object {
+        val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
+            val slotIndex = buf.readInt()
+            BagScreenHandler(syncId, playerInventory, slotIndex)
+        }
     }
 }
 
 
 context(ModContext)
 fun initBagModule() {
-    BagCard.let { card ->
+    BagCard.SEED_BAG.let { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
@@ -69,11 +75,11 @@ fun initBagModule() {
             .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
-
-        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
     }
 
-    registerShapedRecipeGeneration(BagCard.item) {
+    BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("seed_bag"))
+
+    registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
