@@ -72,6 +72,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         // 性質
         //card.block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
         card.block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
+        card.block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
 
         // レシピ
         card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
