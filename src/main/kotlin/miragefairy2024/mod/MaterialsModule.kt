@@ -55,6 +55,7 @@ enum class MaterialCard(
     val jaName: String,
     val poemList: PoemList?,
     val fuelValue: Int? = null,
+    val soulStreamContainable: Boolean = false,
     val foodComponent: FoodComponent? = null,
     val creator: (Item.Settings) -> Item = ::Item,
 ) {
@@ -222,6 +223,7 @@ enum class MaterialCard(
         PoemList(1)
             .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
             .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) }
         // TODO 用途
     ),
@@ -247,6 +249,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(1, it.fireproof()) },
     ),
     MINA_5(
@@ -254,6 +257,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Fairy snack", "ご縁があるよ")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(5, it.fireproof()) },
     ),
     MINA_10(
@@ -261,6 +265,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(10, it.fireproof()) },
     ),
     MINA_50(
@@ -268,6 +273,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("The Society failed to replicate this.", "形而上学的有機結晶")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(50, it.fireproof()) },
     ),
     MINA_100(
@@ -275,6 +281,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(100, it.fireproof()) },
     ),
     MINA_500(
@@ -282,6 +289,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(500, it.fireproof()) },
     ),
     MINA_1000(
@@ -289,6 +297,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(1000, it.fireproof()) },
     ),
     MINA_5000(
@@ -296,6 +305,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("The price of a soul.", "魂の値段。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(5000, it.fireproof()) },
     ),
     MINA_10000(
@@ -303,6 +313,7 @@ enum class MaterialCard(
         PoemList(0)
             .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
             .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+        soulStreamContainable = true,
         creator = { MinaItem(10000, it.fireproof()) },
     ),
 
@@ -310,54 +321,63 @@ enum class MaterialCard(
         "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
         PoemList(0)
             .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_5(
         "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
         PoemList(0)
             .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_10(
         "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
         PoemList(0)
             .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_50(
         "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
         PoemList(0)
             .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_100(
         "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
         PoemList(0)
             .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_500(
         "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
         PoemList(0)
             .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_1000(
         "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
         PoemList(0)
             .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_5000(
         "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
         PoemList(0)
             .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
     JEWEL_10000(
         "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
         PoemList(0)
             .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
+        soulStreamContainable = true,
         creator = { Item(it.fireproof()) },
     ),
 
@@ -391,6 +411,7 @@ fun initMaterialsModule() {
             card.item.registerPoemGeneration(card.poemList)
         }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
+        if (card.soulStreamContainable) card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
     }
 
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
@@ -491,9 +512,6 @@ fun initMaterialsModule() {
     // 妖精の鱗粉
     MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
 
-    // フラクタルウィスプ
-    MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-
     // 蛍石→フェアリークエストカードベース
     registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
         pattern(" R ")
@@ -502,17 +520,6 @@ fun initMaterialsModule() {
         input('F', MaterialCard.FLUORITE.item)
         input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
     } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
-
-    // ミナ
-    MaterialCard.MINA_1.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_5.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_10.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_50.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_100.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_500.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_1000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_5000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.MINA_10000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
@@ -556,17 +563,6 @@ fun initMaterialsModule() {
             override fun craft() = item.createItemStack()
         }
     }
-
-    // フェアリージュエル
-    MaterialCard.JEWEL_1.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_5.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_10.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_50.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_100.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_500.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_1000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_5000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-    MaterialCard.JEWEL_10000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
 
     // フェアリージュエル両替
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item, MaterialCard.JEWEL_5.item, 5)
