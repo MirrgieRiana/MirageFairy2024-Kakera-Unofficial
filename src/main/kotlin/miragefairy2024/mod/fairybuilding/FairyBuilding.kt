@@ -62,7 +62,11 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         }
 
         fun ac(motion: FairyAnimation.Motion, positions: List<FairyAnimation.Position>): FairyAnimation.Configuration {
-            return FairyAnimation.Configuration(motion, positions)
+            return object : FairyAnimation.Configuration {
+                override val motion = motion
+                override val positions = positions
+                override fun getSpeed(blockEntity: FairyBuildingBlockEntity<*>) = if (blockEntity.doMovePosition) 1.0 else 0.0
+            }
         }
 
         val NONE = FairyAnimation.Motion.NONE
@@ -228,7 +232,11 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 class FairyAnimation(private val inventorySlotIndex: Int, private val animation: Configuration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
 
-    class Configuration(val motion: Motion, val positions: List<Position>)
+    interface Configuration {
+        val motion: Motion
+        val positions: List<Position>
+        fun getSpeed(blockEntity: FairyBuildingBlockEntity<*>): Double
+    }
 
     enum class Motion {
         NONE,
@@ -268,8 +276,9 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
         val world = blockEntity.world ?: return
 
         // 定位置の切り替え
-        if (blockEntity.doMovePosition) {
-            countdown--
+        val speed = animation.getSpeed(blockEntity)
+        if (speed > 0) {
+            countdown -= speed
             if (countdown <= 0) {
 
                 index++
