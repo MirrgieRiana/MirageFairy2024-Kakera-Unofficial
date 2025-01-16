@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
 import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.WISP_TAG
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.Channel
@@ -27,16 +26,21 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
+
+val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
 
 context(ModContext)
 fun initSoulStream() {
@@ -127,7 +131,7 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         }
         repeat(soulStream.size) { i ->
             addSlot(object : Slot(soulStream, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = stack.isOf(FairyCard.item) || stack.isIn(WISP_TAG)
+                override fun canInsert(stack: ItemStack) = stack.isOf(FairyCard.item) || stack.isIn(SOUL_STREAM_CONTAINABLE_TAG)
             })
         }
     }

@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
+import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
@@ -374,7 +375,6 @@ enum class MaterialCard(
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
-val WISP_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("wisp"))
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toTranslationKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toTranslationKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
@@ -492,7 +492,7 @@ fun initMaterialsModule() {
     MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
 
     // フラクタルウィスプ
-    MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.FRACTAL_WISP.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
 
     // 蛍石→フェアリークエストカードベース
     registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
@@ -504,15 +504,15 @@ fun initMaterialsModule() {
     } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
 
     // ミナ
-    MaterialCard.MINA_1.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_5.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_10.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_50.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_100.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_500.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_1000.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_5000.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.MINA_10000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.MINA_1.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_5.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_10.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_50.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_100.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_500.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_1000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_5000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.MINA_10000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
@@ -558,15 +558,15 @@ fun initMaterialsModule() {
     }
 
     // フェアリージュエル
-    MaterialCard.JEWEL_1.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_5.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_10.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_50.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_100.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_500.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_1000.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_5000.item.registerItemTagGeneration { WISP_TAG }
-    MaterialCard.JEWEL_10000.item.registerItemTagGeneration { WISP_TAG }
+    MaterialCard.JEWEL_1.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_5.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_10.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_50.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_100.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_500.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_1000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_5000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+    MaterialCard.JEWEL_10000.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
 
     // フェアリージュエル両替
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item, MaterialCard.JEWEL_5.item, 5)
