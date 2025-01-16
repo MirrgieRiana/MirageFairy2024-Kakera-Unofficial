@@ -1,14 +1,8 @@
-package miragefairy2024.mod.magicplant
+package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.description
-import miragefairy2024.mod.mirageFairy2024ItemGroupCard
-import miragefairy2024.mod.poem
-import miragefairy2024.mod.registerPoem
-import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.enJa
@@ -65,18 +59,18 @@ object SeedBagCard {
 context(ModContext)
 fun initSeedBag() {
     SeedBagCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        card.item.registerGeneratedModelGeneration()
-        card.item.enJa(EnJa("Seed Bag", "種子カバン"))
+        SeedBagCard.item.register(Registries.ITEM, SeedBagCard.identifier)
+        SeedBagCard.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        SeedBagCard.item.registerGeneratedModelGeneration()
+        SeedBagCard.item.enJa(EnJa("Seed Bag", "種子カバン"))
         val poemList = PoemList(1)
             .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
             .description("description1", "Display GUI when used", "使用時、GUIを表示")
             .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        SeedBagCard.item.registerPoem(poemList)
+        SeedBagCard.item.registerPoemGeneration(poemList)
 
-        card.screenHandlerType.register(Registries.SCREEN_HANDLER, card.identifier)
+        SeedBagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, SeedBagCard.identifier)
     }
 
     registerShapedRecipeGeneration(SeedBagCard.item) {
@@ -97,7 +91,7 @@ class SeedBagItem(settings: Settings) : Item(settings) {
 
     override fun getName(stack: ItemStack): Text {
         val count = stack.getSeedBagInventory().itemStacks.count { it.isNotEmpty }
-        return text { super.getName(stack) + (if (count > 0) " ($count / ${INVENTORY_SIZE})"() else ""()) }
+        return text { super.getName(stack) + (if (count > 0) " ($count / $INVENTORY_SIZE)"() else ""()) }
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
