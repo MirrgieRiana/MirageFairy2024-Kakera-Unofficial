@@ -219,7 +219,7 @@ object ToolCards {
     val MIRANAGI_STAFF_0 = !ToolCard(
         "miranagi_staff_0", EnJa("Miranagite Staff", "蒼天石のスタッフ"),
         PoemList(2).poem(EnJa("Inflating anti-entropy force", "膨張する秩序の力。")),
-        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 7F, 12F).silkTouch(),
+        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 5F, 12F).silkTouch(),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")
@@ -233,7 +233,7 @@ object ToolCards {
     val MIRANAGI_STAFF = !ToolCard(
         "miranagi_staff", EnJa("Staff of Miranagi", "みらなぎの杖"),
         PoemList(3).poem(EnJa("Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。")),
-        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 10F, 16F).silkTouch(),
+        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 7F, 16F).silkTouch(),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")

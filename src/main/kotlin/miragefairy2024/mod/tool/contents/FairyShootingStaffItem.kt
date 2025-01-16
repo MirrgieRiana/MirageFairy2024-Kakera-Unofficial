@@ -89,7 +89,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     companion object {
         val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toTranslationKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toTranslationKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
-        const val EXPERIENCE_COST = 1
+        const val EXPERIENCE_COST = 2
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
