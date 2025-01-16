@@ -61,6 +61,16 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Inventory
 
+    /**
+     * スロットの内容が変化する際に呼び出されます。
+     * このイベントはスロットの更新が行われた後に呼び出されることは保証されません。
+     */
+    open fun onStackChange(slot: Int?) {
+        if (slot == null || card.inventorySlotConfigurations[slot].isObservable) {
+            world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        }
+    }
+
     private val inventory = MutableList(card.inventorySlotConfigurations.size) { EMPTY_ITEM_STACK }
 
     override fun size() = inventory.size
@@ -73,18 +83,18 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
-        if (card.inventorySlotConfigurations[slot].isObservable) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        onStackChange(slot)
         markDirty()
     }
 
     override fun removeStack(slot: Int, amount: Int): ItemStack {
-        if (card.inventorySlotConfigurations[slot].isObservable) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        onStackChange(slot)
         markDirty()
         return Inventories.splitStack(inventory, slot, amount)
     }
 
     override fun removeStack(slot: Int): ItemStack {
-        if (card.inventorySlotConfigurations[slot].isObservable) world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        onStackChange(slot)
         markDirty()
         return Inventories.removeStack(inventory, slot)
     }
@@ -100,7 +110,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
 
     override fun clear() {
-        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        onStackChange(null)
         markDirty()
         inventory.replaceAll { EMPTY_ITEM_STACK }
     }
@@ -109,7 +119,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         inventory.forEachIndexed { index, itemStack ->
             if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
         }
-        world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+        onStackChange(null)
         markDirty()
     }
 
