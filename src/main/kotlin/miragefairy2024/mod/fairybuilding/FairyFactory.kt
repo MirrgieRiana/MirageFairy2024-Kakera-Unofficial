@@ -28,7 +28,7 @@ import kotlin.math.log
 
 abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {
     companion object {
-        val FOLIA_PROPERTY = PropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it * 10 })
+        val FOLIA_PROPERTY = PropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it.toInt() * 10 })
 
         fun isFairy(itemStack: ItemStack, motif: Motif): Boolean {
             if (!itemStack.isOf(FairyCard.item)) return false
