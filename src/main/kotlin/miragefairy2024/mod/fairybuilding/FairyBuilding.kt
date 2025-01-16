@@ -68,7 +68,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         val NONE = FairyAnimation.Motion.NONE
         val FAIRY = FairyAnimation.Motion.FAIRY
 
-        fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Int) = listOf(FairyAnimation.Position(x, y, z, pitch, yaw, duration))
+        fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Double) = listOf(FairyAnimation.Position(x, y, z, pitch, yaw, duration))
     }
 
     // Specification
@@ -242,7 +242,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
      * @param pitch degree
      * @param yaw degree
      */
-    class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
+    class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Double)
 
     init {
         check(animation.positions.isNotEmpty())
@@ -276,7 +276,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
                 if (index >= animation.positions.size) index = 0
 
                 position = animation.positions[index]
-                countdown = (animation.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)).toInt()
+                countdown = animation.positions[index].duration * (1.0 + world.random.nextDouble() * 0.1)
 
             }
         }
