@@ -14,15 +14,10 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.client.util.ClickableContainer
-import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.inventoryNameLabel
-import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
-import miragefairy2024.mod.BagCard
-import miragefairy2024.mod.BagItem
-import miragefairy2024.mod.BagScreenHandler
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
@@ -44,7 +39,6 @@ import net.minecraft.text.Text
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
-    HandledScreens.register(BagCard.screenHandlerType) { gui, inventory, title -> BagScreen(gui, inventory, title) }
 }
 
 class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
@@ -163,62 +157,6 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                 child().child(Components.label(text { traitStack.trait.poem }).apply {
                     sizing(Sizing.fill(100), Sizing.content())
                     horizontalTextAlignment(HorizontalAlignment.LEFT)
-                })
-            })
-        }
-    }
-}
-
-class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
-    override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
-    override fun build(rootComponent: FlowLayout) {
-        rootComponent.apply {
-            surface(Surface.VANILLA_TRANSLUCENT)
-            verticalAlignment(VerticalAlignment.CENTER)
-            horizontalAlignment(HorizontalAlignment.CENTER)
-
-            child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply { // 外枠
-                surface(Surface.PANEL)
-                padding(Insets.of(7))
-
-                child(Containers.verticalFlow(Sizing.fixed(18 * BagItem.INVENTORY_WIDTH), Sizing.content()).apply { // 内枠
-
-                    child(inventoryNameLabel(title)) // GUI名
-
-                    child(verticalSpace(3))
-
-                    // カバンインベントリ
-                    repeat(BagItem.INVENTORY_HEIGHT) { r ->
-                        child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            repeat(BagItem.INVENTORY_WIDTH) { c ->
-                                child(slotContainer(slotAsComponent(9 * 4 + BagItem.INVENTORY_WIDTH * r + c)))
-                            }
-                        })
-                    }
-
-                    child(verticalSpace(3))
-
-                    child(inventoryNameLabel(playerInventory.name))
-
-                    child(verticalSpace(1))
-
-                    // プレイヤーインベントリ
-                    repeat(3) { r ->
-                        child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            child(horizontalSpace(18 * 4))
-                            repeat(9) { c ->
-                                child(slotContainer(slotAsComponent(9 * r + c)))
-                            }
-                        })
-                    }
-                    child(verticalSpace(4))
-                    child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                        child(horizontalSpace(18 * 4))
-                        repeat(9) { c ->
-                            child(slotContainer(slotAsComponent(9 * 3 + c)))
-                        }
-                    })
-
                 })
             })
         }
