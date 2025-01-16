@@ -61,9 +61,12 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
             }
         }
 
-        fun ac(isFairy: Boolean, positions: List<Position>): FairyBuildingSlotAnimationConfiguration {
-            return FairyBuildingSlotAnimationConfiguration(isFairy, positions)
+        fun ac(motion: FairyAnimation.Motion, positions: List<Position>): FairyBuildingSlotAnimationConfiguration {
+            return FairyBuildingSlotAnimationConfiguration(motion, positions)
         }
+
+        val NONE = FairyAnimation.Motion.NONE
+        val FAIRY = FairyAnimation.Motion.FAIRY
 
         fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Int) = listOf(Position(x, y, z, pitch, yaw, duration))
     }
@@ -102,7 +105,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         override fun getTooltip() = tooltipGetter?.invoke()
     }
 
-    class FairyBuildingSlotAnimationConfiguration(val isFairy: Boolean, val positions: List<Position>)
+    class FairyBuildingSlotAnimationConfiguration(val motion: FairyAnimation.Motion, val positions: List<Position>)
 
     /**
      * @param x 1/16 scale
@@ -235,6 +238,12 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 }
 
 class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.FairyBuildingSlotAnimationConfiguration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
+
+    enum class Motion {
+        NONE,
+        FAIRY,
+    }
+
     init {
         check(animation.positions.isNotEmpty())
     }
@@ -293,8 +302,14 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
         val cZ = z + zSpeed * tickDelta.toDouble()
         val cYaw = yaw + yawSpeed * tickDelta
         val cPitch = pitch + pitchSpeed * tickDelta
-        val yawOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F else 0F
-        val pitchOffset = if (animation.isFairy) MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F else 0F
+        val yawOffset = when (animation.motion) {
+            Motion.NONE -> 0F
+            Motion.FAIRY -> MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F
+        }
+        val pitchOffset = when (animation.motion) {
+            Motion.NONE -> 0F
+            Motion.FAIRY -> MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F
+        }
 
         renderingProxy.stack {
             renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
@@ -302,11 +317,15 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
             renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
             renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
 
-            if (animation.isFairy) {
-                renderingProxy.translate(0.0, 0.25, 0.0)
-                renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
-                renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
-                renderingProxy.translate(0.0, -0.25, 0.0)
+            when (animation.motion) {
+                Motion.NONE -> Unit
+
+                Motion.FAIRY -> {
+                    renderingProxy.translate(0.0, 0.25, 0.0)
+                    renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
+                    renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
+                    renderingProxy.translate(0.0, -0.25, 0.0)
+                }
             }
 
             renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
