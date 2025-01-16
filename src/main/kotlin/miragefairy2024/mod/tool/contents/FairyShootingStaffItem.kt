@@ -89,7 +89,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     companion object {
         val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toTranslationKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toTranslationKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
-        const val EXPERIENCE_COST = 2
+        const val BASE_EXPERIENCE_COST = 2
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
@@ -101,17 +101,18 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         val itemStack = user.getStackInHand(hand)
         if (world.isClient) return TypedActionResult.success(itemStack)
 
-        if (!user.isCreative) {
-            if (user.totalExperience < EXPERIENCE_COST) {
-                user.sendMessage(text { NOT_ENOUGH_EXPERIENCE_TRANSLATION() }, true)
-                return TypedActionResult.consume(itemStack)
-            }
-        }
-
         val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
         val maxDistance = baseMaxDistance + 3F * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
         val speed = 2.0F + 2.0F * EnchantmentCard.MAGIC_REACH.enchantment.getRate(itemStack).toFloat()
         val frequency = 0.5 + 0.5 * EnchantmentCard.MAGIC_ACCELERATION.enchantment.getRate(itemStack)
+        val experienceCost = BASE_EXPERIENCE_COST + 1 * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack)
+
+        if (!user.isCreative) {
+            if (user.totalExperience < experienceCost) {
+                user.sendMessage(text { NOT_ENOUGH_EXPERIENCE_TRANSLATION() }, true)
+                return TypedActionResult.consume(itemStack)
+            }
+        }
 
         // 生成
         val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world)
@@ -126,7 +127,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         itemStack.damage(1, user) {
             it.sendToolBreakStatus(hand)
         }
-        if (!user.isCreative) user.addExperience(-EXPERIENCE_COST)
+        if (!user.isCreative) user.addExperience(-experienceCost)
 
         user.itemCooldownManager.set(this, world.random.randomInt(10.0 / frequency))
 
