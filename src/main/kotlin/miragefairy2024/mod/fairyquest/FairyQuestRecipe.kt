@@ -264,7 +264,7 @@ fun initFairyQuestRecipe() {
 
                 FairyQuestRecipeCard.LootCategory.COMMON -> {
                     allVillageChests.forEach {
-                        registerChestLoot(it, 10)
+                        registerChestLoot(it, 3)
                     }
                 }
 
