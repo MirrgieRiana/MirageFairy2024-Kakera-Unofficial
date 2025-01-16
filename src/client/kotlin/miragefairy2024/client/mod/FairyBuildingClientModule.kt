@@ -28,8 +28,8 @@ fun initFairyBuildingClientModule() {
         }
     }
 
-    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {
@@ -59,9 +59,9 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
     }
 }
 
-class FairyHouseScreen(arguments: Arguments<FairyHouseScreenHandler>) : FairyFactoryScreen<FairyHouseScreenHandler>(FairyHouseCard, arguments)
+class FairyHouseScreen(card: FairyHouseCard, arguments: Arguments<FairyHouseScreenHandler>) : FairyFactoryScreen<FairyHouseScreenHandler>(card, arguments)
 
-class FairyCollectorScreen(arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(FairyCollectorCard, arguments) {
+class FairyCollectorScreen(card: FairyCollectorCard, arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
         context.drawTexture(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
