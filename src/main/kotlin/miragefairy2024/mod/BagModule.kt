@@ -73,7 +73,7 @@ enum class BagCard(
 
 context(ModContext)
 fun initBagModule() {
-    BagCard.SEED_BAG.let { card ->
+    BagCard.entries.forEach { card ->
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
