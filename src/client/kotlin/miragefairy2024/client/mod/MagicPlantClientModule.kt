@@ -21,9 +21,9 @@ import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
-import miragefairy2024.mod.magicplant.SeedBagCard
-import miragefairy2024.mod.magicplant.SeedBagItem
-import miragefairy2024.mod.magicplant.SeedBagScreenHandler
+import miragefairy2024.mod.SeedBagCard
+import miragefairy2024.mod.SeedBagItem
+import miragefairy2024.mod.SeedBagScreenHandler
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.getName

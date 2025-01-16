@@ -21,6 +21,7 @@ import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initParticleModule
 import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initRecipeGroupModule
+import miragefairy2024.mod.initSeedBag
 import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initTelescopeModule
@@ -63,4 +64,5 @@ fun initModules() {
     initFairyFountainModule()
     initFairyLogisticsModule()
     initDebrisModule()
+    initSeedBag()
 }

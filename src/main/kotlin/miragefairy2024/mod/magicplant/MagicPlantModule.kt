@@ -42,7 +42,6 @@ fun initMagicPlantModule() {
     initTraitEffectKeyCard()
     initTraitCard()
     initCreativeGeneAmpoule()
-    initSeedBag()
 
     magicPlantCards.forEach { card ->
         card.init()
