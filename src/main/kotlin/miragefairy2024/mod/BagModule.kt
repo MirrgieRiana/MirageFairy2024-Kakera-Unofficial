@@ -86,7 +86,7 @@ fun initBagModule() {
         card.item.registerPoemGeneration(poemList)
     }
 
-    BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("seed_bag"))
+    BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("bag"))
 
     registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
