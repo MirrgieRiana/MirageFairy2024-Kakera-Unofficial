@@ -61,14 +61,14 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
             }
         }
 
-        fun ac(motion: FairyAnimation.Motion, positions: List<Position>): FairyBuildingSlotAnimationConfiguration {
-            return FairyBuildingSlotAnimationConfiguration(motion, positions)
+        fun ac(motion: FairyAnimation.Motion, positions: List<FairyAnimation.Position>): FairyAnimation.Configuration {
+            return FairyAnimation.Configuration(motion, positions)
         }
 
         val NONE = FairyAnimation.Motion.NONE
         val FAIRY = FairyAnimation.Motion.FAIRY
 
-        fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Int) = listOf(Position(x, y, z, pitch, yaw, duration))
+        fun p(x: Double, y: Double, z: Double, pitch: Float, yaw: Float, duration: Int) = listOf(FairyAnimation.Position(x, y, z, pitch, yaw, duration))
     }
 
     // Specification
@@ -94,7 +94,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         override val dropItem: Boolean = true,
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
-        val animation: FairyBuildingSlotAnimationConfiguration? = null,
+        val animation: FairyAnimation.Configuration? = null,
         val tooltipGetter: (() -> List<Text>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
@@ -104,17 +104,6 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         override val isObservable = animation != null
         override fun getTooltip() = tooltipGetter?.invoke()
     }
-
-    class FairyBuildingSlotAnimationConfiguration(val motion: FairyAnimation.Motion, val positions: List<Position>)
-
-    /**
-     * @param x 1/16 scale
-     * @param y 1/16 scale
-     * @param z 1/16 scale
-     * @param pitch degree
-     * @param yaw degree
-     */
-    class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
     open fun createSlotConfigurations(): List<FairyBuildingSlotConfiguration> = listOf()
 
@@ -237,12 +226,23 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
 }
 
-class FairyAnimation(private val inventorySlotIndex: Int, private val animation: FairyBuildingCard.FairyBuildingSlotAnimationConfiguration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
+class FairyAnimation(private val inventorySlotIndex: Int, private val animation: Configuration) : MachineBlockEntity.Animation<FairyBuildingBlockEntity<*>> {
+
+    class Configuration(val motion: Motion, val positions: List<Position>)
 
     enum class Motion {
         NONE,
         FAIRY,
     }
+
+    /**
+     * @param x 1/16 scale
+     * @param y 1/16 scale
+     * @param z 1/16 scale
+     * @param pitch degree
+     * @param yaw degree
+     */
+    class Position(val x: Double, val y: Double, val z: Double, val pitch: Float, val yaw: Float, val duration: Int)
 
     init {
         check(animation.positions.isNotEmpty())
