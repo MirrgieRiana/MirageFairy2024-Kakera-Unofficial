@@ -6,7 +6,6 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.reset
 import miragefairy2024.util.writeToNbt
-import mirrg.kotlin.hydrogen.unit
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.LockableContainerBlockEntity
