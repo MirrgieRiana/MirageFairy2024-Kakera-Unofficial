@@ -209,8 +209,6 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Move
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) = Unit
-
     open fun getComparatorOutput() = 0
 
 
