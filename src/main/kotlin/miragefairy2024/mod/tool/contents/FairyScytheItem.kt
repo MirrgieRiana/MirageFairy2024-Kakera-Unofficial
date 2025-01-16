@@ -105,23 +105,25 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
 
-        val itemStack = user.getStackInHand(hand)
-        val blockHitResult = raycast(world, user, FluidHandling.NONE)
-        val blockPos = blockHitResult.blockPos
-        var effective = false
-        (-1..1).forEach { x ->
-            (-1..1).forEach { y ->
-                (-1..1).forEach { z ->
-                    val targetBlockPos = blockPos.add(x, y, z)
-                    val targetBlockState = world.getBlockState(targetBlockPos)
-                    val targetBlock = targetBlockState.block
-                    if (targetBlock is MagicPlantBlock) {
-                        if (targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)) effective = true
+        if (!user.isSneaking) {
+            val itemStack = user.getStackInHand(hand)
+            val blockHitResult = raycast(world, user, FluidHandling.NONE)
+            val blockPos = blockHitResult.blockPos
+            var effective = false
+            (-1..1).forEach { x ->
+                (-1..1).forEach { y ->
+                    (-1..1).forEach { z ->
+                        val targetBlockPos = blockPos.add(x, y, z)
+                        val targetBlockState = world.getBlockState(targetBlockPos)
+                        val targetBlock = targetBlockState.block
+                        if (targetBlock is MagicPlantBlock) {
+                            if (targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)) effective = true
+                        }
                     }
                 }
             }
+            if (effective) return TypedActionResult.success(itemStack)
         }
-        if (effective) return TypedActionResult.success(itemStack)
 
         return super.use(world, user, hand)
     }
@@ -146,6 +148,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
         if (world.isClient) return
+        if (player?.isSneaking == true) return
         (-1..1).forEach { x ->
             (-1..1).forEach { y ->
                 (-1..1).forEach { z ->
