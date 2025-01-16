@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_distribution_center",
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "A": {
+      "item": "miragefairy2024:aura_stone"
+    },
+    "C": {
+      "item": "minecraft:barrel"
+    },
+    "D": {
+      "item": "minecraft:pink_dye"
+    }
+  },
+  "pattern": [
+    "#A#",
+    "DCD",
+    "###"
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_distribution_center"
+  },
+  "show_notification": true
+}
