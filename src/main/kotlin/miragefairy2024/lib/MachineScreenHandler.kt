@@ -43,6 +43,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         checkSize(arguments.inventory, card.guiSlotConfigurations.size)
         checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
+        // TODO PlayerInventoryのカスタマイズ
         val y = card.guiHeight - 82
         repeat(3) { r ->
             repeat(9) { c ->
