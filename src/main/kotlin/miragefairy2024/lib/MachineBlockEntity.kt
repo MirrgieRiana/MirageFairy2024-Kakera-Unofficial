@@ -54,9 +54,9 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         inventory.writeToNbt(nbt)
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
+    override fun toInitialChunkDataNbt(): NbtCompound = createNbt() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
 
     // Inventory
@@ -66,6 +66,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
      * このイベントはスロットの更新が行われた後に呼び出されることは保証されません。
      */
     open fun onStackChange(slot: Int?) {
+        // TODO スロットアップデートのための軽量カスタムパケット
         if (slot == null || card.inventorySlotConfigurations[slot].isObservable) {
             world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
         }
