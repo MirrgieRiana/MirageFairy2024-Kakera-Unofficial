@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:plant_bag",
+  "key": {
+    "L": {
+      "item": "miragefairy2024:phantom_leaves"
+    },
+    "S": {
+      "item": "miragefairy2024:mirage_stem"
+    }
+  },
+  "pattern": [
+    " S ",
+    "L L",
+    "LLL"
+  ],
+  "result": {
+    "item": "miragefairy2024:plant_bag"
+  },
+  "show_notification": true
+}

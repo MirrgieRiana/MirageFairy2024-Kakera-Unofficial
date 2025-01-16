@@ -20,10 +20,9 @@ import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
+import miragefairy2024.mod.BagCard
+import miragefairy2024.mod.BagScreenHandler
 import miragefairy2024.mod.NinePatchTextureCard
-import miragefairy2024.mod.magicplant.SeedBagCard
-import miragefairy2024.mod.magicplant.SeedBagItem
-import miragefairy2024.mod.magicplant.SeedBagScreenHandler
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.getName
@@ -44,7 +43,7 @@ import net.minecraft.text.Text
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
-    HandledScreens.register(SeedBagCard.screenHandlerType) { gui, inventory, title -> SeedBagScreen(gui, inventory, title) }
+    HandledScreens.register(BagCard.screenHandlerType) { gui, inventory, title -> BagScreen(gui, inventory, title) }
 }
 
 class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
@@ -169,7 +168,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
     }
 }
 
-class SeedBagScreen(handler: SeedBagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SeedBagScreenHandler>(handler, playerInventory, title) {
+class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {
@@ -181,17 +180,17 @@ class SeedBagScreen(handler: SeedBagScreenHandler, private val playerInventory: 
                 surface(Surface.PANEL)
                 padding(Insets.of(7))
 
-                child(Containers.verticalFlow(Sizing.fixed(18 * SeedBagItem.INVENTORY_WIDTH), Sizing.content()).apply { // 内枠
+                child(Containers.verticalFlow(Sizing.fixed(18 * handler.getInventoryWidth()), Sizing.content()).apply { // 内枠
 
                     child(inventoryNameLabel(title)) // GUI名
 
                     child(verticalSpace(3))
 
                     // カバンインベントリ
-                    repeat(6) { r ->
+                    repeat(handler.getInventoryHeight()) { r ->
                         child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            repeat(SeedBagItem.INVENTORY_WIDTH) { c ->
-                                child(slotContainer(slotAsComponent(9 * 4 + SeedBagItem.INVENTORY_WIDTH * r + c)))
+                            repeat(handler.getInventoryWidth()) { c ->
+                                child(slotContainer(slotAsComponent(9 * 4 + handler.getInventoryWidth() * r + c)))
                             }
                         })
                     }
