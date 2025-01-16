@@ -89,6 +89,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     companion object {
         val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toTranslationKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toTranslationKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
+        const val EXPERIENCE_COST = 1
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
@@ -101,7 +102,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         if (world.isClient) return TypedActionResult.success(itemStack)
 
         if (!user.isCreative) {
-            if (user.totalExperience < 1) {
+            if (user.totalExperience < EXPERIENCE_COST) {
                 user.sendMessage(text { NOT_ENOUGH_EXPERIENCE_TRANSLATION() }, true)
                 return TypedActionResult.consume(itemStack)
             }
@@ -125,7 +126,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         itemStack.damage(1, user) {
             it.sendToolBreakStatus(hand)
         }
-        if (!user.isCreative) user.addExperience(-1)
+        if (!user.isCreative) user.addExperience(-EXPERIENCE_COST)
 
         user.itemCooldownManager.set(this, world.random.randomInt(10.0 / frequency))
 
