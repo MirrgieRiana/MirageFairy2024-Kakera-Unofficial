@@ -46,11 +46,19 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.roundToInt
 
-enum class BagCard {
-    SEED_BAG,
+enum class BagCard(
+    path: String,
+    val itemName: EnJa,
+    val tier: Int,
+    val poem: EnJa,
+) {
+    SEED_BAG(
+        "seed_bag", EnJa("Seed Bag", "種子カバン"),
+        1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
+    ),
     ;
 
-    val identifier = MirageFairy2024.identifier("seed_bag")
+    val identifier = MirageFairy2024.identifier(path)
     val item = BagItem(Item.Settings().maxCount(1))
 
     companion object {
@@ -68,9 +76,9 @@ fun initBagModule() {
         card.item.register(Registries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
-        card.item.enJa(EnJa("Seed Bag", "種子カバン"))
-        val poemList = PoemList(1)
-            .poem("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。")
+        card.item.enJa(card.itemName)
+        val poemList = PoemList(card.tier)
+            .poem(card.poem)
             .description("description1", "Display GUI when used", "使用時、GUIを表示")
             .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
         card.item.registerPoem(poemList)
