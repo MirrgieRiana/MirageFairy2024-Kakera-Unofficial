@@ -22,6 +22,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
+import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.client.item.TooltipContext
@@ -32,10 +33,12 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.inventory.StackReference
+import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
+import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
@@ -61,6 +64,12 @@ enum class BagCard(
         1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
         17, 6,
         { it.item is MagicPlantSeedItem },
+    ),
+    PLANT_BAG(
+        "plant_bag", EnJa("Plant Bag", "植物カバン"),
+        3, EnJa("Maintains the freshness of plants", "両手に、花。"),
+        17, 6,
+        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.isIn(BlockTags.SWORD_EFFICIENT) == true },
     ),
     ;
 
@@ -102,6 +111,14 @@ fun initBagModule() {
         input('S', MaterialCard.MIRAGE_STEM.item)
         input('L', MaterialCard.MIRAGE_LEAVES.item)
     } on MaterialCard.MIRAGE_LEAVES.item
+
+    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {
+        pattern(" S ")
+        pattern("L L")
+        pattern("LLL")
+        input('S', MaterialCard.MIRAGE_STEM.item)
+        input('L', MaterialCard.PHANTOM_LEAVES.item)
+    } on MaterialCard.PHANTOM_LEAVES.item
 }
 
 
