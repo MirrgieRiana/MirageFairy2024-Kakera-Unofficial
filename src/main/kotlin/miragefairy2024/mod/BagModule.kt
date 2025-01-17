@@ -52,11 +52,14 @@ enum class BagCard(
     val itemName: EnJa,
     val tier: Int,
     val poem: EnJa,
+    val inventoryWidth: Int,
+    val inventoryHeight: Int,
     private val filter: (ItemStack) -> Boolean,
 ) {
     SEED_BAG(
         "seed_bag", EnJa("Seed Bag", "種子カバン"),
         1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
+        17, 6,
         { it.item is MagicPlantSeedItem },
     ),
     ;
@@ -70,6 +73,7 @@ enum class BagCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val item = BagItem(this, Item.Settings().maxCount(1))
+    val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
 
@@ -102,16 +106,11 @@ fun initBagModule() {
 
 
 class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
-    companion object {
-        const val INVENTORY_WIDTH = 17
-        const val INVENTORY_HEIGHT = 6
-        const val INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT
-    }
 
     override fun getName(stack: ItemStack): Text {
         val bagInventory = stack.getBagInventory() ?: return super.getName(stack)
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
-        return text { super.getName(stack) + (if (count > 0) " ($count / $INVENTORY_SIZE)"() else ""()) }
+        return text { super.getName(stack) + (if (count > 0) " ($count / ${card.inventorySize})"() else ""()) }
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
@@ -144,13 +143,13 @@ class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
     override fun getItemBarStep(stack: ItemStack): Int {
         val bagInventory = stack.getBagInventory() ?: return 0
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
-        return (13.0 * count.toDouble() / INVENTORY_SIZE.toDouble()).roundToInt()
+        return (13.0 * count.toDouble() / card.inventorySize.toDouble()).roundToInt()
     }
 
     override fun getItemBarColor(stack: ItemStack): Int {
         val bagInventory = stack.getBagInventory() ?: return 0
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
-        return if (count >= INVENTORY_SIZE) 0xFF0000 else 0x00FF00
+        return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
@@ -250,7 +249,7 @@ class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
 
 }
 
-class BagInventory(private val card: BagCard) : SimpleInventory(BagItem.INVENTORY_SIZE) {
+class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {
     override fun isValid(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canBeNested()
 }
 
@@ -305,7 +304,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
             repeat(9) { c ->
                 addSlot(Slot(playerInventory, c, 0, 0))
             }
-            repeat(BagItem.INVENTORY_SIZE) { i ->
+            repeat(item.card.inventorySize) { i ->
                 addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
             }
         }

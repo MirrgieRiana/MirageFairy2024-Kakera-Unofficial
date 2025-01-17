@@ -14,8 +14,8 @@ import miragefairy2024.client.util.inventoryNameLabel
 import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.BagCard
-import miragefairy2024.mod.BagItem
 import miragefairy2024.mod.BagScreenHandler
+import mirrg.kotlin.hydrogen.atLeast
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
@@ -27,7 +27,7 @@ fun initBagClientModule() {
 class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
-        if (handler.card == null) return
+        val card = handler.card ?: return
 
         rootComponent.apply {
             surface(Surface.VANILLA_TRANSLUCENT)
@@ -38,17 +38,17 @@ class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerIn
                 surface(Surface.PANEL)
                 padding(Insets.of(7))
 
-                child(Containers.verticalFlow(Sizing.fixed(18 * BagItem.INVENTORY_WIDTH), Sizing.content()).apply { // 内枠
+                child(Containers.verticalFlow(Sizing.fixed(18 * (card.inventoryWidth atLeast 9)), Sizing.content()).apply { // 内枠
 
                     child(inventoryNameLabel(title)) // GUI名
 
                     child(verticalSpace(3))
 
                     // カバンインベントリ
-                    repeat(BagItem.INVENTORY_HEIGHT) { r ->
+                    repeat(card.inventoryHeight) { r ->
                         child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            repeat(BagItem.INVENTORY_WIDTH) { c ->
-                                child(slotContainer(slotAsComponent(9 * 4 + BagItem.INVENTORY_WIDTH * r + c)))
+                            repeat(card.inventoryWidth) { c ->
+                                child(slotContainer(slotAsComponent(9 * 4 + card.inventoryWidth * r + c)))
                             }
                         })
                     }
