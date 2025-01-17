@@ -67,7 +67,7 @@ enum class BagCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(Item.Settings().maxCount(1))
+    val item = BagItem(this, Item.Settings().maxCount(1))
 
 }
 
@@ -99,7 +99,7 @@ fun initBagModule() {
 }
 
 
-class BagItem(settings: Settings) : Item(settings) {
+class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
     companion object {
         const val INVENTORY_WIDTH = 17
         const val INVENTORY_HEIGHT = 6
@@ -248,13 +248,13 @@ class BagItem(settings: Settings) : Item(settings) {
 
 }
 
-class BagInventory : SimpleInventory(BagItem.INVENTORY_SIZE) {
+class BagInventory(private val card: BagCard) : SimpleInventory(BagItem.INVENTORY_SIZE) {
     override fun isValid(slot: Int, stack: ItemStack) = stack.item is MagicPlantSeedItem && stack.item.canBeNested()
 }
 
 fun ItemStack.getBagInventory(): BagInventory? {
-    if (this.item !is BagItem) return null
-    val inventory = BagInventory()
+    val item = this.item as? BagItem ?: return null
+    val inventory = BagInventory(item.card)
     val nbt = this.nbt
     if (nbt != null) Inventories.readNbt(nbt, inventory.stacks)
     return inventory
@@ -269,6 +269,7 @@ fun ItemStack.setBagInventory(inventory: BagInventory) {
 fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
     val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
     var expectedItemStack = itemStackInstance.copy()
+    val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
     val inventoryDelegate = object : Inventory {
         override fun clear() = bagInventory.clear()
@@ -319,12 +320,12 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
             return quickMove(slot, destinationIndices)
         }
 
-        override val isValid = true
+        override val card = item.card
     }
 }
 
 open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
     override fun canUse(player: PlayerEntity) = false
     override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
-    open val isValid = false
+    open val card: BagCard? = null
 }
