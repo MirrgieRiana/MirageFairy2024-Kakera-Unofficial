@@ -268,7 +268,7 @@ fun ItemStack.setBagInventory(inventory: BagInventory) {
 
 
 fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
-    val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+    val itemStackInstance = if (slotIndex == -1) playerInventory.offHand[0] else playerInventory.main[slotIndex]
     var expectedItemStack = itemStackInstance.copy()
     val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
