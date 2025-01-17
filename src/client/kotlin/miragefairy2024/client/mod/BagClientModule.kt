@@ -27,6 +27,8 @@ fun initBagClientModule() {
 class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
+        if (!handler.isValid) return
+
         rootComponent.apply {
             surface(Surface.VANILLA_TRANSLUCENT)
             verticalAlignment(VerticalAlignment.CENTER)
