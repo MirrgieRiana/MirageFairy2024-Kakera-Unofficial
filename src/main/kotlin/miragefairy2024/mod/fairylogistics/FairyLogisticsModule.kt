@@ -2,7 +2,7 @@ package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
 
-val fairyLogisticsCards: List<FairyLogisticsCard> = listOf(
+val fairyLogisticsCards: List<FairyLogisticsCard<*, *, *>> = listOf(
     FairyPassiveSupplierCard,
     FairyActiveConsumerCard,
 )
