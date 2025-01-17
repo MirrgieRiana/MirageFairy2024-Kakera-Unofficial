@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_active_consumer",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "A": {
+      "item": "miragefairy2024:aura_stone"
+    },
+    "C": {
+      "item": "minecraft:item_frame"
+    },
+    "D": {
+      "item": "minecraft:light_blue_dye"
+    }
+  },
+  "pattern": [
+    "#A#",
+    "DCD",
+    "###"
+  ],
+  "result": {
+    "item": "miragefairy2024:fairy_active_consumer"
+  },
+  "show_notification": true
+}
