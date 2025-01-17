@@ -6,6 +6,7 @@ import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
+import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndNbtAndCount
@@ -78,6 +79,9 @@ enum class BagCard(
             val slotIndex = buf.readInt()
             createBagScreenHandler(syncId, playerInventory, slotIndex)
         }
+
+        val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toTranslationKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
+        val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toTranslationKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
     }
 
     val identifier = MirageFairy2024.identifier(path)
@@ -96,13 +100,18 @@ fun initBagModule() {
         card.item.enJa(card.itemName)
         val poemList = PoemList(card.tier)
             .poem(card.poem)
-            .description("description1", "Display GUI when used", "使用時、GUIを表示")
-            .description("description2", "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
+            .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION1_TRANSLATION)
+            .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION2_TRANSLATION)
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
     }
 
+
     BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("bag"))
+
+    BagCard.DESCRIPTION1_TRANSLATION.enJa()
+    BagCard.DESCRIPTION2_TRANSLATION.enJa()
+
 
     registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
