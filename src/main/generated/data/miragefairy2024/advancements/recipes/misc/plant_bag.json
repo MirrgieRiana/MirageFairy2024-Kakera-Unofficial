@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_phantom_leaves": {
+    "has_mirage_leaves": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:phantom_leaves"
+              "miragefairy2024:mirage_leaves"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_phantom_leaves",
+      "has_mirage_leaves",
       "has_the_recipe"
     ]
   ],

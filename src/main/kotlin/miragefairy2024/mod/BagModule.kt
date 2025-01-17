@@ -60,17 +60,17 @@ enum class BagCard(
     val inventoryHeight: Int,
     private val filter: (ItemStack) -> Boolean,
 ) {
-    SEED_BAG(
-        "seed_bag", EnJa("Seed Bag", "種子カバン"),
-        1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
-        17, 6,
-        { it.item is MagicPlantSeedItem },
-    ),
     PLANT_BAG(
         "plant_bag", EnJa("Plant Bag", "植物カバン"),
+        1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
+        5, 3,
+        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.isIn(BlockTags.SWORD_EFFICIENT) == true },
+    ),
+    SEED_BAG(
+        "seed_bag", EnJa("Seed Bag", "種子カバン"),
         3, EnJa("Maintains the freshness of plants", "両手に、花。"),
         17, 6,
-        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.isIn(BlockTags.SWORD_EFFICIENT) == true },
+        { it.item is MagicPlantSeedItem },
     ),
     ;
 
@@ -113,7 +113,7 @@ fun initBagModule() {
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
 
 
-    registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
+    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
@@ -121,7 +121,7 @@ fun initBagModule() {
         input('L', MaterialCard.MIRAGE_LEAVES.item)
     } on MaterialCard.MIRAGE_LEAVES.item
 
-    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {
+    registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
