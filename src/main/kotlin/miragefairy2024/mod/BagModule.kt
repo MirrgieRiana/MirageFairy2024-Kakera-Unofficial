@@ -62,7 +62,7 @@ enum class BagCard(
     companion object {
         val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
             val slotIndex = buf.readInt()
-            BagScreenHandler(syncId, playerInventory, slotIndex)
+            createBagScreenHandler(syncId, playerInventory, slotIndex)
         }
     }
 
@@ -163,7 +163,7 @@ class BagItem(settings: Settings) : Item(settings) {
         }
         user.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return BagScreenHandler(syncId, playerInventory, slotIndex)
+                return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
             override fun getDisplayName() = itemStack.name
@@ -266,11 +266,11 @@ fun ItemStack.setBagInventory(inventory: BagInventory) {
 }
 
 
-class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory, private val slotIndex: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
-    private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
-    private var expectedItemStack = itemStackInstance.copy()
-    private val bagInventory = itemStackInstance.getBagInventory()
-    private val inventoryDelegate = if (bagInventory == null) null else object : Inventory {
+fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
+    val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+    var expectedItemStack = itemStackInstance.copy()
+    val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
+    val inventoryDelegate = object : Inventory {
         override fun clear() = bagInventory.clear()
         override fun size() = bagInventory.size()
         override fun isEmpty() = bagInventory.isEmpty()
@@ -292,8 +292,8 @@ class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory
         override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTransferTo(hopperInventory, slot, stack)
     }
 
-    init {
-        if (inventoryDelegate != null) {
+    return object : BagScreenHandler(syncId) {
+        init {
             repeat(3) { r ->
                 repeat(9) { c ->
                     addSlot(Slot(playerInventory, 9 + 9 * r + c, 0, 0))
@@ -306,21 +306,25 @@ class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory
                 addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
             }
         }
-    }
 
-    override fun canUse(player: PlayerEntity): Boolean {
-        if (inventoryDelegate == null) return false
-        val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
-        return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
-    }
+        override fun canUse(player: PlayerEntity): Boolean {
+            val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+            return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
+        }
 
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
-        if (inventoryDelegate == null) return EMPTY_ITEM_STACK
-        val playerIndices = 9 * 4 - 1 downTo 0
-        val utilityIndices = 9 * 4 until slots.size
-        val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
-        return quickMove(slot, destinationIndices)
-    }
+        override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+            val playerIndices = 9 * 4 - 1 downTo 0
+            val utilityIndices = 9 * 4 until slots.size
+            val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
+            return quickMove(slot, destinationIndices)
+        }
 
-    val isValid = inventoryDelegate != null
+        override val isValid = true
+    }
+}
+
+open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
+    override fun canUse(player: PlayerEntity) = false
+    override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    open val isValid = false
 }
