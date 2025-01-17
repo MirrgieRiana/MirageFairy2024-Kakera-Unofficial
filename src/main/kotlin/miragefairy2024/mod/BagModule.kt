@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
+import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.enJa
@@ -106,14 +107,15 @@ class BagItem(settings: Settings) : Item(settings) {
     }
 
     override fun getName(stack: ItemStack): Text {
-        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
+        val bagInventory = stack.getBagInventory() ?: return super.getName(stack)
+        val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return text { super.getName(stack) + (if (count > 0) " ($count / $INVENTORY_SIZE)"() else ""()) }
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
 
-        val inventory = stack.getBagInventory()
+        val inventory = stack.getBagInventory() ?: return
         var first = true
         var itemCount = 0
         inventory.itemStacks.forEach { itemStack ->
@@ -132,17 +134,20 @@ class BagItem(settings: Settings) : Item(settings) {
     }
 
     override fun isItemBarVisible(stack: ItemStack): Boolean {
-        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
+        val bagInventory = stack.getBagInventory() ?: return false
+        val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return count > 0
     }
 
     override fun getItemBarStep(stack: ItemStack): Int {
-        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
+        val bagInventory = stack.getBagInventory() ?: return 0
+        val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return (13.0 * count.toDouble() / INVENTORY_SIZE.toDouble()).roundToInt()
     }
 
     override fun getItemBarColor(stack: ItemStack): Int {
-        val count = stack.getBagInventory().itemStacks.count { it.isNotEmpty }
+        val bagInventory = stack.getBagInventory() ?: return 0
+        val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return if (count >= INVENTORY_SIZE) 0xFF0000 else 0x00FF00
     }
 
@@ -181,7 +186,7 @@ class BagItem(settings: Settings) : Item(settings) {
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
         srcInventory[0] = slot.stack.copy()
-        val destInventory = stack.getBagInventory()
+        val destInventory = stack.getBagInventory() ?: return false
 
         // マージをシミュレートする
         val result = srcInventory.mergeTo(destInventory)
@@ -212,7 +217,7 @@ class BagItem(settings: Settings) : Item(settings) {
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
         srcInventory[0] = cursorStackReference.get().copy()
-        val destInventory = stack.getBagInventory()
+        val destInventory = stack.getBagInventory() ?: return false
 
         // マージをシミュレートする
         val result = srcInventory.mergeTo(destInventory)
@@ -235,7 +240,8 @@ class BagItem(settings: Settings) : Item(settings) {
     override fun onItemEntityDestroyed(entity: ItemEntity) {
         val world = entity.world
         if (world.isClient) return
-        entity.stack.getBagInventory().stacks.forEach { itemStack ->
+        val bagInventory = entity.stack.getBagInventory() ?: return
+        bagInventory.stacks.forEach { itemStack ->
             world.spawnEntity(ItemEntity(world, entity.x, entity.y, entity.z, itemStack))
         }
     }
@@ -246,7 +252,8 @@ class BagInventory : SimpleInventory(BagItem.INVENTORY_SIZE) {
     override fun isValid(slot: Int, stack: ItemStack) = stack.item is MagicPlantSeedItem && stack.item.canBeNested()
 }
 
-fun ItemStack.getBagInventory(): BagInventory {
+fun ItemStack.getBagInventory(): BagInventory? {
+    if (this.item !is BagItem) return null
     val inventory = BagInventory()
     val nbt = this.nbt
     if (nbt != null) Inventories.readNbt(nbt, inventory.stacks)
@@ -263,7 +270,7 @@ class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory
     private val itemStackInstance = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
     private var expectedItemStack = itemStackInstance.copy()
     private val bagInventory = itemStackInstance.getBagInventory()
-    private val inventoryDelegate = object : Inventory {
+    private val inventoryDelegate = if (bagInventory == null) null else object : Inventory {
         override fun clear() = bagInventory.clear()
         override fun size() = bagInventory.size()
         override fun isEmpty() = bagInventory.isEmpty()
@@ -286,28 +293,34 @@ class BagScreenHandler(syncId: Int, private val playerInventory: PlayerInventory
     }
 
     init {
-        repeat(3) { r ->
-            repeat(9) { c ->
-                addSlot(Slot(playerInventory, 9 + 9 * r + c, 0, 0))
+        if (inventoryDelegate != null) {
+            repeat(3) { r ->
+                repeat(9) { c ->
+                    addSlot(Slot(playerInventory, 9 + 9 * r + c, 0, 0))
+                }
             }
-        }
-        repeat(9) { c ->
-            addSlot(Slot(playerInventory, c, 0, 0))
-        }
-        repeat(BagItem.INVENTORY_SIZE) { i ->
-            addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
+            repeat(9) { c ->
+                addSlot(Slot(playerInventory, c, 0, 0))
+            }
+            repeat(BagItem.INVENTORY_SIZE) { i ->
+                addSlot(FilteringSlot(inventoryDelegate, i, 0, 0))
+            }
         }
     }
 
     override fun canUse(player: PlayerEntity): Boolean {
+        if (inventoryDelegate == null) return false
         val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
         return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
     }
 
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+        if (inventoryDelegate == null) return EMPTY_ITEM_STACK
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until slots.size
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
         return quickMove(slot, destinationIndices)
     }
+
+    val isValid = inventoryDelegate != null
 }
