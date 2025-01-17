@@ -52,10 +52,12 @@ enum class BagCard(
     val itemName: EnJa,
     val tier: Int,
     val poem: EnJa,
+    private val filter: (ItemStack) -> Boolean,
 ) {
     SEED_BAG(
         "seed_bag", EnJa("Seed Bag", "種子カバン"),
         1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
+        { it.item is MagicPlantSeedItem },
     ),
     ;
 
@@ -68,7 +70,7 @@ enum class BagCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val item = BagItem(this, Item.Settings().maxCount(1))
-
+    fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
 
 
@@ -249,7 +251,7 @@ class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
 }
 
 class BagInventory(private val card: BagCard) : SimpleInventory(BagItem.INVENTORY_SIZE) {
-    override fun isValid(slot: Int, stack: ItemStack) = stack.item is MagicPlantSeedItem && stack.item.canBeNested()
+    override fun isValid(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canBeNested()
 }
 
 fun ItemStack.getBagInventory(): BagInventory? {
