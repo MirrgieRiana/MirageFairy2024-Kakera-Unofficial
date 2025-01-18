@@ -6,6 +6,7 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.registerItemTagGeneration
@@ -18,6 +19,17 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
+
+context(ModContext)
+fun initToolConfiguration() {
+
+    ToolConfiguration.AREA_MINING_TRANSLATION.enJa()
+    ToolConfiguration.MINE_ALL_TRANSLATION.enJa()
+    ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
+    ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
+    ToolConfiguration.OBTAIN_FAIRY_TRANSLATION.enJa()
+
+}
 
 abstract class ToolConfiguration {
     companion object {

@@ -36,12 +36,6 @@ import net.minecraft.registry.tag.BlockTags
 context(ModContext)
 fun initToolCardModule() {
 
-    ToolConfiguration.AREA_MINING_TRANSLATION.enJa()
-    ToolConfiguration.MINE_ALL_TRANSLATION.enJa()
-    ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
-    ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
-    ToolConfiguration.OBTAIN_FAIRY_TRANSLATION.enJa()
-
     ScytheItem.DESCRIPTION_TRANSLATION.enJa()
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
     ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()

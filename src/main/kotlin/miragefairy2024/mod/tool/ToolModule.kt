@@ -7,5 +7,6 @@ fun initToolModule() {
     initDamageTypeModule()
     initToolMaterialModule()
     initToolCardModule()
+    initToolConfiguration()
 }
 
