@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:copper_shovel",
+  "key": {
+    "#": {
+      "item": "minecraft:copper_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "R",
+    "R"
+  ],
+  "result": {
+    "item": "miragefairy2024:copper_shovel"
+  },
+  "show_notification": true
+}

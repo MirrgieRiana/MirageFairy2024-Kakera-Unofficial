@@ -94,6 +94,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.MAGNETITE).collection(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val COPPER_PICKAXE = !ToolCard(
+            "copper_pickaxe", EnJa("Copper Pickaxe", "銅のつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.COPPER),
+        ) { registerPickaxeRecipeGeneration(item, Items.COPPER_INGOT) }
+        val COPPER_AXE = !ToolCard(
+            "copper_axe", EnJa("Copper Axe", "銅の斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.COPPER, 6.5F, -3.2F),
+        ) { registerAxeRecipeGeneration(item, Items.COPPER_INGOT) }
+        val COPPER_SHOVEL = !ToolCard(
+            "copper_shovel", EnJa("Copper Shovel", "銅のシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.COPPER),
+        ) { registerShovelRecipeGeneration(item, Items.COPPER_INGOT) }
+        val COPPER_HOE = !ToolCard(
+            "copper_hoe", EnJa("Copper Hoe", "銅のクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.COPPER, -2, -1.5F),
+        ) { registerHoeRecipeGeneration(item, Items.COPPER_INGOT) }
+        val COPPER_SWORD = !ToolCard(
+            "copper_sword", EnJa("Copper Sword", "銅の剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.COPPER),
+        ) { registerSwordRecipeGeneration(item, Items.COPPER_INGOT) }
         val FLUORITE_PICKAXE = !ToolCard(
             "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
             PoemList(null),
