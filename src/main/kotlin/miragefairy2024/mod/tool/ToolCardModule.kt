@@ -53,7 +53,7 @@ fun initToolCardModule() {
 class ToolCard(
     path: String,
     private val name: EnJa,
-    private val poemList: PoemList?,
+    private val poemList: PoemList,
     private val configuration: ToolConfiguration,
     private val initializer: context(ModContext)ToolCard.() -> Unit = {},
 ) {
@@ -70,11 +70,9 @@ class ToolCard(
 
         item.enJa(name)
 
-        if (poemList != null) {
-            val poemList2 = configuration.appendPoems(poemList)
-            item.registerPoem(poemList2)
-            item.registerPoemGeneration(poemList2)
-        }
+        val poemList2 = configuration.appendPoems(poemList)
+        item.registerPoem(poemList2)
+        item.registerPoemGeneration(poemList2)
 
         configuration.init(this)
         initializer(this@ModContext, this)
@@ -88,7 +86,7 @@ object ToolCards {
 
     val IRON_SCYTHE = !ToolCard(
         "iron_scythe", EnJa("Iron Scythe", "鉄の大鎌"),
-        null,
+        PoemList(null),
         FairyScytheConfiguration(ToolMaterialCard.IRON, 1),
     ) {
         registerShapedRecipeGeneration(item) {
@@ -272,7 +270,7 @@ object ToolCards {
     }
     val DIAMOND_SCYTHE = !ToolCard(
         "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
-        null,
+        PoemList(null),
         FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
     ) {
         registerShapedRecipeGeneration(item) {
