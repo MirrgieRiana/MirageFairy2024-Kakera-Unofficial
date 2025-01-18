@@ -97,6 +97,19 @@ object ToolCards {
             input('R', Items.STICK)
         } on Items.IRON_INGOT
     }
+    val DIAMOND_SCYTHE = !ToolCard(
+        "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
+        PoemList(null),
+        FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern(" ##")
+            pattern("# R")
+            pattern("  R")
+            input('#', Items.DIAMOND)
+            input('R', Items.STICK)
+        } on Items.DIAMOND
+    }
     val FLUORITE_PICKAXE = !ToolCard(
         "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
         PoemList(null),
@@ -280,19 +293,6 @@ object ToolCards {
             input('#', MaterialCard.XARPITE.item)
             input('R', Items.STICK)
         } on MaterialCard.XARPITE.item
-    }
-    val DIAMOND_SCYTHE = !ToolCard(
-        "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
-        PoemList(null),
-        FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern(" ##")
-            pattern("# R")
-            pattern("  R")
-            input('#', Items.DIAMOND)
-            input('R', Items.STICK)
-        } on Items.DIAMOND
     }
     val CHAOS_STONE_PICKAXE = !ToolCard(
         "chaos_stone_pickaxe", EnJa("Chaos Stone Pickaxe", "混沌のつるはし"),
