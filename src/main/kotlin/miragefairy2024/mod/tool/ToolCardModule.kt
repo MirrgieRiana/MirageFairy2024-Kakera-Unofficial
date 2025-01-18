@@ -28,6 +28,7 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.data.client.Models
 import net.minecraft.enchantment.Enchantments
+import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
@@ -89,274 +90,107 @@ object ToolCards {
         "iron_scythe", EnJa("Iron Scythe", "鉄の大鎌"),
         PoemList(null),
         FairyScytheConfiguration(ToolMaterialCard.IRON, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern(" ##")
-            pattern("# R")
-            pattern("  R")
-            input('#', Items.IRON_INGOT)
-            input('R', Items.STICK)
-        } on Items.IRON_INGOT
-    }
+    ) { registerScytheRecipeGeneration(item, Items.IRON_INGOT) }
     val DIAMOND_SCYTHE = !ToolCard(
         "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
         PoemList(null),
         FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern(" ##")
-            pattern("# R")
-            pattern("  R")
-            input('#', Items.DIAMOND)
-            input('R', Items.STICK)
-        } on Items.DIAMOND
-    }
+    ) { registerScytheRecipeGeneration(item, Items.DIAMOND) }
     val FLUORITE_PICKAXE = !ToolCard(
         "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
         PoemList(null),
         FairyPickaxeConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.FORTUNE, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.FLUORITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FLUORITE.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.FLUORITE.item) }
     val FLUORITE_AXE = !ToolCard(
         "fluorite_axe", EnJa("Fluorite Axe", "蛍石の斧"),
         PoemList(null),
         FairyAxeConfiguration(ToolMaterialCard.FLUORITE, 6.5F, -3.2F).enchantment(Enchantments.FORTUNE, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern("#R")
-            pattern(" R")
-            input('#', MaterialCard.FLUORITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FLUORITE.item
-    }
+    ) { registerAxeRecipeGeneration(item, MaterialCard.FLUORITE.item) }
     val FLUORITE_SHOVEL = !ToolCard(
         "fluorite_shovel", EnJa("Fluorite Shovel", "蛍石のシャベル"),
         PoemList(null),
         FairyShovelConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.FORTUNE, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("R")
-            pattern("R")
-            input('#', MaterialCard.FLUORITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FLUORITE.item
-    }
+    ) { registerShovelRecipeGeneration(item, MaterialCard.FLUORITE.item) }
     val FLUORITE_HOE = !ToolCard(
         "fluorite_hoe", EnJa("Fluorite Hoe", "蛍石のクワ"),
         PoemList(null),
         FairyHoeConfiguration(ToolMaterialCard.FLUORITE, -1, -2.0F).enchantment(Enchantments.FORTUNE, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern(" R")
-            pattern(" R")
-            input('#', MaterialCard.FLUORITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FLUORITE.item
-    }
+    ) { registerHoeRecipeGeneration(item, MaterialCard.FLUORITE.item) }
     val FLUORITE_SWORD = !ToolCard(
         "fluorite_sword", EnJa("Fluorite Sword", "蛍石の剣"),
         PoemList(null),
         FairySwordConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.LOOTING, 1),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("#")
-            pattern("R")
-            input('#', MaterialCard.FLUORITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FLUORITE.item
-    }
+    ) { registerSwordRecipeGeneration(item, MaterialCard.FLUORITE.item) }
     val EMERALD_PICKAXE = !ToolCard(
         "emerald_pickaxe", EnJa("Emerald Pickaxe", "エメラルドのつるはし"),
         PoemList(null),
         FairyPickaxeConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.FORTUNE, 2),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', Items.EMERALD)
-            input('R', Items.STICK)
-        } on Items.EMERALD
-    }
+    ) { registerPickaxeRecipeGeneration(item, Items.EMERALD) }
     val EMERALD_AXE = !ToolCard(
         "emerald_axe", EnJa("Emerald Axe", "エメラルドの斧"),
         PoemList(null),
         FairyAxeConfiguration(ToolMaterialCard.EMERALD, 5.5F, -3.0F).enchantment(Enchantments.FORTUNE, 2),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern("#R")
-            pattern(" R")
-            input('#', Items.EMERALD)
-            input('R', Items.STICK)
-        } on Items.EMERALD
-    }
+    ) { registerAxeRecipeGeneration(item, Items.EMERALD) }
     val EMERALD_SHOVEL = !ToolCard(
         "emerald_shovel", EnJa("Emerald Shovel", "エメラルドのシャベル"),
         PoemList(null),
         FairyShovelConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.FORTUNE, 2),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("R")
-            pattern("R")
-            input('#', Items.EMERALD)
-            input('R', Items.STICK)
-        } on Items.EMERALD
-    }
+    ) { registerShovelRecipeGeneration(item, Items.EMERALD) }
     val EMERALD_HOE = !ToolCard(
         "emerald_hoe", EnJa("Emerald Hoe", "エメラルドのクワ"),
         PoemList(null),
         FairyHoeConfiguration(ToolMaterialCard.EMERALD, -3, 0.0F).enchantment(Enchantments.FORTUNE, 2),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern(" R")
-            pattern(" R")
-            input('#', Items.EMERALD)
-            input('R', Items.STICK)
-        } on Items.EMERALD
-    }
+    ) { registerHoeRecipeGeneration(item, Items.EMERALD) }
     val EMERALD_SWORD = !ToolCard(
         "emerald_sword", EnJa("Emerald Sword", "エメラルドの剣"),
         PoemList(null),
         FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("#")
-            pattern("R")
-            input('#', Items.EMERALD)
-            input('R', Items.STICK)
-        } on Items.EMERALD
-    }
+    ) { registerSwordRecipeGeneration(item, Items.EMERALD) }
     val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
         "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
         PoemList(2).poem(EnJa("A brain frozen in crystal", "闇を打ち砕く、透き通る心。")),
         FairyPickaxeConfiguration(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FAIRY_CRYSTAL.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
     val FAIRY_CRYSTAL_SCYTHE = !ToolCard(
         "fairy_crystal_scythe", EnJa("Fairy Crystal Scythe", "フェアリークリスタルの大鎌"),
         PoemList(2).poem(EnJa("What color is fairy blood?", "妖精を刈り取るための道具。")),
         FairyScytheConfiguration(ToolMaterialCard.FAIRY_CRYSTAL, 2).selfMending(10).obtainFairy(9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern(" ##")
-            pattern("# R")
-            pattern("  R")
-            input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FAIRY_CRYSTAL.item
-    }
+    ) { registerScytheRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
     val FAIRY_CRYSTAL_SWORD = !ToolCard(
         "fairy_crystal_sword", EnJa("Fairy Crystal Sword", "フェアリークリスタルの剣"),
         PoemList(2).poem(EnJa("Nutrients for the soul", "妖精はこれをおやつにするという")),
         FairySwordConfiguration(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("#")
-            pattern("R")
-            input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FAIRY_CRYSTAL.item
-    }
+    ) { registerSwordRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
     val FAIRY_CRYSTAL_BATTLE_AXE = !ToolCard(
         "fairy_crystal_battle_axe", EnJa("Fairy Crystal Battle Axe", "フェアリークリスタルの戦斧"),
         PoemList(2).poem(EnJa("The embodiment of fighting spirit", "妖精の本能を呼び覚ませ。")),
         FairyBattleAxeConfiguration(ToolMaterialCard.FAIRY_CRYSTAL, 6.5F, -3.0F).selfMending(10).obtainFairy(9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern("#R#")
-            pattern(" R ")
-            input('#', MaterialCard.FAIRY_CRYSTAL.item)
-            input('R', Items.STICK)
-        } on MaterialCard.FAIRY_CRYSTAL.item
-    }
+    ) { registerBattleAxeRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
     val MIRAGIUM_PICKAXE = !ToolCard(
         "miragium_pickaxe", EnJa("Miragium Pickaxe", "ミラジウムのつるはし"),
         PoemList(3).poem(EnJa("More durable than gold", "妖精の肉体労働")),
         FairyPickaxeConfiguration(ToolMaterialCard.MIRAGIUM).selfMending(20).mineAll(),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.MIRAGIUM_INGOT.item)
-            input('R', Items.STICK)
-        } on MaterialCard.MIRAGIUM_INGOT.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.MIRAGIUM_INGOT.item) }
     val MIRAGIUM_AXE = !ToolCard(
         "miragium_axe", EnJa("Miragium Axe", "ミラジウムの斧"),
         PoemList(3).poem(EnJa("Crack! Squish!", "バキッ！ぐにっ")),
         FairyAxeConfiguration(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern("#R")
-            pattern(" R")
-            input('#', MaterialCard.MIRAGIUM_INGOT.item)
-            input('R', Items.STICK)
-        } on MaterialCard.MIRAGIUM_INGOT.item
-    }
+    ) { registerAxeRecipeGeneration(item, MaterialCard.MIRAGIUM_INGOT.item) }
     val MIRANAGITE_KNIFE = !ToolCard(
         "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
         PoemList(2).poem(EnJa("Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。")),
         FairyKnifeConfiguration(ToolMaterialCard.MIRANAGITE).enchantment(Enchantments.SILK_TOUCH),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("R")
-            input('#', MaterialCard.MIRANAGITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.MIRANAGITE.item
-    }
+    ) { registerKnifeRecipeGeneration(item, MaterialCard.MIRANAGITE.item) }
     val MIRANAGITE_PICKAXE = !ToolCard(
         "miranagite_pickaxe", EnJa("Miranagite Pickaxe", "蒼天石のつるはし"),
         PoemList(2).poem(EnJa("Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。")),
         FairyPickaxeConfiguration(ToolMaterialCard.MIRANAGITE).enchantment(Enchantments.SILK_TOUCH),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.MIRANAGITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.MIRANAGITE.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.MIRANAGITE.item) }
     val MIRANAGITE_SCYTHE = !ToolCard(
         "miranagite_scythe", EnJa("Miranagite Scythe", "蒼天石の大鎌"),
         PoemList(2).poem(EnJa("Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。")),
         FairyScytheConfiguration(ToolMaterialCard.MIRANAGITE, 3).enchantment(Enchantments.SILK_TOUCH),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern(" ##")
-            pattern("# R")
-            pattern("  R")
-            input('#', MaterialCard.MIRANAGITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.MIRANAGITE.item
-    }
+    ) { registerScytheRecipeGeneration(item, MaterialCard.MIRANAGITE.item) }
     val MIRANAGI_STAFF_0 = !ToolCard(
         "miranagi_staff_0", EnJa("Miranagite Staff", "蒼天石のスタッフ"),
         PoemList(2).poem(EnJa("Inflating anti-entropy force", "膨張する秩序の力。")),
@@ -390,78 +224,101 @@ object ToolCards {
         "xarpite_pickaxe", EnJa("Xarpite Pickaxe", "紅天石のつるはし"),
         PoemList(2).poem(EnJa("Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。")),
         FairyPickaxeConfiguration(ToolMaterialCard.XARPITE).mineAll(),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.XARPITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.XARPITE.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.XARPITE.item) }
     val XARPITE_AXE = !ToolCard(
         "xarpite_axe", EnJa("Xarpite Axe", "紅天石の斧"),
         PoemList(2).poem(EnJa("Strip the log from the space", "空間にこびりついた丸太の除去に。")),
         FairyAxeConfiguration(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("##")
-            pattern("#R")
-            pattern(" R")
-            input('#', MaterialCard.XARPITE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.XARPITE.item
-    }
+    ) { registerAxeRecipeGeneration(item, MaterialCard.XARPITE.item) }
     val CHAOS_STONE_PICKAXE = !ToolCard(
         "chaos_stone_pickaxe", EnJa("Chaos Stone Pickaxe", "混沌のつるはし"),
         PoemList(4).poem(EnJa("Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。")),
         FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE }.areaMining(),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.CHAOS_STONE.item)
-            input('R', Items.STICK)
-        } on MaterialCard.CHAOS_STONE.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.CHAOS_STONE.item) }
     val PHANTOM_PICKAXE = !ToolCard(
         "phantom_pickaxe", EnJa("Phantom Pickaxe", "幻想のつるはし"),
         PoemList(4).poem(EnJa("\"Creation\" is the true power.", "人間が手にした唯一の幻想。")),
         FairyPickaxeConfiguration(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("###")
-            pattern(" R ")
-            pattern(" R ")
-            input('#', MaterialCard.PHANTOM_DROP.item)
-            input('R', Items.STICK)
-        } on MaterialCard.PHANTOM_DROP.item
-    }
+    ) { registerPickaxeRecipeGeneration(item, MaterialCard.PHANTOM_DROP.item) }
     val PHANTOM_SHOVEL = !ToolCard(
         "phantom_shovel", EnJa("Phantom Shovel", "幻想のシャベル"),
         PoemList(4).poem(EnJa("The sound of the world's end echoed", "破壊された世界の音――")),
         FairyShovelConfiguration(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("R")
-            pattern("R")
-            input('#', MaterialCard.PHANTOM_DROP.item)
-            input('R', Items.STICK)
-        } on MaterialCard.PHANTOM_DROP.item
-    }
+    ) { registerShovelRecipeGeneration(item, MaterialCard.PHANTOM_DROP.item) }
     val PHANTOM_SWORD = !ToolCard(
         "phantom_sword", EnJa("Phantom Sword", "幻想の剣"),
         PoemList(4).poem(EnJa("Pray. For rebirth.", "闇を切り裂く、再生の光。")),
         FairySwordConfiguration(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
-    ) {
-        registerShapedRecipeGeneration(item) {
-            pattern("#")
-            pattern("#")
-            pattern("R")
-            input('#', MaterialCard.PHANTOM_DROP.item)
-            input('R', Items.STICK)
-        } on MaterialCard.PHANTOM_DROP.item
-    }
+    ) { registerSwordRecipeGeneration(item, MaterialCard.PHANTOM_DROP.item) }
 }
+
+context(ModContext)
+private fun registerPickaxeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("###")
+    pattern(" R ")
+    pattern(" R ")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerAxeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("##")
+    pattern("#R")
+    pattern(" R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerShovelRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("#")
+    pattern("R")
+    pattern("R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerHoeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("##")
+    pattern(" R")
+    pattern(" R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerKnifeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("#")
+    pattern("R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerScytheRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern(" ##")
+    pattern("# R")
+    pattern("  R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerSwordRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("#")
+    pattern("#")
+    pattern("R")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
+
+context(ModContext)
+private fun registerBattleAxeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
+    pattern("###")
+    pattern("#R#")
+    pattern(" R ")
+    input('#', inputItem)
+    input('R', Items.STICK)
+} on inputItem
