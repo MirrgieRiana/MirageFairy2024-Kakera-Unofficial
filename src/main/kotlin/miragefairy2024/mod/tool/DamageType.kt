@@ -18,7 +18,7 @@ object MagicDamageTypeCard {
 }
 
 context(ModContext)
-fun initDamageTypeModule() {
+fun initDamageType() {
     MagicDamageTypeCard.let { card ->
         registerDynamicGeneration(card.registryKey) {
             card.damageType
