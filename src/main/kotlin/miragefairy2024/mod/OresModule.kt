@@ -64,6 +64,16 @@ enum class OreCard(
     val dropItem: Item,
     experience: Pair<Int, Int>,
 ) {
+    MAGNETITE_ORE(
+        "magnetite_ore", "Magnetite Ore", "磁鉄鉱鉱石",
+        null,
+        STONE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+    ),
+    DEEPSLATE_MAGNETITE_ORE(
+        "deepslate_magnetite_ore", "Deepslate Magnetite Ore", "深層磁鉄鉱鉱石",
+        null,
+        DEEPSLATE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+    ),
     FLUORITE_ORE(
         "fluorite_ore", "Fluorite Ore", "蛍石鉱石",
         null,
