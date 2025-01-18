@@ -34,7 +34,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
 
 context(ModContext)
-fun initToolCardModule() {
+fun initToolCard() {
 
     ScytheItem.DESCRIPTION_TRANSLATION.enJa()
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()

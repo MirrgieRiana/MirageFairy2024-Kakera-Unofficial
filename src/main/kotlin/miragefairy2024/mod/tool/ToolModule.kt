@@ -6,7 +6,7 @@ context(ModContext)
 fun initToolModule() {
     initDamageTypeModule()
     initToolMaterialModule()
-    initToolCardModule()
+    initToolCard()
     initToolConfiguration()
 }
 
