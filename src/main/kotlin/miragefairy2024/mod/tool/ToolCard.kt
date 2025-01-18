@@ -68,6 +68,7 @@ class ToolCard(
             PoemList(null),
             FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
         ) { registerScytheRecipeGeneration(item, Items.DIAMOND) }
+
         val MAGNETITE_PICKAXE = !ToolCard(
             "magnetite_pickaxe", EnJa("Magnetite Pickaxe", "磁鉄鉱のつるはし"),
             PoemList(null),
@@ -143,6 +144,7 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
         ) { registerSwordRecipeGeneration(item, Items.EMERALD) }
+
         val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
             "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
             PoemList(2).poem(EnJa("A brain frozen in crystal", "闇を打ち砕く、透き通る心。")),
