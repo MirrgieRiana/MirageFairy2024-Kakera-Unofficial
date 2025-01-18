@@ -251,6 +251,11 @@ enum class MaterialCard(
         PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
     ),
 
+    MAGNETITE(
+        "magnetite", "Magnetite", "磁鉄鉱",
+        null,
+    ),
+
     FLUORITE(
         "fluorite", "Fluorite", "蛍石",
         null,
