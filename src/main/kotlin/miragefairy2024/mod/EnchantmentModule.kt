@@ -3,7 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.ItemFilteringEnchantment
-import miragefairy2024.mod.tool.contents.ShootingStaffItem
+import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.register

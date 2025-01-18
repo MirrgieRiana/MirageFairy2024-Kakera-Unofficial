@@ -1,4 +1,4 @@
-package miragefairy2024.mod.tool.contents
+package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
@@ -18,27 +18,28 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.ShovelItem
+import net.minecraft.item.PickaxeItem
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyShovelConfiguration(
+class FairyPickaxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyShovelItem(this, Item.Settings())
+    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
 
     init {
-        this.attackDamage = 1.5F
-        this.attackSpeed = -3.0F
-        this.tags += ItemTags.SHOVELS
-        this.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
+        this.attackDamage = 1F
+        this.attackSpeed = -2.8F
+        this.tags += ItemTags.PICKAXES
+        this.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
+        this.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
     }
 }
 
-class FairyShovelItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
-    ShovelItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
+class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    PickaxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

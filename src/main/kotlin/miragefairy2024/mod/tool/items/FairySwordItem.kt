@@ -1,4 +1,4 @@
-package miragefairy2024.mod.tool.contents
+package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
@@ -13,36 +13,35 @@ import miragefairy2024.mod.tool.overrideEnchantmentLevelImpl
 import miragefairy2024.mod.tool.postHitImpl
 import miragefairy2024.mod.tool.postMineImpl
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
-import net.minecraft.item.AxeItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.ToolMaterial
+import net.minecraft.item.SwordItem
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class FairyBattleAxeConfiguration(
+class FairySwordConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
-    attackDamage: Float,
-    attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyBattleAxeItem(this, Item.Settings())
+    override fun createItem() = FairySwordItem(this, Item.Settings())
 
     init {
-        this.attackDamage = attackDamage
-        this.attackSpeed = attackSpeed
-        this.tags += ItemTags.AXES
-        this.effectiveBlockTags += BlockTags.AXE_MINEABLE
+        this.attackDamage = 3.0F
+        this.attackSpeed = -2.4F
+        this.miningSpeedMultiplierOverride = 1.5F
+        this.tags += ItemTags.SWORDS
+        this.superEffectiveBlocks += Blocks.COBWEB
+        this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
     }
 }
 
-class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
-    BattleAxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
+class FairySwordItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    SwordItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
@@ -72,22 +71,4 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
-}
-
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
-    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.damage(1, attacker) { e ->
-            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-        }
-        return true
-    }
-
-    override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getHardness(world, pos) != 0.0F) {
-            stack.damage(2, miner) { e ->
-                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-            }
-        }
-        return true
-    }
 }

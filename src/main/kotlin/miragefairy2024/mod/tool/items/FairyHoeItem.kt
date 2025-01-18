@@ -1,4 +1,4 @@
-package miragefairy2024.mod.tool.contents
+package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
@@ -16,30 +16,36 @@ import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.item.HoeItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.PickaxeItem
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import kotlin.math.roundToInt
 
-class FairyPickaxeConfiguration(
+/**
+ * @param attackDamage wood: 0, stone: -1, gold: 0, iron: -2, diamond: -3, netherite: -4
+ * @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
+ */
+class FairyHoeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
+    attackDamage: Int,
+    attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
+    override fun createItem() = FairyHoeItem(this, Item.Settings())
 
     init {
-        this.attackDamage = 1F
-        this.attackSpeed = -2.8F
-        this.tags += ItemTags.PICKAXES
-        this.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-        this.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+        this.attackDamage = attackDamage.toFloat()
+        this.attackSpeed = attackSpeed
+        this.tags += ItemTags.HOES
+        this.effectiveBlockTags += BlockTags.HOE_MINEABLE
     }
 }
 
-class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
-    PickaxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
+class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+    HoeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.roundToInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {

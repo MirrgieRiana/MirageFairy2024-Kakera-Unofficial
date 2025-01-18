@@ -1,4 +1,4 @@
-package miragefairy2024.mod.tool.contents
+package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
