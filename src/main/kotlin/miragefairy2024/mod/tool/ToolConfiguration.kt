@@ -8,6 +8,7 @@ import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
+import miragefairy2024.mod.tool.items.onKilled
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -17,8 +18,10 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.max
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
@@ -37,6 +40,13 @@ fun initToolConfiguration() {
         val item = tool.item
         if (item !is FairyToolItem) return@register
         item.onAfterBreakBlock(world, player, pos, state, blockEntity, tool)
+    }
+
+    ServerLivingEntityEvents.AFTER_DEATH.register { entity, damageSource ->
+        val attacker = damageSource.attacker as? LivingEntity ?: return@register
+        val item = attacker.mainHandStack.item
+        if (item !is FairyToolItem) return@register
+        item.onKilled(entity, attacker, damageSource)
     }
 
 }

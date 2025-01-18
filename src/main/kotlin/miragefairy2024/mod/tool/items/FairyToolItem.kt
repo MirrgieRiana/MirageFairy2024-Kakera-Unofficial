@@ -27,6 +27,7 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ExperienceOrbEntity
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -237,19 +238,22 @@ fun <I> I.onAfterBreakBlock(world: World, player: PlayerEntity, pos: BlockPos, s
 }
 
 fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem {
+
+}
+
+fun <I> I.onKilled(entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) where I : Item, I : FairyToolItem {
     configuration.obtainFairy?.let { obtainFairy ->
         if (attacker !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
-        if (!target.isDead) return@let // 撃破時でない
 
         // モチーフの判定
-        val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(target.type)
+        val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(entity.type)
 
         // 抽選
-        val result = getRandomFairy(target.world.random, motifSet, obtainFairy) ?: return@let
+        val result = getRandomFairy(entity.world.random, motifSet, obtainFairy) ?: return@let
 
         // 入手
         val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-        target.world.spawnEntity(ItemEntity(target.world, target.x, target.y, target.z, fairyItemStack))
+        entity.world.spawnEntity(ItemEntity(entity.world, entity.x, entity.y, entity.z, fairyItemStack))
 
         // 妖精召喚履歴に追加
         attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count
@@ -257,13 +261,11 @@ fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: Li
 
     }
     if (configuration.collection) run {
-        if (!target.isDead) return@run // 撃破時でない
-
-        target.world.getEntitiesByClass(ItemEntity::class.java, target.boundingBox) { !it.isSpectator }.forEach {
+        entity.world.getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
             it.teleport(attacker.x, attacker.y, attacker.z)
             it.resetPickupDelay()
         }
-        target.world.getEntitiesByClass(ExperienceOrbEntity::class.java, target.boundingBox) { !it.isSpectator }.forEach {
+        entity.world.getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
             it.teleport(attacker.x, attacker.y, attacker.z)
         }
     }
