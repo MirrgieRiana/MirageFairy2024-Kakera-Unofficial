@@ -37,6 +37,7 @@ enum class FairyToolMaterials(
     XARPITE(283, 1.0F, 2.0F, MiningLevels.IRON, 20, MaterialCard.XARPITE.item.toIngredient()),
     MIRANAGITE(256, 6.5F, 2.0F, MiningLevels.IRON, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
     CHAOS_STONE(666, 2.0F, 2.0F, MiningLevels.NETHERITE, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
+    HAIMEVISKA_ROSIN(73, 0.5F, 0.0F, MiningLevels.WOOD, 11, MaterialCard.HAIMEVISKA_ROSIN.item.toIngredient())
     ;
 
     override fun getDurability() = durability
@@ -68,6 +69,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", "Xarpite Tool", "紅天石ツール"),
     MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", "Miranagite Tool", "蒼天石ツール"),
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),
+    HAIMEVISKA_ROSIN(FairyToolMaterials.HAIMEVISKA_ROSIN, "haimeviska_rosin_tool", "Rosin Tool", "涙ツール"),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

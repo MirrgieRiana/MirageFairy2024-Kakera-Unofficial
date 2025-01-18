@@ -249,6 +249,21 @@ class ToolCard(
             PoemList(4).poem(EnJa("Pray. For rebirth.", "闇を切り裂く、再生の光。")),
             FairySwordConfiguration(ToolMaterialCard.PHANTOM_DROP).selfMending(20).obtainFairy(9.0 * 9.0),
         ) { registerSwordRecipeGeneration(item, MaterialCard.PHANTOM_DROP.item) }
+        val HAIMEVISKA_ROSIN_PICKAXE = !ToolCard(
+            "haimeviska_rosin_pickaxe", EnJa("Rosin Pickaxe", "涙のつるはし"),
+            PoemList(2).poem(EnJa("A pickaxe looking for companions", "きみも一緒だよ――")),
+            FairyPickaxeConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining().collection().enchantment(Enchantments.UNBREAKING, 2),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
+        val HAIMEVISKA_ROSIN_SHOVEL = !ToolCard(
+            "haimeviska_rosin_shovel", EnJa("Rosin Shovel", "涙のシャベル"),
+            PoemList(2).poem(EnJa("The oppressed Viska spirit's desire", "傷つけられた樹の声")),
+            FairyShovelConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining().collection().enchantment(Enchantments.UNBREAKING, 2),
+        ) { registerShovelRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
+        val HAIMEVISKA_ROSIN_SWORD = !ToolCard(
+            "haimeviska_rosin_sword", EnJa("Rosin Sword", "涙の剣"),
+            PoemList(2).poem(EnJa("The story of the lonely tree", "涙の中に消えた友――")),
+            FairySwordConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining().collection().enchantment(Enchantments.UNBREAKING, 2),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
     }
 
     val identifier = MirageFairy2024.identifier(path)
