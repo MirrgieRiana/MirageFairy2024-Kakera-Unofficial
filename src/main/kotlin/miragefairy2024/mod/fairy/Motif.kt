@@ -347,8 +347,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + luck(1.0)
-            + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
+            + StatusEffects.LUCK() * ToolMaterialCard.EMERALD()
+            + StatusEffects.LUCK(2) * ToolMaterialCard.EMERALD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R + Blocks.EMERALD_BLOCK + Items.EMERALD + BlockTags.EMERALD_ORES,
     ),
 
