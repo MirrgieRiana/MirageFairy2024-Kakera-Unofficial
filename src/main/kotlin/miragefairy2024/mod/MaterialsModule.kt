@@ -548,6 +548,9 @@ fun initMaterialsModule() {
     // 妖精の鱗粉
     MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
 
+    // 磁鉄鉱
+    registerSmeltingRecipeGeneration(MaterialCard.MAGNETITE.item, Items.IRON_NUGGET, 0.7) on MaterialCard.MAGNETITE.item modId MirageFairy2024.MOD_ID from MaterialCard.MAGNETITE.item
+
     // 蛍石→フェアリークエストカードベース
     registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
         pattern(" R ")

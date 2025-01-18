@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "minecraft:iron_nugget",
+  "ingredient": {
+    "item": "miragefairy2024:magnetite"
+  },
+  "result": "minecraft:iron_nugget"
+}
