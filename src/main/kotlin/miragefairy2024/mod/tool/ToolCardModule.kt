@@ -68,6 +68,31 @@ class ToolCard(
             PoemList(null),
             FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 3),
         ) { registerScytheRecipeGeneration(item, Items.DIAMOND) }
+        val MAGNETITE_PICKAXE = !ToolCard(
+            "magnetite_pickaxe", EnJa("Magnetite Pickaxe", "磁鉄鉱のつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.MAGNETITE).collection(),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val MAGNETITE_AXE = !ToolCard(
+            "magnetite_axe", EnJa("Magnetite Axe", "磁鉄鉱の斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.MAGNETITE, 6.5F, -3.2F).collection(),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val MAGNETITE_SHOVEL = !ToolCard(
+            "magnetite_shovel", EnJa("Magnetite Shovel", "磁鉄鉱のシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.MAGNETITE).collection(),
+        ) { registerShovelRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val MAGNETITE_HOE = !ToolCard(
+            "magnetite_hoe", EnJa("Magnetite Hoe", "磁鉄鉱のクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.MAGNETITE, -1, -2.0F).collection(),
+        ) { registerHoeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val MAGNETITE_SWORD = !ToolCard(
+            "magnetite_sword", EnJa("Magnetite Sword", "磁鉄鉱の剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.MAGNETITE).collection(),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val FLUORITE_PICKAXE = !ToolCard(
             "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
             PoemList(null),
