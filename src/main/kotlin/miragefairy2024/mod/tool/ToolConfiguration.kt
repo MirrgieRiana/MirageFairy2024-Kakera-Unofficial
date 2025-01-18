@@ -29,6 +29,7 @@ fun initToolConfiguration() {
     ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
     ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
     ToolConfiguration.OBTAIN_FAIRY_TRANSLATION.enJa()
+    ToolConfiguration.COLLECTION_TRANSLATION.enJa()
 
     BlockCallback.AFTER_BREAK.register { world, player, pos, state, blockEntity, tool ->
         val item = tool.item
@@ -46,6 +47,7 @@ abstract class ToolConfiguration {
         val CUT_ALL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
         val OBTAIN_FAIRY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
+        val COLLECTION_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
     }
 
     abstract val toolMaterialCard: ToolMaterialCard
@@ -62,6 +64,7 @@ abstract class ToolConfiguration {
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
+    var collection = false
 
     abstract fun createItem(): Item
 
@@ -120,4 +123,9 @@ fun ToolConfiguration.selfMending(selfMending: Int) = this.also {
 fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
     it.obtainFairy = appearanceRateBonus
     it.descriptions += text { ToolConfiguration.OBTAIN_FAIRY_TRANSLATION() }
+}
+
+fun ToolConfiguration.collection() = this.also {
+    it.collection = true
+    it.descriptions += text { ToolConfiguration.COLLECTION_TRANSLATION() }
 }

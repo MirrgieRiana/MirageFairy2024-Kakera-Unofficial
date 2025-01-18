@@ -23,6 +23,7 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.ExperienceOrbEntity
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -31,6 +32,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
 import net.minecraft.world.World
 
 interface FairyToolItem {
@@ -222,6 +224,15 @@ fun <I> I.onAfterBreakBlock(world: World, player: PlayerEntity, pos: BlockPos, s
         FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
     }
+    if (configuration.collection) run {
+        world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+            it.teleport(player.x, player.y, player.z)
+            it.resetPickupDelay()
+        }
+        world.getEntitiesByClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+            it.teleport(player.x, player.y, player.z)
+        }
+    }
 }
 
 fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem {
@@ -243,6 +254,17 @@ fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: Li
         attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count
         FairyHistoryContainerExtraPlayerDataCategory.sync(attacker)
 
+    }
+    if (configuration.collection) run {
+        if (!target.isDead) return@run // 撃破時でない
+
+        target.world.getEntitiesByClass(ItemEntity::class.java, target.boundingBox) { !it.isSpectator }.forEach {
+            it.teleport(attacker.x, attacker.y, attacker.z)
+            it.resetPickupDelay()
+        }
+        target.world.getEntitiesByClass(ExperienceOrbEntity::class.java, target.boundingBox) { !it.isSpectator }.forEach {
+            it.teleport(attacker.x, attacker.y, attacker.z)
+        }
     }
 }
 
