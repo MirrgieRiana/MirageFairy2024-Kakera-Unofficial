@@ -10,6 +10,7 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.tool.contents.FairyAxeConfiguration
 import miragefairy2024.mod.tool.contents.FairyBattleAxeConfiguration
+import miragefairy2024.mod.tool.contents.FairyHoeConfiguration
 import miragefairy2024.mod.tool.contents.FairyKnifeConfiguration
 import miragefairy2024.mod.tool.contents.FairyPickaxeConfiguration
 import miragefairy2024.mod.tool.contents.FairyScytheConfiguration
@@ -119,6 +120,58 @@ object ToolCards {
             pattern("###")
             pattern(" R ")
             pattern(" R ")
+            input('#', MaterialCard.FLUORITE.item)
+            input('R', Items.STICK)
+        } on MaterialCard.FLUORITE.item
+    }
+    val FLUORITE_AXE = !ToolCard(
+        "fluorite_axe", EnJa("Fluorite Axe", "蛍石の斧"),
+        PoemList(null),
+        FairyAxeConfiguration(ToolMaterialCard.FLUORITE, 6.5F, -3.2F).enchantment(Enchantments.FORTUNE, 1),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("##")
+            pattern("#R")
+            pattern(" R")
+            input('#', MaterialCard.FLUORITE.item)
+            input('R', Items.STICK)
+        } on MaterialCard.FLUORITE.item
+    }
+    val FLUORITE_SHOVEL = !ToolCard(
+        "fluorite_shovel", EnJa("Fluorite Shovel", "蛍石のシャベル"),
+        PoemList(null),
+        FairyShovelConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.FORTUNE, 1),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("#")
+            pattern("R")
+            pattern("R")
+            input('#', MaterialCard.FLUORITE.item)
+            input('R', Items.STICK)
+        } on MaterialCard.FLUORITE.item
+    }
+    val FLUORITE_HOE = !ToolCard(
+        "fluorite_hoe", EnJa("Fluorite Hoe", "蛍石のクワ"),
+        PoemList(null),
+        FairyHoeConfiguration(ToolMaterialCard.FLUORITE, -1, -2.0F).enchantment(Enchantments.FORTUNE, 1),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("##")
+            pattern(" R")
+            pattern(" R")
+            input('#', MaterialCard.FLUORITE.item)
+            input('R', Items.STICK)
+        } on MaterialCard.FLUORITE.item
+    }
+    val FLUORITE_SWORD = !ToolCard(
+        "fluorite_sword", EnJa("Fluorite Sword", "蛍石の剣"),
+        PoemList(null),
+        FairySwordConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.LOOTING, 1),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("#")
+            pattern("#")
+            pattern("R")
             input('#', MaterialCard.FLUORITE.item)
             input('R', Items.STICK)
         } on MaterialCard.FLUORITE.item
