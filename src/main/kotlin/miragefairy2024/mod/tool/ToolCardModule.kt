@@ -97,6 +97,19 @@ object ToolCards {
             input('R', Items.STICK)
         } on Items.IRON_INGOT
     }
+    val FLUORITE_PICKAXE = !ToolCard(
+        "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
+        PoemList(null),
+        FairyPickaxeConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.FORTUNE, 1),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("###")
+            pattern(" R ")
+            pattern(" R ")
+            input('#', MaterialCard.FLUORITE.item)
+            input('R', Items.STICK)
+        } on MaterialCard.FLUORITE.item
+    }
     val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
         "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
         PoemList(2).poem(EnJa("A brain frozen in crystal", "闇を打ち砕く、透き通る心。")),

@@ -25,6 +25,7 @@ enum class FairyToolMaterials(
     private val repairIngredient: Ingredient,
 ) : ToolMaterial {
     COPPER(196, 5.0F, 1.0F, MiningLevels.IRON, 18, Items.COPPER_INGOT.toIngredient()),
+    FLUORITE(96, 3.0F, 1.0F, MiningLevels.STONE, 20, MaterialCard.FLUORITE.item.toIngredient()),
     MIRAGE(48, 1.6F, 0.0F, MiningLevels.WOOD, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
     MIRAGIUM(87, 0.5F, 0.5F, MiningLevels.IRON, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     FAIRY_CRYSTAL(235, 5.0F, 1.5F, MiningLevels.IRON, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
@@ -51,6 +52,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", "Netherite Tool", "ネザライトツール"),
 
     COPPER(FairyToolMaterials.COPPER, "copper_tool", "Copper Tool", "銅ツール"),
+    FLUORITE(FairyToolMaterials.FLUORITE, "fluorite_tool", "Fluorite Tool", "蛍石ツール"),
     MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途
     MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", "Miragium Tool", "ミラジウムツール"),
     FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
