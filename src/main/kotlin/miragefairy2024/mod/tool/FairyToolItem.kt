@@ -63,6 +63,7 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
 }
 
 fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
+    onBreakBlock(stack, world, state, pos, miner)
     if (configuration.areaMining) run fail@{
         if (world.isClient) return@fail
 
@@ -89,6 +90,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
                             val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
                             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                             if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
+                                onBreakBlock(stack, world, targetBlockState, targetBlockPos, miner)
                                 if (targetHardness > 0) {
                                     val damage = world.random.randomInt(configuration.miningDamage)
                                     if (damage > 0) {
@@ -128,6 +130,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             val targetHardness = targetBlockState.getHardness(world, blockPos)
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                onBreakBlock(stack, world, targetBlockState, blockPos, miner)
                 if (targetHardness > 0) {
                     val damage = world.random.randomInt(configuration.miningDamage)
                     if (damage > 0) {
@@ -164,6 +167,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             val targetHardness = targetBlockState.getHardness(world, blockPos)
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                onBreakBlock(stack, world, targetBlockState, blockPos, miner)
                 if (targetHardness > 0) {
                     val damage = world.random.randomInt(configuration.miningDamage)
                     if (damage > 0) {
@@ -187,6 +191,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             val targetHardness = targetBlockState.getHardness(world, blockPos)
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
+                onBreakBlock(stack, world, targetBlockState, blockPos, miner)
                 if (targetHardness > 0) {
                     if (miner.random.nextFloat() < 0.1F) {
                         val damage = world.random.randomInt(configuration.miningDamage)
@@ -200,6 +205,9 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
+}
+
+fun <I> I.onBreakBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
     configuration.obtainFairy?.let { obtainFairy ->
         if (miner !is ServerPlayerEntity) return@let // 使用者がプレイヤーでない
 
