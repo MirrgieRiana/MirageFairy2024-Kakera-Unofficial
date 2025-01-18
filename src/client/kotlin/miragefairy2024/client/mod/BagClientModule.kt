@@ -9,7 +9,6 @@ import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
-import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.inventoryNameLabel
 import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.verticalSpace
@@ -47,6 +46,7 @@ class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerIn
                     // カバンインベントリ
                     repeat(card.inventoryHeight) { r ->
                         child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
+                            alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER)
                             repeat(card.inventoryWidth) { c ->
                                 child(slotContainer(slotAsComponent(9 * 4 + card.inventoryWidth * r + c)))
                             }
@@ -62,7 +62,7 @@ class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerIn
                     // プレイヤーインベントリ
                     repeat(3) { r ->
                         child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                            child(horizontalSpace(18 * 4))
+                            alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER)
                             repeat(9) { c ->
                                 child(slotContainer(slotAsComponent(9 * r + c)))
                             }
@@ -70,7 +70,7 @@ class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerIn
                     }
                     child(verticalSpace(4))
                     child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
-                        child(horizontalSpace(18 * 4))
+                        alignment(HorizontalAlignment.CENTER, VerticalAlignment.CENTER)
                         repeat(9) { c ->
                             child(slotContainer(slotAsComponent(9 * 3 + c)))
                         }
