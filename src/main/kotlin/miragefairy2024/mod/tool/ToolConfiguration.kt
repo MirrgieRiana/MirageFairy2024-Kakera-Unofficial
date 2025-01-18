@@ -11,7 +11,10 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
+import miragefairy2024.util.translate
+import mirrg.kotlin.hydrogen.max
 import net.minecraft.block.Block
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
@@ -22,8 +25,6 @@ abstract class ToolConfiguration {
         val AREA_MINING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.area_mining" }, "Area mining", "範囲採掘")
         val MINE_ALL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
         val CUT_ALL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
-        val SILK_TOUCH_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.silk_touch" }, "Silk Touch", "シルクタッチ")
-        val FORTUNE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.fortune" }, "Fortune", "幸運")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
         val OBTAIN_FAIRY = Translation({ "item.${identifier.toTranslationKey()}.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
     }
@@ -38,8 +39,7 @@ abstract class ToolConfiguration {
     var areaMining = false
     var mineAll = false
     var cutAll = false
-    var silkTouch = false
-    var fortune: Int? = null
+    val enchantments = mutableMapOf<Enchantment, Int>()
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
@@ -54,7 +54,16 @@ abstract class ToolConfiguration {
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    fun appendPoems(poemList: PoemList) = descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+    fun appendPoems(poemList: PoemList): PoemList {
+        val texts = mutableListOf<Text>()
+
+        texts += descriptions
+        enchantments.forEach { (enchantment, level) ->
+            texts += text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
+        }
+
+        return texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+    }
 
 }
 
@@ -79,15 +88,9 @@ fun ToolConfiguration.cutAll() = this.also {
     it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
-fun ToolConfiguration.silkTouch() = this.also {
-    it.silkTouch = true
-    it.descriptions += text { ToolConfiguration.SILK_TOUCH_TRANSLATION() }
-}
-
-fun ToolConfiguration.fortune(fortune: Int) = this.also {
-    check(fortune >= 1)
-    it.fortune = fortune
-    it.descriptions += text { ToolConfiguration.FORTUNE_TRANSLATION() + if (fortune >= 2) " "() + fortune.toRomanText() else ""() }
+fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
+    check(level >= 1)
+    it.enchantments[enchantment] = (it.enchantments[enchantment] ?: 0) max level
 }
 
 fun ToolConfiguration.selfMending(selfMending: Int) = this.also {

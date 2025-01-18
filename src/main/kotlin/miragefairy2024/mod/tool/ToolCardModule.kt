@@ -26,6 +26,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.data.client.Models
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.BlockTags
@@ -36,8 +37,6 @@ fun initToolCardModule() {
     ToolConfiguration.AREA_MINING_TRANSLATION.enJa()
     ToolConfiguration.MINE_ALL_TRANSLATION.enJa()
     ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
-    ToolConfiguration.SILK_TOUCH_TRANSLATION.enJa()
-    ToolConfiguration.FORTUNE_TRANSLATION.enJa()
     ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
     ToolConfiguration.OBTAIN_FAIRY.enJa()
 
@@ -181,7 +180,7 @@ object ToolCards {
     val MIRANAGITE_KNIFE = !ToolCard(
         "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
         PoemList(2).poem(EnJa("Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。")),
-        FairyKnifeConfiguration(ToolMaterialCard.MIRANAGITE).silkTouch(),
+        FairyKnifeConfiguration(ToolMaterialCard.MIRANAGITE).enchantment(Enchantments.SILK_TOUCH),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern("#")
@@ -193,7 +192,7 @@ object ToolCards {
     val MIRANAGITE_PICKAXE = !ToolCard(
         "miranagite_pickaxe", EnJa("Miranagite Pickaxe", "蒼天石のつるはし"),
         PoemList(2).poem(EnJa("Promotes ore recrystallization", "凝集する秩序、蒼穹彩煌が如く。")),
-        FairyPickaxeConfiguration(ToolMaterialCard.MIRANAGITE).silkTouch(),
+        FairyPickaxeConfiguration(ToolMaterialCard.MIRANAGITE).enchantment(Enchantments.SILK_TOUCH),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern("###")
@@ -206,7 +205,7 @@ object ToolCards {
     val MIRANAGITE_SCYTHE = !ToolCard(
         "miranagite_scythe", EnJa("Miranagite Scythe", "蒼天石の大鎌"),
         PoemList(2).poem(EnJa("Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。")),
-        FairyScytheConfiguration(ToolMaterialCard.MIRANAGITE, 3).silkTouch(),
+        FairyScytheConfiguration(ToolMaterialCard.MIRANAGITE, 3).enchantment(Enchantments.SILK_TOUCH),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" ##")
@@ -219,7 +218,7 @@ object ToolCards {
     val MIRANAGI_STAFF_0 = !ToolCard(
         "miranagi_staff_0", EnJa("Miranagite Staff", "蒼天石のスタッフ"),
         PoemList(2).poem(EnJa("Inflating anti-entropy force", "膨張する秩序の力。")),
-        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 5F, 12F).silkTouch(),
+        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 5F, 12F).enchantment(Enchantments.SILK_TOUCH),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")
@@ -233,7 +232,7 @@ object ToolCards {
     val MIRANAGI_STAFF = !ToolCard(
         "miranagi_staff", EnJa("Staff of Miranagi", "みらなぎの杖"),
         PoemList(3).poem(EnJa("Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。")),
-        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 7F, 16F).silkTouch(),
+        FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 7F, 16F).enchantment(Enchantments.SILK_TOUCH),
     ) {
         registerShapedRecipeGeneration(item) {
             pattern(" IG")

@@ -10,7 +10,7 @@ import miragefairy2024.mod.tool.FairyToolItem
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.areaMining
 import miragefairy2024.mod.tool.convertItemStackImpl
-import miragefairy2024.mod.tool.fortune
+import miragefairy2024.mod.tool.enchantment
 import miragefairy2024.mod.tool.getMiningSpeedMultiplierImpl
 import miragefairy2024.mod.tool.inventoryTickImpl
 import miragefairy2024.mod.tool.isSuitableForImpl
@@ -25,6 +25,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
@@ -53,7 +54,7 @@ class FairyScytheConfiguration(
         this.attackSpeed = -3.2F
         this.miningDamage = 0.2
         this.areaMining()
-        this.fortune(fortune)
+        this.enchantment(Enchantments.FORTUNE, fortune)
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
         this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT

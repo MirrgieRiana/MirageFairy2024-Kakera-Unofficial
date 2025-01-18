@@ -13,6 +13,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.repair
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.ceilToInt
+import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.BlockState
@@ -256,21 +257,13 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Sup
 }
 
 fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
-    if (configuration.silkTouch) {
-        if (enchantment == Enchantments.SILK_TOUCH) return oldLevel atLeast 1
-    }
-    run {
-        val fortune = configuration.fortune
-        if (fortune != null) {
-            if (enchantment == Enchantments.FORTUNE) return oldLevel atLeast fortune
-        }
-    }
-    return oldLevel
+    val newLevel = configuration.enchantments[enchantment] ?: return oldLevel
+    return oldLevel max newLevel
 }
 
 fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
     var itemStack2 = itemStack
-    if (configuration.silkTouch) {
+    if ((configuration.enchantments[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
         itemStack2 = itemStack2.copy()
         val enchantments = EnchantmentHelper.get(itemStack2)
         enchantments[Enchantments.SILK_TOUCH] = enchantments.getOrElse(Enchantments.SILK_TOUCH) { 0 } atLeast 1
