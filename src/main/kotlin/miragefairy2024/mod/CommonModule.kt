@@ -6,8 +6,8 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.createItemStack
 
 val mirageFairy2024ItemGroupCard = ItemGroupCard(
-    MirageFairy2024.identifier("miragefairy2024"), "MirageFairy2024", "MirageFairy2024",
-) { MaterialCard.FAIRY_PLASTIC.item.createItemStack() }
+    MirageFairy2024.identifier("miragefairy2024"), "MF24KU", "MF24KU",
+) { MaterialCard.PHANTOM_DROP.item.createItemStack() }
 
 context(ModContext)
 fun initCommonModule() {
