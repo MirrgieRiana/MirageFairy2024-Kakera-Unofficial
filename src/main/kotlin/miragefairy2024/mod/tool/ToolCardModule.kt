@@ -40,7 +40,7 @@ fun initToolCardModule() {
     ToolConfiguration.MINE_ALL_TRANSLATION.enJa()
     ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
     ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
-    ToolConfiguration.OBTAIN_FAIRY.enJa()
+    ToolConfiguration.OBTAIN_FAIRY_TRANSLATION.enJa()
 
     ScytheItem.DESCRIPTION_TRANSLATION.enJa()
     ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
