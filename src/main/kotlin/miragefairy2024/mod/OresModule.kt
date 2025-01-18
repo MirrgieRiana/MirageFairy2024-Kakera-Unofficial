@@ -64,16 +64,6 @@ enum class OreCard(
     val dropItem: Item,
     experience: Pair<Int, Int>,
 ) {
-    MIRANAGITE_ORE(
-        "miranagite_ore", "Miranagite Ore", "蒼天石鉱石",
-        PoemList(1).poem("What lies beyond a Garden of Eden?", "秩序の石は楽園の先に何を見るのか？"),
-        STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
-    ),
-    DEEPSLATE_MIRANAGITE_ORE(
-        "deepslate_miranagite_ore", "Deepslate Miranagite Ore", "深層蒼天石鉱石",
-        PoemList(1).poem("Singularities built by the Creator", "楽園が楽園であるための奇跡。"),
-        DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
-    ),
     FLUORITE_ORE(
         "fluorite_ore", "Fluorite Ore", "蛍石鉱石",
         null,
@@ -83,6 +73,16 @@ enum class OreCard(
         "deepslate_fluorite_ore", "Deepslate Fluorite Ore", "深層蛍石鉱石",
         null,
         DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+    ),
+    MIRANAGITE_ORE(
+        "miranagite_ore", "Miranagite Ore", "蒼天石鉱石",
+        PoemList(1).poem("What lies beyond a Garden of Eden?", "秩序の石は楽園の先に何を見るのか？"),
+        STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
+    ),
+    DEEPSLATE_MIRANAGITE_ORE(
+        "deepslate_miranagite_ore", "Deepslate Miranagite Ore", "深層蒼天石鉱石",
+        PoemList(1).poem("Singularities built by the Creator", "楽園が楽園であるための奇跡。"),
+        DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
     ),
     ;
 
@@ -171,10 +171,10 @@ fun initOresModule() {
         }
 
     }
-    worldGen(OreCard.MIRANAGITE_ORE, 12, 8, -64, 128)
-    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE, 12, 8, -64, 128)
     worldGen(OreCard.FLUORITE_ORE, 8, 4, 0, 32)
     worldGen(OreCard.DEEPSLATE_FLUORITE_ORE, 8, 4, 0, 32)
+    worldGen(OreCard.MIRANAGITE_ORE, 12, 8, -64, 128)
+    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE, 12, 8, -64, 128)
 
 }
 
