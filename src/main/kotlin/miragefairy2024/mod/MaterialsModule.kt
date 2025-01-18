@@ -551,13 +551,13 @@ fun initMaterialsModule() {
     // 磁鉄鉱
     registerSmeltingRecipeGeneration(MaterialCard.MAGNETITE.item, Items.IRON_NUGGET, 0.7) on MaterialCard.MAGNETITE.item modId MirageFairy2024.MOD_ID from MaterialCard.MAGNETITE.item
 
-    // 蛍石→フェアリークエストカードベース
+    // 蛍石→スフィアベース
     registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
-        pattern(" R ")
-        pattern("RFR")
-        pattern(" R ")
+        pattern(" S ")
+        pattern("SFS")
+        pattern(" S ")
         input('F', MaterialCard.FLUORITE.item)
-        input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
+        input('S', MaterialCard.FAIRY_SCALES.item)
     } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
 
     // ミナ両替

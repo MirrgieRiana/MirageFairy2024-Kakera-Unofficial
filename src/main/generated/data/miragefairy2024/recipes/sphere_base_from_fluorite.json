@@ -6,14 +6,14 @@
     "F": {
       "item": "miragefairy2024:fluorite"
     },
-    "R": {
-      "item": "miragefairy2024:haimeviska_rosin"
+    "S": {
+      "item": "miragefairy2024:fairy_scales"
     }
   },
   "pattern": [
-    " R ",
-    "RFR",
-    " R "
+    " S ",
+    "SFS",
+    " S "
   ],
   "result": {
     "item": "miragefairy2024:sphere_base"
