@@ -76,7 +76,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
 }
 
 context(ModContext)
-fun initToolMaterialModule() {
+fun initToolMaterial() {
 
     ToolMaterialCard.entries.forEach { card ->
         card.translation.enJa()

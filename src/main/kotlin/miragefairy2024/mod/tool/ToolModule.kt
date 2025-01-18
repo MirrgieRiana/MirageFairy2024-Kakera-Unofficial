@@ -5,7 +5,7 @@ import miragefairy2024.ModContext
 context(ModContext)
 fun initToolModule() {
     initDamageTypeModule()
-    initToolMaterialModule()
+    initToolMaterial()
     initToolCard()
     initToolConfiguration()
 }
