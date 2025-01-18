@@ -2,6 +2,7 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mixin.api.BlockCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
@@ -28,6 +29,12 @@ fun initToolConfiguration() {
     ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
     ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
     ToolConfiguration.OBTAIN_FAIRY_TRANSLATION.enJa()
+
+    BlockCallback.AFTER_BREAK.register { world, player, pos, state, blockEntity, tool ->
+        val item = tool.item
+        if (item !is FairyToolItem) return@register
+        item.onAfterBreakBlock(world, player, pos, state, blockEntity, tool)
+    }
 
 }
 
