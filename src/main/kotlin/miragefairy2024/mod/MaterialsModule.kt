@@ -90,6 +90,11 @@ enum class MaterialCard(
         PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
         fuelValue = 100,
     ),
+    FAIRY_GLASS_FIBER(
+        "fairy_glass_fiber", "Fairy Glass Fiber", "きらめきの糸",
+        PoemList(1).poem("Fiber-optic nervous system", "意識の一部だったもの。"),
+        soulStreamContainable = true,
+    ),
     FAIRY_CRYSTAL(
         "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
         PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
