@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:emerald_axe",
+  "key": {
+    "#": {
+      "item": "minecraft:emerald"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "##",
+    "#R",
+    " R"
+  ],
+  "result": {
+    "item": "miragefairy2024:emerald_axe"
+  },
+  "show_notification": true
+}

@@ -176,6 +176,71 @@ object ToolCards {
             input('R', Items.STICK)
         } on MaterialCard.FLUORITE.item
     }
+    val EMERALD_PICKAXE = !ToolCard(
+        "emerald_pickaxe", EnJa("Emerald Pickaxe", "エメラルドのつるはし"),
+        PoemList(null),
+        FairyPickaxeConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.FORTUNE, 2),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("###")
+            pattern(" R ")
+            pattern(" R ")
+            input('#', Items.EMERALD)
+            input('R', Items.STICK)
+        } on Items.EMERALD
+    }
+    val EMERALD_AXE = !ToolCard(
+        "emerald_axe", EnJa("Emerald Axe", "エメラルドの斧"),
+        PoemList(null),
+        FairyAxeConfiguration(ToolMaterialCard.EMERALD, 5.5F, -3.0F).enchantment(Enchantments.FORTUNE, 2),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("##")
+            pattern("#R")
+            pattern(" R")
+            input('#', Items.EMERALD)
+            input('R', Items.STICK)
+        } on Items.EMERALD
+    }
+    val EMERALD_SHOVEL = !ToolCard(
+        "emerald_shovel", EnJa("Emerald Shovel", "エメラルドのシャベル"),
+        PoemList(null),
+        FairyShovelConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.FORTUNE, 2),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("#")
+            pattern("R")
+            pattern("R")
+            input('#', Items.EMERALD)
+            input('R', Items.STICK)
+        } on Items.EMERALD
+    }
+    val EMERALD_HOE = !ToolCard(
+        "emerald_hoe", EnJa("Emerald Hoe", "エメラルドのクワ"),
+        PoemList(null),
+        FairyHoeConfiguration(ToolMaterialCard.EMERALD, -3, 0.0F).enchantment(Enchantments.FORTUNE, 2),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("##")
+            pattern(" R")
+            pattern(" R")
+            input('#', Items.EMERALD)
+            input('R', Items.STICK)
+        } on Items.EMERALD
+    }
+    val EMERALD_SWORD = !ToolCard(
+        "emerald_sword", EnJa("Emerald Sword", "エメラルドの剣"),
+        PoemList(null),
+        FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
+    ) {
+        registerShapedRecipeGeneration(item) {
+            pattern("#")
+            pattern("#")
+            pattern("R")
+            input('#', Items.EMERALD)
+            input('R', Items.STICK)
+        } on Items.EMERALD
+    }
     val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
         "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
         PoemList(2).poem(EnJa("A brain frozen in crystal", "闇を打ち砕く、透き通る心。")),
