@@ -496,6 +496,12 @@ fun initMaterialsModule() {
         pattern("###")
         input('#', MaterialCard.MIRAGE_STEM.item)
     } on MaterialCard.MIRAGE_STEM.item
+    registerShapedRecipeGeneration(Items.STRING) {
+        pattern("##")
+        pattern("##")
+        input('#', MaterialCard.FAIRY_GLASS_FIBER.item)
+    } on MaterialCard.FAIRY_GLASS_FIBER.item modId MirageFairy2024.MOD_ID from MaterialCard.FAIRY_GLASS_FIBER.item
+
     // ミラジウム
     registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)

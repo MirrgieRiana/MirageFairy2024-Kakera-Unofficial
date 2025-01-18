@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "minecraft:string",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:fairy_glass_fiber"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "item": "minecraft:string"
+  },
+  "show_notification": true
+}
