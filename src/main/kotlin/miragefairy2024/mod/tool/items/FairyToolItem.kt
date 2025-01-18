@@ -1,4 +1,4 @@
-package miragefairy2024.mod.tool
+package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.fairy.FairyDreamRecipes
 import miragefairy2024.mod.fairy.FairyHistoryContainerExtraPlayerDataCategory
@@ -6,6 +6,7 @@ import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.fairyHistoryContainer
 import miragefairy2024.mod.fairy.getRandomFairy
 import miragefairy2024.mod.sync
+import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic

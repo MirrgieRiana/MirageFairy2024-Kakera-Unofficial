@@ -6,6 +6,8 @@ import miragefairy2024.mixin.api.BlockCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
+import miragefairy2024.mod.tool.items.FairyToolItem
+import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
