@@ -346,7 +346,9 @@ enum class MotifCard(
         "emerald", 6, "Emeraldia", "翠玉精エメラルジャ", 0x9FF9B5, 0x81F99E, 0x17DD62, 0x008A25,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + luck(1.0),
+            + luck(1.0)
+            + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
+            + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R + Blocks.EMERALD_BLOCK + Items.EMERALD + BlockTags.EMERALD_ORES,
     ),
 
