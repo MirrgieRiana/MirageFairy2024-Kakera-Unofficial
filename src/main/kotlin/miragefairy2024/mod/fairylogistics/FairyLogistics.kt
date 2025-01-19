@@ -20,6 +20,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
@@ -30,7 +31,9 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.registry.tag.BlockTags
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.util.StringIdentifiable
@@ -52,7 +55,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create()
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
 
 
     context(ModContext)
@@ -90,6 +93,8 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
         val poemList = PoemList(tier).poem(poem).description(description)
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
+
+        block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
 
     }
 }

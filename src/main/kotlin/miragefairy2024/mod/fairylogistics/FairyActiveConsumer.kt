@@ -7,7 +7,9 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
+import net.minecraft.block.MapColor
 import net.minecraft.item.Items
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
 
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
@@ -16,6 +18,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val name = EnJa("Fairy Active Consumer", "妖精の郵便受け")
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
+    override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyActiveConsumerScreenHandler(this, arguments)

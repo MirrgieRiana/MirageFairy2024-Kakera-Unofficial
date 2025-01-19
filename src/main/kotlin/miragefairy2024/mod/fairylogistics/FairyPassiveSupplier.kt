@@ -5,10 +5,14 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
+import net.minecraft.block.MapColor
 import net.minecraft.item.Items
+import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
 
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
@@ -17,6 +21,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val name = EnJa("Fairy Passive Supplier", "妖精の郵便屋さん")
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
+    override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD)
     override fun createBlock() = FairyPassiveSupplierBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyPassiveSupplierScreenHandler(this, arguments)
@@ -25,6 +30,9 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     context(ModContext)
     override fun init() {
         super.init()
+
+        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+
         registerShapedRecipeGeneration(item) {
             pattern("#A#")
             pattern("DCD")
