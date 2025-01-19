@@ -227,6 +227,7 @@ fun <I> I.onAfterBreakBlock(world: World, player: PlayerEntity, pos: BlockPos, s
 
     }
     if (configuration.collection) run {
+        if (player.world != world) return@run
         world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
             it.teleport(player.x, player.y, player.z)
             it.resetPickupDelay()
@@ -261,6 +262,7 @@ fun <I> I.onKilled(entity: LivingEntity, attacker: LivingEntity, damageSource: D
 
     }
     if (configuration.collection) run {
+        if (attacker.world != entity.world) return@run
         entity.world.getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
             it.teleport(attacker.x, attacker.y, attacker.z)
             it.resetPickupDelay()
