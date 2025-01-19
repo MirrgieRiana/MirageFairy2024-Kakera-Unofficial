@@ -17,6 +17,7 @@ import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
