@@ -21,12 +21,17 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val name = EnJa("Fairy Active Consumer", "妖精の郵便受け")
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
+
     override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
+
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)
+
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyActiveConsumerScreenHandler(this, arguments)
+
     override val guiWidth = 176
     override val guiHeight = 168
+
     context(ModContext)
     override fun init() {
         super.init()

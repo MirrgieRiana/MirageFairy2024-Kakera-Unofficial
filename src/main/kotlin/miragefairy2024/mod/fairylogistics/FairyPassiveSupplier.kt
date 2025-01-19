@@ -24,12 +24,17 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val name = EnJa("Fairy Passive Supplier", "妖精の郵便屋さん")
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
+
     override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD)
     override fun createBlock() = FairyPassiveSupplierBlock(this)
+
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)
+
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyPassiveSupplierScreenHandler(this, arguments)
+
     override val guiWidth = 176
     override val guiHeight = 132
+
     context(ModContext)
     override fun init() {
         super.init()
