@@ -7,6 +7,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
@@ -25,7 +26,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
 
-    override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)

@@ -9,6 +9,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
@@ -29,7 +30,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
 
-    override fun createBlockSettings() = super.createBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD)
     override fun createBlock() = FairyPassiveSupplierBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)
