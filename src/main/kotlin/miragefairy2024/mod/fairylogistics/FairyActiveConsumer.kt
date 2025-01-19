@@ -9,7 +9,6 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
     override fun getPath() = "fairy_active_consumer"
@@ -41,7 +40,6 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
 
 class FairyActiveConsumerBlockEntity(card: FairyActiveConsumerCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyActiveConsumerBlockEntity>(card, pos, state) {
     override fun getThis() = this
-    override fun getActualSide(side: Direction) = TODO()
 }
 
 class FairyActiveConsumerScreenHandler(card: FairyActiveConsumerCard, arguements: Arguments) : FairyLogisticsScreenHandler(card, arguements)

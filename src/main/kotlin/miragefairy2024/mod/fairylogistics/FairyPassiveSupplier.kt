@@ -10,7 +10,6 @@ import net.minecraft.block.BlockState
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
     override fun getPath() = "fairy_passive_supplier"
@@ -42,7 +41,6 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
 
 class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
     override fun getThis() = this
-    override fun getActualSide(side: Direction) = TODO()
 }
 
 class FairyPassiveSupplierScreenHandler(card: FairyPassiveSupplierCard, arguements: Arguments) : FairyLogisticsScreenHandler(card, arguements)
