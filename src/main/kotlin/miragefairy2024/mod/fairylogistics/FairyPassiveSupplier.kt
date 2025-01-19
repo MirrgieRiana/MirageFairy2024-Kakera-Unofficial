@@ -1,8 +1,10 @@
 package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
+import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
@@ -10,11 +12,13 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
@@ -35,11 +39,30 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val guiWidth = 176
     override val guiHeight = 132
 
+    class Slot(
+        override val x: Int,
+        override val y: Int,
+    ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
+        override fun isValid(itemStack: ItemStack) = itemStack.isOf(FairyCard.item)
+        override fun canInsert(direction: Direction) = true
+        override fun canExtract(direction: Direction) = true
+        override val isObservable = false
+        override val dropItem = true
+        override fun getTooltip() = null
+    }
+
+    val FAIRY_SLOT = Slot(80, 19)
+
     context(ModContext)
     override fun init() {
         super.init()
 
         block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+
+
+        inventorySlotConfigurations += FAIRY_SLOT
+        guiSlotConfigurations += FAIRY_SLOT
+
 
         registerShapedRecipeGeneration(item) {
             pattern("#A#")
