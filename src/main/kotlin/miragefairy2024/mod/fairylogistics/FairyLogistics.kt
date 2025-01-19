@@ -22,6 +22,7 @@ import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
+import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -95,6 +96,8 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
         item.registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+
+        block.registerDefaultLootTableGeneration()
 
     }
 }
