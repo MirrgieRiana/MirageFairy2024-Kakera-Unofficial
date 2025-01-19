@@ -1,6 +1,7 @@
 package miragefairy2024.mod.fairylogistics
 
 import miragefairy2024.ModContext
+import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
@@ -9,9 +10,11 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
 import net.minecraft.block.ShapeContext
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 
@@ -32,9 +35,33 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val guiWidth = 176
     override val guiHeight = 168
 
+    class Slot(
+        override val x: Int,
+        override val y: Int,
+    ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
+        override fun isValid(itemStack: ItemStack) = true
+        override fun canInsert(direction: Direction) = true
+        override fun canExtract(direction: Direction) = true
+        override val isObservable = false
+        override val dropItem = true
+        override fun getTooltip() = null
+    }
+
+    val SLOTS = (0 until 3).flatMap { c ->
+        (0 until 9).map { r ->
+            Slot(8 + 18 * r, 19 + 18 * c)
+        }
+    }
+    val FILTER_SLOT = SLOTS.last()
+
     context(ModContext)
     override fun init() {
         super.init()
+
+        inventorySlotConfigurations += SLOTS
+        guiSlotConfigurations += SLOTS
+
+
         registerShapedRecipeGeneration(item) {
             pattern("#A#")
             pattern("DCD")
