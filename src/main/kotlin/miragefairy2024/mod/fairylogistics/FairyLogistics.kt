@@ -11,13 +11,21 @@ import miragefairy2024.mod.description
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.BlockStateVariant
+import miragefairy2024.util.BlockStateVariantEntry
+import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
+import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
-import miragefairy2024.util.registerSingletonBlockStateGeneration
+import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.times
+import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
@@ -47,7 +55,28 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     override fun init() {
         super.init()
 
-        block.registerSingletonBlockStateGeneration()
+        block.registerVariantsBlockStateGeneration {
+            fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
+                return propertiesOf(
+                    FairyLogisticsBlock.VERTICAL_FACING with verticalFacing,
+                    HorizontalFacingBlock.FACING with direction,
+                ) with BlockStateVariant(model = "block/" * block.getIdentifier() * suffix).with(y = y)
+            }
+            listOf(
+                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.NORTH, "_up", BlockStateVariantRotation.R180),
+                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.EAST, "_up", BlockStateVariantRotation.R270),
+                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.SOUTH, "_up", BlockStateVariantRotation.R0),
+                f(FairyLogisticsBlock.VerticalFacing.UP, Direction.WEST, "_up", BlockStateVariantRotation.R90),
+                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.NORTH, "", BlockStateVariantRotation.R180),
+                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.EAST, "", BlockStateVariantRotation.R270),
+                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.SOUTH, "", BlockStateVariantRotation.R0),
+                f(FairyLogisticsBlock.VerticalFacing.SIDE, Direction.WEST, "", BlockStateVariantRotation.R90),
+                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.NORTH, "_down", BlockStateVariantRotation.R180),
+                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.EAST, "_down", BlockStateVariantRotation.R270),
+                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.SOUTH, "_down", BlockStateVariantRotation.R0),
+                f(FairyLogisticsBlock.VerticalFacing.DOWN, Direction.WEST, "_down", BlockStateVariantRotation.R90),
+            )
+        }
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
         block.enJa(name)
