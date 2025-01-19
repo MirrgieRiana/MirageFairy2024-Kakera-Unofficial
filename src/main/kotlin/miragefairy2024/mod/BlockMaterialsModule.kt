@@ -64,6 +64,12 @@ enum class BlockMaterialCard(
     val texturedModelFactory: TexturedModel.Factory? = null,
     val isCutoutRenderLayer: Boolean = false,
 ) {
+    NEPHRITE_BLOCK(
+        "nephrite_block", "Nephrite Block", "ネフライトブロック",
+        PoemList(null),
+        MapColor.BRIGHT_TEAL, 5.0F, 5.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+    ),
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
