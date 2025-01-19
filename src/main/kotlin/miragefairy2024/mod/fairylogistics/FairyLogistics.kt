@@ -6,6 +6,13 @@ import miragefairy2024.lib.HorizontalFacingMachineBlock
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
+import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.description
+import miragefairy2024.mod.poem
+import miragefairy2024.mod.registerPoem
+import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.EnJa
+import miragefairy2024.util.enJa
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -19,6 +26,11 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     abstract fun getPath(): String
     override fun createIdentifier() = MirageFairy2024.identifier(getPath())
 
+    abstract val tier: Int
+    abstract val name: EnJa
+    abstract val poem: EnJa
+    abstract val description: EnJa
+
 
     // Block
 
@@ -31,6 +43,11 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
         block.registerSingletonBlockStateGeneration()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
+
+        block.enJa(name)
+        val poemList = PoemList(tier).poem(poem).description(description)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
     }
 }
