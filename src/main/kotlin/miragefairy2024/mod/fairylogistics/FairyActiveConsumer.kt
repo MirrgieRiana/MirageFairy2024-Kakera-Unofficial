@@ -42,4 +42,4 @@ class FairyActiveConsumerBlockEntity(card: FairyActiveConsumerCard, pos: BlockPo
     override fun getThis() = this
 }
 
-class FairyActiveConsumerScreenHandler(card: FairyActiveConsumerCard, arguements: Arguments) : FairyLogisticsScreenHandler(card, arguements)
+class FairyActiveConsumerScreenHandler(card: FairyActiveConsumerCard, arguments: Arguments) : FairyLogisticsScreenHandler(card, arguments)

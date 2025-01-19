@@ -43,4 +43,4 @@ class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: Block
     override fun getThis() = this
 }
 
-class FairyPassiveSupplierScreenHandler(card: FairyPassiveSupplierCard, arguements: Arguments) : FairyLogisticsScreenHandler(card, arguements)
+class FairyPassiveSupplierScreenHandler(card: FairyPassiveSupplierCard, arguments: Arguments) : FairyLogisticsScreenHandler(card, arguments)

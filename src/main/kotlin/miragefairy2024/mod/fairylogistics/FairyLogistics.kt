@@ -142,4 +142,4 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
 
 }
 
-open class FairyLogisticsScreenHandler(card: FairyLogisticsCard<*, *, *>, arguements: Arguments) : MachineScreenHandler(card, arguements)
+open class FairyLogisticsScreenHandler(card: FairyLogisticsCard<*, *, *>, arguments: Arguments) : MachineScreenHandler(card, arguments)
