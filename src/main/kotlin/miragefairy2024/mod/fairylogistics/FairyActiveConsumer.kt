@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import net.minecraft.world.World
 
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
     override fun getPath() = "fairy_active_consumer"
@@ -104,6 +105,28 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
 
 class FairyActiveConsumerBlockEntity(card: FairyActiveConsumerCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyActiveConsumerBlockEntity>(card, pos, state) {
     override fun getThis() = this
+
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
+
+        // 1分に1回発動する
+
+        // 対象範囲のBlockEntityを列挙する
+
+        // 視線判定
+
+        // すべてのBlockEntityに対して、フィルタにマッチするアイテムを片っ端から輸送させる
+        // ただし残りの輸送速度を超えない
+
+        // 配送所の輸送済みカウントを増やす
+        // 配送所の輸送済みカウントは配送所側が毎分初期化する
+
+        // 取れるだけ空きスロットに詰めていく
+        // 空きスロットが無ければ終了
+
+        // 最初と最後に接続先ブロックへの輸送を試みる
+
+    }
 }
 
 class FairyActiveConsumerScreenHandler(card: FairyActiveConsumerCard, arguments: Arguments) : FairyLogisticsScreenHandler(card, arguments)
