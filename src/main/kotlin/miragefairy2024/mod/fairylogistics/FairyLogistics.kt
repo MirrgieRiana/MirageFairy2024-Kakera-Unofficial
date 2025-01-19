@@ -8,6 +8,7 @@ import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
@@ -20,6 +21,7 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.registerCutoutRenderLayer
+import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
@@ -56,6 +58,8 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     context(ModContext)
     override fun init() {
         super.init()
+
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         block.registerVariantsBlockStateGeneration {
             fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
