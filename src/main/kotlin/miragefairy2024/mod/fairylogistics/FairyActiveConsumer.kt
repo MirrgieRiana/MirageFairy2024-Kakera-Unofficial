@@ -1,8 +1,13 @@
 package miragefairy2024.mod.fairylogistics
 
+import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
+import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.on
+import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.block.BlockState
+import net.minecraft.item.Items
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 
@@ -17,6 +22,19 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyActiveConsumerScreenHandler(this, arguments)
     override val guiWidth = 176
     override val guiHeight = 178
+    context(ModContext)
+    override fun init() {
+        super.init()
+        registerShapedRecipeGeneration(item) {
+            pattern("#A#")
+            pattern("DCD")
+            pattern("###")
+            input('A', BlockMaterialCard.AURA_STONE.item)
+            input('#', Items.IRON_INGOT)
+            input('C', Items.ITEM_FRAME)
+            input('D', Items.LIGHT_BLUE_DYE)
+        } on BlockMaterialCard.AURA_STONE.item
+    }
 }
 
 class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBlock(card)
