@@ -102,6 +102,11 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     val backgroundTexture = "textures/gui/container/" * identifier * ".png"
 
     val guiSlotConfigurations = mutableListOf<MachineScreenHandler.GuiSlotConfiguration>()
+
+    val guiSlotIndexTable by lazy {
+        inventorySlotConfigurations.withIndex().associate { (index, it) -> it to 9 * 4 + index } // TODO プレイヤーインベントリの扱い
+    }
+
     val propertyConfigurations = mutableListOf<MachineScreenHandler.PropertyConfiguration<E>>()
 
     val propertyIndexTable by lazy {
