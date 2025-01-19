@@ -25,7 +25,7 @@ import net.minecraft.world.BlockView
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
     override fun getPath() = "fairy_passive_supplier"
     override val tier = 3
-    override val name = EnJa("Fairy Passive Supplier", "妖精の郵便屋さん")
+    override val name = EnJa("Fairy Passive Supplier(WIP)", "妖精の郵便屋さん(WIP)") // TODO rename
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
 

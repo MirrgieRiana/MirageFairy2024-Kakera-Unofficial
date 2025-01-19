@@ -21,7 +21,7 @@ import net.minecraft.world.BlockView
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
     override fun getPath() = "fairy_active_consumer"
     override val tier = 3
-    override val name = EnJa("Fairy Active Consumer", "妖精の郵便受け")
+    override val name = EnJa("Fairy Active Consumer(WIP)", "妖精の郵便受け(WIP)") // TODO rename
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
 
