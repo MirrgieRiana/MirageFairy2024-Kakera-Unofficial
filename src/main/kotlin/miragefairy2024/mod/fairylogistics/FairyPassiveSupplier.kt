@@ -29,7 +29,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyPassiveSupplierScreenHandler(this, arguments)
     override val guiWidth = 176
-    override val guiHeight = 178
+    override val guiHeight = 132
     context(ModContext)
     override fun init() {
         super.init()

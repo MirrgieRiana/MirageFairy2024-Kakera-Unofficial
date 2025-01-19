@@ -26,7 +26,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FairyActiveConsumerScreenHandler(this, arguments)
     override val guiWidth = 176
-    override val guiHeight = 178
+    override val guiHeight = 168
     context(ModContext)
     override fun init() {
         super.init()
