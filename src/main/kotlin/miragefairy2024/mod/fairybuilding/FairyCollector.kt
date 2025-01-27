@@ -5,6 +5,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.SimpleInventoryDelegate
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -137,6 +138,8 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
             return
         }
 
+        markDirty()
+
         folia -= 10
 
         collectionProgress += collectionSpeed
@@ -170,7 +173,12 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
 
             folia -= 200
 
-            val result = mergeInventory(this, FairyCollectorCard.TABLE_SLOT_INDICES, this, FairyCollectorCard.CHEST_SLOT_INDICES)
+            val result = mergeInventory(
+                SimpleInventoryDelegate(this),
+                SimpleInventoryDelegate(this),
+                srcIndices = FairyCollectorCard.TABLE_SLOT_INDICES,
+                destIndices = FairyCollectorCard.CHEST_SLOT_INDICES
+            )
             folia -= 20 * result.movedItemCount
 
         }

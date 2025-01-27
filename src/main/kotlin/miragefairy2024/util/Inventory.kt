@@ -4,10 +4,12 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
 import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
+import net.minecraft.util.math.Direction
 import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
@@ -43,14 +45,14 @@ class MergeResult(val completed: Boolean, val movementTimes: Int, val movedItemC
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: Inventory, destSlotIndex: Int): MergeResult {
+fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcSlotIndex: Int, destSlotIndex: Int): MergeResult {
 
-    val srcItemStack = srcInventory[srcSlotIndex]
+    val srcItemStack = src.getItemStack(srcSlotIndex)
     if (srcItemStack.isEmpty) return MergeResult.UP_TO_DATE // 元から空なので何もする必要はない
 
-    if (!destInventory.isValid(destSlotIndex, srcItemStack)) return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
+    if (!dest.canInsert(destSlotIndex, srcItemStack)) return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
 
-    val destItemStack = destInventory[destSlotIndex]
+    val destItemStack = dest.getItemStack(destSlotIndex)
     if (destItemStack.isNotEmpty && !(srcItemStack hasSameItemAndNbt destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
 
     // 先が空もしくは元と同じ種類のアイテムが入っているのでマージ
@@ -59,20 +61,20 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
     val srcCount = srcItemStack.count
     val oldDestCount = destItemStack.count
     val allCount = srcCount + oldDestCount
-    val newDestCount = allCount atMost destInventory.maxCountPerStack atMost srcItemStack.maxCount atLeast oldDestCount
+    val newDestCount = allCount atMost dest.getMaxCountPerStack(destSlotIndex) atMost srcItemStack.maxCount atLeast oldDestCount
     val moveCount = newDestCount - oldDestCount
 
     if (moveCount == 0) return MergeResult.FAILED // 宛先にこれ以上入らない
 
     // 移動処理
     if (destItemStack.isEmpty) {
-        destInventory[destSlotIndex] = srcItemStack.copyWithCount(newDestCount)
+        dest.setItemStack(destSlotIndex, srcItemStack.copyWithCount(newDestCount))
     } else {
         destItemStack.count = newDestCount
     }
     val newSrcCount = allCount - newDestCount
     srcItemStack.count = newSrcCount
-    if (newSrcCount == 0) srcInventory[srcSlotIndex] = EMPTY_ITEM_STACK
+    if (newSrcCount == 0) src.setItemStack(srcSlotIndex, EMPTY_ITEM_STACK)
 
     return MergeResult(newSrcCount == 0, 1, moveCount)
 }
@@ -81,11 +83,12 @@ fun mergeInventory(srcInventory: Inventory, srcSlotIndex: Int, destInventory: In
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
+fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcIndex: Int, destIndices: Iterable<Int>): MergeResult {
+    if (!src.canExtract(srcIndex, src.getItemStack(srcIndex))) return MergeResult.FAILED // 移動元がこのアイテムを出せない
     var movementTimes = 0
     var movedItemCount = 0
     destIndices.forEach { destIndex ->
-        val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndex)
+        val result = mergeInventory(src, dest, srcIndex, destIndex)
         movementTimes += result.movementTimes
         movedItemCount += result.movedItemCount
         if (result.completed) return MergeResult(true, movementTimes, movedItemCount) // すべてマージされたのでこれ以降の判定は不要
@@ -97,12 +100,12 @@ fun mergeInventory(srcInventory: Inventory, srcIndex: Int, destInventory: Invent
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInventory: Inventory, destIndices: Iterable<Int>): MergeResult {
+fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcIndices: Iterable<Int>? = null, destIndices: Iterable<Int>? = null): MergeResult {
     var completed = true
     var movementTimes = 0
     var movedItemCount = 0
-    srcIndices.forEach { srcIndex ->
-        val result = mergeInventory(srcInventory, srcIndex, destInventory, destIndices)
+    (srcIndices ?: src.getIndices()).forEach { srcIndex ->
+        val result = mergeInventory(src, dest, srcIndex, destIndices ?: dest.getIndices())
         if (!result.completed) completed = false
         movementTimes += result.movementTimes
         movedItemCount += result.movedItemCount
@@ -110,11 +113,41 @@ fun mergeInventory(srcInventory: Inventory, srcIndices: Iterable<Int>, destInven
     return MergeResult(completed, movementTimes, movedItemCount)
 }
 
+interface InventoryDelegate {
+    fun getIndices(): Iterable<Int>
+    fun getItemStack(index: Int): ItemStack
+    fun setItemStack(index: Int, itemStack: ItemStack)
+    fun canInsert(index: Int, itemStack: ItemStack): Boolean
+    fun canExtract(index: Int, itemStack: ItemStack): Boolean
+    fun getMaxCountPerStack(index: Int): Int
+    fun markDirty()
+}
+
+class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDelegate {
+    override fun getIndices() = inventory.indices
+    override fun getItemStack(index: Int) = inventory[index]
+    override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
+    override fun canExtract(index: Int, itemStack: ItemStack) = true
+    override fun canInsert(index: Int, itemStack: ItemStack) = inventory.isValid(index, itemStack)
+    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
+    override fun markDirty() = inventory.markDirty()
+}
+
+class SidedInventoryDelegate(private val inventory: Inventory, private val side: Direction) : InventoryDelegate {
+    override fun getIndices() = if (inventory is SidedInventory) inventory.getAvailableSlots(side).asIterable() else inventory.indices
+    override fun getItemStack(index: Int) = inventory[index]
+    override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
+    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canExtract(index, itemStack, side) else true
+    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canInsert(index, itemStack, side) else true) && inventory.isValid(index, itemStack)
+    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
+    override fun markDirty() = inventory.markDirty()
+}
+
 /**
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun Inventory.mergeTo(other: Inventory) = mergeInventory(this, this.indices, other, other.indices)
+fun Inventory.mergeTo(other: Inventory) = mergeInventory(SimpleInventoryDelegate(this), SimpleInventoryDelegate(other))
 
 
 // Insert

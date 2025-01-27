@@ -5,10 +5,12 @@ import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.fairy.FairyCard
+import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
+import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
@@ -22,6 +24,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import net.minecraft.world.World
 
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
     override fun getPath() = "fairy_passive_supplier"
@@ -104,8 +107,38 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].horizontal]
 }
 
-class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
+class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
+    companion object {
+        fun getLogisticsPower(itemStack: ItemStack): Int {
+            if (!itemStack.isOf(FairyCard.item)) return 0
+            return (FairyFactoryBlockEntity.getFairyLevel(itemStack) * 10.0).floorToInt()
+        }
+    }
+
     override fun getThis() = this
+
+    var t = -1
+    var logisticsEnergy = 0
+
+    private fun getLogisticsPower(): Int {
+        val inventorySlotIndex = card.inventorySlotIndexTable[FairyPassiveSupplierCard.FAIRY_SLOT] ?: return 0
+        val fairyItemStack = getStack(inventorySlotIndex)
+        return getLogisticsPower(fairyItemStack)
+    }
+
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
+
+        // 1分に1回発動する
+        if (t == -1) t = world.random.nextInt(20 * 60)
+        t--
+        if (t > 0) return
+        t = 20 * 60
+
+        logisticsEnergy = getLogisticsPower()
+
+    }
+
 }
 
 class FairyPassiveSupplierScreenHandler(card: FairyPassiveSupplierCard, arguments: Arguments) : FairyLogisticsScreenHandler(card, arguments)
