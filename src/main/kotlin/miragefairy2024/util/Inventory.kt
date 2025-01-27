@@ -247,3 +247,5 @@ fun List<ItemStack>.writeToNbt(nbt: NbtCompound) {
     }
     nbt.put("Items", nbtList)
 }
+
+fun List<ItemStack>.writeToNbt() = NbtCompound().also { this.writeToNbt(it) }

@@ -1,6 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.util.checkType
+import miragefairy2024.util.getOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
@@ -19,9 +20,22 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
 open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
+    companion object {
+        fun getActualSide(blockState: BlockState, side: Direction): Direction {
+            return when (side) {
+                Direction.UP, Direction.DOWN -> side
+
+                else -> {
+                    val direction = blockState.getOrNull(FACING) ?: Direction.NORTH
+                    Direction.fromHorizontal((direction.horizontal + side.horizontal) % 4)
+                }
+            }
+        }
+    }
 
     // Block Entity
 

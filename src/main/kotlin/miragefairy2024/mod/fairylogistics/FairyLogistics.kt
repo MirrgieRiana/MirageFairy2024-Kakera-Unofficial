@@ -18,7 +18,6 @@ import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
-import miragefairy2024.util.getOrNull
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -145,16 +144,7 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
 
     // Inventory
 
-    override fun getActualSide(side: Direction): Direction {
-        return when (side) {
-            Direction.UP, Direction.DOWN -> side
-
-            else -> {
-                val direction = cachedState.getOrNull(HorizontalFacingBlock.FACING) ?: Direction.NORTH
-                Direction.fromHorizontal((direction.horizontal + side.horizontal) % 4)
-            }
-        }
-    }
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
 
     fun getTarget(): Pair<Inventory, Direction>? {
         fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
