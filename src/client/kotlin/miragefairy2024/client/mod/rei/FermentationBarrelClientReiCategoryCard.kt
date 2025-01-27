@@ -1,0 +1,3 @@
+package miragefairy2024.client.mod.rei
+
+class FermentationBarrelClientReiCategoryCard
