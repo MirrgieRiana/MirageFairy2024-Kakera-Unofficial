@@ -143,6 +143,11 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
         shouldUpdateRecipe = true
     }
 
+    override fun markDirty() {
+        super.markDirty()
+        shouldUpdateRecipe = true
+    }
+
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
 
     private val craftingInventory = mutableListOf<ItemStack>()
