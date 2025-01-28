@@ -2,8 +2,8 @@ package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.lib.MachineScreen
-import miragefairy2024.mod.FermentationBarrelCard
-import miragefairy2024.mod.FermentationBarrelScreenHandler
+import miragefairy2024.mod.fermentationbarrel.FermentationBarrelCard
+import miragefairy2024.mod.fermentationbarrel.FermentationBarrelScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost

@@ -1,0 +1,15 @@
+{
+  "type": "miragefairy2024:fermentation_barrel",
+  "duration": 200,
+  "group": "minecraft:iron_ingot",
+  "input1": {
+    "item": "miragefairy2024:haimeviska_sap"
+  },
+  "input2": {
+    "item": "minecraft:potion"
+  },
+  "input_count1": 16,
+  "input_count2": 1,
+  "output": "minecraft:iron_ingot",
+  "output_count": 1
+}

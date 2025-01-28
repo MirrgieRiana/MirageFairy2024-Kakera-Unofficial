@@ -1,4 +1,4 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.fermentationbarrel
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -6,8 +6,14 @@ import miragefairy2024.lib.HorizontalFacingMachineBlock
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
+import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard.Companion.PropertyConfiguration
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.mod.poem
+import miragefairy2024.mod.registerPoem
+import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
@@ -43,11 +49,6 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
-
-context(ModContext)
-fun initFermentationBarrelModule() {
-    FermentationBarrelCard.init()
-}
 
 object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler>() {
     override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
