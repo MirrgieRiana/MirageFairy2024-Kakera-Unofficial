@@ -29,6 +29,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
+import miragefairy2024.util.set
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
@@ -38,17 +39,17 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.enums.Instrument
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.potion.PotionUtil
-import net.minecraft.potion.Potions
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
+import kotlin.jvm.optionals.getOrNull
 
 object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler>() {
     override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
@@ -169,25 +170,22 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
-        if (progressMax == 0 && shouldUpdateRecipe) {
+        if (progressMax == 0 && shouldUpdateRecipe) run {
             shouldUpdateRecipe = false
-            val input1 = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT1_SLOT]!!)
-            val input2 = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT2_SLOT]!!)
 
-            if (
-                input1.isOf(MaterialCard.HAIMEVISKA_SAP.item) &&
-                input1.count >= 4 &&
-                input2.isOf(Items.POTION) &&
-                PotionUtil.getPotion(input2) == Potions.WATER &&
-                input2.count >= 1
-            ) {
-                progressMax = 200
-                craftingInventory += input1.split(4)
-                craftingInventory += input2.split(1)
-                waitingInventory += ItemStack(Items.IRON_INGOT, 1)
-                markDirty()
-            }
+            val inventory = SimpleInventory(2)
+            inventory[0] = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT1_SLOT]!!)
+            inventory[1] = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT2_SLOT]!!)
 
+            val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipe.TYPE, inventory, world).getOrNull() ?: return@run
+
+            val remainder = recipe.getRemainder(inventory)
+            craftingInventory += inventory[0].split(recipe.inputCount1)
+            craftingInventory += inventory[1].split(recipe.inputCount2)
+            waitingInventory += recipe.output.copy()
+            waitingInventory += remainder
+            progressMax = recipe.duration
+            markDirty()
         }
 
         if (progressMax > 0) {

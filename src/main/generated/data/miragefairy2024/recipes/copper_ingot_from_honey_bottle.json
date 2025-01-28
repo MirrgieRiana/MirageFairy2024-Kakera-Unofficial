@@ -1,0 +1,15 @@
+{
+  "type": "miragefairy2024:fermentation_barrel",
+  "duration": 10,
+  "group": "minecraft:copper_ingot",
+  "input1": {
+    "item": "minecraft:honey_bottle"
+  },
+  "input2": {
+    "item": "minecraft:potion"
+  },
+  "input_count1": 4,
+  "input_count2": 1,
+  "output": "minecraft:copper_ingot",
+  "output_count": 1
+}
