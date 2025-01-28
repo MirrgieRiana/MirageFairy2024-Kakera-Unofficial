@@ -138,11 +138,6 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
     }
 
-    override fun onStackChange(slot: Int?) {
-        super.onStackChange(slot)
-        shouldUpdateRecipe = true
-    }
-
     override fun markDirty() {
         super.markDirty()
         shouldUpdateRecipe = true
