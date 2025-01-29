@@ -5,7 +5,6 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.SimpleInventoryDelegate
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -15,6 +14,7 @@ import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
+import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
 import net.minecraft.block.BlockState
 import net.minecraft.item.Items
@@ -174,8 +174,8 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
             folia -= 200
 
             val result = mergeInventory(
-                SimpleInventoryDelegate(this),
-                SimpleInventoryDelegate(this),
+                this.toInventoryDelegate(),
+                this.toInventoryDelegate(),
                 srcIndices = FairyCollectorCard.TABLE_SLOT_INDICES,
                 destIndices = FairyCollectorCard.CHEST_SLOT_INDICES
             )

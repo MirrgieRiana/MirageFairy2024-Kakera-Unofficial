@@ -20,6 +20,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
+import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
 import miragefairy2024.util.readFromNbt
@@ -30,7 +31,9 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
 import miragefairy2024.util.set
+import miragefairy2024.util.size
 import miragefairy2024.util.times
+import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
@@ -74,11 +77,16 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
         override val dropItem = true
     }
 
-    val INPUT1_SLOT = SlotConfiguration(48, 17, setOf(Direction.UP), setOf())
-    val INPUT2_SLOT = SlotConfiguration(48, 39, setOf(Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf())
-    val OUTPUT_SLOT = SlotConfiguration(108, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN))
-    val INPUT_SLOTS = listOf(INPUT1_SLOT, INPUT2_SLOT)
-    val SLOTS = listOf(INPUT1_SLOT, INPUT2_SLOT, OUTPUT_SLOT)
+    val INPUT_SLOTS = listOf(
+        SlotConfiguration(48, 17, setOf(Direction.UP), setOf()),
+        SlotConfiguration(48, 39, setOf(Direction.NORTH), setOf()),
+        SlotConfiguration(68, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
+    )
+    val OUTPUT_SLOTS = listOf(
+        SlotConfiguration(108, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+        SlotConfiguration(128, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+    )
+    val SLOTS = INPUT_SLOTS + OUTPUT_SLOTS
 
     val PROGRESS_PROPERTY = PropertyConfiguration<FermentationBarrelBlockEntity>({ progress }, { progress = it })
     val PROGRESS_MAX_PROPERTY = PropertyConfiguration<FermentationBarrelBlockEntity>({ progressMax }, { progressMax = it })
@@ -143,6 +151,7 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
     override fun markDirty() {
         super.markDirty()
         shouldUpdateRecipe = true
+        shouldUpdateWaiting = true
     }
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
@@ -164,6 +173,7 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
     }
 
     private var shouldUpdateRecipe = true
+    private var shouldUpdateWaiting = true
     var progressMax = 0
     var progress = 0
 
@@ -173,15 +183,17 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
         if (progressMax == 0 && shouldUpdateRecipe) run {
             shouldUpdateRecipe = false
 
-            val inventory = SimpleInventory(2)
-            inventory[0] = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT1_SLOT]!!)
-            inventory[1] = getStack(card.inventorySlotIndexTable[FermentationBarrelCard.INPUT2_SLOT]!!)
+            val inventory = SimpleInventory(FermentationBarrelCard.INPUT_SLOTS.size)
+            FermentationBarrelCard.INPUT_SLOTS.forEachIndexed { index, slot ->
+                inventory[index] = getStack(card.inventorySlotIndexTable[slot]!!)
+            }
 
             val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipe.TYPE, inventory, world).getOrNull() ?: return@run
 
             val remainder = recipe.getRemainder(inventory)
-            craftingInventory += inventory[0].split(recipe.inputCount1)
-            craftingInventory += inventory[1].split(recipe.inputCount2)
+            (0 until inventory.size).forEach { index ->
+                craftingInventory += inventory[index].split(recipe.inputs[index].second)
+            }
             waitingInventory += recipe.output.copy()
             waitingInventory += remainder
             progressMax = recipe.duration
@@ -196,19 +208,23 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
             }
 
             if (progress >= progressMax) {
+                if (shouldUpdateWaiting) {
+                    shouldUpdateWaiting = false
 
-                if (getStack(card.inventorySlotIndexTable[FermentationBarrelCard.OUTPUT_SLOT]!!).isEmpty) {
-                    setStack(card.inventorySlotIndexTable[FermentationBarrelCard.OUTPUT_SLOT]!!, waitingInventory.removeFirst())
-                    markDirty()
+                    val result = mergeInventory(
+                        waitingInventory.toInventoryDelegate(),
+                        this.toInventoryDelegate(),
+                        destIndices = FermentationBarrelCard.OUTPUT_SLOTS.map { card.inventorySlotIndexTable[it]!! },
+                    )
+                    if (result.movementTimes > 0) markDirty()
+                    if (result.completed) {
+                        progress = 0
+                        progressMax = 0
+                        craftingInventory.clear()
+                        markDirty()
+                    }
+
                 }
-
-                if (waitingInventory.isEmpty()) {
-                    progress = 0
-                    progressMax = 0
-                    craftingInventory.clear()
-                    markDirty()
-                }
-
             }
 
         }

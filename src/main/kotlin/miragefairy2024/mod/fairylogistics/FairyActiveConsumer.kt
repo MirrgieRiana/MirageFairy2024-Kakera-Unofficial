@@ -6,12 +6,12 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.SidedInventoryDelegate
-import miragefairy2024.util.SimpleInventoryDelegate
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.toInventoryDelegate
+import miragefairy2024.util.toSidedInventoryDelegate
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
@@ -140,8 +140,8 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         run {
             val (targetInventory, targetSide) = getTarget() ?: return@run
             val result = mergeInventory(
-                SimpleInventoryDelegate(this),
-                SidedInventoryDelegate(targetInventory, targetSide),
+                this.toInventoryDelegate(),
+                targetInventory.toSidedInventoryDelegate(targetSide),
                 srcIndices = FairyActiveConsumerCard.CONTAINER_SLOTS.mapNotNull { card.inventorySlotIndexTable[it] },
             )
             if (result.movedItemCount > 0) markDirty()
@@ -184,7 +184,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
             unblockedSuppliers.forEach { supplier ->
                 if (supplier.logisticsEnergy == 0) return@forEach
                 val (supplierTargetInventory, supplierTargetSide) = supplier.getTarget() ?: return@forEach
-                val src = SidedInventoryDelegate(supplierTargetInventory, supplierTargetSide)
+                val src = supplierTargetInventory.toSidedInventoryDelegate(supplierTargetSide)
 
                 var srcChanged = false
                 run finishSrcIndices@{

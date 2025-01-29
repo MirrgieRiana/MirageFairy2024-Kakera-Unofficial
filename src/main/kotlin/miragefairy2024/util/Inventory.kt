@@ -123,6 +123,18 @@ interface InventoryDelegate {
     fun markDirty()
 }
 
+class MutableListInventoryDelegate(private val inventory: MutableList<ItemStack>) : InventoryDelegate {
+    override fun getIndices() = inventory.indices
+    override fun getItemStack(index: Int) = inventory[index]
+    override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
+    override fun canExtract(index: Int, itemStack: ItemStack) = true
+    override fun canInsert(index: Int, itemStack: ItemStack) = true
+    override fun getMaxCountPerStack(index: Int) = 64
+    override fun markDirty() = Unit
+}
+
+fun MutableList<ItemStack>.toInventoryDelegate() = MutableListInventoryDelegate(this)
+
 class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDelegate {
     override fun getIndices() = inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
@@ -132,6 +144,8 @@ class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDeleg
     override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
     override fun markDirty() = inventory.markDirty()
 }
+
+fun Inventory.toInventoryDelegate() = SimpleInventoryDelegate(this)
 
 class SidedInventoryDelegate(private val inventory: Inventory, private val side: Direction) : InventoryDelegate {
     override fun getIndices() = if (inventory is SidedInventory) inventory.getAvailableSlots(side).asIterable() else inventory.indices
@@ -143,11 +157,15 @@ class SidedInventoryDelegate(private val inventory: Inventory, private val side:
     override fun markDirty() = inventory.markDirty()
 }
 
+fun Inventory.toSidedInventoryDelegate(side: Direction) = SidedInventoryDelegate(this, side)
+
+fun InventoryDelegate.mergeTo(other: InventoryDelegate) = mergeInventory(this, other)
+
 /**
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun Inventory.mergeTo(other: Inventory) = mergeInventory(SimpleInventoryDelegate(this), SimpleInventoryDelegate(other))
+fun Inventory.mergeTo(other: Inventory) = mergeInventory(this.toInventoryDelegate(), other.toInventoryDelegate())
 
 
 // Insert

@@ -4,6 +4,7 @@ import miragefairy2024.mod.fairy.initFairyModule
 import miragefairy2024.mod.fairybuilding.initFairyBuildingModule
 import miragefairy2024.mod.fairylogistics.initFairyLogisticsModule
 import miragefairy2024.mod.fairyquest.initFairyQuestModule
+import miragefairy2024.mod.fermentationbarrel.initFermentationBarrelModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBagModule
 import miragefairy2024.mod.initBiomeModule
@@ -14,7 +15,6 @@ import miragefairy2024.mod.initEnchantmentModule
 import miragefairy2024.mod.initEntityModule
 import miragefairy2024.mod.initExtraPlayerDataModule
 import miragefairy2024.mod.initFairyFountainModule
-import miragefairy2024.mod.fermentationbarrel.initFermentationBarrelModule
 import miragefairy2024.mod.initFoodIngredientsModule
 import miragefairy2024.mod.initLastFoodModule
 import miragefairy2024.mod.initMaterialsModule

@@ -47,6 +47,7 @@ object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<Fermentat
 
                 Widgets.createSlot(p + Point(48, 17) - uv).entries(display.inputEntries[0]).disableBackground().markInput(),
                 Widgets.createSlot(p + Point(48, 39) - uv).entries(display.inputEntries[1]).disableBackground().markInput(),
+                Widgets.createSlot(p + Point(68, 28) - uv).entries(display.inputEntries[2]).disableBackground().markInput(),
 
                 Widgets.createArrow(p + Point(71, 27) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
 

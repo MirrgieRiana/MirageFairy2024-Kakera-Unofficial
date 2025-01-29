@@ -3,6 +3,7 @@ package miragefairy2024.mod.fermentationbarrel
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.WaterBottleIngredient
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.from
 import miragefairy2024.util.modId
@@ -17,20 +18,18 @@ fun initFermentationBarrelModule() {
 
     // TODO
     registerFermentationBarrelRecipeGeneration(
-        input1 = Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item),
-        inputCount1 = 16,
-        input2 = Ingredient.ofItems(Items.POTION), // TODO water only
-        inputCount2 = 1,
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 16),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
         output = Items.IRON_INGOT.createItemStack(),
         duration = 200,
     ) modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_SAP.item on MaterialCard.HAIMEVISKA_SAP.item
 
     // TODO
     registerFermentationBarrelRecipeGeneration(
-        input1 = Ingredient.ofItems(Items.HONEY_BOTTLE),
-        inputCount1 = 4,
-        input2 = Ingredient.ofItems(Items.POTION), // TODO water only
-        inputCount2 = 1,
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.HONEY_BOTTLE), 4),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
         output = Items.COPPER_INGOT.createItemStack(),
         duration = 10,
     ) modId MirageFairy2024.MOD_ID from Items.HONEY_BOTTLE on Items.HONEY_BOTTLE
