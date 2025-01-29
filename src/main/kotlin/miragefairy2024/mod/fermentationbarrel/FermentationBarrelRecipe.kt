@@ -141,7 +141,7 @@ class FermentationBarrelRecipe(
                 inputJson.addProperty("count", input.second)
                 return inputJson
             }
-            json.addProperty("group", recipe.group ?: "")
+            json.addProperty("group", recipe.group)
             json.add("input1", toJsonInput(recipe.input1))
             json.add("input2", toJsonInput(recipe.input2))
             json.add("input3", toJsonInput(recipe.input3))

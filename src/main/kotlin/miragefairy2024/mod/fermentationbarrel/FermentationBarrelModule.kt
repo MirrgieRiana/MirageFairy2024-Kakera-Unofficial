@@ -31,7 +31,7 @@ fun initFermentationBarrelModule() {
         input2 = Pair(Ingredient.ofItems(Items.HONEY_BOTTLE), 4),
         input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
         output = Items.COPPER_INGOT.createItemStack(),
-        duration = 10,
+        duration = 11,
     ) modId MirageFairy2024.MOD_ID from Items.HONEY_BOTTLE on Items.HONEY_BOTTLE
 
 }

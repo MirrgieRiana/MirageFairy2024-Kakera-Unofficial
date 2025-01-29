@@ -19,6 +19,9 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
+import miragefairy2024.util.translate
+import mirrg.kotlin.hydrogen.formatAs
+import mirrg.kotlin.hydrogen.stripTrailingZeros
 
 object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<FermentationBarrelReiCategoryCard.Display>(FermentationBarrelReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -28,9 +31,9 @@ object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<Fermentat
     }
 
     override fun createCategory() = object : DisplayCategory<FermentationBarrelReiCategoryCard.Display> {
-        val imageX = 47 - 8
+        val imageX = 30 - 8
         val imageY = 16 - 4
-        val imageWidth = 82 + 8 * 2
+        val imageWidth = 120 + 8 * 2
         val imageHeight = 40 + 4 * 2
         override fun getCategoryIdentifier() = FermentationBarrelReiCategoryCard.identifier.first
         override fun getTitle() = text { FermentationBarrelReiCategoryCard.translation() }
@@ -45,13 +48,14 @@ object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<Fermentat
 
                 Widgets.createTexturedWidget(MirageFairy2024.identifier("textures/gui/container/fermentation_barrel.png"), Rectangle(bounds.x + 3, bounds.y + 3, bounds.width - 6, bounds.height - 6), uv.x.toFloat(), uv.y.toFloat()),
 
-                Widgets.createSlot(p + Point(48, 17) - uv).entries(display.inputEntries[0]).disableBackground().markInput(),
-                Widgets.createSlot(p + Point(48, 39) - uv).entries(display.inputEntries[1]).disableBackground().markInput(),
-                Widgets.createSlot(p + Point(68, 28) - uv).entries(display.inputEntries[2]).disableBackground().markInput(),
+                Widgets.createSlot(p + Point(42, 17) - uv).entries(display.inputEntries[0]).disableBackground().markInput(),
+                Widgets.createSlot(p + Point(31, 39) - uv).entries(display.inputEntries[1]).disableBackground().markInput(),
+                Widgets.createSlot(p + Point(53, 39) - uv).entries(display.inputEntries[2]).disableBackground().markInput(),
 
-                Widgets.createArrow(p + Point(71, 27) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
+                Widgets.createArrow(p + Point(77 - 1, 27) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
+                Widgets.createLabel(p + Point(77 - 1 + (22 + 2) / 2, 27 - 12) - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
 
-                Widgets.createSlot(p + Point(108, 28) - uv).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).disableBackground().markOutput(),
+                Widgets.createSlot(p + Point(111, 28) - uv).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).disableBackground().markOutput(),
             )
         }
     }

@@ -78,13 +78,13 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
     }
 
     val INPUT_SLOTS = listOf(
-        SlotConfiguration(48, 17, setOf(Direction.UP), setOf()),
-        SlotConfiguration(48, 39, setOf(Direction.NORTH), setOf()),
-        SlotConfiguration(68, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
+        SlotConfiguration(42, 17, setOf(Direction.UP), setOf()),
+        SlotConfiguration(31, 39, setOf(Direction.NORTH), setOf()),
+        SlotConfiguration(53, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
     )
     val OUTPUT_SLOTS = listOf(
-        SlotConfiguration(108, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
-        SlotConfiguration(128, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+        SlotConfiguration(111, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+        SlotConfiguration(129, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
     )
     val SLOTS = INPUT_SLOTS + OUTPUT_SLOTS
 
@@ -185,10 +185,12 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
 
             val inventory = SimpleInventory(FermentationBarrelCard.INPUT_SLOTS.size)
             FermentationBarrelCard.INPUT_SLOTS.forEachIndexed { index, slot ->
-                inventory[index] = getStack(card.inventorySlotIndexTable[slot]!!)
+                inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
             }
-
             val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipe.TYPE, inventory, world).getOrNull() ?: return@run
+            FermentationBarrelCard.INPUT_SLOTS.forEachIndexed { index, slot ->
+                this[card.inventorySlotIndexTable[slot]!!] = inventory[index]
+            }
 
             val remainder = recipe.getRemainder(inventory)
             (0 until inventory.size).forEach { index ->

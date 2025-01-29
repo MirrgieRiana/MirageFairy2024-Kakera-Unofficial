@@ -14,9 +14,9 @@ import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.plus
-import miragefairy2024.util.removeTrailingZeros
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import mirrg.kotlin.hydrogen.stripTrailingZeros
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.item.Item
@@ -91,7 +91,7 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
 
     class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Int)
 
-    private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
+    private fun format(double: Double) = (double formatAs "%.8f").stripTrailingZeros()
     override val text: Text get() = text { term.emoji() + format(threshold / term.unit.toDouble())() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         val value = term.getValue(context, level, mana)
@@ -108,7 +108,7 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
 
     class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Double)
 
-    private fun format(double: Double) = (double formatAs "%.8f").removeTrailingZeros()
+    private fun format(double: Double) = (double formatAs "%.8f").stripTrailingZeros()
     override val text: Text get() = text { term.emoji() + format(threshold / term.unit)() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         val value = term.getValue(context, level, mana)
