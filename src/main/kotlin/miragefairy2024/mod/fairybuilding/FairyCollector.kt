@@ -138,6 +138,8 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
             return
         }
 
+        markDirty()
+
         folia -= 10
 
         collectionProgress += collectionSpeed
