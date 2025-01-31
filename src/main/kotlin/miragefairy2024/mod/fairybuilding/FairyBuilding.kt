@@ -191,16 +191,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Inventory
 
-    override fun getActualSide(side: Direction): Direction {
-        return when (side) {
-            Direction.UP, Direction.DOWN -> side
-
-            else -> {
-                val direction = cachedState.getOrNull(HorizontalFacingBlock.FACING) ?: Direction.NORTH
-                Direction.fromHorizontal((direction.horizontal + side.horizontal) % 4)
-            }
-        }
-    }
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
 
 
     // Move
