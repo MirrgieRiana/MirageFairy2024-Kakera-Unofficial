@@ -32,6 +32,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.state.StateManager
@@ -144,6 +145,28 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
     // Inventory
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+
+    fun getTarget(): Pair<Inventory, Direction>? {
+        fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
+            val world = world ?: return null
+            val blockEntity = world.getBlockEntity(blockPos) ?: return null
+            if (blockEntity !is Inventory) return null
+            return Pair(blockEntity, side)
+        }
+        return when (cachedState[FairyLogisticsBlock.VERTICAL_FACING]) {
+            FairyLogisticsBlock.VerticalFacing.UP -> f(pos.up(), Direction.DOWN)
+            FairyLogisticsBlock.VerticalFacing.SIDE -> when (cachedState[HorizontalFacingBlock.FACING]) {
+                Direction.NORTH -> f(pos.north(), Direction.SOUTH)
+                Direction.SOUTH -> f(pos.south(), Direction.NORTH)
+                Direction.WEST -> f(pos.west(), Direction.EAST)
+                Direction.EAST -> f(pos.east(), Direction.WEST)
+                else -> null
+            }
+
+            FairyLogisticsBlock.VerticalFacing.DOWN -> f(pos.down(), Direction.UP)
+            else -> null
+        }
+    }
 
 }
 

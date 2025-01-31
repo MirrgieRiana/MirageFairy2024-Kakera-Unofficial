@@ -24,7 +24,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
+import net.minecraft.world.World
 
+// TODO WIP
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
     override fun getPath() = "fairy_passive_supplier"
     override val tier = 3
@@ -106,7 +108,7 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].horizontal]
 }
 
-class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
+class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
     companion object {
         fun getLogisticsPower(itemStack: ItemStack): Int {
             if (!itemStack.isOf(FairyCard.item)) return 0
@@ -115,6 +117,29 @@ class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: Block
     }
 
     override fun getThis() = this
+
+    var t = -1
+    var logisticsEnergy = 0
+
+    private fun getLogisticsPower(): Int {
+        val inventorySlotIndex = card.inventorySlotIndexTable[FairyPassiveSupplierCard.FAIRY_SLOT] ?: return 0
+        val fairyItemStack = getStack(inventorySlotIndex)
+        return getLogisticsPower(fairyItemStack)
+    }
+
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
+
+        // 1分に1回発動する
+        if (t == -1) t = world.random.nextInt(20 * 60)
+        t--
+        if (t > 0) return
+        t = 20 * 60
+
+        logisticsEnergy = getLogisticsPower()
+
+    }
+
 }
 
 class FairyPassiveSupplierScreenHandler(card: FairyPassiveSupplierCard, arguments: Arguments) : FairyLogisticsScreenHandler(card, arguments)
