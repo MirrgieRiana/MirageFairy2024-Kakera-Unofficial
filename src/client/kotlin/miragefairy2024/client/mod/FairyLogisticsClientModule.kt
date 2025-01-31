@@ -24,7 +24,7 @@ open class FairyLogisticsScreen<H : FairyLogisticsScreenHandler>(card: FairyLogi
 
 class FairyPassiveSupplierScreen(private val card: FairyPassiveSupplierCard, arguments: Arguments<FairyPassiveSupplierScreenHandler>) : FairyLogisticsScreen<FairyPassiveSupplierScreenHandler>(card, arguments) {
     private fun getLogisticsPower(): Int {
-        val guiSlotIndex = card.guiSlotIndexTable[card.FAIRY_SLOT] ?: return 0
+        val guiSlotIndex = card.guiSlotIndexTable[FairyPassiveSupplierCard.FAIRY_SLOT] ?: return 0
         val fairyItemStack = handler.stacks.getOrNull(guiSlotIndex) ?: return 0
         if (!fairyItemStack.isOf(FairyCard.item)) return 0
         return (FairyFactoryBlockEntity.getFairyLevel(fairyItemStack) * 10.0).floorToInt()
