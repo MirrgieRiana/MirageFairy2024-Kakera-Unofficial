@@ -116,7 +116,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         inventory.replaceAll { EMPTY_ITEM_STACK }
     }
 
-    fun dropItems() {
+    open fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
             if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
         }
