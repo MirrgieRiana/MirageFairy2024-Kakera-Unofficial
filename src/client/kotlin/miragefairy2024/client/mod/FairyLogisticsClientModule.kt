@@ -1,17 +1,15 @@
 package miragefairy2024.client.mod
 
 import miragefairy2024.client.lib.MachineScreen
-import miragefairy2024.mod.fairy.FairyCard
-import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.mod.fairylogistics.FairyActiveConsumerCard
 import miragefairy2024.mod.fairylogistics.FairyActiveConsumerScreenHandler
 import miragefairy2024.mod.fairylogistics.FairyLogisticsCard
 import miragefairy2024.mod.fairylogistics.FairyLogisticsScreenHandler
+import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierBlockEntity
 import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierCard
 import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import mirrg.kotlin.hydrogen.floorToInt
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 
@@ -26,8 +24,7 @@ class FairyPassiveSupplierScreen(private val card: FairyPassiveSupplierCard, arg
     private fun getLogisticsPower(): Int {
         val guiSlotIndex = card.guiSlotIndexTable[FairyPassiveSupplierCard.FAIRY_SLOT] ?: return 0
         val fairyItemStack = handler.stacks.getOrNull(guiSlotIndex) ?: return 0
-        if (!fairyItemStack.isOf(FairyCard.item)) return 0
-        return (FairyFactoryBlockEntity.getFairyLevel(fairyItemStack) * 10.0).floorToInt()
+        return FairyPassiveSupplierBlockEntity.getLogisticsPower(fairyItemStack)
     }
 
     override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) {
