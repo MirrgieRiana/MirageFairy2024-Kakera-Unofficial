@@ -5,10 +5,12 @@ import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.fairy.FairyCard
+import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
+import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
@@ -105,6 +107,13 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
 }
 
 class FairyPassiveSupplierBlockEntity(card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
+    companion object {
+        fun getLogisticsPower(itemStack: ItemStack): Int {
+            if (!itemStack.isOf(FairyCard.item)) return 0
+            return (FairyFactoryBlockEntity.getFairyLevel(itemStack) * 10.0).floorToInt()
+        }
+    }
+
     override fun getThis() = this
 }
 
