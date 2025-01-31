@@ -149,8 +149,8 @@ object FairyQuestCardIngredient : CustomIngredient {
     val ID = MirageFairy2024.identifier("fairy_quest_card")
     val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
         override fun getIdentifier() = ID
-        override fun read(json: JsonObject?) = FairyQuestCardIngredient
-        override fun write(json: JsonObject?, ingredient: FairyQuestCardIngredient?) = Unit
+        override fun read(json: JsonObject) = FairyQuestCardIngredient
+        override fun write(json: JsonObject, ingredient: FairyQuestCardIngredient) = Unit
         override fun read(buf: PacketByteBuf) = FairyQuestCardIngredient
         override fun write(buf: PacketByteBuf, ingredient: FairyQuestCardIngredient) = Unit
     }
