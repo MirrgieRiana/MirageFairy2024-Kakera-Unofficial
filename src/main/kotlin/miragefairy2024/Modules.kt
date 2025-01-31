@@ -4,6 +4,7 @@ import miragefairy2024.mod.fairy.initFairyModule
 import miragefairy2024.mod.fairybuilding.initFairyBuildingModule
 import miragefairy2024.mod.fairylogistics.initFairyLogisticsModule
 import miragefairy2024.mod.fairyquest.initFairyQuestModule
+import miragefairy2024.mod.fermentationbarrel.initFermentationBarrelModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBagModule
 import miragefairy2024.mod.initBiomeModule
@@ -65,4 +66,5 @@ fun initModules() {
     initFairyLogisticsModule()
     initDebrisModule()
     initBagModule()
+    initFermentationBarrelModule()
 }
