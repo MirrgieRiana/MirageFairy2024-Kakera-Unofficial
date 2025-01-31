@@ -7,7 +7,7 @@ import miragefairy2024.util.isServer
 import miragefairy2024.util.ja
 import miragefairy2024.util.register
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.effect.InstantStatusEffect
+import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectCategory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
@@ -23,7 +23,8 @@ fun initStatusEffectModule() {
     ja { experienceStatusEffect.translationKey to "経験値獲得" }
 }
 
-class ExperienceStatusEffect : InstantStatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {
+class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {
+    override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = true
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         super.applyUpdateEffect(entity, amplifier)
         val world = entity.world
