@@ -10,6 +10,7 @@ import miragefairy2024.client.mod.initExtraPlayerDataClientModule
 import miragefairy2024.client.mod.initFairyBuildingClientModule
 import miragefairy2024.client.mod.initFairyLogisticsClientModule
 import miragefairy2024.client.mod.initFairyStatueClientModule
+import miragefairy2024.client.mod.initFermentationBarrelClientModule
 import miragefairy2024.client.mod.initMagicPlantClientModule
 import miragefairy2024.client.mod.initParticleClientModule
 import miragefairy2024.client.mod.initPlacedItemClientModule
@@ -33,5 +34,6 @@ object MirageFairy2024Client : ClientModInitializer {
         initPlacedItemClientModule()
         initFairyLogisticsClientModule()
         initBagClientModule()
+        initFermentationBarrelClientModule()
     }
 }
