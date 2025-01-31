@@ -99,7 +99,7 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
 
         block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
 
-        block.enJa(EnJa("Fermentation Barrel", "発酵樽"))
+        block.enJa(EnJa("Fermentation Barrel", "醸造樽"))
         val poemList = PoemList(2).poem(EnJa("The scent of Haimeviska feel nostalgic", "懐かしき故郷の香り。"))
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
@@ -234,6 +234,7 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
     }
 }
 
+// TODO レシピブック対応
 class FermentationBarrelScreenHandler(card: FermentationBarrelCard, arguments: Arguments) : MachineScreenHandler(card, arguments) {
     var progress by Property(FermentationBarrelCard.PROGRESS_PROPERTY)
     var progressMax by Property(FermentationBarrelCard.PROGRESS_MAX_PROPERTY)

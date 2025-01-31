@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_honey_bottle": {
+    "has_pufferfish": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:honey_bottle"
+              "minecraft:pufferfish"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:copper_ingot_from_honey_bottle"
+        "recipe": "miragefairy2024:poison_from_pufferfish"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_honey_bottle",
+      "has_pufferfish",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:copper_ingot_from_honey_bottle"
+      "miragefairy2024:poison_from_pufferfish"
     ]
   },
   "sends_telemetry_event": false

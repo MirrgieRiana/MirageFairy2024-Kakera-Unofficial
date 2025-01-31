@@ -1,7 +1,7 @@
 {
   "type": "miragefairy2024:fermentation_barrel",
-  "duration": 11,
-  "group": "minecraft:copper_ingot",
+  "duration": 100,
+  "group": "miragefairy2024:poison",
   "input1": {
     "count": 1,
     "ingredient": {
@@ -11,7 +11,7 @@
   "input2": {
     "count": 4,
     "ingredient": {
-      "item": "minecraft:honey_bottle"
+      "item": "minecraft:poisonous_potato"
     }
   },
   "input3": {
@@ -20,6 +20,8 @@
       "fabric:type": "miragefairy2024:water_bottle"
     }
   },
-  "output": "minecraft:copper_ingot",
-  "output_count": 1
+  "output": {
+    "count": 1,
+    "item": "miragefairy2024:poison"
+  }
 }

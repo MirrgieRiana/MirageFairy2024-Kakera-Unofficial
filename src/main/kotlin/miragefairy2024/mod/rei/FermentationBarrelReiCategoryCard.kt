@@ -13,7 +13,7 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.hydrogen.Single
 
-object FermentationBarrelReiCategoryCard : ReiCategoryCard<FermentationBarrelReiCategoryCard.Display>("fermentation_barrel", "Fermentation Barrel", "発酵樽") {
+object FermentationBarrelReiCategoryCard : ReiCategoryCard<FermentationBarrelReiCategoryCard.Display>("fermentation_barrel", "Fermentation Barrel", "醸造樽") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             val id = tag.wrapper["id"].string.get()!!

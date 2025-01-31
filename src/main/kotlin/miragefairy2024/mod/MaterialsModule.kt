@@ -9,18 +9,24 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.mod.fermentationbarrel.registerFermentationBarrelRecipeGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
+import miragefairy2024.util.blue
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.modId
 import miragefairy2024.util.noGroup
+import miragefairy2024.util.obtain
 import miragefairy2024.util.on
+import miragefairy2024.util.plus
 import miragefairy2024.util.pull
+import miragefairy2024.util.red
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
@@ -35,18 +41,36 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
 import miragefairy2024.util.registerSpecialRecipe
+import miragefairy2024.util.text
+import miragefairy2024.util.toRomanText
+import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.advancement.criterion.Criteria
 import net.minecraft.block.Blocks
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.ItemUsage
 import net.minecraft.item.Items
 import net.minecraft.loot.LootTables
+import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.stat.Stats
+import net.minecraft.text.Text
+import net.minecraft.util.Hand
+import net.minecraft.util.StringHelper
+import net.minecraft.util.TypedActionResult
+import net.minecraft.util.UseAction
+import net.minecraft.world.World
+import net.minecraft.world.event.GameEvent
 import kotlin.math.pow
 
 enum class MaterialCard(
@@ -57,13 +81,14 @@ enum class MaterialCard(
     val fuelValue: Int? = null,
     val soulStreamContainable: Boolean = false,
     val foodComponent: FoodComponent? = null,
+    val recipeRemainder: Item? = null,
     val creator: (Item.Settings) -> Item = ::Item,
 ) {
 
     XARPITE(
         "xarpite", "Xarpite", "紅天石",
         PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
-        fuelValue = 3200,
+        fuelValue = 200 * 16,
         // TODO 使えるワード：牢獄
     ),
     MIRANAGITE(
@@ -166,7 +191,7 @@ enum class MaterialCard(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
         PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
-        fuelValue = 1600,
+        fuelValue = 200 * 8,
     ),
     FAIRY_RUBBER(
         // TODO add purpose
@@ -409,11 +434,71 @@ enum class MaterialCard(
         PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
         creator = { ApostleWandItem(it.maxCount(1)) },
     ),
+
+    RUM(
+        "rum", "Rum", "ラム酒",
+        null,
+        fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
+        foodComponent = FoodComponent.Builder()
+            .hunger(6)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 20 * 60, 1), 1.0F)
+            .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 60), 0.1F)
+            .build(),
+        creator = { DrinkItem(it) },
+    ),
+    CIDRE(
+        "cidre", "Cidre", "シードル",
+        null,
+        fuelValue = 200 * 1, recipeRemainder = Items.GLASS_BOTTLE,
+        foodComponent = FoodComponent.Builder()
+            .hunger(6)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60), 1.0F)
+            .build(),
+        creator = { DrinkItem(it) },
+    ),
+    FAIRY_LIQUEUR(
+        "fairy_liqueur", "fairy_liqueur", "妖精のリキュール",
+        PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
+        fuelValue = 200 * 8, recipeRemainder = Items.GLASS_BOTTLE,
+        foodComponent = FoodComponent.Builder()
+            .hunger(6)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
+            .build(),
+        creator = { DrinkItem(it, flaming = 5) },
+    ),
+    VEROPEDELIQUORA(
+        "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
+        PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
+        fuelValue = 200 * 8, recipeRemainder = Items.GLASS_BOTTLE,
+        foodComponent = FoodComponent.Builder()
+            .hunger(6)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+            .statusEffect(StatusEffectInstance(StatusEffects.DARKNESS, 20 * 60), 0.1F)
+            .build(),
+        creator = { DrinkItem(it) },
+    ),
+    POISON(
+        "poison", "Poison", "毒薬",
+        null,
+        recipeRemainder = Items.GLASS_BOTTLE,
+        foodComponent = FoodComponent.Builder()
+            .hunger(1)
+            .saturationModifier(0.1F)
+            .statusEffect(StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 9), 1.0F)
+            .statusEffect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
+            .build(),
+        creator = { DrinkItem(it) },
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
     val item = Item.Settings()
         .let { if (foodComponent != null) it.food(foodComponent) else it }
+        .let { if (recipeRemainder != null) it.recipeRemainder(recipeRemainder) else it }
         .let { creator(it) }
 }
 
@@ -439,6 +524,7 @@ fun initMaterialsModule() {
 
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
     MINA_DESCRIPTION_TRANSLATION.enJa()
+    DrinkItem.FLAMING_TRANSLATION.enJa()
 
     fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
         registerShapedRecipeGeneration(high.item) {
@@ -621,6 +707,71 @@ fun initMaterialsModule() {
         input('G', Items.GOLD_INGOT)
     } on MaterialCard.MIRAGE_STEM.item
 
+    // TODO 蒸留装置
+    // ラム酒
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.RUM.item.createItemStack(),
+        duration = 20 * 60 * 5,
+    ) on Items.SUGAR_CANE
+    FoodIngredientsRegistry.registry[MaterialCard.RUM.item] = FoodIngredients() + Items.SUGAR_CANE
+
+    // シードル
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.APPLE), 4),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.CIDRE.item.createItemStack(),
+        duration = 20 * 60 * 1,
+    ) on Items.APPLE
+    FoodIngredientsRegistry.registry[MaterialCard.CIDRE.item] = FoodIngredients() + Items.APPLE
+
+    // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
+    // 妖精のリキュール
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 16),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.FAIRY_LIQUEUR.item.createItemStack(),
+        duration = 20 * 60 * 5,
+    ) on MaterialCard.HAIMEVISKA_SAP.item
+    FoodIngredientsRegistry.registry[MaterialCard.FAIRY_LIQUEUR.item] = FoodIngredients() + MaterialCard.HAIMEVISKA_SAP.item
+
+    // ヴェロペデリコラ
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 16),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.VEROPEDELIQUORA.item.createItemStack(),
+        duration = 20 * 60 * 5,
+    ) on MaterialCard.VEROPEDA_BERRIES.item
+    FoodIngredientsRegistry.registry[MaterialCard.VEROPEDELIQUORA.item] = FoodIngredients() + MaterialCard.VEROPEDA_BERRIES.item
+
+    // 毒薬
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.POISON.item.createItemStack(),
+        duration = 20 * 5,
+    ) on Items.PUFFERFISH from Items.PUFFERFISH
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.POISON.item.createItemStack(),
+        duration = 20 * 5,
+    ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
+    registerFermentationBarrelRecipeGeneration(
+        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+        input2 = Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
+        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+        output = MaterialCard.POISON.item.createItemStack(),
+        duration = 20 * 5,
+    ) on Items.SPIDER_EYE from Items.SPIDER_EYE
+
 }
 
 context(ModContext)
@@ -640,4 +791,48 @@ class MinaItem(val mina: Int, settings: Settings) : Item(settings)
 class ApostleWandItem(settings: Settings) : Item(settings) {
     override fun hasRecipeRemainder() = true
     override fun getRecipeRemainder(stack: ItemStack) = stack.item.createItemStack()
+}
+
+class DrinkItem(settings: Settings, private val flaming: Int? = null) : Item(settings) {
+    companion object {
+        val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toTranslationKey()}.burning" }, "Flaming", "炎上")
+    }
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+
+        run {
+            val foodComponent = foodComponent ?: return@run
+            foodComponent.statusEffects.forEach { entry ->
+                var text = entry.first.effectType.name
+                if (entry.first.amplifier > 0) text = text { text + " "() + (entry.first.amplifier + 1).toRomanText() }
+                if (!entry.first.effectType.isInstant) text = text { text + " (${StringHelper.formatTicks(entry.first.duration)}"() + ")"() }
+                if (entry.second != 1.0F) text = text { text + " (${entry.second * 100 formatAs "%.0f"}%)"() }
+                text = if (entry.first.effectType.isBeneficial) text.blue else text.red
+                tooltip += text
+            }
+        }
+
+        if (flaming != null) tooltip += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTicks(flaming * 20)}"() + ")"()).red }
+    }
+
+    override fun finishUsing(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
+        super.finishUsing(stack, world, user)
+        if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
+        if (user is PlayerEntity) user.incrementStat(Stats.USED.getOrCreateStat(this))
+        user.emitGameEvent(GameEvent.DRINK)
+        if (!world.isClient) {
+            if (flaming != null) user.setOnFireFor(flaming)
+        }
+        return if (stack.isEmpty) {
+            Items.GLASS_BOTTLE.createItemStack()
+        } else {
+            if (user !is PlayerEntity || !user.abilities.creativeMode) user.obtain(Items.GLASS_BOTTLE.createItemStack())
+            stack
+        }
+    }
+
+    override fun getMaxUseTime(stack: ItemStack) = 32
+    override fun getUseAction(stack: ItemStack) = UseAction.DRINK
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.consumeHeldItem(world, user, hand)
 }

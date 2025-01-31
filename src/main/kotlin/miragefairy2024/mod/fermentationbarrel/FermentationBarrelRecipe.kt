@@ -126,8 +126,8 @@ class FermentationBarrelRecipe(
                 input2 = readInput(root["input2"]),
                 input3 = readInput(root["input3"]),
                 output = run {
-                    val itemId = root["output"].asString()
-                    val count = root["output_count"].asInt()
+                    val itemId = root["output"]["item"].asString()
+                    val count = root["output"]["count"].asInt()
                     ItemStack(Registries.ITEM[Identifier(itemId)], count)
                 },
                 duration = root["duration"].asInt(),
@@ -141,12 +141,18 @@ class FermentationBarrelRecipe(
                 inputJson.addProperty("count", input.second)
                 return inputJson
             }
+
+            fun toJsonOutput(output: ItemStack): JsonObject {
+                val outputJson = JsonObject()
+                outputJson.addProperty("item", output.item.getIdentifier().string)
+                outputJson.addProperty("count", output.count)
+                return outputJson
+            }
             json.addProperty("group", recipe.group)
             json.add("input1", toJsonInput(recipe.input1))
             json.add("input2", toJsonInput(recipe.input2))
             json.add("input3", toJsonInput(recipe.input3))
-            json.addProperty("output", recipe.output.item.getIdentifier().string)
-            json.addProperty("output_count", recipe.output.count)
+            json.add("output", toJsonOutput(recipe.output))
             json.addProperty("duration", recipe.duration)
         }
 

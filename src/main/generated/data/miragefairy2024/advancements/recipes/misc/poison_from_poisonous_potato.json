@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_haimeviska_sap": {
+    "has_poisonous_potato": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:haimeviska_sap"
+              "minecraft:poisonous_potato"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:iron_ingot_from_haimeviska_sap"
+        "recipe": "miragefairy2024:poison_from_poisonous_potato"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_haimeviska_sap",
+      "has_poisonous_potato",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:iron_ingot_from_haimeviska_sap"
+      "miragefairy2024:poison_from_poisonous_potato"
     ]
   },
   "sends_telemetry_event": false
