@@ -57,6 +57,7 @@ enum class DebrisCard(
     val placedFeatureKey = RegistryKeys.PLACED_FEATURE with identifier
 }
 
+// TODO rei
 context(ModContext)
 fun initDebrisModule() {
 

@@ -115,6 +115,7 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
 
 }
 
+// TODO 右クリックで立てたりする
 class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(PlacedItemCard.blockEntityType, pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = Items.BARRIER.createItemStack()
