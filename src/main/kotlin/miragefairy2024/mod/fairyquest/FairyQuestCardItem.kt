@@ -3,7 +3,6 @@ package miragefairy2024.mod.fairyquest
 import com.google.gson.JsonObject
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.util.EnJa
@@ -85,9 +84,7 @@ fun initFairyQuestCardItem() {
         input(FairyQuestCardIngredient.toVanilla())
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
-    ModEvents.onInitialize {
-        CustomIngredientSerializer.register(FairyQuestCardIngredient.SERIALIZER)
-    }
+    FairyQuestCardIngredient.SERIALIZER.register()
 }
 
 class FairyQuestCardItem(settings: Settings) : Item(settings) {
