@@ -1,0 +1,27 @@
+{
+  "type": "miragefairy2024:fermentation_barrel",
+  "duration": 6000,
+  "group": "miragefairy2024:rum",
+  "input1": {
+    "count": 1,
+    "ingredient": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "input2": {
+    "count": 16,
+    "ingredient": {
+      "item": "minecraft:sugar_cane"
+    }
+  },
+  "input3": {
+    "count": 1,
+    "ingredient": {
+      "fabric:type": "miragefairy2024:water_bottle"
+    }
+  },
+  "output": {
+    "count": 1,
+    "item": "miragefairy2024:rum"
+  }
+}
