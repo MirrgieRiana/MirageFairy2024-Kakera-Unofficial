@@ -63,7 +63,7 @@ enum class MaterialCard(
     XARPITE(
         "xarpite", "Xarpite", "紅天石",
         PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
-        fuelValue = 3200,
+        fuelValue = 200 * 16,
         // TODO 使えるワード：牢獄
     ),
     MIRANAGITE(
@@ -166,7 +166,7 @@ enum class MaterialCard(
         // TODO add purpose
         "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
         PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
-        fuelValue = 1600,
+        fuelValue = 200 * 8,
     ),
     FAIRY_RUBBER(
         // TODO add purpose
