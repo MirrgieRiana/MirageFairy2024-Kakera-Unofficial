@@ -14,10 +14,9 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
     private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Regeneration: %s/s", "持続回復: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
-        if (newValue > 0.0) {
-            if (context.player.health < context.player.maxHealth) {
-                context.player.heal(newValue.toFloat())
-            }
+        if (newValue <= 0.0) return
+        if (context.player.health < context.player.maxHealth) {
+            context.player.heal(newValue.toFloat())
         }
     }
 

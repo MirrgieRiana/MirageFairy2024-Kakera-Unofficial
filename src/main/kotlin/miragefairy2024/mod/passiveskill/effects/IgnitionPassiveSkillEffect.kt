@@ -18,10 +18,9 @@ object IgnitionPassiveSkillEffect : PassiveSkillEffectCard<Boolean>("ignition") 
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun combine(a: Boolean, b: Boolean) = a || b
     override fun update(context: PassiveSkillContext, oldValue: Boolean, newValue: Boolean) {
-        if (newValue) {
-            if (context.player.isWet || context.player.inPowderSnow || context.player.wasInPowderSnow) return
-            context.player.fireTicks = 30 atLeast context.player.fireTicks
-        }
+        if (!newValue) return
+        if (context.player.isWet || context.player.inPowderSnow || context.player.wasInPowderSnow) return
+        context.player.fireTicks = 30 atLeast context.player.fireTicks
     }
 
     context(ModContext)
