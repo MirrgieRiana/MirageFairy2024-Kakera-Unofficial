@@ -1,7 +1,9 @@
-package miragefairy2024.mod.passiveskill
+package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.passiveskill.DoublePassiveSkillEffectCard
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.enJa

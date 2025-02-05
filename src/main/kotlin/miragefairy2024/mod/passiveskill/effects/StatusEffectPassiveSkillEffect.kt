@@ -1,5 +1,7 @@
-package miragefairy2024.mod.passiveskill
+package miragefairy2024.mod.passiveskill.effects
 
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
+import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.util.empty
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join

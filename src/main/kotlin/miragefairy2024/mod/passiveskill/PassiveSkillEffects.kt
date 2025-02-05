@@ -3,6 +3,16 @@ package miragefairy2024.mod.passiveskill
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.mod.passiveskill.effects.CollectionPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.ElementPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.EntityAttributePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.ExperiencePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.HungerPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.IgnitionPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.MendingPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.RegenerationPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.StatusEffectPassiveSkillEffect
 import miragefairy2024.util.register
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttributes

@@ -8,6 +8,7 @@ import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
+import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos

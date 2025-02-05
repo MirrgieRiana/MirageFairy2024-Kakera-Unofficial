@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
-import miragefairy2024.mod.passiveskill.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
@@ -16,6 +15,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.PassiveSkillStatus
 import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
+import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
