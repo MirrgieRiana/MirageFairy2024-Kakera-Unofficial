@@ -9,17 +9,23 @@ import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
+import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
+import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.string
 import miragefairy2024.util.text
+import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.Identifier
 import kotlin.math.log
 
@@ -49,6 +55,7 @@ fun initPassiveSkillExecution() {
 
                 // 効果
                 result.update(player)
+                PassiveSkillResultExtraPlayerDataCategory.sync(player)
 
             }
         }
@@ -199,6 +206,34 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
 object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<PassiveSkillResult> {
     override fun create() = PassiveSkillResult()
     override fun castOrThrow(value: Any) = value as PassiveSkillResult
+
+    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
+        override fun fromNbt(nbt: NbtCompound): PassiveSkillResult {
+            val result = PassiveSkillResult()
+            nbt.keys.forEach { key ->
+                fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                    result.map[passiveSkillEffect] = passiveSkillEffect.fromNbt(nbt[key] as NbtCompound)
+                }
+
+                val passiveSkillEffect = passiveSkillEffectRegistry.get(key.toIdentifier()) ?: return@forEach
+                f(passiveSkillEffect)
+            }
+            return result
+        }
+
+        override fun toNbt(data: PassiveSkillResult): NbtCompound {
+            val nbt = NbtCompound()
+            data.map.entries.forEach {
+                fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                    val identifier = passiveSkillEffectRegistry.getId(passiveSkillEffect) ?: return
+                    nbt.wrapper[identifier.string].compound.set(passiveSkillEffect.toNbt(passiveSkillEffect.castOrThrow(it.value)))
+                }
+
+                f(it.key)
+            }
+            return nbt
+        }
+    }
 }
 
 class PassiveSkillResult {

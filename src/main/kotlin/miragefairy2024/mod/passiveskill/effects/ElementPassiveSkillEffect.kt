@@ -16,6 +16,7 @@ import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.damage.DamageTypes
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
 
@@ -70,9 +71,14 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
         return Value(attackMap, defenceMap)
     }
 
+    override fun fromNbt(nbt: NbtCompound) = Value(mapOf(), mapOf())
+    override fun toNbt(value: Value) = NbtCompound()
+
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
+
     context(ModContext)
     override fun init() {
+        super.init()
         attackTranslation.enJa()
         defenceTranslation.enJa()
         Elements.entries.forEach {

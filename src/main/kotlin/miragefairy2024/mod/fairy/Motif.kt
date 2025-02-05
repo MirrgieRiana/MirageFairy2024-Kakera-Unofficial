@@ -825,6 +825,13 @@ enum class MotifCard(
     ),
 
     // 道具
+    PICKAXE(
+        "pickaxe", 3, "Pickaxia", "鶴嘴精ピッカーシャ", 0xFFFFFF, 0xFFC48E, 0xAD75FF, 0xFFFFFF,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + miningSpeed(100.2) * MainHandConditionCard.PICKAXE(),
+        MotifCardRecipes().R + ItemTags.PICKAXES,
+    ),
     HOE(
         "hoe", 3, "Hia", "鍬精ヒャ", 0xFFFFFF, 0xFFC48E, 0x47FF00, 0xFFFFFF,
         ParentMotifs(),

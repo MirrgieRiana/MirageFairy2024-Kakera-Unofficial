@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.text.Text
@@ -51,5 +52,7 @@ interface PassiveSkillEffect<T> {
     val unit: T
     fun castOrThrow(value: Any?): T
     fun combine(a: T, b: T): T
+    fun fromNbt(nbt: NbtCompound): T
+    fun toNbt(value: T): NbtCompound
     fun update(context: PassiveSkillContext, oldValue: T, newValue: T)
 }

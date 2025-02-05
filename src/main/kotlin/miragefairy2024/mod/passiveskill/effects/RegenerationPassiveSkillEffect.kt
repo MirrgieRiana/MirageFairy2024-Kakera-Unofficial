@@ -22,6 +22,7 @@ object RegenerationPassiveSkillEffect : DoublePassiveSkillEffectCard("regenerati
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }

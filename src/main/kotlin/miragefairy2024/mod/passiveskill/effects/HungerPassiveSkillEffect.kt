@@ -20,6 +20,7 @@ object HungerPassiveSkillEffect : DoublePassiveSkillEffectCard("hunger") {
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }

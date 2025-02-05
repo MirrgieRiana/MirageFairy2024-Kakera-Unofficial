@@ -10,6 +10,7 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import java.util.UUID
 
@@ -36,6 +37,9 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
         }
         return Value(map)
     }
+
+    override fun fromNbt(nbt: NbtCompound) = Value(mapOf())
+    override fun toNbt(value: Value) = NbtCompound()
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
 

@@ -15,6 +15,7 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 
 object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
@@ -39,9 +40,13 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkil
         return Value(map)
     }
 
+    override fun fromNbt(nbt: NbtCompound) = Value(mapOf())
+    override fun toNbt(value: Value) = NbtCompound()
+
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
         familyTranslation.enJa()
     }

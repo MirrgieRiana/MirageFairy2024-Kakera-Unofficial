@@ -10,7 +10,11 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<StatusEffect, Entry>)
@@ -34,6 +38,9 @@ object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassi
         }
         return Value(map)
     }
+
+    override fun fromNbt(nbt: NbtCompound) = Value(mapOf())
+    override fun toNbt(value: Value) = NbtCompound()
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
         newValue.map.forEach { (statusEffect, entry) ->

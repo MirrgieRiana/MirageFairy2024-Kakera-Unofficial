@@ -22,6 +22,7 @@ object MendingPassiveSkillEffect : DoublePassiveSkillEffectCard("mending") {
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }
