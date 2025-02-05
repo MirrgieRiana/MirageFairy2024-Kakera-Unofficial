@@ -23,7 +23,8 @@ object MiningSpeedPassiveSkillEffect : DoublePassiveSkillEffectCard("mining_spee
         super.init()
         translation.enJa()
 
-        BlockBreakingCallback.EVENT.register { _, player, _, _, blockBreakingDelta ->
+        BlockBreakingCallback.EVENT.register { blockState, player, _, _, blockBreakingDelta ->
+            if (player.mainHandStack.getMiningSpeedMultiplier(blockState) <= 1F) return@register blockBreakingDelta
             val newBlockBreakingDelta = blockBreakingDelta * (1F + player.passiveSkillResult[MiningSpeedPassiveSkillEffect].toFloat())
             if (blockBreakingDelta < 1F) newBlockBreakingDelta atMost 0.99F else newBlockBreakingDelta
         }
