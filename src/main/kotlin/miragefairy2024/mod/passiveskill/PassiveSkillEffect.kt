@@ -18,7 +18,7 @@ import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.attribute.EntityAttributes
 
 context(ModContext)
-fun initPassiveSkillEffects() {
+fun initPassiveSkillEffect() {
     PassiveSkillEffectCard.entries.forEach { card ->
         card.register(passiveSkillEffectRegistry, card.identifier)
         card.init()

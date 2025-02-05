@@ -17,7 +17,7 @@ import net.minecraft.world.World
 context(ModContext)
 fun initPassiveSkillModule() {
     initPassiveSkillConditions()
-    initPassiveSkillEffects()
+    initPassiveSkillEffect()
     initPassiveSkillExecution()
 }
 
