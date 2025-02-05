@@ -450,7 +450,7 @@ enum class MaterialCard(
     CIDRE(
         "cidre", "Cidre", "シードル",
         null,
-        fuelValue = 200 * 1, recipeRemainder = Items.GLASS_BOTTLE,
+        recipeRemainder = Items.GLASS_BOTTLE,
         foodComponent = FoodComponent.Builder()
             .hunger(6)
             .saturationModifier(0.1F)
