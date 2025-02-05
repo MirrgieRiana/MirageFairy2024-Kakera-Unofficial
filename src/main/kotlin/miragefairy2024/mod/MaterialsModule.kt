@@ -477,7 +477,7 @@ enum class MaterialCard(
             .hunger(6)
             .saturationModifier(0.1F)
             .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-            .statusEffect(StatusEffectInstance(StatusEffects.DARKNESS, 20 * 60), 0.1F)
+            .statusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
             .build(),
         creator = { DrinkItem(it) },
     ),
