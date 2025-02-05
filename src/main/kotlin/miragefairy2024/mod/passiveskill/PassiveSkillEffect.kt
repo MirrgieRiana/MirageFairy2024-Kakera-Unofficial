@@ -11,6 +11,7 @@ import miragefairy2024.mod.passiveskill.effects.HungerPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.IgnitionPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.MendingPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.MiningSpeedPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.RegenerationPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.StatusEffectPassiveSkillEffect
 import miragefairy2024.util.register
@@ -30,6 +31,7 @@ fun initPassiveSkillEffect() {
         MendingPassiveSkillEffect,
         CollectionPassiveSkillEffect,
         ElementPassiveSkillEffect,
+        MiningSpeedPassiveSkillEffect,
     ).forEach { card ->
         card.init()
     }
