@@ -19,7 +19,18 @@ import net.minecraft.entity.attribute.EntityAttributes
 
 context(ModContext)
 fun initPassiveSkillEffect() {
-    PassiveSkillEffectCard.entries.forEach { card ->
+    listOf(
+        ManaBoostPassiveSkillEffect,
+        EntityAttributePassiveSkillEffect,
+        StatusEffectPassiveSkillEffect,
+        IgnitionPassiveSkillEffect,
+        ExperiencePassiveSkillEffect,
+        RegenerationPassiveSkillEffect,
+        HungerPassiveSkillEffect,
+        MendingPassiveSkillEffect,
+        CollectionPassiveSkillEffect,
+        ElementPassiveSkillEffect,
+    ).forEach { card ->
         card.init()
     }
 
@@ -29,22 +40,6 @@ fun initPassiveSkillEffect() {
 }
 
 abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
-    companion object {
-        val entries = mutableListOf<PassiveSkillEffectCard<*>>()
-        private operator fun <T> PassiveSkillEffectCard<T>.unaryPlus() = this.also { entries += it }
-
-        val MANA_BOOST = +ManaBoostPassiveSkillEffect
-        val ENTITY_ATTRIBUTE = +EntityAttributePassiveSkillEffect
-        val STATUS_EFFECT = +StatusEffectPassiveSkillEffect
-        val IGNITION = +IgnitionPassiveSkillEffect
-        val EXPERIENCE = +ExperiencePassiveSkillEffect
-        val REGENERATION = +RegenerationPassiveSkillEffect
-        val HUNGER = +HungerPassiveSkillEffect
-        val MENDING = +MendingPassiveSkillEffect
-        val COLLECTION = +CollectionPassiveSkillEffect
-        val ELEMENT = +ElementPassiveSkillEffect
-    }
-
     val identifier = MirageFairy2024.identifier(path)
 
     context(ModContext)

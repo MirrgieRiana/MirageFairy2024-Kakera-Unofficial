@@ -44,7 +44,7 @@ fun initPassiveSkillExecution() {
                 // 現在発動しているパッシブスキル効果の計算
                 val result = PassiveSkillResult()
                 result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
-                val manaBoostValue = result[PassiveSkillEffectCard.MANA_BOOST]
+                val manaBoostValue = result[ManaBoostPassiveSkillEffect]
                 result.collect(passiveSkillProviders.passiveSkills, player, manaBoostValue, false) // 後行判定
 
                 // 効果

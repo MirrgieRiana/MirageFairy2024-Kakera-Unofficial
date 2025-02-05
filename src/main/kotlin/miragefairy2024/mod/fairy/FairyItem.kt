@@ -8,7 +8,6 @@ import miragefairy2024.mod.invoke
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillProvider
 import miragefairy2024.mod.passiveskill.PassiveSkillResult
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
@@ -179,7 +178,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
             result.collect(passiveSkillProviders.passiveSkills, player, ManaBoostPassiveSkillEffect.Value(mapOf()), true) // 先行判定
 
             // この妖精が受けられる魔力ブーストを計算
-            val manaBoost = result[PassiveSkillEffectCard.MANA_BOOST].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }
+            val manaBoost = result[ManaBoostPassiveSkillEffect].map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 }
 
             // 実際のプロバイダを取得
             val provider = passiveSkillProviders.providers.find { it.first === stack }

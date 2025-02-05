@@ -21,14 +21,19 @@ import miragefairy2024.mod.passiveskill.MainHandConditionCard
 import miragefairy2024.mod.passiveskill.MainHandPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification
 import miragefairy2024.mod.passiveskill.SimplePassiveSkillConditionCard
 import miragefairy2024.mod.passiveskill.StatusEffectPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.ToolMaterialCardPassiveSkillCondition
+import miragefairy2024.mod.passiveskill.effects.CollectionPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.ElementPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.EntityAttributePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.ExperiencePassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.HungerPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.IgnitionPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.MendingPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.RegenerationPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.StatusEffectPassiveSkillEffect
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation
@@ -1163,21 +1168,21 @@ private operator fun MainHandConditionCard.invoke() = MainHandPassiveSkillCondit
 
 private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: StatusEffect) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
-private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = PassiveSkillEffectCard.MANA_BOOST { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
-private fun attribute(attribute: EntityAttribute, factor: Double) = PassiveSkillEffectCard.ENTITY_ATTRIBUTE { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
+private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
+private fun attribute(attribute: EntityAttribute, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
 private fun speed(factor: Double) = attribute(EntityAttributes.GENERIC_MOVEMENT_SPEED, factor * 0.002)
 private fun health(factor: Double) = attribute(EntityAttributes.GENERIC_MAX_HEALTH, factor * 0.4)
 private fun luck(factor: Double) = attribute(EntityAttributes.GENERIC_LUCK, factor * 0.1)
 private operator fun StatusEffect.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
-    return PassiveSkillEffectCard.STATUS_EFFECT { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
+    return StatusEffectPassiveSkillEffect { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
 }
 
-private val ignition get() = PassiveSkillEffectCard.IGNITION { true }
-private fun experience(factor: Double) = PassiveSkillEffectCard.EXPERIENCE { it * factor * 0.005 }
-private fun regeneration(factor: Double) = PassiveSkillEffectCard.REGENERATION { it * factor * 0.01 }
-private fun hunger(factor: Double) = PassiveSkillEffectCard.HUNGER { it * factor * 0.1 }
-private fun mending(factor: Double) = PassiveSkillEffectCard.MENDING { it * factor * 0.01 }
-private fun collection(factor: Double) = PassiveSkillEffectCard.COLLECTION { it * factor * 0.1 }
+private val ignition get() = IgnitionPassiveSkillEffect { true }
+private fun experience(factor: Double) = ExperiencePassiveSkillEffect { it * factor * 0.005 }
+private fun regeneration(factor: Double) = RegenerationPassiveSkillEffect { it * factor * 0.01 }
+private fun hunger(factor: Double) = HungerPassiveSkillEffect { it * factor * 0.1 }
+private fun mending(factor: Double) = MendingPassiveSkillEffect { it * factor * 0.01 }
+private fun collection(factor: Double) = CollectionPassiveSkillEffect { it * factor * 0.1 }
 
 private val overall get() = ElementPassiveSkillEffect.Elements.OVERALL
 private val melee get() = ElementPassiveSkillEffect.Elements.MELEE
@@ -1185,8 +1190,8 @@ private val shooting get() = ElementPassiveSkillEffect.Elements.SHOOTING
 private val magic get() = ElementPassiveSkillEffect.Elements.MAGIC
 private val fire get() = ElementPassiveSkillEffect.Elements.FIRE
 private val fall get() = ElementPassiveSkillEffect.Elements.FALL
-private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
-private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = PassiveSkillEffectCard.ELEMENT { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
+private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
+private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
 
 
 operator fun Motif.contains(child: Motif): Boolean = child == this || child.parents.any { it in this }
