@@ -71,6 +71,7 @@ object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEff
     }
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
+
     context(ModContext)
     override fun init() {
         super.init()
