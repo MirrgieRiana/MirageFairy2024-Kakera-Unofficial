@@ -461,7 +461,7 @@ enum class MaterialCard(
     FAIRY_LIQUEUR(
         "fairy_liqueur", "fairy_liqueur", "妖精のリキュール",
         PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
-        fuelValue = 200 * 8, recipeRemainder = Items.GLASS_BOTTLE,
+        fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
         foodComponent = FoodComponent.Builder()
             .hunger(6)
             .saturationModifier(0.1F)
@@ -472,7 +472,7 @@ enum class MaterialCard(
     VEROPEDELIQUORA(
         "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
         PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
-        fuelValue = 200 * 8, recipeRemainder = Items.GLASS_BOTTLE,
+        fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
         foodComponent = FoodComponent.Builder()
             .hunger(6)
             .saturationModifier(0.1F)
@@ -732,7 +732,7 @@ fun initMaterialsModule() {
     // 妖精のリキュール
     registerFermentationBarrelRecipeGeneration(
         input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 16),
+        input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 8),
         input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
         output = MaterialCard.FAIRY_LIQUEUR.item.createItemStack(),
         duration = 20 * 60 * 5,
@@ -742,7 +742,7 @@ fun initMaterialsModule() {
     // ヴェロペデリコラ
     registerFermentationBarrelRecipeGeneration(
         input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 16),
+        input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 8),
         input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
         output = MaterialCard.VEROPEDELIQUORA.item.createItemStack(),
         duration = 20 * 60 * 5,
