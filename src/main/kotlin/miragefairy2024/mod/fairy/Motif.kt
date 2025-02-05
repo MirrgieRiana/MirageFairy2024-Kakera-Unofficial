@@ -825,19 +825,19 @@ enum class MotifCard(
     ),
 
     // 道具
-    SWORD(
-        "sword", 3, "Swordia", "剣精スウォルジャ", 0xFFFFFF, 0xFFC48E, 0xFF0300, 0xFFFFFF,
-        ParentMotifs(),
-        PassiveSkillBuilder()
-            + melee.attack(1.2) * MainHandConditionCard.SWORD(),
-        MotifCardRecipes().R + ItemTags.SWORDS,
-    ),
     HOE(
         "hoe", 3, "Hia", "鍬精ヒャ", 0xFFFFFF, 0xFFC48E, 0x47FF00, 0xFFFFFF,
         ParentMotifs(),
         PassiveSkillBuilder()
             + luck(1.2) * MainHandConditionCard.HOE(),
         MotifCardRecipes().R + ItemTags.HOES,
+    ),
+    SWORD(
+        "sword", 3, "Swordia", "剣精スウォルジャ", 0xFFFFFF, 0xFFC48E, 0xFF0300, 0xFFFFFF,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + melee.attack(1.2) * MainHandConditionCard.SWORD(),
+        MotifCardRecipes().R + ItemTags.SWORDS,
     ),
     SHIELD(
         "shield", 3, "Shieldia", "盾精シエルジャ", 0xFFFFFF, 0xFFC48E, 0x5A5A8E, 0xFFFFFF,
