@@ -33,6 +33,7 @@ import miragefairy2024.mod.passiveskill.effects.HungerPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.IgnitionPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.MendingPassiveSkillEffect
+import miragefairy2024.mod.passiveskill.effects.MiningSpeedPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.RegenerationPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.StatusEffectPassiveSkillEffect
 import miragefairy2024.mod.tool.ToolMaterialCard
@@ -1192,6 +1193,8 @@ private val fire get() = ElementPassiveSkillEffect.Elements.FIRE
 private val fall get() = ElementPassiveSkillEffect.Elements.FALL
 private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
 private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
+
+private fun miningSpeed(factor: Double) = MiningSpeedPassiveSkillEffect { it * factor * 0.01 }
 
 
 operator fun Motif.contains(child: Motif): Boolean = child == this || child.parents.any { it in this }
