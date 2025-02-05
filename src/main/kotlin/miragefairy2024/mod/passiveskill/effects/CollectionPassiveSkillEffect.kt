@@ -31,6 +31,7 @@ object CollectionPassiveSkillEffect : DoublePassiveSkillEffectCard("collection")
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }

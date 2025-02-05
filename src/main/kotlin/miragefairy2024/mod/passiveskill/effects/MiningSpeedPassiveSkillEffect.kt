@@ -20,6 +20,7 @@ object MiningSpeedPassiveSkillEffect : DoublePassiveSkillEffectCard("mining_spee
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
 
         BlockBreakingCallback.EVENT.register { _, player, _, _, blockBreakingDelta ->

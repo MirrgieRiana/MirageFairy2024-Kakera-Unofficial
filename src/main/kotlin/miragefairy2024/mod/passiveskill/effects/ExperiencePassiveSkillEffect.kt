@@ -24,6 +24,7 @@ object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience")
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }

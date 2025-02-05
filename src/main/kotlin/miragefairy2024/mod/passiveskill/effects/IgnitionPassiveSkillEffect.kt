@@ -22,6 +22,7 @@ object IgnitionPassiveSkillEffect : BooleanPassiveSkillEffectCard("ignition") {
 
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
     }
 }

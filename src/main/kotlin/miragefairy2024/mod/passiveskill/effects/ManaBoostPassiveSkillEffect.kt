@@ -42,6 +42,7 @@ object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkil
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) = Unit
     context(ModContext)
     override fun init() {
+        super.init()
         translation.enJa()
         familyTranslation.enJa()
     }
