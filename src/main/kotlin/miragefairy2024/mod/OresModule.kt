@@ -181,12 +181,12 @@ fun initOresModule() {
         }
 
     }
-    worldGen(16..128, 0.5663, 12, OreCard.MAGNETITE_ORE)
-    worldGen(16..128, 0.5663, 12, OreCard.DEEPSLATE_MAGNETITE_ORE)
-    worldGen(0..32, 1.9393, 8, OreCard.FLUORITE_ORE)
-    worldGen(0..32, 1.9393, 8, OreCard.DEEPSLATE_FLUORITE_ORE)
-    worldGen(-64..128, 0.6632, 12, OreCard.MIRANAGITE_ORE)
-    worldGen(-64..128, 0.6632, 12, OreCard.DEEPSLATE_MIRANAGITE_ORE)
+    worldGen(16 until 128, 1.6, 12, OreCard.MAGNETITE_ORE)
+    worldGen(16 until 128, 1.6, 12, OreCard.DEEPSLATE_MAGNETITE_ORE)
+    worldGen(0 until 64, 1.2, 8, OreCard.FLUORITE_ORE)
+    worldGen(0 until 64, 1.2, 8, OreCard.DEEPSLATE_FLUORITE_ORE)
+    worldGen(-64 until 128, 0.6, 12, OreCard.MIRANAGITE_ORE)
+    worldGen(-64 until 128, 0.6, 12, OreCard.DEEPSLATE_MIRANAGITE_ORE)
 
 }
 
