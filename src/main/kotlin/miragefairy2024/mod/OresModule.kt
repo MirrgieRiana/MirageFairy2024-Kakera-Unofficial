@@ -12,10 +12,10 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.count
 import miragefairy2024.util.enJa
 import miragefairy2024.util.overworld
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.randomIntCount
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -163,7 +163,7 @@ fun initOresModule() {
 
     }
 
-    fun worldGen(card: OreCard, size: Int, count: Int, min: Int, max: Int) {
+    fun worldGen(range: IntRange, countPerCube: Double, size: Int, card: OreCard) {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
@@ -174,19 +174,19 @@ fun initOresModule() {
         }
 
         registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
-            val placementModifiers = placementModifiers { count(count) + uniformOre(min, max) }
+            val placementModifiers = placementModifiers { randomIntCount(countPerCube * (range.last - range.first + 1).toDouble() / 16.0) + uniformOre(range.first, range.last) }
             it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
         }
 
     }
-    worldGen(OreCard.MAGNETITE_ORE, 12, 4, 16, 128)
-    worldGen(OreCard.DEEPSLATE_MAGNETITE_ORE, 12, 4, 16, 128)
-    worldGen(OreCard.FLUORITE_ORE, 8, 4, 0, 32)
-    worldGen(OreCard.DEEPSLATE_FLUORITE_ORE, 8, 4, 0, 32)
-    worldGen(OreCard.MIRANAGITE_ORE, 12, 8, -64, 128)
-    worldGen(OreCard.DEEPSLATE_MIRANAGITE_ORE, 12, 8, -64, 128)
+    worldGen(16..128, 0.5663, 12, OreCard.MAGNETITE_ORE)
+    worldGen(16..128, 0.5663, 12, OreCard.DEEPSLATE_MAGNETITE_ORE)
+    worldGen(0..32, 1.9393, 8, OreCard.FLUORITE_ORE)
+    worldGen(0..32, 1.9393, 8, OreCard.DEEPSLATE_FLUORITE_ORE)
+    worldGen(-64..128, 0.6632, 12, OreCard.MIRANAGITE_ORE)
+    worldGen(-64..128, 0.6632, 12, OreCard.DEEPSLATE_MIRANAGITE_ORE)
 
 }
 
