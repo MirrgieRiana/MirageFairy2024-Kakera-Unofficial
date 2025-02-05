@@ -20,7 +20,6 @@ import net.minecraft.entity.attribute.EntityAttributes
 context(ModContext)
 fun initPassiveSkillEffect() {
     PassiveSkillEffectCard.entries.forEach { card ->
-        card.register(passiveSkillEffectRegistry, card.identifier)
         card.init()
     }
 
@@ -47,8 +46,11 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
     }
 
     val identifier = MirageFairy2024.identifier(path)
+
     context(ModContext)
-    open fun init() = Unit
+    open fun init() {
+        this.register(passiveSkillEffectRegistry, identifier)
+    }
 
     override val isPreprocessor = false
 }
