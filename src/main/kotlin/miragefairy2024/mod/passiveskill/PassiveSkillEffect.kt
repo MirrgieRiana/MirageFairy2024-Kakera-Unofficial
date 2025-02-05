@@ -57,3 +57,9 @@ abstract class DoublePassiveSkillEffectCard(path: String) : PassiveSkillEffectCa
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
 }
+
+abstract class BooleanPassiveSkillEffectCard(path: String) : PassiveSkillEffectCard<Boolean>(path) {
+    override val unit = false
+    override fun castOrThrow(value: Any?) = value as Boolean
+    override fun combine(a: Boolean, b: Boolean) = a || b
+}
