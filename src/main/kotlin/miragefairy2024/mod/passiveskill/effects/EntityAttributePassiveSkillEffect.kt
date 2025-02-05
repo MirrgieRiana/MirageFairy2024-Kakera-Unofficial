@@ -14,7 +14,8 @@ import net.minecraft.text.Text
 import java.util.UUID
 
 object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
-    val formatters = mutableMapOf<EntityAttribute, (Double) -> String>()
+    val FORMATTERS = mutableMapOf<EntityAttribute, (Double) -> String>()
+
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
     private val uuid: UUID = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
 
@@ -22,7 +23,7 @@ object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttribut
 
     override fun getText(value: Value): Text {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.translationKey) + " ${formatters.getOrElse(attribute) { defaultFormatter }(value)}"() }
+            text { translate(attribute.translationKey) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 
