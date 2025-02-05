@@ -4,6 +4,7 @@ import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
@@ -14,8 +15,11 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DataPool
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
+import net.minecraft.util.math.intprovider.IntProvider
+import net.minecraft.util.math.intprovider.WeightedListIntProvider
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.YOffset
@@ -36,6 +40,7 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier
 import java.util.function.Predicate
+import kotlin.math.roundToInt
 
 infix fun <C : FeatureConfig, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
 infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<PlacementModifier>) = PlacedFeature(this, placementModifiers)
@@ -89,6 +94,20 @@ context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.plus(o
 object PlacementModifiersScope
 
 fun placementModifiers(block: PlacementModifiersScope.() -> List<PlacementModifier>) = block(PlacementModifiersScope)
+
+context(PlacementModifiersScope)
+fun randomIntCount(count: Double): List<PlacementModifier> {
+    val min = count.floorToInt()
+    val rate = ((count - min.toDouble()) * 100).roundToInt()
+    if (rate == 0) return count(min)
+    if (rate == 100) return count(min + 1)
+    val dataPool = DataPool.builder<IntProvider>()
+        .add(ConstantIntProvider.create(min), 100 - rate)
+        .add(ConstantIntProvider.create(min + 1), rate)
+        .build()
+    val intProvider = WeightedListIntProvider(dataPool)
+    return listOf(CountPlacementModifier.of(intProvider))
+}
 
 context(PlacementModifiersScope)
 fun count(count: Int): List<PlacementModifier> = listOf(CountPlacementModifier.of(count))
