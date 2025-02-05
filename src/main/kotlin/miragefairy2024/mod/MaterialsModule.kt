@@ -459,7 +459,7 @@ enum class MaterialCard(
         creator = { DrinkItem(it) },
     ),
     FAIRY_LIQUEUR(
-        "fairy_liqueur", "fairy_liqueur", "妖精のリキュール",
+        "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
         PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
         fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
         foodComponent = FoodComponent.Builder()
