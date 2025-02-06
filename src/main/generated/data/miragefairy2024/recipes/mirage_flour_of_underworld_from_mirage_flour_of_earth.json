@@ -1,18 +1,36 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "key": {
-    "#": {
+  "ingredients": [
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
+      "item": "miragefairy2024:mirage_flour_of_earth"
+    },
+    {
       "item": "miragefairy2024:mirage_flour_of_earth"
     }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
   ],
   "result": {
     "item": "miragefairy2024:mirage_flour_of_underworld"
-  },
-  "show_notification": true
+  }
 }
