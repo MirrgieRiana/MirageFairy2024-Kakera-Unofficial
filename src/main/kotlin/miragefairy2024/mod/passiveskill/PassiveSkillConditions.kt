@@ -156,6 +156,7 @@ class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) 
 // main hand
 
 enum class MainHandConditionCard(path: String, en: String, ja: String, val predicate: (ItemStack) -> Boolean) {
+    PICKAXE("pickaxe", "Pickaxe", "つるはし", { it.isIn(ItemTags.PICKAXES) }),
     HOE("hoe", "Hoe", "クワ", { it.isIn(ItemTags.HOES) }),
     SWORD("sword", "Sword", "剣", { it.isIn(ItemTags.SWORDS) }),
     ;
