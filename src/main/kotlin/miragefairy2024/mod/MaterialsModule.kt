@@ -73,7 +73,7 @@ import net.minecraft.world.World
 import net.minecraft.world.event.GameEvent
 import kotlin.math.pow
 
-enum class MaterialCard(
+class MaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
@@ -84,416 +84,419 @@ enum class MaterialCard(
     val recipeRemainder: Item? = null,
     val creator: (Item.Settings) -> Item = ::Item,
 ) {
+    companion object {
+        val entries = mutableListOf<MaterialCard>()
+        private operator fun MaterialCard.not() = apply { entries += this }
 
-    XARPITE(
-        "xarpite", "Xarpite", "紅天石",
-        PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
-        fuelValue = 200 * 16,
-        // TODO 使えるワード：牢獄
-    ),
-    MIRANAGITE(
-        "miranagite", "Miranagite", "蒼天石",
-        PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
-        // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
-    ),
-    MIRANAGITE_ROD(
-        "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
-        PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
-    ),
-    CHAOS_STONE(
-        "chaos_stone", "Chaos Stone", "混沌の石",
-        PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
-    ),
+        val XARPITE = !MaterialCard(
+            "xarpite", "Xarpite", "紅天石",
+            PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
+            fuelValue = 200 * 16,
+            // TODO 使えるワード：牢獄
+        )
+        val MIRANAGITE = !MaterialCard(
+            "miranagite", "Miranagite", "蒼天石",
+            PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
+            // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
+        )
+        val MIRANAGITE_ROD = !MaterialCard(
+            "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
+            PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
+        )
+        val CHAOS_STONE = !MaterialCard(
+            "chaos_stone", "Chaos Stone", "混沌の石",
+            PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
+        )
 
-    MIRAGE_LEAVES(
-        "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
-        PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
-        fuelValue = 100,
-    ),
-    MIRAGE_STEM(
-        "mirage_stem", "Mirage Stem", "ミラージュの茎",
-        PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
-        fuelValue = 100,
-    ),
-    FAIRY_GLASS_FIBER(
-        "fairy_glass_fiber", "Fairy Glass Fiber", "きらめきの糸",
-        PoemList(1).poem("Fiber-optic nervous system", "意識の一部だったもの。"),
-        soulStreamContainable = true,
-    ),
-    FAIRY_CRYSTAL(
-        "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
-        PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
-        soulStreamContainable = true,
-    ),
-    PHANTOM_LEAVES(
-        "phantom_leaves", "Phantom Leaves", "ファントムの葉",
-        PoemList(3).poem("The eroding reality", "析出する空想。"),
-        fuelValue = 100,
-    ),
-    PHANTOM_DROP(
-        "phantom_drop", "Phantom Drop", "幻想の雫",
-        PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
-        soulStreamContainable = true,
-        foodComponent = FoodComponent.Builder()
-            .hunger(2)
-            .saturationModifier(0.3F)
-            .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-            .alwaysEdible()
-            .build(),
-    ),
-    MIRAGIUM_NUGGET(
-        "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
-        PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
-        soulStreamContainable = true,
-    ),
-    MIRAGIUM_INGOT(
-        "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
-        PoemList(3).poem("Metallic body", "妖精インゴット。"),
-        soulStreamContainable = true,
-    ),
-    VEROPEDA_LEAF(
-        "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
-        PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
-        fuelValue = 100,
-    ),
-    VEROPEDA_BERRIES(
-        "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
-        PoemList(1)
-            .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
-            .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
-        foodComponent = FoodComponent.Builder()
-            .hunger(1)
-            .saturationModifier(0.1F)
-            .snack()
-            .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
-            .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 20), 0.01F)
-            .build(),
-    ),
-    HAIMEVISKA_SAP(
-        "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
-        PoemList(1)
-            .poem("Smooth and mellow on the palate", "口福のアナムネシス。")
-            .description("Gain experience by eating", "食べると経験値を獲得"),
-        fuelValue = 200,
-        foodComponent = FoodComponent.Builder()
-            .hunger(1)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
-            .build(),
-    ),
-    HAIMEVISKA_ROSIN(
-        "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
-        PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
-        fuelValue = 200,
-    ),
-    FAIRY_PLASTIC(
-        // TODO add recipe
-        // TODO add purpose
-        "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
-        PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
-        fuelValue = 200 * 8,
-    ),
-    FAIRY_RUBBER(
-        // TODO add purpose
-        "fairy_rubber", "Fairy Rubber", "夜のかけら",
-        PoemList(3).poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた"),
-    ),
+        val MIRAGE_LEAVES = !MaterialCard(
+            "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
+            PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
+            fuelValue = 100,
+        )
+        val MIRAGE_STEM = !MaterialCard(
+            "mirage_stem", "Mirage Stem", "ミラージュの茎",
+            PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
+            fuelValue = 100,
+        )
+        val FAIRY_GLASS_FIBER = !MaterialCard(
+            "fairy_glass_fiber", "Fairy Glass Fiber", "きらめきの糸",
+            PoemList(1).poem("Fiber-optic nervous system", "意識の一部だったもの。"),
+            soulStreamContainable = true,
+        )
+        val FAIRY_CRYSTAL = !MaterialCard(
+            "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
+            PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
+            soulStreamContainable = true,
+        )
+        val PHANTOM_LEAVES = !MaterialCard(
+            "phantom_leaves", "Phantom Leaves", "ファントムの葉",
+            PoemList(3).poem("The eroding reality", "析出する空想。"),
+            fuelValue = 100,
+        )
+        val PHANTOM_DROP = !MaterialCard(
+            "phantom_drop", "Phantom Drop", "幻想の雫",
+            PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
+            soulStreamContainable = true,
+            foodComponent = FoodComponent.Builder()
+                .hunger(2)
+                .saturationModifier(0.3F)
+                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                .alwaysEdible()
+                .build(),
+        )
+        val MIRAGIUM_NUGGET = !MaterialCard(
+            "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
+            PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
+            soulStreamContainable = true,
+        )
+        val MIRAGIUM_INGOT = !MaterialCard(
+            "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
+            PoemList(3).poem("Metallic body", "妖精インゴット。"),
+            soulStreamContainable = true,
+        )
+        val VEROPEDA_LEAF = !MaterialCard(
+            "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
+            PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
+            fuelValue = 100,
+        )
+        val VEROPEDA_BERRIES = !MaterialCard(
+            "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
+            PoemList(1)
+                .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
+                .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
+            foodComponent = FoodComponent.Builder()
+                .hunger(1)
+                .saturationModifier(0.1F)
+                .snack()
+                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
+                .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 20), 0.01F)
+                .build(),
+        )
+        val HAIMEVISKA_SAP = !MaterialCard(
+            "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
+            PoemList(1)
+                .poem("Smooth and mellow on the palate", "口福のアナムネシス。")
+                .description("Gain experience by eating", "食べると経験値を獲得"),
+            fuelValue = 200,
+            foodComponent = FoodComponent.Builder()
+                .hunger(1)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
+                .build(),
+        )
+        val HAIMEVISKA_ROSIN = !MaterialCard(
+            "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
+            PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
+            fuelValue = 200,
+        )
+        val FAIRY_PLASTIC = !MaterialCard(
+            // TODO add recipe
+            // TODO add purpose
+            "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
+            PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
+            fuelValue = 200 * 8,
+        )
+        val FAIRY_RUBBER = !MaterialCard(
+            // TODO add purpose
+            "fairy_rubber", "Fairy Rubber", "夜のかけら",
+            PoemList(3).poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた"),
+        )
 
-    TINY_MIRAGE_FLOUR(
-        "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
-        PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
-    ),
-    MIRAGE_FLOUR(
-        "mirage_flour", "Mirage Flour", "ミラージュの花粉",
-        PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_NATURE(
-        "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
-        PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_EARTH(
-        "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
-        PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_UNDERWORLD(
-        "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
-        PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_SKY(
-        "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
-        PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_UNIVERSE(
-        "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
-        PoemList(3)
-            .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
-            .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
-    ),
-    MIRAGE_FLOUR_OF_TIME(
-        "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
-        PoemList(4)
-            .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
-            .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
-        soulStreamContainable = true,
-        creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
-    ),
+        val TINY_MIRAGE_FLOUR = !MaterialCard(
+            "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
+            PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
+        )
+        val MIRAGE_FLOUR = !MaterialCard(
+            "mirage_flour", "Mirage Flour", "ミラージュの花粉",
+            PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_NATURE = !MaterialCard(
+            "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
+            PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_EARTH = !MaterialCard(
+            "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
+            PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_UNDERWORLD = !MaterialCard(
+            "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
+            PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_SKY = !MaterialCard(
+            "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
+            PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_UNIVERSE = !MaterialCard(
+            "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
+            PoemList(3)
+                .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
+                .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
+        )
+        val MIRAGE_FLOUR_OF_TIME = !MaterialCard(
+            "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
+            PoemList(4)
+                .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
+                .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
+            soulStreamContainable = true,
+            creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
+        )
 
-    FAIRY_SCALES(
-        "fairy_scales", "Fairy Scales", "妖精の鱗粉",
-        PoemList(1)
-            .poem("A catalyst that converts mana into erg", "湧き上がる、エルグの誘い。"),
-        soulStreamContainable = true,
-        // TODO レシピ 妖精の森バイオームの雑草
-        // TODO 妖精からクラフト
-        // TODO 用途
-    ),
-    FRACTAL_WISP(
-        "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
-        PoemList(1)
-            .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
-            .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) }
-        // TODO 用途
-    ),
+        val FAIRY_SCALES = !MaterialCard(
+            "fairy_scales", "Fairy Scales", "妖精の鱗粉",
+            PoemList(1)
+                .poem("A catalyst that converts mana into erg", "湧き上がる、エルグの誘い。"),
+            soulStreamContainable = true,
+            // TODO レシピ 妖精の森バイオームの雑草
+            // TODO 妖精からクラフト
+            // TODO 用途
+        )
+        val FRACTAL_WISP = !MaterialCard(
+            "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
+            PoemList(1)
+                .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
+                .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) }
+            // TODO 用途
+        )
 
-    FAIRY_QUEST_CARD_BASE(
-        "fairy_quest_card_base", "Fairy Quest Card Base", "フェアリークエストカードベース",
-        PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
-    ),
+        val FAIRY_QUEST_CARD_BASE = !MaterialCard(
+            "fairy_quest_card_base", "Fairy Quest Card Base", "フェアリークエストカードベース",
+            PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
+        )
 
-    MAGNETITE(
-        "magnetite", "Magnetite", "磁鉄鉱",
-        null,
-    ),
+        val MAGNETITE = !MaterialCard(
+            "magnetite", "Magnetite", "磁鉄鉱",
+            null,
+        )
 
-    FLUORITE(
-        "fluorite", "Fluorite", "蛍石",
-        null,
-    ),
-    SPHERE_BASE(
-        "sphere_base", "Sphere Base", "スフィアベース",
-        PoemList(2)
-            .poem("A mirror that reflects sadistic desires", "前世が見える。              （らしい）"),
-        // TODO 用途
-    ),
+        val FLUORITE = !MaterialCard(
+            "fluorite", "Fluorite", "蛍石",
+            null,
+        )
+        val SPHERE_BASE = !MaterialCard(
+            "sphere_base", "Sphere Base", "スフィアベース",
+            PoemList(2)
+                .poem("A mirror that reflects sadistic desires", "前世が見える。              （らしい）"),
+            // TODO 用途
+        )
 
-    MINA_1(
-        "mina_1", "1 Mina", "1ミナ",
-        PoemList(0)
-            .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(1, it.fireproof()) },
-    ),
-    MINA_5(
-        "mina_5", "5 Mina", "5ミナ",
-        PoemList(0)
-            .poem("Fairy snack", "ご縁があるよ")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(5, it.fireproof()) },
-    ),
-    MINA_10(
-        "mina_10", "10 Mina", "10ミナ",
-        PoemList(0)
-            .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(10, it.fireproof()) },
-    ),
-    MINA_50(
-        "mina_50", "50 Mina", "50ミナ",
-        PoemList(0)
-            .poem("The Society failed to replicate this.", "形而上学的有機結晶")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(50, it.fireproof()) },
-    ),
-    MINA_100(
-        "mina_100", "100 Mina", "100ミナ",
-        PoemList(0)
-            .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(100, it.fireproof()) },
-    ),
-    MINA_500(
-        "mina_500", "500 Mina", "500ミナ",
-        PoemList(0)
-            .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(500, it.fireproof()) },
-    ),
-    MINA_1000(
-        "mina_1000", "1000 Mina", "1000ミナ",
-        PoemList(0)
-            .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(1000, it.fireproof()) },
-    ),
-    MINA_5000(
-        "mina_5000", "5000 Mina", "5000ミナ",
-        PoemList(0)
-            .poem("The price of a soul.", "魂の値段。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(5000, it.fireproof()) },
-    ),
-    MINA_10000(
-        "mina_10000", "10000 Mina", "10000ミナ",
-        PoemList(0)
-            .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
-            .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-        soulStreamContainable = true,
-        creator = { MinaItem(10000, it.fireproof()) },
-    ),
+        val MINA_1 = !MaterialCard(
+            "mina_1", "1 Mina", "1ミナ",
+            PoemList(0)
+                .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(1, it.fireproof()) },
+        )
+        val MINA_5 = !MaterialCard(
+            "mina_5", "5 Mina", "5ミナ",
+            PoemList(0)
+                .poem("Fairy snack", "ご縁があるよ")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(5, it.fireproof()) },
+        )
+        val MINA_10 = !MaterialCard(
+            "mina_10", "10 Mina", "10ミナ",
+            PoemList(0)
+                .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(10, it.fireproof()) },
+        )
+        val MINA_50 = !MaterialCard(
+            "mina_50", "50 Mina", "50ミナ",
+            PoemList(0)
+                .poem("The Society failed to replicate this.", "形而上学的有機結晶")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(50, it.fireproof()) },
+        )
+        val MINA_100 = !MaterialCard(
+            "mina_100", "100 Mina", "100ミナ",
+            PoemList(0)
+                .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(100, it.fireproof()) },
+        )
+        val MINA_500 = !MaterialCard(
+            "mina_500", "500 Mina", "500ミナ",
+            PoemList(0)
+                .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(500, it.fireproof()) },
+        )
+        val MINA_1000 = !MaterialCard(
+            "mina_1000", "1000 Mina", "1000ミナ",
+            PoemList(0)
+                .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(1000, it.fireproof()) },
+        )
+        val MINA_5000 = !MaterialCard(
+            "mina_5000", "5000 Mina", "5000ミナ",
+            PoemList(0)
+                .poem("The price of a soul.", "魂の値段。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(5000, it.fireproof()) },
+        )
+        val MINA_10000 = !MaterialCard(
+            "mina_10000", "10000 Mina", "10000ミナ",
+            PoemList(0)
+                .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
+                .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
+            soulStreamContainable = true,
+            creator = { MinaItem(10000, it.fireproof()) },
+        )
 
-    JEWEL_1(
-        "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
-        PoemList(0)
-            .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_5(
-        "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
-        PoemList(0)
-            .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_10(
-        "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
-        PoemList(0)
-            .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_50(
-        "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
-        PoemList(0)
-            .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_100(
-        "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
-        PoemList(0)
-            .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_500(
-        "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
-        PoemList(0)
-            .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_1000(
-        "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
-        PoemList(0)
-            .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_5000(
-        "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
-        PoemList(0)
-            .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
-    JEWEL_10000(
-        "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
-        PoemList(0)
-            .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
-        soulStreamContainable = true,
-        creator = { Item(it.fireproof()) },
-    ),
+        val JEWEL_1 = !MaterialCard(
+            "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
+            PoemList(0)
+                .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_5 = !MaterialCard(
+            "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
+            PoemList(0)
+                .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_10 = !MaterialCard(
+            "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
+            PoemList(0)
+                .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_50 = !MaterialCard(
+            "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
+            PoemList(0)
+                .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_100 = !MaterialCard(
+            "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
+            PoemList(0)
+                .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_500 = !MaterialCard(
+            "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
+            PoemList(0)
+                .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_1000 = !MaterialCard(
+            "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
+            PoemList(0)
+                .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_5000 = !MaterialCard(
+            "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
+            PoemList(0)
+                .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
+        val JEWEL_10000 = !MaterialCard(
+            "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
+            PoemList(0)
+                .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
+            soulStreamContainable = true,
+            creator = { Item(it.fireproof()) },
+        )
 
-    APOSTLE_WAND(
-        "apostle_wand", "Apostle's Wand", "使徒のステッキ",
-        PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
-        creator = { ApostleWandItem(it.maxCount(1)) },
-    ),
+        val APOSTLE_WAND = !MaterialCard(
+            "apostle_wand", "Apostle's Wand", "使徒のステッキ",
+            PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
+            creator = { ApostleWandItem(it.maxCount(1)) },
+        )
 
-    RUM(
-        "rum", "Rum", "ラム酒",
-        null,
-        fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
-        foodComponent = FoodComponent.Builder()
-            .hunger(6)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 20 * 60, 1), 1.0F)
-            .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 60), 0.1F)
-            .build(),
-        creator = { DrinkItem(it) },
-    ),
-    CIDRE(
-        "cidre", "Cidre", "シードル",
-        null,
-        recipeRemainder = Items.GLASS_BOTTLE,
-        foodComponent = FoodComponent.Builder()
-            .hunger(6)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60), 1.0F)
-            .build(),
-        creator = { DrinkItem(it) },
-    ),
-    FAIRY_LIQUEUR(
-        "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
-        PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
-        fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
-        foodComponent = FoodComponent.Builder()
-            .hunger(6)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
-            .build(),
-        creator = { DrinkItem(it, flaming = 5) },
-    ),
-    VEROPEDELIQUORA(
-        "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
-        PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
-        fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
-        foodComponent = FoodComponent.Builder()
-            .hunger(6)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-            .statusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
-            .build(),
-        creator = { DrinkItem(it) },
-    ),
-    POISON(
-        "poison", "Poison", "毒薬",
-        null,
-        recipeRemainder = Items.GLASS_BOTTLE,
-        foodComponent = FoodComponent.Builder()
-            .hunger(1)
-            .saturationModifier(0.1F)
-            .statusEffect(StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 9), 1.0F)
-            .statusEffect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
-            .build(),
-        creator = { DrinkItem(it) },
-    ),
-    ;
+        val RUM = !MaterialCard(
+            "rum", "Rum", "ラム酒",
+            null,
+            fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
+            foodComponent = FoodComponent.Builder()
+                .hunger(6)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 20 * 60, 1), 1.0F)
+                .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 60), 0.1F)
+                .build(),
+            creator = { DrinkItem(it) },
+        )
+        val CIDRE = !MaterialCard(
+            "cidre", "Cidre", "シードル",
+            null,
+            recipeRemainder = Items.GLASS_BOTTLE,
+            foodComponent = FoodComponent.Builder()
+                .hunger(6)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60), 1.0F)
+                .build(),
+            creator = { DrinkItem(it) },
+        )
+        val FAIRY_LIQUEUR = !MaterialCard(
+            "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
+            PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
+            fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
+            foodComponent = FoodComponent.Builder()
+                .hunger(6)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
+                .build(),
+            creator = { DrinkItem(it, flaming = 5) },
+        )
+        val VEROPEDELIQUORA = !MaterialCard(
+            "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
+            PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
+            fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
+            foodComponent = FoodComponent.Builder()
+                .hunger(6)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                .statusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
+                .build(),
+            creator = { DrinkItem(it) },
+        )
+        val POISON = !MaterialCard(
+            "poison", "Poison", "毒薬",
+            null,
+            recipeRemainder = Items.GLASS_BOTTLE,
+            foodComponent = FoodComponent.Builder()
+                .hunger(1)
+                .saturationModifier(0.1F)
+                .statusEffect(StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 9), 1.0F)
+                .statusEffect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
+                .build(),
+            creator = { DrinkItem(it) },
+        )
+    }
 
     val identifier = MirageFairy2024.identifier(path)
     val item = Item.Settings()
