@@ -17,27 +17,27 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 
 enum class FairyToolMaterials(
+    private val miningLevel: Int,
     private val durability: Int,
     private val miningSpeedMultiplier: Float,
     private val attackDamage: Float,
-    private val miningLevel: Int,
     private val enchantability: Int,
     private val repairIngredient: Ingredient,
 ) : ToolMaterial {
-    COPPER(196, 5.0F, 1.0F, MiningLevels.IRON, 18, Items.COPPER_INGOT.toIngredient()),
-    EMERALD(1192, 7.0F, 2.5F, MiningLevels.DIAMOND, 16, Items.EMERALD.toIngredient()),
+    COPPER(MiningLevels.IRON, 196, 5.0F, 1.0F, 18, Items.COPPER_INGOT.toIngredient()),
+    EMERALD(MiningLevels.DIAMOND, 1192, 7.0F, 2.5F, 16, Items.EMERALD.toIngredient()),
 
-    MAGNETITE(220, 5.0F, 1.5F, MiningLevels.STONE, 3, MaterialCard.MAGNETITE.item.toIngredient()),
-    FLUORITE(96, 3.0F, 1.0F, MiningLevels.STONE, 20, MaterialCard.FLUORITE.item.toIngredient()),
+    MAGNETITE(MiningLevels.STONE, 220, 5.0F, 1.5F, 3, MaterialCard.MAGNETITE.item.toIngredient()),
+    FLUORITE(MiningLevels.STONE, 96, 3.0F, 1.0F, 20, MaterialCard.FLUORITE.item.toIngredient()),
 
-    MIRAGE(48, 1.6F, 0.0F, MiningLevels.WOOD, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
-    MIRAGIUM(87, 0.5F, 0.5F, MiningLevels.IRON, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
-    FAIRY_CRYSTAL(235, 5.0F, 1.5F, MiningLevels.IRON, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
-    PHANTOM_DROP(777, 9.0F, 2.0F, MiningLevels.NETHERITE, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
-    XARPITE(283, 1.0F, 2.0F, MiningLevels.IRON, 20, MaterialCard.XARPITE.item.toIngredient()),
-    MIRANAGITE(256, 6.5F, 2.0F, MiningLevels.IRON, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
-    CHAOS_STONE(666, 2.0F, 2.0F, MiningLevels.NETHERITE, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
-    HAIMEVISKA_ROSIN(73, 0.5F, 0.0F, MiningLevels.WOOD, 11, MaterialCard.HAIMEVISKA_ROSIN.item.toIngredient())
+    MIRAGE(MiningLevels.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
+    MIRAGIUM(MiningLevels.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
+    FAIRY_CRYSTAL(MiningLevels.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
+    PHANTOM_DROP(MiningLevels.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
+    XARPITE(MiningLevels.IRON, 283, 1.0F, 2.0F, 20, MaterialCard.XARPITE.item.toIngredient()),
+    MIRANAGITE(MiningLevels.IRON, 256, 6.5F, 2.0F, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
+    CHAOS_STONE(MiningLevels.NETHERITE, 666, 2.0F, 2.0F, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
+    HAIMEVISKA_ROSIN(MiningLevels.WOOD, 73, 0.5F, 0.0F, 11, MaterialCard.HAIMEVISKA_ROSIN.item.toIngredient())
     ;
 
     override fun getDurability() = durability
