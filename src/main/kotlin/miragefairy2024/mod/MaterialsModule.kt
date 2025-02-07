@@ -693,20 +693,11 @@ fun initMaterialsModule() {
     DrinkItem.FLAMING_TRANSLATION.enJa()
 
     fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
-        if (count == 9) {
-            registerShapedRecipeGeneration(higherItem) {
-                pattern("###")
-                pattern("###")
-                pattern("###")
-                input('#', lowerItem)
-            }.noGroup(noGroup) on lowerItem from lowerItem
-        } else {
-            registerShapelessRecipeGeneration(higherItem, count = 1) {
-                repeat(count) {
-                    input(lowerItem)
-                }
-            }.noGroup(noGroup) on lowerItem from lowerItem
-        }
+        registerShapelessRecipeGeneration(higherItem, count = 1) {
+            repeat(count) {
+                input(lowerItem)
+            }
+        }.noGroup(noGroup) on lowerItem from lowerItem
         registerShapelessRecipeGeneration(lowerItem, count = count) {
             input(higherItem)
         }.noGroup(noGroup) on higherItem from higherItem
