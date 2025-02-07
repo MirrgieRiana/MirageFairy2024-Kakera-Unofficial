@@ -703,6 +703,18 @@ fun initMaterialsModule() {
             input(high.item)
         }.noGroup(noGroup) on high.item from high.item
     }
+
+    fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
+        registerShapelessRecipeGeneration(higherItem, count = 1) {
+            repeat(count) {
+                input(lowerItem)
+            }
+        } on lowerItem from lowerItem
+        registerShapelessRecipeGeneration(lowerItem, count = count) {
+            input(higherItem)
+        } on higherItem from higherItem
+    }
+
     registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH, noGroup = true)
@@ -767,18 +779,6 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_1000.item, MaterialCard.JEWEL_5000.item, 5)
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_5000.item, MaterialCard.JEWEL_10000.item, 2)
 
-}
-
-context(ModContext)
-private fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
-    registerShapelessRecipeGeneration(higherItem, count = 1) {
-        repeat(count) {
-            input(lowerItem)
-        }
-    } on lowerItem from lowerItem
-    registerShapelessRecipeGeneration(lowerItem, count = count) {
-        input(higherItem)
-    } on higherItem from higherItem
 }
 
 class MinaItem(val mina: Int, settings: Settings) : Item(settings)
