@@ -1,5 +1,7 @@
-package miragefairy2024.mod.passiveskill
+package miragefairy2024.mod.passiveskill.conditions
 
+import miragefairy2024.mod.passiveskill.PassiveSkillCondition
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.text.Text
 

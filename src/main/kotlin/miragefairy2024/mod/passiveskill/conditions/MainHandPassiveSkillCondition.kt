@@ -1,6 +1,8 @@
-package miragefairy2024.mod.passiveskill
+package miragefairy2024.mod.passiveskill.conditions
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.passiveskill.PassiveSkillCondition
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text

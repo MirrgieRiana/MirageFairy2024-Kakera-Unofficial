@@ -1,7 +1,9 @@
-package miragefairy2024.mod.passiveskill
+package miragefairy2024.mod.passiveskill.conditions
 
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
+import miragefairy2024.mod.passiveskill.PassiveSkillCondition
+import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
