@@ -274,37 +274,49 @@ class MaterialCard(
             PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR = !MaterialCard(
             "mirage_flour", "Mirage Flour", "ミラージュの花粉",
             PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_NATURE = !MaterialCard(
             "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
             PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_EARTH = !MaterialCard(
             "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
             PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_UNDERWORLD = !MaterialCard(
             "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
             PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_SKY = !MaterialCard(
             "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
             PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_UNIVERSE = !MaterialCard(
             "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
             PoemList(3)
@@ -312,7 +324,9 @@ class MaterialCard(
                 .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
         val MIRAGE_FLOUR_OF_TIME = !MaterialCard(
             "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
             PoemList(4)
@@ -320,7 +334,9 @@ class MaterialCard(
                 .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
-        )
+        ) {
+            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
+        }
 
         val FAIRY_SCALES = !MaterialCard(
             "fairy_scales", "Fairy Scales", "妖精の鱗粉",
@@ -697,16 +713,6 @@ fun initMaterialsModule() {
 
     // ミラジウム
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
-
-    // ミラージュの花粉
-    MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_SKY.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-    MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
