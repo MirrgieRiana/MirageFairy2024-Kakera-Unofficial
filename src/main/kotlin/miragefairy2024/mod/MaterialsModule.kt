@@ -549,80 +549,102 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME, noGroup = true)
 
     // 紅天石
-    MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
-    MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
+    run {
+        MaterialCard.XARPITE.item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
+        MaterialCard.XARPITE.item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
+    }
 
     // 蒼天石の棒
-    registerShapedRecipeGeneration(MaterialCard.MIRANAGITE_ROD.item) {
-        pattern("  #")
-        pattern(" # ")
-        pattern("#  ")
-        input('#', MaterialCard.MIRANAGITE.item)
-    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+    run {
+        registerShapedRecipeGeneration(MaterialCard.MIRANAGITE_ROD.item) {
+            pattern("  #")
+            pattern(" # ")
+            pattern("#  ")
+            input('#', MaterialCard.MIRANAGITE.item)
+        } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+    }
 
     // 混沌の石
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.SIMPLE_DUNGEON_CHEST }, 10, 3..5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT_CHEST }, 5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ANCIENT_CITY_CHEST }, 10, 1..5)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_CHEST }, 10)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE_CHEST }, 3)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
-    MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
+    run {
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.SIMPLE_DUNGEON_CHEST }, 10, 3..5)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT_CHEST }, 5)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.ANCIENT_CITY_CHEST }, 10, 1..5)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_CHEST }, 10)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE_CHEST }, 3)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
+        MaterialCard.CHAOS_STONE.item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
+    }
 
     // ミラージュの葉
-    MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
+    run {
+        MaterialCard.MIRAGE_LEAVES.item.registerComposterInput(0.5F)
+    }
 
     // ミラージュの茎
-    registerShapelessRecipeGeneration(MaterialCard.MIRAGE_STEM.item) {
-        input(MaterialCard.MIRAGE_LEAVES.item)
-    } on MaterialCard.MIRAGE_LEAVES.item
-    MaterialCard.MIRAGE_STEM.item.registerComposterInput(0.5F)
-    registerShapedRecipeGeneration(Items.STICK, 2) {
-        pattern("#")
-        pattern("#")
-        input('#', MaterialCard.MIRAGE_STEM.item)
-    } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.MOD_ID from MaterialCard.MIRAGE_STEM.item
+    run {
+        registerShapelessRecipeGeneration(MaterialCard.MIRAGE_STEM.item) {
+            input(MaterialCard.MIRAGE_LEAVES.item)
+        } on MaterialCard.MIRAGE_LEAVES.item
+        MaterialCard.MIRAGE_STEM.item.registerComposterInput(0.5F)
+        registerShapedRecipeGeneration(Items.STICK, 2) {
+            pattern("#")
+            pattern("#")
+            input('#', MaterialCard.MIRAGE_STEM.item)
+        } on MaterialCard.MIRAGE_STEM.item modId MirageFairy2024.MOD_ID from MaterialCard.MIRAGE_STEM.item
+    }
 
     // きらめきの束
-    registerShapedRecipeGeneration(MaterialCard.FAIRY_GLASS_FIBER.item) {
-        pattern("###")
-        pattern("# #")
-        pattern("###")
-        input('#', MaterialCard.MIRAGE_STEM.item)
-    } on MaterialCard.MIRAGE_STEM.item
-    registerShapedRecipeGeneration(Items.STRING) {
-        pattern("##")
-        pattern("##")
-        input('#', MaterialCard.FAIRY_GLASS_FIBER.item)
-    } on MaterialCard.FAIRY_GLASS_FIBER.item modId MirageFairy2024.MOD_ID from MaterialCard.FAIRY_GLASS_FIBER.item
+    run {
+        registerShapedRecipeGeneration(MaterialCard.FAIRY_GLASS_FIBER.item) {
+            pattern("###")
+            pattern("# #")
+            pattern("###")
+            input('#', MaterialCard.MIRAGE_STEM.item)
+        } on MaterialCard.MIRAGE_STEM.item
+        registerShapedRecipeGeneration(Items.STRING) {
+            pattern("##")
+            pattern("##")
+            input('#', MaterialCard.FAIRY_GLASS_FIBER.item)
+        } on MaterialCard.FAIRY_GLASS_FIBER.item modId MirageFairy2024.MOD_ID from MaterialCard.FAIRY_GLASS_FIBER.item
+    }
 
     // ミラジウム
-    registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+    run {
+        registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGIUM_NUGGET.item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+    }
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
 
     // ヴェロペダの葉
-    MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
-    registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
-    registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
+    run {
+        MaterialCard.VEROPEDA_LEAF.item.registerComposterInput(0.5F)
+        registerSmeltingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
+        registerBlastingRecipeGeneration(MaterialCard.VEROPEDA_LEAF.item, Items.IRON_NUGGET, 0.1) on MaterialCard.VEROPEDA_LEAF.item modId MirageFairy2024.MOD_ID from MaterialCard.VEROPEDA_LEAF.item
+    }
 
     // ヴェロペダの実
-    MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
+    run {
+        MaterialCard.VEROPEDA_BERRIES.item.registerComposterInput(0.3F)
+    }
 
     // ハイメヴィスカの樹液→松明
-    registerShapedRecipeGeneration(Items.TORCH) {
-        pattern("#")
-        pattern("S")
-        input('#', MaterialCard.HAIMEVISKA_SAP.item)
-        input('S', Items.STICK)
-    } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_SAP.item
+    run {
+        registerShapedRecipeGeneration(Items.TORCH) {
+            pattern("#")
+            pattern("S")
+            input('#', MaterialCard.HAIMEVISKA_SAP.item)
+            input('S', Items.STICK)
+        } on MaterialCard.HAIMEVISKA_SAP.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_SAP.item
+    }
 
     // 妖精の木の涙→粘着ピストン
-    registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
-        pattern("S")
-        pattern("P")
-        input('P', Blocks.PISTON)
-        input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
-    } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_ROSIN.item
+    run {
+        registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
+            pattern("S")
+            pattern("P")
+            input('P', Blocks.PISTON)
+            input('S', MaterialCard.HAIMEVISKA_ROSIN.item)
+        } on MaterialCard.HAIMEVISKA_ROSIN.item modId MirageFairy2024.MOD_ID from MaterialCard.HAIMEVISKA_ROSIN.item
+    }
 
     // ミラージュの花粉
     MaterialCard.TINY_MIRAGE_FLOUR.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
@@ -635,19 +657,25 @@ fun initMaterialsModule() {
     MaterialCard.MIRAGE_FLOUR_OF_TIME.item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
 
     // 妖精の鱗粉
-    MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
+    run {
+        MaterialCard.FAIRY_SCALES.item.registerGrassDrop(0.1F, 1)
+    }
 
     // 磁鉄鉱
-    registerSmeltingRecipeGeneration(MaterialCard.MAGNETITE.item, Items.IRON_NUGGET, 0.7) on MaterialCard.MAGNETITE.item modId MirageFairy2024.MOD_ID from MaterialCard.MAGNETITE.item
+    run {
+        registerSmeltingRecipeGeneration(MaterialCard.MAGNETITE.item, Items.IRON_NUGGET, 0.7) on MaterialCard.MAGNETITE.item modId MirageFairy2024.MOD_ID from MaterialCard.MAGNETITE.item
+    }
 
     // 蛍石→スフィアベース
-    registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
-        pattern(" S ")
-        pattern("SFS")
-        pattern(" S ")
-        input('F', MaterialCard.FLUORITE.item)
-        input('S', MaterialCard.FAIRY_SCALES.item)
-    } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
+    run {
+        registerShapedRecipeGeneration(MaterialCard.SPHERE_BASE.item) {
+            pattern(" S ")
+            pattern("SFS")
+            pattern(" S ")
+            input('F', MaterialCard.FLUORITE.item)
+            input('S', MaterialCard.FAIRY_SCALES.item)
+        } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
+    }
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
@@ -703,77 +731,89 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.JEWEL_5000.item, MaterialCard.JEWEL_10000.item, 2)
 
     // 使徒のステッキ
-    registerShapedRecipeGeneration(MaterialCard.APOSTLE_WAND.item) {
-        pattern(" G")
-        pattern("S ")
-        input('S', MaterialCard.MIRAGE_STEM.item)
-        input('G', Items.GOLD_INGOT)
-    } on MaterialCard.MIRAGE_STEM.item
+    run {
+        registerShapedRecipeGeneration(MaterialCard.APOSTLE_WAND.item) {
+            pattern(" G")
+            pattern("S ")
+            input('S', MaterialCard.MIRAGE_STEM.item)
+            input('G', Items.GOLD_INGOT)
+        } on MaterialCard.MIRAGE_STEM.item
+    }
 
     // TODO 蒸留装置
     // ラム酒
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.RUM.item.createItemStack(),
-        duration = 20 * 60 * 5,
-    ) on Items.SUGAR_CANE
-    FoodIngredientsRegistry.registry[MaterialCard.RUM.item] = FoodIngredients() + Items.SUGAR_CANE
+    run {
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.RUM.item.createItemStack(),
+            duration = 20 * 60 * 5,
+        ) on Items.SUGAR_CANE
+        FoodIngredientsRegistry.registry[MaterialCard.RUM.item] = FoodIngredients() + Items.SUGAR_CANE
+    }
 
     // シードル
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(Items.APPLE), 4),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.CIDRE.item.createItemStack(),
-        duration = 20 * 60 * 1,
-    ) on Items.APPLE
-    FoodIngredientsRegistry.registry[MaterialCard.CIDRE.item] = FoodIngredients() + Items.APPLE
+    run {
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(Items.APPLE), 4),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.CIDRE.item.createItemStack(),
+            duration = 20 * 60 * 1,
+        ) on Items.APPLE
+        FoodIngredientsRegistry.registry[MaterialCard.CIDRE.item] = FoodIngredients() + Items.APPLE
+    }
 
     // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
     // 妖精のリキュール
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 8),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.FAIRY_LIQUEUR.item.createItemStack(),
-        duration = 20 * 60 * 5,
-    ) on MaterialCard.HAIMEVISKA_SAP.item
-    FoodIngredientsRegistry.registry[MaterialCard.FAIRY_LIQUEUR.item] = FoodIngredients() + MaterialCard.HAIMEVISKA_SAP.item
+    run {
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 8),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.FAIRY_LIQUEUR.item.createItemStack(),
+            duration = 20 * 60 * 5,
+        ) on MaterialCard.HAIMEVISKA_SAP.item
+        FoodIngredientsRegistry.registry[MaterialCard.FAIRY_LIQUEUR.item] = FoodIngredients() + MaterialCard.HAIMEVISKA_SAP.item
+    }
 
     // ヴェロペデリコラ
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 8),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.VEROPEDELIQUORA.item.createItemStack(),
-        duration = 20 * 60 * 5,
-    ) on MaterialCard.VEROPEDA_BERRIES.item
-    FoodIngredientsRegistry.registry[MaterialCard.VEROPEDELIQUORA.item] = FoodIngredients() + MaterialCard.VEROPEDA_BERRIES.item
+    run {
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 8),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.VEROPEDELIQUORA.item.createItemStack(),
+            duration = 20 * 60 * 5,
+        ) on MaterialCard.VEROPEDA_BERRIES.item
+        FoodIngredientsRegistry.registry[MaterialCard.VEROPEDELIQUORA.item] = FoodIngredients() + MaterialCard.VEROPEDA_BERRIES.item
+    }
 
     // 毒薬
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.POISON.item.createItemStack(),
-        duration = 20 * 5,
-    ) on Items.PUFFERFISH from Items.PUFFERFISH
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.POISON.item.createItemStack(),
-        duration = 20 * 5,
-    ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
-    registerFermentationBarrelRecipeGeneration(
-        input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-        input2 = Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
-        input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
-        output = MaterialCard.POISON.item.createItemStack(),
-        duration = 20 * 5,
-    ) on Items.SPIDER_EYE from Items.SPIDER_EYE
+    run {
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.POISON.item.createItemStack(),
+            duration = 20 * 5,
+        ) on Items.PUFFERFISH from Items.PUFFERFISH
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.POISON.item.createItemStack(),
+            duration = 20 * 5,
+        ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
+        registerFermentationBarrelRecipeGeneration(
+            input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+            input2 = Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
+            input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            output = MaterialCard.POISON.item.createItemStack(),
+            duration = 20 * 5,
+        ) on Items.SPIDER_EYE from Items.SPIDER_EYE
+    }
 
 }
 
