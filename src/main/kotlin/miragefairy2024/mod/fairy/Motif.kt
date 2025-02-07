@@ -122,7 +122,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.STRENGTH(2)
-            + overall.attack(0.5)
+            + overall.attack(0.4)
+            + miningSpeed(0.3)
             + StatusEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
             + StatusEffects.UNLUCK(3), // TODO MOBドロップを減らす効果
         MotifCardRecipes().SR.end + BlockMaterialCard.LOCAL_VACUUM_DECAY.block,
@@ -192,8 +193,8 @@ enum class MotifCard(
         "dirt", 1, "Dirtia", "土精ディルチャ", 0xB87440, 0xB9855C, 0x593D29, 0x914A18,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + health(1.0) * overworld
-            + regeneration(0.2) * overworld,
+            + health(0.8) * overworld
+            + miningSpeed(0.4) * overworld,
         MotifCardRecipes().R.overworld + BlockTags.DIRT,
     ),
     MYCELIUM(
@@ -203,6 +204,7 @@ enum class MotifCard(
             + health(0.3)
             + regeneration(0.3) * light.atMost(12)
             + magic.attack(0.3) * light.atMost(12)
+            + miningSpeed(0.3) * light.atMost(12)
             + mana(2.0) { MUSHROOM },
         MotifCardRecipes().R.common(ConventionalBiomeTags.MUSHROOM) + Blocks.MYCELIUM,
     ),
@@ -210,9 +212,10 @@ enum class MotifCard(
         "sculk", 8, "Sculkia", "幽匿塊精スツルキャ", 0x19222C, 0x023F3D, 0x023F3D, 0x19C0C0,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + regeneration(0.8) * light.atMost(5)
+            + regeneration(0.4) * light.atMost(5)
             + overall.attack(0.4) * light.atMost(5)
-            + magic.attack(0.4) * indoor,
+            + magic.attack(0.4) * indoor
+            + miningSpeed(0.4) * indoor,
         MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK) + Blocks.SCULK,
     ),
 
@@ -221,7 +224,8 @@ enum class MotifCard(
         "stone", 2, "Stonia", "石精ストーニャ", 0x333333, 0x8F8F8F, 0x686868, 0x747474,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + overall.defence(1.0)
+            + overall.defence(0.8)
+            + miningSpeed(0.4)
             + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
             + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld + Blocks.STONE,
@@ -231,15 +235,17 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(0.8)
-            + overall.defence(0.4),
+            + overall.defence(0.3)
+            + miningSpeed(0.2),
         MotifCardRecipes().R.common(BiomeKeys.DRIPSTONE_CAVES) + Blocks.DRIPSTONE_BLOCK + Blocks.POINTED_DRIPSTONE,
     ),
     NETHERRACK(
         "netherrack", 7, "Netherrackia", "地獄岩精ネテッラッキャ", 0x9B5C5C, 0x703131, 0x703131, 0x8E1111,
         ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
-            + overall.defence(0.2)
+            + overall.defence(0.1)
             + fire.defence(2.0 * 0.5)
+            + miningSpeed(0.2)
             + overall.attack(0.2) * onFire,
         MotifCardRecipes().R.nether + Blocks.NETHERRACK,
     ),
@@ -260,7 +266,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + melee.attack(0.6)
-            + melee.defence(1.0)
+            + miningSpeed(0.5)
             + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
             + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R + Blocks.IRON_BLOCK + Items.IRON_INGOT + BlockTags.IRON_ORES,
@@ -270,7 +276,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + luck(0.8)
-            + magic.defence(1.0)
+            + miningSpeed(0.6)
             + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
             + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R + Blocks.GOLD_BLOCK + Items.GOLD_INGOT + BlockTags.GOLD_ORES,
@@ -320,8 +326,8 @@ enum class MotifCard(
         "chaos_stone", 8, "Chaose Stonia", "混沌石精キャオセストーニャ", 0xDB5F00, 0xB36229, 0x78421C, 0xFFBF40,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + shooting.attack(0.7)
-            + luck(0.4)
+            + shooting.attack(0.4)
+            + miningSpeed(0.8)
             + StatusEffects.HASTE() * ToolMaterialCard.CHAOS_STONE()
             + StatusEffects.HASTE(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + MaterialCard.CHAOS_STONE.item,
@@ -340,8 +346,8 @@ enum class MotifCard(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + luck(0.8)
-            + melee.attack(0.2)
+            + luck(0.6)
+            + miningSpeed(0.5)
             + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
             + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + Blocks.DIAMOND_BLOCK + Items.DIAMOND + BlockTags.DIAMOND_ORES,
@@ -468,7 +474,8 @@ enum class MotifCard(
         "enderman", 6, "Endermania", "終界人精エンデルマーニャ", 0x000000, 0x161616, 0x161616, 0xEF84FA,
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
-            + collection(1.2) * food.atLeast(12),
+            + collection(1.0) * food.atLeast(12)
+            + miningSpeed(0.2),
         MotifCardRecipes().R.overworld.nether.end + EntityType.ENDERMAN,
     ),
     ENDER_EYE(
@@ -544,6 +551,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(1.0) * food.atMost(6)
             + shooting.defence(1.0) * food.atMost(6)
+            + miningSpeed(0.5) * food.atMost(6)
             + StatusEffects.SLOW_FALLING() * food.atMost(6)
             + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
             + StatusEffects.SLOWNESS(3) * food.atMost(6) * fairyLevel.atMost(16.0),
