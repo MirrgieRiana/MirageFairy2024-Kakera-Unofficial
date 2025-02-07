@@ -76,6 +76,7 @@ infix fun Item.containsAsFoodIngredient(ingredient: FoodIngredientCategory): Boo
 enum class FoodIngredientCategoryCard(path: String, enName: String, jaName: String) : FoodIngredientCategory {
     FISH("fish", "Fish", "魚"),
     MUSHROOM("mushroom", "Mushroom", "キノコ"),
+    ALCOHOL("alcohol", "Alcohol", "アルコール")
     ;
 
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.food_ingredient.$path" }, enName, jaName)

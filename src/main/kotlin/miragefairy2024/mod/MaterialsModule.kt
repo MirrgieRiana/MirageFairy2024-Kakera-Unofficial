@@ -560,7 +560,7 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on Items.SUGAR_CANE
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + Items.SUGAR_CANE
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.SUGAR_CANE
         }
         val CIDRE = !MaterialCard(
             "cidre", "Cidre", "シードル",
@@ -580,7 +580,7 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 60 * 1,
             ) on Items.APPLE
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + Items.APPLE
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.APPLE
         }
         val FAIRY_LIQUEUR = !MaterialCard(
             "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
@@ -601,7 +601,7 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on HAIMEVISKA_SAP.item
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + HAIMEVISKA_SAP.item
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + HAIMEVISKA_SAP.item
         }
         val VEROPEDELIQUORA = !MaterialCard(
             "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
@@ -622,7 +622,7 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on VEROPEDA_BERRIES.item
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + VEROPEDA_BERRIES.item
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + VEROPEDA_BERRIES.item
         }
         val POISON = !MaterialCard(
             "poison", "Poison", "毒薬",
