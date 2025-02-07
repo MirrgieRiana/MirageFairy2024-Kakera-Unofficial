@@ -20,8 +20,6 @@ import miragefairy2024.mod.passiveskill.conditions.CategoryFoodIngredientPassive
 import miragefairy2024.mod.passiveskill.conditions.DoubleComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.conditions.IntComparisonPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.conditions.ItemFoodIngredientPassiveSkillCondition
-import miragefairy2024.mod.passiveskill.conditions.MainHandConditionCard
-import miragefairy2024.mod.passiveskill.conditions.MainHandPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.conditions.SimplePassiveSkillConditionCard
 import miragefairy2024.mod.passiveskill.conditions.StatusEffectPassiveSkillCondition
 import miragefairy2024.mod.passiveskill.conditions.ToolMaterialCardPassiveSkillCondition
@@ -829,14 +827,14 @@ enum class MotifCard(
         "hoe", 3, "Hia", "鍬精ヒャ", 0xFFFFFF, 0xFFC48E, 0x47FF00, 0xFFFFFF,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + luck(1.2) * MainHandConditionCard.HOE(),
+            + luck(1.2) * SimplePassiveSkillConditionCard.HOE,
         MotifCardRecipes().R + ItemTags.HOES,
     ),
     SWORD(
         "sword", 3, "Swordia", "剣精スウォルジャ", 0xFFFFFF, 0xFFC48E, 0xFF0300, 0xFFFFFF,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + melee.attack(1.2) * MainHandConditionCard.SWORD(),
+            + melee.attack(1.2) * SimplePassiveSkillConditionCard.SWORD,
         MotifCardRecipes().R + ItemTags.SWORDS,
     ),
     SHIELD(
@@ -1164,8 +1162,6 @@ private val fairyLevel get() = DoubleComparisonPassiveSkillCondition.FAIRY_LEVEL
 private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
-
-private operator fun MainHandConditionCard.invoke() = MainHandPassiveSkillCondition(this)
 
 private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: StatusEffect) = this * StatusEffectPassiveSkillCondition(statusEffect)
 

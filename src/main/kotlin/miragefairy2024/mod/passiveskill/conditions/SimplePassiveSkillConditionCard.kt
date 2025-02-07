@@ -11,6 +11,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.registry.tag.FluidTags
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
 
@@ -37,6 +38,9 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
     IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
     NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
+
+    HOE("hoe", "Hoe", "クワ", { it.player.mainHandStack.isIn(ItemTags.HOES) }),
+    SWORD("sword", "Sword", "剣", { it.player.mainHandStack.isIn(ItemTags.SWORDS) }),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

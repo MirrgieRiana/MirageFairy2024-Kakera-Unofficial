@@ -2,7 +2,6 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.ModContext
 import miragefairy2024.mod.passiveskill.conditions.ItemFoodIngredientPassiveSkillCondition
-import miragefairy2024.mod.passiveskill.conditions.MainHandConditionCard
 import miragefairy2024.mod.passiveskill.conditions.SimplePassiveSkillConditionCard
 import miragefairy2024.util.enJa
 
@@ -12,7 +11,4 @@ fun initPassiveSkillConditions() {
         card.init()
     }
     ItemFoodIngredientPassiveSkillCondition.translation.enJa()
-    MainHandConditionCard.entries.forEach { card ->
-        card.translation.enJa()
-    }
 }
