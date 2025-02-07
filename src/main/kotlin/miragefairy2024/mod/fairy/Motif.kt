@@ -102,6 +102,8 @@ TNT
 磁鉄鉱
 銅　→パッシブ追加
 蛍石
+小麦
+酒精
  */
 @Suppress("SpellCheckingInspection")
 enum class MotifCard(
