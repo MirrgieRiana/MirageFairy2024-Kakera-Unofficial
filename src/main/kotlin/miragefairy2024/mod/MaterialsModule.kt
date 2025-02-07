@@ -703,6 +703,10 @@ fun initMaterialsModule() {
         }.noGroup(noGroup) on higherItem from higherItem
     }
 
+    // ミラジウム圧縮
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)
+
+    // ミラージュの花粉圧縮
     registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGE_FLOUR_OF_EARTH.item, noGroup = true)
@@ -710,9 +714,6 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, MaterialCard.MIRAGE_FLOUR_OF_SKY.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, MaterialCard.MIRAGE_FLOUR_OF_TIME.item, noGroup = true)
-
-    // ミラジウム
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
