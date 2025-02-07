@@ -692,39 +692,36 @@ fun initMaterialsModule() {
     MINA_DESCRIPTION_TRANSLATION.enJa()
     DrinkItem.FLAMING_TRANSLATION.enJa()
 
-    fun registerCompressionRecipeGeneration(low: MaterialCard, high: MaterialCard, noGroup: Boolean = false) {
-        registerShapedRecipeGeneration(high.item) {
-            pattern("###")
-            pattern("###")
-            pattern("###")
-            input('#', low.item)
-        }.noGroup(noGroup) on low.item from low.item
-        registerShapelessRecipeGeneration(low.item, 9) {
-            input(high.item)
-        }.noGroup(noGroup) on high.item from high.item
-    }
-
-    fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int) {
-        registerShapelessRecipeGeneration(higherItem, count = 1) {
-            repeat(count) {
-                input(lowerItem)
-            }
-        } on lowerItem from lowerItem
+    fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
+        if (count == 9) {
+            registerShapedRecipeGeneration(higherItem) {
+                pattern("###")
+                pattern("###")
+                pattern("###")
+                input('#', lowerItem)
+            }.noGroup(noGroup) on lowerItem from lowerItem
+        } else {
+            registerShapelessRecipeGeneration(higherItem, count = 1) {
+                repeat(count) {
+                    input(lowerItem)
+                }
+            }.noGroup(noGroup) on lowerItem from lowerItem
+        }
         registerShapelessRecipeGeneration(lowerItem, count = count) {
             input(higherItem)
-        } on higherItem from higherItem
+        }.noGroup(noGroup) on higherItem from higherItem
     }
 
-    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR, MaterialCard.MIRAGE_FLOUR_OF_NATURE, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE, MaterialCard.MIRAGE_FLOUR_OF_EARTH, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD, MaterialCard.MIRAGE_FLOUR_OF_SKY, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE, MaterialCard.MIRAGE_FLOUR_OF_TIME, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGE_FLOUR_OF_EARTH.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, MaterialCard.MIRAGE_FLOUR_OF_SKY.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, MaterialCard.MIRAGE_FLOUR_OF_TIME.item, noGroup = true)
 
     // ミラジウム
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET, MaterialCard.MIRAGIUM_INGOT)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
