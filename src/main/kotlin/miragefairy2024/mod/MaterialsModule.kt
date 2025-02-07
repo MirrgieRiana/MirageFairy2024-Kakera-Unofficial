@@ -111,8 +111,8 @@ class MaterialCard(
                 pattern("  #")
                 pattern(" # ")
                 pattern("#  ")
-                input('#', MaterialCard.MIRANAGITE.item)
-            } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+                input('#', MIRANAGITE.item)
+            } on MIRANAGITE.item from MIRANAGITE.item
         }
         val CHAOS_STONE = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
@@ -140,8 +140,8 @@ class MaterialCard(
             fuelValue = 100,
         ) {
             registerShapelessRecipeGeneration(item) {
-                input(MaterialCard.MIRAGE_LEAVES.item)
-            } on MaterialCard.MIRAGE_LEAVES.item
+                input(MIRAGE_LEAVES.item)
+            } on MIRAGE_LEAVES.item
             item.registerComposterInput(0.5F)
             registerShapedRecipeGeneration(Items.STICK, 2) {
                 pattern("#")
@@ -158,8 +158,8 @@ class MaterialCard(
                 pattern("###")
                 pattern("# #")
                 pattern("###")
-                input('#', MaterialCard.MIRAGE_STEM.item)
-            } on MaterialCard.MIRAGE_STEM.item
+                input('#', MIRAGE_STEM.item)
+            } on MIRAGE_STEM.item
             registerShapedRecipeGeneration(Items.STRING) {
                 pattern("##")
                 pattern("##")
@@ -192,7 +192,7 @@ class MaterialCard(
             PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
             soulStreamContainable = true,
         ) {
-            registerSmeltingRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, item) on MaterialCard.MIRAGE_FLOUR_OF_NATURE.item from MaterialCard.MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+            registerSmeltingRecipeGeneration(MIRAGE_FLOUR_OF_NATURE.item, item) on MIRAGE_FLOUR_OF_NATURE.item from MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
         }
         val MIRAGIUM_INGOT = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
@@ -385,9 +385,9 @@ class MaterialCard(
                 pattern(" S ")
                 pattern("SFS")
                 pattern(" S ")
-                input('F', MaterialCard.FLUORITE.item)
-                input('S', MaterialCard.FAIRY_SCALES.item)
-            } on MaterialCard.FLUORITE.item from MaterialCard.FLUORITE.item
+                input('F', FLUORITE.item)
+                input('S', FAIRY_SCALES.item)
+            } on FLUORITE.item from FLUORITE.item
         }
 
         val MINA_1 = !MaterialCard(
@@ -535,9 +535,9 @@ class MaterialCard(
             registerShapedRecipeGeneration(item) {
                 pattern(" G")
                 pattern("S ")
-                input('S', MaterialCard.MIRAGE_STEM.item)
+                input('S', MIRAGE_STEM.item)
                 input('G', Items.GOLD_INGOT)
-            } on MaterialCard.MIRAGE_STEM.item
+            } on MIRAGE_STEM.item
         }
 
         val RUM = !MaterialCard(
@@ -596,12 +596,12 @@ class MaterialCard(
             // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
             registerFermentationBarrelRecipeGeneration(
                 input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(MaterialCard.HAIMEVISKA_SAP.item), 8),
+                input2 = Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
                 input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
-            ) on MaterialCard.HAIMEVISKA_SAP.item
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + MaterialCard.HAIMEVISKA_SAP.item
+            ) on HAIMEVISKA_SAP.item
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + HAIMEVISKA_SAP.item
         }
         val VEROPEDELIQUORA = !MaterialCard(
             "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
@@ -617,12 +617,12 @@ class MaterialCard(
         ) {
             registerFermentationBarrelRecipeGeneration(
                 input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(MaterialCard.VEROPEDA_BERRIES.item), 8),
+                input2 = Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
                 input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
-            ) on MaterialCard.VEROPEDA_BERRIES.item
-            FoodIngredientsRegistry.registry[item] = FoodIngredients() + MaterialCard.VEROPEDA_BERRIES.item
+            ) on VEROPEDA_BERRIES.item
+            FoodIngredientsRegistry.registry[item] = FoodIngredients() + VEROPEDA_BERRIES.item
         }
         val POISON = !MaterialCard(
             "poison", "Poison", "毒薬",
