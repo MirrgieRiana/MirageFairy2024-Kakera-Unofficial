@@ -4,37 +4,11 @@ import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
 import javax.swing.JPanel
-import javax.swing.JSlider
+import kotlin.math.roundToInt
 
-class PanelSliderField(private val min: Int, private val max: Int) : JPanel() {
-    val listeners = mutableListOf<SetValueEvent.() -> Unit>()
-
-    class SetValueEvent(val value: Int, val source: Any?)
-
-    private var _value = 0
-    private var isInProcessing = false
-
-    var value: Int
-        get() = _value
-        set(value) {
-            setValue(value, null)
-        }
-
-    private fun setValue(value: Int, source: Any?) {
-        isInProcessing = true
-
-        _value = value
-        listeners.forEach {
-            try {
-                SetValueEvent(value, source).it()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        isInProcessing = false
-    }
-
+class PanelSliderField(private val min: Int, private val max: Int, private val colorFunction: (Int) -> Int) : JPanel() {
+    val value = ObservableValue(0)
+    val repaintGradientEvent = ObservableValue(Unit)
 
     init {
 
@@ -47,47 +21,50 @@ class PanelSliderField(private val min: Int, private val max: Int) : JPanel() {
         }
 
         // スライダーを追加
-        JSlider().also { c ->
-            c.majorTickSpacing = 8
-            c.paintTicks = true
-            c.maximum = max
-            c.addChangeListener {
-                if (isInProcessing) return@addChangeListener
-                setValue(c.value, c)
+        add(ColorSlider { colorFunction((it * (max - min) + min).roundToInt()) }.also { c ->
+            c.value.register { _, it, _ ->
+                if (value.modifying) return@register
+                value.set((it * (max - min) + min).roundToInt(), c)
             }
-            listeners += {
-                if (source != c) c.value = value
+            value.register { _, it, source ->
+                if (source == c) return@register
+                c.value.set((it.toFloat() - min.toFloat()) / (max - min).toFloat())
             }
-            add(c, GridBagConstraints().also {
-                it.insets = Insets(0, 0, 0, 5)
-                it.fill = GridBagConstraints.HORIZONTAL
-                it.gridx = 0
-                it.gridy = 0
-            })
-        }
+            repaintGradientEvent.register { _, _, _ ->
+                c.repaintGradientEvent.fire()
+            }
+        }, GridBagConstraints().also {
+            it.insets = Insets(1, 5, 1, 5)
+            it.fill = GridBagConstraints.HORIZONTAL
+            it.gridx = 0
+            it.gridy = 0
+        })
 
         // 入力欄
-        ParsingTextField(
+        add(ParsingTextField(
+            min,
             { it.trim().toIntOrNull()?.takeIf { a -> a in min..max } },
             { "$it" },
         ).also { c ->
             c.columns = 5
-            c.listeners.add { value ->
-                if (isInProcessing) return@add
-                setValue(value, c)
+            c.value.register { _, it, _ ->
+                if (value.modifying) return@register
+                value.set(it, c)
             }
-            listeners += {
-                if (source != c) c.setValue(value)
+            value.register { _, it, source ->
+                if (source == c) return@register
+                c.value.set(it)
             }
-            add(c, GridBagConstraints().also {
-                it.fill = GridBagConstraints.HORIZONTAL
-                it.gridx = 1
-                it.gridy = 0
-            })
+        }, GridBagConstraints().also {
+            it.fill = GridBagConstraints.HORIZONTAL
+            it.gridx = 1
+            it.gridy = 0
+        })
+
+        value.register { _, _, _ ->
+            repaintGradientEvent.fire()
         }
 
-        // 初期化
-        value = 0
-
+        value.set(0)
     }
 }

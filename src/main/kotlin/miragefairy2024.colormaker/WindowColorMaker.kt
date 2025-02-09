@@ -82,17 +82,17 @@ class WindowColorMaker(
             labelImages.forEach { labelImage ->
                 if (source !== labelImage) labelImage.backgroundColor = backgroundColor
             }
-            if (source !== panelColorSliderBG) panelColorSliderBG.setValue(backgroundColor)
+            if (source !== panelColorSliderBG) panelColorSliderBG.value.set(Rgb(backgroundColor))
             updateImage()
         }
     }
 
-    private fun getColor(index: Int) = panelColorSliders[index].getValue()
+    private fun getColor(index: Int) = panelColorSliders[index].value.get().color
 
     private fun setColors(colors: List<Color>, source: Any?) {
         exclusiveController {
             panelColorSliders.indices.forEach { i ->
-                if (source !== panelColorSliders[i]) panelColorSliders[i].setValue(colors[i])
+                if (source !== panelColorSliders[i]) panelColorSliders[i].value.set(Rgb(colors[i]))
             }
             if (source !== textFieldColors) textFieldColors.text = colors.encode()
             updateImage()
@@ -161,7 +161,9 @@ class WindowColorMaker(
                 rightPane.add(createPanelTitledBorder("Background",
                     PanelColorSlider().also { c ->
                         panelColorSliderBG = c
-                        c.listeners += { color -> setBackgroundColor(color, c) }
+                        c.value.register { _, it, _ ->
+                            setBackgroundColor(it.color, c)
+                        }
                     }), GridBagConstraints().also {
                     it.fill = GridBagConstraints.HORIZONTAL
                     it.insets = Insets(0, 0, 5, 0)
@@ -172,7 +174,9 @@ class WindowColorMaker(
                     rightPane.add(createPanelTitledBorder(name,
                         PanelColorSlider().also { c ->
                             panelColorSliders += c
-                            c.listeners += { setColors(panelColorSliders.map { it.getValue() }, c) }
+                            c.value.register { _, _, _ ->
+                                setColors(panelColorSliders.map { it.value.get().color }, c)
+                            }
                         }), GridBagConstraints().also {
                         it.fill = GridBagConstraints.HORIZONTAL
                         it.insets = Insets(0, 0, 5, 0)

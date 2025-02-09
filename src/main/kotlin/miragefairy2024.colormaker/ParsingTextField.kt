@@ -6,95 +6,41 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.text.Document
 
-class ParsingTextField<T> : JTextField {
-    val parser: (String) -> T?
-    val builder: (T) -> String
+class ParsingTextField<T : Any>(defaultValue: T, private val decoder: (String) -> T?, private val encoder: (T) -> String) : JTextField() {
+    val value = ObservableValue(defaultValue)
+    var errorColor: Color = Color.decode("#FFBFBF")
 
-    constructor(parser: (String) -> T?, builder: (T) -> String) : super() {
-        this.parser = parser
-        this.builder = builder
-        init()
-    }
+    init {
 
-    constructor(parser: (String) -> T?, builder: (T) -> String, doc: Document?, text: String?, columns: Int) : super(doc, text, columns) {
-        this.parser = parser
-        this.builder = builder
-        init()
-    }
-
-    constructor(parser: (String) -> T?, builder: (T) -> String, columns: Int) : super(columns) {
-        this.parser = parser
-        this.builder = builder
-        init()
-    }
-
-    constructor(parser: (String) -> T?, builder: (T) -> String, text: String?, columns: Int) : super(text, columns) {
-        this.parser = parser
-        this.builder = builder
-        init()
-    }
-
-    constructor(parser: (String) -> T?, builder: (T) -> String, text: String?) : super(text) {
-        this.parser = parser
-        this.builder = builder
-        init()
-    }
-
-    private fun init() {
-
-        // イベント登録
-        run {
-
-            // アクションリスナー登録
-            addActionListener { parse() }
-
-            // ドキュメントのリスナーに常にドキュメントリスナーを配置する
-            run {
-                val dl = object : DocumentListener {
-                    override fun removeUpdate(e: DocumentEvent) = parse()
-                    override fun insertUpdate(e: DocumentEvent) = parse()
-                    override fun changedUpdate(e: DocumentEvent) = parse()
-                }
-                if (document != null) document.addDocumentListener(dl)
-                addPropertyChangeListener("document") { e ->
-                    e.oldValue.let { if (it is Document) it.removeDocumentListener(dl) }
-                    e.newValue.let { if (it is Document) it.addDocumentListener(dl) }
-                }
-            }
-
+        // Documentが変更される可能性があるため、それに追従する
+        val dl = object : DocumentListener {
+            override fun removeUpdate(e: DocumentEvent) = onUpdate()
+            override fun insertUpdate(e: DocumentEvent) = onUpdate()
+            override fun changedUpdate(e: DocumentEvent) = onUpdate()
+        }
+        if (document != null) document.addDocumentListener(dl)
+        addPropertyChangeListener("document") { e ->
+            (e.oldValue as Document).removeDocumentListener(dl)
+            (e.newValue as Document).addDocumentListener(dl)
         }
 
-    }
-
-    //
-
-    var colorSuccess: Color = Color.decode("#BFFFBF")
-    var colorError: Color = Color.decode("#FFBFBF")
-
-    val listeners = mutableListOf<(T) -> Unit>()
-
-    private fun parse() {
-        val res = parser(text)
-        if (res != null) {
-            value = res
-            listeners.forEach { it ->
-                try {
-                    it(res)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-            setBackground(colorSuccess)
-        } else {
-            setBackground(colorError)
+        addActionListener {
+            onUpdate()
         }
+
+        value.register { _, it, source ->
+            if (source == this) return@register
+            text = encoder(it)
+            setBackground(Color.WHITE)
+        }
+
+        value.fire()
     }
 
-    //
-
-    var value: T? = null
-        private set
-
-    fun setValue(value: T) = run { text = builder(value) }
-
+    private fun onUpdate() {
+        if (value.modifying) return
+        val newValue = decoder(text)
+        if (newValue != null) value.set(newValue, this)
+        setBackground(if (newValue != null) Color.WHITE else errorColor)
+    }
 }
