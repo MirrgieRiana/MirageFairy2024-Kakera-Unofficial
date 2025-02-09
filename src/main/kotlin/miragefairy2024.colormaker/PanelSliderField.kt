@@ -21,7 +21,7 @@ class PanelSliderField(private val min: Int, private val max: Int, private val c
         }
 
         // スライダーを追加
-        add(ColorSlider { colorFunction((it * (max - min) + min).roundToInt()) }.also { c ->
+        add(ColorSlider(max - min + 1) { colorFunction((it * (max - min) + min).roundToInt()) }.also { c ->
             c.value.register { _, it, _ ->
                 if (value.modifying) return@register
                 value.set((it * (max - min) + min).roundToInt(), c)
