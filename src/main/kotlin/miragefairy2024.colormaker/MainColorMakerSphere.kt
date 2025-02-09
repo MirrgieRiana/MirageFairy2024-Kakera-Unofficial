@@ -6,7 +6,7 @@ object MainColorMakerSphere {
         WindowColorMaker(
             { loadImage(it) },
             listOf(
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     4,
                     LayerSetting("sphere_layer0", ColorExpression("@background")),
                     LayerSetting("sphere_layer1", ColorExpression("@plasma")),

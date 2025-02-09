@@ -6,7 +6,7 @@ object MainColorMakerFairy {
         WindowColorMaker(
             { loadImage(it) },
             listOf(
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     2,
                     LayerSetting("fairy_skin", ColorExpression("@skin")),
                     LayerSetting("fairy_dress", ColorExpression("@dress")),
@@ -14,7 +14,7 @@ object MainColorMakerFairy {
                     LayerSetting("fairy_front", ColorExpression("@front")),
                     LayerSetting("fairy_hair", ColorExpression("@hair")),
                 ),
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     4,
                     LayerSetting("fairy_skin", ColorExpression("@skin")),
                     LayerSetting("fairy_dress", ColorExpression("@dress")),
@@ -22,7 +22,7 @@ object MainColorMakerFairy {
                     LayerSetting("fairy_front", ColorExpression("@front")),
                     LayerSetting("fairy_hair", ColorExpression("@hair")),
                 ),
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     8,
                     LayerSetting("fairy_skin", ColorExpression("@skin")),
                     LayerSetting("fairy_dress", ColorExpression("@dress")),

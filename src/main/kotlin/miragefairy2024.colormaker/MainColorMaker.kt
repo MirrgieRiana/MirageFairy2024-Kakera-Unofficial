@@ -13,7 +13,7 @@ object MainColorMaker {
         WindowColorMaker(
             { loadImage(it) },
             listOf(
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     4,
                     LayerSetting("fairy_layer0", ColorExpression("@skin")),
                     LayerSetting("fairy_layer1", ColorExpression("#00BE00")),
@@ -21,14 +21,14 @@ object MainColorMaker {
                     LayerSetting("fairy_layer3", ColorExpression("@brighter")),
                     LayerSetting("fairy_layer4", ColorExpression("@hair")),
                 ),
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     4,
                     LayerSetting("mirage_wisp_layer0", ColorExpression("@darker")),
                     LayerSetting("mirage_wisp_layer1", ColorExpression("@skin")),
                     LayerSetting("mirage_wisp_layer2", ColorExpression("@brighter")),
                     LayerSetting("mirage_wisp_layer3", ColorExpression("@hair")),
                 ),
-                layeredImageSettingOf(
+                LayeredImageSetting(
                     4,
                     LayerSetting("sphere_layer0", ColorExpression("@darker")),
                     LayerSetting("sphere_layer1", ColorExpression("@hair")),
