@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:xarpite_block_from_xarpite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_xarpite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "miragefairy2024:xarpite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_xarpite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:xarpite_block_from_xarpite"
+    ]
+  },
+  "sends_telemetry_event": false
+}
