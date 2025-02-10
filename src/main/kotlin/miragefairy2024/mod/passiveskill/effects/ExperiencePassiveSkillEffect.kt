@@ -2,7 +2,7 @@ package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.passiveskill.DoublePassiveSkillEffectCard
+import miragefairy2024.mod.passiveskill.AbstractDoublePassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -11,7 +11,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 
-object ExperiencePassiveSkillEffect : DoublePassiveSkillEffectCard("experience") {
+object ExperiencePassiveSkillEffect : AbstractDoublePassiveSkillEffect("experience") {
     private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {

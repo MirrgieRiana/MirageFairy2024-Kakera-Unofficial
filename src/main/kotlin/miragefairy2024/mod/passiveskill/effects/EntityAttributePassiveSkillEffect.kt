@@ -1,7 +1,7 @@
 package miragefairy2024.mod.passiveskill.effects
 
+import miragefairy2024.mod.passiveskill.AbstractPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -13,7 +13,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.text.Text
 import java.util.UUID
 
-object EntityAttributePassiveSkillEffect : PassiveSkillEffectCard<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
+object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
     val FORMATTERS = mutableMapOf<EntityAttribute, (Double) -> String>()
 
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }

@@ -73,7 +73,7 @@ fun initPassiveSkillModule() {
 
 }
 
-abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
+abstract class AbstractPassiveSkillEffect<T>(path: String) : PassiveSkillEffect<T> {
     val identifier = MirageFairy2024.identifier(path)
 
     context(ModContext)
@@ -84,7 +84,7 @@ abstract class PassiveSkillEffectCard<T>(path: String) : PassiveSkillEffect<T> {
     override val isPreprocessor = false
 }
 
-abstract class DoublePassiveSkillEffectCard(path: String) : PassiveSkillEffectCard<Double>(path) {
+abstract class AbstractDoublePassiveSkillEffect(path: String) : AbstractPassiveSkillEffect<Double>(path) {
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
@@ -92,7 +92,7 @@ abstract class DoublePassiveSkillEffectCard(path: String) : PassiveSkillEffectCa
     override fun toNbt(value: Double) = NbtCompound().also { it.wrapper["value"].double.set(value) }
 }
 
-abstract class BooleanPassiveSkillEffectCard(path: String) : PassiveSkillEffectCard<Boolean>(path) {
+abstract class AbstractBooleanPassiveSkillEffect(path: String) : AbstractPassiveSkillEffect<Boolean>(path) {
     override val unit = false
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun combine(a: Boolean, b: Boolean) = a || b
