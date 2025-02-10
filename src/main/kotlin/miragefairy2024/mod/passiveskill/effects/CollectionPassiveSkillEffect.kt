@@ -2,7 +2,6 @@ package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.passiveskill.AbstractDoublePassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.collectItem
