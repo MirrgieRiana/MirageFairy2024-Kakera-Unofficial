@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:nether_star_pickaxe",
+  "key": {
+    "#": {
+      "item": "minecraft:nether_star"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "item": "miragefairy2024:nether_star_pickaxe"
+  },
+  "show_notification": true
+}

@@ -169,6 +169,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
         ) { registerSwordRecipeGeneration(item, Items.EMERALD) }
+        val NETHER_STAR_PICKAXE = !ToolCard(
+            "nether_star_pickaxe", EnJa("Nether Star Pickaxe", "ネザースターのつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.NETHER_STAR).enchantment(Enchantments.FORTUNE, 4),
+        ) { registerPickaxeRecipeGeneration(item, Items.NETHER_STAR) }
+        val NETHER_STAR_AXE = !ToolCard(
+            "nether_star_axe", EnJa("Nether Star Axe", "ネザースターの斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.NETHER_STAR, 4.5F, -3.0F).enchantment(Enchantments.FORTUNE, 4),
+        ) { registerAxeRecipeGeneration(item, Items.NETHER_STAR) }
+        val NETHER_STAR_SHOVEL = !ToolCard(
+            "nether_star_shovel", EnJa("Nether Star Shovel", "ネザースターのシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.NETHER_STAR).enchantment(Enchantments.FORTUNE, 4),
+        ) { registerShovelRecipeGeneration(item, Items.NETHER_STAR) }
+        val NETHER_STAR_HOE = !ToolCard(
+            "nether_star_hoe", EnJa("Nether Star Hoe", "ネザースターのクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.NETHER_STAR, -4, 0.0F).enchantment(Enchantments.FORTUNE, 4),
+        ) { registerHoeRecipeGeneration(item, Items.NETHER_STAR) }
+        val NETHER_STAR_SWORD = !ToolCard(
+            "nether_star_sword", EnJa("Nether Star Sword", "ネザースターの剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.NETHER_STAR).enchantment(Enchantments.LOOTING, 4),
+        ) { registerSwordRecipeGeneration(item, Items.NETHER_STAR) }
 
         val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
             "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
