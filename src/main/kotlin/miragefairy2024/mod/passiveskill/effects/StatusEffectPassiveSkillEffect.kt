@@ -1,7 +1,7 @@
 package miragefairy2024.mod.passiveskill.effects
 
+import miragefairy2024.mod.passiveskill.AbstractPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.util.empty
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -12,7 +12,7 @@ import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.text.Text
 
-object StatusEffectPassiveSkillEffect : PassiveSkillEffectCard<StatusEffectPassiveSkillEffect.Value>("status_effect") {
+object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<StatusEffect, Entry>)
     class Entry(val level: Int, val additionalSeconds: Int)
 

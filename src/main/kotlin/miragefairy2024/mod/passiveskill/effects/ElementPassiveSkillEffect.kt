@@ -3,8 +3,8 @@ package miragefairy2024.mod.passiveskill.effects
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.DamageCallback
+import miragefairy2024.mod.passiveskill.AbstractPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -19,7 +19,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
 
-object ElementPassiveSkillEffect : PassiveSkillEffectCard<ElementPassiveSkillEffect.Value>("element") {
+object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
     class Value(val attackMap: Map<Element, Double>, val defenceMap: Map<Element, Double>)
 
     interface Element {

@@ -5,8 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.invoke
+import miragefairy2024.mod.passiveskill.AbstractPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
-import miragefairy2024.mod.passiveskill.PassiveSkillEffectCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
@@ -17,7 +17,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.text.Text
 
-object ManaBoostPassiveSkillEffect : PassiveSkillEffectCard<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
+object ManaBoostPassiveSkillEffect : AbstractPassiveSkillEffect<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
     class Value(val map: Map<Motif?, Double>)
 
     override val isPreprocessor = true
