@@ -70,6 +70,12 @@ enum class BlockMaterialCard(
         MapColor.BRIGHT_TEAL, 5.0F, 5.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
+    XARPITE_BLOCK(
+        "xarpite_block", "Xarpite Block", "紅天石ブロック",
+        PoemList(2).poem("Loss and reconstruction of perception", "夢の世界の如き紅。"),
+        MapColor.DARK_RED, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+    ),
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
@@ -139,6 +145,17 @@ fun initBlockMaterialsModule() {
             card.block.registerBlockTagGeneration { it }
         }
     }
+
+    // 紅天石ブロック
+    registerShapedRecipeGeneration(BlockMaterialCard.XARPITE_BLOCK.item) {
+        pattern("###")
+        pattern("###")
+        pattern("###")
+        input('#', MaterialCard.XARPITE.item)
+    } on MaterialCard.XARPITE.item from MaterialCard.XARPITE.item
+    registerShapelessRecipeGeneration(MaterialCard.XARPITE.item, 9) {
+        input(BlockMaterialCard.XARPITE_BLOCK.item)
+    } on BlockMaterialCard.XARPITE_BLOCK.item from BlockMaterialCard.XARPITE_BLOCK.item
 
     // 蒼天石ブロック
     registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {

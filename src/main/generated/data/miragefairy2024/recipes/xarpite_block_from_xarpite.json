@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:xarpite_block",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:xarpite"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "miragefairy2024:xarpite_block"
+  },
+  "show_notification": true
+}
