@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.invoke
-import miragefairy2024.mod.passiveskill.AbstractPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.empty
