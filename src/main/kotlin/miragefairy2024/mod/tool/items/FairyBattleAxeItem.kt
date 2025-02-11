@@ -64,6 +64,8 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
+    override fun hasGlint(stack: ItemStack) = super.hasGlint(stack) || hasGlintImpl(stack)
+
 }
 
 open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {

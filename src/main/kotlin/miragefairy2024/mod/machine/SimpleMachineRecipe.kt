@@ -1,15 +1,12 @@
-package miragefairy2024.mod.fermentationbarrel
+package miragefairy2024.mod.machine
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import miragefairy2024.DataGenerationEvents
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.RecipeGenerationSettings
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
-import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.JsonWrapper
@@ -25,7 +22,6 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
@@ -38,42 +34,46 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 import java.util.function.Consumer
+import kotlin.jvm.optionals.getOrNull
 
-class FermentationBarrelRecipe(
-    val identifier: Identifier,
-    private val group: String,
-    val input1: Pair<Ingredient, Int>,
-    val input2: Pair<Ingredient, Int>,
-    val input3: Pair<Ingredient, Int>,
-    val output: ItemStack,
-    val duration: Int,
-) : Recipe<Inventory> {
-    companion object {
-        val IDENTIFIER = MirageFairy2024.identifier("fermentation_barrel")
-        val TYPE: RecipeType<FermentationBarrelRecipe> = object : RecipeType<FermentationBarrelRecipe> {
-            override fun toString() = MirageFairy2024.identifier("fermentation_barrel").string
-        }
+abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
+    abstract val identifier: Identifier
+    abstract val icon: ItemStack
 
-        context (ModContext)
-        fun init() {
-            TYPE.register(Registries.RECIPE_TYPE, IDENTIFIER)
-            Serializer.register(Registries.RECIPE_SERIALIZER, IDENTIFIER)
-        }
+    val type = object : RecipeType<R> {
+        override fun toString() = identifier.string
+    }
 
-        fun getCustomizedRemainder(itemStack: ItemStack): ItemStack {
-            val remainder = itemStack.item.getRecipeRemainder(itemStack)
-            if (remainder.isNotEmpty) return remainder
-
-            if (itemStack.isOf(Items.POTION)) return Items.GLASS_BOTTLE.createItemStack()
-
-            return EMPTY_ITEM_STACK
+    val serializer = object : SimpleMachineRecipe.Serializer<R>() {
+        override fun createRecipe(recipeIdentifier: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R {
+            return this@SimpleMachineRecipeCard.createRecipe(recipeIdentifier, group, inputs, output, duration)
         }
     }
 
-    val inputs = listOf(input1, input2, input3)
+    abstract val recipeClass: Class<R>
+
+    abstract fun createRecipe(recipeIdentifier: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
+
+    fun match(world: World, inventory: Inventory) = world.recipeManager.getFirstMatch(type, inventory, world).getOrNull()
+
+    context(ModContext)
+    fun init() {
+        serializer.register(Registries.RECIPE_SERIALIZER, identifier)
+    }
+}
+
+abstract class SimpleMachineRecipe(
+    private val card: SimpleMachineRecipeCard<*>,
+    val recipeId: Identifier,
+    private val group: String,
+    val inputs: List<Pair<Ingredient, Int>>,
+    val output: ItemStack,
+    val duration: Int,
+) : Recipe<Inventory> {
 
     override fun getGroup() = group
 
+    // TODO 順不同
     override fun matches(inventory: Inventory, world: World): Boolean {
         inputs.forEachIndexed { index, input ->
             if (!input.first.test(inventory.getStack(index))) return false
@@ -81,6 +81,8 @@ class FermentationBarrelRecipe(
         }
         return true
     }
+
+    open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
     override fun getRemainder(inventory: Inventory): DefaultedList<ItemStack> {
         val list = DefaultedList.of<ItemStack>()
@@ -98,16 +100,16 @@ class FermentationBarrelRecipe(
         return list
     }
 
-    override fun craft(inventory: Inventory?, registryManager: DynamicRegistryManager?): ItemStack = output.copy()
-    override fun fits(width: Int, height: Int) = width * height >= 3
+    override fun craft(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
+    override fun fits(width: Int, height: Int) = width * height >= inputs.size
     override fun getOutput(registryManager: DynamicRegistryManager?) = output
-    override fun createIcon(): ItemStack = FermentationBarrelCard.item.createItemStack()
-    override fun getId() = identifier
-    override fun getSerializer() = Serializer
-    override fun getType() = TYPE
+    override fun createIcon() = card.icon
+    override fun getId() = recipeId
+    override fun getSerializer() = card.serializer
+    override fun getType() = card.type
 
-    object Serializer : RecipeSerializer<FermentationBarrelRecipe> {
-        override fun read(id: Identifier, json: JsonObject): FermentationBarrelRecipe {
+    abstract class Serializer<R : SimpleMachineRecipe> : RecipeSerializer<R> {
+        override fun read(id: Identifier, json: JsonObject): R {
             val root = json.toJsonWrapper()
             fun readInput(json: JsonWrapper): Pair<Ingredient, Int> {
                 return Pair(
@@ -119,12 +121,10 @@ class FermentationBarrelRecipe(
                     json["count"].asInt(),
                 )
             }
-            return FermentationBarrelRecipe(
-                identifier = id,
+            return createRecipe(
+                recipeIdentifier = id,
                 group = root["group"].asString(),
-                input1 = readInput(root["input1"]),
-                input2 = readInput(root["input2"]),
-                input3 = readInput(root["input3"]),
+                inputs = root["inputs"].asList().map { readInput(it) },
                 output = run {
                     val itemId = root["output"]["item"].asString()
                     val count = root["output"]["count"].asInt()
@@ -134,7 +134,7 @@ class FermentationBarrelRecipe(
             )
         }
 
-        fun write(json: JsonObject, recipe: FermentationBarrelRecipe) {
+        fun write(json: JsonObject, recipe: R) {
             fun toJsonInput(input: Pair<Ingredient, Int>): JsonObject {
                 val inputJson = JsonObject()
                 inputJson.add("ingredient", input.first.toJson())
@@ -149,59 +149,60 @@ class FermentationBarrelRecipe(
                 return outputJson
             }
             json.addProperty("group", recipe.group)
-            json.add("input1", toJsonInput(recipe.input1))
-            json.add("input2", toJsonInput(recipe.input2))
-            json.add("input3", toJsonInput(recipe.input3))
+            json.add("inputs", JsonArray().also { inputs ->
+                recipe.inputs.forEach { input ->
+                    inputs.add(toJsonInput(input))
+                }
+            })
             json.add("output", toJsonOutput(recipe.output))
             json.addProperty("duration", recipe.duration)
         }
 
-        override fun read(id: Identifier, buf: PacketByteBuf): FermentationBarrelRecipe {
+        override fun read(id: Identifier, buf: PacketByteBuf): R {
             val group = buf.readString()
-            val input1 = Pair(Ingredient.fromPacket(buf), buf.readInt())
-            val input2 = Pair(Ingredient.fromPacket(buf), buf.readInt())
-            val input3 = Pair(Ingredient.fromPacket(buf), buf.readInt())
+            val inputCount = buf.readInt()
+            val inputs = (0 until inputCount).map {
+                Pair(Ingredient.fromPacket(buf), buf.readInt())
+            }
             val output = buf.readItemStack()
             val duration = buf.readInt()
-            return FermentationBarrelRecipe(
-                identifier = id,
+            return createRecipe(
+                recipeIdentifier = id,
                 group = group,
-                input1 = input1,
-                input2 = input2,
-                input3 = input3,
+                inputs = inputs,
                 output = output,
                 duration = duration,
             )
         }
 
-        override fun write(buf: PacketByteBuf, recipe: FermentationBarrelRecipe) {
+        override fun write(buf: PacketByteBuf, recipe: R) {
             buf.writeString(recipe.group)
-            recipe.input1.first.write(buf)
-            buf.writeInt(recipe.input1.second)
-            recipe.input2.first.write(buf)
-            buf.writeInt(recipe.input2.second)
-            recipe.input3.first.write(buf)
-            buf.writeInt(recipe.input3.second)
+            buf.writeInt(recipe.inputs.size)
+            recipe.inputs.forEach {
+                it.first.write(buf)
+                buf.writeInt(it.second)
+            }
             buf.writeItemStack(recipe.output)
             buf.writeInt(recipe.duration)
         }
+
+        abstract fun createRecipe(recipeIdentifier: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
     }
 
 }
 
 
 context(ModContext)
-fun registerFermentationBarrelRecipeGeneration(
-    input1: Pair<Ingredient, Int>,
-    input2: Pair<Ingredient, Int>,
-    input3: Pair<Ingredient, Int>,
+fun <R : SimpleMachineRecipe> registerSimpleMachineRecipeGeneration(
+    card: SimpleMachineRecipeCard<R>,
+    inputs: List<Pair<Ingredient, Int>>,
     output: ItemStack,
     duration: Int,
-    block: FermentationBarrelRecipeJsonBuilder.() -> Unit = {},
-): RecipeGenerationSettings<FermentationBarrelRecipeJsonBuilder> {
-    val settings = RecipeGenerationSettings<FermentationBarrelRecipeJsonBuilder>()
+    block: SimpleMachineRecipeJsonBuilder<R>.() -> Unit = {},
+): RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>> {
+    val settings = RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = FermentationBarrelRecipeJsonBuilder(RecipeCategory.MISC, input1, input2, input3, output, duration)
+        val builder = SimpleMachineRecipeJsonBuilder(card, RecipeCategory.MISC, inputs, output, duration)
         builder.group(output.item)
         settings.listeners.forEach { listener ->
             listener(builder)
@@ -213,11 +214,10 @@ fun registerFermentationBarrelRecipeGeneration(
     return settings
 }
 
-class FermentationBarrelRecipeJsonBuilder(
+class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
+    private val card: SimpleMachineRecipeCard<R>,
     private val category: RecipeCategory,
-    private val input1: Pair<Ingredient, Int>,
-    private val input2: Pair<Ingredient, Int>,
-    private val input3: Pair<Ingredient, Int>,
+    private val inputs: List<Pair<Ingredient, Int>>,
     private val output: ItemStack,
     private val duration: Int,
 ) : CraftingRecipeJsonBuilder {
@@ -241,10 +241,10 @@ class FermentationBarrelRecipeJsonBuilder(
 
         val recipeJsonProvider = object : RecipeJsonProvider {
             override fun serialize(json: JsonObject) {
-                FermentationBarrelRecipe.Serializer.write(json, FermentationBarrelRecipe(recipeId, group, input1, input2, input3, output, duration))
+                card.serializer.write(json, card.createRecipe(recipeId, group, inputs, output, duration))
             }
 
-            override fun getSerializer() = FermentationBarrelRecipe.Serializer
+            override fun getSerializer() = card.serializer
             override fun getRecipeId() = recipeId
             override fun toAdvancementJson() = advancementBuilder.toJson()
             override fun getAdvancementId() = advancementId

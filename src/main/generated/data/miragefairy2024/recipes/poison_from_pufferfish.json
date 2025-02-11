@@ -2,24 +2,26 @@
   "type": "miragefairy2024:fermentation_barrel",
   "duration": 100,
   "group": "miragefairy2024:poison",
-  "input1": {
-    "count": 1,
-    "ingredient": {
-      "item": "minecraft:glass_bottle"
+  "inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:glass_bottle"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:pufferfish"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "fabric:type": "miragefairy2024:water_bottle"
+      }
     }
-  },
-  "input2": {
-    "count": 1,
-    "ingredient": {
-      "item": "minecraft:pufferfish"
-    }
-  },
-  "input3": {
-    "count": 1,
-    "ingredient": {
-      "fabric:type": "miragefairy2024:water_bottle"
-    }
-  },
+  ],
   "output": {
     "count": 1,
     "item": "miragefairy2024:poison"

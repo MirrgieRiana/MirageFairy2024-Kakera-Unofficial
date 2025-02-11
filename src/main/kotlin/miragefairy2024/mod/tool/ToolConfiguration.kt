@@ -77,6 +77,7 @@ abstract class ToolConfiguration {
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
     var collection = false
+    var hasGlint = false
 
     abstract fun createItem(): Item
 
@@ -140,4 +141,8 @@ fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
 fun ToolConfiguration.collection() = this.also {
     it.collection = true
     it.descriptions += text { ToolConfiguration.COLLECTION_TRANSLATION() }
+}
+
+fun ToolConfiguration.glint() = this.also {
+    it.hasGlint = true
 }

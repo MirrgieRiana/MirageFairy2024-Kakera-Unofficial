@@ -84,6 +84,8 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
+    override fun hasGlint(stack: ItemStack) = super.hasGlint(stack) || hasGlintImpl(stack)
+
 }
 
 open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {

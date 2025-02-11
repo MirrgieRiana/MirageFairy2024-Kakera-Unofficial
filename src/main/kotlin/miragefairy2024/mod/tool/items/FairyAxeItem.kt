@@ -66,4 +66,6 @@ class FairyAxeItem(override val configuration: FairyMiningToolConfiguration, set
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
+    override fun hasGlint(stack: ItemStack) = super.hasGlint(stack) || hasGlintImpl(stack)
+
 }

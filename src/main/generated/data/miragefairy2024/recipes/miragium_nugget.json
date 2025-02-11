@@ -1,0 +1,17 @@
+{
+  "type": "miragefairy2024:aura_reflector_furnace",
+  "duration": 1200,
+  "group": "miragefairy2024:miragium_nugget",
+  "inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "miragefairy2024:mirage_flour"
+      }
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "miragefairy2024:miragium_nugget"
+  }
+}

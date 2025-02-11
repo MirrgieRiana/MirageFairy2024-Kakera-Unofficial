@@ -9,7 +9,9 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
-import miragefairy2024.mod.fermentationbarrel.registerFermentationBarrelRecipeGeneration
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
+import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
+import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
@@ -192,7 +194,14 @@ class MaterialCard(
             PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
             soulStreamContainable = true,
         ) {
-            registerSmeltingRecipeGeneration(MIRAGE_FLOUR_OF_NATURE.item, item) on MIRAGE_FLOUR_OF_NATURE.item from MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(MIRAGE_FLOUR.item), 1),
+                ),
+                output = item.createItemStack(),
+                duration = 20 * 60,
+            ) on MIRAGE_FLOUR.item
         }
         val MIRAGIUM_INGOT = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
@@ -222,6 +231,21 @@ class MaterialCard(
                 .build(),
         ) {
             item.registerComposterInput(0.3F)
+        }
+        val RESONITE_INGOT = !MaterialCard(
+            "resonite_ingot", "Resonite Ingot", "レゾナイトインゴット",
+            PoemList(5).poem("TODO", "TODO"), // TODO
+        ) {
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
+                    Pair(Ingredient.ofItems(Items.ECHO_SHARD), 1),
+                    Pair(Ingredient.ofItems(Items.EMERALD), 1), // TODO
+                ),
+                output = item.createItemStack(),
+                duration = 20 * 60,
+            ) on Items.EMERALD // TODO
         }
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
@@ -553,10 +577,13 @@ class MaterialCard(
             creator = { DrinkItem(it) },
         ) {
             // TODO 蒸留装置
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on Items.SUGAR_CANE
@@ -573,10 +600,13 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.APPLE), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.APPLE), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 1,
             ) on Items.APPLE
@@ -594,10 +624,13 @@ class MaterialCard(
             creator = { DrinkItem(it, flaming = 5) },
         ) {
             // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on HAIMEVISKA_SAP.item
@@ -615,10 +648,13 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on VEROPEDA_BERRIES.item
@@ -636,24 +672,33 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.PUFFERFISH from Items.PUFFERFISH
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
-            registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.SPIDER_EYE from Items.SPIDER_EYE
