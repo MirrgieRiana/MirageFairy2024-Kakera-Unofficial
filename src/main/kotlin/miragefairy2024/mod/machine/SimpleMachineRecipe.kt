@@ -52,7 +52,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
     @Suppress("LeakingThis")
     val serializer = SimpleMachineRecipe.Serializer(this)
 
-    abstract fun createRecipe(identifier: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
+    abstract fun createRecipe(recipeId: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
 
     context(ModContext)
     fun init() {
@@ -64,7 +64,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
 open class SimpleMachineRecipe(
     private val card: SimpleMachineRecipeCard<*>,
-    val identifier: Identifier,
+    val recipeId: Identifier,
     private val group: String,
     val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
@@ -112,7 +112,7 @@ open class SimpleMachineRecipe(
     override fun fits(width: Int, height: Int) = width * height >= inputs.size
     override fun getOutput(registryManager: DynamicRegistryManager?) = output
     override fun createIcon() = card.icon
-    override fun getId() = identifier
+    override fun getId() = recipeId
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
 
@@ -130,7 +130,7 @@ open class SimpleMachineRecipe(
                 )
             }
             return card.createRecipe(
-                identifier = id,
+                recipeId = id,
                 group = root["group"].asString(),
                 inputs = root["inputs"].asList().map { input ->
                     readInput(input)
@@ -177,7 +177,7 @@ open class SimpleMachineRecipe(
             val output = buf.readItemStack()
             val duration = buf.readInt()
             return card.createRecipe(
-                identifier = id,
+                recipeId = id,
                 group = group,
                 inputs = inputs,
                 output = output,

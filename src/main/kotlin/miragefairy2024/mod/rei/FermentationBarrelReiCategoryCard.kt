@@ -22,7 +22,7 @@ object FermentationBarrelReiCategoryCard : ReiCategoryCard<FermentationBarrelRei
         }, { display, tag ->
             val jsonObject = JsonObject()
             FermentationBarrelRecipeCard.serializer.write(jsonObject, display.recipe)
-            tag.wrapper["id"].string.set(display.recipe.identifier.string)
+            tag.wrapper["id"].string.set(display.recipe.recipeId.string)
             tag.wrapper["json"].string.set(jsonObject.toString())
         }))
     }
