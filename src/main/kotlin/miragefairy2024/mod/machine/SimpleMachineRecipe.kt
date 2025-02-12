@@ -109,7 +109,7 @@ open class SimpleMachineRecipe(
     }
 
     override fun craft(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
-    override fun fits(width: Int, height: Int) = width * height >= 3
+    override fun fits(width: Int, height: Int) = width * height >= inputs.size
     override fun getOutput(registryManager: DynamicRegistryManager?) = output
     override fun createIcon() = card.icon
     override fun getId() = identifier
