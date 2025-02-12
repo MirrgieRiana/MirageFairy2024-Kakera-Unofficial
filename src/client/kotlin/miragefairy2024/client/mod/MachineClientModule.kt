@@ -38,7 +38,13 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
     override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
         super.drawMouseoverTooltip(context, x, y)
         run {
-            if (x in this.x + arrowBound.x until this.x + arrowBound.x + arrowBound.width && y in this.y + arrowBound.y until this.y + arrowBound.y + arrowBound.height) {
+            val bound = Rect2i(
+                this.x + arrowBound.x,
+                this.y + arrowBound.y,
+                arrowBound.width - 1,
+                arrowBound.height - 1,
+            )
+            if (bound.contains(x, y)) {
                 context.drawTooltip(textRenderer, listOf(text { "${handler.progress} / ${handler.progressMax}"() }), Optional.empty(), x, y + 17)
             }
         }
