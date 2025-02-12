@@ -1,15 +1,12 @@
 package miragefairy2024.mod.machine
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.HorizontalFacingMachineBlock
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard.Companion.PropertyConfiguration
-import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -22,12 +19,9 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.normal
-import miragefairy2024.util.on
 import miragefairy2024.util.readFromNbt
-import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
 import miragefairy2024.util.set
@@ -37,19 +31,13 @@ import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.enums.Instrument
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.recipe.RecipeType
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -112,52 +100,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     }
 }
 
-object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler, FermentationBarrelRecipe>() {
-    override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
-    override fun createBlock() = FermentationBarrelBlock(this)
-    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FermentationBarrelBlockEntity)
-    override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FermentationBarrelScreenHandler(this, arguments)
-    override val guiWidth = 176
-    override val guiHeight = 152
-
-    override val name = EnJa("Fermentation Barrel", "醸造樽")
-    override val poem = EnJa("The scent of Haimeviska feel nostalgic", "懐かしき故郷の香り。")
-    override val tier = 2
-
-    override val inputSlots = listOf(
-        SlotConfiguration(42, 17, setOf(Direction.UP), setOf()),
-        SlotConfiguration(31, 39, setOf(Direction.NORTH), setOf()),
-        SlotConfiguration(53, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
-    )
-    override val outputSlots = listOf(
-        SlotConfiguration(111, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
-        SlotConfiguration(129, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
-    )
-    override val slots = inputSlots + outputSlots
-
-    override val recipeType = FermentationBarrelRecipeCard.type
-
-    context(ModContext)
-    override fun init() {
-        super.init()
-
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
-
-        registerShapedRecipeGeneration(item) {
-            pattern("ILI")
-            pattern("LRL")
-            pattern("ILI")
-            input('L', HaimeviskaBlockCard.LOG.item)
-            input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
-            input('I', Items.IRON_NUGGET)
-        } on MaterialCard.HAIMEVISKA_ROSIN.item
-    }
-}
-
 open class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
-
-class FermentationBarrelBlock(card: FermentationBarrelCard) : SimpleMachineBlock(card)
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
@@ -262,14 +205,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     }
 }
 
-class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
-    override fun getThis() = this
-}
-
 // TODO レシピブック対応
 open class SimpleMachineScreenHandler(card: SimpleMachineCard<*, *, *, *>, arguments: Arguments) : MachineScreenHandler(card, arguments) {
     var progress by Property(SimpleMachineCard.PROGRESS_PROPERTY)
     var progressMax by Property(SimpleMachineCard.PROGRESS_MAX_PROPERTY)
 }
-
-class FermentationBarrelScreenHandler(card: FermentationBarrelCard, arguments: Arguments) : SimpleMachineScreenHandler(card, arguments)
