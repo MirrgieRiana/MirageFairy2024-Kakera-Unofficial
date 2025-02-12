@@ -106,20 +106,20 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
-        progress = nbt.wrapper["Progress"].int.get() ?: 0
-        progressMax = nbt.wrapper["ProgressMax"].int.get() ?: 0
         craftingInventory.reset()
         nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it) }
         waitingInventory.reset()
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+        progressMax = nbt.wrapper["ProgressMax"].int.get() ?: 0
+        progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
     override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
-        nbt.wrapper["Progress"].int.set(progress)
-        nbt.wrapper["ProgressMax"].int.set(progressMax)
         nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt())
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+        nbt.wrapper["ProgressMax"].int.set(progressMax)
+        nbt.wrapper["Progress"].int.set(progress)
     }
 
     override fun markDirty() {

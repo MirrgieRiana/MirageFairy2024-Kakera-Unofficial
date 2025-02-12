@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 
 context(ModContext)
 fun initMachineModule() {
-    FermentationBarrelCard.init()
     FermentationBarrelRecipeCard.init()
+
+    FermentationBarrelCard.init()
 }

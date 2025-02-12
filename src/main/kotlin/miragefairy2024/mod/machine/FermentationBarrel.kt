@@ -64,7 +64,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
 
 class FermentationBarrelBlock(card: FermentationBarrelCard) : SimpleMachineBlock(card)
 
-class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
+class FermentationBarrelBlockEntity(card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
     override fun getThis() = this
 }
 
