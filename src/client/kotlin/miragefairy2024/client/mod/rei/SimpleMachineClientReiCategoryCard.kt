@@ -9,63 +9,80 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import me.shedaniel.rei.api.common.entry.EntryIngredient
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.mod.FermentationBarrelScreen
-import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
-import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
+import miragefairy2024.mod.machine.SimpleMachineRecipe
 import miragefairy2024.mod.rei.FermentationBarrelReiCategoryCard
-import miragefairy2024.util.createItemStack
+import miragefairy2024.mod.rei.SimpleMachineReiCategoryCard
 import miragefairy2024.util.invoke
 import miragefairy2024.util.minus
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
+import miragefairy2024.util.times
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
+import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.screen.ScreenHandler
 
-object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<FermentationBarrelReiCategoryCard.Display>(FermentationBarrelReiCategoryCard) {
+abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        registry.registerRecipeFiller(FermentationBarrelRecipe::class.java, FermentationBarrelRecipeCard.type) {
-            FermentationBarrelReiCategoryCard.Display(it)
+        registry.registerRecipeFiller(card.recipeCard.recipeClass, card.recipeCard.type) {
+            SimpleMachineReiCategoryCard.Display(card, it)
         }
     }
 
-    override fun createCategory() = object : DisplayCategory<FermentationBarrelReiCategoryCard.Display> {
-        val imageX = 30 - 8
-        val imageY = 16 - 4
-        val imageWidth = 120 + 8 * 2
-        val imageHeight = 40 + 4 * 2
-        override fun getCategoryIdentifier() = FermentationBarrelReiCategoryCard.identifier.first
-        override fun getTitle() = text { FermentationBarrelReiCategoryCard.translation() }
-        override fun getIcon(): Renderer = FermentationBarrelCard.item.createItemStack().toEntryStack()
-        override fun getDisplayWidth(display: FermentationBarrelReiCategoryCard.Display) = imageWidth + 6
-        override fun getDisplayHeight() = imageHeight + 6
-        override fun setupDisplay(display: FermentationBarrelReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
+    abstract val imageBound: Rectangle
+    abstract val arrowPosition: Point
+    abstract val durationTextPosition: Point
+    private val textureId = "textures/gui/container/" * card.recipeCard.identifier * ".png"
+    abstract val inputSlots: List<Point>
+    abstract val outputSlots: List<Point>
+
+    override fun createCategory() = object : DisplayCategory<SimpleMachineReiCategoryCard.Display<R>> {
+        override fun getCategoryIdentifier() = card.identifier.first
+        override fun getTitle() = text { card.translation() }
+        override fun getIcon(): Renderer = card.recipeCard.icon.toEntryStack()
+        override fun getDisplayWidth(display: SimpleMachineReiCategoryCard.Display<R>) = imageBound.width + 6
+        override fun getDisplayHeight() = imageBound.height + 6
+        override fun setupDisplay(display: SimpleMachineReiCategoryCard.Display<R>, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(3, 3)
-            val uv = Point(imageX, imageY)
+            val uv = Point(imageBound.x, imageBound.y)
             return listOf(
                 Widgets.createRecipeBase(bounds),
 
-                Widgets.createTexturedWidget(MirageFairy2024.identifier("textures/gui/container/fermentation_barrel.png"), Rectangle(bounds.x + 3, bounds.y + 3, bounds.width - 6, bounds.height - 6), uv.x.toFloat(), uv.y.toFloat()),
+                Widgets.createTexturedWidget(textureId, Rectangle(bounds.x + 3, bounds.y + 3, bounds.width - 6, bounds.height - 6), uv.x.toFloat(), uv.y.toFloat()),
 
-                Widgets.createSlot(p + Point(42, 17) - uv).entries(display.inputEntries[0]).disableBackground().markInput(),
-                Widgets.createSlot(p + Point(31, 39) - uv).entries(display.inputEntries[1]).disableBackground().markInput(),
-                Widgets.createSlot(p + Point(53, 39) - uv).entries(display.inputEntries[2]).disableBackground().markInput(),
+                *inputSlots.mapIndexed { index, it ->
+                    Widgets.createSlot(p + it - uv).entries(display.inputEntries[index]).disableBackground().markInput()
+                }.toTypedArray(),
 
-                Widgets.createArrow(p + Point(77 - 1, 27) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
-                Widgets.createLabel(p + Point(77 - 1 + (22 + 2) / 2, 27 - 12) - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
+                Widgets.createArrow(p + arrowPosition + Point(-1, 0) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
+                Widgets.createLabel(p + durationTextPosition - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
 
-                Widgets.createSlot(p + Point(111, 28) - uv).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).disableBackground().markOutput(),
+                *outputSlots.mapIndexed { index, it ->
+                    Widgets.createSlot(p + it - uv).entries(display.outputEntries.getOrNull(index) ?: EntryIngredient.empty()).disableBackground().markOutput()
+                }.toTypedArray(),
             )
         }
     }
 
-    override fun getWorkstations() = listOf(listOf(FermentationBarrelCard.item.createItemStack().toEntryStack()).toEntryIngredient())
+    override fun getWorkstations() = listOf(listOf(card.machine.toEntryStack()).toEntryIngredient())
 
+    fun <C : ScreenHandler, T : HandledScreen<C>> registerScreen(registry: ScreenRegistry, screenClass: Class<out T>, rectangle: Rectangle) {
+        registry.registerContainerClickArea(Rectangle(rectangle.x, rectangle.y, rectangle.width, rectangle.height), screenClass, card.identifier.first)
+    }
+}
+
+object FermentationBarrelClientReiCategoryCard : SimpleMachineClientReiCategoryCard<FermentationBarrelRecipe>(FermentationBarrelReiCategoryCard) {
+    override val imageBound = Rectangle(30 - 8, 16 - 4, 120 + 8 * 2, 40 + 4 * 2)
+    override val arrowPosition = Point(77, 27)
+    override val durationTextPosition = Point(77 - 1 + (22 + 2) / 2, 27 - 12)
+    override val inputSlots = listOf(Point(42, 17), Point(31, 39), Point(53, 39))
+    override val outputSlots = listOf(Point(111, 28))
     override fun registerScreens(registry: ScreenRegistry) {
-        registry.registerContainerClickArea(Rectangle(77 - 1, 27, 22 + 2, 16 + 2), FermentationBarrelScreen::class.java, FermentationBarrelReiCategoryCard.identifier.first)
+        registerScreen(registry, FermentationBarrelScreen::class.java, Rectangle(77 - 1, 27, 22 + 2, 16 + 2))
     }
 }

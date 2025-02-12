@@ -48,6 +48,8 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
     @Suppress("LeakingThis")
     val serializer = SimpleMachineRecipe.Serializer(this)
 
+    abstract val recipeClass: Class<R>
+
     abstract fun createRecipe(recipeId: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
 
     context(ModContext)
