@@ -298,3 +298,7 @@ fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, 
     }
     return itemStack2
 }
+
+fun <I> I.hasGlintImpl(stack: ItemStack): Boolean where I : Item, I : FairyToolItem {
+    return configuration.hasGlint
+}

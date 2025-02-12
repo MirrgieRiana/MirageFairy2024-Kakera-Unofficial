@@ -75,6 +75,8 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
+    override fun hasGlint(stack: ItemStack) = super.hasGlint(stack) || hasGlintImpl(stack)
+
 }
 
 open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
