@@ -8,7 +8,6 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
-import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.client.mod.FermentationBarrelScreen
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.machine.SimpleMachineRecipe
@@ -63,7 +62,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
                 Widgets.createLabel(p + durationTextPosition - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
 
                 *outputSlots.mapIndexed { index, it ->
-                    Widgets.createSlot(p + it - uv).entries(display.outputEntries.getOrNull(index) ?: EntryIngredient.empty()).disableBackground().markOutput()
+                    Widgets.createSlot(p + it - uv).entries(display.outputEntries.getOrNull(index) ?: listOf()).disableBackground().markOutput()
                 }.toTypedArray(),
             )
         }
