@@ -31,7 +31,7 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 
         if (handler.progressMax > 0) {
             val w = (arrowBound.width.toDouble() * (handler.progress.toDouble() / handler.progressMax.toDouble() atMost 1.0)).roundToInt()
-            context.drawTexture(PROGRESS_ARROW_TEXTURE, x + arrowBound.x, y + arrowBound.y, 0F, 0F, w, arrowBound.height, 32, 32)
+            context.drawTexture(PROGRESS_ARROW_TEXTURE, x + arrowBound.x, y + arrowBound.y - 1, 0F, 0F, w, arrowBound.height + 1, 32, 32)
         }
     }
 
@@ -40,9 +40,9 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
         run {
             val bound = Rect2i(
                 this.x + arrowBound.x,
-                this.y + arrowBound.y,
+                this.y + arrowBound.y - 1,
                 arrowBound.width - 1,
-                arrowBound.height - 1,
+                arrowBound.height + 1 - 1,
             )
             if (bound.contains(x, y)) {
                 context.drawTooltip(textRenderer, listOf(text { "${handler.progress} / ${handler.progressMax}"() }), Optional.empty(), x, y + 17)
@@ -52,5 +52,5 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 }
 
 class FermentationBarrelScreen(card: FermentationBarrelCard, arguments: Arguments<FermentationBarrelScreenHandler>) : SimpleMachineScreen<FermentationBarrelScreenHandler>(card, arguments) {
-    override val arrowBound = Rect2i(77, 27, 22, 16)
+    override val arrowBound = Rect2i(77, 28, 22, 15)
 }
