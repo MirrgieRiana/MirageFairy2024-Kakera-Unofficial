@@ -44,11 +44,11 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
         override fun getCategoryIdentifier() = card.identifier.first
         override fun getTitle() = text { card.translation() }
         override fun getIcon(): Renderer = card.recipeCard.icon.toEntryStack()
-        override fun getDisplayWidth(display: SimpleMachineReiCategoryCard.Display<R>) = imageBound.width + 6
-        override fun getDisplayHeight() = imageBound.height + 6
+        override fun getDisplayWidth(display: SimpleMachineReiCategoryCard.Display<R>) = imageBound.width + 8 * 2 + 6
+        override fun getDisplayHeight() = imageBound.height + 4 * 2 + 6
         override fun setupDisplay(display: SimpleMachineReiCategoryCard.Display<R>, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(3, 3)
-            val uv = Point(imageBound.x, imageBound.y)
+            val uv = Point(imageBound.x - 8, imageBound.y - 4)
             return listOf(
                 Widgets.createRecipeBase(bounds),
 
@@ -58,7 +58,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
                     Widgets.createSlot(p + it - uv).entries(display.inputEntries[index]).disableBackground().markInput()
                 }.toTypedArray(),
 
-                Widgets.createArrow(p + arrowPosition + Point(-1, 0) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
+                Widgets.createArrow(p + arrowPosition + Point(-1, -1) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
                 Widgets.createLabel(p + durationTextPosition - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
 
                 *outputSlots.mapIndexed { index, it ->
@@ -76,9 +76,9 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
 }
 
 object FermentationBarrelClientReiCategoryCard : SimpleMachineClientReiCategoryCard<FermentationBarrelRecipe>(FermentationBarrelReiCategoryCard) {
-    override val imageBound = Rectangle(30 - 8, 16 - 4, 120 + 8 * 2, 40 + 4 * 2)
-    override val arrowPosition = Point(77, 27)
-    override val durationTextPosition = Point(77 - 1 + (22 + 2) / 2, 27 - 12)
+    override val imageBound = Rectangle(30, 16, 120, 40)
+    override val arrowPosition = Point(77, 28)
+    override val durationTextPosition = Point(88, 15)
     override val inputSlots = listOf(Point(42, 17), Point(31, 39), Point(53, 39))
     override val outputSlots = listOf(Point(111, 28))
     override fun registerScreens(registry: ScreenRegistry) {
