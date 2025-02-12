@@ -232,6 +232,10 @@ class MaterialCard(
         ) {
             item.registerComposterInput(0.3F)
         }
+        val LUMINITE = !MaterialCard(
+            "luminite", "Luminite", "ルミナイト",
+            PoemList(4).poem("TODO", "TODO"), // TODO
+        )
         val RESONITE_INGOT = !MaterialCard(
             "resonite_ingot", "Resonite Ingot", "レゾナイトインゴット",
             PoemList(5).poem("TODO", "TODO"), // TODO
@@ -241,11 +245,11 @@ class MaterialCard(
                 inputs = listOf(
                     Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
                     Pair(Ingredient.ofItems(Items.ECHO_SHARD), 1),
-                    Pair(Ingredient.ofItems(Items.EMERALD), 1), // TODO
+                    Pair(Ingredient.ofItems(LUMINITE.item), 1),
                 ),
                 output = item.createItemStack(),
                 duration = 20 * 60,
-            ) on Items.EMERALD // TODO
+            ) on LUMINITE.item
         }
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",

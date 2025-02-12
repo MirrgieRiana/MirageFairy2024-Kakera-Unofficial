@@ -2,7 +2,9 @@ package miragefairy2024.mod.machine
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.createItemStack
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.util.Identifier
 
@@ -29,4 +31,13 @@ class AuraReflectorFurnaceRecipe(
     inputs,
     output,
     duration,
-)
+) {
+    companion object {
+        val FUELS = mutableListOf<Item>()
+
+        init {
+            FUELS += Items.SOUL_SAND
+            FUELS += Items.SOUL_SOIL
+        }
+    }
+}

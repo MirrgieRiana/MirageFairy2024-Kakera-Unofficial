@@ -225,6 +225,11 @@ class ToolCard(
             PoemList(3).poem(EnJa("Crack! Squish!", "バキッ！ぐにっ")),
             FairyAxeConfiguration(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.MIRAGIUM_INGOT.item) }
+        val LUMINITE_PICKAXE = !ToolCard(
+            "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
+            PoemList(4).poem(EnJa("TODO", "TODO")), // TODO
+            FairyPickaxeConfiguration(ToolMaterialCard.LUMINITE),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val RESONITE_PICKAXE = !ToolCard(
             "resonite_pickaxe", EnJa("Resonite Pickaxe", "レゾナイトのつるはし"),
             PoemList(5).poem(EnJa("TODO", "TODO")), // TODO

@@ -43,6 +43,15 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
     abstract val inputSlots: List<Point>
     abstract val outputSlots: List<Point>
 
+    open fun getInputSlotWidgets(offset: Point, display: SimpleMachineReiCategoryCard.Display<R>): List<Widget> {
+        val inputIndices = card.getInputIndices(display.recipe)
+        return inputSlots.mapIndexed { slotIndex, it ->
+            val inputIndex = inputIndices.getOrNull(slotIndex)
+            val inputEntry = if (inputIndex == null) null else display.inputEntries.getOrNull(inputIndex)
+            Widgets.createSlot(offset + it).entries(inputEntry ?: listOf()).disableBackground().markInput()
+        }
+    }
+
     override fun createCategory() = object : DisplayCategory<SimpleMachineReiCategoryCard.Display<R>> {
         override fun getCategoryIdentifier() = card.identifier.first
         override fun getTitle() = text { card.translation() }
@@ -57,9 +66,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
 
                 Widgets.createTexturedWidget(textureId, Rectangle(bounds.x + 3, bounds.y + 3, bounds.width - 6, bounds.height - 6), uv.x.toFloat(), uv.y.toFloat()),
 
-                *inputSlots.mapIndexed { index, it ->
-                    Widgets.createSlot(p + it - uv).entries(display.inputEntries.getOrNull(index) ?: listOf()).disableBackground().markInput()
-                }.toTypedArray(),
+                *getInputSlotWidgets(p - uv, display).toTypedArray(),
 
                 Widgets.createArrow(p + arrowPosition + Point(-1, -1) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
                 Widgets.createLabel(p + durationTextPosition - uv, text { translate("category.rei.campfire.time", (display.recipe.duration.toDouble() / 20.0 formatAs "%.2f").stripTrailingZeros()) }).centered().color(0xFF404040.toInt(), 0xFFBBBBBB.toInt()).noShadow(),
@@ -94,7 +101,18 @@ object AuraReflectorFurnaceClientReiCategoryCard : SimpleMachineClientReiCategor
     override val arrowPosition = Point(89, 35)
     override val durationTextPosition = Point(108, 18)
     override val inputSlots = listOf(Point(29, 17), Point(47, 17), Point(65, 17))
+    val fuelSlots = listOf(Point(47, 53))
     override val outputSlots = listOf(Point(123, 35))
+
+    override fun getInputSlotWidgets(offset: Point, display: SimpleMachineReiCategoryCard.Display<AuraReflectorFurnaceRecipe>): List<Widget> {
+        val fuelInputIndices = AuraReflectorFurnaceReiCategoryCard.getFuelInputIndices(display.recipe)
+        return super.getInputSlotWidgets(offset, display) + fuelSlots.mapIndexed { slotIndex, it ->
+            val inputIndex = fuelInputIndices.getOrNull(slotIndex)
+            val inputEntry = if (inputIndex == null) null else display.inputEntries.getOrNull(inputIndex)
+            Widgets.createSlot(offset + it).entries(inputEntry ?: listOf()).disableBackground().markInput()
+        }
+    }
+
     override fun registerScreens(registry: ScreenRegistry) {
         registerScreen(registry, AuraReflectorFurnaceScreen::class.java, Rectangle(89, 35, 22, 15))
     }

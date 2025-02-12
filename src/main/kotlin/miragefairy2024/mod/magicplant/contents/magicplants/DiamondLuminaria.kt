@@ -3,6 +3,7 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
@@ -50,7 +51,10 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
         createCuboidShape(7.0, 16.0),
     )
 
-    override val drops = listOf(Items.DIAMOND)
+    override val baseFruitGeneration = 0.1
+
+    override val drops = listOf(MaterialCard.LUMINITE.item, Items.DIAMOND)
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
     override val family = MirageFairy2024.identifier("luminaria")
