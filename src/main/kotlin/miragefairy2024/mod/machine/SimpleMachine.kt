@@ -162,9 +162,10 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
                 inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
             }
             val recipe = card.match(world, inventory) ?: return@run
+            if (recipe.inputs.size > inventory.size) return@run
 
             val remainder = recipe.getRemainder(inventory)
-            (0 until inventory.size).forEach { index ->
+            (0 until recipe.inputs.size).forEach { index ->
                 craftingInventory += inventory[index].split(recipe.inputs[index].second)
             }
             waitingInventory += recipe.output.copy()

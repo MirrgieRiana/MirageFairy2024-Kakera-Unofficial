@@ -55,7 +55,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
                 Widgets.createTexturedWidget(textureId, Rectangle(bounds.x + 3, bounds.y + 3, bounds.width - 6, bounds.height - 6), uv.x.toFloat(), uv.y.toFloat()),
 
                 *inputSlots.mapIndexed { index, it ->
-                    Widgets.createSlot(p + it - uv).entries(display.inputEntries[index]).disableBackground().markInput()
+                    Widgets.createSlot(p + it - uv).entries(display.inputEntries.getOrNull(index) ?: listOf()).disableBackground().markInput()
                 }.toTypedArray(),
 
                 Widgets.createArrow(p + arrowPosition + Point(-1, -1) - uv).animationDurationTicks(display.recipe.duration.toDouble()),
