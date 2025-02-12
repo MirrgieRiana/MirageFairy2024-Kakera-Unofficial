@@ -13,6 +13,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.mod.FermentationBarrelScreen
 import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
+import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.rei.FermentationBarrelReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke
@@ -27,7 +28,7 @@ import mirrg.kotlin.hydrogen.stripTrailingZeros
 
 object FermentationBarrelClientReiCategoryCard : ClientReiCategoryCard<FermentationBarrelReiCategoryCard.Display>(FermentationBarrelReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        registry.registerRecipeFiller(FermentationBarrelRecipe::class.java, FermentationBarrelRecipe.TYPE) {
+        registry.registerRecipeFiller(FermentationBarrelRecipe::class.java, FermentationBarrelRecipeCard.type) {
             FermentationBarrelReiCategoryCard.Display(it)
         }
     }

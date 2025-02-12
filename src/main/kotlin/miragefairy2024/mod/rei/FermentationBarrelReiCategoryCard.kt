@@ -3,6 +3,7 @@ package miragefairy2024.mod.rei
 import com.google.gson.JsonObject
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
+import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.util.get
 import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
@@ -17,10 +18,10 @@ object FermentationBarrelReiCategoryCard : ReiCategoryCard<FermentationBarrelRei
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             val id = tag.wrapper["id"].string.get()!!
             val json = tag.wrapper["json"].string.get()!!
-            Display(FermentationBarrelRecipe.Serializer.read(id.toIdentifier(), json.toJsonElement() as JsonObject))
+            Display(FermentationBarrelRecipeCard.serializer.read(id.toIdentifier(), json.toJsonElement() as JsonObject))
         }, { display, tag ->
             val jsonObject = JsonObject()
-            FermentationBarrelRecipe.Serializer.write(jsonObject, display.recipe)
+            FermentationBarrelRecipeCard.serializer.write(jsonObject, display.recipe)
             tag.wrapper["id"].string.set(display.recipe.identifier.string)
             tag.wrapper["json"].string.set(jsonObject.toString())
         }))

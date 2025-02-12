@@ -9,7 +9,8 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
-import miragefairy2024.mod.machine.registerFermentationBarrelRecipeGeneration
+import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
+import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
@@ -553,7 +554,8 @@ class MaterialCard(
             creator = { DrinkItem(it) },
         ) {
             // TODO 蒸留装置
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
@@ -575,7 +577,8 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(Items.APPLE), 4),
@@ -598,7 +601,8 @@ class MaterialCard(
             creator = { DrinkItem(it, flaming = 5) },
         ) {
             // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
@@ -621,7 +625,8 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
@@ -644,7 +649,8 @@ class MaterialCard(
                 .build(),
             creator = { DrinkItem(it) },
         ) {
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
@@ -653,7 +659,8 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.PUFFERFISH from Items.PUFFERFISH
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
@@ -662,7 +669,8 @@ class MaterialCard(
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
-            registerFermentationBarrelRecipeGeneration(
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
                 inputs = listOf(
                     Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
                     Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),

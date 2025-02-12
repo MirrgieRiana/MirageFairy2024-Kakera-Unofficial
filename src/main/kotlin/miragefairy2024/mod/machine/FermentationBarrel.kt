@@ -187,7 +187,7 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
             FermentationBarrelCard.INPUT_SLOTS.forEachIndexed { index, slot ->
                 inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
             }
-            val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipe.TYPE, inventory, world).getOrNull() ?: return@run
+            val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipeCard.type, inventory, world).getOrNull() ?: return@run
 
             val remainder = recipe.getRemainder(inventory)
             (0 until inventory.size).forEach { index ->
