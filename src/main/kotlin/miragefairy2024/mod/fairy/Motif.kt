@@ -631,7 +631,7 @@ enum class MotifCard(
         ParentMotifs() + { WITHER } + { STAR },
         PassiveSkillBuilder()
             + luck(0.6)
-            + magic.attack(0.4),
+            + magic.attack(0.4), // TODO ツールパッシブ
         MotifCardRecipes().R + Items.NETHER_STAR,
     ),
 

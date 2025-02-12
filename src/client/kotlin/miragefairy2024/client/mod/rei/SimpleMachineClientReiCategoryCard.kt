@@ -8,9 +8,12 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import miragefairy2024.client.mod.AuraReflectorFurnaceScreen
 import miragefairy2024.client.mod.FermentationBarrelScreen
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipe
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.machine.SimpleMachineRecipe
+import miragefairy2024.mod.rei.AuraReflectorFurnaceReiCategoryCard
 import miragefairy2024.mod.rei.FermentationBarrelReiCategoryCard
 import miragefairy2024.mod.rei.SimpleMachineReiCategoryCard
 import miragefairy2024.util.invoke
@@ -83,5 +86,16 @@ object FermentationBarrelClientReiCategoryCard : SimpleMachineClientReiCategoryC
     override val outputSlots = listOf(Point(111, 28))
     override fun registerScreens(registry: ScreenRegistry) {
         registerScreen(registry, FermentationBarrelScreen::class.java, Rectangle(77, 28, 22, 15))
+    }
+}
+
+object AuraReflectorFurnaceClientReiCategoryCard : SimpleMachineClientReiCategoryCard<AuraReflectorFurnaceRecipe>(AuraReflectorFurnaceReiCategoryCard) {
+    override val imageBound = Rectangle(28, 16, 116, 54)
+    override val arrowPosition = Point(89, 35)
+    override val durationTextPosition = Point(108, 18)
+    override val inputSlots = listOf(Point(29, 17), Point(47, 17), Point(65, 17))
+    override val outputSlots = listOf(Point(123, 35))
+    override fun registerScreens(registry: ScreenRegistry) {
+        registerScreen(registry, AuraReflectorFurnaceScreen::class.java, Rectangle(89, 35, 22, 15))
     }
 }

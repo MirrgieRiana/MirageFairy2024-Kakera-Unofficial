@@ -225,6 +225,16 @@ class ToolCard(
             PoemList(3).poem(EnJa("Crack! Squish!", "バキッ！ぐにっ")),
             FairyAxeConfiguration(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.MIRAGIUM_INGOT.item) }
+        val RESONITE_PICKAXE = !ToolCard(
+            "resonite_pickaxe", EnJa("Resonite Pickaxe", "レゾナイトのつるはし"),
+            PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
+            FairyPickaxeConfiguration(ToolMaterialCard.RESONITE).mineAll().enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_AXE = !ToolCard(
+            "resonite_axe", EnJa("Resonite Axe", "レゾナイトの斧"),
+            PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
+            FairyAxeConfiguration(ToolMaterialCard.RESONITE, 4.0F, -3.0F).cutAll().enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val MIRANAGITE_KNIFE = !ToolCard(
             "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
             PoemList(2).poem(EnJa("Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。")),

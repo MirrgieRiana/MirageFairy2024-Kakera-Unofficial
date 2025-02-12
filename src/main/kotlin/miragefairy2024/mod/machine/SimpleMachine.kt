@@ -157,6 +157,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         if (progressMax == 0 && shouldUpdateRecipe) run {
             shouldUpdateRecipe = false
 
+            // TODO 順不同
             val inventory = SimpleInventory(card.inputSlots.size)
             card.inputSlots.forEachIndexed { index, slot ->
                 inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
