@@ -27,11 +27,9 @@ object FermentationBarrelReiCategoryCard : ReiCategoryCard<FermentationBarrelRei
     }
 
     class Display(val recipe: FermentationBarrelRecipe) : BasicDisplay(
-        listOf(
-            recipe.input1.first.matchingStacks.map { it.copyWithCount(recipe.input1.second).toEntryStack() }.toEntryIngredient(),
-            recipe.input2.first.matchingStacks.map { it.copyWithCount(recipe.input2.second).toEntryStack() }.toEntryIngredient(),
-            recipe.input3.first.matchingStacks.map { it.copyWithCount(recipe.input3.second).toEntryStack() }.toEntryIngredient(),
-        ),
+        recipe.inputs.map { input ->
+            input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
+        },
         listOf(
             recipe.output.toEntryStack().toEntryIngredient(),
         ),

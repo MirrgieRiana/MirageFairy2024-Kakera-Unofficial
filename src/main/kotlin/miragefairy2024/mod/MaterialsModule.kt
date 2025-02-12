@@ -554,9 +554,11 @@ class MaterialCard(
         ) {
             // TODO 蒸留装置
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on Items.SUGAR_CANE
@@ -574,9 +576,11 @@ class MaterialCard(
             creator = { DrinkItem(it) },
         ) {
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.APPLE), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.APPLE), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 1,
             ) on Items.APPLE
@@ -595,9 +599,11 @@ class MaterialCard(
         ) {
             // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on HAIMEVISKA_SAP.item
@@ -616,9 +622,11 @@ class MaterialCard(
             creator = { DrinkItem(it) },
         ) {
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 60 * 5,
             ) on VEROPEDA_BERRIES.item
@@ -637,23 +645,29 @@ class MaterialCard(
             creator = { DrinkItem(it) },
         ) {
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.PUFFERFISH from Items.PUFFERFISH
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
             registerFermentationBarrelRecipeGeneration(
-                input1 = Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                input2 = Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
-                input3 = Pair(WaterBottleIngredient.toVanilla(), 1),
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
+                    Pair(WaterBottleIngredient.toVanilla(), 1),
+                ),
                 output = item.createItemStack(),
                 duration = 20 * 5,
             ) on Items.SPIDER_EYE from Items.SPIDER_EYE

@@ -1,5 +1,6 @@
 package miragefairy2024.mod.machine
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
@@ -42,9 +43,7 @@ import java.util.function.Consumer
 class FermentationBarrelRecipe(
     val identifier: Identifier,
     private val group: String,
-    val input1: Pair<Ingredient, Int>,
-    val input2: Pair<Ingredient, Int>,
-    val input3: Pair<Ingredient, Int>,
+    val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
     val duration: Int,
 ) : Recipe<Inventory> {
@@ -69,8 +68,6 @@ class FermentationBarrelRecipe(
             return EMPTY_ITEM_STACK
         }
     }
-
-    val inputs = listOf(input1, input2, input3)
 
     override fun getGroup() = group
 
@@ -122,9 +119,9 @@ class FermentationBarrelRecipe(
             return FermentationBarrelRecipe(
                 identifier = id,
                 group = root["group"].asString(),
-                input1 = readInput(root["input1"]),
-                input2 = readInput(root["input2"]),
-                input3 = readInput(root["input3"]),
+                inputs = root["inputs"].asList().map { input ->
+                    readInput(input)
+                },
                 output = run {
                     val itemId = root["output"]["item"].asString()
                     val count = root["output"]["count"].asInt()
@@ -149,26 +146,27 @@ class FermentationBarrelRecipe(
                 return outputJson
             }
             json.addProperty("group", recipe.group)
-            json.add("input1", toJsonInput(recipe.input1))
-            json.add("input2", toJsonInput(recipe.input2))
-            json.add("input3", toJsonInput(recipe.input3))
+            json.add("inputs", JsonArray().also { inputsJson ->
+                recipe.inputs.forEach { input ->
+                    inputsJson.add(toJsonInput(input))
+                }
+            })
             json.add("output", toJsonOutput(recipe.output))
             json.addProperty("duration", recipe.duration)
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): FermentationBarrelRecipe {
             val group = buf.readString()
-            val input1 = Pair(Ingredient.fromPacket(buf), buf.readInt())
-            val input2 = Pair(Ingredient.fromPacket(buf), buf.readInt())
-            val input3 = Pair(Ingredient.fromPacket(buf), buf.readInt())
+            val inputsCount = buf.readInt()
+            val inputs = (0 until inputsCount).map {
+                Pair(Ingredient.fromPacket(buf), buf.readInt())
+            }
             val output = buf.readItemStack()
             val duration = buf.readInt()
             return FermentationBarrelRecipe(
                 identifier = id,
                 group = group,
-                input1 = input1,
-                input2 = input2,
-                input3 = input3,
+                inputs = inputs,
                 output = output,
                 duration = duration,
             )
@@ -176,12 +174,11 @@ class FermentationBarrelRecipe(
 
         override fun write(buf: PacketByteBuf, recipe: FermentationBarrelRecipe) {
             buf.writeString(recipe.group)
-            recipe.input1.first.write(buf)
-            buf.writeInt(recipe.input1.second)
-            recipe.input2.first.write(buf)
-            buf.writeInt(recipe.input2.second)
-            recipe.input3.first.write(buf)
-            buf.writeInt(recipe.input3.second)
+            buf.writeInt(recipe.inputs.size)
+            recipe.inputs.forEach {
+                it.first.write(buf)
+                buf.writeInt(it.second)
+            }
             buf.writeItemStack(recipe.output)
             buf.writeInt(recipe.duration)
         }
@@ -192,16 +189,14 @@ class FermentationBarrelRecipe(
 
 context(ModContext)
 fun registerFermentationBarrelRecipeGeneration(
-    input1: Pair<Ingredient, Int>,
-    input2: Pair<Ingredient, Int>,
-    input3: Pair<Ingredient, Int>,
+    inputs: List<Pair<Ingredient, Int>>,
     output: ItemStack,
     duration: Int,
     block: FermentationBarrelRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<FermentationBarrelRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<FermentationBarrelRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = FermentationBarrelRecipeJsonBuilder(RecipeCategory.MISC, input1, input2, input3, output, duration)
+        val builder = FermentationBarrelRecipeJsonBuilder(RecipeCategory.MISC, inputs, output, duration)
         builder.group(output.item)
         settings.listeners.forEach { listener ->
             listener(builder)
@@ -215,9 +210,7 @@ fun registerFermentationBarrelRecipeGeneration(
 
 class FermentationBarrelRecipeJsonBuilder(
     private val category: RecipeCategory,
-    private val input1: Pair<Ingredient, Int>,
-    private val input2: Pair<Ingredient, Int>,
-    private val input3: Pair<Ingredient, Int>,
+    private val inputs: List<Pair<Ingredient, Int>>,
     private val output: ItemStack,
     private val duration: Int,
 ) : CraftingRecipeJsonBuilder {
@@ -241,7 +234,7 @@ class FermentationBarrelRecipeJsonBuilder(
 
         val recipeJsonProvider = object : RecipeJsonProvider {
             override fun serialize(json: JsonObject) {
-                FermentationBarrelRecipe.Serializer.write(json, FermentationBarrelRecipe(recipeId, group, input1, input2, input3, output, duration))
+                FermentationBarrelRecipe.Serializer.write(json, FermentationBarrelRecipe(recipeId, group, inputs, output, duration))
             }
 
             override fun getSerializer() = FermentationBarrelRecipe.Serializer
