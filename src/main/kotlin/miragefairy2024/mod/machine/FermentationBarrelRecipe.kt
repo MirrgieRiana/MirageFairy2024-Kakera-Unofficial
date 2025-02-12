@@ -1,4 +1,4 @@
-package miragefairy2024.mod.fermentationbarrel
+package miragefairy2024.mod.machine
 
 import com.google.gson.JsonObject
 import miragefairy2024.DataGenerationEvents

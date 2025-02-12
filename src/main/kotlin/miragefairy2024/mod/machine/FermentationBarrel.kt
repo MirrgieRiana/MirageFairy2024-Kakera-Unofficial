@@ -1,4 +1,4 @@
-package miragefairy2024.mod.fermentationbarrel
+package miragefairy2024.mod.machine
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext

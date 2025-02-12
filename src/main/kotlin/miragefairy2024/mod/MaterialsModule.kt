@@ -9,7 +9,7 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
-import miragefairy2024.mod.fermentationbarrel.registerFermentationBarrelRecipeGeneration
+import miragefairy2024.mod.machine.registerFermentationBarrelRecipeGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation

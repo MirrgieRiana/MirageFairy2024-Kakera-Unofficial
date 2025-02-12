@@ -11,8 +11,8 @@ import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.mod.FermentationBarrelScreen
-import miragefairy2024.mod.fermentationbarrel.FermentationBarrelCard
-import miragefairy2024.mod.fermentationbarrel.FermentationBarrelRecipe
+import miragefairy2024.mod.machine.FermentationBarrelCard
+import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.rei.FermentationBarrelReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke

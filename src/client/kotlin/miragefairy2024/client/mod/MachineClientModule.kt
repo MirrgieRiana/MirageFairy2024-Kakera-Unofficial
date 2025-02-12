@@ -2,8 +2,8 @@ package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.lib.MachineScreen
-import miragefairy2024.mod.fermentationbarrel.FermentationBarrelCard
-import miragefairy2024.mod.fermentationbarrel.FermentationBarrelScreenHandler
+import miragefairy2024.mod.machine.FermentationBarrelCard
+import miragefairy2024.mod.machine.FermentationBarrelScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens
 import java.util.Optional
 import kotlin.math.roundToInt
 
-fun initFermentationBarrelClientModule() {
+fun initMachineClientModule() {
     HandledScreens.register(FermentationBarrelCard.screenHandlerType) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 

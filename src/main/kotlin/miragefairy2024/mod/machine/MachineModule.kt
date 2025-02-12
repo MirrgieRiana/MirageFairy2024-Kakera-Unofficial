@@ -1,9 +1,9 @@
-package miragefairy2024.mod.fermentationbarrel
+package miragefairy2024.mod.machine
 
 import miragefairy2024.ModContext
 
 context(ModContext)
-fun initFermentationBarrelModule() {
+fun initMachineModule() {
     FermentationBarrelCard.init()
     FermentationBarrelRecipe.init()
 }

@@ -2,7 +2,7 @@ package miragefairy2024.mod.rei
 
 import com.google.gson.JsonObject
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
-import miragefairy2024.mod.fermentationbarrel.FermentationBarrelRecipe
+import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.rei.FairyFamilyReiCategoryCard.Display
 import miragefairy2024.util.get
 import miragefairy2024.util.string
