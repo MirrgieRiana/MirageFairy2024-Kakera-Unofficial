@@ -71,7 +71,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
     override fun getWorkstations() = listOf(listOf(card.machine.toEntryStack()).toEntryIngredient())
 
     fun <C : ScreenHandler, T : HandledScreen<C>> registerScreen(registry: ScreenRegistry, screenClass: Class<out T>, rectangle: Rectangle) {
-        registry.registerContainerClickArea(Rectangle(rectangle.x, rectangle.y, rectangle.width, rectangle.height), screenClass, card.identifier.first)
+        registry.registerContainerClickArea(Rectangle(rectangle.x - 1, rectangle.y - 1, rectangle.width + 2, rectangle.height + 1 + 2), screenClass, card.identifier.first)
     }
 }
 
@@ -82,6 +82,6 @@ object FermentationBarrelClientReiCategoryCard : SimpleMachineClientReiCategoryC
     override val inputSlots = listOf(Point(42, 17), Point(31, 39), Point(53, 39))
     override val outputSlots = listOf(Point(111, 28))
     override fun registerScreens(registry: ScreenRegistry) {
-        registerScreen(registry, FermentationBarrelScreen::class.java, Rectangle(77 - 1, 27, 22 + 2, 16 + 2))
+        registerScreen(registry, FermentationBarrelScreen::class.java, Rectangle(77, 28, 22, 15))
     }
 }
