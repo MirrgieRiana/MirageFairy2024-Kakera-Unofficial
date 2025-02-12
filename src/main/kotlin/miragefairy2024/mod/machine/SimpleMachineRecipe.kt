@@ -45,20 +45,21 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     abstract val icon: ItemStack
 
-    val type: RecipeType<R> = object : RecipeType<R> {
+    val type = object : RecipeType<R> {
         override fun toString() = identifier.string
     }
 
     @Suppress("LeakingThis")
-    val serializer = SimpleMachineRecipe.Serializer<R>(this)
+    val serializer = SimpleMachineRecipe.Serializer(this)
 
     abstract fun createRecipe(identifier: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
 
-    context (ModContext)
+    context(ModContext)
     fun init() {
         type.register(Registries.RECIPE_TYPE, identifier)
         serializer.register(Registries.RECIPE_SERIALIZER, identifier)
     }
+
 }
 
 open class SimpleMachineRecipe(
@@ -107,10 +108,10 @@ open class SimpleMachineRecipe(
         return list
     }
 
-    override fun craft(inventory: Inventory?, registryManager: DynamicRegistryManager?): ItemStack = output.copy()
+    override fun craft(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
     override fun fits(width: Int, height: Int) = width * height >= 3
     override fun getOutput(registryManager: DynamicRegistryManager?) = output
-    override fun createIcon(): ItemStack = card.icon
+    override fun createIcon() = card.icon
     override fun getId() = identifier
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
@@ -169,8 +170,8 @@ open class SimpleMachineRecipe(
 
         override fun read(id: Identifier, buf: PacketByteBuf): R {
             val group = buf.readString()
-            val inputsCount = buf.readInt()
-            val inputs = (0 until inputsCount).map {
+            val inputCount = buf.readInt()
+            val inputs = (0 until inputCount).map {
                 Pair(Ingredient.fromPacket(buf), buf.readInt())
             }
             val output = buf.readItemStack()
