@@ -42,10 +42,12 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.enums.Instrument
+import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.recipe.RecipeType
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.ItemScatterer
@@ -54,14 +56,15 @@ import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 import kotlin.jvm.optionals.getOrNull
 
-object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler>() {
-    override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
-    override fun createBlock() = FermentationBarrelBlock(this)
-    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FermentationBarrelBlockEntity)
-    override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FermentationBarrelScreenHandler(this, arguments)
-    override val guiWidth = 176
-    override val guiHeight = 152
+abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
+    companion object {
+        val PROGRESS_PROPERTY = PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progress }, { progress = it })
+        val PROGRESS_MAX_PROPERTY = PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progressMax }, { progressMax = it })
+    }
+
+    abstract val name: EnJa
+    abstract val poem: EnJa
+    abstract val tier: Int
 
     class SlotConfiguration(
         override val x: Int,
@@ -77,19 +80,15 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
         override val dropItem = true
     }
 
-    val INPUT_SLOTS = listOf(
-        SlotConfiguration(42, 17, setOf(Direction.UP), setOf()),
-        SlotConfiguration(31, 39, setOf(Direction.NORTH), setOf()),
-        SlotConfiguration(53, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
-    )
-    val OUTPUT_SLOTS = listOf(
-        SlotConfiguration(111, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
-        SlotConfiguration(129, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
-    )
-    val SLOTS = INPUT_SLOTS + OUTPUT_SLOTS
+    abstract val inputSlots: List<SlotConfiguration>
+    abstract val outputSlots: List<SlotConfiguration>
+    abstract val slots: List<SlotConfiguration>
 
-    val PROGRESS_PROPERTY = PropertyConfiguration<FermentationBarrelBlockEntity>({ progress }, { progress = it })
-    val PROGRESS_MAX_PROPERTY = PropertyConfiguration<FermentationBarrelBlockEntity>({ progressMax }, { progressMax = it })
+    open val properties: List<MachineScreenHandler.PropertyConfiguration<E>> = listOf(PROGRESS_PROPERTY, PROGRESS_MAX_PROPERTY)
+
+    abstract val recipeType: RecipeType<R>
+
+    fun match(world: World, inventory: Inventory) = world.recipeManager.getFirstMatch(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -99,20 +98,51 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
 
         block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
 
-        block.enJa(EnJa("Fermentation Barrel", "醸造樽"))
-        val poemList = PoemList(2).poem(EnJa("The scent of Haimeviska feel nostalgic", "懐かしき故郷の香り。"))
+        block.enJa(name)
+        val poemList = PoemList(tier).poem(poem)
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
-
         block.registerDefaultLootTableGeneration()
 
+        inventorySlotConfigurations += slots
+        guiSlotConfigurations += slots
+        propertyConfigurations += properties
 
-        inventorySlotConfigurations += SLOTS
-        guiSlotConfigurations += SLOTS
-        propertyConfigurations += listOf(PROGRESS_PROPERTY, PROGRESS_MAX_PROPERTY)
+    }
+}
 
+object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler, FermentationBarrelRecipe>() {
+    override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
+    override fun createBlock() = FermentationBarrelBlock(this)
+    override fun createBlockEntityAccessor() = BlockEntityAccessor(::FermentationBarrelBlockEntity)
+    override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FermentationBarrelScreenHandler(this, arguments)
+    override val guiWidth = 176
+    override val guiHeight = 152
+
+    override val name = EnJa("Fermentation Barrel", "醸造樽")
+    override val poem = EnJa("The scent of Haimeviska feel nostalgic", "懐かしき故郷の香り。")
+    override val tier = 2
+
+    override val inputSlots = listOf(
+        SlotConfiguration(42, 17, setOf(Direction.UP), setOf()),
+        SlotConfiguration(31, 39, setOf(Direction.NORTH), setOf()),
+        SlotConfiguration(53, 39, setOf(Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN), setOf()),
+    )
+    override val outputSlots = listOf(
+        SlotConfiguration(111, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+        SlotConfiguration(129, 28, setOf(), setOf(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.DOWN)),
+    )
+    override val slots = inputSlots + outputSlots
+
+    override val recipeType = FermentationBarrelRecipeCard.type
+
+    context(ModContext)
+    override fun init() {
+        super.init()
+
+        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
 
         registerShapedRecipeGeneration(item) {
             pattern("ILI")
@@ -125,10 +155,11 @@ object FermentationBarrelCard : MachineCard<FermentationBarrelBlock, Fermentatio
     }
 }
 
-class FermentationBarrelBlock(card: FermentationBarrelCard) : HorizontalFacingMachineBlock(card)
+open class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
 
-class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : MachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
-    override fun getThis() = this
+class FermentationBarrelBlock(card: FermentationBarrelCard) : SimpleMachineBlock(card)
+
+abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
@@ -183,11 +214,11 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
         if (progressMax == 0 && shouldUpdateRecipe) run {
             shouldUpdateRecipe = false
 
-            val inventory = SimpleInventory(FermentationBarrelCard.INPUT_SLOTS.size)
-            FermentationBarrelCard.INPUT_SLOTS.forEachIndexed { index, slot ->
+            val inventory = SimpleInventory(card.inputSlots.size)
+            card.inputSlots.forEachIndexed { index, slot ->
                 inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
             }
-            val recipe = world.recipeManager.getFirstMatch(FermentationBarrelRecipeCard.type, inventory, world).getOrNull() ?: return@run
+            val recipe = card.match(world, inventory) ?: return@run
 
             val remainder = recipe.getRemainder(inventory)
             (0 until inventory.size).forEach { index ->
@@ -213,7 +244,7 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
                     val result = mergeInventory(
                         waitingInventory.toInventoryDelegate(),
                         this.toInventoryDelegate(),
-                        destIndices = FermentationBarrelCard.OUTPUT_SLOTS.map { card.inventorySlotIndexTable[it]!! },
+                        destIndices = card.outputSlots.map { card.inventorySlotIndexTable[it]!! },
                     )
                     if (result.movementTimes > 0) markDirty()
                     if (result.completed) {
@@ -231,8 +262,14 @@ class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, po
     }
 }
 
-// TODO レシピブック対応
-class FermentationBarrelScreenHandler(card: FermentationBarrelCard, arguments: Arguments) : MachineScreenHandler(card, arguments) {
-    var progress by Property(FermentationBarrelCard.PROGRESS_PROPERTY)
-    var progressMax by Property(FermentationBarrelCard.PROGRESS_MAX_PROPERTY)
+class FermentationBarrelBlockEntity(private val card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
+    override fun getThis() = this
 }
+
+// TODO レシピブック対応
+open class SimpleMachineScreenHandler(card: SimpleMachineCard<*, *, *, *>, arguments: Arguments) : MachineScreenHandler(card, arguments) {
+    var progress by Property(SimpleMachineCard.PROGRESS_PROPERTY)
+    var progressMax by Property(SimpleMachineCard.PROGRESS_MAX_PROPERTY)
+}
+
+class FermentationBarrelScreenHandler(card: FermentationBarrelCard, arguments: Arguments) : SimpleMachineScreenHandler(card, arguments)
