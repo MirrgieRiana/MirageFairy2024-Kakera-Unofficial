@@ -4,12 +4,9 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.RecipeGenerationSettings
-import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
-import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.JsonWrapper
@@ -25,7 +22,6 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
@@ -70,17 +66,6 @@ open class SimpleMachineRecipe(
     val output: ItemStack,
     val duration: Int,
 ) : Recipe<Inventory> {
-    companion object {
-
-        fun getCustomizedRemainder(itemStack: ItemStack): ItemStack {
-            val remainder = itemStack.item.getRecipeRemainder(itemStack)
-            if (remainder.isNotEmpty) return remainder
-
-            if (itemStack.isOf(Items.POTION)) return Items.GLASS_BOTTLE.createItemStack()
-
-            return EMPTY_ITEM_STACK
-        }
-    }
 
     override fun getGroup() = group
 
@@ -91,6 +76,8 @@ open class SimpleMachineRecipe(
         }
         return true
     }
+
+    open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
     override fun getRemainder(inventory: Inventory): DefaultedList<ItemStack> {
         val list = DefaultedList.of<ItemStack>()

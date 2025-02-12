@@ -1,8 +1,11 @@
 package miragefairy2024.mod.machine
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.isNotEmpty
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.util.Identifier
 
@@ -28,4 +31,13 @@ class FermentationBarrelRecipe(
     inputs,
     output,
     duration,
-)
+) {
+    override fun getCustomizedRemainder(itemStack: ItemStack): ItemStack {
+        val remainder = super.getCustomizedRemainder(itemStack)
+        if (remainder.isNotEmpty) return remainder
+
+        if (itemStack.isOf(Items.POTION)) return Items.GLASS_BOTTLE.createItemStack()
+
+        return EMPTY_ITEM_STACK
+    }
+}
