@@ -126,13 +126,18 @@ context(VariantsBlockStateGenerationRegistrationScope)
 fun normal(model: Identifier) = listOf(propertiesOf() with BlockStateVariant(model = model))
 
 context(VariantsBlockStateGenerationRegistrationScope)
-infix fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>): List<BlockStateVariantEntry> {
+fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>, modelFunction: (Identifier, PropertyEntry<T>) -> Identifier): List<BlockStateVariantEntry> {
     return property.values.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
-            propertiesOf(*properties.toTypedArray(), entry) with variant.with(model = variant.getModel()!! * "_${entry.keyName}${entry.valueName}")
+            propertiesOf(*properties.toTypedArray(), entry) with variant.with(model = modelFunction(variant.getModel()!!, entry))
         }
     }
+}
+
+context(VariantsBlockStateGenerationRegistrationScope)
+infix fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>): List<BlockStateVariantEntry> {
+    return this.with(property) { model, entry -> model * "_${entry.keyName}${entry.valueName}" }
 }
 
 context(VariantsBlockStateGenerationRegistrationScope)
