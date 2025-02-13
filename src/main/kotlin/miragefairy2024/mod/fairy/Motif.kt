@@ -631,7 +631,9 @@ enum class MotifCard(
         ParentMotifs() + { WITHER } + { STAR },
         PassiveSkillBuilder()
             + luck(0.6)
-            + magic.attack(0.4),
+            + magic.attack(0.4)
+            + StatusEffects.HASTE() * ToolMaterialCard.NETHER_STAR()
+            + StatusEffects.HASTE(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + Items.NETHER_STAR,
     ),
 
