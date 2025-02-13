@@ -9,6 +9,7 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.util.EnJa
@@ -193,7 +194,14 @@ class MaterialCard(
             PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
             soulStreamContainable = true,
         ) {
-            registerSmeltingRecipeGeneration(MIRAGE_FLOUR_OF_NATURE.item, item) on MIRAGE_FLOUR_OF_NATURE.item from MIRAGE_FLOUR_OF_NATURE.item // TODO エルグ炉
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(MIRAGE_FLOUR.item), 1),
+                ),
+                output = item.createItemStack(),
+                duration = 20 * 60,
+            ) on MIRAGE_FLOUR.item
         }
         val MIRAGIUM_INGOT = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
