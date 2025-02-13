@@ -84,7 +84,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        registerBlockStateGeneration()
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
@@ -97,6 +97,11 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
         guiSlotConfigurations += slots
         propertyConfigurations += properties
 
+    }
+
+    context(ModContext)
+    open fun registerBlockStateGeneration() {
+        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
     }
 }
 

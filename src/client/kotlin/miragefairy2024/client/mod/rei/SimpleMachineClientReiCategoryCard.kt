@@ -4,6 +4,7 @@ import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.Renderer
 import me.shedaniel.rei.api.client.gui.widgets.Widget
+import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
@@ -26,8 +27,12 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
+import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.client.util.math.Rect2i
 import net.minecraft.screen.ScreenHandler
+import kotlin.math.roundToInt
 
 abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -102,6 +107,7 @@ object AuraReflectorFurnaceClientReiCategoryCard : SimpleMachineClientReiCategor
     override val durationTextPosition = Point(108, 18)
     override val inputSlots = listOf(Point(29, 17), Point(47, 17), Point(65, 17))
     val fuelSlots = listOf(Point(47, 53))
+    val fuelBound = Rect2i(48, 37, 13, 13)
     override val outputSlots = listOf(Point(123, 35))
 
     override fun createInputWidgets(offset: Point, display: SimpleMachineReiCategoryCard.Display<AuraReflectorFurnaceRecipe>): List<Widget> {
@@ -110,10 +116,39 @@ object AuraReflectorFurnaceClientReiCategoryCard : SimpleMachineClientReiCategor
             val inputIndex = fuelInputIndices.getOrNull(slotIndex)
             val inputEntry = if (inputIndex == null) null else display.inputEntries.getOrNull(inputIndex)
             Widgets.createSlot(offset + it).entries(inputEntry ?: listOf()).disableBackground().markInput()
-        }
+        } + BlueFuelWidget(Rectangle(fuelBound.x + offset.x, fuelBound.y + offset.y, fuelBound.width, fuelBound.height))
     }
 
     override fun registerScreens(registry: ScreenRegistry) {
         registerScreen(registry, AuraReflectorFurnaceScreen::class.java, Rectangle(89, 35, 22, 15))
+    }
+}
+
+class BlueFuelWidget(private val rectangle: Rectangle) : WidgetWithBounds() {
+    override fun children() = listOf<Element>()
+    override fun getBounds() = rectangle
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        val fuelMax = 20 * 10
+        val fuel = fuelMax - (System.currentTimeMillis() / 50) % fuelMax - 1
+        val fuelRate = fuel.toDouble() / fuelMax.toDouble()
+        val h = (rectangle.height.toDouble() * fuelRate).roundToInt()
+
+
+        //RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F)
+        //RenderSystem.enableBlend()
+        //RenderSystem.blendFuncSeparate(770, 771, 1, 0)
+        //RenderSystem.blendFunc(770, 771)
+        context.drawTexture(
+            AuraReflectorFurnaceScreen.BLUE_FUEL_TEXTURE,
+            rectangle.x - 1,
+            rectangle.y - 1 + (rectangle.height - h),
+            0F,
+            rectangle.height.toFloat() - h.toFloat(),
+            rectangle.width,
+            h,
+            32,
+            32,
+        )
+        //RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
     }
 }

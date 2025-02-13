@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:echo_shard_pickaxe",
+  "key": {
+    "#": {
+      "item": "minecraft:echo_shard"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "item": "miragefairy2024:echo_shard_pickaxe"
+  },
+  "show_notification": true
+}

@@ -6,27 +6,42 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard.Companion.PropertyConfiguration
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Model
+import miragefairy2024.util.TextureMap
 import miragefairy2024.util.get
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
 import miragefairy2024.util.mergeInventory
+import miragefairy2024.util.normal
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
+import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.times
 import miragefairy2024.util.toInventoryDelegate
+import miragefairy2024.util.with
+import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.data.client.TextureKey
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
+import net.minecraft.state.property.Properties
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create() // TODO
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().luminance { if (it[AuraReflectorFurnaceBlock.LIT]) 8 else 0 } // TODO
     override fun createBlock() = AuraReflectorFurnaceBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::AuraReflectorFurnaceBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = AuraReflectorFurnaceScreenHandler(this, arguments)
@@ -60,6 +75,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun init() {
         super.init()
 
+        registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
+
         block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
 
         registerShapedRecipeGeneration(item) {
@@ -70,9 +87,31 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
             input('X', MaterialCard.XARPITE.item)
         } on MaterialCard.XARPITE.item
     }
+
+    context(ModContext)
+    override fun registerBlockStateGeneration() {
+        block.registerVariantsBlockStateGeneration {
+            normal("block/" * block.getIdentifier())
+                .withHorizontalRotation(HorizontalFacingBlock.FACING)
+                .with(AuraReflectorFurnaceBlock.LIT) { model, entry -> if (entry.value) model * "_lit" else model }
+        }
+    }
 }
 
-class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card)
+class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card) {
+    companion object {
+        val LIT: BooleanProperty = Properties.LIT
+    }
+
+    init {
+        defaultState = defaultState.with(LIT, false)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        super.appendProperties(builder)
+        builder.add(LIT)
+    }
+}
 
 class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<AuraReflectorFurnaceBlockEntity>(card, pos, state) {
     override fun getThis() = this
@@ -112,8 +151,14 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         }
     }
 
+    fun setLit(lit: Boolean) {
+        val world = world ?: return
+        if (cachedState[AuraReflectorFurnaceBlock.LIT] != lit) {
+            world.setBlockState(pos, cachedState.with(AuraReflectorFurnaceBlock.LIT, lit), Block.NOTIFY_ALL)
+        }
+    }
+
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
-        super.serverTick(world, pos, state)
 
         // クラフトが開始されていなければ、開始を試みる
         if (progressMax == 0) run {
@@ -173,7 +218,9 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
 
         }
 
+        val oldFuel = fuel
         if (fuel > 0) fuel--
+        setLit(oldFuel > 0)
 
     }
 }

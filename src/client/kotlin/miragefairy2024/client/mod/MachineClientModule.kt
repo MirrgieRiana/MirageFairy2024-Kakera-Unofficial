@@ -60,18 +60,28 @@ class FermentationBarrelScreen(card: FermentationBarrelCard, arguments: Argument
 
 class AuraReflectorFurnaceScreen(card: AuraReflectorFurnaceCard, arguments: Arguments<AuraReflectorFurnaceScreenHandler>) : SimpleMachineScreen<AuraReflectorFurnaceScreenHandler>(card, arguments) {
     companion object {
-        val FUEL_BLUE_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/fuel_blue.png")
+        val BLUE_FUEL_TEXTURE = MirageFairy2024.identifier("textures/gui/sprites/blue_fuel.png")
     }
 
     override val arrowBound = Rect2i(89, 35, 22, 15)
-    val fuelBound = Rect2i(47, 35, 16, 16) // TODO
+    val fuelBound = Rect2i(48, 37, 13, 13)
 
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
 
         if (handler.fuelMax > 0) {
-            val w = (fuelBound.width.toDouble() * (handler.fuel.toDouble() / handler.fuelMax.toDouble() atMost 1.0)).roundToInt()
-            context.drawTexture(FUEL_BLUE_TEXTURE, x + fuelBound.x, y + fuelBound.y - 1, 0F, 0F, w, fuelBound.height + 1, 32, 32)
+            val h = (fuelBound.height.toDouble() * (handler.fuel.toDouble() / handler.fuelMax.toDouble() atMost 1.0)).roundToInt()
+            context.drawTexture(
+                BLUE_FUEL_TEXTURE,
+                x + fuelBound.x - 1,
+                y + fuelBound.y - 1 + (fuelBound.height - h),
+                0F,
+                fuelBound.height.toFloat() - h.toFloat(),
+                fuelBound.width,
+                h,
+                32,
+                32,
+            )
         }
     }
 }

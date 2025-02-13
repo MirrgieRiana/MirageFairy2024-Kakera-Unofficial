@@ -1,0 +1,6 @@
+{
+  "parent": "miragefairy2024:block/aura_reflector_furnace",
+  "textures": {
+    "front": "miragefairy2024:block/aura_reflector_furnace_front_lit"
+  }
+}
