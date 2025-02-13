@@ -224,6 +224,10 @@ class MaterialCard(
         ) {
             item.registerComposterInput(0.3F)
         }
+        val LUMINITE = !MaterialCard(
+            "luminite", "Luminite", "ルミナイト",
+            PoemList(4).poem("Charged etheroluminescence crystal", "エーテルの光、魂のエネルギーを受けて。"),
+        )
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)
