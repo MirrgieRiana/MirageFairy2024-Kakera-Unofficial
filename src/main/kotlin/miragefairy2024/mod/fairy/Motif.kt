@@ -796,6 +796,7 @@ enum class MotifCard(
             + mending(1.0) * ToolMaterialCard.WOOD()
             + mending(1.0) * ToolMaterialCard.MIRAGE()
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP()
+            + mending(1.0) * ToolMaterialCard.LUMINITE()
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
         MotifCardRecipes().R + MaterialCard.PHANTOM_DROP.item,
     ),
@@ -808,6 +809,15 @@ enum class MotifCard(
             + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item)
             + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item),
         MotifCardRecipes().R.common(ConventionalBiomeTags.CLIMATE_DRY).nether + VeropedaCard.block,
+    ),
+    LUMINITE(
+        "luminite", 7, "Luminitia", "輝石精ルミニーチャ", 0x9BE8E8, 0x75C7C7, 0x75C7C7, 0x5EE6E6,
+        ParentMotifs(),
+        PassiveSkillBuilder()
+            + overall.defence(1.0)
+            + StatusEffects.RESISTANCE() * ToolMaterialCard.LUMINITE()
+            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
+        MotifCardRecipes().R + MaterialCard.LUMINITE.item,
     ),
     GLOW_LICHEN(
         "glow_lichen", 5, "Glowe Lichenia", "光苔精グローウェリケーニャ", 0x639386, 0x639386, 0x639386, 0xAFB18B,
