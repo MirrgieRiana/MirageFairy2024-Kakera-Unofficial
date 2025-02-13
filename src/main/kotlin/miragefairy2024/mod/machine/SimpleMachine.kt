@@ -54,7 +54,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     abstract val poem: EnJa
     abstract val tier: Int
 
-    class SlotConfiguration(
+    open class SlotConfiguration(
         override val x: Int,
         override val y: Int,
         private val insertDirections: Set<Direction> = setOf(),
@@ -84,7 +84,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        registerBlockStateGeneration()
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
@@ -97,6 +97,11 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
         guiSlotConfigurations += slots
         propertyConfigurations += properties
 
+    }
+
+    context(ModContext)
+    open fun registerBlockStateGeneration() {
+        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
     }
 }
 
@@ -130,8 +135,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
 
-    private val craftingInventory = mutableListOf<ItemStack>()
-    private val waitingInventory = mutableListOf<ItemStack>()
+    val craftingInventory = mutableListOf<ItemStack>()
+    val waitingInventory = mutableListOf<ItemStack>()
 
     override fun clear() {
         super.clear()
@@ -146,8 +151,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         }
     }
 
-    private var shouldUpdateRecipe = true
-    private var shouldUpdateWaiting = true
+    var shouldUpdateRecipe = true
+    var shouldUpdateWaiting = true
     var progressMax = 0
     var progress = 0
 
