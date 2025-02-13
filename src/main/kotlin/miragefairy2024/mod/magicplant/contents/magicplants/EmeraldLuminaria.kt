@@ -54,6 +54,9 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
         createCuboidShape(7.0, 16.0),
     )
 
+    override val baseGrowth = 0.2
+    override val baseFruitGeneration = 0.1
+
     override val drops = listOf(MaterialCard.LUMINITE.item, Items.EMERALD)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item.createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
