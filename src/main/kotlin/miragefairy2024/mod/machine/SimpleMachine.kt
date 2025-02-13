@@ -180,16 +180,27 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         }
     }
 
+    open fun onRecipeCheck(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+        listeners += checkRecipe(world) ?: return false
+        return true
+    }
+
+    open fun onCraftingTick(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+        return true
+    }
+
+    open fun onPostServerTick(world: World, pos: BlockPos, state: BlockState) {
+
+    }
+
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // クラフトが開始されていなければ、開始を試みる
         if (progressMax == 0) run {
-            val onCraft = mutableListOf<() -> Unit>()
-
-            onCraft += checkRecipe(world) ?: return@run
-
-            onCraft.forEach {
+            val listeners = mutableListOf<() -> Unit>()
+            if (!onRecipeCheck(world, pos, state, listeners)) return@run
+            listeners.forEach {
                 it()
             }
         }
@@ -198,8 +209,20 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         if (progressMax > 0) {
 
             // クラフトが完了していなければ、プログレスの進行を試みる
-            if (progress < progressMax) {
-                progress++
+            if (progress < progressMax) run success@{
+                run fail@{
+                    val listeners = mutableListOf<() -> Unit>()
+                    if (!onCraftingTick(world, pos, state, listeners)) return@fail
+                    listeners.forEach {
+                        it()
+                    }
+
+                    progress++
+                    markDirty()
+                    return@success
+                }
+
+                progress = 0
                 markDirty()
             }
 
@@ -225,6 +248,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
             }
 
         }
+
+        onPostServerTick(world, pos, state)
 
     }
 }
