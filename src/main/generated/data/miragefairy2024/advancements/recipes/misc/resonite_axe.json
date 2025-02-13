@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_mirage_flour_of_nature": {
+    "has_resonite_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:mirage_flour_of_nature"
+              "miragefairy2024:resonite_ingot"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:miragium_nugget_from_mirage_flour_of_nature"
+        "recipe": "miragefairy2024:resonite_axe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_mirage_flour_of_nature",
+      "has_resonite_ingot",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:miragium_nugget_from_mirage_flour_of_nature"
+      "miragefairy2024:resonite_axe"
     ]
   },
   "sends_telemetry_event": false

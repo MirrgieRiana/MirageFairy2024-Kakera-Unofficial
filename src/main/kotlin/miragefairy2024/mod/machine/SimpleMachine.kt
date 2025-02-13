@@ -54,7 +54,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     abstract val poem: EnJa
     abstract val tier: Int
 
-    class SlotConfiguration(
+    open class SlotConfiguration(
         override val x: Int,
         override val y: Int,
         private val insertDirections: Set<Direction> = setOf(),
@@ -130,8 +130,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
 
-    private val craftingInventory = mutableListOf<ItemStack>()
-    private val waitingInventory = mutableListOf<ItemStack>()
+    val craftingInventory = mutableListOf<ItemStack>()
+    val waitingInventory = mutableListOf<ItemStack>()
 
     override fun clear() {
         super.clear()
@@ -146,24 +146,23 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         }
     }
 
-    private var shouldUpdateRecipe = true
-    private var shouldUpdateWaiting = true
+    var shouldUpdateRecipe = true
+    var shouldUpdateWaiting = true
     var progressMax = 0
     var progress = 0
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
-        super.serverTick(world, pos, state)
+    fun checkRecipe(world: World): (() -> Unit)? {
+        if (!shouldUpdateRecipe) return null
+        shouldUpdateRecipe = false
 
-        if (progressMax == 0 && shouldUpdateRecipe) run {
-            shouldUpdateRecipe = false
-
-            val inventory = SimpleInventory(card.inputSlots.size)
-            card.inputSlots.forEachIndexed { index, slot ->
-                inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
-            }
-            val recipe = card.match(world, inventory) ?: return@run
-            if (recipe.inputs.size > inventory.size) return@run
-
+        // TODO 順不同
+        val inventory = SimpleInventory(card.inputSlots.size)
+        card.inputSlots.forEachIndexed { index, slot ->
+            inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
+        }
+        val recipe = card.match(world, inventory) ?: return null
+        if (recipe.inputs.size > inventory.size) return null
+        return {
             val remainder = recipe.getRemainder(inventory)
             (0 until recipe.inputs.size).forEach { index ->
                 craftingInventory += inventory[index].split(recipe.inputs[index].second)
@@ -173,14 +172,32 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
             progressMax = recipe.duration
             markDirty()
         }
+    }
 
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
+
+        // クラフトが開始されていなければ、開始を試みる
+        if (progressMax == 0) run {
+            val onCrafted = mutableListOf<() -> Unit>()
+
+            onCrafted += checkRecipe(world) ?: return@run
+
+            onCrafted.forEach {
+                it()
+            }
+        }
+
+        // クラフトが開始されていれば、クラフトの進行を試みる
         if (progressMax > 0) {
 
+            // クラフトが完了していなければ、プログレスの進行を試みる
             if (progress < progressMax) {
                 progress++
                 markDirty()
             }
 
+            // プログレスが完了していれば、クラフトの完了を試みる
             if (progress >= progressMax) {
                 if (shouldUpdateWaiting) {
                     shouldUpdateWaiting = false
