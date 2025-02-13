@@ -156,19 +156,18 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     var progressMax = 0
     var progress = 0
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
-        super.serverTick(world, pos, state)
+    fun checkRecipe(world: World): (() -> Unit)? {
+        if (!shouldUpdateRecipe) return null
+        shouldUpdateRecipe = false
 
-        if (progressMax == 0 && shouldUpdateRecipe) run {
-            shouldUpdateRecipe = false
+        val inventory = SimpleInventory(card.inputSlots.size)
+        card.inputSlots.forEachIndexed { index, slot ->
+            inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
+        }
+        val recipe = card.match(world, inventory) ?: return null
+        if (recipe.inputs.size > inventory.size) return null
 
-            val inventory = SimpleInventory(card.inputSlots.size)
-            card.inputSlots.forEachIndexed { index, slot ->
-                inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
-            }
-            val recipe = card.match(world, inventory) ?: return@run
-            if (recipe.inputs.size > inventory.size) return@run
-
+        return {
             val remainder = recipe.getRemainder(inventory)
             (0 until recipe.inputs.size).forEach { index ->
                 craftingInventory += inventory[index].split(recipe.inputs[index].second)
@@ -177,6 +176,20 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
             waitingInventory += remainder
             progressMax = recipe.duration
             markDirty()
+        }
+    }
+
+    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+        super.serverTick(world, pos, state)
+
+        if (progressMax == 0) run {
+            val onCraft = mutableListOf<() -> Unit>()
+
+            onCraft += checkRecipe(world) ?: return@run
+
+            onCraft.forEach {
+                it()
+            }
         }
 
         if (progressMax > 0) {
