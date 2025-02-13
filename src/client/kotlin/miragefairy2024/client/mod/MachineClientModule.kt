@@ -31,7 +31,17 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 
         if (handler.progressMax > 0) {
             val w = (arrowBound.width.toDouble() * (handler.progress.toDouble() / handler.progressMax.toDouble() atMost 1.0)).roundToInt()
-            context.drawTexture(PROGRESS_ARROW_TEXTURE, x + arrowBound.x, y + arrowBound.y - 1, 0F, 0F, w, arrowBound.height + 1, 32, 32)
+            context.drawTexture(
+                PROGRESS_ARROW_TEXTURE,
+                x + arrowBound.x,
+                y + arrowBound.y - 1,
+                0F,
+                0F,
+                w,
+                arrowBound.height + 1,
+                32,
+                32,
+            )
         }
     }
 
