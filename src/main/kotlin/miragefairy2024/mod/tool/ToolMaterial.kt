@@ -73,7 +73,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
     PHANTOM_DROP(FairyToolMaterials.PHANTOM_DROP, "phantom_tool", "Phantom Tool", "幻想ツール"),
     LUMINITE(FairyToolMaterials.LUMINITE, "luminite_tool", "Luminite Tool", "ルミナイトツール"),
-    RESONITE(FairyToolMaterials.RESONITE, "resonite_tool", "Resonite Tool", "レゾナイトツール"),
+    RESONITE(FairyToolMaterials.RESONITE, "resonite_tool", "Resonance Tool", "共鳴ツール"),
     XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", "Xarpite Tool", "紅天石ツール"),
     MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", "Miranagite Tool", "蒼天石ツール"),
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),

@@ -237,7 +237,7 @@ class MaterialCard(
             PoemList(4).poem("Bionic etheroluminescence illuminator", "彷徨える魂の行方。"),
         )
         val RESONITE_INGOT = !MaterialCard(
-            "resonite_ingot", "Resonite Ingot", "レゾナイトインゴット",
+            "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
             PoemList(5).poem("TODO", "TODO"), // TODO
         ) {
             registerSimpleMachineRecipeGeneration(

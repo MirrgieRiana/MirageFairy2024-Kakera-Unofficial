@@ -266,12 +266,12 @@ class ToolCard(
             FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.UNBREAKING, 3),
         ) { registerSwordRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val RESONITE_PICKAXE = !ToolCard(
-            "resonite_pickaxe", EnJa("Resonite Pickaxe", "レゾナイトのつるはし"),
+            "resonite_pickaxe", EnJa("Resonance Pickaxe", "共鳴のつるはし"),
             PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
             FairyPickaxeConfiguration(ToolMaterialCard.RESONITE).mineAll().enchantment(Enchantments.EFFICIENCY, 6),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_AXE = !ToolCard(
-            "resonite_axe", EnJa("Resonite Axe", "レゾナイトの斧"),
+            "resonite_axe", EnJa("Resonance Axe", "共鳴の斧"),
             PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
             FairyAxeConfiguration(ToolMaterialCard.RESONITE, 4.0F, -3.0F).cutAll().enchantment(Enchantments.EFFICIENCY, 6),
         ) { registerAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
