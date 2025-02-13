@@ -41,8 +41,11 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
     abstract val outputSlots: List<Point>
 
     open fun createInputWidgets(offset: Point, display: SimpleMachineReiCategoryCard.Display<R>): List<Widget> {
-        return inputSlots.mapIndexed { index, it ->
-            Widgets.createSlot(offset + it).entries(display.inputEntries.getOrNull(index) ?: listOf()).disableBackground().markInput()
+        val inputIndices = card.getInputIndices(display.recipe)
+        return inputSlots.mapIndexed { slotIndex, it ->
+            val inputIndex = inputIndices.getOrNull(slotIndex)
+            val inputEntry = if (inputIndex == null) null else display.inputEntries.getOrNull(inputIndex)
+            Widgets.createSlot(offset + it).entries(inputEntry ?: listOf()).disableBackground().markInput()
         }
     }
 

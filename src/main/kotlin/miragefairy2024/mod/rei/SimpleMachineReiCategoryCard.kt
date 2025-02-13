@@ -2,6 +2,7 @@ package miragefairy2024.mod.rei
 
 import com.google.gson.JsonObject
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
+import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
@@ -35,10 +36,16 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
     abstract val recipeCard: SimpleMachineRecipeCard<R>
     abstract val machine: ItemStack
 
-    class Display<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<*>, val recipe: R) : BasicDisplay(
-        recipe.inputs.map { input ->
+    open fun getInputIndices(recipe: R): List<Int> = recipe.inputs.indices.toList()
+
+    open fun getInputs(recipe: R): List<EntryIngredient> {
+        return recipe.inputs.map { input ->
             input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
-        },
+        }
+    }
+
+    class Display<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>, val recipe: R) : BasicDisplay(
+        card.getInputs(recipe),
         listOf(
             recipe.output.toEntryStack().toEntryIngredient(),
         ),
