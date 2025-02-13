@@ -71,6 +71,7 @@ open class SimpleMachineRecipe(
 
     override fun getGroup() = group
 
+    // TODO 順不同
     override fun matches(inventory: Inventory, world: World): Boolean {
         inputs.forEachIndexed { index, input ->
             if (!input.first.test(inventory.getStack(index))) return false
