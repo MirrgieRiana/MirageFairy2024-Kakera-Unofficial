@@ -1185,7 +1185,8 @@ enum class MotifCard(
         "magnetism", 10, "Magnetismia", "磁気精マグネティスミャ", 0xA6A6A6, 0xB33636, 0x3636B3, 0x333333,
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
-            + collection(1.0),
+            + collection(1.0)
+            + mana(5.0) { MAGNETISM },
         MotifCardRecipes().SR.always,
     ),
     GRAVITY(
