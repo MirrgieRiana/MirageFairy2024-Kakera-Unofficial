@@ -337,7 +337,7 @@ enum class MotifCard(
     ),
     XARPITE(
         "xarpite", 5, "Xarpitia", "紅天石精シャルピーチャ", 0xD43333, 0xD45D5D, 0x8A1111, 0xAB0000,
-        ParentMotifs(),
+        ParentMotifs() + { MAGNETISM },
         PassiveSkillBuilder()
             + shooting.attack(0.7)
             + mana(0.4)
@@ -368,7 +368,7 @@ enum class MotifCard(
 
     MAGNETITE(
         "magnetite", 4, "Magnetitia", "磁鉄鉱精マグネティーチャ", 0x565942, 0x232900, 0x1D2100, 0x1D2100,
-        ParentMotifs(),
+        ParentMotifs() + { MAGNETISM },
         PassiveSkillBuilder()
             + collection(1.0)
             + collection(3.0) * ToolMaterialCard.MAGNETITE(),
