@@ -24,6 +24,7 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
             EntityTypeFairyDreamRecipeReiCategoryCard,
             FairyFamilyReiCategoryCard,
             FermentationBarrelReiCategoryCard,
+            AuraReflectorFurnaceReiCategoryCard,
         )
     }
 

@@ -3,6 +3,9 @@ package miragefairy2024.mod.rei
 import com.google.gson.JsonObject
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipe
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipe
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
@@ -57,4 +60,15 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
 object FermentationBarrelReiCategoryCard : SimpleMachineReiCategoryCard<FermentationBarrelRecipe>("fermentation_barrel", "Fermentation Barrel", "醸造樽") {
     override val recipeCard = FermentationBarrelRecipeCard
     override val machine = FermentationBarrelCard.item.createItemStack()
+}
+
+object AuraReflectorFurnaceReiCategoryCard : SimpleMachineReiCategoryCard<AuraReflectorFurnaceRecipe>("aura_reflector_furnace", "Aura Reflector Furnace", "オーラ反射炉") {
+    override val recipeCard = AuraReflectorFurnaceRecipeCard
+    override val machine = AuraReflectorFurnaceCard.item.createItemStack()
+
+    fun getFuelInputIndices(recipe: AuraReflectorFurnaceRecipe) = listOf(recipe.inputs.size)
+
+    override fun getInputs(recipe: AuraReflectorFurnaceRecipe): List<EntryIngredient> {
+        return super.getInputs(recipe) + listOf(AuraReflectorFurnaceRecipe.FUELS.map { it.createItemStack().toEntryStack() }.toEntryIngredient())
+    }
 }

@@ -1,6 +1,8 @@
 {
   "biome.miragefairy2024.deep_fairy_forest": "妖精の樹海",
   "biome.miragefairy2024.fairy_forest": "妖精の森",
+  "block.miragefairy2024.aura_reflector_furnace": "オーラ反射炉",
+  "block.miragefairy2024.aura_reflector_furnace.poem": "生命と無機物の境界。",
   "block.miragefairy2024.aura_stone": "霊氣石",
   "block.miragefairy2024.aura_stone.poem": "呼吸する石。",
   "block.miragefairy2024.deepslate_fluorite_ore": "深層蛍石鉱石",
@@ -72,6 +74,7 @@
   "block.miragefairy2024.veropeda": "呪草ヴェロペダ",
   "block.miragefairy2024.xarpite_block": "紅天石ブロック",
   "block.miragefairy2024.xarpite_block.poem": "夢の世界の如き紅。",
+  "category.rei.miragefairy2024.aura_reflector_furnace": "オーラ反射炉",
   "category.rei.miragefairy2024.block_fairy_dream_recipe": "妖精の夢：ブロック",
   "category.rei.miragefairy2024.common_motif_recipe": "コモン妖精",
   "category.rei.miragefairy2024.entity_fairy_dream_recipe": "妖精の夢：エンティティ",

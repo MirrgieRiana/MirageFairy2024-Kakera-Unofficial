@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:aura_reflector_furnace",
+  "key": {
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "X": {
+      "item": "miragefairy2024:xarpite"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "XFX",
+    "XXX"
+  ],
+  "result": {
+    "item": "miragefairy2024:aura_reflector_furnace"
+  },
+  "show_notification": true
+}
