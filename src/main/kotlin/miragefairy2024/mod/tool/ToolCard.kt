@@ -169,6 +169,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
         ) { registerSwordRecipeGeneration(item, Items.EMERALD) }
+        val ECHO_SHARD_PICKAXE = !ToolCard(
+            "echo_shard_pickaxe", EnJa("Echo Pickaxe", "残響のつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.EFFICIENCY, 5),
+        ) { registerPickaxeRecipeGeneration(item, Items.ECHO_SHARD) }
+        val ECHO_SHARD_AXE = !ToolCard(
+            "echo_shard_axe", EnJa("Echo Axe", "残響の斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.ECHO_SHARD, 5.0F, -3.0F).enchantment(Enchantments.EFFICIENCY, 5),
+        ) { registerAxeRecipeGeneration(item, Items.ECHO_SHARD) }
+        val ECHO_SHARD_SHOVEL = !ToolCard(
+            "echo_shard_shovel", EnJa("Echo Shovel", "残響のシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.EFFICIENCY, 5),
+        ) { registerShovelRecipeGeneration(item, Items.ECHO_SHARD) }
+        val ECHO_SHARD_HOE = !ToolCard(
+            "echo_shard_hoe", EnJa("Echo Hoe", "残響のクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.ECHO_SHARD, -4, 0.0F).enchantment(Enchantments.EFFICIENCY, 5),
+        ) { registerHoeRecipeGeneration(item, Items.ECHO_SHARD) }
+        val ECHO_SHARD_SWORD = !ToolCard(
+            "echo_shard_sword", EnJa("Echo Sword", "残響の剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.SHARPNESS, 5),
+        ) { registerSwordRecipeGeneration(item, Items.ECHO_SHARD) }
         val NETHER_STAR_PICKAXE = !ToolCard(
             "nether_star_pickaxe", EnJa("Nether Star Pickaxe", "ネザースターのつるはし"),
             PoemList(null),
