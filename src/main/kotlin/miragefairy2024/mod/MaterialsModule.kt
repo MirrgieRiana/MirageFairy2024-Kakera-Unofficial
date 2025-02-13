@@ -226,7 +226,7 @@ class MaterialCard(
         }
         val LUMINITE = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
-            PoemList(4).poem("Charged etheroluminescence crystal", "エーテルの光、魂のエネルギーを受けて。"),
+            PoemList(4).poem("Bionic etheroluminescence illuminator", "彷徨える魂の行方。"),
         )
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
