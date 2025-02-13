@@ -160,6 +160,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         if (!shouldUpdateRecipe) return null
         shouldUpdateRecipe = false
 
+        // TODO 順不同
         val inventory = SimpleInventory(card.inputSlots.size)
         card.inputSlots.forEachIndexed { index, slot ->
             inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
@@ -182,6 +183,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
+        // クラフトが開始されていなければ、開始を試みる
         if (progressMax == 0) run {
             val onCraft = mutableListOf<() -> Unit>()
 
@@ -192,13 +194,16 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
             }
         }
 
+        // クラフトが開始されていれば、クラフトの進行を試みる
         if (progressMax > 0) {
 
+            // クラフトが完了していなければ、プログレスの進行を試みる
             if (progress < progressMax) {
                 progress++
                 markDirty()
             }
 
+            // プログレスが完了していれば、クラフトの完了を試みる
             if (progress >= progressMax) {
                 if (shouldUpdateWaiting) {
                     shouldUpdateWaiting = false
