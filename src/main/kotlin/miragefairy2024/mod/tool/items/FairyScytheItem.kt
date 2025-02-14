@@ -46,7 +46,7 @@ class FairyScytheConfiguration(
         this.attackSpeed = -3.2F
         this.miningDamage = 0.2
         this.areaMining()
-        this.enchantment(Enchantments.FORTUNE, fortune)
+        if (fortune > 0) this.enchantment(Enchantments.FORTUNE, fortune)
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
         this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
