@@ -236,6 +236,21 @@ class MaterialCard(
             "luminite", "Luminite", "ルミナイト",
             PoemList(4).poem("An end point of reincarnation", "彷徨える魂の行方。"),
         )
+        val RESONITE_INGOT = !MaterialCard(
+            "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
+            PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
+        ) {
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
+                    Pair(Ingredient.ofItems(Items.ECHO_SHARD), 1),
+                    Pair(Ingredient.ofItems(LUMINITE.item), 1),
+                ),
+                output = item.createItemStack(),
+                duration = 20 * 60,
+            ) on LUMINITE.item
+        }
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)
