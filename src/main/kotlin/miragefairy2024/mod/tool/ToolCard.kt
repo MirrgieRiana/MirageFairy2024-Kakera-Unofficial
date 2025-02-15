@@ -265,6 +265,36 @@ class ToolCard(
             PoemList(4).poem(EnJa("Bionic etheroluminescence illuminator", "光を生み出す力。")),
             FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.SHARPNESS, 4).enchantment(Enchantments.LOOTING, 3),
         ) { registerSwordRecipeGeneration(item, MaterialCard.LUMINITE.item) }
+        val RESONITE_PICKAXE = !ToolCard(
+            "resonite_pickaxe", EnJa("Resonance Pickaxe", "共鳴のつるはし"),
+            PoemList(5).poem(EnJa("The compound of light and sound", "光と闇の純結晶。")),
+            FairyPickaxeConfiguration(ToolMaterialCard.RESONITE).mineAll().enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_AXE = !ToolCard(
+            "resonite_axe", EnJa("Resonance Axe", "共鳴の斧"),
+            PoemList(5).poem(EnJa("Wavelength matched to tree height", "共振する樹の繊維。")),
+            FairyAxeConfiguration(ToolMaterialCard.RESONITE, 4.0F, -3.0F).cutAll().enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_KNIFE = !ToolCard(
+            "resonite_knife", EnJa("Resonite Knife", "共鳴のナイフ"),
+            PoemList(5).poem(EnJa(en = "The ultrasonic vibration knife", "音波を超えた破壊の力。")),
+            FairyKnifeConfiguration(ToolMaterialCard.RESONITE).areaMining().enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerKnifeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_SCYTHE = !ToolCard(
+            "resonite_scythe", EnJa("Resonite Scythe", "共鳴の大鎌"),
+            PoemList(5).poem(EnJa("Vacuum wave that cuts down grasses", "虚空を切り裂く碧の波。")),
+            FairyScytheConfiguration(ToolMaterialCard.RESONITE, 3).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.EFFICIENCY, 6),
+        ) { registerScytheRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_SWORD = !ToolCard(
+            "resonite_sword", EnJa("Resonite Sword", "共鳴の剣"),
+            PoemList(5).poem(EnJa("The pulsating ectoplasm", "生命の脈動を砥ぎ澄ませ。")),
+            FairySwordConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.SHARPNESS, 6),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val RESONITE_BATTLE_AXE = !ToolCard(
+            "resonite_battle_axe", EnJa("Resonite Battle Axe", "共鳴の戦斧"),
+            PoemList(5).poem(EnJa("The mind synchronize with the body", "精神と肉体の調和。")),
+            FairyBattleAxeConfiguration(ToolMaterialCard.RESONITE, 7.0F, -3.0F).cutAll().enchantment(Enchantments.SHARPNESS, 6),
+        ) { registerBattleAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val MIRANAGITE_KNIFE = !ToolCard(
             "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
             PoemList(2).poem(EnJa("Gardener's tool invented by Miranagi", "大自然を駆ける探究者のナイフ。")),
