@@ -36,7 +36,7 @@ enum class FairyToolMaterials(
     MIRAGIUM(MiningLevels.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     FAIRY_CRYSTAL(MiningLevels.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
     PHANTOM_DROP(MiningLevels.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
-    LUMINITE(MiningLevels.DIAMOND, 2461, 9.0F, 4.0F, 6, MaterialCard.LUMINITE.item.toIngredient()),
+    LUMINITE(MiningLevels.DIAMOND, 1361, 9.0F, 4.0F, 21, MaterialCard.LUMINITE.item.toIngredient()),
     XARPITE(MiningLevels.IRON, 283, 1.0F, 2.0F, 20, MaterialCard.XARPITE.item.toIngredient()),
     MIRANAGITE(MiningLevels.IRON, 256, 6.5F, 2.0F, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
     CHAOS_STONE(MiningLevels.NETHERITE, 666, 2.0F, 2.0F, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),

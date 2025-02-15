@@ -253,17 +253,17 @@ class ToolCard(
         val LUMINITE_PICKAXE = !ToolCard(
             "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
             PoemList(4).poem(EnJa("Energetic soul extract", "精製された魂の残滓。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.UNBREAKING, 3),
+            FairyPickaxeConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.EFFICIENCY, 4).enchantment(Enchantments.FORTUNE, 3),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val LUMINITE_AXE = !ToolCard(
             "luminite_axe", EnJa("Luminite Axe", "ルミナイトの斧"),
             PoemList(4).poem(EnJa("Spiritual ectoplasm recycler", "失われた記憶の断片。")),
-            FairyAxeConfiguration(ToolMaterialCard.LUMINITE, 5.0F, -3.0F).enchantment(Enchantments.UNBREAKING, 3),
+            FairyAxeConfiguration(ToolMaterialCard.LUMINITE, 5.0F, -3.0F).enchantment(Enchantments.EFFICIENCY, 4).enchantment(Enchantments.FORTUNE, 3),
         ) { registerAxeRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val LUMINITE_SWORD = !ToolCard(
             "luminite_sword", EnJa("Luminite Sword", "ルミナイトの剣"),
             PoemList(4).poem(EnJa("Bionic etheroluminescence illuminator", "光を生み出す力。")),
-            FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.UNBREAKING, 3),
+            FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.SHARPNESS, 4).enchantment(Enchantments.LOOTING, 3),
         ) { registerSwordRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val MIRANAGITE_KNIFE = !ToolCard(
             "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
