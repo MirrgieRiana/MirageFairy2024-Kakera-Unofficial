@@ -68,7 +68,8 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
 }
 
 fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
-    if (configuration.areaMining) run fail@{
+    val areaMining = configuration.areaMining
+    if (areaMining != null) run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -79,9 +80,10 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
 
         val baseHardness = state.getHardness(world, pos)
 
-        (-1..1).forEach { x ->
-            (-1..1).forEach { y ->
-                (-1..1).forEach { z ->
+        // TODO 貫通抑制
+        (-areaMining..areaMining).forEach { x ->
+            (-areaMining..areaMining).forEach { y ->
+                (-areaMining..areaMining).forEach { z ->
                     if (x != 0 || y != 0 || z != 0) {
                         val targetBlockPos = pos.add(x, y, z)
                         if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{

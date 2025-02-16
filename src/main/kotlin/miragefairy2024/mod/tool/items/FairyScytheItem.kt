@@ -12,6 +12,7 @@ import miragefairy2024.mod.tool.enchantment
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
+import miragefairy2024.util.toRomanText
 import miragefairy2024.util.yellow
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
@@ -38,14 +39,15 @@ import net.minecraft.world.World
 class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     fortune: Int,
+    private val range: Int = 1
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyScytheItem(this, Item.Settings())
+    override fun createItem() = FairyScytheItem(this, range, Item.Settings())
 
     init {
         this.attackDamage = 4.0F
         this.attackSpeed = -3.2F
         this.miningDamage = 0.2
-        this.areaMining()
+        this.areaMining(range)
         if (fortune > 0) this.enchantment(Enchantments.FORTUNE, fortune)
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
@@ -53,8 +55,8 @@ class FairyScytheConfiguration(
     }
 }
 
-class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
-    ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
+class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Settings) :
+    ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, range, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
@@ -88,14 +90,14 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
+open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
     companion object {
-        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toTranslationKey()}.description" }, "Perform area harvesting when used", "使用時、範囲収穫")
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toTranslationKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
-        tooltip += text { DESCRIPTION_TRANSLATION().yellow }
+        tooltip += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
@@ -105,9 +107,10 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
             val blockHitResult = raycast(world, user, FluidHandling.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false
-            (-1..1).forEach { x ->
-                (-1..1).forEach { y ->
-                    (-1..1).forEach { z ->
+            // TODO 貫通判定
+            (-range..range).forEach { x ->
+                (-range..range).forEach { y ->
+                    (-range..range).forEach { z ->
                         val targetBlockPos = blockPos.add(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
                         val targetBlock = targetBlockState.block
