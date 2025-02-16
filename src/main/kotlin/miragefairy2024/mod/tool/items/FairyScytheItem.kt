@@ -9,7 +9,6 @@ import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.mod.tool.areaMining
-import miragefairy2024.mod.tool.enchantment
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
@@ -41,7 +40,6 @@ import net.minecraft.world.World
 
 class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
-    fortune: Int,
     private val range: Int = 1
 ) : FairyMiningToolConfiguration() {
     override fun createItem() = FairyScytheItem(this, range, Item.Settings())
@@ -51,7 +49,6 @@ class FairyScytheConfiguration(
         this.attackSpeed = -3.2F
         this.miningDamage = 0.2
         this.areaMining(range)
-        if (fortune > 0) this.enchantment(Enchantments.FORTUNE, fortune)
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
         this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT

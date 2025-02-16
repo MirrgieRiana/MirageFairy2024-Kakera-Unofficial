@@ -61,12 +61,12 @@ class ToolCard(
         val IRON_SCYTHE = !ToolCard(
             "iron_scythe", EnJa("Iron Scythe", "鉄の大鎌"),
             PoemList(null),
-            FairyScytheConfiguration(ToolMaterialCard.IRON, 0),
+            FairyScytheConfiguration(ToolMaterialCard.IRON),
         ) { registerScytheRecipeGeneration(item, Items.IRON_INGOT) }
         val DIAMOND_SCYTHE = !ToolCard(
             "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
             PoemList(null),
-            FairyScytheConfiguration(ToolMaterialCard.DIAMOND, 2),
+            FairyScytheConfiguration(ToolMaterialCard.DIAMOND),
         ) { registerScytheRecipeGeneration(item, Items.DIAMOND) }
 
         val MAGNETITE_PICKAXE = !ToolCard(
@@ -253,7 +253,7 @@ class ToolCard(
         val FAIRY_CRYSTAL_SCYTHE = !ToolCard(
             "fairy_crystal_scythe", EnJa("Fairy Crystal Scythe", "フェアリークリスタルの大鎌"),
             PoemList(2).poem(EnJa("What color is fairy blood?", "妖精を刈り取るための道具。")),
-            FairyScytheConfiguration(ToolMaterialCard.FAIRY_CRYSTAL, 1).selfMending(10).obtainFairy(9.0),
+            FairyScytheConfiguration(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0),
         ) { registerScytheRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
         val FAIRY_CRYSTAL_SWORD = !ToolCard(
             "fairy_crystal_sword", EnJa("Fairy Crystal Sword", "フェアリークリスタルの剣"),
@@ -278,7 +278,7 @@ class ToolCard(
         val LILAGIUM_SCYTHE = !ToolCard(
             "lilagium_scythe", EnJa("Lilagium Scythe", "リラジウムの大鎌"),
             PoemList(3).poem(EnJa("Wish upon the grass", "葉っぱが吸い込まれてくる")),
-            FairyScytheConfiguration(ToolMaterialCard.LILAGIUM, 2, range = 2),
+            FairyScytheConfiguration(ToolMaterialCard.LILAGIUM, range = 2),
         ) { registerScytheRecipeGeneration(item, MaterialCard.LILAGIUM_INGOT.item) }
         val LUMINITE_PICKAXE = !ToolCard(
             "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
@@ -313,7 +313,7 @@ class ToolCard(
         val RESONITE_SCYTHE = !ToolCard(
             "resonite_scythe", EnJa("Resonite Scythe", "共鳴の大鎌"),
             PoemList(5).poem(EnJa("Vacuum wave that cuts down grasses", "虚空を切り裂く碧の波。")),
-            FairyScytheConfiguration(ToolMaterialCard.RESONITE, 3).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.EFFICIENCY, 6),
+            FairyScytheConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.EFFICIENCY, 6),
         ) { registerScytheRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_SWORD = !ToolCard(
             "resonite_sword", EnJa("Resonite Sword", "共鳴の剣"),
@@ -338,7 +338,7 @@ class ToolCard(
         val MIRANAGITE_SCYTHE = !ToolCard(
             "miranagite_scythe", EnJa("Miranagite Scythe", "蒼天石の大鎌"),
             PoemList(2).poem(EnJa("Releases the souls of weeds", "宙を切り裂く創世の刃、草魂を蒼天へ導く。")),
-            FairyScytheConfiguration(ToolMaterialCard.MIRANAGITE, 2).enchantment(Enchantments.SILK_TOUCH),
+            FairyScytheConfiguration(ToolMaterialCard.MIRANAGITE).enchantment(Enchantments.SILK_TOUCH),
         ) { registerScytheRecipeGeneration(item, MaterialCard.MIRANAGITE.item) }
         val MIRANAGI_STAFF_0 = !ToolCard(
             "miranagi_staff_0", EnJa("Miranagite Staff", "蒼天石のスタッフ"),
