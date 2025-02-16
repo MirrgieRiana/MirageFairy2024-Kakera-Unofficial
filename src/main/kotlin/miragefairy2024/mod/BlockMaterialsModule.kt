@@ -11,17 +11,16 @@ import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.enJa
-import miragefairy2024.util.from
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
-import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.times
@@ -147,26 +146,10 @@ fun initBlockMaterialsModule() {
     }
 
     // 紅天石ブロック
-    registerShapedRecipeGeneration(BlockMaterialCard.XARPITE_BLOCK.item) {
-        pattern("###")
-        pattern("###")
-        pattern("###")
-        input('#', MaterialCard.XARPITE.item)
-    } on MaterialCard.XARPITE.item from MaterialCard.XARPITE.item
-    registerShapelessRecipeGeneration(MaterialCard.XARPITE.item, 9) {
-        input(BlockMaterialCard.XARPITE_BLOCK.item)
-    } on BlockMaterialCard.XARPITE_BLOCK.item from BlockMaterialCard.XARPITE_BLOCK.item
+    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, BlockMaterialCard.XARPITE_BLOCK.item)
 
     // 蒼天石ブロック
-    registerShapedRecipeGeneration(BlockMaterialCard.MIRANAGITE_BLOCK.item) {
-        pattern("###")
-        pattern("###")
-        pattern("###")
-        input('#', MaterialCard.MIRANAGITE.item)
-    } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
-    registerShapelessRecipeGeneration(MaterialCard.MIRANAGITE.item, 9) {
-        input(BlockMaterialCard.MIRANAGITE_BLOCK.item)
-    } on BlockMaterialCard.MIRANAGITE_BLOCK.item from BlockMaterialCard.MIRANAGITE_BLOCK.item
+    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
 
     // 霊氣石
     registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
