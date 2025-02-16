@@ -85,6 +85,14 @@ enum class BlockMaterialCard(
         MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
+    LUMINITE_BLOCK(
+        "luminite_block", "Luminite Block", "ルミナイトブロック",
+        PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
+        MapColor.DIAMOND_BLUE, 6.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+        blockCreator = { SemiOpaqueTransparentBlock(it.nonOpaque().luminance { 15 }.solidBlock { _, _, _ -> false }) },
+    ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
         PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
@@ -155,6 +163,9 @@ fun initBlockMaterialsModule() {
 
     // 蒼天石ブロック
     registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
+
+    // ルミナイトブロック
+    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
 
     // 霊氣石
     registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
