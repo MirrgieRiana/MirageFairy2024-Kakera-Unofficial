@@ -217,6 +217,22 @@ class MaterialCard(
             registerSmeltingRecipeGeneration(item, Items.IRON_NUGGET, 0.1) on item modId MirageFairy2024.MOD_ID from item
             registerBlastingRecipeGeneration(item, Items.IRON_NUGGET, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
+        val LILAGIUM_INGOT = !MaterialCard(
+            "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
+            PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
+            soulStreamContainable = true,
+        ) {
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
+                    Pair(Ingredient.ofItems(Items.LILAC), 4),
+                    Pair(Ingredient.ofItems(Items.PEONY), 4),
+                ),
+                output = item.createItemStack(),
+                duration = 20 * 60,
+            ) on Items.LILAC
+        } // TODO "Botanical alloy", "牡丹合金。"
         val VEROPEDA_BERRIES = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
             PoemList(1)
