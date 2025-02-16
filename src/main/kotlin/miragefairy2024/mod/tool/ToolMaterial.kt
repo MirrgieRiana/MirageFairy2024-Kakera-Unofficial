@@ -25,6 +25,7 @@ enum class FairyToolMaterials(
     private val repairIngredient: Ingredient,
 ) : ToolMaterial {
     COPPER(MiningLevels.IRON, 196, 5.0F, 1.0F, 18, Items.COPPER_INGOT.toIngredient()),
+    AMETHYST(MiningLevels.IRON, 218, 5.5F, 2.0F, 23, Items.AMETHYST_SHARD.toIngredient()),
     EMERALD(MiningLevels.DIAMOND, 1192, 7.0F, 2.5F, 16, Items.EMERALD.toIngredient()),
     ECHO_SHARD(MiningLevels.NETHERITE, 1366, 12.0F, 4.0F, 12, Items.ECHO_SHARD.toIngredient()),
     NETHER_STAR(MiningLevels.NETHERITE, 5048, 11.0F, 5.0F, 25, Items.NETHER_STAR.toIngredient()),
@@ -61,6 +62,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", "Netherite Tool", "ネザライトツール"),
 
     COPPER(FairyToolMaterials.COPPER, "copper_tool", "Copper Tool", "銅ツール"),
+    AMETHYST(FairyToolMaterials.AMETHYST, "amethyst_tool", "Amethyst Tool", "アメジストツール"),
     EMERALD(FairyToolMaterials.EMERALD, "emerald_tool", "Emerald Tool", "エメラルドツール"),
     ECHO_SHARD(FairyToolMaterials.ECHO_SHARD, "echo_shard_tool", "Echo Shard Tool", "残響ツール"),
     NETHER_STAR(FairyToolMaterials.NETHER_STAR, "nether_star_tool", "Nether Star Tool", "ネザースターツール"),

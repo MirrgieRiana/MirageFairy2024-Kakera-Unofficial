@@ -144,6 +144,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.LOOTING, 1),
         ) { registerSwordRecipeGeneration(item, MaterialCard.FLUORITE.item) }
+        val AMETHYST_PICKAXE = !ToolCard(
+            "amethyst_pickaxe", EnJa("Amethyst Pickaxe", "アメジストのつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.FORTUNE, 2),
+        ) { registerPickaxeRecipeGeneration(item, Items.AMETHYST_SHARD) }
+        val AMETHYST_AXE = !ToolCard(
+            "amethyst_axe", EnJa("Amethyst Axe", "アメジストの斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.AMETHYST, 6.5F, -3.2F).enchantment(Enchantments.FORTUNE, 2),
+        ) { registerAxeRecipeGeneration(item, Items.AMETHYST_SHARD) }
+        val AMETHYST_SHOVEL = !ToolCard(
+            "amethyst_shovel", EnJa("Amethyst Shovel", "アメジストのシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.FORTUNE, 2),
+        ) { registerShovelRecipeGeneration(item, Items.AMETHYST_SHARD) }
+        val AMETHYST_HOE = !ToolCard(
+            "amethyst_hoe", EnJa("Amethyst Hoe", "アメジストのクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.AMETHYST, -1, -2.0F).enchantment(Enchantments.FORTUNE, 2),
+        ) { registerHoeRecipeGeneration(item, Items.AMETHYST_SHARD) }
+        val AMETHYST_SWORD = !ToolCard(
+            "amethyst_sword", EnJa("Amethyst Sword", "アメジストの剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.LOOTING, 2),
+        ) { registerSwordRecipeGeneration(item, Items.AMETHYST_SHARD) }
         val EMERALD_PICKAXE = !ToolCard(
             "emerald_pickaxe", EnJa("Emerald Pickaxe", "エメラルドのつるはし"),
             PoemList(null),

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:amethyst_sword",
+  "key": {
+    "#": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "#",
+    "R"
+  ],
+  "result": {
+    "item": "miragefairy2024:amethyst_sword"
+  },
+  "show_notification": true
+}
