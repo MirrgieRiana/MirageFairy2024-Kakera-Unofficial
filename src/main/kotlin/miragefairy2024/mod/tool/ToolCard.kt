@@ -275,6 +275,11 @@ class ToolCard(
             PoemList(3).poem(EnJa("Crack! Squish!", "バキッ！ぐにっ")),
             FairyAxeConfiguration(ToolMaterialCard.MIRAGIUM, 5.0F, -3.0F).selfMending(20).cutAll(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.MIRAGIUM_INGOT.item) }
+        val LILAGIUM_SCYTHE = !ToolCard(
+            "lilagium_scythe", EnJa("Lilagium Scythe", "リラジウムの大鎌"),
+            PoemList(3).poem(EnJa("Wish upon the grass", "葉っぱが吸い込まれてくる")),
+            FairyScytheConfiguration(ToolMaterialCard.LILAGIUM, 2, range = 2),
+        ) { registerScytheRecipeGeneration(item, MaterialCard.LILAGIUM_INGOT.item) }
         val LUMINITE_PICKAXE = !ToolCard(
             "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
             PoemList(4).poem(EnJa("Energetic soul extract", "精製された魂の残滓。")),

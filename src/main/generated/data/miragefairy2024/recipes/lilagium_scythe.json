@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:lilagium_scythe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:lilagium_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " ##",
+    "# R",
+    "  R"
+  ],
+  "result": {
+    "item": "miragefairy2024:lilagium_scythe"
+  },
+  "show_notification": true
+}
