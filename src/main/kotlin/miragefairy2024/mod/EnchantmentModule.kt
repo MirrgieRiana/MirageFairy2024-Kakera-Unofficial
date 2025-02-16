@@ -19,9 +19,9 @@ enum class EnchantmentCard(
     val ja: String,
     val enchantment: Enchantment,
 ) {
-    MAGIC_POWER("magic_power", "Magic Power", "魔法ダメージ増加", SimpleEnchantment(5, 1, 10, 30) { it.item is ShootingStaffItem }),
-    MAGIC_REACH("magic_reach", "Magic Reach", "魔法射程増加", SimpleEnchantment(5, 1, 10, 30) { it.item is ShootingStaffItem }),
-    MAGIC_ACCELERATION("magic_acceleration", "Magic Acceleration", "魔法加速", SimpleEnchantment(5, 1, 10, 30) { it.item is ShootingStaffItem }),
+    MAGIC_POWER("magic_power", "Magic Power", "魔法ダメージ増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
+    MAGIC_REACH("magic_reach", "Magic Reach", "魔法射程増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
+    MAGIC_ACCELERATION("magic_acceleration", "Magic Acceleration", "魔法加速", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -37,12 +37,13 @@ fun initEnchantmentModule() {
 }
 
 class SimpleEnchantment(
+    rarity: Rarity,
     private val maxLevel: Int,
     private val basePower: Int,
     private val powerPerLevel: Int,
     private val powerRange: Int,
     private val predicate: (ItemStack) -> Boolean,
-) : Enchantment(Rarity.COMMON, EnchantmentTarget.VANISHABLE, arrayOf(EquipmentSlot.MAINHAND)), ItemFilteringEnchantment {
+) : Enchantment(rarity, EnchantmentTarget.VANISHABLE, arrayOf(EquipmentSlot.MAINHAND)), ItemFilteringEnchantment {
     override fun getMaxLevel() = maxLevel
     override fun getMinPower(level: Int) = basePower + (level - 1) * powerPerLevel
     override fun getMaxPower(level: Int) = super.getMinPower(level) + powerRange
