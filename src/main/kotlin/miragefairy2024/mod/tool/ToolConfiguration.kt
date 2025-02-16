@@ -51,6 +51,12 @@ fun initToolConfiguration() {
 
 }
 
+interface ToolEffectType<T : Any> {
+    fun castOrThrow(value: Any): T
+    fun merge(a: T, b: T): T
+    fun init(value: T)
+}
+
 abstract class ToolConfiguration {
     companion object {
         private val identifier = MirageFairy2024.identifier("fairy_mining_tool")
@@ -61,6 +67,43 @@ abstract class ToolConfiguration {
         val OBTAIN_FAIRY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.obtain_fairy_when_mined" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
         val COLLECTION_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
     }
+
+
+    private var initialized = false
+    private val effects = mutableMapOf<ToolEffectType<*>, Any>()
+
+    operator fun <T : Any> set(effectType: ToolEffectType<T>, value: T) {
+        effects[effectType] = value
+    }
+
+    operator fun <T : Any> get(effectType: ToolEffectType<T>): T? {
+        val value = effects[effectType] ?: return null
+        return effectType.castOrThrow(value)
+    }
+
+    fun <T : Any> merge(effectType: ToolEffectType<T>, value: T) {
+        if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
+
+        val old = this[effectType]
+        if (old == null) {
+            this[effectType] = value
+            return
+        }
+        this[effectType] = effectType.merge(old, value)
+    }
+
+    fun init() {
+        if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
+        initialized = true
+        effects.forEach {
+            fun <T : Any> f(toolEffectType: ToolEffectType<T>) {
+                val value = effects[toolEffectType] ?: return
+                toolEffectType.init(toolEffectType.castOrThrow(value))
+            }
+            f(it.key)
+        }
+    }
+
 
     abstract val toolMaterialCard: ToolMaterialCard
     val tags = mutableListOf<TagKey<Item>>()
