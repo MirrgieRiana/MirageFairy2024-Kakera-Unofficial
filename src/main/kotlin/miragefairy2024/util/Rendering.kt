@@ -21,6 +21,11 @@ fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {
 }
 
 context(ModContext)
+fun Block.registerTranslucentRenderLayer() = ModEvents.onClientInit {
+    clientProxy!!.registerTranslucentRenderLayer(this)
+}
+
+context(ModContext)
 fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
     clientProxy!!.registerBlockColorProvider(this, provider)
 }

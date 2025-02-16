@@ -18,6 +18,7 @@ var clientProxy: ClientProxy? = null
 interface ClientProxy {
     fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit)
     fun registerCutoutRenderLayer(block: Block)
+    fun registerTranslucentRenderLayer(block: Block)
     fun getClientPlayer(): PlayerEntity?
     fun getBlockColorProvider(block: Block): BlockColorProvider?
     fun registerBlockColorProvider(block: Block, provider: BlockColorProvider)

@@ -41,6 +41,10 @@ class ClientProxyImpl : ClientProxy {
         BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout())
     }
 
+    override fun registerTranslucentRenderLayer(block: Block) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent())
+    }
+
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
 
     override fun getBlockColorProvider(block: Block): BlockColorProvider? {
