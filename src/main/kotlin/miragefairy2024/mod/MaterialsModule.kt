@@ -23,7 +23,6 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.modId
-import miragefairy2024.util.noGroup
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
 import miragefairy2024.util.plus
@@ -33,6 +32,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
+import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerGrassDrop
@@ -740,17 +740,6 @@ fun initMaterialsModule() {
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
     MINA_DESCRIPTION_TRANSLATION.enJa()
     DrinkItem.FLAMING_TRANSLATION.enJa()
-
-    fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
-        registerShapelessRecipeGeneration(higherItem, count = 1) {
-            repeat(count) {
-                input(lowerItem)
-            }
-        }.noGroup(noGroup) on lowerItem from lowerItem
-        registerShapelessRecipeGeneration(lowerItem, count = count) {
-            input(higherItem)
-        }.noGroup(noGroup) on higherItem from higherItem
-    }
 
     // ミラジウム圧縮
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)

@@ -198,6 +198,18 @@ fun MutableList<ItemStack>.pull(predicate: (ItemStack) -> Boolean): ItemStack? {
 // Others
 
 context(ModContext)
+fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
+    registerShapelessRecipeGeneration(higherItem, count = 1) {
+        repeat(count) {
+            input(lowerItem)
+        }
+    }.noGroup(noGroup) on lowerItem from lowerItem
+    registerShapelessRecipeGeneration(lowerItem, count = count) {
+        input(higherItem)
+    }.noGroup(noGroup) on higherItem from higherItem
+}
+
+context(ModContext)
 fun Item.registerLootTableModification(lootTableIdGetter: () -> Identifier, block: (LootTable.Builder) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
