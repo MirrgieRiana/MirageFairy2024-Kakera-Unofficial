@@ -239,6 +239,7 @@ class MaterialCard(
         val RESONITE_INGOT = !MaterialCard(
             "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
             PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
+            soulStreamContainable = true,
         ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
