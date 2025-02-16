@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.ItemFilteringEnchantment
+import miragefairy2024.mod.tool.items.ScytheItem
 import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
@@ -22,6 +23,7 @@ enum class EnchantmentCard(
     MAGIC_POWER("magic_power", "Magic Power", "魔法ダメージ増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
     MAGIC_REACH("magic_reach", "Magic Reach", "魔法射程増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
     MAGIC_ACCELERATION("magic_acceleration", "Magic Acceleration", "魔法加速", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
+    FERTILITY("fertility", "Fertility", "豊穣", SimpleEnchantment(Enchantment.Rarity.RARE, 3, 15, 9, 50) { it.item is ScytheItem }),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

@@ -3,6 +3,7 @@ package miragefairy2024.mod.tool.items
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
@@ -14,10 +15,12 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import miragefairy2024.util.yellow
+import mirrg.kotlin.hydrogen.max
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
@@ -58,7 +61,6 @@ class FairyScytheConfiguration(
 class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Settings) :
     ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, range, settings),
     FairyToolItem,
-    OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
     override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
@@ -82,7 +84,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = super.overrideEnchantmentLevel(enchantment, itemStack, oldLevel) max overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
@@ -90,7 +92,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem {
+open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
     companion object {
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toTranslationKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
@@ -160,6 +162,15 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
                     }
                 }
             }
+        }
+    }
+
+    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
+        return if (enchantment == Enchantments.FORTUNE) {
+            val enchantments = EnchantmentHelper.get(itemStack)
+            oldLevel max (enchantments[EnchantmentCard.FERTILITY.enchantment] ?: 0)
+        } else {
+            oldLevel
         }
     }
 }
