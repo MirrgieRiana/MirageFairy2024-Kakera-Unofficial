@@ -12,16 +12,12 @@ import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.repair
-import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.ceilToInt
-import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.enchantment.Enchantment
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ExperienceOrbEntity
@@ -286,19 +282,11 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Sup
 }
 
 fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
-    val newLevel = configuration.enchantments[enchantment] ?: return oldLevel
-    return oldLevel max newLevel
+    return configuration.onOverrideEnchantmentLevelListeners.fold(oldLevel) { level, listener -> listener(enchantment, level) }
 }
 
 fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
-    var itemStack2 = itemStack
-    if ((configuration.enchantments[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
-        itemStack2 = itemStack2.copy()
-        val enchantments = EnchantmentHelper.get(itemStack2)
-        enchantments[Enchantments.SILK_TOUCH] = enchantments.getOrElse(Enchantments.SILK_TOUCH) { 0 } atLeast 1
-        EnchantmentHelper.set(enchantments, itemStack2)
-    }
-    return itemStack2
+    return configuration.onConvertItemStackListeners.fold(itemStack) { itemStack2, listener -> listener(itemStack2) }
 }
 
 fun <I> I.hasGlintImpl(stack: ItemStack): Boolean where I : Item, I : FairyToolItem {

@@ -17,12 +17,16 @@ import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import miragefairy2024.util.translate
+import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
@@ -115,12 +119,15 @@ abstract class ToolConfiguration {
     var areaMining: Int? = null
     var mineAll = false
     var cutAll = false
-    val enchantments = mutableMapOf<Enchantment, Int>()
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
     var collection = false
     var hasGlint = false
+
+    val onAddPoemListeners = mutableListOf<(poemList: PoemList) -> PoemList>()
+    val onOverrideEnchantmentLevelListeners = mutableListOf<(enchantment: Enchantment, old: Int) -> Int>()
+    val onConvertItemStackListeners = mutableListOf<(itemStack: ItemStack) -> ItemStack>()
 
     abstract fun createItem(): Item
 
@@ -136,11 +143,8 @@ abstract class ToolConfiguration {
         val texts = mutableListOf<Text>()
 
         texts += descriptions
-        enchantments.forEach { (enchantment, level) ->
-            texts += text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
-        }
 
-        return texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+        return onAddPoemListeners.fold(texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }) { it, listener -> listener(it) }
     }
 
 }
@@ -166,9 +170,36 @@ fun ToolConfiguration.cutAll() = this.also {
     it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
+object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Value> {
+    override fun castOrThrow(value: Any) = value as Value
+    override fun merge(a: Value, b: Value) = Value(a.configuration, (a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
+    override fun init(value: Value) {
+        value.configuration.onAddPoemListeners += { poemList ->
+            value.map.entries.fold(poemList) { poemList2, (enchantment, level) ->
+                poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
+            }
+        }
+        value.configuration.onOverrideEnchantmentLevelListeners += run@{ enchantment, oldLevel ->
+            val newLevel = value.map[enchantment] ?: return@run oldLevel
+            oldLevel max newLevel
+        }
+        value.configuration.onConvertItemStackListeners += { itemStack ->
+            var itemStack2 = itemStack
+            if ((value.map[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
+                itemStack2 = itemStack2.copy()
+                val enchantments = EnchantmentHelper.get(itemStack2)
+                enchantments[Enchantments.SILK_TOUCH] = (enchantments[Enchantments.SILK_TOUCH] ?: 0) atLeast 1
+                EnchantmentHelper.set(enchantments, itemStack2)
+            }
+            itemStack2
+        }
+    }
+
+    class Value(val configuration: ToolConfiguration, val map: Map<Enchantment, Int>)
+}
+
 fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
-    check(level >= 1)
-    it.enchantments[enchantment] = (it.enchantments[enchantment] ?: 0) max level
+    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level)))
 }
 
 fun ToolConfiguration.selfMending(selfMending: Int) = this.also {
