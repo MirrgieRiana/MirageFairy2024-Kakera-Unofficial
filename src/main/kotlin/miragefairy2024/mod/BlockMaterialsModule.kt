@@ -22,6 +22,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
+import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
@@ -29,6 +30,7 @@ import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.MapColor
+import net.minecraft.block.TransparentBlock
 import net.minecraft.data.client.TextureKey
 import net.minecraft.data.client.TexturedModel
 import net.minecraft.entity.Entity
@@ -43,6 +45,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 enum class BlockMaterialCard(
@@ -62,6 +65,7 @@ enum class BlockMaterialCard(
     val tags: List<TagKey<Block>> = listOf(),
     val texturedModelFactory: TexturedModel.Factory? = null,
     val isCutoutRenderLayer: Boolean = false,
+    val isTranslucentRenderLayer: Boolean = false,
 ) {
     NEPHRITE_BLOCK(
         "nephrite_block", "Nephrite Block", "ネフライトブロック",
@@ -133,6 +137,7 @@ fun initBlockMaterialsModule() {
             card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
         }
         if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
+        if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
 
         card.block.enJa(EnJa(card.enName, card.jaName))
         card.item.registerPoem(card.poemList)
@@ -228,4 +233,9 @@ class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
         }
         super.onSteppedOn(world, pos, state, entity)
     }
+}
+
+class SemiOpaqueTransparentBlock(settings: Settings) : TransparentBlock(settings) {
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }
