@@ -7,6 +7,7 @@ import miragefairy2024.mod.fairy.fairyHistoryContainer
 import miragefairy2024.mod.fairy.getRandomFairy
 import miragefairy2024.mod.sync
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.areaMining
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
@@ -59,52 +60,6 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
             configuration.effectiveBlocks.any { state.isOf(it) } -> true
             configuration.effectiveBlockTags.any { state.isIn(it) } -> true
             else -> false
-        }
-    }
-}
-
-fun <I> I.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
-    val areaMining = configuration.areaMining
-    if (areaMining != null) run fail@{
-        if (world.isClient) return@fail
-
-        if (miner.isSneaking) return@fail // 使用者がスニーク中
-        if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-        if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
-
-        // 発動
-
-        val baseHardness = state.getHardness(world, pos)
-
-        // TODO 貫通抑制
-        (-areaMining..areaMining).forEach { x ->
-            (-areaMining..areaMining).forEach { y ->
-                (-areaMining..areaMining).forEach { z ->
-                    if (x != 0 || y != 0 || z != 0) {
-                        val targetBlockPos = pos.add(x, y, z)
-                        if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
-                            if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
-
-                            // 採掘を続行
-
-                            val targetBlockState = world.getBlockState(targetBlockPos)
-                            val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
-                            if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                            if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                if (targetHardness > 0) {
-                                    val damage = world.random.randomInt(configuration.miningDamage)
-                                    if (damage > 0) {
-                                        stack.damage(damage, miner) {
-                                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
