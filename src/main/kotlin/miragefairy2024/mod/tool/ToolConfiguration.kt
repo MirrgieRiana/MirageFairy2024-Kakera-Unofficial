@@ -124,7 +124,6 @@ abstract class ToolConfiguration {
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var miningDamage = 1.0
-    var areaMining: Int? = null
     var mineAll = false
     var cutAll = false
     var selfMending: Int? = null
@@ -134,6 +133,7 @@ abstract class ToolConfiguration {
     var hasGlint = false
 
     val onAddPoemListeners = mutableListOf<(item: Item, poemList: PoemList) -> PoemList>()
+    val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
     val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Enchantment, old: Int) -> Int>()
     val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 
@@ -163,14 +163,28 @@ abstract class FairyMiningToolConfiguration : ToolConfiguration() {
 }
 
 
-fun ToolConfiguration.areaMining(areaMining: Int? = 1) = this.also {
-    it.areaMining = areaMining
-    if (areaMining != null) it.descriptions += text { ToolConfiguration.AREA_MINING_TRANSLATION(areaMining.toRomanText()) } // TODO 複数回起動しても説明文が重複しないように
+object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
+    class Value(val configuration: ToolConfiguration, val level: Int)
+
+    override fun castOrThrow(value: Any) = value as Value
+    override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
+    override fun init(value: Value) {
+        value.configuration.onAddPoemListeners += { _, poemList ->
+            if (value.level > 0) {
+                poemList.text(PoemType.DESCRIPTION, text { ToolConfiguration.AREA_MINING_TRANSLATION(value.level.toRomanText()) })
+            } else {
+                poemList
+            }
+        }
+        value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
+            if (value.level <= 0) return@fail
+            item.areaMining(stack, world, state, pos, miner, value.configuration, value.level)
+        }
+    }
 }
 
-fun <I> I.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
-    val areaMining = configuration.areaMining
-    if (areaMining != null) run fail@{
+private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration, areaMining: Int) {
+    run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -212,6 +226,10 @@ fun <I> I.areaMining(stack: ItemStack, world: World, state: BlockState, pos: Blo
             }
         }
     }
+}
+
+fun ToolConfiguration.areaMining(areaMining: Int = 1) = this.also {
+    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, areaMining))
 }
 
 fun ToolConfiguration.mineAll() = this.also {
