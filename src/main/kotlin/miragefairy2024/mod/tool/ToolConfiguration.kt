@@ -179,8 +179,8 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
                 poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
             }
         }
-        value.configuration.onOverrideEnchantmentLevelListeners += run@{ _, enchantment, oldLevel ->
-            val newLevel = value.map[enchantment] ?: return@run oldLevel
+        value.configuration.onOverrideEnchantmentLevelListeners += fail@{ _, enchantment, oldLevel ->
+            val newLevel = value.map[enchantment] ?: return@fail oldLevel
             oldLevel max newLevel
         }
         value.configuration.onConvertItemStackListeners += { _, itemStack ->
