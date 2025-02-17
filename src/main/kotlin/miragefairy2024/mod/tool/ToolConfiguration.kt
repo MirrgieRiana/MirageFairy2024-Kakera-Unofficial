@@ -125,9 +125,9 @@ abstract class ToolConfiguration {
     var collection = false
     var hasGlint = false
 
-    val onAddPoemListeners = mutableListOf<(poemList: PoemList) -> PoemList>()
-    val onOverrideEnchantmentLevelListeners = mutableListOf<(enchantment: Enchantment, old: Int) -> Int>()
-    val onConvertItemStackListeners = mutableListOf<(itemStack: ItemStack) -> ItemStack>()
+    val onAddPoemListeners = mutableListOf<(item: Item, poemList: PoemList) -> PoemList>()
+    val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Enchantment, old: Int) -> Int>()
+    val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 
     abstract fun createItem(): Item
 
@@ -139,12 +139,12 @@ abstract class ToolConfiguration {
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    fun appendPoems(poemList: PoemList): PoemList {
+    fun appendPoems(item: Item, poemList: PoemList): PoemList {
         val texts = mutableListOf<Text>()
 
         texts += descriptions
 
-        return onAddPoemListeners.fold(texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }) { it, listener -> listener(it) }
+        return onAddPoemListeners.fold(texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }) { it, listener -> listener(item, it) }
     }
 
 }
@@ -174,16 +174,16 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, (a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
     override fun init(value: Value) {
-        value.configuration.onAddPoemListeners += { poemList ->
+        value.configuration.onAddPoemListeners += { _, poemList ->
             value.map.entries.fold(poemList) { poemList2, (enchantment, level) ->
                 poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
             }
         }
-        value.configuration.onOverrideEnchantmentLevelListeners += run@{ enchantment, oldLevel ->
+        value.configuration.onOverrideEnchantmentLevelListeners += run@{ _, enchantment, oldLevel ->
             val newLevel = value.map[enchantment] ?: return@run oldLevel
             oldLevel max newLevel
         }
-        value.configuration.onConvertItemStackListeners += { itemStack ->
+        value.configuration.onConvertItemStackListeners += { _, itemStack ->
             var itemStack2 = itemStack
             if ((value.map[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
                 itemStack2 = itemStack2.copy()

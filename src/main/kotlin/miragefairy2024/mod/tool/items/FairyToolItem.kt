@@ -282,11 +282,11 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Sup
 }
 
 fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
-    return configuration.onOverrideEnchantmentLevelListeners.fold(oldLevel) { level, listener -> listener(enchantment, level) }
+    return configuration.onOverrideEnchantmentLevelListeners.fold(oldLevel) { level, listener -> listener(this, enchantment, level) }
 }
 
 fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
-    return configuration.onConvertItemStackListeners.fold(itemStack) { itemStack2, listener -> listener(itemStack2) }
+    return configuration.onConvertItemStackListeners.fold(itemStack) { itemStack2, listener -> listener(this, itemStack2) }
 }
 
 fun <I> I.hasGlintImpl(stack: ItemStack): Boolean where I : Item, I : FairyToolItem {
