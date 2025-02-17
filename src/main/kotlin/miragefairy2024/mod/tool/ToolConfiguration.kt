@@ -181,41 +181,41 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
             item.areaMining(stack, world, state, pos, miner, value.configuration, value.level)
         }
     }
-}
 
-private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration, areaMining: Int) {
-    run fail@{
-        if (world.isClient) return@fail
+    private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration, areaMining: Int) {
+        run fail@{
+            if (world.isClient) return@fail
 
-        if (miner.isSneaking) return@fail // 使用者がスニーク中
-        if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-        if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (miner.isSneaking) return@fail // 使用者がスニーク中
+            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
+            if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
 
-        // 発動
+            // 発動
 
-        val baseHardness = state.getHardness(world, pos)
+            val baseHardness = state.getHardness(world, pos)
 
-        // TODO 貫通抑制
-        (-areaMining..areaMining).forEach { x ->
-            (-areaMining..areaMining).forEach { y ->
-                (-areaMining..areaMining).forEach { z ->
-                    if (x != 0 || y != 0 || z != 0) {
-                        val targetBlockPos = pos.add(x, y, z)
-                        if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
-                            if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            // TODO 貫通抑制
+            (-areaMining..areaMining).forEach { x ->
+                (-areaMining..areaMining).forEach { y ->
+                    (-areaMining..areaMining).forEach { z ->
+                        if (x != 0 || y != 0 || z != 0) {
+                            val targetBlockPos = pos.add(x, y, z)
+                            if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
+                                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
-                            // 採掘を続行
+                                // 採掘を続行
 
-                            val targetBlockState = world.getBlockState(targetBlockPos)
-                            val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
-                            if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                            if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                if (targetHardness > 0) {
-                                    val damage = world.random.randomInt(configuration.miningDamage)
-                                    if (damage > 0) {
-                                        stack.damage(damage, miner) {
-                                            it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                val targetBlockState = world.getBlockState(targetBlockPos)
+                                val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
+                                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
+                                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
+                                    if (targetHardness > 0) {
+                                        val damage = world.random.randomInt(configuration.miningDamage)
+                                        if (damage > 0) {
+                                            stack.damage(damage, miner) {
+                                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                            }
                                         }
                                     }
                                 }
