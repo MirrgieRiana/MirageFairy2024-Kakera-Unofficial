@@ -178,11 +178,11 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
         }
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (value.level <= 0) return@fail
-            item.areaMining(stack, world, state, pos, miner, value.configuration, value.level)
+            item.areaMining(stack, world, state, pos, miner, value)
         }
     }
 
-    private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration, areaMining: Int) {
+    private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: Value) {
         run fail@{
             if (world.isClient) return@fail
 
@@ -195,14 +195,14 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
             val baseHardness = state.getHardness(world, pos)
 
             // TODO 貫通抑制
-            (-areaMining..areaMining).forEach { x ->
-                (-areaMining..areaMining).forEach { y ->
-                    (-areaMining..areaMining).forEach { z ->
+            (-value.level..value.level).forEach { x ->
+                (-value.level..value.level).forEach { y ->
+                    (-value.level..value.level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
                             if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                                if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                                 // 採掘を続行
 
@@ -211,7 +211,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                     if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(configuration.miningDamage)
+                                        val damage = world.random.randomInt(value.configuration.miningDamage)
                                         if (damage > 0) {
                                             stack.damage(damage, miner) {
                                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
