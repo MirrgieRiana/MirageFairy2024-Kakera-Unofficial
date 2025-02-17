@@ -178,12 +178,6 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
         }
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (value.level <= 0) return@fail
-            areaMining(item, stack, world, state, pos, miner, value)
-        }
-    }
-
-    private fun areaMining(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: Value) {
-        run fail@{
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
