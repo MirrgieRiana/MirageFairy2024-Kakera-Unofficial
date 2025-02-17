@@ -178,17 +178,17 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
         }
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (value.level <= 0) return@fail
-            item.areaMining(stack, world, state, pos, miner, value)
+            areaMining(item, stack, world, state, pos, miner, value)
         }
     }
 
-    private fun Item.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: Value) {
+    private fun areaMining(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: Value) {
         run fail@{
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
 
             // 発動
 
@@ -200,7 +200,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
                     (-value.level..value.level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
-                            if (isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
+                            if (item.isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
