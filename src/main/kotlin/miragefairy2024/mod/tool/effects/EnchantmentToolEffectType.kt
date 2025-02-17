@@ -15,6 +15,10 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 
+fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
+    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level)))
+}
+
 object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Value> {
     class Value(val configuration: ToolConfiguration, val map: Map<Enchantment, Int>)
 
@@ -41,8 +45,4 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
             itemStack2
         }
     }
-}
-
-fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
-    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level)))
 }

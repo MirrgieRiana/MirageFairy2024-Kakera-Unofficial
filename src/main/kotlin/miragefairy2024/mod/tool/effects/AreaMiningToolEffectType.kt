@@ -14,6 +14,10 @@ import mirrg.kotlin.hydrogen.max
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
+fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
+    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level))
+}
+
 object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
     class Value(val configuration: ToolConfiguration, val level: Int)
 
@@ -71,8 +75,4 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
             }
         }
     }
-}
-
-fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level))
 }
