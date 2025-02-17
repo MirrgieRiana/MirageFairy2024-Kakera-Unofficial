@@ -228,8 +228,8 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
     }
 }
 
-fun ToolConfiguration.areaMining(areaMining: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, areaMining))
+fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
+    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level))
 }
 
 fun ToolConfiguration.mineAll() = this.also {
