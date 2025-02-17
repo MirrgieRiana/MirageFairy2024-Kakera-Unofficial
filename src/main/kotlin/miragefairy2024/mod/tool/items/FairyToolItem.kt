@@ -63,7 +63,7 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
     }
 }
 
-fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
+fun <I> I.areaMining(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
     val areaMining = configuration.areaMining
     if (areaMining != null) run fail@{
         if (world.isClient) return@fail
@@ -107,6 +107,10 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
+}
+
+fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
+    areaMining(stack, world, state, pos, miner)
     if (configuration.mineAll) run fail@{
         if (world.isClient) return@fail
 
