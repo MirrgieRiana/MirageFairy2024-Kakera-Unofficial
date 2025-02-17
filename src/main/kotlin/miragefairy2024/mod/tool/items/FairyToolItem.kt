@@ -7,7 +7,6 @@ import miragefairy2024.mod.fairy.fairyHistoryContainer
 import miragefairy2024.mod.fairy.getRandomFairy
 import miragefairy2024.mod.sync
 import miragefairy2024.mod.tool.ToolConfiguration
-import miragefairy2024.mod.tool.areaMining
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
@@ -65,7 +64,9 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
 }
 
 fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
-    areaMining(stack, world, state, pos, miner)
+    configuration.onPostMineListeners.forEach {
+        it(this, stack, world, state, pos, miner)
+    }
     if (configuration.mineAll) run fail@{
         if (world.isClient) return@fail
 
