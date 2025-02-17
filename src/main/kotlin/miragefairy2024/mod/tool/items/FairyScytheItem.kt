@@ -8,7 +8,7 @@ import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
-import miragefairy2024.mod.tool.areaMining
+import miragefairy2024.mod.tool.effects.areaMining
 import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text

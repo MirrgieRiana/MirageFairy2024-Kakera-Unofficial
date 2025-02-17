@@ -8,6 +8,8 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.tool.effects.areaMining
+import miragefairy2024.mod.tool.effects.enchantment
 import miragefairy2024.mod.tool.items.FairyAxeConfiguration
 import miragefairy2024.mod.tool.items.FairyBattleAxeConfiguration
 import miragefairy2024.mod.tool.items.FairyHoeConfiguration

@@ -1,7 +1,9 @@
-package miragefairy2024.mod.tool
+package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
+import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
