@@ -10,30 +10,18 @@ import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
 import miragefairy2024.util.Translation
-import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
-import miragefairy2024.util.plus
-import miragefairy2024.util.randomInt
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.text
-import miragefairy2024.util.toRomanText
-import miragefairy2024.util.translate
-import mirrg.kotlin.hydrogen.atLeast
-import mirrg.kotlin.hydrogen.ceilToInt
-import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.enchantment.Enchantment
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -163,69 +151,6 @@ abstract class FairyMiningToolConfiguration : ToolConfiguration() {
 }
 
 
-object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
-    class Value(val configuration: ToolConfiguration, val level: Int)
-
-    override fun castOrThrow(value: Any) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
-    override fun init(value: Value) {
-        value.configuration.onAddPoemListeners += { _, poemList ->
-            if (value.level > 0) {
-                poemList.text(PoemType.DESCRIPTION, text { ToolConfiguration.AREA_MINING_TRANSLATION(value.level.toRomanText()) })
-            } else {
-                poemList
-            }
-        }
-        value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
-            if (value.level <= 0) return@fail
-            if (world.isClient) return@fail
-
-            if (miner.isSneaking) return@fail // 使用者がスニーク中
-            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
-
-            // 発動
-
-            val baseHardness = state.getHardness(world, pos)
-
-            // TODO 貫通抑制
-            (-value.level..value.level).forEach { x ->
-                (-value.level..value.level).forEach { y ->
-                    (-value.level..value.level).forEach { z ->
-                        if (x != 0 || y != 0 || z != 0) {
-                            val targetBlockPos = pos.add(x, y, z)
-                            if (item.isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
-                                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
-
-                                // 採掘を続行
-
-                                val targetBlockState = world.getBlockState(targetBlockPos)
-                                val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
-                                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                    if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(value.configuration.miningDamage)
-                                        if (damage > 0) {
-                                            stack.damage(damage, miner) {
-                                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level))
-}
-
 fun ToolConfiguration.mineAll() = this.also {
     it.mineAll = true
     it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
@@ -234,38 +159,6 @@ fun ToolConfiguration.mineAll() = this.also {
 fun ToolConfiguration.cutAll() = this.also {
     it.cutAll = true
     it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
-}
-
-object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Value> {
-    class Value(val configuration: ToolConfiguration, val map: Map<Enchantment, Int>)
-
-    override fun castOrThrow(value: Any) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.configuration, (a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
-    override fun init(value: Value) {
-        value.configuration.onAddPoemListeners += { _, poemList ->
-            value.map.entries.fold(poemList) { poemList2, (enchantment, level) ->
-                poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
-            }
-        }
-        value.configuration.onOverrideEnchantmentLevelListeners += fail@{ _, enchantment, oldLevel ->
-            val newLevel = value.map[enchantment] ?: return@fail oldLevel
-            oldLevel max newLevel
-        }
-        value.configuration.onConvertItemStackListeners += { _, itemStack ->
-            var itemStack2 = itemStack
-            if ((value.map[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
-                itemStack2 = itemStack2.copy()
-                val enchantments = EnchantmentHelper.get(itemStack2)
-                enchantments[Enchantments.SILK_TOUCH] = (enchantments[Enchantments.SILK_TOUCH] ?: 0) atLeast 1
-                EnchantmentHelper.set(enchantments, itemStack2)
-            }
-            itemStack2
-        }
-    }
-}
-
-fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
-    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level)))
 }
 
 fun ToolConfiguration.selfMending(selfMending: Int) = this.also {
