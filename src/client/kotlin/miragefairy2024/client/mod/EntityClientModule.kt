@@ -4,6 +4,8 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.AntimatterBoltCard
 import miragefairy2024.mod.AntimatterBoltEntity
+import miragefairy2024.mod.ChaosCubeCard
+import miragefairy2024.mod.ChaosCubeEntity
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.model.ModelData
@@ -26,6 +28,8 @@ import net.minecraft.util.math.RotationAxis
 fun initEntityClientModule() {
     EntityModelLayerRegistry.registerModelLayer(AntimatterBoltEntityRenderer.MAIN.entityModelLayer, AntimatterBoltEntityRenderer.MAIN.provider)
     EntityRendererRegistry.register(AntimatterBoltCard.entityType, ::AntimatterBoltEntityRenderer)
+    EntityModelLayerRegistry.registerModelLayer(ChaosCubeEntityRenderer.MAIN.entityModelLayer, ChaosCubeEntityRenderer.MAIN.provider)
+    EntityRendererRegistry.register(ChaosCubeCard.entityType, ::ChaosCubeEntityRenderer)
 }
 
 class EntityModelLayerCard(
@@ -61,6 +65,36 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
     override fun getTexture(entity: AntimatterBoltEntity) = texture
 
     override fun render(entity: AntimatterBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
+        matrices.stack {
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.prevYaw, entity.yaw) - 90.0F) / 180F * MathHelper.PI))
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotation(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch) / 180F * MathHelper.PI))
+
+            model.setAngles(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
+            val vertexConsumer = vertexConsumers.getBuffer(model.getLayer(texture))
+            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F)
+        }
+        super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
+    }
+}
+
+class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<ChaosCubeEntity>(context) {
+    companion object {
+        val MAIN = EntityModelLayerCard(ChaosCubeCard.identifier, "main", 16, 16) {
+            it.addChild("main", ModelPartBuilder.create().uv(0, 0).cuboid(-5F, 0F, -5F, 10F, 24F, 10F), ModelTransform.NONE)
+        }
+    }
+
+    private val texture = MirageFairy2024.identifier("textures/block/miranagite_block.png")
+
+    private val model = object : SinglePartEntityModel<ChaosCubeEntity>() {
+        private val modelPart: ModelPart = context.getPart(MAIN.entityModelLayer)
+        override fun setAngles(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) = Unit
+        override fun getPart() = modelPart
+    }
+
+    override fun getTexture(entity: ChaosCubeEntity) = texture
+
+    override fun render(entity: ChaosCubeEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.prevYaw, entity.yaw) - 90.0F) / 180F * MathHelper.PI))
             matrices.multiply(RotationAxis.POSITIVE_Z.rotation(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch) / 180F * MathHelper.PI))
