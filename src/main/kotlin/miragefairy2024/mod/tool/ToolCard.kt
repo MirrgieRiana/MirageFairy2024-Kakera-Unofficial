@@ -429,7 +429,7 @@ class ToolCard(
 
         item.enJa(name)
 
-        val poemList2 = configuration.appendPoems(poemList)
+        val poemList2 = configuration.appendPoems(item, poemList)
         item.registerPoem(poemList2)
         item.registerPoemGeneration(poemList2)
 
