@@ -22,8 +22,6 @@ fun ToolConfiguration.cutAll() = this.also {
 }
 
 object CutAllToolEffectType : ToolEffectType<Boolean> {
-    class Value
-
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun merge(a: Boolean, b: Boolean) = a || b
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {

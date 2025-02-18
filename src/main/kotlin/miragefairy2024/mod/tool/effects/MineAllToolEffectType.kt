@@ -20,8 +20,6 @@ fun ToolConfiguration.mineAll() = this.also {
 }
 
 object MineAllToolEffectType : ToolEffectType<Boolean> {
-    class Value
-
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun merge(a: Boolean, b: Boolean) = a || b
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
