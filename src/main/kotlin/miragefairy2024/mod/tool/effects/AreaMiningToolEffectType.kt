@@ -34,7 +34,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
 
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
-    override fun init(value: Value) {
+    override fun apply(value: Value) {
         value.configuration.onAddPoemListeners += { _, poemList ->
             if (value.level > 0) {
                 poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
