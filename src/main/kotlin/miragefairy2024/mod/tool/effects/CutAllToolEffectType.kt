@@ -15,18 +15,18 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 
 fun ToolConfiguration.cutAll() = this.also {
-    this.merge(CutAllToolEffectType, CutAllToolEffectType.Value(true)) { value ->
-        CutAllToolEffectType.apply(this, value)
+    this.merge(CutAllToolEffectType, true) { enabled ->
+        CutAllToolEffectType.apply(this, enabled)
     }
     it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
-object CutAllToolEffectType : ToolEffectType<CutAllToolEffectType.Value> {
-    class Value(val enabled: Boolean)
+object CutAllToolEffectType : ToolEffectType<Boolean> {
+    class Value
 
-    override fun castOrThrow(value: Any?) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.enabled || b.enabled)
-    fun apply(configuration: ToolConfiguration, value: Value) {
+    override fun castOrThrow(value: Any?) = value as Boolean
+    override fun merge(a: Boolean, b: Boolean) = a || b
+    fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 

@@ -16,8 +16,8 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 
 fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
-    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level))) { value ->
-        EnchantmentToolEffectType.apply(this, value)
+    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level))) { map ->
+        EnchantmentToolEffectType.apply(this, map)
     }
 }
 
