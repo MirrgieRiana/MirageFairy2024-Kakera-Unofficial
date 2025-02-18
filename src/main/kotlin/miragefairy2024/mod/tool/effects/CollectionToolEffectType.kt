@@ -2,8 +2,6 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.PoemType
-import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -29,9 +27,7 @@ object CollectionToolEffectType : BooleanToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
-        configuration.onAddPoemListeners += { _, poemList ->
-            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION() })
-        }
+        configuration.descriptions += text { TRANSLATION() }
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
             if (player.world != world) return@fail
             world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {

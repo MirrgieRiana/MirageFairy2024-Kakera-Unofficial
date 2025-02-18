@@ -1,7 +1,5 @@
 package miragefairy2024.mod.tool.effects
 
-import miragefairy2024.mod.PoemType
-import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.util.invoke
@@ -29,10 +27,8 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
 
     fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
-        configuration.onAddPoemListeners += { _, poemList ->
-            value.map.entries.fold(poemList) { poemList2, (enchantment, level) ->
-                poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
-            }
+        value.map.entries.forEach { (enchantment, level) ->
+            configuration.descriptions += text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
         }
         configuration.onOverrideEnchantmentLevelListeners += fail@{ _, enchantment, oldLevel ->
             val newLevel = value.map[enchantment] ?: return@fail oldLevel

@@ -97,7 +97,6 @@ abstract class ToolConfiguration {
     val descriptions = mutableListOf<Text>()
     var hasGlint = false
 
-    val onAddPoemListeners = mutableListOf<(item: Item, poemList: PoemList) -> PoemList>()
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
     val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: World, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
@@ -116,11 +115,7 @@ abstract class ToolConfiguration {
     }
 
     fun appendPoems(item: Item, poemList: PoemList): PoemList {
-        val texts = mutableListOf<Text>()
-
-        texts += descriptions
-
-        return onAddPoemListeners.fold(texts.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }) { it, listener -> listener(item, it) }
+        return descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
     }
 
 }
