@@ -7,8 +7,6 @@ import miragefairy2024.mod.fairy.fairyHistoryContainer
 import miragefairy2024.mod.fairy.getRandomFairy
 import miragefairy2024.mod.sync
 import miragefairy2024.mod.tool.ToolConfiguration
-import miragefairy2024.util.randomInt
-import miragefairy2024.util.repair
 import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -129,13 +127,9 @@ fun <I> I.onKilled(entity: LivingEntity, attacker: LivingEntity, damageSource: D
     }
 }
 
-fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, @Suppress("UNUSED_PARAMETER") slot: Int, @Suppress("UNUSED_PARAMETER") selected: Boolean) where I : Item, I : FairyToolItem {
-    val selfMending = configuration.selfMending
-    if (selfMending != null) run {
-        if (world.isClient) return@run
-        if (entity !is PlayerEntity) return@run // プレイヤーじゃない
-        if (stack !== entity.mainHandStack) return@run // メインハンドに持っていない
-        stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * selfMending)
+fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) where I : Item, I : FairyToolItem {
+    configuration.onInventoryTickListeners.forEach {
+        it(this, stack, world, entity, slot, selected)
     }
 }
 
