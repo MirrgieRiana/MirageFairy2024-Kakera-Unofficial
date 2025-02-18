@@ -7,6 +7,16 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.random.Random
 
+fun Spectrogram.removePhase(): Spectrogram {
+    val image = BufferedImage(this.bufferedImage.width, this.bufferedImage.height, BufferedImage.TYPE_INT_RGB)
+    repeat(this.bufferedImage.width) { x ->
+        repeat(this.bufferedImage.height) { y ->
+            image.setRGB(x, y, this.bufferedImage.getRGB(x, y) and 0x00FF00)
+        }
+    }
+    return Spectrogram(image)
+}
+
 fun Spectrogram.generatePhaseSimple(): Spectrogram {
     val windowSize = (this.bufferedImage.height - 1) * 2 // 256
 
