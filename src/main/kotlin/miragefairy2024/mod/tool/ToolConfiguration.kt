@@ -14,7 +14,6 @@ import miragefairy2024.mod.tool.effects.SelfMendingToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
-import miragefairy2024.util.invoke
 import miragefairy2024.util.registerItemTagGeneration
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.block.Block
@@ -129,9 +128,4 @@ abstract class ToolConfiguration {
 abstract class FairyMiningToolConfiguration : ToolConfiguration() {
     var attackDamage = 0F
     var attackSpeed = 0F
-}
-
-
-fun ToolConfiguration.glint() = this.also {
-    it.hasGlint = true
 }
