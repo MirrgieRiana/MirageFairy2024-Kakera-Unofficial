@@ -12,6 +12,7 @@ import miragefairy2024.mod.tool.effects.areaMining
 import miragefairy2024.mod.tool.effects.cutAll
 import miragefairy2024.mod.tool.effects.enchantment
 import miragefairy2024.mod.tool.effects.mineAll
+import miragefairy2024.mod.tool.effects.obtainFairy
 import miragefairy2024.mod.tool.effects.selfMending
 import miragefairy2024.mod.tool.items.FairyAxeConfiguration
 import miragefairy2024.mod.tool.items.FairyBattleAxeConfiguration
