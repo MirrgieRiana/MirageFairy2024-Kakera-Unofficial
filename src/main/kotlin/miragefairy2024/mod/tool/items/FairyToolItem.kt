@@ -6,8 +6,6 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
-import net.minecraft.entity.ExperienceOrbEntity
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
@@ -15,7 +13,6 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
 import net.minecraft.world.World
 
 interface FairyToolItem {
@@ -58,16 +55,6 @@ fun <I> I.onAfterBreakBlock(world: World, player: PlayerEntity, pos: BlockPos, s
     configuration.onAfterBreakBlockListeners.forEach {
         it(this, world, player, pos, state, blockEntity, tool)
     }
-    if (configuration.collection) run {
-        if (player.world != world) return@run
-        world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-            it.teleport(player.x, player.y, player.z)
-            it.resetPickupDelay()
-        }
-        world.getEntitiesByClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-            it.teleport(player.x, player.y, player.z)
-        }
-    }
 }
 
 fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: LivingEntity, attacker: LivingEntity) where I : Item, I : FairyToolItem {
@@ -77,16 +64,6 @@ fun <I> I.postHitImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, target: Li
 fun <I> I.onKilled(entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) where I : Item, I : FairyToolItem {
     configuration.onKilledListeners.forEach {
         it(this, entity, attacker, damageSource)
-    }
-    if (configuration.collection) run {
-        if (attacker.world != entity.world) return@run
-        entity.world.getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-            it.teleport(attacker.x, attacker.y, attacker.z)
-            it.resetPickupDelay()
-        }
-        entity.world.getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-            it.teleport(attacker.x, attacker.y, attacker.z)
-        }
     }
 }
 

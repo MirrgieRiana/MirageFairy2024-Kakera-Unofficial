@@ -1,12 +1,12 @@
 package miragefairy2024.mod.tool
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.BlockCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
+import miragefairy2024.mod.tool.effects.CollectionToolEffectType
 import miragefairy2024.mod.tool.effects.CutAllToolEffectType
 import miragefairy2024.mod.tool.effects.MineAllToolEffectType
 import miragefairy2024.mod.tool.effects.ObtainFairyToolEffectType
@@ -14,11 +14,8 @@ import miragefairy2024.mod.tool.effects.SelfMendingToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
-import miragefairy2024.util.Translation
-import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.registerItemTagGeneration
-import miragefairy2024.util.text
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -38,8 +35,6 @@ import net.minecraft.world.World
 context(ModContext)
 fun initToolConfiguration() {
 
-    ToolConfiguration.COLLECTION_TRANSLATION.enJa()
-
     BlockCallback.AFTER_BREAK.register { world, player, pos, state, blockEntity, tool ->
         val item = tool.item
         if (item !is FairyToolItem) return@register
@@ -58,6 +53,7 @@ fun initToolConfiguration() {
     CutAllToolEffectType.init()
     SelfMendingToolEffectType.init()
     ObtainFairyToolEffectType.init()
+    CollectionToolEffectType.init()
 
 }
 
@@ -67,11 +63,6 @@ interface ToolEffectType<T> {
 }
 
 abstract class ToolConfiguration {
-    companion object {
-        private val identifier = MirageFairy2024.identifier("fairy_mining_tool")
-        val COLLECTION_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
-    }
-
 
     private var initialized = false
     private val effects = mutableMapOf<ToolEffectType<*>, ToolEffectEntry<*>>()
@@ -105,7 +96,6 @@ abstract class ToolConfiguration {
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var miningDamage = 1.0
     val descriptions = mutableListOf<Text>()
-    var collection = false
     var hasGlint = false
 
     val onAddPoemListeners = mutableListOf<(item: Item, poemList: PoemList) -> PoemList>()
@@ -141,11 +131,6 @@ abstract class FairyMiningToolConfiguration : ToolConfiguration() {
     var attackSpeed = 0F
 }
 
-
-fun ToolConfiguration.collection() = this.also {
-    it.collection = true
-    it.descriptions += text { ToolConfiguration.COLLECTION_TRANSLATION() }
-}
 
 fun ToolConfiguration.glint() = this.also {
     it.hasGlint = true
