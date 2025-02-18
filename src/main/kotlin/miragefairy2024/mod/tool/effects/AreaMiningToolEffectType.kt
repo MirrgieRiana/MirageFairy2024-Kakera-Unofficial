@@ -35,15 +35,11 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
     override fun apply(value: Value) {
+        if (value.level <= 0) return
         value.configuration.onAddPoemListeners += { _, poemList ->
-            if (value.level > 0) {
-                poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
-            } else {
-                poemList
-            }
+            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
         }
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
-            if (value.level <= 0) return@fail
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
