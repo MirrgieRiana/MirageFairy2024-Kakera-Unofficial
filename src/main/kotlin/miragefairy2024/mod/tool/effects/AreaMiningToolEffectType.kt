@@ -19,7 +19,9 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level))
+    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level)) { value ->
+        AreaMiningToolEffectType.apply(value)
+    }
 }
 
 object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
@@ -34,7 +36,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
 
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
-    override fun apply(value: Value) {
+    fun apply(value: Value) {
         if (value.level <= 0) return
         value.configuration.onAddPoemListeners += { _, poemList ->
             poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })

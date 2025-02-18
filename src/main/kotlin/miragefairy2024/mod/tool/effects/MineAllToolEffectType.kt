@@ -13,7 +13,9 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ToolConfiguration.mineAll() = this.also {
-    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(this, true))
+    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(this, true)) { value ->
+        MineAllToolEffectType.apply(value)
+    }
     it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
 }
 
@@ -22,7 +24,7 @@ object MineAllToolEffectType : ToolEffectType<MineAllToolEffectType.Value> {
 
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.enabled || b.enabled)
-    override fun apply(value: Value) {
+    fun apply(value: Value) {
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 

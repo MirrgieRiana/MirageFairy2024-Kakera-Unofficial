@@ -56,7 +56,6 @@ fun initToolConfiguration() {
 interface ToolEffectType<T : Any> {
     fun castOrThrow(value: Any): T
     fun merge(a: T, b: T): T
-    fun apply(value: T)
 }
 
 abstract class ToolConfiguration {
@@ -71,37 +70,30 @@ abstract class ToolConfiguration {
 
 
     private var initialized = false
-    private val effects = mutableMapOf<ToolEffectType<*>, Any>()
+    private val effects = mutableMapOf<ToolEffectType<*>, ToolEffectEntry<*>>()
 
-    operator fun <T : Any> set(effectType: ToolEffectType<T>, value: T) {
-        effects[effectType] = value
-    }
+    class ToolEffectEntry<T : Any>(val type: ToolEffectType<T>, val value: T, val delegate: (T) -> Unit)
 
-    operator fun <T : Any> get(effectType: ToolEffectType<T>): T? {
-        val value = effects[effectType] ?: return null
-        return effectType.castOrThrow(value)
-    }
-
-    fun <T : Any> merge(effectType: ToolEffectType<T>, value: T) {
+    fun <T : Any> merge(effectType: ToolEffectType<T>, value: T, delegate: (T) -> Unit) {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
 
-        val old = this[effectType]
+        val toolEffectEntry = effects[effectType]
+        val old = if (toolEffectEntry == null) null else effectType.castOrThrow(toolEffectEntry.value)
         if (old == null) {
-            this[effectType] = value
+            effects[effectType] = ToolEffectEntry(effectType, value, delegate)
             return
         }
-        this[effectType] = effectType.merge(old, value)
+        effects[effectType] = ToolEffectEntry(effectType, effectType.merge(old, value), delegate)
     }
 
     fun apply() {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
         initialized = true
         effects.forEach {
-            fun <T : Any> f(toolEffectType: ToolEffectType<T>) {
-                val value = effects[toolEffectType] ?: return
-                toolEffectType.apply(toolEffectType.castOrThrow(value))
+            fun <T : Any> f(toolEffectEntry: ToolEffectEntry<T>) {
+                toolEffectEntry.delegate(toolEffectEntry.value)
             }
-            f(it.key)
+            f(it.value)
         }
     }
 

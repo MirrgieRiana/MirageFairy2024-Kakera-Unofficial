@@ -16,7 +16,9 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 
 fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
-    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level)))
+    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(this, mapOf(enchantment to level))) { value ->
+        EnchantmentToolEffectType.apply(value)
+    }
 }
 
 object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Value> {
@@ -24,7 +26,7 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
 
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, (a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
-    override fun apply(value: Value) {
+    fun apply(value: Value) {
         value.configuration.onAddPoemListeners += { _, poemList ->
             value.map.entries.fold(poemList) { poemList2, (enchantment, level) ->
                 poemList2.text(PoemType.DESCRIPTION, text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() })
