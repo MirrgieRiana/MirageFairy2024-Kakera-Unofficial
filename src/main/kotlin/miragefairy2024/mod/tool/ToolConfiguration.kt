@@ -7,8 +7,6 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
-import miragefairy2024.mod.tool.effects.CutAllToolEffectType
-import miragefairy2024.mod.tool.effects.MineAllToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
@@ -151,16 +149,6 @@ abstract class FairyMiningToolConfiguration : ToolConfiguration() {
     var attackSpeed = 0F
 }
 
-
-fun ToolConfiguration.mineAll() = this.also {
-    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(this, true))
-    it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
-}
-
-fun ToolConfiguration.cutAll() = this.also {
-    this.merge(CutAllToolEffectType, CutAllToolEffectType.Value(this, true))
-    it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
-}
 
 fun ToolConfiguration.selfMending(selfMending: Int) = this.also {
     it.selfMending = selfMending
