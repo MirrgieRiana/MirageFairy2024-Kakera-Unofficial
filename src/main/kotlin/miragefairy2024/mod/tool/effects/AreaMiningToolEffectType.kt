@@ -34,7 +34,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
         TRANSLATION.enJa()
     }
 
-    override fun castOrThrow(value: Any) = value as Value
+    override fun castOrThrow(value: Any?) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
     fun apply(value: Value) {
         if (value.level <= 0) return

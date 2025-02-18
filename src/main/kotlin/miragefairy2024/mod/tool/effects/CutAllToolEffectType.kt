@@ -24,7 +24,7 @@ fun ToolConfiguration.cutAll() = this.also {
 object CutAllToolEffectType : ToolEffectType<CutAllToolEffectType.Value> {
     class Value(val configuration: ToolConfiguration, val enabled: Boolean)
 
-    override fun castOrThrow(value: Any) = value as Value
+    override fun castOrThrow(value: Any?) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.enabled || b.enabled)
     fun apply(value: Value) {
         value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
