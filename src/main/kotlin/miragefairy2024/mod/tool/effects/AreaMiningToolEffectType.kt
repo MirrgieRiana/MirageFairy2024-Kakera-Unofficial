@@ -19,13 +19,13 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(this, level)) { value ->
-        AreaMiningToolEffectType.apply(value)
+    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(level)) { value ->
+        AreaMiningToolEffectType.apply(this, value)
     }
 }
 
 object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
-    class Value(val configuration: ToolConfiguration, val level: Int)
+    class Value(val level: Int)
 
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
 
@@ -35,13 +35,13 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
     }
 
     override fun castOrThrow(value: Any?) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
-    fun apply(value: Value) {
+    override fun merge(a: Value, b: Value) = Value(a.level max b.level)
+    fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.level <= 0) return
-        value.configuration.onAddPoemListeners += { _, poemList ->
+        configuration.onAddPoemListeners += { _, poemList ->
             poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
         }
-        value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
+        configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -60,7 +60,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
                             val targetBlockPos = pos.add(x, y, z)
                             if (item.isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                                 // 採掘を続行
 
@@ -69,7 +69,7 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                     if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(value.configuration.miningDamage)
+                                        val damage = world.random.randomInt(configuration.miningDamage)
                                         if (damage > 0) {
                                             stack.damage(damage, miner) {
                                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
