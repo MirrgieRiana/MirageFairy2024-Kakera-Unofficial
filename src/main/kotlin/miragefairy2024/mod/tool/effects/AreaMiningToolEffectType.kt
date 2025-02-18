@@ -1,10 +1,14 @@
 package miragefairy2024.mod.tool.effects
 
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
+import miragefairy2024.util.Translation
 import miragefairy2024.util.breakBlockByMagic
+import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
@@ -21,12 +25,19 @@ fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
 object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
     class Value(val configuration: ToolConfiguration, val level: Int)
 
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
+
+    context(ModContext)
+    fun init() {
+        TRANSLATION.enJa()
+    }
+
     override fun castOrThrow(value: Any) = value as Value
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.level max b.level)
     override fun init(value: Value) {
         value.configuration.onAddPoemListeners += { _, poemList ->
             if (value.level > 0) {
-                poemList.text(PoemType.DESCRIPTION, text { ToolConfiguration.AREA_MINING_TRANSLATION(value.level.toRomanText()) })
+                poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
             } else {
                 poemList
             }
