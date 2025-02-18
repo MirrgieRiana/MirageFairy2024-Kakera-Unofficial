@@ -45,3 +45,4 @@ replay_*.log
 /backup
 /src/main/generated/.cache
 /.kotlin
+/logs/
