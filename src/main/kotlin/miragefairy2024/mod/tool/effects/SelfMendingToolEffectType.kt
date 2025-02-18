@@ -2,8 +2,6 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.PoemType
-import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -29,9 +27,7 @@ object SelfMendingToolEffectType : IntAddToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, speed: Int) {
         if (speed <= 0) return
-        configuration.onAddPoemListeners += { _, poemList ->
-            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION() })
-        }
+        configuration.descriptions += text { TRANSLATION() }
         configuration.onInventoryTickListeners += fail@{ _, stack, world, entity, _, _ ->
             if (world.isClient) return@fail
             if (entity !is PlayerEntity) return@fail // プレイヤーじゃない
