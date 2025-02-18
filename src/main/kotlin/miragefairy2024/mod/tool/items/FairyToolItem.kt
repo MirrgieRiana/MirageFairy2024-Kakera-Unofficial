@@ -67,7 +67,10 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
     configuration.onPostMineListeners.forEach {
         it(this, stack, world, state, pos, miner)
     }
-    if (configuration.mineAll) run fail@{
+}
+
+fun Item.mineAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration) {
+    run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -102,7 +105,10 @@ fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: B
             }
         }
     }
-    if (configuration.cutAll) run fail@{
+}
+
+fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration) {
+    run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
