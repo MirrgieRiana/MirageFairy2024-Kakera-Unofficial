@@ -1,10 +1,16 @@
 package miragefairy2024.mod.tool.effects
 
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemType
+import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.util.NeighborType
+import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
+import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
@@ -18,14 +24,23 @@ fun ToolConfiguration.cutAll() = this.also {
     this.merge(CutAllToolEffectType, true) { enabled ->
         CutAllToolEffectType.apply(this, enabled)
     }
-    it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
 object CutAllToolEffectType : ToolEffectType<Boolean> {
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+
+    context(ModContext)
+    fun init() {
+        TRANSLATION.enJa()
+    }
+
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun merge(a: Boolean, b: Boolean) = a || b
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
+        configuration.onAddPoemListeners += { _, poemList ->
+            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION() })
+        }
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 
