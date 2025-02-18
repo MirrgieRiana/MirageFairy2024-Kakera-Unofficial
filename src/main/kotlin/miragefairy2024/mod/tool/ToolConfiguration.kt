@@ -114,7 +114,7 @@ abstract class ToolConfiguration {
         card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
-    fun appendPoems(item: Item, poemList: PoemList): PoemList {
+    fun appendPoems(poemList: PoemList): PoemList {
         return descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
     }
 
