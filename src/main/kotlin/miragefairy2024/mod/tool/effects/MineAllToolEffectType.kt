@@ -30,18 +30,18 @@ object MineAllToolEffectType : ToolEffectType<MineAllToolEffectType.Value> {
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.enabled || b.enabled)
     override fun apply(value: Value) {
         value.configuration.onPostMineListeners += { item, stack, world, state, pos, miner ->
-            item.mineAll(stack, world, state, pos, miner, value.configuration)
+            mineAll(item, stack, world, state, pos, miner, value)
         }
     }
 }
 
-fun Item.mineAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration) {
+private fun mineAll(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: MineAllToolEffectType.Value) {
     run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
         if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-        if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+        if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
         if (!state.isIn(ConventionalBlockTags.ORES)) return@fail // 掘ったブロックが鉱石ではない
 
         // 発動
@@ -52,7 +52,7 @@ fun Item.mineAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPo
             world.getBlockState(toBlockPos).block === state.block
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -61,7 +61,7 @@ fun Item.mineAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPo
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    val damage = world.random.randomInt(configuration.miningDamage)
+                    val damage = world.random.randomInt(value.configuration.miningDamage)
                     if (damage > 0) {
                         stack.damage(damage, miner) {
                             it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
