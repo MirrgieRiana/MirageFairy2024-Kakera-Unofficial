@@ -8,6 +8,7 @@ import miragefairy2024.util.isServer
 import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
+import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityDimensions
@@ -15,9 +16,18 @@ import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
+import net.minecraft.entity.ai.goal.ActiveTargetGoal
+import net.minecraft.entity.ai.goal.LookAroundGoal
+import net.minecraft.entity.ai.goal.LookAtEntityGoal
+import net.minecraft.entity.ai.goal.MeleeAttackGoal
+import net.minecraft.entity.ai.goal.RevengeGoal
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedData
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
+import net.minecraft.entity.mob.HostileEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.entity.projectile.ProjectileUtil
 import net.minecraft.nbt.NbtCompound
@@ -32,6 +42,10 @@ import net.minecraft.world.World
 context(ModContext)
 fun initEntityModule() {
     AntimatterBoltCard.let { card ->
+        card.entityType.register(Registries.ENTITY_TYPE, card.identifier)
+        card.init()
+    }
+    ChaosCubeCard.let { card ->
         card.entityType.register(Registries.ENTITY_TYPE, card.identifier)
         card.init()
     }
@@ -176,5 +190,43 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         }
 
     }
+
+}
+
+object ChaosCubeCard {
+    val spawnGroup = SpawnGroup.MONSTER
+    val width = 1.0F
+    val height = 1.5F
+    fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: World) = ChaosCubeEntity(entityType, world)
+    val identifier = MirageFairy2024.identifier("chaos_cube")
+    val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
+        .dimensions(EntityDimensions.fixed(width, height))
+        .build()
+
+    context(ModContext)
+    fun init() {
+        //entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
+
+        val attributes = HostileEntity.createHostileAttributes()
+            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6)
+            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
+        FabricDefaultAttributeRegistry.register(entityType, attributes)
+    }
+}
+
+class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World) : HostileEntity(entityType, world) {
+
+    override fun initGoals() {
+        // TODO
+        goalSelector.add(4, MeleeAttackGoal(this, 1.0, false))
+        goalSelector.add(7, WanderAroundFarGoal(this, 1.0, 0.0F))
+        goalSelector.add(8, LookAtEntityGoal(this, PlayerEntity::class.java, 8.0F))
+        goalSelector.add(8, LookAroundGoal(this))
+        targetSelector.add(1, RevengeGoal(this, *arrayOfNulls(0)).setGroupRevenge())
+        targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
+    }
+
+    // TODO
 
 }
