@@ -7,6 +7,8 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
+import miragefairy2024.mod.tool.effects.CutAllToolEffectType
+import miragefairy2024.mod.tool.effects.MineAllToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
@@ -113,8 +115,6 @@ abstract class ToolConfiguration {
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var miningDamage = 1.0
-    var mineAll = false
-    var cutAll = false
     var selfMending: Int? = null
     val descriptions = mutableListOf<Text>()
     var obtainFairy: Double? = null
@@ -153,12 +153,12 @@ abstract class FairyMiningToolConfiguration : ToolConfiguration() {
 
 
 fun ToolConfiguration.mineAll() = this.also {
-    it.mineAll = true
+    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(this, true))
     it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
 }
 
 fun ToolConfiguration.cutAll() = this.also {
-    it.cutAll = true
+    this.merge(CutAllToolEffectType, CutAllToolEffectType.Value(this, true))
     it.descriptions += text { ToolConfiguration.CUT_ALL_TRANSLATION() }
 }
 
