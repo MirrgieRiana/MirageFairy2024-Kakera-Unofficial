@@ -22,7 +22,7 @@ fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
     }
 }
 
-object AreaMiningToolEffectType : IntToolEffectType() {
+object AreaMiningToolEffectType : IntMaxToolEffectType() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
 
     context(ModContext)

@@ -8,7 +8,12 @@ abstract class BooleanToolEffectType : ToolEffectType<Boolean> {
     override fun merge(a: Boolean, b: Boolean) = a || b
 }
 
-abstract class IntToolEffectType : ToolEffectType<Int> {
+abstract class IntAddToolEffectType : ToolEffectType<Int> {
+    override fun castOrThrow(value: Any?) = value as Int
+    override fun merge(a: Int, b: Int) = a + b
+}
+
+abstract class IntMaxToolEffectType : ToolEffectType<Int> {
     override fun castOrThrow(value: Any?) = value as Int
     override fun merge(a: Int, b: Int) = a max b
 }
