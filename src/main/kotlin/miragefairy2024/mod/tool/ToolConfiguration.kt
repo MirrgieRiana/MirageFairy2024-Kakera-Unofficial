@@ -56,7 +56,7 @@ fun initToolConfiguration() {
 interface ToolEffectType<T : Any> {
     fun castOrThrow(value: Any): T
     fun merge(a: T, b: T): T
-    fun init(value: T)
+    fun apply(value: T)
 }
 
 abstract class ToolConfiguration {
@@ -93,13 +93,13 @@ abstract class ToolConfiguration {
         this[effectType] = effectType.merge(old, value)
     }
 
-    fun init() {
+    fun apply() {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
         initialized = true
         effects.forEach {
             fun <T : Any> f(toolEffectType: ToolEffectType<T>) {
                 val value = effects[toolEffectType] ?: return
-                toolEffectType.init(toolEffectType.castOrThrow(value))
+                toolEffectType.apply(toolEffectType.castOrThrow(value))
             }
             f(it.key)
         }

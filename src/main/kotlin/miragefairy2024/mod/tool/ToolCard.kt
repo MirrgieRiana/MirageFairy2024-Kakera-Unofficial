@@ -419,7 +419,7 @@ class ToolCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = configuration.also { it.init() }.createItem()
+    val item = configuration.also { it.apply() }.createItem()
 
     context(ModContext)
     fun init() {
