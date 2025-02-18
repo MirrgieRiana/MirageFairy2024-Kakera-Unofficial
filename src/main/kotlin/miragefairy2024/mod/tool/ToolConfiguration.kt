@@ -6,6 +6,7 @@ import miragefairy2024.mixin.api.BlockCallback
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
+import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
@@ -29,7 +30,6 @@ import net.minecraft.world.World
 context(ModContext)
 fun initToolConfiguration() {
 
-    ToolConfiguration.AREA_MINING_TRANSLATION.enJa()
     ToolConfiguration.MINE_ALL_TRANSLATION.enJa()
     ToolConfiguration.CUT_ALL_TRANSLATION.enJa()
     ToolConfiguration.SELF_MENDING_TRANSLATION.enJa()
@@ -49,6 +49,8 @@ fun initToolConfiguration() {
         item.onKilled(entity, attacker, damageSource)
     }
 
+    AreaMiningToolEffectType.init()
+
 }
 
 interface ToolEffectType<T : Any> {
@@ -60,7 +62,6 @@ interface ToolEffectType<T : Any> {
 abstract class ToolConfiguration {
     companion object {
         private val identifier = MirageFairy2024.identifier("fairy_mining_tool")
-        val AREA_MINING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
         val MINE_ALL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
         val CUT_ALL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
         val SELF_MENDING_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
