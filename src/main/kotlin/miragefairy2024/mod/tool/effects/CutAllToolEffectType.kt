@@ -31,18 +31,18 @@ object CutAllToolEffectType : ToolEffectType<CutAllToolEffectType.Value> {
     override fun merge(a: Value, b: Value) = Value(a.configuration, a.enabled || b.enabled)
     override fun apply(value: Value) {
         value.configuration.onPostMineListeners += { item, stack, world, state, pos, miner ->
-            item.cutAll(stack, world, state, pos, miner, value.configuration)
+            cutAll(item, stack, world, state, pos, miner, value)
         }
     }
 }
 
-fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, configuration: ToolConfiguration) {
+private fun cutAll(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity, value: CutAllToolEffectType.Value) {
     run fail@{
         if (world.isClient) return@fail
 
         if (miner.isSneaking) return@fail // 使用者がスニーク中
         if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-        if (!isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+        if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
         if (!state.isIn(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
         // 発動
@@ -54,7 +54,7 @@ fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos
             world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -63,7 +63,7 @@ fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos
             if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
-                    val damage = world.random.randomInt(configuration.miningDamage)
+                    val damage = world.random.randomInt(value.configuration.miningDamage)
                     if (damage > 0) {
                         stack.damage(damage, miner) {
                             it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
@@ -77,7 +77,7 @@ fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos
             world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
         }.forEach skip@{ (_, blockPos) ->
             if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-            if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
             // 採掘を続行
 
@@ -87,7 +87,7 @@ fun Item.cutAll(stack: ItemStack, world: World, state: BlockState, pos: BlockPos
             if (breakBlockByMagic(stack, world, blockPos, miner)) {
                 if (targetHardness > 0) {
                     if (miner.random.nextFloat() < 0.1F) {
-                        val damage = world.random.randomInt(configuration.miningDamage)
+                        val damage = world.random.randomInt(value.configuration.miningDamage)
                         if (damage > 0) {
                             stack.damage(damage, miner) {
                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
