@@ -25,6 +25,7 @@ object CutAllToolEffectType : ToolEffectType<Boolean> {
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun merge(a: Boolean, b: Boolean) = a || b
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
+        if (!enabled) return
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 
