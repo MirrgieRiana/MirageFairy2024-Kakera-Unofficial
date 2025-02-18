@@ -19,13 +19,13 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(level)) { value ->
-        AreaMiningToolEffectType.apply(this, value)
+    this.merge(AreaMiningToolEffectType, level) { level ->
+        AreaMiningToolEffectType.apply(this, level)
     }
 }
 
-object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value> {
-    class Value(val level: Int)
+object AreaMiningToolEffectType : ToolEffectType<Int> {
+    class Value
 
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
 
@@ -34,12 +34,12 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
         TRANSLATION.enJa()
     }
 
-    override fun castOrThrow(value: Any?) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.level max b.level)
-    fun apply(configuration: ToolConfiguration, value: Value) {
-        if (value.level <= 0) return
+    override fun castOrThrow(value: Any?) = value as Int
+    override fun merge(a: Int, b: Int) = a max b
+    fun apply(configuration: ToolConfiguration, level: Int) {
+        if (level <= 0) return
         configuration.onAddPoemListeners += { _, poemList ->
-            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(value.level.toRomanText()) })
+            poemList.text(PoemType.DESCRIPTION, text { TRANSLATION(level.toRomanText()) })
         }
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
@@ -53,9 +53,9 @@ object AreaMiningToolEffectType : ToolEffectType<AreaMiningToolEffectType.Value>
             val baseHardness = state.getHardness(world, pos)
 
             // TODO 貫通抑制
-            (-value.level..value.level).forEach { x ->
-                (-value.level..value.level).forEach { y ->
-                    (-value.level..value.level).forEach { z ->
+            (-level..level).forEach { x ->
+                (-level..level).forEach { y ->
+                    (-level..level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
                             if (item.isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
