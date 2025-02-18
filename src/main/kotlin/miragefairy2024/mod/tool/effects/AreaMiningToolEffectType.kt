@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
-import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.util.Translation
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
@@ -14,7 +13,6 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.ceilToInt
-import mirrg.kotlin.hydrogen.max
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
@@ -24,7 +22,7 @@ fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
     }
 }
 
-object AreaMiningToolEffectType : ToolEffectType<Int> {
+object AreaMiningToolEffectType : IntToolEffectType() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
 
     context(ModContext)
@@ -32,8 +30,6 @@ object AreaMiningToolEffectType : ToolEffectType<Int> {
         TRANSLATION.enJa()
     }
 
-    override fun castOrThrow(value: Any?) = value as Int
-    override fun merge(a: Int, b: Int) = a max b
     fun apply(configuration: ToolConfiguration, level: Int) {
         if (level <= 0) return
         configuration.onAddPoemListeners += { _, poemList ->
