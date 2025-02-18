@@ -5,7 +5,6 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.text
 import miragefairy2024.mod.tool.ToolConfiguration
-import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
@@ -24,7 +23,7 @@ fun ToolConfiguration.mineAll() = this.also {
     }
 }
 
-object MineAllToolEffectType : ToolEffectType<Boolean> {
+object MineAllToolEffectType : BooleanToolEffectType() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
 
     context(ModContext)
@@ -32,8 +31,6 @@ object MineAllToolEffectType : ToolEffectType<Boolean> {
         TRANSLATION.enJa()
     }
 
-    override fun castOrThrow(value: Any?) = value as Boolean
-    override fun merge(a: Boolean, b: Boolean) = a || b
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
         configuration.onAddPoemListeners += { _, poemList ->
