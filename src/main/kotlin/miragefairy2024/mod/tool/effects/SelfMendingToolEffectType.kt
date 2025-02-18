@@ -19,7 +19,7 @@ fun ToolConfiguration.selfMending(speed: Int) = this.also {
     }
 }
 
-object SelfMendingToolEffectType : IntToolEffectType() {
+object SelfMendingToolEffectType : IntAddToolEffectType() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
 
     context(ModContext)
