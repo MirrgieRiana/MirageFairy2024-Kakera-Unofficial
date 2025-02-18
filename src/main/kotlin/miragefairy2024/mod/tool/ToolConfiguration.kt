@@ -74,24 +74,19 @@ abstract class ToolConfiguration {
 
     class ToolEffectEntry<T : Any>(val type: ToolEffectType<T>, val value: T, val delegate: (T) -> Unit)
 
-    fun <T : Any> merge(effectType: ToolEffectType<T>, value: T, delegate: (T) -> Unit) {
+    fun <T : Any> merge(type: ToolEffectType<T>, value: T, delegate: (T) -> Unit) {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
-
-        val toolEffectEntry = effects[effectType]
-        val old = if (toolEffectEntry == null) null else effectType.castOrThrow(toolEffectEntry.value)
-        if (old == null) {
-            effects[effectType] = ToolEffectEntry(effectType, value, delegate)
-            return
-        }
-        effects[effectType] = ToolEffectEntry(effectType, effectType.merge(old, value), delegate)
+        val entry = effects[type]
+        val newValue = if (entry == null) value else type.merge(type.castOrThrow(entry.value), value)
+        effects[type] = ToolEffectEntry(type, newValue, delegate)
     }
 
     fun apply() {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
         initialized = true
         effects.forEach {
-            fun <T : Any> f(toolEffectEntry: ToolEffectEntry<T>) {
-                toolEffectEntry.delegate(toolEffectEntry.value)
+            fun <T: Any> f(entry: ToolEffectEntry<T>) {
+                entry.delegate(entry.value)
             }
             f(it.value)
         }
