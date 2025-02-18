@@ -13,19 +13,19 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ToolConfiguration.mineAll() = this.also {
-    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(this, true)) { value ->
-        MineAllToolEffectType.apply(value)
+    this.merge(MineAllToolEffectType, MineAllToolEffectType.Value(true)) { value ->
+        MineAllToolEffectType.apply(this, value)
     }
     it.descriptions += text { ToolConfiguration.MINE_ALL_TRANSLATION() }
 }
 
 object MineAllToolEffectType : ToolEffectType<MineAllToolEffectType.Value> {
-    class Value(val configuration: ToolConfiguration, val enabled: Boolean)
+    class Value(val enabled: Boolean)
 
     override fun castOrThrow(value: Any?) = value as Value
-    override fun merge(a: Value, b: Value) = Value(a.configuration, a.enabled || b.enabled)
-    fun apply(value: Value) {
-        value.configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
+    override fun merge(a: Value, b: Value) = Value(a.enabled || b.enabled)
+    fun apply(configuration: ToolConfiguration, value: Value) {
+        configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClient) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
@@ -41,7 +41,7 @@ object MineAllToolEffectType : ToolEffectType<MineAllToolEffectType.Value> {
                 world.getBlockState(toBlockPos).block === state.block
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damage <= value.configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -50,7 +50,7 @@ object MineAllToolEffectType : ToolEffectType<MineAllToolEffectType.Value> {
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
-                        val damage = world.random.randomInt(value.configuration.miningDamage)
+                        val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
                             stack.damage(damage, miner) {
                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
