@@ -9,6 +9,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.tool.effects.areaMining
+import miragefairy2024.mod.tool.effects.collection
 import miragefairy2024.mod.tool.effects.cutAll
 import miragefairy2024.mod.tool.effects.enchantment
 import miragefairy2024.mod.tool.effects.mineAll
