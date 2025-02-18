@@ -17,3 +17,8 @@ abstract class IntMaxToolEffectType : ToolEffectType<Int> {
     override fun castOrThrow(value: Any?) = value as Int
     override fun merge(a: Int, b: Int) = a max b
 }
+
+abstract class DoubleAddToolEffectType : ToolEffectType<Double> {
+    override fun castOrThrow(value: Any?) = value as Double
+    override fun merge(a: Double, b: Double) = a + b
+}
