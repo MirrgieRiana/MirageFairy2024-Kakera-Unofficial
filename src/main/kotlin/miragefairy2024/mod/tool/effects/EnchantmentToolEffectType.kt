@@ -26,6 +26,7 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
 
     override fun castOrThrow(value: Any?) = value as Value
     override fun merge(a: Value, b: Value) = Value((a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
+
     fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
         configuration.onAddPoemListeners += { _, poemList ->
