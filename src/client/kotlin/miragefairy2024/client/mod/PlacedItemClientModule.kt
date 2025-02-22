@@ -27,6 +27,8 @@ fun initPlacedItemClientModule() {
 
             val player = MinecraftClient.getInstance().player ?: return@run // プレイヤーの取得に失敗した
 
+            if (player.isSpectator) return@run // スペクテイターモード
+
             val hitResult = player.raycast(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@run // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@run // ブロックをターゲットにしていない
