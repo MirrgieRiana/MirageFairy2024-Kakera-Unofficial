@@ -29,6 +29,8 @@ fun initPlacedItemModule() {
 
             // パケットの正常性判定
 
+            if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
+
             val hitResult = player.raycast(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
@@ -75,6 +77,8 @@ fun initPlacedItemModule() {
         RemovePlacedItemChannel.registerServerPacketReceiver { player, packet ->
 
             // パケットの正常性判定
+
+            if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
 
             val hitResult = player.raycast(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
