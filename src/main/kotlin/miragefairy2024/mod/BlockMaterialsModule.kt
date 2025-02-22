@@ -85,6 +85,12 @@ enum class BlockMaterialCard(
         MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
+    CHAOS_STONE_BLOCK(
+        "chaos_stone_block", "Chaos Stone Block", "混沌の石ブロック",
+        PoemList(4).poem("The eye of entropy.", "無秩序の目。"),
+        MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+    ),
     LUMINITE_BLOCK(
         "luminite_block", "Luminite Block", "ルミナイトブロック",
         PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
@@ -163,6 +169,9 @@ fun initBlockMaterialsModule() {
 
     // 蒼天石ブロック
     registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
+
+    // 混沌の石ブロック
+    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
 
     // ルミナイトブロック
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
