@@ -15,7 +15,7 @@ import net.minecraft.registry.Registries
 enum class ParticleTypeCard(
     path: String,
     textureName: String,
-    alwaysSpawn: Boolean
+    alwaysSpawn: Boolean,
 ) {
     MISSION("mission", "mission", true),
     COLLECTING_MAGIC("collecting_magic", "magic", false),
