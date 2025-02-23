@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.data.server.loottable.BlockLootTableGenerator
 import net.minecraft.enchantment.Enchantments
+import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.loot.LootPool
 import net.minecraft.loot.LootTable
@@ -76,6 +77,11 @@ fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider
 context(ModContext)
 fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration {
     it.drops(this)
+}
+
+context(ModContext)
+fun EntityType<*>.registerLootTableGeneration(initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable {
+    it(this, initializer())
 }
 
 enum class FortuneEffect {
