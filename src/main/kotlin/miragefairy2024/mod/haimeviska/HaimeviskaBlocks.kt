@@ -5,6 +5,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.ParticleTypeCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -59,6 +60,7 @@ import net.minecraft.block.SaplingBlock
 import net.minecraft.block.enums.Instrument
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.block.sapling.SaplingGenerator
+import net.minecraft.client.util.ParticleUtil
 import net.minecraft.data.client.Models
 import net.minecraft.data.client.TextureKey
 import net.minecraft.data.server.loottable.BlockLootTableGenerator
@@ -371,6 +373,16 @@ class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
         if (!state[CHARGED]) {
             if (random.randomBoolean(15, world.getLightLevel(pos))) {
                 world.setBlockState(pos, state.with(CHARGED, true), Block.NOTIFY_LISTENERS)
+            }
+        }
+    }
+
+    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+        super.randomDisplayTick(state, world, pos, random)
+        if (random.nextInt(20) == 0) {
+            val blockPos = pos.down()
+            if (!isFaceFullSquare(world.getBlockState(blockPos).getCollisionShape(world, blockPos), Direction.UP)) {
+                ParticleUtil.spawnParticle(world, pos, random, ParticleTypeCard.HAIMEVISKA_BLOSSOM.particleType)
             }
         }
     }
