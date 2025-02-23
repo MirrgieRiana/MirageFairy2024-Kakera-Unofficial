@@ -3,6 +3,7 @@ package miragefairy2024.util
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import net.minecraft.block.Block
+import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 
 context(ModContext)
@@ -25,6 +26,12 @@ fun Block.enJa(name: EnJa) {
 
 context(ModContext)
 fun Item.enJa(name: EnJa) {
+    en { this.translationKey to name.en }
+    ja { this.translationKey to name.ja }
+}
+
+context(ModContext)
+fun EntityType<*>.enJa(name: EnJa) {
     en { this.translationKey to name.en }
     ja { this.translationKey to name.ja }
 }
