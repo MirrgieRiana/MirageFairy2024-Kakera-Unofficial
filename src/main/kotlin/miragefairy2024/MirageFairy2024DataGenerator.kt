@@ -16,6 +16,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
+import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.data.DataOutput
 import net.minecraft.data.DataProvider
@@ -26,6 +27,8 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageType
 import net.minecraft.item.Item
+import net.minecraft.loot.LootTable
+import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryBuilder
 import net.minecraft.registry.RegistryKey
@@ -35,6 +38,7 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
 import java.util.concurrent.CompletableFuture
+import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 object DataGenerationEvents {
@@ -48,6 +52,7 @@ object DataGenerationEvents {
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
     val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
+    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit) -> Unit>()
     val onGenerateRecipe = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
@@ -101,6 +106,13 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricBlockLootTableProvider(output) {
                 override fun generate() = DataGenerationEvents.onGenerateBlockLootTable.fire { it(this) }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput ->
+            object : SimpleFabricLootTableProvider(output, LootContextTypes.ENTITY) {
+                override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateEntityLootTable.fire { it { entityType, builder -> exporter.accept(entityType.lootTableId, builder) } }
+                }
             }
         }
         pack.addProvider { output: FabricDataOutput ->
