@@ -23,6 +23,7 @@ enum class ParticleTypeCard(
     MIRAGE_FLOUR("mirage_flour", "mirage_flour", false),
     ATTRACTING_MAGIC("attracting_magic", "mission", false),
     AURA("aura", "mission", false),
+    HAIMEVISKA_BLOSSOM("haimeviska_blossom", "haimeviska_blossom", false)
     ;
 
     val identifier = MirageFairy2024.identifier(path)
