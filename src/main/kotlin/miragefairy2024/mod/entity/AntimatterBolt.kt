@@ -7,6 +7,7 @@ import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.MagicDamageTypeCard
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer
+import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
@@ -22,6 +23,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.entity.projectile.ProjectileUtil
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.EntityTypeTags
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.hit.EntityHitResult
@@ -41,6 +43,7 @@ object AntimatterBoltCard {
 
     context(ModContext)
     fun init() {
+        entityType.register(Registries.ENTITY_TYPE, identifier)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }
