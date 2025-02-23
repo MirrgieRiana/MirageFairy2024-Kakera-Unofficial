@@ -1,5 +1,6 @@
 package miragefairy2024
 
+import miragefairy2024.mod.entity.initEntityModule
 import miragefairy2024.mod.fairy.initFairyModule
 import miragefairy2024.mod.fairybuilding.initFairyBuildingModule
 import miragefairy2024.mod.fairylogistics.initFairyLogisticsModule
@@ -11,7 +12,6 @@ import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initDebrisModule
 import miragefairy2024.mod.initEnchantmentModule
-import miragefairy2024.mod.initEntityModule
 import miragefairy2024.mod.initExtraPlayerDataModule
 import miragefairy2024.mod.initFairyFountainModule
 import miragefairy2024.mod.initFoodIngredientsModule

@@ -1,7 +1,9 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.entity
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.ParticleTypeCard
+import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.MagicDamageTypeCard
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer

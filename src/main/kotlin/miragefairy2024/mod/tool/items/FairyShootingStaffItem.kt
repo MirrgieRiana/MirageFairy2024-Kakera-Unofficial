@@ -3,10 +3,10 @@ package miragefairy2024.mod.tool.items
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
-import miragefairy2024.mod.AntimatterBoltCard
-import miragefairy2024.mod.AntimatterBoltEntity
 import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.SoundEventCard
+import miragefairy2024.mod.entity.AntimatterBoltCard
+import miragefairy2024.mod.entity.AntimatterBoltEntity
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation

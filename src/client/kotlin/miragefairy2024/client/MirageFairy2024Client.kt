@@ -2,10 +2,10 @@ package miragefairy2024.client
 
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
+import miragefairy2024.client.mod.entity.initEntityClientModule
 import miragefairy2024.client.mod.fairy.initFairyClientModule
 import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
 import miragefairy2024.client.mod.initBagClientModule
-import miragefairy2024.client.mod.initEntityClientModule
 import miragefairy2024.client.mod.initExtraPlayerDataClientModule
 import miragefairy2024.client.mod.initFairyBuildingClientModule
 import miragefairy2024.client.mod.initFairyLogisticsClientModule
