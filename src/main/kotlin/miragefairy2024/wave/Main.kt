@@ -9,11 +9,54 @@ private val logger = getLogger(Main::class.java)
 
 fun main() {
 
-    convert(File("""./src/main/resources/assets/miragefairy2024/sounds/magic_hit.8b.1000ms.8000a.scr.png"""))
+    fun f(baseName: String) {
+        File("$baseName.png")
+            .readSpectrogram()
+            .resize(48000 * 2 + 256 - 1, 256 / 2 + 1)
+            .generatePhase()
+            .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
+            .toWaveform(8, 1 / 1600.0)
+            .toWavByteArray()
+            .also { it.writeTo(File("$baseName.wav")) }
+            .toOggAsWav()
+            .writeTo(File("$baseName.ogg"))
+    }
+    f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1")
+    f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2")
+
+
+    //convert(File("""./src/main/resources/assets/miragefairy2024/sounds/magic_hit.8b.1000ms.8000a.scr.png"""))
 
     //File("""./src/main/resources/assets/miragefairy2024/sounds""").listFiles()?.forEach { inputFile ->
     //    if (inputFile.name.endsWith(".scr.png")) convert(inputFile)
     //}
+
+    /*
+    if (false) {
+        File("C:\\Users\\tacti\\AppData\\Roaming\\.minecraft\\assets\\out_2\\minecraft__sounds__block__cauldron__dye1.ogg")
+            .readBytes()
+            .toWavAsOgg()
+            .toWaveformAsWav()
+            .also { println(it.doubleArray.size) }
+            .toSpectrogram(8, 1 / 800.0)
+            .also { println("${it.bufferedImage.width} x ${it.bufferedImage.height}") }
+            .removePhase()
+            .resize(2000, 2000)
+            .writeTo(File("./build/tmp.png"))
+    }
+
+    if (true) {
+        File("./build/tmp.png")
+            .readSpectrogram()
+            .resize(56511, 129)
+            .generatePhaseSimple()
+            .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
+            .toWaveform(8, 1 / 800.0)
+            .toWavByteArray()
+            .toOggAsWav()
+            .writeTo(File("./build/tmp3.ogg"))
+    }
+    */
 
 }
 

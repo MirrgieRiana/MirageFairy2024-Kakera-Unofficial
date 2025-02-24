@@ -11,6 +11,13 @@
     ],
     "subtitle": "subtitles.miragefairy2024.collect"
   },
+  "entity.chaos_cube.ambient": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_ambient_1",
+      "miragefairy2024:entity_chaos_cube_ambient_2"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.ambient"
+  },
   "magic1": {
     "sounds": [
       "miragefairy2024:magic1"
