@@ -29,6 +29,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal
 import net.minecraft.entity.ai.goal.RevengeGoal
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -37,6 +38,7 @@ import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.EntityTypeTags
+import net.minecraft.sound.SoundEvent
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
@@ -168,6 +170,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
 
     override fun getAmbientSound() = SoundEventCard.ENTITY_CHAOS_CUBE_AMBIENT.soundEvent
+    override fun getHurtSound(source: DamageSource) = SoundEventCard.ENTITY_CHAOS_CUBE_HURT.soundEvent
+    override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH. soundEvent
 
     // TODO
 

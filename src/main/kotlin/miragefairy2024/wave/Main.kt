@@ -1,5 +1,8 @@
 package miragefairy2024.wave
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mirrg.kotlin.slf4j.hydrogen.getLogger
 import java.io.File
 
@@ -13,6 +16,7 @@ fun main() {
         File("$baseName.png")
             .readSpectrogram()
             .resize(48000 * 2 + 256 - 1, 256 / 2 + 1)
+            .logScale()
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
             .toWaveform(8, 1 / 1600.0)
@@ -21,8 +25,21 @@ fun main() {
             .toOggAsWav()
             .writeTo(File("$baseName.ogg"))
     }
-    f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1")
-    f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2")
+
+    val tasks = mutableListOf<() -> Unit>()
+
+    //tasks += { f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1") }
+    //tasks += { f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2") }
+    //tasks += { f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1") }
+    tasks += { f("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1") }
+
+    runBlocking {
+        tasks.forEach { task ->
+            launch(Dispatchers.Default) {
+                task()
+            }
+        }
+    }
 
 
     //convert(File("""./src/main/resources/assets/miragefairy2024/sounds/magic_hit.8b.1000ms.8000a.scr.png"""))

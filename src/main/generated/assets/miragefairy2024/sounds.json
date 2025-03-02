@@ -18,6 +18,18 @@
     ],
     "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.ambient"
   },
+  "entity.chaos_cube.death": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_death_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.death"
+  },
+  "entity.chaos_cube.hurt": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_hurt_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.hurt"
+  },
   "magic1": {
     "sounds": [
       "miragefairy2024:magic1"
