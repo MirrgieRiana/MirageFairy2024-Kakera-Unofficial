@@ -4,6 +4,8 @@ import mirrg.kotlin.slf4j.hydrogen.getLogger
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.math.log
+import kotlin.math.pow
 
 class Spectrogram(val bufferedImage: BufferedImage)
 
@@ -288,6 +290,51 @@ fun Spectrogram.resizeVertical(imageWidth: Int): Spectrogram {
 }
 
 fun Spectrogram.resize(imageWidth: Int, imageHeight: Int) = this.resizeHorizontal(imageHeight).resizeVertical(imageWidth)
+
+fun Spectrogram.fromLogScale(): Spectrogram {
+    val image = BufferedImage(this.bufferedImage.width, this.bufferedImage.height, BufferedImage.TYPE_INT_RGB)
+    repeat(this.bufferedImage.width) { x ->
+        repeat(this.bufferedImage.height) { y ->
+            // 元が255だったときに255
+            // 125下がるごとに0.1倍でいく
+            // 1で約0.01倍になる
+            // 元が0だった場合は0
+            fun f(x: Double): Double {
+                if (x == 0.0) return 0.0
+                return 255 * 0.1.pow((255 - x) / 125)
+            }
+
+            val rgb = this.bufferedImage.getRGB(x, y)
+            val r = f((rgb shr 16 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            val g = f((rgb shr 8 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            val b = f((rgb shr 0 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            image.setRGB(x, y, (r shl 16) or (g shl 8) or (b shl 0))
+        }
+    }
+    return Spectrogram(image)
+}
+
+fun Spectrogram.toLogScale(): Spectrogram {
+    val image = BufferedImage(this.bufferedImage.width, this.bufferedImage.height, BufferedImage.TYPE_INT_RGB)
+    repeat(this.bufferedImage.width) { x ->
+        repeat(this.bufferedImage.height) { y ->
+            // 元が255だったときに255
+            // 0.1倍になるごとに125下がる
+            // 元が0だった場合は0
+            fun f(x: Double): Double {
+                if (x == 0.0) return 0.0
+                return 255 - log(x / 255.0, 0.1) * 125.0
+            }
+
+            val rgb = this.bufferedImage.getRGB(x, y)
+            val r = f((rgb shr 16 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            val g = f((rgb shr 8 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            val b = f((rgb shr 0 and 0xFF).toDouble()).toInt().coerceIn(0, 255)
+            image.setRGB(x, y, (r shl 16) or (g shl 8) or (b shl 0))
+        }
+    }
+    return Spectrogram(image)
+}
 
 fun File.readSpectrogram(): Spectrogram = Spectrogram(ImageIO.read(this))
 
