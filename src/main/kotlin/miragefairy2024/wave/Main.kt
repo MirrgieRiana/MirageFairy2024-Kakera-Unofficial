@@ -1,5 +1,7 @@
 package miragefairy2024.wave
 
+import mirrg.kotlin.gson.hydrogen.toJsonElement
+import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.slf4j.hydrogen.getFileLogger
 import java.io.File
 
@@ -69,6 +71,40 @@ object GenerateMain {
                     .also { it.writeTo(inputFile.resolveSibling("dump.wav")) }
                     .toOggAsWav()
                     .writeTo(outputFile)
+            }
+        }
+    }
+}
+
+private val assetsDir = File(System.getProperty("user.home")).resolve(".gradle/caches/fabric-loom/assets")
+private val outputDir = File("./build/minecraft_assets")
+
+private fun File.mkdirsParentOrThrow() {
+    val parentDir = this.absoluteFile.parentFile
+    if (!parentDir.isDirectory && !parentDir.mkdirs()) throw RuntimeException("failed to create directory: $parentDir")
+}
+
+private class MinecraftAsset(val name: String, val hash: String) {
+    companion object {
+        fun getMinecraftAssets(): List<MinecraftAsset> {
+            val indexes = assetsDir.resolve("indexes/1.20.1-5.json").readText().toJsonElement().toJsonWrapper()
+            return indexes["objects"].asMap().map { obj ->
+                MinecraftAsset(obj.key, obj.value["hash"].asString())
+            }
+        }
+    }
+}
+
+object ExtractMinecraftAssetsMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        MinecraftAsset.getMinecraftAssets().forEach { asset ->
+            logger.info("${asset.name} ${asset.hash}")
+            val inputFile = assetsDir.resolve("objects/${asset.hash.take(2)}/${asset.hash}")
+            val outputFile = outputDir.resolve("original/${asset.name.replace("/", "__")}")
+            if (!outputFile.exists()) {
+                outputFile.mkdirsParentOrThrow()
+                inputFile.copyTo(outputFile)
             }
         }
     }
