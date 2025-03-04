@@ -1,11 +1,9 @@
 package miragefairy2024.wave
 
-import mirrg.kotlin.slf4j.hydrogen.getLogger
+import mirrg.kotlin.slf4j.hydrogen.getFileLogger
 import java.io.File
 
-object Main
-
-private val logger = getLogger(Main::class.java)
+private val logger = getFileLogger(object {})
 
 object GenerateMain {
     @JvmStatic
