@@ -1,9 +1,18 @@
 package miragefairy2024.wave
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.slf4j.hydrogen.getFileLogger
+import java.awt.Dimension
 import java.io.File
+import javax.swing.JButton
+import javax.swing.JFrame
+import kotlin.math.roundToInt
 
 private val logger = getFileLogger(object {})
 
@@ -107,5 +116,99 @@ object ExtractMinecraftAssetsMain {
                 inputFile.copyTo(outputFile)
             }
         }
+    }
+}
+
+private val pixelsPerSecond = 128
+
+object DegenerateMain {
+    @JvmStatic
+    fun main(args: Array<String>) = runBlocking {
+        val onProgressChanged = mutableListOf<(count: Int, total: Int) -> Unit>()
+        val onStarted = mutableListOf<() -> Unit>()
+        val onFinished = mutableListOf<() -> Unit>()
+
+        JFrame().also { f ->
+            f.add(JButton().also { b ->
+                b.preferredSize = Dimension(200, 50)
+                b.addActionListener {
+                    this@runBlocking.cancel()
+                    f.dispose()
+                }
+                onProgressChanged += { count, total ->
+                    b.text = "Interrupt ($count/$total)"
+                }
+            })
+            f.isLocationByPlatform = true
+            f.defaultCloseOperation = JFrame.DO_NOTHING_ON_CLOSE
+            onFinished += {
+                f.dispose()
+            }
+            onStarted += {
+                f.isVisible = true
+            }
+            f.pack()
+        }
+
+        val assets = MinecraftAsset.getMinecraftAssets()
+            .filter { it.name.endsWith(".ogg") }
+        var count = 0
+
+        onProgressChanged.forEach { it(count, assets.size) }
+        onStarted.forEach { it() }
+        try {
+            coroutineScope {
+                assets.forEach { asset ->
+                    launch(Dispatchers.Default) {
+                        val baseName = asset.name.dropLast(4).replace("/", "__")
+
+                        val inputFile = outputDir.resolve("original/$baseName.ogg")
+                        val outputDegenerateFile = outputDir.resolve("degenerate/$baseName.png")
+                        if (!outputDegenerateFile.exists()) {
+                            logger.info("Start degenerate: ${asset.name}")
+                            try {
+                                degenerate(inputFile, outputDegenerateFile)
+                            } catch (e: Throwable) {
+                                e.printStackTrace()
+                            }
+                        }
+
+                        val outputCopyFile = outputDir.resolve("degenerate/$baseName.ogg")
+                        if (!outputCopyFile.exists()) {
+                            inputFile.copyTo(outputCopyFile)
+                        }
+
+                        this@runBlocking.launch {
+                            count++
+                            onProgressChanged.forEach { it(count, assets.size) }
+                        }
+                    }
+                }
+            }
+        } finally {
+            onFinished.forEach { it() }
+        }
+
+    }
+
+    private fun degenerate(inputFile: File, outputFile: File) {
+        val waveform = inputFile
+            .readBytes()
+            .toWavAsOgg()
+            .toWaveformAsWav()
+        if (waveform.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${waveform.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
+        logger.info("Waveform Length: ${waveform.doubleArray.size} samples") // 56256 == 56511 - 255
+
+        val spectrogram = waveform.toSpectrogram(8, 1 / 800.0)
+        logger.info("Image Size: ${spectrogram.bufferedImage.width} x ${spectrogram.bufferedImage.height}") // 56511 x 129
+        // 画像の幅のうち、255は固定の部分に使われる
+        // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
+        // 画像の幅が+128される度にサンプル数が+48000になってほしい
+
+        spectrogram
+            .removePhase()
+            .resize((spectrogram.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
+            .toLogScale()
+            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 }
