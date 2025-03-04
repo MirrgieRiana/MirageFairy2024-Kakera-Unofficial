@@ -85,15 +85,18 @@ object GenerateMain {
     }
 }
 
+private val pixelsPerSecond = 128
+
 object GenerateV2Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val tasks = mutableListOf<() -> Unit>()
 
-        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1") }
-        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2") }
-        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1") }
-        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1") }
+        //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1") }
+        //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2") }
+        //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1") }
+        //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1") }
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/004") }
 
         runBlocking {
             tasks.forEach { task ->
@@ -108,7 +111,7 @@ object GenerateV2Main {
         File("$baseName.scr.png")
             .readSpectrogram()
             .also { logger.info("${it.bufferedImage.width}x${it.bufferedImage.height}") }
-            .resize(samplesPerSecond * 2 + 256 - 1, 256 / 2 + 1)
+            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 256 / 2 + 1) }
             .fromLogScale()
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
@@ -153,8 +156,6 @@ object ExtractMinecraftAssetsMain {
         }
     }
 }
-
-private val pixelsPerSecond = 128
 
 object DegenerateMain {
     @JvmStatic
@@ -263,7 +264,7 @@ object RegenerateMain {
         logger.info("Image Size: ${spectrogram.bufferedImage.width} x ${spectrogram.bufferedImage.height}") // 151 x 128
 
         spectrogram
-            .resize((spectrogram.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 129) // 56625 x 129
+            .resize((spectrogram.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 256 / 2 + 1) // 56625 x 129
             .fromLogScale()
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
