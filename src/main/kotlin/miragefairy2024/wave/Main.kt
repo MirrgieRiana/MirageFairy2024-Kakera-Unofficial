@@ -5,6 +5,8 @@ import java.io.File
 
 private val logger = getFileLogger(object {})
 
+private val samplesPerSecond = 48000
+
 object GenerateMain {
     @JvmStatic
     fun main(args: Array<String>) {
@@ -18,7 +20,7 @@ object GenerateMain {
     }
 
     fun convert(inputFile: File) {
-        logger.info("inputFile    = $inputFile")
+        logger.info("inputFile        = $inputFile")
 
         when (inputFile.extension) {
             "wav" -> {
@@ -34,28 +36,27 @@ object GenerateMain {
 
 
                 val baseName = m.groups[1]?.value!!
-                logger.info("baseName     = $baseName")
+                logger.info("baseName         = $baseName")
                 val outputFile = inputFile.resolveSibling("$baseName.ogg")
-                logger.info("outputFile   = $outputFile")
+                logger.info("outputFile       = $outputFile")
 
                 val bits = m.groups[2]?.value!!.toInt()
-                logger.info("bits         = $bits")
+                logger.info("bits             = $bits")
                 val windowSize = 1 shl bits
-                logger.info("windowSize   = $windowSize")
+                logger.info("windowSize       = $windowSize")
                 val imageHeight = windowSize / 2 + 1
-                logger.info("imageHeight  = $imageHeight")
+                logger.info("imageHeight      = $imageHeight")
 
-                val samplingRate = 48000
-                logger.info("samplingRate = $samplingRate")
+                logger.info("samplesPerSecond = $samplesPerSecond")
 
                 val duration = m.groups[3]?.value!!.toDouble() * 0.001
-                logger.info("duration     = $duration")
-                val imageWidth = (samplingRate * duration + (windowSize - 1)).toInt()
-                logger.info("imageWidth   = $imageWidth")
+                logger.info("duration         = $duration")
+                val imageWidth = (samplesPerSecond.toDouble() * duration + (windowSize - 1)).toInt()
+                logger.info("imageWidth       = $imageWidth")
 
                 //val amplifier = 4000.0
                 val amplifier = m.groups[4]?.value!!.toDouble()
-                logger.info("amplifier    = $amplifier")
+                logger.info("amplifier        = $amplifier")
 
                 inputFile
                     .readSpectrogram()
