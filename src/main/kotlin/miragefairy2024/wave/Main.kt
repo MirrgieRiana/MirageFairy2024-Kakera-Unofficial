@@ -85,6 +85,41 @@ object GenerateMain {
     }
 }
 
+object GenerateV2Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val tasks = mutableListOf<() -> Unit>()
+
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1") }
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2") }
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1") }
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1") }
+
+        runBlocking {
+            tasks.forEach { task ->
+                launch(Dispatchers.Default) {
+                    task()
+                }
+            }
+        }
+    }
+
+    fun generateV2(baseName: String) {
+        File("$baseName.scr.png")
+            .readSpectrogram()
+            .also { logger.info("${it.bufferedImage.width}x${it.bufferedImage.height}") }
+            .resize(samplesPerSecond * 2 + 256 - 1, 256 / 2 + 1)
+            .fromLogScale()
+            .generatePhase()
+            .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
+            .toWaveform(8, 1 / 1600.0)
+            .toWavByteArray()
+            .also { it.writeTo(File("$baseName.wav")) }
+            .toOggAsWav()
+            .writeTo(File("$baseName.ogg"))
+    }
+}
+
 private val assetsDir = File(System.getProperty("user.home")).resolve(".gradle/caches/fabric-loom/assets")
 private val outputDir = File("./build/minecraft_assets")
 
@@ -209,6 +244,32 @@ object DegenerateMain {
             .removePhase()
             .resize((spectrogram.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
             .toLogScale()
+            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
+    }
+}
+
+object RegenerateMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val baseName = "minecraft__sounds__block__cauldron__dye1"
+        val inputFile = outputDir.resolve("degenerate/$baseName.png")
+        val outputFile = outputDir.resolve("regenerate/$baseName.ogg")
+        regenerate(inputFile, outputFile)
+    }
+
+    private fun regenerate(inputFile: File, outputFile: File) {
+        val spectrogram = inputFile
+            .readSpectrogram()
+        logger.info("Image Size: ${spectrogram.bufferedImage.width} x ${spectrogram.bufferedImage.height}") // 151 x 128
+
+        spectrogram
+            .resize((spectrogram.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 129) // 56625 x 129
+            .fromLogScale()
+            .generatePhase()
+            .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
+            .toWaveform(8, 1 / 800.0)
+            .toWavByteArray()
+            .toOggAsWav()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 }
