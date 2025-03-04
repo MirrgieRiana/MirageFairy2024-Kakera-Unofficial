@@ -24,3 +24,4 @@ import org.slf4j.LoggerFactory
 fun <T : Any> T.getLogger() = getLogger(javaClass)
 fun getLogger(name: String): Logger = LoggerFactory.getLogger(name)
 fun getLogger(clazz: Class<*>): Logger = LoggerFactory.getLogger(clazz)
+fun getFileLogger(topLevelAnonymousObject: Any) = getLogger(topLevelAnonymousObject::class.java.enclosingClass!!)
