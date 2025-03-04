@@ -96,7 +96,8 @@ object GenerateV2Main {
         //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2") }
         //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1") }
         //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1") }
-        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/004") }
+        //tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/004") }
+        tasks += { generateV2("./src/main/resources/assets/miragefairy2024/sounds/005") }
 
         runBlocking {
             tasks.forEach { task ->
