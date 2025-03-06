@@ -196,18 +196,25 @@ object DegenerateMain {
             .readBytes()
             .toWavAsOgg()
             .toWaveformAsWav()
-        if (waveform.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${waveform.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
-        logger.info("Waveform Length: ${waveform.doubleArray.size} samples") // 56256 == 56511 - 255
+            .also { waveform ->
+                if (waveform.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${waveform.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
+                logger.info("Waveform Length: ${waveform.doubleArray.size} samples") // 56256 == 56511 - 255
+            }
 
         val spectrogram = waveform.toSpectrogram(8, 1 / 800.0)
-        logger.info("Image Size: ${spectrogram.bufferedImage.width} x ${spectrogram.bufferedImage.height}") // 56511 x 129
-        // 画像の幅のうち、255は固定の部分に使われる
-        // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
-        // 画像の幅が+128される度にサンプル数が+48000になってほしい
+            .also { spectrogram ->
+                logger.info("Image Size: ${spectrogram.bufferedImage.width} x ${spectrogram.bufferedImage.height}") // 56511 x 129
+                // 画像の幅のうち、255は固定の部分に使われる
+                // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
+                // 画像の幅が+128される度にサンプル数が+48000になってほしい
+            }
 
         spectrogram
             .removePhase()
-            .resize((spectrogram.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
+            .let {
+                it
+                    .resize((spectrogram.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
+            }
             .toLogScale()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
