@@ -84,6 +84,28 @@ object GenerateMain {
     }
 }
 
+object GenerateV2Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val tasks = mutableListOf<() -> Unit>()
+
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_1".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_ambient_2".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/004".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        tasks += { "./src/main/resources/assets/miragefairy2024/sounds/005".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+
+        runBlocking {
+            tasks.forEach { task ->
+                launch(Dispatchers.Default) {
+                    task()
+                }
+            }
+        }
+    }
+}
+
 private val assetsDir = File(System.getProperty("user.home")).resolve(".gradle/caches/fabric-loom/assets")
 private val outputDir = File("./build/minecraft_assets")
 
@@ -186,5 +208,15 @@ object DegenerateMain {
             onFinished.forEach { it() }
         }
 
+    }
+}
+
+object RegenerateMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val baseName = "minecraft__sounds__block__cauldron__dye1"
+        val inputFile = outputDir.resolve("degenerate/$baseName.png")
+        val outputFile = outputDir.resolve("regenerate/$baseName.ogg")
+        GenerateV2.regenerate(inputFile, outputFile)
     }
 }

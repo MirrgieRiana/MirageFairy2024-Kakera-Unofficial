@@ -40,8 +40,24 @@ object GenerateV2 {
     fun generate(inputFile: File, outputFile: File) {
         inputFile
             .readSpectrogram()
+            .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") }
             .fromLogScale()
             .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), internalImageHeight) }
+            .generatePhase()
+            .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
+            .toWaveform(bits, 1 / amplifier)
+            .toWavByteArray()
+            .also { it.writeTo(File("${outputFile.path}.wav").also { it.mkdirsParentOrThrow() }) }
+            .toOggAsWav()
+            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
+    }
+
+    fun regenerate(inputFile: File, outputFile: File) {
+        inputFile
+            .readSpectrogram()
+            .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 151 x 128
+            .fromLogScale()
+            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), internalImageHeight) } // 56625 x 129
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
             .toWaveform(bits, 1 / amplifier)
