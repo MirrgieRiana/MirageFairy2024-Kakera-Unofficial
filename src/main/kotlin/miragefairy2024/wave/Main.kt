@@ -94,7 +94,12 @@ object GenerateV2Main {
         //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_hurt_1".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
         //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/entity_chaos_cube_death_1".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
         //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/004".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
-        tasks += { "./src/main/resources/assets/miragefairy2024/sounds/005".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/005".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/006".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/007".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/008".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        //tasks += { "./src/main/resources/assets/miragefairy2024/sounds/009".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
+        tasks += { "./src/main/resources/assets/miragefairy2024/sounds/010".let { GenerateV2.generate(File("$it.scr.png"), File("$it.ogg")) } }
 
         runBlocking {
             tasks.forEach { task ->
