@@ -15,6 +15,10 @@ object GenerateV2 {
     private val saveImageHeight = 256 / 2
     private val internalImageHeight = 256 / 2 + 1
 
+    // 画像の幅のうち、255は固定の部分に使われる
+    // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
+    // 画像の幅が+128される度にサンプル数が+48000になってほしい
+
     fun degenerate(inputFile: File, outputFile: File) {
         inputFile
             .readBytes()
@@ -27,9 +31,6 @@ object GenerateV2 {
             .toSpectrogram(bits, 1 / amplifier)
             .also {
                 logger.info("Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") // 56511 x 129
-                // 画像の幅のうち、255は固定の部分に使われる
-                // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
-                // 画像の幅が+128される度にサンプル数が+48000になってほしい
             }
             .removePhase()
             .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
