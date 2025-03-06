@@ -19,7 +19,7 @@ object GenerateV2 {
                 if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
                 logger.info("Waveform Length: ${it.doubleArray.size} samples") // 56256 == 56511 - 255
             }
-            .toSpectrogram(8, 1 / 800.0)
+            .toSpectrogram(8, 1 / 1600.0)
             .also {
                 logger.info("Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") // 56511 x 129
                 // 画像の幅のうち、255は固定の部分に使われる
@@ -39,7 +39,7 @@ object GenerateV2 {
             .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 129) }
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
-            .toWaveform(8, 1 / 800.0)
+            .toWaveform(8, 1 / 1600.0)
             .toWavByteArray()
             .toOggAsWav()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
