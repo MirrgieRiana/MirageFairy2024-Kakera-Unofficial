@@ -31,4 +31,17 @@ object GenerateV2 {
             .toLogScale()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
+
+    fun generate(inputFile: File, outputFile: File) {
+        inputFile
+            .readSpectrogram()
+            .fromLogScale()
+            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), 129) }
+            .generatePhase()
+            .generatePhaseGriffinLim(5, { it.toWaveform(8, 1.0) }, { it.toSpectrogram(8, 1.0) })
+            .toWaveform(8, 1 / 800.0)
+            .toWavByteArray()
+            .toOggAsWav()
+            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
+    }
 }
