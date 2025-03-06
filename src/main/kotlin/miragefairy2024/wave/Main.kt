@@ -213,7 +213,7 @@ object DegenerateMain {
             .removePhase()
             .let {
                 it
-                    .resize((spectrogram.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
+                    .resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
             }
             .toLogScale()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
