@@ -208,10 +208,7 @@ object DegenerateMain {
                 // 画像の幅が+128される度にサンプル数が+48000になってほしい
             }
             .removePhase()
-            .let {
-                it
-                    .resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) // 151 x 128
-            }
+            .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), 128) } // 151 x 128
             .toLogScale()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
