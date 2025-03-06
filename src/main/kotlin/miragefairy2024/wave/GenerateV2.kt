@@ -26,11 +26,11 @@ object GenerateV2 {
             .toWaveformAsWav()
             .also {
                 if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
-                logger.info("Waveform Length: ${it.doubleArray.size} samples") // 56256 == 56511 - 255
+                logger.info("Input Waveform Length: ${it.doubleArray.size} samples") // 56256 == 56511 - 255
             }
             .toSpectrogram(bits, 1 / amplifier)
             .also {
-                logger.info("Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") // 56511 x 129
+                logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") // 56511 x 129
             }
             .removePhase()
             .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
@@ -41,11 +41,17 @@ object GenerateV2 {
     fun generate(inputFile: File, outputFile: File) {
         inputFile
             .readSpectrogram()
+            .also {
+                logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") // 56511 x 129
+            }
             .fromLogScale()
             .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), internalImageHeight) }
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
             .toWaveform(bits, 1 / amplifier)
+            .also {
+                logger.info("Output Waveform Length: ${it.doubleArray.size} samples") // 56256 == 56511 - 255
+            }
             .toWavByteArray()
             .toOggAsWav()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
