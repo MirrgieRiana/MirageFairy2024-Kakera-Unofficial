@@ -23,12 +23,17 @@ object GenerateV2 {
         inputFile
             .readSpectrogram()
             .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
+
             .fromLogScale()
+
             .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), internalImageHeight) }
+
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
+
             .toWaveform(bits, 1 / amplifier)
             .also { logger.info("Output Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
+
             .toWavByteArray()
             .also {
                 if (dumpWav) it.writeTo(File("${outputFile.path}.wav").also { it.mkdirsParentOrThrow() })
@@ -46,11 +51,16 @@ object GenerateV2 {
                 if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
             }
             .also { logger.info("Input Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
+
             .toSpectrogram(bits, 1 / amplifier)
             .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
+
             .removePhase()
+
             .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
+
             .toLogScale()
+
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 }
