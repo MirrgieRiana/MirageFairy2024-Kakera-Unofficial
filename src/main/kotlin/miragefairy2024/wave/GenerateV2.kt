@@ -12,8 +12,8 @@ object GenerateV2 {
     private val bits = 8
     private val amplifier = 1600.0
 
-    private val imageHeight = 256 / 2 + 1
-    private val bias = 255
+    private val imageHeight = (1 shl bits) / 2 + 1
+    private val bias = (1 shl bits) - 1
 
     // 内部画像の幅のうち、255は固定の部分に使われる
     // 内部画像の幅から-255した部分の長さが実際のサンプル数に相当する
