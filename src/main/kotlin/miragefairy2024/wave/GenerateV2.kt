@@ -36,7 +36,7 @@ object GenerateV2 {
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 
-    fun generate(inputFile: File, outputFile: File) {
+    fun generate(inputFile: File, outputFile: File, dumpWav: Boolean = false) {
         inputFile
             .readSpectrogram()
             .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
@@ -47,6 +47,9 @@ object GenerateV2 {
             .toWaveform(bits, 1 / amplifier)
             .also { logger.info("Output Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
             .toWavByteArray()
+            .also {
+                if (dumpWav) it.writeTo(File("${outputFile.path}.wav").also { it.mkdirsParentOrThrow() })
+            }
             .toOggAsWav()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
