@@ -14,6 +14,7 @@ object GenerateV2 {
 
     private val saveImageHeight = 256 / 2
     private val internalImageHeight = 256 / 2 + 1
+    private val bias = 255
 
     // 画像の幅のうち、255は固定の部分に使われる
     // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
@@ -26,7 +27,7 @@ object GenerateV2 {
 
             .fromLogScale()
 
-            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble()).roundToInt(), internalImageHeight) }
+            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble() + bias).roundToInt(), internalImageHeight) }
 
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
@@ -57,7 +58,7 @@ object GenerateV2 {
 
             .removePhase()
 
-            .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
+            .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
 
             .toLogScale()
 
