@@ -133,3 +133,11 @@ object DegenerateMain {
 
     }
 }
+
+object RegenerateMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val baseName = "minecraft__sounds__block__cauldron__dye1"
+        GenerateV2.generate(outputDir.resolve("degenerate/$baseName.png"), outputDir.resolve("regenerate/$baseName.ogg"))
+    }
+}
