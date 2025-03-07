@@ -37,27 +37,29 @@ object GenerateV2Main {
         val dir = File("./src/main/resources/assets/miragefairy2024/sounds")
         fun generate(baseFileName: String) {
             tasks += {
-                GenerateV2.generate(dir.resolve("$baseFileName.scr.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
+                GenerateV2.generate(dir.resolve("$baseFileName.sc2.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
             }
         }
 
-        //generate("entity_chaos_cube_ambient_1")
-        //generate("entity_chaos_cube_ambient_2")
-        //generate("entity_chaos_cube_hurt_1")
-        //generate("entity_chaos_cube_death_1")
-        //generate("004")
-        //generate("005")
-        //generate("006")
-        //generate("007")
-        //generate("008")
-        //generate("009")
-        //generate("010")
+        generate("entity_chaos_cube_ambient_1")
+        generate("entity_chaos_cube_ambient_2")
+        generate("entity_chaos_cube_hurt_1")
+        generate("entity_chaos_cube_death_1")
+        generate("001")
+        generate("002")
+        generate("004")
+        generate("005")
+        generate("006")
+        generate("007")
+        generate("008")
+        generate("009")
+        generate("010")
 
-        tasks += {
-            val baseFileName = "009"
-            GenerateV2.generate(dir.resolve("$baseFileName.scr.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
-            GenerateV2.degenerate(dir.resolve("$baseFileName.ogg"), dir.resolve("$baseFileName.2.png"))
-        }
+        //tasks += {
+        //    val baseFileName = "009"
+        //    GenerateV2.generate(dir.resolve("$baseFileName.scr.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
+        //    GenerateV2.degenerate(dir.resolve("$baseFileName.ogg"), dir.resolve("$baseFileName.2.png"))
+        //}
 
         runBlocking {
             tasks.forEach { task ->

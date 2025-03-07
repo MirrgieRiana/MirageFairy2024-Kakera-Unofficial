@@ -142,6 +142,7 @@ tasks.named<Copy>("processResources") {
     inputs.property("version", project.version)
     exclude("**/*.pdn")
     exclude("**/*.scr.png")
+    exclude("**/*.sc2.png")
     exclude("**/*.wav")
 
     filesMatching("fabric.mod.json") {
