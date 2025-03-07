@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
+/** 注意：wav→oggの変換ではサンプル数が増える場合がある。 */
 fun ByteArray.toOggAsWav(): ByteArray {
     val processBuilder = ProcessBuilder("bash", "-c", "ffmpeg -i - -f ogg -")
     val process = processBuilder.start()
