@@ -19,23 +19,6 @@ object GenerateV2 {
     // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
     // 画像の幅が+128される度にサンプル数が+48000になってほしい
 
-    fun degenerate(inputFile: File, outputFile: File) {
-        inputFile
-            .readBytes()
-            .toWavAsOgg()
-            .toWaveformAsWav()
-            .also {
-                if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
-            }
-            .also { logger.info("Input Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
-            .toSpectrogram(bits, 1 / amplifier)
-            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
-            .removePhase()
-            .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
-            .toLogScale()
-            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
-    }
-
     fun generate(inputFile: File, outputFile: File, dumpWav: Boolean = false) {
         inputFile
             .readSpectrogram()
@@ -51,6 +34,23 @@ object GenerateV2 {
                 if (dumpWav) it.writeTo(File("${outputFile.path}.wav").also { it.mkdirsParentOrThrow() })
             }
             .toOggAsWav()
+            .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
+    }
+
+    fun degenerate(inputFile: File, outputFile: File) {
+        inputFile
+            .readBytes()
+            .toWavAsOgg()
+            .toWaveformAsWav()
+            .also {
+                if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
+            }
+            .also { logger.info("Input Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
+            .toSpectrogram(bits, 1 / amplifier)
+            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
+            .removePhase()
+            .let { it.resize((it.bufferedImage.width.toDouble() / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
+            .toLogScale()
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 }
