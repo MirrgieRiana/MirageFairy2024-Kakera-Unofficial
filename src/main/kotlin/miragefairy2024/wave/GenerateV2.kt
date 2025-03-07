@@ -73,7 +73,7 @@ object GenerateV2 {
             .removePhase()
 
             .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), imageHeight) }
-            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 129 x 129
+            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 128 x 129
 
             .toLogScale()
 
