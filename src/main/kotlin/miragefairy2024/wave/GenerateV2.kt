@@ -16,30 +16,45 @@ object GenerateV2 {
     private val internalImageHeight = 256 / 2 + 1
     private val bias = 255
 
-    // 画像の幅のうち、255は固定の部分に使われる
-    // 画像の幅から-255した部分の長さが実際のサンプル数に相当する
+    // 内部画像の幅のうち、255は固定の部分に使われる
+    // 内部画像の幅から-255した部分の長さが実際のサンプル数に相当する
     // 画像の幅が+128される度にサンプル数が+48000になってほしい
+    // generateしてdegenerateしたときに元の幅を維持してほしい
+    // 画像の幅が変わっても1画素あたりの波形の長さが変わらないようにしたい
+    // 画像幅が128のとき、サンプル数は48000であってほしい
+
+    // サンプル数 = 内部画像幅 - 255 = (画像幅 / 128 * 48000 + a) - 255
+    // 48000 = (128 / 128 * 48000 + a) - 255
+    // ⇒a = 48000 + 255 - 128 / 128  * 48000
+    //     = 255
+    // このとき、
+    // (128 / 128 * 48000 + 255) - 255 = 48000
+    // (256 / 128 * 48000 + 255) - 255 = 96000
+
+    // 内部画像幅 = 画像幅 / 128 * 48000 + a
+    // 画像幅 = (内部画像幅 - a) / 48000 * 128
 
     fun generate(inputFile: File, outputFile: File, dumpWav: Boolean = false) {
         inputFile
             .readSpectrogram()
-            .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
+            .also { logger.info("Input Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 128 x 129
 
             .fromLogScale()
 
             .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble() + bias).roundToInt(), internalImageHeight) }
+            .also { logger.info("Internal Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 48255 x 129
 
             .generatePhase()
             .generatePhaseGriffinLim(5, { it.toWaveform(bits, 1.0) }, { it.toSpectrogram(bits, 1.0) })
 
             .toWaveform(bits, 1 / amplifier)
-            .also { logger.info("Output Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
+            .also { logger.info("Output Waveform Length: ${it.doubleArray.size} samples") } // 48000
 
             .toWavByteArray()
             .also {
                 if (dumpWav) it.writeTo(File("${outputFile.path}.wav").also { it.mkdirsParentOrThrow() })
             }
-            .toOggAsWav()
+            .toOggAsWav() // ここでサンプル数が増えていることに注意
             .writeTo(outputFile.also { it.mkdirsParentOrThrow() })
     }
 
@@ -51,14 +66,15 @@ object GenerateV2 {
             .also {
                 if (it.doubleArray.size > samplesPerSecond * 10) throw RuntimeException("too long: ${inputFile.name} (${it.doubleArray.size.toDouble() / samplesPerSecond.toDouble()}s)")
             }
-            .also { logger.info("Input Waveform Length: ${it.doubleArray.size} samples") } // 56256 == 56511 - 255
+            .also { logger.info("Input Waveform Length: ${it.doubleArray.size} samples") } // 48000
 
             .toSpectrogram(bits, 1 / amplifier)
-            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 56511 x 129
+            .also { logger.info("Internal Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 48255 x 129
 
             .removePhase()
 
-            .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) } // 151 x 128
+            .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) }
+            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 129 x 128
 
             .toLogScale()
 
