@@ -12,8 +12,7 @@ object GenerateV2 {
     private val bits = 8
     private val amplifier = 1600.0
 
-    private val saveImageHeight = 256 / 2
-    private val internalImageHeight = 256 / 2 + 1
+    private val imageHeight = 256 / 2 + 1
     private val bias = 255
 
     // 内部画像の幅のうち、255は固定の部分に使われる
@@ -41,7 +40,7 @@ object GenerateV2 {
 
             .fromLogScale()
 
-            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble() + bias).roundToInt(), internalImageHeight) }
+            .let { it.resize((it.bufferedImage.width.toDouble() / pixelsPerSecond.toDouble() * samplesPerSecond.toDouble() + bias).roundToInt(), imageHeight) }
             .also { logger.info("Internal Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 48255 x 129
 
             .generatePhase()
@@ -73,8 +72,8 @@ object GenerateV2 {
 
             .removePhase()
 
-            .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), saveImageHeight) }
-            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 129 x 128
+            .let { it.resize(((it.bufferedImage.width.toDouble() - bias) / samplesPerSecond.toDouble() * pixelsPerSecond.toDouble()).roundToInt(), imageHeight) }
+            .also { logger.info("Output Image Size: ${it.bufferedImage.width} x ${it.bufferedImage.height}") } // 129 x 129
 
             .toLogScale()
 
