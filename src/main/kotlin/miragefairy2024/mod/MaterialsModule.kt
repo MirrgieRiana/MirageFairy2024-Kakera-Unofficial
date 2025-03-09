@@ -435,6 +435,21 @@ class MaterialCard(
             } on FLUORITE.item from FLUORITE.item
         }
 
+        val TINY_BISMUTH_DUST = !MaterialCard(
+            "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
+            null,
+        )
+        val BISMUTH_DUST = !MaterialCard(
+            "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
+            null,
+        )
+        val BISMUTH_INGOT = !MaterialCard(
+            "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
+            null,
+        ) {
+            registerSmeltingRecipeGeneration(BISMUTH_DUST.item, item) on BISMUTH_DUST.item from BISMUTH_DUST.item
+        }
+
         val MINA_1 = !MaterialCard(
             "mina_1", "1 Mina", "1ミナ",
             PoemList(0)
@@ -769,6 +784,9 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, MaterialCard.MIRAGE_FLOUR_OF_SKY.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, MaterialCard.MIRAGE_FLOUR_OF_TIME.item, noGroup = true)
+
+    // ビスマスの粉圧縮
+    registerCompressionRecipeGeneration(MaterialCard.TINY_BISMUTH_DUST.item, MaterialCard.BISMUTH_DUST.item)
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)

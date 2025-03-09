@@ -102,6 +102,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.MAGNETITE).collection(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
+        val BISMUTH_PICKAXE = !ToolCard(
+            "bismuth_pickaxe", EnJa("Bismuth Pickaxe", "ビスマスのつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.BISMUTH), // TODO
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
+        val BISMUTH_AXE = !ToolCard(
+            "bismuth_axe", EnJa("Bismuth Axe", "ビスマスの斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.BISMUTH, 6.5F, -3.2F), // TODO
+        ) { registerAxeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
+        val BISMUTH_SHOVEL = !ToolCard(
+            "bismuth_shovel", EnJa("Bismuth Shovel", "ビスマスのシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.BISMUTH), // TODO
+        ) { registerShovelRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
+        val BISMUTH_HOE = !ToolCard(
+            "bismuth_hoe", EnJa("Bismuth Hoe", "ビスマスのクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.BISMUTH, -2, -1.5F), // TODO
+        ) { registerHoeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
+        val BISMUTH_SWORD = !ToolCard(
+            "bismuth_sword", EnJa("Bismuth Sword", "ビスマスの剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.BISMUTH), // TODO
+        ) { registerSwordRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val COPPER_PICKAXE = !ToolCard(
             "copper_pickaxe", EnJa("Copper Pickaxe", "銅のつるはし"),
             PoemList(null),

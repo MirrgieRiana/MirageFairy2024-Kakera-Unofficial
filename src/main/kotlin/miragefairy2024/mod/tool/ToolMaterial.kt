@@ -31,6 +31,7 @@ enum class FairyToolMaterials(
     NETHER_STAR(MiningLevels.NETHERITE, 5048, 11.0F, 5.0F, 25, Items.NETHER_STAR.toIngredient()),
 
     MAGNETITE(MiningLevels.STONE, 220, 5.0F, 1.5F, 3, MaterialCard.MAGNETITE.item.toIngredient()),
+    BISMUTH(MiningLevels.IRON, 16, 4.0F, 1.0F, 19, MaterialCard.BISMUTH_INGOT.item.toIngredient()),
     FLUORITE(MiningLevels.STONE, 96, 3.0F, 1.0F, 20, MaterialCard.FLUORITE.item.toIngredient()),
 
     MIRAGE(MiningLevels.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
@@ -69,6 +70,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     NETHER_STAR(FairyToolMaterials.NETHER_STAR, "nether_star_tool", "Nether Star Tool", "ネザースターツール"),
 
     MAGNETITE(FairyToolMaterials.MAGNETITE, "magnetite_tool", "Magnetite Tool", "磁鉄鉱ツール"),
+    BISMUTH(FairyToolMaterials.BISMUTH, "bismuth_tool", "Bismuth Tool", "ビスマスツール"),
     FLUORITE(FairyToolMaterials.FLUORITE, "fluorite_tool", "Fluorite Tool", "蛍石ツール"),
 
     MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途

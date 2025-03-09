@@ -7,9 +7,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.gson.hydrogen.toJsonWrapper
+import mirrg.kotlin.hydrogen.join
+import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.slf4j.hydrogen.getFileLogger
+import java.awt.Color
 import java.awt.Dimension
 import java.io.File
+import javax.imageio.ImageIO
 import javax.swing.JButton
 import javax.swing.JFrame
 
@@ -28,6 +32,50 @@ object GenerateV1Main {
     }
 }
 
+
+object TmpMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val dir = File("./src/main/resources/assets/miragefairy2024/sounds")
+        val image1 = ImageIO.read(dir.resolve("無題.png"))
+        val image2 = ImageIO.read(dir.resolve("無題2.png"))
+        val conversions: List<Pair<String, (r: Int, g: Int, b: Int) -> Any?>> = listOf(
+            "r" to { r, g, b -> r },
+            "g" to { r, g, b -> g },
+            "b" to { r, g, b -> b },
+            "h" to { r, g, b -> Color.RGBtoHSB(r, g, b, null)[0] },
+            "s" to { r, g, b -> Color.RGBtoHSB(r, g, b, null)[1] },
+            "v" to { r, g, b -> Color.RGBtoHSB(r, g, b, null)[2] },
+            "La" to { r, g, b -> (r + g + b) / (255 * 3).toDouble() },
+            "Lm" to { r, g, b -> r max g max b },
+            "L2a" to { r, g, b -> (r * 76.0 + g * 149.0 + b * 29.0) / (255 * (76 + 149 + 29)).toDouble() },
+        )
+        println(
+            listOf(
+                *conversions.map { (name, _) -> "${name}1" }.toTypedArray(),
+                *conversions.map { (name, _) -> "${name}2" }.toTypedArray(),
+            ).join(",")
+        )
+        (0 until 16).forEach { x ->
+            (0 until 16).forEach { y ->
+                val rgb1 = image1.getRGB(x, y)
+                val rgb2 = image2.getRGB(x, y)
+                val r1 = rgb1 shr 16 and 0xFF
+                val g1 = rgb1 shr 8 and 0xFF
+                val b1 = rgb1 and 0xFF
+                val r2 = rgb2 shr 16 and 0xFF
+                val g2 = rgb2 shr 8 and 0xFF
+                val b2 = rgb2 and 0xFF
+                println(
+                    listOf(
+                        *conversions.map { (_, f) -> f(r1, g1, b1).toString() }.toTypedArray(),
+                        *conversions.map { (_, f) -> f(r2, g2, b2).toString() }.toTypedArray(),
+                    ).join(",")
+                )
+            }
+        }
+    }
+}
 
 object GenerateV2Main {
     @JvmStatic
