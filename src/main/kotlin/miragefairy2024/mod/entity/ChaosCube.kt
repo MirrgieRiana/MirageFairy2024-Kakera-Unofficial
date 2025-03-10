@@ -77,7 +77,7 @@ object ChaosCubeCard {
             )
         }
 
-        entityType.registerSpawn(SpawnGroup.MONSTER, 10, 1, 4) { +BiomeKeys.DRIPSTONE_CAVES }
+        entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
