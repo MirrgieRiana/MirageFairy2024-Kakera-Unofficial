@@ -33,6 +33,7 @@ import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCompressionRecipeGeneration
+import miragefairy2024.util.registerExtraOreDrop
 import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerGrassDrop
@@ -438,7 +439,9 @@ class MaterialCard(
         val TINY_BISMUTH_DUST = !MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
             null,
-        )
+        ) {
+            item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
+        }
         val BISMUTH_DUST = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
             null,
