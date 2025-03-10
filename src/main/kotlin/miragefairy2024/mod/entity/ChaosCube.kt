@@ -27,13 +27,14 @@ import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.ai.goal.ActiveTargetGoal
-import net.minecraft.entity.ai.goal.MeleeAttackGoal
+import net.minecraft.entity.ai.goal.Goal
 import net.minecraft.entity.ai.goal.RevengeGoal
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.projectile.SmallFireballEntity
 import net.minecraft.item.Item
 import net.minecraft.item.SpawnEggItem
 import net.minecraft.loot.condition.KilledByPlayerLootCondition
@@ -43,8 +44,11 @@ import net.minecraft.registry.tag.EntityTypeTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
+import net.minecraft.world.WorldEvents
 import net.minecraft.world.biome.BiomeKeys
 import org.joml.Quaternionf
+import java.util.EnumSet
+import kotlin.math.sqrt
 
 object ChaosCubeCard {
     val spawnGroup = SpawnGroup.MONSTER
@@ -166,7 +170,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     }
 
     override fun initGoals() {
-        goalSelector.add(4, MeleeAttackGoal(this, 1.0, false))
+        goalSelector.add(4, ShootGoal(this))
         goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
         targetSelector.add(1, RevengeGoal(this).setGroupRevenge())
         targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
@@ -234,4 +238,111 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
         super.mobTick()
     }
 
+    class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
+        private var count = 0
+        private var cooldown = 0
+        private var targetNotVisibleTicks = 0
+
+        init {
+            controls = EnumSet.of(Control.MOVE, Control.LOOK)
+        }
+
+        override fun canStart(): Boolean {
+            val livingEntity = entity.target
+            return livingEntity != null && livingEntity.isAlive && entity.canTarget(livingEntity)
+        }
+
+        override fun start() {
+            count = 0
+        }
+
+        override fun stop() {
+            targetNotVisibleTicks = 0
+        }
+
+        override fun shouldRunEveryTick() = true
+
+        override fun tick() {
+
+            if (cooldown > 0) cooldown--
+
+            val target = entity.target ?: return
+
+            // 見えるかどうか判定、見えている時間の更新
+            val canSee = entity.visibilityCache.canSee(target)
+            if (canSee) {
+                targetNotVisibleTicks = 0
+            } else {
+                targetNotVisibleTicks++
+            }
+
+            val squaredDistance = entity.squaredDistanceTo(target)
+            if (squaredDistance < 4.0) { // 至近距離
+                if (!canSee) return // 至近距離なのに遮蔽されているので抜ける
+
+                // クールタイムが満了しているなら打撃
+                if (cooldown <= 0) {
+                    cooldown = 20
+                    entity.tryAttack(target)
+                }
+
+                // ターゲットに近づく
+                entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+
+            } else if (squaredDistance < getFollowRange() * getFollowRange() && canSee) { // 感知範囲内かつ見える
+
+                // クールタイムが満了しているなら射撃を撃つ
+                if (cooldown <= 0) {
+                    count++
+                    if (count == 1) {
+                        cooldown = 60
+                        //entity.setFireActive(true)
+                    } else if (count <= 4) {
+                        cooldown = 6
+                    } else {
+                        // リセット
+                        cooldown = 100
+                        count = 0
+                        //entity.setFireActive(false)
+                    }
+
+                    if (count > 1) { // count 2 .. 5
+
+                        // エフェクト
+                        if (!entity.isSilent) entity.world.syncWorldEvent(null, WorldEvents.BLAZE_SHOOTS, entity.blockPos, 0)
+
+                        // 発射体の生成
+                        val sqrtDistance = sqrt(sqrt(squaredDistance)) * 0.5
+                        val smallFireballEntity = SmallFireballEntity(
+                            entity.world,
+                            entity,
+                            entity.getRandom().nextTriangular(target.x - entity.x, 2.297 * sqrtDistance),
+                            target.getBodyY(0.5) - entity.getBodyY(0.5),
+                            entity.getRandom().nextTriangular(target.z - entity.z, 2.297 * sqrtDistance),
+                        )
+                        smallFireballEntity.setPosition(
+                            smallFireballEntity.x,
+                            entity.getBodyY(0.5) + 0.5,
+                            smallFireballEntity.z
+                        )
+                        entity.world.spawnEntity(smallFireballEntity)
+
+                    }
+                }
+
+                // ターゲットを見る
+                entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+
+            } else if (targetNotVisibleTicks < 5) { // 遮蔽された直後なら
+
+                // ターゲットに近づく
+                entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+
+            }
+
+            super.tick()
+        }
+
+        private fun getFollowRange() = entity.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE)
+    }
 }
