@@ -441,6 +441,7 @@ class MaterialCard(
             null,
         ) {
             item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
+            item.registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
         }
         val BISMUTH_DUST = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
