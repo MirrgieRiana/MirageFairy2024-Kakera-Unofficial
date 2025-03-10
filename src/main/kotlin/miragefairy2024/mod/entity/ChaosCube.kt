@@ -18,7 +18,9 @@ import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.registerSpawn
 import miragefairy2024.util.times
+import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.entity.EntityDimensions
@@ -38,10 +40,10 @@ import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.EntityTypeTags
-import net.minecraft.sound.SoundEvent
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
+import net.minecraft.world.biome.BiomeKeys
 import org.joml.Quaternionf
 
 object ChaosCubeCard {
@@ -74,6 +76,8 @@ object ChaosCubeCard {
                 },
             )
         }
+
+        entityType.registerSpawn(SpawnGroup.MONSTER, 10, 1, 4) { +BiomeKeys.DRIPSTONE_CAVES }
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -171,7 +175,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     override fun getAmbientSound() = SoundEventCard.ENTITY_CHAOS_CUBE_AMBIENT.soundEvent
     override fun getHurtSound(source: DamageSource) = SoundEventCard.ENTITY_CHAOS_CUBE_HURT.soundEvent
-    override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH. soundEvent
+    override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH.soundEvent
 
     // TODO
 
