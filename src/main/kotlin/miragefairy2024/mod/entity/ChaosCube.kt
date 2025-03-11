@@ -27,6 +27,7 @@ import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.ai.goal.ActiveTargetGoal
+import net.minecraft.entity.ai.goal.GoToWalkTargetGoal
 import net.minecraft.entity.ai.goal.Goal
 import net.minecraft.entity.ai.goal.RevengeGoal
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal
@@ -66,9 +67,12 @@ object ChaosCubeCard {
     fun init() {
         entityType.register(Registries.ENTITY_TYPE, identifier)
         val attributes = HostileEntity.createHostileAttributes()
-            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+            .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
+            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4)
+            .add(EntityAttributes.GENERIC_ARMOR, 8.0)
+            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0)
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1)
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
+            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 4.0)
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
@@ -166,11 +170,12 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
 
     init {
-        experiencePoints = 10
+        experiencePoints = 20
     }
 
     override fun initGoals() {
         goalSelector.add(4, ShootGoal(this))
+        goalSelector.add(5, GoToWalkTargetGoal(this, 1.0))
         goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
         targetSelector.add(1, RevengeGoal(this).setGroupRevenge())
         targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
@@ -180,9 +185,6 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     override fun getAmbientSound() = SoundEventCard.ENTITY_CHAOS_CUBE_AMBIENT.soundEvent
     override fun getHurtSound(source: DamageSource) = SoundEventCard.ENTITY_CHAOS_CUBE_HURT.soundEvent
     override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH.soundEvent
-
-    // TODO
-
 
     override fun tickMovement() {
         super.tickMovement()
