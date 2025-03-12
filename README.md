@@ -26,7 +26,7 @@ There is currently no comprehensive official documentation explaining the specif
 
 Contributions for version ≤ v0.14.1: Copyright 2024 The Developer of MirageFairy, Generation 7
 
-Contributions for version > v0.14.1: Copyright 2025 Yoruno Kakera
+Contributions for version > v0.14.1: Copyright 2025 The Developer of MirageFairy, Generation 7, Yoruno Kakera
 
 ### License
 
@@ -68,7 +68,7 @@ For further details, please refer to the original repository: https://github.com
 
 Contributions for version ≤ v0.14.1: Copyright 2024 The Developer of MirageFairy, Generation 7
 
-Contributions for version > v0.14.1: Copyright 2025 Yoruno Kakera
+Contributions for version > v0.14.1: Copyright 2025 The Developer of MirageFairy, Generation 7, Yoruno Kakera
 
 ### License
 
