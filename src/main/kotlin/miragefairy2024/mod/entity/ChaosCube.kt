@@ -26,7 +26,7 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilde
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
-import net.minecraft.entity.ai.goal.ActiveTargetGoal
+import net.minecraft.entity.SpawnRestriction
 import net.minecraft.entity.ai.goal.GoToWalkTargetGoal
 import net.minecraft.entity.ai.goal.Goal
 import net.minecraft.entity.ai.goal.RevengeGoal
@@ -34,7 +34,6 @@ import net.minecraft.entity.ai.goal.WanderAroundFarGoal
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.SmallFireballEntity
 import net.minecraft.item.Item
 import net.minecraft.item.SpawnEggItem
@@ -44,6 +43,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.EntityTypeTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import net.minecraft.world.Heightmap
 import net.minecraft.world.World
 import net.minecraft.world.WorldEvents
 import net.minecraft.world.biome.BiomeKeys
@@ -69,10 +69,10 @@ object ChaosCubeCard {
         val attributes = HostileEntity.createHostileAttributes()
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
             .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4)
-            .add(EntityAttributes.GENERIC_ARMOR, 8.0)
+            .add(EntityAttributes.GENERIC_ARMOR, 12.0)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0)
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1)
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 4.0)
+            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
@@ -86,6 +86,7 @@ object ChaosCubeCard {
         }
 
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
+        SpawnRestriction.register(entityType, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark)
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -178,7 +179,6 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
         goalSelector.add(5, GoToWalkTargetGoal(this, 1.0))
         goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
         targetSelector.add(1, RevengeGoal(this).setGroupRevenge())
-        targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
     }
 
 
