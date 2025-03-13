@@ -116,23 +116,6 @@ fun initBiomeModule() {
 
         }
     }
-/*
-    registerDynamicGeneration(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin")) {
-        JigsawStructure(
-            Structure.Config(
-                it.getRegistryLookup(RegistryKeys.BIOME).getOrThrow(ConventionalBiomeTags.CAVES),
-                Map.of(),
-                GenerationStep.Feature.UNDERGROUND_STRUCTURES,
-                StructureTerrainAdaptation.BURY
-            ),
-            it.getRegistryLookup(RegistryKeys.TEMPLATE_POOL).getOrThrow(RegistryKey.of(RegistryKeys.TEMPLATE_POOL, MirageFairy2024.identifier("dripstone_caves_ruin/main"))),
-            20,
-            ConstantHeightProvider.create(YOffset.belowTop(-20)),
-            false,
-            Heightmap.Type.WORLD_SURFACE_WG,
-        )
-    }
-*/
 }
 
 
