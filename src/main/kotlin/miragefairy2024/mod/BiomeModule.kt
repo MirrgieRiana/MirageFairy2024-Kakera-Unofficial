@@ -22,6 +22,7 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BiomeTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.GenerationSettings
@@ -30,18 +31,24 @@ import net.minecraft.world.biome.SpawnSettings.SpawnEntry
 import net.minecraft.world.biome.source.util.MultiNoiseUtil
 import net.minecraft.world.biome.source.util.MultiNoiseUtil.ParameterRange
 import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.StructureTerrainAdaptation
+import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.carver.ConfiguredCarver
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures
 import net.minecraft.world.gen.feature.OceanPlacedFeatures
 import net.minecraft.world.gen.feature.PlacedFeature
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures
+import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
 import net.minecraft.world.gen.noise.NoiseParametersKeys
+import net.minecraft.world.gen.structure.JigsawStructure
+import net.minecraft.world.gen.structure.Structure
 import net.minecraft.world.gen.surfacebuilder.MaterialRules
 import terrablender.api.ParameterUtils
 import terrablender.api.Region
 import terrablender.api.RegionType
 import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
+import java.util.Map
 import java.util.function.Consumer
 
 val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, MirageFairy2024.identifier("fairy"))
@@ -109,6 +116,23 @@ fun initBiomeModule() {
 
         }
     }
+/*
+    registerDynamicGeneration(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin")) {
+        JigsawStructure(
+            Structure.Config(
+                it.getRegistryLookup(RegistryKeys.BIOME).getOrThrow(ConventionalBiomeTags.CAVES),
+                Map.of(),
+                GenerationStep.Feature.UNDERGROUND_STRUCTURES,
+                StructureTerrainAdaptation.BURY
+            ),
+            it.getRegistryLookup(RegistryKeys.TEMPLATE_POOL).getOrThrow(RegistryKey.of(RegistryKeys.TEMPLATE_POOL, MirageFairy2024.identifier("dripstone_caves_ruin/main"))),
+            20,
+            ConstantHeightProvider.create(YOffset.belowTop(-20)),
+            false,
+            Heightmap.Type.WORLD_SURFACE_WG,
+        )
+    }
+*/
 }
 
 
