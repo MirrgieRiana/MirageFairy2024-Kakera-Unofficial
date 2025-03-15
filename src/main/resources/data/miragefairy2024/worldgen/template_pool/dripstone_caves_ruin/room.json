@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room1",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_conference",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -12,7 +12,16 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room2",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_conference2",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 10
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_residence",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -21,7 +30,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room3",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_spawner",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -30,7 +39,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room4",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_prison",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -39,16 +48,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room5",
-        "processors": "miragefairy2024:dripstone_caves_ruin",
-        "projection": "rigid"
-      },
-      "weight": 10
-    },
-    {
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room6",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_empty",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },

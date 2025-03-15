@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/road1",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_straight",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -12,7 +12,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/road2",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_rooms",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -21,16 +21,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/road3",
-        "processors": "miragefairy2024:dripstone_caves_ruin",
-        "projection": "rigid"
-      },
-      "weight": 2
-    },
-    {
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/cross1",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_cross",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
@@ -39,12 +30,21 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/end1",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_stairs",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_end",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
       "weight": 5
     }
   ],
-  "fallback": "miragefairy2024:dripstone_caves_ruin/end"
+  "fallback": "miragefairy2024:dripstone_caves_ruin/road_end"
 }

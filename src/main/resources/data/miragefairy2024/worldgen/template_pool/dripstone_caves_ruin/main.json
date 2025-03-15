@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/main1",
+        "location": "miragefairy2024:dripstone_caves_ruin/main",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
