@@ -4,9 +4,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "miragefairy2024:dripstone_caves_ruin/main1",
-        "processors": {
-          "processors": []
-        },
+        "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
       "weight": 1
