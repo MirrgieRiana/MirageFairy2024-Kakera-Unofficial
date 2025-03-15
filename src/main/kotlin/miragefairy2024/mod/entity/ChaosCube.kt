@@ -25,8 +25,10 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttribute
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.SpawnRestriction
+import net.minecraft.entity.ai.goal.ActiveTargetGoal
 import net.minecraft.entity.ai.goal.GoToWalkTargetGoal
 import net.minecraft.entity.ai.goal.Goal
 import net.minecraft.entity.ai.goal.RevengeGoal
@@ -34,13 +36,18 @@ import net.minecraft.entity.ai.goal.WanderAroundFarGoal
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
+import net.minecraft.entity.mob.MobEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.SmallFireballEntity
 import net.minecraft.item.Item
 import net.minecraft.item.SpawnEggItem
 import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.EntityTypeTags
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.Heightmap
@@ -178,7 +185,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
         goalSelector.add(4, ShootGoal(this))
         goalSelector.add(5, GoToWalkTargetGoal(this, 1.0))
         goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
-        targetSelector.add(1, RevengeGoal(this).setGroupRevenge())
+        targetSelector.add(1, RevengeGoal(this, ChaosCubeEntity::class.java).setGroupRevenge())
+        targetSelector.add(2, TargetGoal(this, PlayerEntity::class.java))
     }
 
 
@@ -228,19 +236,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     }
 
-    override fun mobTick() {
-
-        val livingEntity = target
-        if (livingEntity != null && livingEntity.eyeY > eyeY && canTarget(livingEntity)) {
-            val vec3d = velocity
-            velocity = velocity.add(0.0, (0.3 - vec3d.y) * 0.3, 0.0)
-            velocityDirty = true
-        }
-
-        super.mobTick()
-    }
-
-    class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
+    private class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
         private var count = 0
         private var cooldown = 0
         private var targetNotVisibleTicks = 0
@@ -346,5 +342,15 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
         }
 
         private fun getFollowRange() = entity.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE)
+    }
+
+    private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
+        override fun canStart(): Boolean {
+            val world = mob.world
+            if (world !is ServerWorld) return false
+            val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            if (!world.structureAccessor.getStructureAt(mob.blockPos, structure).hasChildren()) return false
+            return super.canStart()
+        }
     }
 }

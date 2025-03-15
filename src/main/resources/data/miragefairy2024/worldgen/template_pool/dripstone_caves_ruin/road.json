@@ -7,7 +7,25 @@
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
-      "weight": 20
+      "weight": 100
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/road2",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 30
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/road3",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 2
     },
     {
       "element": {
@@ -25,7 +43,7 @@
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
-      "weight": 1
+      "weight": 5
     }
   ],
   "fallback": "miragefairy2024:dripstone_caves_ruin/end"

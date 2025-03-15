@@ -17,7 +17,7 @@
   },
   "terrain_adaptation": "bury",
   "start_pool": "miragefairy2024:dripstone_caves_ruin/main",
-  "size": 16,
+  "size": 12,
   "start_height": {
     "type": "uniform",
     "min_inclusive": {
