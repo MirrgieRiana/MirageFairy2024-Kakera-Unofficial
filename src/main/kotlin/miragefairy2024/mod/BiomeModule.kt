@@ -11,15 +11,23 @@ import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
+import miragefairy2024.util.ItemLootPoolEntry
+import miragefairy2024.util.LootPool
+import miragefairy2024.util.LootTable
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
+import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
+import net.minecraft.item.Items
+import net.minecraft.loot.function.EnchantRandomlyLootFunction
+import net.minecraft.loot.function.SetCountLootFunction
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryEntryLookup
@@ -130,6 +138,17 @@ fun initBiomeModule() {
 
     ModEvents.onRegistration {
         Registry.register(Registries.STRUCTURE_TYPE, MirageFairy2024.identifier("unlimited_jigsaw"), UnlimitedJigsawCard.structureType)
+    }
+
+    registerChestLootTableGeneration(MirageFairy2024.identifier("dripstone_caves_ruin/chest_books")) {
+        LootTable(
+            LootPool(
+                ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
+                ItemLootPoolEntry(Items.BOOK).weight(2).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 10.0F))),
+            ) {
+                rolls(UniformLootNumberProvider.create(5.0F, 15.0F))
+            },
+        )
     }
 
 }

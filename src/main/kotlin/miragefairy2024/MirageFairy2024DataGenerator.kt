@@ -3,6 +3,7 @@ package miragefairy2024
 import com.google.gson.JsonElement
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -52,6 +53,7 @@ object DataGenerationEvents {
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
     val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
+    val onGenerateChestLootTable = InitializationEventRegistry<((Identifier, LootTable.Builder) -> Unit) -> Unit>()
     val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit) -> Unit>()
     val onGenerateRecipe = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
@@ -106,6 +108,13 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricBlockLootTableProvider(output) {
                 override fun generate() = DataGenerationEvents.onGenerateBlockLootTable.fire { it(this) }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput ->
+            object : SimpleFabricLootTableProvider(output, LootContextTypes.CHEST) {
+                override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept("chests/" * lootTableId, builder) } }
+                }
             }
         }
         pack.addProvider { output: FabricDataOutput ->

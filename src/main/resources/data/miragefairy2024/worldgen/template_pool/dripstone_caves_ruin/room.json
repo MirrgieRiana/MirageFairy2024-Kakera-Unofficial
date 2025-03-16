@@ -48,11 +48,65 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "miragefairy2024:dripstone_caves_ruin/room_empty",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_prison2",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 10
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_prison3",
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
       "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_library",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_laboratory",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 5
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_farm",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 10
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_farm2",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 5
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/room_empty",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 1
     },
     {
       "element": {
