@@ -52,7 +52,7 @@
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
-      "weight": 2
+      "weight": 3
     },
     {
       "element": {
