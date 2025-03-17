@@ -7,6 +7,7 @@ import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
+import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.ComposterBlock
 import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder
@@ -34,7 +35,9 @@ import net.minecraft.loot.function.LootingEnchantLootFunction
 import net.minecraft.loot.function.SetCountLootFunction
 import net.minecraft.loot.provider.number.LootNumberProvider
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
+import net.minecraft.predicate.NumberRange
 import net.minecraft.predicate.entity.LocationPredicate
+import net.minecraft.predicate.item.EnchantmentPredicate
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
@@ -236,6 +239,26 @@ fun Item.registerGrassDrop(
                 conditionally(RandomChanceLootCondition.builder(0.125F * amount))
                 if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
                 apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
+                apply(ExplosionDecayLootFunction.builder())
+            })
+        }))
+    }
+}
+
+context(ModContext)
+fun Item.registerExtraOreDrop(
+    oreBlock: Block,
+    chance: Float = 1.0F,
+    fortuneMultiplier: Int = 0,
+) = this.registerLootTableModification({ oreBlock.lootTableId }) { tableBuilder ->
+    tableBuilder.configure {
+        pool(LootPool(AlternativeLootPoolEntry {
+            alternatively(EmptyLootPoolEntry {
+                conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().enchantment(EnchantmentPredicate(Enchantments.SILK_TOUCH, NumberRange.IntRange.atLeast(1)))))
+            })
+            alternatively(ItemLootPoolEntry(this@registerExtraOreDrop) {
+                if (chance < 1.0F) conditionally(RandomChanceLootCondition.builder(chance))
+                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.builder())
             })
         }))
