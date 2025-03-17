@@ -23,6 +23,7 @@ import net.minecraft.loot.entry.SequenceEntry
 import net.minecraft.loot.function.ApplyBonusLootFunction
 import net.minecraft.loot.function.SetCountLootFunction
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
+import net.minecraft.util.Identifier
 
 inline fun <T> T.configure(block: T.() -> Unit) = this.apply(block)
 
@@ -77,6 +78,11 @@ fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider
 context(ModContext)
 fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration {
     it.drops(this)
+}
+
+context(ModContext)
+fun registerChestLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateChestLootTable {
+    it(lootTableId, initializer())
 }
 
 context(ModContext)
