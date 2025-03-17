@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bismuth_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "miragefairy2024:bismuth_dust"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:tiny_bismuth_dust_from_bismuth_dust"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_bismuth_dust",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:tiny_bismuth_dust_from_bismuth_dust"
+    ]
+  },
+  "sends_telemetry_event": false
+}

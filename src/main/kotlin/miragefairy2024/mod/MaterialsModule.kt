@@ -33,6 +33,7 @@ import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCompressionRecipeGeneration
+import miragefairy2024.util.registerExtraOreDrop
 import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerGrassDrop
@@ -438,7 +439,10 @@ class MaterialCard(
         val TINY_BISMUTH_DUST = !MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
             null,
-        )
+        ) {
+            item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
+            item.registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
+        }
         val BISMUTH_DUST = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
             null,
@@ -446,7 +450,9 @@ class MaterialCard(
         val BISMUTH_INGOT = !MaterialCard(
             "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
             null,
-        )
+        ) {
+            registerSmeltingRecipeGeneration(BISMUTH_DUST.item, item) on BISMUTH_DUST.item from BISMUTH_DUST.item
+        }
 
         val MINA_1 = !MaterialCard(
             "mina_1", "1 Mina", "1ミナ",
@@ -782,6 +788,9 @@ fun initMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, MaterialCard.MIRAGE_FLOUR_OF_SKY.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, noGroup = true)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, MaterialCard.MIRAGE_FLOUR_OF_TIME.item, noGroup = true)
+
+    // ビスマスの粉圧縮
+    registerCompressionRecipeGeneration(MaterialCard.TINY_BISMUTH_DUST.item, MaterialCard.BISMUTH_DUST.item)
 
     // ミナ両替
     registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
