@@ -435,6 +435,19 @@ class MaterialCard(
             } on FLUORITE.item from FLUORITE.item
         }
 
+        val TINY_BISMUTH_DUST = !MaterialCard(
+            "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
+            null,
+        )
+        val BISMUTH_DUST = !MaterialCard(
+            "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
+            null,
+        )
+        val BISMUTH_INGOT = !MaterialCard(
+            "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
+            null,
+        )
+
         val MINA_1 = !MaterialCard(
             "mina_1", "1 Mina", "1ミナ",
             PoemList(0)
