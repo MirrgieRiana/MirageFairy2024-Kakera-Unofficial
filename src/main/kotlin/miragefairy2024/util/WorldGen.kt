@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.minecraft.block.Block
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
@@ -71,6 +73,11 @@ fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: (Registerable<T>
 context(ModContext)
 fun RegistryKey<PlacedFeature>.registerFeature(step: GenerationStep.Feature, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
     BiomeModifications.addFeature(biomeSelectorCreator(BiomeSelectorScope), step, this)
+}
+
+context(ModContext)
+fun EntityType<*>.registerSpawn(spawnGroup: SpawnGroup, weight: Int, minGroupSize: Int, maxGroupSize: Int, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
+    BiomeModifications.addSpawn(biomeSelectorCreator(BiomeSelectorScope), spawnGroup, this, weight, minGroupSize, maxGroupSize)
 }
 
 
