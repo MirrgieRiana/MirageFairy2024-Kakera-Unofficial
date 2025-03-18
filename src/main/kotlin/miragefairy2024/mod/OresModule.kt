@@ -13,6 +13,7 @@ import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.enJa
+import miragefairy2024.util.get
 import miragefairy2024.util.overworld
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.randomIntCount
@@ -175,7 +176,7 @@ fun initOresModule() {
 
         registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
             val placementModifiers = placementModifiers { randomIntCount(countPerCube * (range.last - range.first + 1).toDouble() / 16.0) + uniformOre(range.first, range.last) }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(configuredKey) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[configuredKey] with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
         }

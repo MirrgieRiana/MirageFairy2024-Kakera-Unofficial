@@ -9,6 +9,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.registerDynamicGeneration
@@ -113,7 +114,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         }
         registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(16) + flower }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
         PHANTOM_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
 

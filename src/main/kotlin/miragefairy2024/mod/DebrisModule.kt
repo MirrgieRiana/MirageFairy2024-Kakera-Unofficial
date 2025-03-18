@@ -8,6 +8,7 @@ import miragefairy2024.lib.PlacedItemFeature
 import miragefairy2024.util.BiomeSelectorScope
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
@@ -69,7 +70,7 @@ fun initDebrisModule() {
         }
         registerDynamicGeneration(card.placedFeatureKey) {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(card.configuredFeatureKey) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[card.configuredFeatureKey] with placementModifiers
         }
         card.placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, card.biomeSelectorCreator)
     }

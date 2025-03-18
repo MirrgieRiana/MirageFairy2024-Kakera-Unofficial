@@ -10,6 +10,7 @@ import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.end
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.not
@@ -140,25 +141,25 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
             // 地上とエンド用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(16) + flower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // ネザー用PlacedFeature
             registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(64) + netherFlower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // 妖精の森用PlacedFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { count(4) + flower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // Fairy Ring PlacedFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(600) + flower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ

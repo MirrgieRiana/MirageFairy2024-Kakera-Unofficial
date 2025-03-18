@@ -10,6 +10,7 @@ import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
@@ -121,7 +122,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
         // 地上に配置
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(32) + flower }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
         EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.JUNGLE }
         EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
@@ -129,7 +130,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
         // 地下に配置
         registerDynamicGeneration(UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { count(32) + undergroundFlower }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
         UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +BiomeKeys.LUSH_CAVES }
 

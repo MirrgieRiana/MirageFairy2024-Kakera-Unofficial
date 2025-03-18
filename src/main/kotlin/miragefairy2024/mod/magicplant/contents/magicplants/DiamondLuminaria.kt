@@ -9,6 +9,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
@@ -115,7 +116,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
         }
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(32) + flower }
-            it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+            RegistryKeys.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
         DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.SNOWY }
         DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.ICY }

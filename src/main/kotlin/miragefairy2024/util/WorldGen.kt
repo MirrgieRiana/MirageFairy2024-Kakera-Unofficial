@@ -50,19 +50,26 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 
 // Init
 
+class DynamicGenerationScope<T>(val context: Registerable<T>)
+
+context(DynamicGenerationScope<*>)
+operator fun <T> RegistryKey<Registry<T>>.get(key: RegistryKey<T>): RegistryEntry<T> {
+    return this@DynamicGenerationScope.context.getRegistryLookup(this).getOrThrow(key)
+}
+
 context(ModContext)
-fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: (Registerable<T>) -> T): RegistryKey<T> {
+fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, identifier: Identifier, creator: context(DynamicGenerationScope<T>) () -> T): RegistryKey<T> {
     val key = registryKey with identifier
     registerDynamicGeneration(key, creator)
     return key
 }
 
 context(ModContext)
-fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: (Registerable<T>) -> T) {
+fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: context(DynamicGenerationScope<T>) () -> T) {
     val registryKey = RegistryKey.ofRegistry<T>(key.registry)
     DataGenerationEvents.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
-            context.register(key, creator(context))
+            context.register(key, creator(DynamicGenerationScope(context)))
         }
     }
     DataGenerationEvents.onInitializeDataGenerator {

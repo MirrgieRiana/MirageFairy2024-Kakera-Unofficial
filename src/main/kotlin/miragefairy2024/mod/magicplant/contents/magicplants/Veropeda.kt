@@ -8,6 +8,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.get
 import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
@@ -124,13 +125,13 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
             // 地上
             registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(16) + flower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(8) + netherFlower }
-                it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) with placementModifiers
+                RegistryKeys.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ

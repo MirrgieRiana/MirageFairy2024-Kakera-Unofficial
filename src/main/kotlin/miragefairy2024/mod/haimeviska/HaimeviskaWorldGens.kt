@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.count
+import miragefairy2024.util.get
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.plus
@@ -63,19 +64,19 @@ fun initHaimeviskaWorldGens() {
     // まばらなPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_PLACED_FEATURE_KEY) {
         val placementModifiers = placementModifiers { per(512) + tree(HaimeviskaBlockCard.SAPLING.block) }
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
+        RegistryKeys.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
     // 高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY) {
         val placementModifiers = placementModifiers { per(16) + tree(HaimeviskaBlockCard.SAPLING.block) }
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
+        RegistryKeys.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
     // 超高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY) {
         val placementModifiers = placementModifiers { count(8) + tree(HaimeviskaBlockCard.SAPLING.block) }
-        it.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(HAIMEVISKA_CONFIGURED_FEATURE_KEY) with placementModifiers
+        RegistryKeys.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
     // 平原・森林バイオームに配置
