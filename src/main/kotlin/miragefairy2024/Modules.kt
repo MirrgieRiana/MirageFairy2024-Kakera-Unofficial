@@ -24,7 +24,6 @@ import miragefairy2024.mod.initPoemModule
 import miragefairy2024.mod.initRecipeGroupModule
 import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
-import miragefairy2024.mod.initStructureModule
 import miragefairy2024.mod.initTelescopeModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.machine.initMachineModule
@@ -32,6 +31,7 @@ import miragefairy2024.mod.magicplant.initMagicPlantModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule
 import miragefairy2024.mod.rei.initReiModule
+import miragefairy2024.mod.structure.initStructureModule
 import miragefairy2024.mod.tool.initToolModule
 
 context(ModContext)
