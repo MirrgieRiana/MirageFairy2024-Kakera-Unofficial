@@ -5,7 +5,15 @@ import com.mojang.serialization.DataResult
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.ItemLootPoolEntry
+import miragefairy2024.util.LootPool
+import miragefairy2024.util.LootTable
 import miragefairy2024.util.register
+import miragefairy2024.util.registerChestLootTableGeneration
+import net.minecraft.item.Items
+import net.minecraft.loot.function.EnchantRandomlyLootFunction
+import net.minecraft.loot.function.SetCountLootFunction
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.structure.pool.StructurePool
@@ -24,6 +32,7 @@ import java.util.Optional
 context(ModContext)
 fun initStructureModule() {
     initUnlimitedJigsaw()
+    initDripstoneCavesRuin()
 }
 
 
@@ -85,4 +94,21 @@ class UnlimitedJigsawStructure(
     }
 
     override fun getType(): StructureType<*> = UnlimitedJigsawCard.structureType
+}
+
+
+context(ModContext)
+fun initDripstoneCavesRuin() {
+
+    registerChestLootTableGeneration(MirageFairy2024.identifier("dripstone_caves_ruin/chest_books")) {
+        LootTable(
+            LootPool(
+                ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
+                ItemLootPoolEntry(Items.BOOK).weight(2).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 10.0F))),
+            ) {
+                rolls(UniformLootNumberProvider.create(5.0F, 15.0F))
+            },
+        )
+    }
+
 }
