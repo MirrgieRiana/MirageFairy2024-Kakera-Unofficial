@@ -1,13 +1,13 @@
 {
   "placement": {
     "type": "minecraft:random_spread",
-    "salt": 645172983,
+    "salt": 94857624,
     "separation": 8,
-    "spacing": 64
+    "spacing": 16
   },
   "structures": [
     {
-      "structure": "miragefairy2024:dripstone_caves_ruin",
+      "structure": "miragefairy2024:weathered_ancient_remnants",
       "weight": 1
     }
   ]

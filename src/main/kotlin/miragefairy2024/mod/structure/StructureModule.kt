@@ -6,4 +6,5 @@ context(ModContext)
 fun initStructureModule() {
     initUnlimitedJigsaw()
     initDripstoneCavesRuin()
+    initWeatheredAncientRemnants()
 }

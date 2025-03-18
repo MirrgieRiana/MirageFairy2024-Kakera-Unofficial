@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "decoration": "banner_brown",
+              "destination": "miragefairy2024:map_of_weathered_ancient_remnants",
+              "function": "minecraft:exploration_map",
+              "skip_existing_chunks": false,
+              "zoom": 3
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "filled_map.weathered_ancient_remnants"
+              }
+            }
+          ],
+          "name": "minecraft:map"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 15.0,
+        "min": 5.0
+      }
+    }
+  ]
+}

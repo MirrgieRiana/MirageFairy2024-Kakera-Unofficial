@@ -46,7 +46,7 @@ context(ModContext)
 fun initDripstoneCavesRuin() {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
 
-    registerChestLootTableGeneration(identifier * "/chest_books") {
+    registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
         LootTable(
             LootPool(
                 ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
@@ -183,7 +183,7 @@ fun initDripstoneCavesRuin() {
             listOf(
                 StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
             ),
-            RandomSpreadStructurePlacement(12, 10, SpreadType.LINEAR, 645172983),
+            RandomSpreadStructurePlacement(64, 8, SpreadType.LINEAR, 645172983),
         )
     }
 

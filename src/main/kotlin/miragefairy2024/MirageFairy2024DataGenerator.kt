@@ -3,7 +3,6 @@ package miragefairy2024
 import com.google.gson.JsonElement
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.util.string
-import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -38,6 +37,7 @@ import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
+import net.minecraft.world.gen.structure.Structure
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -50,6 +50,7 @@ object DataGenerationEvents {
     val onGenerateBlockTag = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
     val onGenerateItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
     val onGenerateBiomeTag = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
+    val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
     val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
@@ -96,6 +97,11 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+            object : FabricTagProvider<Structure>(output, RegistryKeys.STRUCTURE, registriesFuture) {
+                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
             object : FabricTagProvider<EntityType<*>>(output, RegistryKeys.ENTITY_TYPE, registriesFuture) {
                 override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
@@ -113,7 +119,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput ->
             object : SimpleFabricLootTableProvider(output, LootContextTypes.CHEST) {
                 override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept("chests/" * lootTableId, builder) } }
+                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
                 }
             }
         }
