@@ -5,8 +5,8 @@
       "rules": [
         {
           "input_predicate": {
-            "predicate_type": "minecraft:random_block_match",
             "block": "minecraft:polished_granite",
+            "predicate_type": "minecraft:random_block_match",
             "probability": 0.1
           },
           "location_predicate": {
@@ -18,8 +18,8 @@
         },
         {
           "input_predicate": {
-            "predicate_type": "minecraft:random_block_match",
             "block": "minecraft:lantern",
+            "predicate_type": "minecraft:random_block_match",
             "probability": 0.8
           },
           "location_predicate": {
@@ -31,8 +31,8 @@
         },
         {
           "input_predicate": {
-            "predicate_type": "minecraft:random_block_match",
             "block": "minecraft:redstone_torch",
+            "predicate_type": "minecraft:random_block_match",
             "probability": 0.05
           },
           "location_predicate": {
@@ -47,8 +47,8 @@
         },
         {
           "input_predicate": {
-            "predicate_type": "minecraft:block_match",
-            "block": "minecraft:redstone_torch"
+            "block": "minecraft:redstone_torch",
+            "predicate_type": "minecraft:block_match"
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -67,8 +67,8 @@
             "predicate_type": "minecraft:always_true"
           },
           "location_predicate": {
-            "predicate_type": "minecraft:block_match",
-            "block": "minecraft:air"
+            "block": "minecraft:air",
+            "predicate_type": "minecraft:block_match"
           },
           "output_state": {
             "Name": "minecraft:air"
@@ -79,8 +79,8 @@
             "predicate_type": "minecraft:always_true"
           },
           "location_predicate": {
-            "predicate_type": "minecraft:block_match",
-            "block": "minecraft:water"
+            "block": "minecraft:water",
+            "predicate_type": "minecraft:block_match"
           },
           "output_state": {
             "Name": "minecraft:water"
@@ -91,8 +91,8 @@
             "predicate_type": "minecraft:always_true"
           },
           "location_predicate": {
-            "predicate_type": "minecraft:block_match",
-            "block": "minecraft:lava"
+            "block": "minecraft:lava",
+            "predicate_type": "minecraft:block_match"
           },
           "output_state": {
             "Name": "minecraft:lava"
