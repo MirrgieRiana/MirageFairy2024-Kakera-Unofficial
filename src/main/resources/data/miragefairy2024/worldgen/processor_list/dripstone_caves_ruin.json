@@ -83,7 +83,10 @@
             "predicate_type": "minecraft:block_match"
           },
           "output_state": {
-            "Name": "minecraft:water"
+            "Name": "minecraft:water",
+            "Properties": {
+              "level": "0"
+            }
           }
         },
         {
@@ -95,7 +98,10 @@
             "predicate_type": "minecraft:block_match"
           },
           "output_state": {
-            "Name": "minecraft:lava"
+            "Name": "minecraft:lava",
+            "Properties": {
+              "level": "0"
+            }
           }
         }
       ]
