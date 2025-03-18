@@ -1,4 +1,4 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.structure
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
