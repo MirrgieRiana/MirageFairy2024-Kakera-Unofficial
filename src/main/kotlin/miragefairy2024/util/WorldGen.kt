@@ -14,8 +14,15 @@ import net.minecraft.entity.SpawnGroup
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.structure.pool.StructurePool
+import net.minecraft.structure.pool.StructurePoolElement
+import net.minecraft.structure.processor.RuleStructureProcessor
+import net.minecraft.structure.processor.StructureProcessor
+import net.minecraft.structure.processor.StructureProcessorList
+import net.minecraft.structure.processor.StructureProcessorRule
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DataPool
 import net.minecraft.util.math.Direction
@@ -169,3 +176,26 @@ val undergroundFlower: List<PlacementModifier>
         RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1)),
         BiomePlacementModifier.of(),
     )
+
+
+// Structure
+
+context(DynamicGenerationScope<*>)
+fun RuleStructureProcessor(vararg rules: StructureProcessorRule): RuleStructureProcessor {
+    return RuleStructureProcessor(rules.toList())
+}
+
+context(DynamicGenerationScope<*>)
+fun StructureProcessorList(vararg processors: StructureProcessor): StructureProcessorList {
+    return StructureProcessorList(processors.toList())
+}
+
+context(DynamicGenerationScope<*>)
+fun SinglePoolElement(location: Identifier, processorsKey: RegistryKey<StructureProcessorList>, projection: StructurePool.Projection): StructurePoolElement {
+    return StructurePoolElement.ofProcessedSingle(location.string, RegistryKeys.PROCESSOR_LIST[processorsKey]).apply(projection)
+}
+
+context(DynamicGenerationScope<*>)
+fun StructurePool(fallbackKey: RegistryKey<StructurePool>, vararg elements: Pair<StructurePoolElement, Int>): StructurePool {
+    return StructurePool(RegistryKeys.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
+}
