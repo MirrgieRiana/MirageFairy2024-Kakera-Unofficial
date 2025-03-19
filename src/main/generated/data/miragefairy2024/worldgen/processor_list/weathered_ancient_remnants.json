@@ -3,6 +3,9 @@
     {
       "blocks": [
         {
+          "Name": "minecraft:air"
+        },
+        {
           "Name": "minecraft:dirt"
         },
         {

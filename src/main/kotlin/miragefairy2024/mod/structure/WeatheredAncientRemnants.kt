@@ -83,7 +83,7 @@ fun initWeatheredAncientRemnants() {
                     apply(SetNameLootFunction.builder(text { translation() }))
                 }.weight(2),
             ),
-        ).randomSequenceId(archaeologyLootTable)
+        )
     }
 
     val element = identifier
