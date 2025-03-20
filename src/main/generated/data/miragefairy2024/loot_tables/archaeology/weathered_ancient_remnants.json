@@ -22,17 +22,12 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:glass_pane",
-          "weight": 10
+          "weight": 5
         },
         {
           "type": "minecraft:item",
           "name": "miragefairy2024:xarpite",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "name": "miragefairy2024:chaos_stone",
-          "weight": 10
+          "weight": 20
         },
         {
           "type": "minecraft:item",
@@ -81,6 +76,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "miragefairy2024:chaos_stone",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:amethyst_shard",
           "weight": 3
         },
@@ -104,7 +104,7 @@
           "functions": [
             {
               "decoration": "banner_brown",
-              "destination": "miragefairy2024:map_of_weathered_ancient_remnants",
+              "destination": "miragefairy2024:on_weathered_ancient_remnants_archaeology_maps",
               "function": "minecraft:exploration_map",
               "skip_existing_chunks": false,
               "zoom": 3
@@ -112,7 +112,12 @@
             {
               "function": "minecraft:set_name",
               "name": {
-                "translate": "filled_map.dripstone_caves_ruin"
+                "translate": "item.miragefairy2024.filled_map.template",
+                "with": [
+                  {
+                    "translate": "structure..miragefairy2024.dripstone_caves_ruin"
+                  }
+                ]
               }
             }
           ],

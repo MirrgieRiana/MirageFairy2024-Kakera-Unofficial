@@ -7,7 +7,7 @@
         "processors": "miragefairy2024:dripstone_caves_ruin",
         "projection": "rigid"
       },
-      "weight": 50
+      "weight": 40
     },
     {
       "element": {
@@ -62,6 +62,15 @@
         "projection": "rigid"
       },
       "weight": 5
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "miragefairy2024:dripstone_caves_ruin/road_mobs",
+        "processors": "miragefairy2024:dripstone_caves_ruin",
+        "projection": "rigid"
+      },
+      "weight": 10
     }
   ],
   "fallback": "miragefairy2024:dripstone_caves_ruin/road_end"
