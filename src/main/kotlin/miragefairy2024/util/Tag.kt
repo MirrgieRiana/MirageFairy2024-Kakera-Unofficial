@@ -9,6 +9,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
+import net.minecraft.world.gen.structure.Structure
 
 context(ModContext)
 fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
@@ -32,6 +33,11 @@ fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = Da
 
 context(ModContext)
 fun Identifier.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
+    it(tagProvider()).add(this)
+}
+
+context(ModContext)
+fun Identifier.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = DataGenerationEvents.onGenerateStructureTag {
     it(tagProvider()).add(this)
 }
 
