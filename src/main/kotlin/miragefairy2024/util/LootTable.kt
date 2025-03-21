@@ -86,6 +86,11 @@ fun registerChestLootTableGeneration(lootTableId: Identifier, initializer: () ->
 }
 
 context(ModContext)
+fun registerArchaeologyLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateArchaeologyLootTable {
+    it(lootTableId, initializer().randomSequenceId(lootTableId))
+}
+
+context(ModContext)
 fun EntityType<*>.registerLootTableGeneration(initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable {
     it(this, initializer().randomSequenceId(this.lootTableId))
 }

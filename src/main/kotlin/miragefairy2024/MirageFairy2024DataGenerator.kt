@@ -53,6 +53,7 @@ object DataGenerationEvents {
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
     val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
     val onGenerateChestLootTable = InitializationEventRegistry<((Identifier, LootTable.Builder) -> Unit) -> Unit>()
+    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((Identifier, LootTable.Builder) -> Unit) -> Unit>()
     val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit) -> Unit>()
     val onGenerateRecipe = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
@@ -113,6 +114,13 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
             object : SimpleFabricLootTableProvider(output, LootContextTypes.CHEST) {
                 override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
                     DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
+                }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput ->
+            object : SimpleFabricLootTableProvider(output, LootContextTypes.ARCHAEOLOGY) {
+                override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
                 }
             }
         }
