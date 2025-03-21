@@ -15,6 +15,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.registerStructureTagGeneration
 import miragefairy2024.util.times
 import net.minecraft.block.Blocks
 import net.minecraft.item.Items
@@ -46,6 +47,7 @@ object DripstoneCavesRuinCard {
     context(ModContext)
     fun init() {
 
+        identifier.registerStructureTagGeneration { WeatheredAncientRemnantsCard.onMapsTag }
         translation.enJa()
 
 
