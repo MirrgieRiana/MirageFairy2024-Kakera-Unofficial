@@ -10,6 +10,8 @@ import miragefairy2024.util.RuleStructureProcessor
 import miragefairy2024.util.SinglePoolElement
 import miragefairy2024.util.StructurePool
 import miragefairy2024.util.StructureProcessorList
+import miragefairy2024.util.Translation
+import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
@@ -39,9 +41,13 @@ import net.minecraft.world.gen.structure.Structure
 
 object DripstoneCavesRuinCard {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
+    val translation = Translation({ identifier.toTranslationKey("structure") }, "Dripstone Caves Ruin", "鍾乳洞の遺跡")
 
     context(ModContext)
     fun init() {
+
+        translation.enJa()
+
 
         registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
             LootTable(
