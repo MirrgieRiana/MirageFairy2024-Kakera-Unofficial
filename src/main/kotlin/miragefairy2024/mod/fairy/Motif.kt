@@ -761,7 +761,8 @@ enum class MotifCard(
         ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + shooting.attack(0.4) * outdoor
-            + shooting.attack(0.8) * food(Items.SWEET_BERRIES),
+            + shooting.attack(0.8) * food(Items.SWEET_BERRIES)
+            + spine.defence(2.0),
         MotifCardRecipes().R.common(ConventionalBiomeTags.TAIGA) + Items.SWEET_BERRIES + Blocks.SWEET_BERRY_BUSH,
     ),
     GLOW_BERRY(
@@ -831,7 +832,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.2) * outdoor
-            + regeneration(0.1) * outdoor,
+            + regeneration(0.1) * outdoor
+            + spine.defence(3.0),
         MotifCardRecipes().R.common(ConventionalBiomeTags.DESERT) + Blocks.CACTUS,
     ),
     DEAD_BUSH(
