@@ -3,7 +3,6 @@ package miragefairy2024
 import com.google.gson.JsonElement
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.util.string
-import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -113,7 +112,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput ->
             object : SimpleFabricLootTableProvider(output, LootContextTypes.CHEST) {
                 override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept("chests/" * lootTableId, builder) } }
+                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
                 }
             }
         }

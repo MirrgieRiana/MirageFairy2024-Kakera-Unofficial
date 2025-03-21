@@ -43,7 +43,7 @@ object DripstoneCavesRuinCard {
     context(ModContext)
     fun init() {
 
-        registerChestLootTableGeneration(identifier * "/chest_books") {
+        registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
             LootTable(
                 LootPool(
                     ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
