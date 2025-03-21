@@ -5,5 +5,5 @@ import miragefairy2024.ModContext
 context(ModContext)
 fun initStructureModule() {
     initUnlimitedJigsaw()
-    initDripstoneCavesRuin()
+    DripstoneCavesRuinCard.init()
 }
