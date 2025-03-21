@@ -62,6 +62,7 @@ object DripstoneCavesRuinCard {
         val roadStraightElement = identifier * "/road_straight"
         val roadStraight2Element = identifier * "/road_straight2"
         val roadStraight3Element = identifier * "/road_straight3"
+        val roadMobs = identifier * "/road_mobs"
         val roomConferenceElement = identifier * "/room_conference"
         val roomConference2Element = identifier * "/room_conference2"
         val roomEmptyElement = identifier * "/room_empty"
@@ -78,6 +79,8 @@ object DripstoneCavesRuinCard {
         val stairsBottomElement = identifier * "/stairs_bottom"
         val stairsMiddleElement = identifier * "/stairs_middle"
         val stairsTopElement = identifier * "/stairs_top"
+        val mobElement = identifier * "/mob"
+        val mobEmptyElement = identifier * "/mob_empty"
 
         val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
@@ -111,13 +114,14 @@ object DripstoneCavesRuinCard {
         val roadTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/road") {
             StructurePool(
                 roadEndTemplatePoolKey,
-                SinglePoolElement(roadStraightElement, processorListKey, StructurePool.Projection.RIGID) to 50,
+                SinglePoolElement(roadStraightElement, processorListKey, StructurePool.Projection.RIGID) to 40,
                 SinglePoolElement(roadStraight2Element, processorListKey, StructurePool.Projection.RIGID) to 10,
                 SinglePoolElement(roadStraight3Element, processorListKey, StructurePool.Projection.RIGID) to 5,
                 SinglePoolElement(roadRoomsElement, processorListKey, StructurePool.Projection.RIGID) to 40,
                 SinglePoolElement(roadCrossElement, processorListKey, StructurePool.Projection.RIGID) to 1,
                 SinglePoolElement(roadStairsElement, processorListKey, StructurePool.Projection.RIGID) to 3,
                 SinglePoolElement(roadEndElement, processorListKey, StructurePool.Projection.RIGID) to 5,
+                SinglePoolElement(roadMobs, processorListKey, StructurePool.Projection.RIGID) to 10,
             )
         }
         val stairsTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/stairs") {
@@ -152,6 +156,13 @@ object DripstoneCavesRuinCard {
                 SinglePoolElement(roomEndElement, processorListKey, StructurePool.Projection.RIGID) to 2,
             )
         }
+        val mobTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/mob") {
+            StructurePool(
+                StructurePools.EMPTY,
+                SinglePoolElement(mobElement, processorListKey, StructurePool.Projection.RIGID) to 10,
+                SinglePoolElement(mobEmptyElement, processorListKey, StructurePool.Projection.RIGID) to 3,
+            )
+        }
 
         val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
@@ -173,7 +184,7 @@ object DripstoneCavesRuinCard {
                 listOf(
                     StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
                 ),
-                RandomSpreadStructurePlacement(12, 10, SpreadType.LINEAR, 645172983),
+                RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
             )
         }
 
