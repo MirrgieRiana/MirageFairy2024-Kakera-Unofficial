@@ -72,7 +72,7 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 context(ModContext)
 fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable {
-    it.addDrop(this, initializer(it))
+    it.addDrop(this, initializer(it).randomSequenceId(this.lootTableId))
 }
 
 context(ModContext)
@@ -82,12 +82,12 @@ fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneratio
 
 context(ModContext)
 fun registerChestLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateChestLootTable {
-    it(lootTableId, initializer())
+    it(lootTableId, initializer().randomSequenceId(lootTableId))
 }
 
 context(ModContext)
 fun EntityType<*>.registerLootTableGeneration(initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable {
-    it(this, initializer())
+    it(this, initializer().randomSequenceId(this.lootTableId))
 }
 
 enum class FortuneEffect {
