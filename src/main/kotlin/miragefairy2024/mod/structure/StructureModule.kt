@@ -12,4 +12,5 @@ fun initStructureModule() {
 
     initUnlimitedJigsaw()
     DripstoneCavesRuinCard.init()
+    WeatheredAncientRemnantsCard.init()
 }

@@ -1,0 +1,132 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:raw_iron",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:raw_copper",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_nugget",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glass_pane",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "miragefairy2024:xarpite",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "miragefairy2024:amethyst_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "miragefairy2024:amethyst_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "miragefairy2024:amethyst_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "miragefairy2024:amethyst_hoe"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "miragefairy2024:amethyst_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "miragefairy2024:chaos_stone",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_shard",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:book",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "miragefairy2024:jewel_100",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "decoration": "banner_brown",
+              "destination": "miragefairy2024:on_weathered_ancient_remnants_archaeology_maps",
+              "function": "minecraft:exploration_map",
+              "skip_existing_chunks": false,
+              "zoom": 3
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.miragefairy2024.filled_map.template",
+                "with": [
+                  {
+                    "translate": "structure.miragefairy2024.dripstone_caves_ruin"
+                  }
+                ]
+              }
+            }
+          ],
+          "name": "minecraft:map",
+          "weight": 2
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "miragefairy2024:archaeology/weathered_ancient_remnants"
+}
