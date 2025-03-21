@@ -10,12 +10,15 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
+import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.damage.DamageTypes
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.DamageTypeTags
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
 object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
@@ -33,12 +36,15 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         MAGIC("magic", "Magic", "魔法", { it.isIn(DamageTypeTags.BYPASSES_ARMOR) }),
         FIRE("fire", "Fire", "火属性", { it.isIn(DamageTypeTags.IS_FIRE) }),
         FALL("fall", "Fall", "落下", { it.isIn(DamageTypeTags.IS_FALL) }),
+        SPINE("spine", "Spine", "棘", { it.isIn(SPINE_DAMAGE_TYPE_TAG) }),
         ;
 
         val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.elements.$path" }, enName, jaName)
         override val text = text { translation() }
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
+
+    private val SPINE_DAMAGE_TYPE_TAG = TagKey.of(RegistryKeys.DAMAGE_TYPE, MirageFairy2024.identifier("spine"))
 
     private val attackTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.attack" }, "%s Attack", "%s攻撃力")
     private val defenceTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.defence" }, "%s Defence", "%s防御力")
@@ -105,5 +111,9 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
 
             damage
         }
+
+        DamageTypes.CACTUS.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.SWEET_BERRY_BUSH.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.STING.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
     }
 }
