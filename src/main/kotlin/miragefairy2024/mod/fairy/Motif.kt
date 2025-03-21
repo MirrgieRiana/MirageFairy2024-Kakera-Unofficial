@@ -1350,6 +1350,7 @@ private val shooting get() = ElementPassiveSkillEffect.Elements.SHOOTING
 private val magic get() = ElementPassiveSkillEffect.Elements.MAGIC
 private val fire get() = ElementPassiveSkillEffect.Elements.FIRE
 private val fall get() = ElementPassiveSkillEffect.Elements.FALL
+private val spine get() = ElementPassiveSkillEffect.Elements.SPINE
 private fun ElementPassiveSkillEffect.Element.attack(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(this to it * factor * 0.03), mapOf()) }
 private fun ElementPassiveSkillEffect.Element.defence(factor: Double) = ElementPassiveSkillEffect { ElementPassiveSkillEffect.Value(mapOf(), mapOf(this to it * factor * 0.03)) }
 
