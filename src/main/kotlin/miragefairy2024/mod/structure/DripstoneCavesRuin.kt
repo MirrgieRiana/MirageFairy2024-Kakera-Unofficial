@@ -2,7 +2,6 @@ package miragefairy2024.mod.structure
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -16,7 +15,6 @@ import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.times
 import net.minecraft.block.Blocks
-import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.Items
 import net.minecraft.loot.function.EnchantRandomlyLootFunction
 import net.minecraft.loot.function.SetCountLootFunction
@@ -30,10 +28,7 @@ import net.minecraft.structure.processor.StructureProcessorRule
 import net.minecraft.structure.rule.AlwaysTrueRuleTest
 import net.minecraft.structure.rule.BlockMatchRuleTest
 import net.minecraft.structure.rule.RandomBlockMatchRuleTest
-import net.minecraft.util.collection.Pool
-import net.minecraft.world.StructureSpawns
 import net.minecraft.world.biome.BiomeKeys
-import net.minecraft.world.biome.SpawnSettings.SpawnEntry
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.StructureTerrainAdaptation
 import net.minecraft.world.gen.YOffset
@@ -160,14 +155,7 @@ fun initDripstoneCavesRuin() {
         UnlimitedJigsawStructure(
             config = Structure.Config(
                 RegistryEntryList.of(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
-                mapOf(
-                    SpawnGroup.MONSTER to StructureSpawns(
-                        StructureSpawns.BoundingBox.PIECE,
-                        Pool.of(
-                            SpawnEntry(ChaosCubeCard.entityType, 10, 1, 4),
-                        )
-                    ),
-                ),
+                mapOf(),
                 GenerationStep.Feature.UNDERGROUND_STRUCTURES,
                 StructureTerrainAdaptation.BURY,
             ),
