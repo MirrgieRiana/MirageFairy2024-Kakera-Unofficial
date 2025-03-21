@@ -16,6 +16,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.registry.entry.RegistryEntryList
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.structure.pool.StructurePool
 import net.minecraft.structure.pool.StructurePoolElement
@@ -61,6 +62,11 @@ class DynamicGenerationScope<T>(val context: Registerable<T>)
 
 context(DynamicGenerationScope<*>)
 operator fun <T> RegistryKey<Registry<T>>.get(key: RegistryKey<T>): RegistryEntry<T> {
+    return this@DynamicGenerationScope.context.getRegistryLookup(this).getOrThrow(key)
+}
+
+context(DynamicGenerationScope<*>)
+operator fun <T> RegistryKey<Registry<T>>.get(key: TagKey<T>): RegistryEntryList.Named<T> {
     return this@DynamicGenerationScope.context.getRegistryLookup(this).getOrThrow(key)
 }
 
