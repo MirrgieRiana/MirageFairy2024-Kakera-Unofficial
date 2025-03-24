@@ -5,6 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.ParticleTypeCard
 import miragefairy2024.mod.SoundEventCard
+import miragefairy2024.mod.SoundEventChannel
+import miragefairy2024.mod.SoundEventPacket
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
@@ -19,6 +21,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSpawn
+import miragefairy2024.util.sendToAround
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
@@ -48,11 +51,11 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.EntityTypeTags
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundCategory
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.Heightmap
 import net.minecraft.world.World
-import net.minecraft.world.WorldEvents
 import net.minecraft.world.biome.BiomeKeys
 import org.joml.Quaternionf
 import java.util.EnumSet
@@ -237,80 +240,80 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     }
 
     private class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
-        private var count = 0
-        private var cooldown = 0
-        private var targetNotVisibleTicks = 0
-
         init {
             controls = EnumSet.of(Control.MOVE, Control.LOOK)
         }
+
+        override fun shouldRunEveryTick() = true
 
         override fun canStart(): Boolean {
             val livingEntity = entity.target
             return livingEntity != null && livingEntity.isAlive && entity.canTarget(livingEntity)
         }
 
+        private var ticker: Iterator<Unit>? = null
+
         override fun start() {
-            count = 0
-        }
+            ticker = sequence {
 
-        override fun stop() {
-            targetNotVisibleTicks = 0
-        }
-
-        override fun shouldRunEveryTick() = true
-
-        override fun tick() {
-
-            if (cooldown > 0) cooldown--
-
-            val target = entity.target ?: return
-
-            // 見えるかどうか判定、見えている時間の更新
-            val canSee = entity.visibilityCache.canSee(target)
-            if (canSee) {
-                targetNotVisibleTicks = 0
-            } else {
-                targetNotVisibleTicks++
-            }
-
-            val squaredDistance = entity.squaredDistanceTo(target)
-            if (squaredDistance < 4.0) { // 至近距離
-                if (!canSee) return // 至近距離なのに遮蔽されているので抜ける
-
-                // クールタイムが満了しているなら打撃
-                if (cooldown <= 0) {
-                    cooldown = 20
-                    entity.tryAttack(target)
+                suspend fun SequenceScope<Unit>.tryWait(): Boolean {
+                    repeat(20 * 4) {
+                        yield(Unit)
+                    }
+                    return true
                 }
 
-                // ターゲットに近づく
-                entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+                suspend fun SequenceScope<Unit>.tryShoot(): Boolean {
 
-            } else if (squaredDistance < getFollowRange() * getFollowRange() && canSee) { // 感知範囲内かつ見える
-
-                // クールタイムが満了しているなら射撃を撃つ
-                if (cooldown <= 0) {
-                    count++
-                    if (count == 1) {
-                        cooldown = 60
-                        //entity.setFireActive(true)
-                    } else if (count <= 4) {
-                        cooldown = 6
-                    } else {
-                        // リセット
-                        cooldown = 100
-                        count = 0
-                        //entity.setFireActive(false)
+                    run {
+                        val target = entity.target ?: return false
+                        if (!entity.visibilityCache.canSee(target)) return false
+                        Unit // なぜかKotlinNothingValueExceptionが出る
                     }
 
-                    if (count > 1) { // count 2 .. 5
+                    // エフェクト
+                    if (!entity.isSilent) {
+                        val packet = SoundEventPacket(
+                            SoundEventCard.ENTITY_CHAOS_CUBE_ATTACK.soundEvent,
+                            entity.blockPos,
+                            SoundCategory.HOSTILE,
+                            2.0F,
+                            (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
+                            false,
+                        )
+                        SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, packet)
+                    }
+
+                    repeat(10) {
+                        yield(Unit)
+                    }
+
+                    repeat(5) { i ->
+
+                        if (i > 0) {
+                            repeat(4) {
+                                yield(Unit)
+                            }
+                        }
+
+                        val target = entity.target ?: return false
+                        if (!entity.visibilityCache.canSee(target)) return false
 
                         // エフェクト
-                        if (!entity.isSilent) entity.world.syncWorldEvent(null, WorldEvents.BLAZE_SHOOTS, entity.blockPos, 0)
+                        if (!entity.isSilent) {
+                            val packet = SoundEventPacket(
+                                SoundEventCard.ENTITY_PSYCHIC_UNGUIDED_BOLT_SHOOT.soundEvent,
+                                entity.blockPos,
+                                SoundCategory.HOSTILE,
+                                2.0F,
+                                (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
+                                false,
+                            )
+                            SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, packet)
+                        }
 
                         // 発射体の生成
-                        val sqrtDistance = sqrt(sqrt(squaredDistance)) * 0.5
+                        val sqrtDistance = sqrt(sqrt(100.0)) * 0.5 // TODO
                         val smallFireballEntity = SmallFireballEntity(
                             entity.world,
                             entity,
@@ -325,28 +328,60 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         )
                         entity.world.spawnEntity(smallFireballEntity)
 
+                        // ターゲットを見る
+                        entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+
+                    }
+
+                    return true
+                }
+
+                suspend fun SequenceScope<Unit>.tryMove(): Boolean {
+                    while (true) {
+                        val target = entity.target ?: return false
+                        if (entity.visibilityCache.canSee(target)) return true
+                        entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+                        yield(Unit)
                     }
                 }
 
-                // ターゲットを見る
-                entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+                while (true) {
 
-            } else if (targetNotVisibleTicks < 5) { // 遮蔽された直後なら
+                    if (!tryWait()) {
+                        ticker = null
+                        return@sequence
+                    }
 
-                // ターゲットに近づく
-                entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+                    if (!tryMove()) {
+                        ticker = null
+                        return@sequence
+                    }
 
-            }
+                    if (!tryShoot()) {
+                        ticker = null
+                        return@sequence
+                    }
 
-            super.tick()
+                }
+
+            }.iterator()
         }
 
-        private fun getFollowRange() = entity.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE)
+        override fun stop() {
+            ticker = null
+        }
+
+        override fun tick() {
+            val ticker = ticker ?: return
+            if (ticker.hasNext()) ticker.next()
+        }
+
     }
 
     private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
         override fun canStart(): Boolean {
             val world = mob.world
+            if (world.time % 20L != 0L) return false
             if (world !is ServerWorld) return false
             val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
             if (!world.structureAccessor.getStructureAt(mob.blockPos, structure).hasChildren()) return false
