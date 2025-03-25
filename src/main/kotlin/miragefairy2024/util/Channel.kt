@@ -4,7 +4,9 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 
 abstract class Channel<P>(val packetId: Identifier) {
     abstract fun writeToBuf(buf: PacketByteBuf, packet: P)
@@ -15,6 +17,16 @@ fun <P> Channel<P>.sendToClient(player: ServerPlayerEntity, packet: P) {
     val buf = PacketByteBufs.create()
     this.writeToBuf(buf, packet)
     ServerPlayNetworking.send(player, this.packetId, buf)
+}
+
+fun <P> Channel<P>.sendToAround(world: ServerWorld, pos: Vec3d, distance: Double, packet: P) {
+    world.players.forEach { player ->
+        if (player.world.registryKey == world.registryKey) {
+            if (pos.squaredDistanceTo(player.pos) <= distance * distance) {
+                this.sendToClient(player, packet)
+            }
+        }
+    }
 }
 
 fun <P> Channel<P>.registerServerPacketReceiver(handler: (ServerPlayerEntity, P) -> Unit) {
