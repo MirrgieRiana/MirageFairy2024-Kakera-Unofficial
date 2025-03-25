@@ -14,6 +14,7 @@ import miragefairy2024.client.mod.initMachineClientModule
 import miragefairy2024.client.mod.initMagicPlantClientModule
 import miragefairy2024.client.mod.initParticleClientModule
 import miragefairy2024.client.mod.initPlacedItemClientModule
+import miragefairy2024.client.mod.initSoundEventClientModule
 import miragefairy2024.clientProxy
 import net.fabricmc.api.ClientModInitializer
 
@@ -35,5 +36,6 @@ object MirageFairy2024Client : ClientModInitializer {
         initFairyLogisticsClientModule()
         initBagClientModule()
         initMachineClientModule()
+        initSoundEventClientModule()
     }
 }
