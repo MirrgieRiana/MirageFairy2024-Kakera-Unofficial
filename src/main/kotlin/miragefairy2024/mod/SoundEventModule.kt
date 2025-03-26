@@ -20,6 +20,12 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
     MAGIC_HIT("magic_hit", "Magic hits", "魔法が当たる", listOf("magic_hit")),
     CANCEL("cancel", "TODO", "TODO", listOf("cancel")), // TODO
     COLLECT("collect", "Collect item", "アイテムを集める", listOf("collect")),
+    ENTITY_CHAOS_CUBE_AMBIENT("entity.chaos_cube.ambient", "Chaos Cube roars", "混沌のキューブがうなる", listOf("entity_chaos_cube_ambient_1", "entity_chaos_cube_ambient_2")),
+    ENTITY_CHAOS_CUBE_HURT("entity.chaos_cube.hurt", "Chaos Cube hurts", "混沌のキューブがダメージを受ける", listOf("entity_chaos_cube_hurt_1")),
+    ENTITY_CHAOS_CUBE_DEATH("entity.chaos_cube.death", "Chaos Cube dies", "混沌のキューブが死ぬ", listOf("entity_chaos_cube_death_1")),
+    ENTITY_CHAOS_CUBE_ATTACK("entity.chaos_cube.attack", "Chaos Cube chants", "混沌のキューブが詠唱する", listOf("entity_chaos_cube_attack_1")),
+    ENTITY_PSYCHIC_UNGUIDED_BOLT_HIT("entity.psychic_unguided_bolt.hit", "Psychic Unguided Bolt hits", "サイキック無誘導弾が当たる", listOf("entity_psychic_unguided_bolt_hit_1")),
+    ENTITY_PSYCHIC_UNGUIDED_BOLT_SHOOT("entity.psychic_unguided_bolt.shoot", "Psychic Unguided Bolt fired", "サイキック無誘導弾が発射される", listOf("entity_psychic_unguided_bolt_shoot_1")),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

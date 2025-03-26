@@ -1,9 +1,9 @@
 package miragefairy2024.client.mod.entity
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.AntimatterBoltEntity
+import miragefairy2024.util.times
 import net.minecraft.client.model.ModelPart
 import net.minecraft.client.model.ModelPartBuilder
 import net.minecraft.client.model.ModelTransform
@@ -23,7 +23,7 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
         }
     }
 
-    private val texture = MirageFairy2024.identifier("textures/block/creative_aura_stone.png")
+    private val texture = "textures/entity/" * AntimatterBoltCard.identifier
 
     private val model = object : SinglePartEntityModel<AntimatterBoltEntity>() {
         private val modelPart: ModelPart = context.getPart(MAIN.entityModelLayer)

@@ -37,6 +37,7 @@ enum class FairyToolMaterials(
     MIRAGE(MiningLevels.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
     MIRAGIUM(MiningLevels.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     LILAGIUM(MiningLevels.IRON, 122, 0.5F, 0.5F, 19, MaterialCard.LILAGIUM_INGOT.item.toIngredient()),
+    MIRAGIDIAN(MiningLevels.NETHERITE, 7826, 8.0F, 3.0F, 2, MaterialCard.MIRAGIDIAN.item.toIngredient()),
     FAIRY_CRYSTAL(MiningLevels.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
     PHANTOM_DROP(MiningLevels.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
     LUMINITE(MiningLevels.DIAMOND, 1361, 9.0F, 4.0F, 21, MaterialCard.LUMINITE.item.toIngredient()),
@@ -76,6 +77,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途
     MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", "Miragium Tool", "ミラジウムツール"),
     LILAGIUM(FairyToolMaterials.LILAGIUM, "lilagium_tool", "Lilagium Tool", "リラジウムツール"),
+    MIRAGIDIAN(FairyToolMaterials.MIRAGIDIAN, "miragidian_tool", "Miragidian Tool", "ミラジディアンツール"),
     FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
     PHANTOM_DROP(FairyToolMaterials.PHANTOM_DROP, "phantom_tool", "Phantom Tool", "幻想ツール"),
     LUMINITE(FairyToolMaterials.LUMINITE, "luminite_tool", "Luminite Tool", "ルミナイトツール"),

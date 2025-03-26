@@ -11,7 +11,6 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
-import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.EntityType
@@ -146,11 +145,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
 
     override fun onEntityHit(entityHitResult: EntityHitResult) {
         super.onEntityHit(entityHitResult)
-        attack(entityHitResult.entity)
-    }
-
-    private fun attack(entity: Entity) {
-        entity.damage(world.damageSources.create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
+        entityHitResult.entity.damage(world.damageSources.create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
     }
 
     override fun handleStatus(status: Byte) {
@@ -169,7 +164,6 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
                 )
             }
         }
-
     }
 
 }

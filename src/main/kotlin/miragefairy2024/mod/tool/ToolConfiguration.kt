@@ -11,6 +11,7 @@ import miragefairy2024.mod.tool.effects.CutAllToolEffectType
 import miragefairy2024.mod.tool.effects.MineAllToolEffectType
 import miragefairy2024.mod.tool.effects.ObtainFairyToolEffectType
 import miragefairy2024.mod.tool.effects.SelfMendingToolEffectType
+import miragefairy2024.mod.tool.effects.SoulStreamContainableToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
@@ -53,6 +54,7 @@ fun initToolConfiguration() {
     SelfMendingToolEffectType.init()
     ObtainFairyToolEffectType.init()
     CollectionToolEffectType.init()
+    SoulStreamContainableToolEffectType.init()
 
 }
 
