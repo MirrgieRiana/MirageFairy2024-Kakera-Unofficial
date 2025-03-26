@@ -315,16 +315,18 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         val projectileEntity = PsychicUnguidedBoltEntity(PsychicUnguidedBoltCard.entityType, entity.world)
                         projectileEntity.owner = entity
                         projectileEntity.setPosition(
-                            projectileEntity.x,
+                            entity.x,
                             entity.getBodyY(0.5) + 0.5,
-                            projectileEntity.z
+                            entity.z
                         )
                         val sqrtDistance = sqrt(sqrt(100.0)) * 0.5 // TODO
                         projectileEntity.setVelocity(
-                            entity.getRandom().nextTriangular(target.x - entity.x, 2.297 * sqrtDistance),
-                            target.getBodyY(0.5) - entity.getBodyY(0.5),
-                            entity.getRandom().nextTriangular(target.z - entity.z, 2.297 * sqrtDistance),
+                            0.1 * entity.getRandom().nextTriangular(target.x - entity.x, 2.297 * sqrtDistance),
+                            0.1 * (target.getBodyY(0.5) - entity.getBodyY(0.5)),
+                            0.1 * entity.getRandom().nextTriangular(target.z - entity.z, 2.297 * sqrtDistance),
                         )
+                        projectileEntity.damage = 20.0F
+                        projectileEntity.maxDistance = 32.0F
                         entity.world.spawnEntity(projectileEntity)
 
                         // ターゲットを見る
