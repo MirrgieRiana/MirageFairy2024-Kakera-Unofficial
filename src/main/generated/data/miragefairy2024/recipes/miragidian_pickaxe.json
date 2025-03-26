@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miragidian_pickaxe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miragidian"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "item": "miragefairy2024:miragidian_pickaxe"
+  },
+  "show_notification": true
+}

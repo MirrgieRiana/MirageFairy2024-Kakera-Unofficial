@@ -91,6 +91,12 @@ enum class BlockMaterialCard(
         MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
+    MIRAGIDIAN_BLOCK(
+        "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
+        PoemList(4).poem("TODO", "TODO"), // TODO
+        MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true,
+        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+    ),
     LUMINITE_BLOCK(
         "luminite_block", "Luminite Block", "ルミナイトブロック",
         PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
@@ -172,6 +178,9 @@ fun initBlockMaterialsModule() {
 
     // 混沌の石ブロック
     registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
+
+    // ミラジディアンブロック
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
 
     // ルミナイトブロック
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
