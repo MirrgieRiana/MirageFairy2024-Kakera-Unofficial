@@ -119,13 +119,13 @@ class PsychicUnguidedBoltEntity(entityType: EntityType<out PsychicUnguidedBoltEn
         if (world.isServer) {
             world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES)
             discard()
-            if (world.random.nextInt(3) == 0) dropItem(MaterialCard.PSYCHIC_UNGUIDED_BOLT_FRAGMENT.item)
         }
     }
 
     override fun onEntityHit(entityHitResult: EntityHitResult) {
         super.onEntityHit(entityHitResult)
         entityHitResult.entity.damage(world.damageSources.create(PhysicalMagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
+        if (world.random.nextInt(5) == 0) dropItem(MaterialCard.PSYCHIC_UNGUIDED_BOLT_FRAGMENT.item)
     }
 
     override fun handleStatus(status: Byte) {

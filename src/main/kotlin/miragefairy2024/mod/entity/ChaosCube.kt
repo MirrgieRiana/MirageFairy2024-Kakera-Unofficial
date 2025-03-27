@@ -45,6 +45,9 @@ import net.minecraft.item.Item
 import net.minecraft.item.SpawnEggItem
 import net.minecraft.loot.condition.KilledByPlayerLootCondition
 import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
+import net.minecraft.loot.function.LootingEnchantLootFunction
+import net.minecraft.loot.function.SetCountLootFunction
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
@@ -87,6 +90,14 @@ object ChaosCubeCard {
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
         entityType.registerLootTableGeneration {
             LootTable(
+                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item)).configure {
+                    apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0F, 2.0F)))
+                    apply(LootingEnchantLootFunction.builder(UniformLootNumberProvider.create(0.0F, 1.0F)))
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item)).configure {
+                    conditionally(KilledByPlayerLootCondition.builder())
+                    conditionally(RandomChanceWithLootingLootCondition.builder(0.05F, 0.02F))
+                },
                 LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item)).configure {
                     conditionally(KilledByPlayerLootCondition.builder())
                     conditionally(RandomChanceWithLootingLootCondition.builder(0.3F, 0.1F))

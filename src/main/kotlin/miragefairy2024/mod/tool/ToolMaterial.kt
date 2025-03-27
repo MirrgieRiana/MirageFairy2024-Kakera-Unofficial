@@ -37,7 +37,7 @@ enum class FairyToolMaterials(
     MIRAGE(MiningLevels.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
     MIRAGIUM(MiningLevels.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
     LILAGIUM(MiningLevels.IRON, 122, 0.5F, 0.5F, 19, MaterialCard.LILAGIUM_INGOT.item.toIngredient()),
-    MIRAGIDIAN(MiningLevels.NETHERITE, 7826, 8.0F, 3.0F, 2, MaterialCard.MIRAGIDIAN.item.toIngredient()),
+    MIRAGIDIAN(MiningLevels.NETHERITE, 7826, 7.0F, 2.5F, 2, MaterialCard.MIRAGIDIAN.item.toIngredient()),
     FAIRY_CRYSTAL(MiningLevels.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
     PHANTOM_DROP(MiningLevels.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
     LUMINITE(MiningLevels.DIAMOND, 1361, 9.0F, 4.0F, 21, MaterialCard.LUMINITE.item.toIngredient()),
