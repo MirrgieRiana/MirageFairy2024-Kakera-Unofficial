@@ -30,13 +30,13 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
-object PsychicUnguidedBoltCard {
+object EtheroballisticZeroGravityBoltCard {
     val spawnGroup = SpawnGroup.MISC
     val width = 0.5F
     val height = 0.5F
-    fun createEntity(entityType: EntityType<PsychicUnguidedBoltEntity>, world: World) = PsychicUnguidedBoltEntity(entityType, world)
-    val identifier = MirageFairy2024.identifier("psychic_unguided_bolt")
-    val entityType: EntityType<PsychicUnguidedBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
+    fun createEntity(entityType: EntityType<EtheroballisticZeroGravityBoltEntity>, world: World) = EtheroballisticZeroGravityBoltEntity(entityType, world)
+    val identifier = MirageFairy2024.identifier("etheroballistic_zero_gravity_bolt")
+    val entityType: EntityType<EtheroballisticZeroGravityBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
         .build()
 
@@ -47,10 +47,10 @@ object PsychicUnguidedBoltCard {
     }
 }
 
-class PsychicUnguidedBoltEntity(entityType: EntityType<out PsychicUnguidedBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
+class EtheroballisticZeroGravityBoltEntity(entityType: EntityType<out EtheroballisticZeroGravityBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
     companion object {
-        val DAMAGE: TrackedData<Float> = DataTracker.registerData(PsychicUnguidedBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
-        val MAX_DISTANCE: TrackedData<Float> = DataTracker.registerData(PsychicUnguidedBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
+        val DAMAGE: TrackedData<Float> = DataTracker.registerData(EtheroballisticZeroGravityBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
+        val MAX_DISTANCE: TrackedData<Float> = DataTracker.registerData(EtheroballisticZeroGravityBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
     }
 
 
@@ -125,13 +125,13 @@ class PsychicUnguidedBoltEntity(entityType: EntityType<out PsychicUnguidedBoltEn
     override fun onEntityHit(entityHitResult: EntityHitResult) {
         super.onEntityHit(entityHitResult)
         entityHitResult.entity.damage(world.damageSources.create(PhysicalMagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
-        if (world.random.nextInt(5) == 0) dropItem(MaterialCard.PSYCHIC_UNGUIDED_BOLT_FRAGMENT.item)
+        if (world.random.nextInt(5) == 0) dropItem(MaterialCard.ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_FRAGMENT.item)
     }
 
     override fun handleStatus(status: Byte) {
         super.handleStatus(status)
         if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
-            world.playSound(x, y, z, SoundEventCard.ENTITY_PSYCHIC_UNGUIDED_BOLT_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (world.random.nextFloat() - 0.5F) * 0.3F, true)
+            world.playSound(x, y, z, SoundEventCard.ENTITY_ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (world.random.nextFloat() - 0.5F) * 0.3F, true)
         }
     }
 

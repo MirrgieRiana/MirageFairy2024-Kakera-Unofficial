@@ -312,7 +312,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         // エフェクト
                         if (!entity.isSilent) {
                             val packet = SoundEventPacket(
-                                SoundEventCard.ENTITY_PSYCHIC_UNGUIDED_BOLT_SHOOT.soundEvent,
+                                SoundEventCard.ENTITY_ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_SHOOT.soundEvent,
                                 entity.blockPos,
                                 SoundCategory.HOSTILE,
                                 2.0F,
@@ -323,7 +323,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         }
 
                         // 発射体の生成
-                        val projectileEntity = PsychicUnguidedBoltEntity(PsychicUnguidedBoltCard.entityType, entity.world)
+                        val projectileEntity = EtheroballisticZeroGravityBoltEntity(EtheroballisticZeroGravityBoltCard.entityType, entity.world)
                         projectileEntity.owner = entity
                         projectileEntity.setPosition(
                             entity.x,

@@ -253,8 +253,8 @@ class MaterialCard(
             PoemList(4).poem("TODO", "TODO"), // TODO
             soulStreamContainable = true,
         )
-        val PSYCHIC_UNGUIDED_BOLT_FRAGMENT = !MaterialCard(
-            "psychic_unguided_bolt_fragment", "Psychic Unguided Bolt Fragment", "サイキック無誘導弾の破片",
+        val ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_FRAGMENT = !MaterialCard(
+            "etheroballistic_zero_gravity_bolt_fragment", "Etheroballistic Zero Gravity Bolt Fragment", "エテロバリスティック無重力弾の破片",
             PoemList(4).poem("TODO", "古代からのおくりもの"), // TODO
             soulStreamContainable = true,
         ) {

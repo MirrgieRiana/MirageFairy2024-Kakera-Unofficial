@@ -6,5 +6,5 @@ context(ModContext)
 fun initEntityModule() {
     AntimatterBoltCard.init()
     ChaosCubeCard.init()
-    PsychicUnguidedBoltCard.init()
+    EtheroballisticZeroGravityBoltCard.init()
 }
