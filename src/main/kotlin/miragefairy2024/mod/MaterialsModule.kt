@@ -236,7 +236,7 @@ class MaterialCard(
         } // TODO "Botanical alloy", "牡丹合金。"
         val MIRAGIDIAN_SHARD = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
-            PoemList(4).poem("TODO", "TODO"), // TODO
+            PoemList(4).poem("TODO", "1万年の夢見るタングステン。"), // TODO
             soulStreamContainable = true,
         ) {
             registerSimpleMachineRecipeGeneration(
@@ -250,7 +250,7 @@ class MaterialCard(
         }
         val MIRAGIDIAN = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
-            PoemList(4).poem("TODO", "TODO"), // TODO
+            PoemList(4).poem("TODO", "　　黒曜石　　文明が   伝える幻想合金。"), // TODO
             soulStreamContainable = true,
         )
         val ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_FRAGMENT = !MaterialCard(
