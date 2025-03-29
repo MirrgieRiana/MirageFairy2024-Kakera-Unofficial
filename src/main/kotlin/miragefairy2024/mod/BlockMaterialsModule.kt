@@ -93,7 +93,7 @@ enum class BlockMaterialCard(
     ),
     MIRAGIDIAN_BLOCK(
         "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
-        PoemList(4).poem("TODO", "TODO"), // TODO
+        PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
         MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true,
         tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
@@ -170,19 +170,11 @@ fun initBlockMaterialsModule() {
         }
     }
 
-    // 紅天石ブロック
+    // 圧縮
     registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, BlockMaterialCard.XARPITE_BLOCK.item)
-
-    // 蒼天石ブロック
     registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
-
-    // 混沌の石ブロック
     registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
-
-    // ミラジディアンブロック
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
-
-    // ルミナイトブロック
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
 
     // 霊氣石

@@ -236,7 +236,7 @@ class MaterialCard(
         } // TODO "Botanical alloy", "牡丹合金。"
         val MIRAGIDIAN_SHARD = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
-            PoemList(4).poem("TODO", "1万年の夢見るタングステン。"), // TODO
+            PoemList(4).poem("The great collapse 30,000 years ago", "遥か三万年前のミラジウムが見た夢。"),
             soulStreamContainable = true,
         ) {
             registerSimpleMachineRecipeGeneration(
@@ -250,12 +250,12 @@ class MaterialCard(
         }
         val MIRAGIDIAN = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
-            PoemList(4).poem("TODO", "　　黒曜石　　文明が   伝える幻想合金。"), // TODO
+            PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
             soulStreamContainable = true,
         )
         val ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_FRAGMENT = !MaterialCard(
             "etheroballistic_zero_gravity_bolt_fragment", "Etheroballistic Zero Gravity Bolt Fragment", "エテロバリスティック無重力弾の破片",
-            PoemList(4).poem("TODO", "古代からのおくりもの"), // TODO
+            PoemList(4).poem("More abrasion resistant than lethal", "合金として生きるということ。"),
             soulStreamContainable = true,
         ) {
             registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
