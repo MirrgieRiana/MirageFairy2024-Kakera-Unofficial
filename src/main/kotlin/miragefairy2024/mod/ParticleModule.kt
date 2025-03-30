@@ -11,6 +11,7 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
 import net.minecraft.particle.DefaultParticleType
 import net.minecraft.registry.Registries
+import net.minecraft.util.Identifier
 
 enum class ParticleTypeCard(
     path: String,
@@ -24,11 +25,14 @@ enum class ParticleTypeCard(
     ATTRACTING_MAGIC("attracting_magic", "mission", false),
     AURA("aura", "mission", false),
     CHAOS_STONE("chaos_stone", "chaos_stone", false),
-    HAIMEVISKA_BLOSSOM("haimeviska_blossom", "haimeviska_blossom", false)
+    HAIMEVISKA_BLOSSOM("haimeviska_blossom", "haimeviska_blossom", false),
+    DRIPPING_HAIMEVISKA_SAP("dripping_haimeviska_sap", "minecraft:drip_hang", false),
+    FALLING_HAIMEVISKA_SAP("falling_haimeviska_sap", "minecraft:drip_fall", false),
+    LANDING_HAIMEVISKA_SAP("landing_haimeviska_sap", "minecraft:drip_land", false),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val texture = MirageFairy2024.identifier(textureName)
+    val texture = if (":" in textureName) Identifier(textureName) else MirageFairy2024.identifier(textureName)
     val particleType: DefaultParticleType = FabricParticleTypes.simple(alwaysSpawn)
 }
 
