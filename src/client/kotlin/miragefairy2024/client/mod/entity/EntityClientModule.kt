@@ -1,6 +1,8 @@
 package miragefairy2024.client.mod.entity
 
 import miragefairy2024.mod.entity.AntimatterBoltCard
+import miragefairy2024.mod.entity.ChaosCubeCard
+import miragefairy2024.mod.entity.EtheroballisticZeroGravityBoltCard
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.model.ModelData
@@ -12,6 +14,10 @@ import net.minecraft.util.Identifier
 fun initEntityClientModule() {
     EntityModelLayerRegistry.registerModelLayer(AntimatterBoltEntityRenderer.MAIN.entityModelLayer, AntimatterBoltEntityRenderer.MAIN.provider)
     EntityRendererRegistry.register(AntimatterBoltCard.entityType, ::AntimatterBoltEntityRenderer)
+    EntityModelLayerRegistry.registerModelLayer(ChaosCubeEntityRenderer.ROOT.entityModelLayer, ChaosCubeEntityRenderer.ROOT.provider)
+    EntityRendererRegistry.register(ChaosCubeCard.entityType, ::ChaosCubeEntityRenderer)
+    EntityModelLayerRegistry.registerModelLayer(EtheroballisticZeroGravityBoltEntityRenderer.MAIN.entityModelLayer, EtheroballisticZeroGravityBoltEntityRenderer.MAIN.provider)
+    EntityRendererRegistry.register(EtheroballisticZeroGravityBoltCard.entityType, ::EtheroballisticZeroGravityBoltEntityRenderer)
 }
 
 class EntityModelLayerCard(
