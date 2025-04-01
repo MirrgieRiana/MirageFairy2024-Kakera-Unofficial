@@ -93,6 +93,8 @@
   "container.miragefairy2024.soul_stream": "ソウルストリーム",
   "death.attack.miragefairy2024.magic": "%1$sは魔法で殺された",
   "death.attack.miragefairy2024.magic.player": "%1$sは%2$sとの戦闘中に魔法で殺された",
+  "death.attack.miragefairy2024.physical_magic": "%1$sは魔法で殺された",
+  "death.attack.miragefairy2024.physical_magic.player": "%1$sは%2$sとの戦闘中に魔法で殺された",
   "effect.miragefairy2024.experience": "経験値獲得",
   "enchantment.miragefairy2024.fertility": "豊穣",
   "enchantment.miragefairy2024.magic_acceleration": "魔法加速",

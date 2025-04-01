@@ -49,7 +49,15 @@ object MagicDamageTypeCard : DamageTypeCard() {
     override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.BYPASSES_ARMOR)
 }
 
+object PhysicalMagicDamageTypeCard : DamageTypeCard() {
+    override fun getPath() = "physical_magic"
+    override fun getKillMessage() = EnJa("%1\$s was killed by magic", "%1\$sは魔法で殺された")
+    override fun getPlayerKillMessage() = EnJa("%1\$s was killed by magic whilst trying to escape %2\$s", "%1\$sは%2\$sとの戦闘中に魔法で殺された")
+    override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE)
+}
+
 context(ModContext)
 fun initDamageType() {
     MagicDamageTypeCard.init()
+    PhysicalMagicDamageTypeCard.init()
 }
