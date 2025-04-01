@@ -24,6 +24,7 @@ enum class ParticleTypeCard(
     MIRAGE_FLOUR("mirage_flour", "mirage_flour", false),
     ATTRACTING_MAGIC("attracting_magic", "mission", false),
     AURA("aura", "mission", false),
+    CHAOS_STONE("chaos_stone", "chaos_stone", false),
     HAIMEVISKA_BLOSSOM("haimeviska_blossom", "haimeviska_blossom", false),
     DRIPPING_HAIMEVISKA_SAP("dripping_haimeviska_sap", "minecraft:drip_hang", false),
     FALLING_HAIMEVISKA_SAP("falling_haimeviska_sap", "minecraft:drip_fall", false),
