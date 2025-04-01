@@ -449,7 +449,51 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
         return ActionResult.CONSUME
     }
 
-    // TODO したたるパーティクル
+    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+        if (random.nextFloat() >= 0.2F) return
+
+        val direction = state.get(FACING)
+        val destBlockPos = pos.offset(direction)
+        val destBlockState = world.getBlockState(destBlockPos)
+        val destShape = destBlockState.getCollisionShape(world, destBlockPos)
+        val hasSpace = when (direction) {
+            Direction.NORTH -> destShape.getMax(Direction.Axis.Z) < 1.0
+            Direction.SOUTH -> destShape.getMin(Direction.Axis.Z) > 0.0
+            Direction.WEST -> destShape.getMax(Direction.Axis.X) < 1.0
+            Direction.EAST -> destShape.getMin(Direction.Axis.X) > 0.0
+            else -> throw IllegalStateException()
+        }
+        if (!(hasSpace || !destBlockState.isFullCube(world, destBlockPos))) return
+
+        val position = random.nextInt(2)
+        val x = when (position) {
+            0 -> (7.0 + 7.0 * world.random.nextDouble()) / 16.0
+            else -> (2.0 + 8.0 * world.random.nextDouble()) / 16.0
+        }
+        val y = when (position) {
+            0 -> 12.0 / 16.0
+            else -> 5.0 / 16.0
+        }
+        val z = 17.0 / 16.0
+
+        val (x2, z2) = when (direction) {
+            Direction.NORTH -> Pair(1.0 - x, 1.0 - z)
+            Direction.EAST -> Pair(0.0 + z, 1.0 - x)
+            Direction.SOUTH -> Pair(0.0 + x, 0.0 + z)
+            Direction.WEST -> Pair(1.0 - z, 0.0 + x)
+            else -> throw IllegalStateException()
+        }
+
+        world.addParticle(
+            ParticleTypeCard.DRIPPING_HAIMEVISKA_SAP.particleType,
+            pos.x + x2,
+            pos.y + y - 1.0 / 16.0,
+            pos.z + z2,
+            0.0,
+            0.0,
+            0.0,
+        )
+    }
 }
 
 class HaimeviskaSaplingGenerator : SaplingGenerator() {
