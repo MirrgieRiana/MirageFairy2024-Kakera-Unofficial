@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:miragidian_block",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    },
+    {
+      "item": "miragefairy2024:miragidian"
+    }
+  ],
+  "result": {
+    "item": "miragefairy2024:miragidian_block"
+  }
+}

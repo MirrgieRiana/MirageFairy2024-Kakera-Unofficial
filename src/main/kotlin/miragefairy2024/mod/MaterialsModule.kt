@@ -234,6 +234,25 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on Items.LILAC
         } // TODO "Botanical alloy", "牡丹合金。"
+        val MIRAGIDIAN_SHARD = !MaterialCard(
+            "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
+            PoemList(4).poem("The great collapse 30,000 years ago", "遥か三万年前のミラジウムが見た夢。"),
+            soulStreamContainable = true,
+        ) {
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair(Ingredient.ofItems(item), 9),
+                ),
+                output = MIRAGIDIAN.item.createItemStack(),
+                duration = 20 * 60,
+            ) on item from item
+        }
+        val MIRAGIDIAN = !MaterialCard(
+            "miragidian", "Miragidian", "ミラジディアン",
+            PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
+            soulStreamContainable = true,
+        )
         val VEROPEDA_BERRIES = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
             PoemList(1)
