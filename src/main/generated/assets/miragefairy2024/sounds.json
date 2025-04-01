@@ -11,6 +11,43 @@
     ],
     "subtitle": "subtitles.miragefairy2024.collect"
   },
+  "entity.chaos_cube.ambient": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_ambient_1",
+      "miragefairy2024:entity_chaos_cube_ambient_2"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.ambient"
+  },
+  "entity.chaos_cube.attack": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_attack_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.attack"
+  },
+  "entity.chaos_cube.death": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_death_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.death"
+  },
+  "entity.chaos_cube.hurt": {
+    "sounds": [
+      "miragefairy2024:entity_chaos_cube_hurt_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.chaos_cube.hurt"
+  },
+  "entity.etheroballistic_zero_gravity_bolt.hit": {
+    "sounds": [
+      "miragefairy2024:entity_etheroballistic_zero_gravity_bolt_hit_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.etheroballistic_zero_gravity_bolt.hit"
+  },
+  "entity.etheroballistic_zero_gravity_bolt.shoot": {
+    "sounds": [
+      "miragefairy2024:entity_etheroballistic_zero_gravity_bolt_shoot_1"
+    ],
+    "subtitle": "subtitles.miragefairy2024.entity.etheroballistic_zero_gravity_bolt.shoot"
+  },
   "magic1": {
     "sounds": [
       "miragefairy2024:magic1"

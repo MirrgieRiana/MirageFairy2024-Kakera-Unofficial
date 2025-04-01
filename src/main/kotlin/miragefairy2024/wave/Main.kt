@@ -29,6 +29,68 @@ object GenerateV1Main {
 }
 
 
+object GenerateV2Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val tasks = mutableListOf<() -> Unit>()
+
+        val dir = File("./src/main/resources/assets/miragefairy2024/sounds")
+        fun generate(baseFileName: String) {
+            tasks += {
+                GenerateV2.generate(dir.resolve("$baseFileName.sc2.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
+            }
+        }
+
+        //generate("entity_chaos_cube_ambient_1")
+        //generate("entity_chaos_cube_ambient_2")
+        //generate("entity_chaos_cube_hurt_1")
+        //generate("entity_chaos_cube_death_1")
+        //generate("entity_chaos_cube_attack_1")
+        //generate("entity_etheroballistic_zero_gravity_bolt_hit_1")
+        generate("entity_etheroballistic_zero_gravity_bolt_shoot_1")
+        //generate("001")
+        //generate("002")
+        //generate("004")
+        //generate("005")
+        //generate("006")
+        //generate("007")
+        //generate("008")
+        //generate("009")
+        //generate("010")
+        //generate("011")
+        //generate("012")
+        //generate("013")
+        //generate("014")
+        //generate("015")
+        //generate("016")
+        //generate("017")
+        //generate("018")
+        //generate("019")
+        //generate("020")
+        //generate("021")
+        //generate("022")
+        //generate("023")
+        //generate("024")
+        //generate("025")
+        //generate("026")
+        //generate("027")
+
+        //tasks += {
+        //    val baseFileName = "009"
+        //    GenerateV2.generate(dir.resolve("$baseFileName.scr.png"), dir.resolve("$baseFileName.ogg"), dumpWav = true)
+        //    GenerateV2.degenerate(dir.resolve("$baseFileName.ogg"), dir.resolve("$baseFileName.2.png"))
+        //}
+
+        runBlocking {
+            tasks.forEach { task ->
+                launch(Dispatchers.Default) {
+                    task()
+                }
+            }
+        }
+    }
+}
+
 private val assetsDir = File(System.getProperty("user.home")).resolve(".gradle/caches/fabric-loom/assets")
 private val outputDir = File("./build/minecraft_assets")
 
