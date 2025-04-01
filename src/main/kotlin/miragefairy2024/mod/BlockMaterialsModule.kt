@@ -164,16 +164,10 @@ fun initBlockMaterialsModule() {
         }
     }
 
-    // 紅天石ブロック
+    // 圧縮
     registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, BlockMaterialCard.XARPITE_BLOCK.item)
-
-    // 蒼天石ブロック
     registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
-
-    // 混沌の石ブロック
     registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
-
-    // ルミナイトブロック
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
 
     // 霊氣石
