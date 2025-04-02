@@ -38,6 +38,7 @@ fun initParticleClientModule() {
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.DRIPPING_HAIMEVISKA_SAP.particleType) { spriteProvider -> ParticleFactory { _, world, x, y, z, _, _, _ -> HaimeviskaSapParticle.Dripping(world, x, y, z, spriteProvider, ParticleTypeCard.FALLING_HAIMEVISKA_SAP.particleType) } }
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.FALLING_HAIMEVISKA_SAP.particleType) { spriteProvider -> ParticleFactory { _, world, x, y, z, _, _, _ -> HaimeviskaSapParticle.Falling(world, x, y, z, spriteProvider, ParticleTypeCard.LANDING_HAIMEVISKA_SAP.particleType) } }
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.LANDING_HAIMEVISKA_SAP.particleType) { spriteProvider -> ParticleFactory { _, world, x, y, z, _, _, _ -> HaimeviskaSapParticle.Landing(world, x, y, z, spriteProvider) } }
+    ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.MAGIC_SQUARE.particleType, createMagicSquareParticleFactory())
 }
 
 class AttractingParticle internal constructor(
@@ -210,6 +211,37 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
         init {
             setSprite(spriteProvider)
             maxAge = (128.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
+        }
+    }
+}
+
+fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
+    ParticleFactory<DefaultParticleType> { _, world, x, y, z, _, _, _ ->
+        object : SpriteBillboardParticle(world, x, y, z) {
+
+            init {
+                setSprite(spriteProvider)
+                gravityStrength = 0.0F
+                maxAge = 40
+                scale = 0.5F
+            }
+
+            override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+
+            override fun tick() {
+                prevPosX = x
+                prevPosY = y
+                prevPosZ = z
+
+                maxAge--
+                if (maxAge <= 0) {
+                    markDead()
+                    return
+                }
+
+                val lifeRate = 1F - maxAge.toFloat() / 40F
+                scale = 0.5F * (1F - lifeRate * lifeRate)
+            }
         }
     }
 }

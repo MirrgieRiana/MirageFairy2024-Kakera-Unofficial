@@ -29,6 +29,7 @@ enum class ParticleTypeCard(
     DRIPPING_HAIMEVISKA_SAP("dripping_haimeviska_sap", "minecraft:drip_hang", false),
     FALLING_HAIMEVISKA_SAP("falling_haimeviska_sap", "minecraft:drip_fall", false),
     LANDING_HAIMEVISKA_SAP("landing_haimeviska_sap", "minecraft:drip_land", false),
+    MAGIC_SQUARE("magic_square", "magic_square", false),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
