@@ -2,6 +2,8 @@ package miragefairy2024.mod.entity
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.MagicSquareParticleChannel
+import miragefairy2024.mod.MagicSquareParticlePacket
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.ParticleTypeCard
 import miragefairy2024.mod.SoundEventCard
@@ -320,6 +322,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                                 false,
                             )
                             SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, packet)
+
+                            MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, MagicSquareParticlePacket(entity.x + 1.6, entity.y + 1.4, entity.z + 1.9))
                         }
 
                         // 発射体の生成
