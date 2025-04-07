@@ -22,8 +22,8 @@ fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
 
 class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, index: Int, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
     companion object {
-        private val field_38334: Vector3f = Vector3f(0.5F, 0.5F, 0.5F).normalize()
-        private val field_38335: Vector3f = Vector3f(-1.0F, -1.0F, 0.0F)
+        private val targetVector: Vector3f = Vector3f(0.5F, 0.5F, 0.5F).normalize()
+        private val rotationVector: Vector3f = Vector3f(-1.0F, -1.0F, 0.0F)
     }
 
     init {
@@ -33,40 +33,45 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, i
         scale = 2.0F
     }
 
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_LIT
+    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
 
     override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
-        super.buildGeometry(vertexConsumer, camera, tickDelta)
+		//if (delay <= 0) {
+			alpha = 1.0F - MathHelper.clamp((age.toFloat() + tickDelta) / maxAge.toFloat(), 0.0F, 1.0F)
+			buildGeometry(vertexConsumer, camera, tickDelta) { quaternion -> quaternion.mul(Quaternionf().rotationX(-1.0472F)) }
+			buildGeometry(vertexConsumer, camera, tickDelta) { quaternion -> quaternion.mul(Quaternionf().rotationYXZ(-Math.PI.toFloat(), 1.0472F, 0.0F)) }
+		//}
+        //super.buildGeometry(vertexConsumer, camera, tickDelta)
     }
 
     private fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float, rotator: (Quaternionf) -> Unit) {
-        val vec3d = camera.pos
-        val f = (MathHelper.lerp(tickDelta.toDouble(), prevPosX, x) - vec3d.getX()).toFloat()
-        val g = (MathHelper.lerp(tickDelta.toDouble(), prevPosY, y) - vec3d.getY()).toFloat()
-        val h = (MathHelper.lerp(tickDelta.toDouble(), prevPosZ, z) - vec3d.getZ()).toFloat()
-        val quaternionf = Quaternionf().setAngleAxis(0.0F, field_38334.x(), field_38334.y(), field_38334.z())
+        val quaternionf = Quaternionf().setAngleAxis(0.0F, targetVector.x(), targetVector.y(), targetVector.z())
         rotator(quaternionf)
-        quaternionf.transform(field_38335)
+        quaternionf.transform(rotationVector)
         val vector3fs = arrayOf(
             Vector3f(-1.0F, -1.0F, 0.0F),
             Vector3f(-1.0F, 1.0F, 0.0F),
             Vector3f(1.0F, 1.0F, 0.0F),
             Vector3f(1.0F, -1.0F, 0.0F),
         )
-        val i = getSize(tickDelta)
 
+        val size = getSize(tickDelta)
+        val cameraPos = camera.pos
+        val translateX = (MathHelper.lerp(tickDelta.toDouble(), prevPosX, x) - cameraPos.getX()).toFloat()
+        val translateY = (MathHelper.lerp(tickDelta.toDouble(), prevPosY, y) - cameraPos.getY()).toFloat()
+        val translateZ = (MathHelper.lerp(tickDelta.toDouble(), prevPosZ, z) - cameraPos.getZ()).toFloat()
         repeat(4) { j ->
             val vector3f = vector3fs[j]
             vector3f.rotate(quaternionf)
-            vector3f.mul(i)
-            vector3f.add(f, g, h)
+            vector3f.mul(size)
+            vector3f.add(translateX, translateY, translateZ)
         }
 
-        val j = getBrightness(tickDelta)
-        vertex(vertexConsumer, vector3fs[0], maxU, maxV, j)
-        vertex(vertexConsumer, vector3fs[1], maxU, minV, j)
-        vertex(vertexConsumer, vector3fs[2], minU, minV, j)
-        vertex(vertexConsumer, vector3fs[3], minU, maxV, j)
+        val brightness = getBrightness(tickDelta)
+        vertex(vertexConsumer, vector3fs[0], maxU, maxV, brightness)
+        vertex(vertexConsumer, vector3fs[1], maxU, minV, brightness)
+        vertex(vertexConsumer, vector3fs[2], minU, minV, brightness)
+        vertex(vertexConsumer, vector3fs[3], minU, maxV, brightness)
     }
 
     private fun vertex(vertexConsumer: VertexConsumer, pos: Vector3f, u: Float, v: Float, light: Int) {
