@@ -1,4 +1,4 @@
-package miragefairy2024.client.mod
+package miragefairy2024.client.mod.particle
 
 import miragefairy2024.mod.ParticleTypeCard
 import mirrg.kotlin.hydrogen.atLeast
