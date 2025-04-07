@@ -24,8 +24,8 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
     ENTITY_CHAOS_CUBE_HURT("entity.chaos_cube.hurt", "Chaos Cube hurts", "混沌のキューブがダメージを受ける", listOf("entity_chaos_cube_hurt_1")),
     ENTITY_CHAOS_CUBE_DEATH("entity.chaos_cube.death", "Chaos Cube dies", "混沌のキューブが死ぬ", listOf("entity_chaos_cube_death_1")),
     ENTITY_CHAOS_CUBE_ATTACK("entity.chaos_cube.attack", "Chaos Cube chants", "混沌のキューブが詠唱する", listOf("entity_chaos_cube_attack_1")),
-    ENTITY_ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_HIT("entity.etheroballistic_zero_gravity_bolt.hit", "Etheroballistic Zero Gravity Bolt hits", "エテロバリスティック無重力弾が当たる", listOf("entity_etheroballistic_zero_gravity_bolt_hit_1")),
-    ENTITY_ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_SHOOT("entity.etheroballistic_zero_gravity_bolt.shoot", "Etheroballistic Zero Gravity Bolt fired", "エテロバリスティック無重力弾が発射される", listOf("entity_etheroballistic_zero_gravity_bolt_shoot_1")),
+    ENTITY_ETHEROBALLISTIC_BOLT_HIT("entity.etheroballistic_bolt.hit", "Etheroballistic Bolt hits", "エテロバリスティック弾が当たる", listOf("entity_etheroballistic_bolt_hit_1")),
+    ENTITY_ETHEROBALLISTIC_BOLT_SHOOT("entity.etheroballistic_bolt.shoot", "Etheroballistic Bolt fired", "エテロバリスティック弾が発射される", listOf("entity_etheroballistic_bolt_shoot_1")),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_etheroballistic_zero_gravity_bolt_fragment": {
+    "has_etheroballistic_bolt_fragment": {
       "conditions": {
         "items": [
           {
             "items": [
-              "miragefairy2024:etheroballistic_zero_gravity_bolt_fragment"
+              "miragefairy2024:etheroballistic_bolt_fragment"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:miragidian_shard_from_etheroballistic_zero_gravity_bolt_fragment"
+        "recipe": "miragefairy2024:miragidian_shard_from_etheroballistic_bolt_fragment"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_etheroballistic_zero_gravity_bolt_fragment",
+      "has_etheroballistic_bolt_fragment",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:miragidian_shard_from_etheroballistic_zero_gravity_bolt_fragment"
+      "miragefairy2024:miragidian_shard_from_etheroballistic_bolt_fragment"
     ]
   },
   "sends_telemetry_event": false

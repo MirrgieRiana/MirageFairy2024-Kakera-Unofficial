@@ -253,8 +253,8 @@ class MaterialCard(
             PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
             soulStreamContainable = true,
         )
-        val ETHEROBALLISTIC_ZERO_GRAVITY_BOLT_FRAGMENT = !MaterialCard(
-            "etheroballistic_zero_gravity_bolt_fragment", "Etheroballistic Zero Gravity Bolt Fragment", "エテロバリスティック無重力弾の破片",
+        val ETHEROBALLISTIC_BOLT_FRAGMENT = !MaterialCard(
+            "etheroballistic_bolt_fragment", "Etheroballistic Bolt Fragment", "エテロバリスティック弾の破片",
             PoemList(4).poem("More abrasion resistant than lethal", "合金として生きるということ。"),
             soulStreamContainable = true,
         ) {
