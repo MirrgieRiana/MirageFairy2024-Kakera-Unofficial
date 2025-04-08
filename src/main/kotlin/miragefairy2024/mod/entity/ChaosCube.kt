@@ -58,6 +58,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.Heightmap
 import net.minecraft.world.World
 import net.minecraft.world.biome.BiomeKeys
@@ -313,7 +314,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
                         // エフェクト
                         if (!entity.isSilent) {
-                            val packet = SoundEventPacket(
+                            val soundEventPacket = SoundEventPacket(
                                 SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_SHOOT.soundEvent,
                                 entity.blockPos,
                                 SoundCategory.HOSTILE,
@@ -321,9 +322,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,
                             )
-                            SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, packet)
+                            SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
 
-                            MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, MagicSquareParticlePacket(entity.x + 1.6, entity.y + 1.4, entity.z + 1.9))
+                            val particlePacket = MagicSquareParticlePacket(
+                                Vec3d(entity.x + 1.6, entity.y + 1.4, entity.z + 1.9), // TODO
+                                Vec3d(target.x, target.getBodyY(0.5), target.z),
+                            )
+                            MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
                         }
 
                         // 発射体の生成

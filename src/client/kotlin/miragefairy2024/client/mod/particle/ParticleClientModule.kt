@@ -2,6 +2,7 @@ package miragefairy2024.client.mod.particle
 
 import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.mod.MagicSquareParticleChannel
+import miragefairy2024.mod.MagicSquareParticleEffect
 import miragefairy2024.mod.ParticleTypeCard
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
 import net.minecraft.client.MinecraftClient
@@ -35,10 +36,10 @@ fun initParticleClientModule() {
         val particleManager = MinecraftClient.getInstance()?.particleManager ?: return@registerClientPacketReceiver
         (0..6).forEach { i ->
             particleManager.addParticle(
-                ParticleTypeCard.MAGIC_SQUARE.particleType,
-                packet.x,
-                packet.y,
-                packet.z,
+                MagicSquareParticleEffect(packet.targetPosition),
+                packet.position.x,
+                packet.position.y,
+                packet.position.z,
                 i.toDouble(),
                 0.0,
                 0.0,

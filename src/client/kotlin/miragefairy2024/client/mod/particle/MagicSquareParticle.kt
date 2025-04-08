@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod.particle
 
+import miragefairy2024.mod.MagicSquareParticleEffect
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
 import net.minecraft.client.particle.ParticleFactory
 import net.minecraft.client.particle.ParticleTextureSheet
@@ -8,30 +9,26 @@ import net.minecraft.client.particle.SpriteProvider
 import net.minecraft.client.render.Camera
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.world.ClientWorld
-import net.minecraft.particle.DefaultParticleType
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.roundToInt
 
 fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
-    ParticleFactory<DefaultParticleType> { _, world, x, y, z, velocityX, _, _ ->
-        MagicSquareParticle(world, x, y, z, velocityX.roundToInt(), spriteProvider)
+    ParticleFactory<MagicSquareParticleEffect> { parameters, world, x, y, z, velocityX, _, _ ->
+        MagicSquareParticle(world, x, y, z, velocityX.roundToInt(), parameters.targetPosition, spriteProvider)
     }
 }
 
-class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, index: Int, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
-    companion object {
-        private val targetVector: Vector3f = Vector3f(0.5F, 0.5F, 0.5F).normalize()
-        private val rotationVector: Vector3f = Vector3f(-1.0F, -1.0F, 0.0F)
-    }
+class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, index: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
 
     var delay = 0
 
     init {
         setSprite((spriteProvider as FabricSpriteProvider).sprites[index])
         maxAge = 60
-        scale = 1.5F
+        scale = 0.5F
     }
 
     override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -44,15 +41,29 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, i
             a < 60F -> 1F - (a - 40F) / 20F
             else -> 0F
         }
-        buildGeometry(vertexConsumer, camera, tickDelta, Quaternionf().rotationX(-1.0472F))
-        buildGeometry(vertexConsumer, camera, tickDelta, Quaternionf().rotationYXZ(-Math.PI.toFloat(), 1.0472F, 0.0F))
+        buildGeometry(vertexConsumer, camera, tickDelta, false)
+        buildGeometry(vertexConsumer, camera, tickDelta, true)
     }
 
-    private fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float, rotator: Quaternionf) {
-        val quaternionf = Quaternionf().setAngleAxis(0.0F, targetVector.x(), targetVector.y(), targetVector.z())
-        quaternionf.mul(rotator)
+    private fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float, flip: Boolean) {
+
+
+        val offsetX = (targetPosition.x - x).toFloat()
+        val offsetY = (targetPosition.y - y).toFloat()
+        val offsetZ = (targetPosition.z - z).toFloat()
+
+        val yaw = MathHelper.atan2(offsetX.toDouble(), offsetZ.toDouble()).toFloat()
+        val pitch = MathHelper.atan2(-offsetY.toDouble(), MathHelper.sqrt(offsetX * offsetX + offsetZ * offsetZ).toDouble()).toFloat()
+
+
+        val quaternionf = Quaternionf().setAngleAxis(0F, 1F, 1F, 1F)
+        quaternionf.rotateY(yaw)
+        quaternionf.rotateX(pitch)
+        //println(targetPosition) // TODO
+        //println("$x $y $z") // TODO
+        //println(Vector3f((targetPosition.x - x).toFloat(), (targetPosition.y - y).toFloat(), (targetPosition.z - z).toFloat())) // TODO
         quaternionf.rotateZ(MathHelper.lerp(tickDelta, prevAngle, angle))
-        quaternionf.transform(rotationVector)
+        if (flip) quaternionf.rotateY(-MathHelper.PI)
 
         val size = getSize(tickDelta)
 

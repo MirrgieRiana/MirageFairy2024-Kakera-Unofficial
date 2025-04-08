@@ -1,5 +1,8 @@
 package miragefairy2024.mod
 
+import com.mojang.brigadier.StringReader
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -11,32 +14,38 @@ import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.particle.DefaultParticleType
+import net.minecraft.particle.ParticleEffect
+import net.minecraft.particle.ParticleType
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 
-enum class ParticleTypeCard(
+class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
     path: String,
     textureNames: List<String>,
-    alwaysSpawn: Boolean,
+    creator: () -> P,
 ) {
-    MISSION("mission", listOf("mission"), true),
-    COLLECTING_MAGIC("collecting_magic", listOf("magic"), false),
-    DESCENDING_MAGIC("descending_magic", listOf("magic"), false),
-    MIRAGE_FLOUR("mirage_flour", listOf("mirage_flour"), false),
-    ATTRACTING_MAGIC("attracting_magic", listOf("mission"), false),
-    AURA("aura", listOf("mission"), false),
-    CHAOS_STONE("chaos_stone", listOf("chaos_stone"), false),
-    HAIMEVISKA_BLOSSOM("haimeviska_blossom", listOf("haimeviska_blossom"), false),
-    DRIPPING_HAIMEVISKA_SAP("dripping_haimeviska_sap", listOf("minecraft:drip_hang"), false),
-    FALLING_HAIMEVISKA_SAP("falling_haimeviska_sap", listOf("minecraft:drip_fall"), false),
-    LANDING_HAIMEVISKA_SAP("landing_haimeviska_sap", listOf("minecraft:drip_land"), false),
-    MAGIC_SQUARE("magic_square", (1..7).map { "magic_square_$it" }, true),
-    ;
+    companion object {
+        val entries = mutableListOf<ParticleTypeCard<*, *>>()
+        private operator fun <P : ParticleType<T>, T : ParticleEffect> ParticleTypeCard<P, T>.not() = this.also { entries.add(this) }
+
+        val MISSION = !ParticleTypeCard("mission", listOf("mission")) { FabricParticleTypes.simple(true) }
+        val COLLECTING_MAGIC = !ParticleTypeCard("collecting_magic", listOf("magic")) { FabricParticleTypes.simple(false) }
+        val DESCENDING_MAGIC = !ParticleTypeCard("descending_magic", listOf("magic")) { FabricParticleTypes.simple(false) }
+        val MIRAGE_FLOUR = !ParticleTypeCard("mirage_flour", listOf("mirage_flour")) { FabricParticleTypes.simple(false) }
+        val ATTRACTING_MAGIC = !ParticleTypeCard("attracting_magic", listOf("mission")) { FabricParticleTypes.simple(false) }
+        val AURA = !ParticleTypeCard("aura", listOf("mission")) { FabricParticleTypes.simple(false) }
+        val CHAOS_STONE = !ParticleTypeCard("chaos_stone", listOf("chaos_stone")) { FabricParticleTypes.simple(false) }
+        val HAIMEVISKA_BLOSSOM = !ParticleTypeCard("haimeviska_blossom", listOf("haimeviska_blossom")) { FabricParticleTypes.simple(false) }
+        val DRIPPING_HAIMEVISKA_SAP = !ParticleTypeCard("dripping_haimeviska_sap", listOf("minecraft:drip_hang")) { FabricParticleTypes.simple(false) }
+        val FALLING_HAIMEVISKA_SAP = !ParticleTypeCard("falling_haimeviska_sap", listOf("minecraft:drip_fall")) { FabricParticleTypes.simple(false) }
+        val LANDING_HAIMEVISKA_SAP = !ParticleTypeCard("landing_haimeviska_sap", listOf("minecraft:drip_land")) { FabricParticleTypes.simple(false) }
+        val MAGIC_SQUARE = !ParticleTypeCard("magic_square", (1..7).map { "magic_square_$it" }) { MagicSquareParticleType(true) }
+    }
 
     val identifier = MirageFairy2024.identifier(path)
     val textures = textureNames.map { if (":" in it) Identifier(it) else MirageFairy2024.identifier(it) }
-    val particleType: DefaultParticleType = FabricParticleTypes.simple(alwaysSpawn)
+    val particleType: P = creator()
 }
 
 context(ModContext)
@@ -52,19 +61,64 @@ fun initParticleModule() {
     }
 }
 
+class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquareParticleEffect>(alwaysSpawn, MagicSquareParticleEffect.FACTORY) {
+    companion object {
+        val CODEC: Codec<MagicSquareParticleEffect> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Vec3d.CODEC.fieldOf("targetPosition").forGetter(MagicSquareParticleEffect::targetPosition),
+            ).apply(instance, ::MagicSquareParticleEffect)
+        }
+    }
+
+    override fun getCodec() = CODEC
+}
+
+class MagicSquareParticleEffect(val targetPosition: Vec3d) : ParticleEffect {
+    companion object {
+        val FACTORY = object : ParticleEffect.Factory<MagicSquareParticleEffect> {
+            override fun read(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
+                return MagicSquareParticleEffect(Vec3d.ZERO) // TODO
+            }
+
+            override fun read(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
+                val targetPositionX = reader.readDouble()
+                val targetPositionY = reader.readDouble()
+                val targetPositionZ = reader.readDouble()
+                return MagicSquareParticleEffect(Vec3d(targetPositionX, targetPositionY, targetPositionZ))
+            }
+        }
+    }
+
+    override fun getType() = ParticleTypeCard.MAGIC_SQUARE.particleType
+
+    override fun write(buf: PacketByteBuf) {
+        buf.writeDouble(targetPosition.x)
+        buf.writeDouble(targetPosition.y)
+        buf.writeDouble(targetPosition.z)
+    }
+
+    override fun asString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string
+}
+
 object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFairy2024.identifier("magic_square_particle")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: MagicSquareParticlePacket) {
-        buf.writeDouble(packet.x)
-        buf.writeDouble(packet.y)
-        buf.writeDouble(packet.z)
+        buf.writeDouble(packet.position.x)
+        buf.writeDouble(packet.position.y)
+        buf.writeDouble(packet.position.z)
+        buf.writeDouble(packet.targetPosition.x)
+        buf.writeDouble(packet.targetPosition.y)
+        buf.writeDouble(packet.targetPosition.z)
     }
 
     override fun readFromBuf(buf: PacketByteBuf): MagicSquareParticlePacket {
-        val x = buf.readDouble()
-        val y = buf.readDouble()
-        val z = buf.readDouble()
-        return MagicSquareParticlePacket(x, y, z)
+        val positionX = buf.readDouble()
+        val positionY = buf.readDouble()
+        val positionZ = buf.readDouble()
+        val targetPositionX = buf.readDouble()
+        val targetPositionY = buf.readDouble()
+        val targetPositionZ = buf.readDouble()
+        return MagicSquareParticlePacket(Vec3d(positionX, positionY, positionZ), Vec3d(targetPositionX, targetPositionY, targetPositionZ))
     }
 }
 
-class MagicSquareParticlePacket(val x: Double, val y: Double, val z: Double)
+class MagicSquareParticlePacket(val position: Vec3d, val targetPosition: Vec3d)
