@@ -67,6 +67,7 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
             instance.group(
                 Codec.INT.fieldOf("layer").forGetter(MagicSquareParticleEffect::layer),
                 Vec3d.CODEC.fieldOf("targetPosition").forGetter(MagicSquareParticleEffect::targetPosition),
+                Codec.FLOAT.fieldOf("delay").forGetter(MagicSquareParticleEffect::delay),
             ).apply(instance, ::MagicSquareParticleEffect)
         }
     }
@@ -74,7 +75,7 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
     override fun getCodec() = CODEC
 }
 
-class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d) : ParticleEffect {
+class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val delay: Float) : ParticleEffect {
     companion object {
         val FACTORY = object : ParticleEffect.Factory<MagicSquareParticleEffect> {
             override fun read(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
@@ -82,7 +83,8 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d) : Par
                 val targetPositionX = buf.readDouble()
                 val targetPositionY = buf.readDouble()
                 val targetPositionZ = buf.readDouble()
-                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ))
+                val delay = buf.readFloat()
+                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ), delay)
             }
 
             override fun read(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
@@ -90,7 +92,8 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d) : Par
                 val targetPositionX = reader.readDouble()
                 val targetPositionY = reader.readDouble()
                 val targetPositionZ = reader.readDouble()
-                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ))
+                val delay = reader.readFloat()
+                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ), delay)
             }
         }
     }
@@ -102,6 +105,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d) : Par
         buf.writeDouble(targetPosition.x)
         buf.writeDouble(targetPosition.y)
         buf.writeDouble(targetPosition.z)
+        buf.writeFloat(delay)
     }
 
     override fun asString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string

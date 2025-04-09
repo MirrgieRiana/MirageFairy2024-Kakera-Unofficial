@@ -27,6 +27,7 @@ import net.minecraft.registry.tag.EntityTypeTags
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
@@ -88,7 +89,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         maxDistance -= movingDistance
 
         // 衝突判定
-        val hitResult = ProjectileUtil.getCollision(this) { canHit(it) }
+        val hitResult = ProjectileUtil.getCollision(this) { (owner == null || it.type != owner!!.type) && it.canHit() }
         if (hitResult.type != HitResult.Type.MISS) onCollision(hitResult)
         if (isRemoved) return
 
@@ -111,6 +112,14 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         // 位置更新
         prevPos = pos
         setPosition(nextX, nextY, nextZ)
+
+        // 向き更新
+        if (prevPitch == 0F && prevYaw == 0F) {
+            yaw = (MathHelper.atan2(vec3d.x, vec3d.z) * 180F / MathHelper.PI).toFloat()
+            pitch = (MathHelper.atan2(vec3d.y, vec3d.horizontalLength()) * 180F / MathHelper.PI).toFloat()
+            prevYaw = yaw
+            prevPitch = pitch
+        }
 
     }
 

@@ -36,7 +36,7 @@ fun initParticleClientModule() {
         val particleManager = MinecraftClient.getInstance()?.particleManager ?: return@registerClientPacketReceiver
         (0..6).forEach { i ->
             particleManager.addParticle(
-                MagicSquareParticleEffect(i, packet.targetPosition),
+                MagicSquareParticleEffect(i, packet.targetPosition, 30F * (i.toFloat() / 6F)),
                 packet.position.x,
                 packet.position.y,
                 packet.position.z,

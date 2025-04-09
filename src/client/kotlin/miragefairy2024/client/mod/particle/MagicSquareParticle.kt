@@ -18,20 +18,25 @@ import kotlin.math.roundToInt
 
 fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
     ParticleFactory<MagicSquareParticleEffect> { parameters, world, x, y, z, _, _, _ ->
-        MagicSquareParticle(world, x, y, z, parameters.layer, parameters.targetPosition, spriteProvider)
+        MagicSquareParticle(world, x, y, z, parameters.layer, parameters.targetPosition, spriteProvider).also {
+            it.alphaTicks[0] = parameters.delay
+            it.alphaTicks[1] = parameters.delay + 20F
+            it.lightTicks[0] = parameters.delay
+            it.lightTicks[1] = parameters.delay + 20F
+        }
     }
 }
 
 class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, layer: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
 
     var delay = 0
-    var alphaTicks = arrayOf(0F, 20F, 40F, 60F)
-    var lightTicks = arrayOf(0F, 20F, 40F, 60F)
+    var alphaTicks = arrayOf(0F, 10F, 70F, 80F)
+    var lightTicks = arrayOf(0F, 10F, 70F, 80F)
 
     init {
         val sprites = (spriteProvider as FabricSpriteProvider).sprites
         setSprite(sprites[layer.coerceIn(sprites.indices)])
-        maxAge = 60
+        maxAge = 80
         scale = 0.5F
     }
 
@@ -109,7 +114,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         angle += MathHelper.TAU / 60F
     }
 
-    override fun getSize(tickDelta: Float) = scale * (1F + 0.2F * MathHelper.sin((age.toFloat() + tickDelta) / 40F))
+    override fun getSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TAU))
 
     override fun getBrightness(tint: Float): Int {
         val brightness = super.getBrightness(tint)

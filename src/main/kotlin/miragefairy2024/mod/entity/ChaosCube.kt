@@ -270,7 +270,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             ticker = sequence {
 
                 suspend fun SequenceScope<Unit>.tryWait(): Boolean {
-                    repeat(20 * 4) {
+                    repeat(entity.random.nextBetween(20 * 2, 20 * 8)) {
                         yield(Unit)
                     }
                     return true
@@ -278,15 +278,22 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
                 suspend fun SequenceScope<Unit>.tryShoot(): Boolean {
 
-                    run {
-                        val target = entity.target ?: return false
-                        if (!entity.visibilityCache.canSee(target)) return false
-                        Unit // なぜかKotlinNothingValueExceptionが出る
-                    }
+
+                    // 準備フェーズ
+
+                    val target = (entity.target ?: return false)
+                    if (!entity.visibilityCache.canSee(target)) return false
+
+                    val shootingX = entity.x + entity.random.nextTriangular(0.0, 2.0)
+                    val shootingY = entity.y + entity.random.nextTriangular(2.0, 2.0)
+                    val shootingZ = entity.z + entity.random.nextTriangular(0.0, 2.0)
+
+                    // ターゲットを見る
+                    entity.getLookControl().lookAt(target, 10.0F, 10.0F)
 
                     // エフェクト
                     if (!entity.isSilent) {
-                        val packet = SoundEventPacket(
+                        val soundEventPacket = SoundEventPacket(
                             SoundEventCard.ENTITY_CHAOS_CUBE_ATTACK.soundEvent,
                             entity.blockPos,
                             SoundCategory.HOSTILE,
@@ -294,10 +301,16 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
                         )
-                        SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, packet)
+                        SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
                     }
+                    val particlePacket = MagicSquareParticlePacket(
+                        Vec3d(shootingX, shootingY, shootingZ),
+                        Vec3d(target.x, target.getBodyY(0.5), target.z),
+                    )
+                    MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
 
-                    repeat(10) {
+
+                    repeat(40) {
                         yield(Unit)
                     }
 
@@ -309,8 +322,33 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                             }
                         }
 
-                        val target = entity.target ?: return false
+
+                        // 射撃フェーズ
+
+                        if (entity.target != target) return false
                         if (!entity.visibilityCache.canSee(target)) return false
+
+                        val diffX = target.x - shootingX
+                        val diffY = target.getBodyY(0.5) - shootingY
+                        val diffZ = target.z - shootingZ
+                        val distance = sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ)
+                        if (distance < 0.01) return@repeat // 近すぎるので射撃に失敗
+
+                        // 発射体の生成
+                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.world)
+                        projectileEntity.owner = entity
+                        projectileEntity.setPosition(shootingX, shootingY, shootingZ)
+                        projectileEntity.setVelocity(
+                            0.8 * entity.getRandom().nextTriangular(diffX / distance, 0.05),
+                            0.8 * entity.getRandom().nextTriangular(diffY / distance, 0.05),
+                            0.8 * entity.getRandom().nextTriangular(diffZ / distance, 0.05),
+                        )
+                        projectileEntity.damage = 20.0F
+                        projectileEntity.maxDistance = 32.0F
+                        entity.world.spawnEntity(projectileEntity)
+
+                        // ターゲットを見る
+                        entity.getLookControl().lookAt(target, 10.0F, 10.0F)
 
                         // エフェクト
                         if (!entity.isSilent) {
@@ -323,34 +361,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                                 false,
                             )
                             SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
-
-                            val particlePacket = MagicSquareParticlePacket(
-                                Vec3d(entity.x + 1.6, entity.y + 1.4, entity.z + 1.9), // TODO
-                                Vec3d(target.x, target.getBodyY(0.5), target.z),
-                            )
-                            MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
                         }
 
-                        // 発射体の生成
-                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.world)
-                        projectileEntity.owner = entity
-                        projectileEntity.setPosition(
-                            entity.x,
-                            entity.getBodyY(0.5) + 0.5,
-                            entity.z
-                        )
-                        val sqrtDistance = sqrt(sqrt(100.0)) * 0.5 // TODO
-                        projectileEntity.setVelocity(
-                            0.1 * entity.getRandom().nextTriangular(target.x - entity.x, 2.297 * sqrtDistance),
-                            0.1 * (target.getBodyY(0.5) - entity.getBodyY(0.5)),
-                            0.1 * entity.getRandom().nextTriangular(target.z - entity.z, 2.297 * sqrtDistance),
-                        )
-                        projectileEntity.damage = 20.0F
-                        projectileEntity.maxDistance = 32.0F
-                        entity.world.spawnEntity(projectileEntity)
-
-                        // ターゲットを見る
-                        entity.getLookControl().lookAt(target, 10.0F, 10.0F)
 
                     }
 
