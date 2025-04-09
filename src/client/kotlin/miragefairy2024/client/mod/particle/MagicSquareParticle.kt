@@ -1,6 +1,7 @@
 package miragefairy2024.client.mod.particle
 
 import miragefairy2024.mod.MagicSquareParticleEffect
+import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
 import net.minecraft.client.particle.ParticleFactory
 import net.minecraft.client.particle.ParticleTextureSheet
@@ -16,37 +17,43 @@ import org.joml.Vector3f
 import kotlin.math.roundToInt
 
 fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
-    ParticleFactory<MagicSquareParticleEffect> { parameters, world, x, y, z, velocityX, _, _ ->
-        MagicSquareParticle(world, x, y, z, velocityX.roundToInt(), parameters.targetPosition, spriteProvider)
+    ParticleFactory<MagicSquareParticleEffect> { parameters, world, x, y, z, _, _, _ ->
+        MagicSquareParticle(world, x, y, z, parameters.layer, parameters.targetPosition, spriteProvider)
     }
 }
 
-class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, index: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
+class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, layer: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
 
     var delay = 0
+    var alphaTicks = arrayOf(0F, 20F, 40F, 60F)
+    var lightTicks = arrayOf(0F, 20F, 40F, 60F)
 
     init {
-        setSprite((spriteProvider as FabricSpriteProvider).sprites[index])
+        val sprites = (spriteProvider as FabricSpriteProvider).sprites
+        setSprite(sprites[layer.coerceIn(sprites.indices)])
         maxAge = 60
         scale = 0.5F
     }
 
-    override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
-        if (delay > 0) return
+    private fun getValue(tickDelta: Float, ticks: Array<Float>): Float {
         val a = age.toFloat() + tickDelta
-        alpha = when {
-            a < 0F -> 0F
-            a < 20F -> a / 20F
-            a < 40F -> 1F
-            a < 60F -> 1F - (a - 40F) / 20F
+        return when {
+            a < ticks[0] -> 0F
+            a < ticks[1] -> 0F + (a - ticks[0]) / (ticks[1] - ticks[0])
+            a < ticks[2] -> 1F
+            a < ticks[3] -> 1F - (a - ticks[2]) / (ticks[3] - ticks[2])
             else -> 0F
         }
+    }
+
+    override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
+        if (delay > 0) return
+        alpha = getValue(tickDelta, alphaTicks)
         buildGeometry(vertexConsumer, camera, tickDelta, false)
         buildGeometry(vertexConsumer, camera, tickDelta, true)
     }
 
     private fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float, flip: Boolean) {
-
 
         val offsetX = (targetPosition.x - x).toFloat()
         val offsetY = (targetPosition.y - y).toFloat()
@@ -55,14 +62,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, i
         val yaw = MathHelper.atan2(offsetX.toDouble(), offsetZ.toDouble()).toFloat()
         val pitch = MathHelper.atan2(-offsetY.toDouble(), MathHelper.sqrt(offsetX * offsetX + offsetZ * offsetZ).toDouble()).toFloat()
 
-
-        val quaternionf = Quaternionf().setAngleAxis(0F, 1F, 1F, 1F)
-        quaternionf.rotateY(yaw)
-        quaternionf.rotateX(pitch)
-        //println(targetPosition) // TODO
-        //println("$x $y $z") // TODO
-        //println(Vector3f((targetPosition.x - x).toFloat(), (targetPosition.y - y).toFloat(), (targetPosition.z - z).toFloat())) // TODO
-        quaternionf.rotateZ(MathHelper.lerp(tickDelta, prevAngle, angle))
+        val quaternionf = Quaternionf().rotationYXZ(yaw, pitch, MathHelper.lerp(tickDelta, prevAngle, angle))
         if (flip) quaternionf.rotateY(-MathHelper.PI)
 
         val size = getSize(tickDelta)
@@ -97,8 +97,6 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, i
     }
 
     override fun tick() {
-        prevAngle = angle
-
         if (delay > 0) {
             delay--
             return
@@ -107,10 +105,20 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, i
         age++
         if (age >= maxAge) markDead()
 
+        prevAngle = angle
         angle += MathHelper.TAU / 60F
     }
 
     override fun getSize(tickDelta: Float) = scale * (1F + 0.2F * MathHelper.sin((age.toFloat() + tickDelta) / 40F))
+
+    override fun getBrightness(tint: Float): Int {
+        val brightness = super.getBrightness(tint)
+        val oldSkyLight = (brightness shr 20) and 0xF
+        val oldBlockLight = (brightness shr 4) and 0xF
+        val skyLight = oldSkyLight
+        val blockLight = oldBlockLight max (15F * getValue(tint, lightTicks)).roundToInt()
+        return (skyLight shl 20) or (blockLight shl 4)
+    }
 
     override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
 

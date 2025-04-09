@@ -65,6 +65,7 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
     companion object {
         val CODEC: Codec<MagicSquareParticleEffect> = RecordCodecBuilder.create { instance ->
             instance.group(
+                Codec.INT.fieldOf("layer").forGetter(MagicSquareParticleEffect::layer),
                 Vec3d.CODEC.fieldOf("targetPosition").forGetter(MagicSquareParticleEffect::targetPosition),
             ).apply(instance, ::MagicSquareParticleEffect)
         }
@@ -73,18 +74,23 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
     override fun getCodec() = CODEC
 }
 
-class MagicSquareParticleEffect(val targetPosition: Vec3d) : ParticleEffect {
+class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d) : ParticleEffect {
     companion object {
         val FACTORY = object : ParticleEffect.Factory<MagicSquareParticleEffect> {
             override fun read(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
-                return MagicSquareParticleEffect(Vec3d.ZERO) // TODO
+                val layer = buf.readInt()
+                val targetPositionX = buf.readDouble()
+                val targetPositionY = buf.readDouble()
+                val targetPositionZ = buf.readDouble()
+                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ))
             }
 
             override fun read(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
+                val layer = reader.readInt()
                 val targetPositionX = reader.readDouble()
                 val targetPositionY = reader.readDouble()
                 val targetPositionZ = reader.readDouble()
-                return MagicSquareParticleEffect(Vec3d(targetPositionX, targetPositionY, targetPositionZ))
+                return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ))
             }
         }
     }
@@ -92,6 +98,7 @@ class MagicSquareParticleEffect(val targetPosition: Vec3d) : ParticleEffect {
     override fun getType() = ParticleTypeCard.MAGIC_SQUARE.particleType
 
     override fun write(buf: PacketByteBuf) {
+        buf.writeInt(layer)
         buf.writeDouble(targetPosition.x)
         buf.writeDouble(targetPosition.y)
         buf.writeDouble(targetPosition.z)
