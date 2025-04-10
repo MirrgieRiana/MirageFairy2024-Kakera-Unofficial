@@ -50,6 +50,9 @@ fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
 class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, layer: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
 
     var delay = 0
+    var color1 = 0xFFF4D3
+    var color2 = 0xFFB82C
+    var color3 = 0x341B0E
     var alphaTicks = arrayOf(0F, 10F, 70F, 80F)
     var lightTicks = arrayOf(0F, 10F, 70F, 80F)
 
@@ -59,6 +62,11 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         maxAge = 80
         scale = 0.5F
     }
+
+    //       0     1         2     3
+    // 　　　　　／￣￣￣￣￣＼
+    // 　　　　／　　　　　　　＼
+    // ＿＿＿／　　　　　　　　　＼
 
     private fun getValue(tickDelta: Float, ticks: Array<Float>): Float {
         val a = age.toFloat() + tickDelta
@@ -71,8 +79,36 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         }
     }
 
+    private fun setColor(color1: Int, color2: Int, delta: Float) {
+        val r1 = ((color1 shr 16) and 0xFF).toFloat() / 255F
+        val g1 = ((color1 shr 8) and 0xFF).toFloat() / 255F
+        val b1 = (color1 and 0xFF).toFloat() / 255F
+        val r2 = ((color2 shr 16) and 0xFF).toFloat() / 255F
+        val g2 = ((color2 shr 8) and 0xFF).toFloat() / 255F
+        val b2 = (color2 and 0xFF).toFloat() / 255F
+        red = r1 + (r2 - r1) * delta
+        green = g1 + (g2 - g1) * delta
+        blue = b1 + (b2 - b1) * delta
+    }
+
+    private fun setColor(color: Int) {
+        red = ((color shr 16) and 0xFF).toFloat() / 255F
+        green = ((color shr 8) and 0xFF).toFloat() / 255F
+        blue = (color and 0xFF).toFloat() / 255F
+    }
+
     override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
         if (delay > 0) return
+
+        val a = age.toFloat() + tickDelta
+        when {
+            a < alphaTicks[0] -> setColor(color1)
+            a < alphaTicks[1] -> setColor(color1)
+            a < alphaTicks[2] -> setColor(color1, color2, (a - alphaTicks[1]) / (alphaTicks[2] - alphaTicks[1]))
+            a < alphaTicks[3] -> setColor(color2, color3, (a - alphaTicks[2]) / (alphaTicks[3] - alphaTicks[2]))
+            else -> setColor(color3)
+        }
+
         alpha = getValue(tickDelta, alphaTicks)
         buildGeometry(vertexConsumer, camera, tickDelta, false)
         buildGeometry(vertexConsumer, camera, tickDelta, true)
@@ -132,6 +168,8 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
 
         prevAngle = angle
         angle += MathHelper.TAU / 60F
+
+        // TODO 魔方陣の周りのパーティクル
     }
 
     override fun getSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TAU))

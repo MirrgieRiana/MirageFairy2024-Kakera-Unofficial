@@ -1,9 +1,9 @@
 package miragefairy2024.client.mod.entity
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.ChaosCubeEntity
+import miragefairy2024.util.times
 import net.minecraft.client.model.ModelPart
 import net.minecraft.client.model.ModelPartBuilder
 import net.minecraft.client.model.ModelTransform
@@ -34,7 +34,7 @@ class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntit
         }
     }
 
-    private val texture = MirageFairy2024.identifier("textures/entity/chaos_cube.png")
+    private val texture = "textures/entity/" * ChaosCubeCard.identifier * ".png"
 
     override fun getTexture(entity: ChaosCubeEntity) = texture
 }

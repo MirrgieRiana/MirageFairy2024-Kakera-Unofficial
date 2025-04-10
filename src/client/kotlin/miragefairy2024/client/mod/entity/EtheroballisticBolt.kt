@@ -19,11 +19,11 @@ import net.minecraft.util.math.RotationAxis
 class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<EtheroballisticBoltEntity>(context) {
     companion object {
         val MAIN = EntityModelLayerCard(EtheroballisticBoltCard.identifier, "main", 16, 16) {
-            it.addChild("main", ModelPartBuilder.create().uv(0, 0).cuboid(-6F, -1F, -1F, 12F, 2F, 2F), ModelTransform.NONE)
+            it.addChild("main", ModelPartBuilder.create().uv(0, 0).cuboid(-1F, -6F, -1F, 2F, 12F, 2F), ModelTransform.NONE)
         }
     }
 
-    private val texture = "textures/entity/" * EtheroballisticBoltCard.identifier
+    private val texture = "textures/entity/" * EtheroballisticBoltCard.identifier * ".png"
 
     private val model = object : SinglePartEntityModel<EtheroballisticBoltEntity>() {
         private val modelPart: ModelPart = context.getPart(MAIN.entityModelLayer)
@@ -36,7 +36,7 @@ class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) 
     override fun render(entity: EtheroballisticBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.prevYaw, entity.yaw) - 90.0F) / 180F * MathHelper.PI))
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotation(MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch) / 180F * MathHelper.PI))
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotation((MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch) / 180F - 0.5F) * MathHelper.PI))
 
             model.setAngles(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.getLayer(texture))

@@ -264,6 +264,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             return livingEntity != null && livingEntity.isAlive && entity.canTarget(livingEntity)
         }
 
+        override fun shouldContinue() = ticker != null && super.shouldContinue()
+
         private var ticker: Iterator<Unit>? = null
 
         override fun start() {
@@ -282,7 +284,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     // 準備フェーズ
 
                     val target = (entity.target ?: return false)
-                    if (!entity.visibilityCache.canSee(target)) return false
+                    if (!entity.visibilityCache.canSee(target)) return true
 
                     val shootingX = entity.x + entity.random.nextTriangular(0.0, 2.0)
                     val shootingY = entity.y + entity.random.nextTriangular(2.0, 2.0)
@@ -326,7 +328,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         // 射撃フェーズ
 
                         if (entity.target != target) return false
-                        if (!entity.visibilityCache.canSee(target)) return false
+                        if (!entity.visibilityCache.canSee(target)) return true
 
                         val diffX = target.x - shootingX
                         val diffY = target.getBodyY(0.5) - shootingY

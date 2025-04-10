@@ -121,6 +121,8 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
             prevPitch = pitch
         }
 
+        // TODO 飛翔体パーティクル
+
     }
 
     override fun onCollision(hitResult: HitResult) {
@@ -141,6 +143,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         super.handleStatus(status)
         if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
             world.playSound(x, y, z, SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (world.random.nextFloat() - 0.5F) * 0.3F, true)
+            // TODO パーティクル
         }
     }
 
