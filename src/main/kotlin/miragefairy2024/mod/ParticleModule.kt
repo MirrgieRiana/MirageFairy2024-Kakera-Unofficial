@@ -9,31 +9,36 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
-import net.minecraft.particle.DefaultParticleType
+import net.minecraft.particle.ParticleEffect
+import net.minecraft.particle.ParticleType
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
-enum class ParticleTypeCard(
+class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
     path: String,
     textureNames: List<String>,
-    alwaysSpawn: Boolean,
+    creator: () -> P,
 ) {
-    MISSION("mission", listOf("mission"), true),
-    COLLECTING_MAGIC("collecting_magic", listOf("magic"), false),
-    DESCENDING_MAGIC("descending_magic", listOf("magic"), false),
-    MIRAGE_FLOUR("mirage_flour", listOf("mirage_flour"), false),
-    ATTRACTING_MAGIC("attracting_magic", listOf("mission"), false),
-    AURA("aura", listOf("mission"), false),
-    CHAOS_STONE("chaos_stone", listOf("chaos_stone"), false),
-    HAIMEVISKA_BLOSSOM("haimeviska_blossom", listOf("haimeviska_blossom"), false),
-    DRIPPING_HAIMEVISKA_SAP("dripping_haimeviska_sap", listOf("minecraft:drip_hang"), false),
-    FALLING_HAIMEVISKA_SAP("falling_haimeviska_sap", listOf("minecraft:drip_fall"), false),
-    LANDING_HAIMEVISKA_SAP("landing_haimeviska_sap", listOf("minecraft:drip_land"), false),
-    ;
+    companion object {
+        val entries = mutableListOf<ParticleTypeCard<*, *>>()
+        private operator fun <P : ParticleType<T>, T : ParticleEffect> ParticleTypeCard<P, T>.not() = this.also { entries.add(this) }
+
+        val MISSION = !ParticleTypeCard("mission", listOf("mission")) { FabricParticleTypes.simple(true) }
+        val COLLECTING_MAGIC = !ParticleTypeCard("collecting_magic", listOf("magic")) { FabricParticleTypes.simple(false) }
+        val DESCENDING_MAGIC = !ParticleTypeCard("descending_magic", listOf("magic")) { FabricParticleTypes.simple(false) }
+        val MIRAGE_FLOUR = !ParticleTypeCard("mirage_flour", listOf("mirage_flour")) { FabricParticleTypes.simple(false) }
+        val ATTRACTING_MAGIC = !ParticleTypeCard("attracting_magic", listOf("mission")) { FabricParticleTypes.simple(false) }
+        val AURA = !ParticleTypeCard("aura", listOf("mission")) { FabricParticleTypes.simple(false) }
+        val CHAOS_STONE = !ParticleTypeCard("chaos_stone", listOf("chaos_stone")) { FabricParticleTypes.simple(false) }
+        val HAIMEVISKA_BLOSSOM = !ParticleTypeCard("haimeviska_blossom", listOf("haimeviska_blossom")) { FabricParticleTypes.simple(false) }
+        val DRIPPING_HAIMEVISKA_SAP = !ParticleTypeCard("dripping_haimeviska_sap", listOf("minecraft:drip_hang")) { FabricParticleTypes.simple(false) }
+        val FALLING_HAIMEVISKA_SAP = !ParticleTypeCard("falling_haimeviska_sap", listOf("minecraft:drip_fall")) { FabricParticleTypes.simple(false) }
+        val LANDING_HAIMEVISKA_SAP = !ParticleTypeCard("landing_haimeviska_sap", listOf("minecraft:drip_land")) { FabricParticleTypes.simple(false) }
+    }
 
     val identifier = MirageFairy2024.identifier(path)
     val textures = textureNames.map { if (":" in it) Identifier(it) else MirageFairy2024.identifier(it) }
-    val particleType: DefaultParticleType = FabricParticleTypes.simple(alwaysSpawn)
+    val particleType = creator()
 }
 
 context(ModContext)
