@@ -10,6 +10,7 @@ import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.setFairyStatueMotif
+import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation

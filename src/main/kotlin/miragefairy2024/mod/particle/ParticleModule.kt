@@ -1,4 +1,4 @@
-package miragefairy2024.mod
+package miragefairy2024.mod.particle
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024

@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
+import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
