@@ -34,6 +34,7 @@ class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
         val DRIPPING_HAIMEVISKA_SAP = !ParticleTypeCard("dripping_haimeviska_sap", listOf("minecraft:drip_hang")) { FabricParticleTypes.simple(false) }
         val FALLING_HAIMEVISKA_SAP = !ParticleTypeCard("falling_haimeviska_sap", listOf("minecraft:drip_fall")) { FabricParticleTypes.simple(false) }
         val LANDING_HAIMEVISKA_SAP = !ParticleTypeCard("landing_haimeviska_sap", listOf("minecraft:drip_land")) { FabricParticleTypes.simple(false) }
+        val MAGIC_SQUARE = !ParticleTypeCard("magic_square", (1..7).map { "magic_square_$it" }) { MagicSquareParticleType(true) }
     }
 
     val identifier = MirageFairy2024.identifier(path)
