@@ -5,4 +5,5 @@ import miragefairy2024.ModContext
 context(ModContext)
 fun initEntityModule() {
     AntimatterBoltCard.init()
+    EtheroballisticBoltCard.init()
 }
