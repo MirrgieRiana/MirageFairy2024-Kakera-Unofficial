@@ -175,7 +175,7 @@ fun initFairyStatue() {
         card.item.registerPoemGeneration(card.poemList)
 
         // タグ
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         // ドロップ
         card.block.registerLootTableGeneration { provider ->
@@ -209,7 +209,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Settings) : 
 
     override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
         super.onPlaced(world, pos, state, placer, itemStack)
-        if (world.isClient) return
+        if (world.isClientSide) return
         val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
         blockEntity.setMotif(itemStack.getFairyStatueMotif())
     }

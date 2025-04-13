@@ -60,11 +60,11 @@ interface Poem {
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
-    override fun getText(item: Item) = text { translate("${item.translationKey}.$key").formatted(type.color) }
+    override fun getText(item: Item) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
     context(ModContext)
     override fun init(item: Item) {
-        en { "${item.translationKey}.$key" to en }
-        ja { "${item.translationKey}.$key" to ja }
+        en { "${item.descriptionId}.$key" to en }
+        ja { "${item.descriptionId}.$key" to ja }
     }
 }
 

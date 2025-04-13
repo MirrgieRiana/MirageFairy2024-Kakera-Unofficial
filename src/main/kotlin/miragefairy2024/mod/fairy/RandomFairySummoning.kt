@@ -75,7 +75,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
 
             return TypedActionResult.consume(itemStack)
         } else {
-            if (world.isClient) return TypedActionResult.success(itemStack)
+            if (world.isClientSide) return TypedActionResult.success(itemStack)
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
@@ -98,7 +98,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
     }
 
     override fun usageTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
-        if (world.isClient) return
+        if (world.isClientSide) return
         if (user !is ServerPlayerEntity) return
 
         run {

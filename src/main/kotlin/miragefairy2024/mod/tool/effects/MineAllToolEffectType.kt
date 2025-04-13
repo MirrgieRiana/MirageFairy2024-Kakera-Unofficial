@@ -33,7 +33,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
         if (!enabled) return
         configuration.descriptions += text { TRANSLATION() }
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
-            if (world.isClient) return@fail
+            if (world.isClientSide) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない

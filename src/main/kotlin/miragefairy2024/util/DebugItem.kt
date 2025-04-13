@@ -25,12 +25,12 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
         override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
             action(world, user, hand, user.getStackInHand(hand))
-            return TypedActionResult.success(user.getStackInHand(hand), world.isClient)
+            return TypedActionResult.success(user.getStackInHand(hand), world.isClientSide)
         }
     }
     item.register(Registries.ITEM, MirageFairy2024.identifier(path))
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-    item.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(icon) }
+    item.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
     item.registerColorProvider { _, _ -> color }
 }
 
@@ -45,7 +45,7 @@ fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 
 context(ModContext)
 fun registerServerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (ServerWorld, ServerPlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
-        if (world.isClient) return@registerDebugItem
+        if (world.isClientSide) return@registerDebugItem
         action(world as ServerWorld, player as ServerPlayerEntity, hand, itemStack)
     }
 }

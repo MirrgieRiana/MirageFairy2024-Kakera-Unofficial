@@ -32,7 +32,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
         if (level <= 0) return
         configuration.descriptions += text { TRANSLATION(level.toRomanText()) }
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
-            if (world.isClient) return@fail
+            if (world.isClientSide) return@fail
 
             if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない

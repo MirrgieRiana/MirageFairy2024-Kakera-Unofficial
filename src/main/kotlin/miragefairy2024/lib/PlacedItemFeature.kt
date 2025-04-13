@@ -41,7 +41,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
 
             // 成功
 
-            world.setBlockState(actualBlockPos, PlacedItemCard.block.defaultState, Block.NOTIFY_LISTENERS)
+            world.setBlockState(actualBlockPos, PlacedItemCard.block.defaultBlockState, Block.NOTIFY_LISTENERS)
             val blockEntity = world.getBlockEntity(actualBlockPos) as? PlacedItemBlockEntity ?: return@repeat // ブロックの配置に失敗した
             blockEntity.itemStack = itemStack
             blockEntity.itemX = (4.0 + 8.0 * random.nextDouble()) / 16.0

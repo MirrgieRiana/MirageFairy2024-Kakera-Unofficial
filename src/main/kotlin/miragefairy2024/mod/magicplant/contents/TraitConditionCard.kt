@@ -59,7 +59,7 @@ enum class TraitConditionCard(
 
 private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
     val blockState = world.getBlockState(blockPos.down())
-    if (!blockState.isIn(BlockTags.PICKAXE_MINEABLE)) return 0.0
+    if (!blockState.isIn(BlockTags.MINEABLE_WITH_PICKAXE)) return 0.0
     val hardness = blockState.getHardness(world, blockPos.down())
     if (hardness < 0) return 0.0
     return hardness / 2.0 atMost 2.0

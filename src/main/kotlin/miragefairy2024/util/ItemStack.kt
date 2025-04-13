@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import java.util.Objects
 
-fun Item.createItemStack(count: Int = 1) = ItemStack(this, count atMost this.maxCount)
+fun Item.createItemStack(count: Int = 1) = ItemStack(this, count atMost this.maxStackSize)
 
 val EMPTY_ITEM_STACK: ItemStack get() = ItemStack.EMPTY
 val ItemStack?.orEmpty get() = this ?: EMPTY_ITEM_STACK

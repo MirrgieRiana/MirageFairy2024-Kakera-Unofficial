@@ -29,7 +29,7 @@ object SelfMendingToolEffectType : IntAddToolEffectType() {
         if (speed <= 0) return
         configuration.descriptions += text { TRANSLATION() }
         configuration.onInventoryTickListeners += fail@{ _, stack, world, entity, _, _ ->
-            if (world.isClient) return@fail
+            if (world.isClientSide) return@fail
             if (entity !is PlayerEntity) return@fail // プレイヤーじゃない
             if (stack !== entity.mainHandStack) return@fail // メインハンドに持っていない
             stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * speed)

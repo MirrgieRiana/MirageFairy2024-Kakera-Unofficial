@@ -144,7 +144,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     }
 
     override fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
-        if (world.isClient) return
+        if (world.isClientSide) return
         if (player?.isSneaking == true) return
         (-1..1).forEach { x ->
             (-1..1).forEach { y ->
@@ -163,7 +163,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     }
 
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
-        return if (enchantment == Enchantments.FORTUNE) {
+        return if (enchantment == Enchantments.BLOCK_FORTUNE) {
             val enchantments = EnchantmentHelper.get(itemStack)
             oldLevel max (enchantments[EnchantmentCard.FERTILITY.enchantment] ?: 0)
         } else {

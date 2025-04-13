@@ -70,59 +70,59 @@ enum class BlockMaterialCard(
     NEPHRITE_BLOCK(
         "nephrite_block", "Nephrite Block", "ネフライトブロック",
         PoemList(null),
-        MapColor.BRIGHT_TEAL, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     XARPITE_BLOCK(
         "xarpite_block", "Xarpite Block", "紅天石ブロック",
         PoemList(2).poem("Loss and reconstruction of perception", "夢の世界の如き紅。"),
-        MapColor.DARK_RED, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
-        MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     CHAOS_STONE_BLOCK(
         "chaos_stone_block", "Chaos Stone Block", "混沌の石ブロック",
         PoemList(4).poem("The eye of entropy.", "無秩序の目。"),
         MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     MIRAGIDIAN_BLOCK(
         "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
         PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
         MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     LUMINITE_BLOCK(
         "luminite_block", "Luminite Block", "ルミナイトブロック",
         PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
-        MapColor.DIAMOND_BLUE, 6.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
         isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
         blockCreator = { SemiOpaqueTransparentBlock(it.nonOpaque().luminance { 15 }.solidBlock { _, _, _ -> false }) },
     ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
         PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
-        MapColor.PALE_YELLOW, 3.0F, 3.0F,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE),
+        MapColor.SAND, 3.0F, 3.0F,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE),
     ),
     LOCAL_VACUUM_DECAY(
         "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
         PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
-        MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
+        MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
         tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
+        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
     ),
     AURA_STONE(
         "aura_stone", "Aura Stone", "霊氣石",
         PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
-        MapColor.DIAMOND_BLUE, 5.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL),
+        MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
         blockSoundGroup = BlockSoundGroup.METAL,
     ),
     ;
@@ -154,7 +154,7 @@ fun initBlockMaterialsModule() {
         if (card.texturedModelFactory != null) {
             card.block.registerModelGeneration(card.texturedModelFactory)
         } else {
-            card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+            card.block.registerModelGeneration(TexturedModel.CUBE)
         }
         if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
         if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()

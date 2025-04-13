@@ -28,7 +28,7 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
     fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
         value.map.entries.forEach { (enchantment, level) ->
-            configuration.descriptions += text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
+            configuration.descriptions += text { translate(enchantment.descriptionId) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
         }
         configuration.onOverrideEnchantmentLevelListeners += fail@{ _, enchantment, oldLevel ->
             val newLevel = value.map[enchantment] ?: return@fail oldLevel

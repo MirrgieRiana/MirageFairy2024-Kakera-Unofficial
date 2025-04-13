@@ -67,7 +67,7 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
     // Move
 
     override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return if (world.isClient) {
+        return if (world.isClientSide) {
             checkType(type, card.blockEntityType) { world2, pos, state2, blockEntity ->
                 blockEntity.clientTick(world2, pos, state2)
             }
@@ -86,7 +86,7 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClient) return ActionResult.SUCCESS
+        if (world.isClientSide) return ActionResult.SUCCESS
         val blockEntity = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return ActionResult.CONSUME
         player.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)

@@ -17,7 +17,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.Level as World
 
-val World.isServer get() = !this.isClient
+val World.isServer get() = !this.isClientSide
 
 fun BlockView.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
@@ -143,10 +143,10 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
 
     if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.NOTIFY_ALL)
+        world.updateListeners(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.interactionManager.gameMode)) return false // 破壊する権限がない
+    if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
     block.onBreak(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)
@@ -174,10 +174,10 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 
     if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.NOTIFY_ALL)
+        world.updateListeners(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.interactionManager.gameMode)) return false // 破壊する権限がない
+    if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
     block.onBreak(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)

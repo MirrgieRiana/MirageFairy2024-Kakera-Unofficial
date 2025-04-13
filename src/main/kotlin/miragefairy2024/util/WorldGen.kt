@@ -146,7 +146,7 @@ context(PlacementModifiersScope)
 fun tree(saplingBlock: Block): List<PlacementModifier> = listOf(
     SquarePlacementModifier.of(),
     SurfaceWaterDepthFilterPlacementModifier.of(0),
-    PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP,
+    PlacedFeatures.HEIGHTMAP_OCEAN_FLOOR,
     BiomePlacementModifier.of(),
     PlacedFeatures.wouldSurvive(saplingBlock),
 )
@@ -162,7 +162,7 @@ context(PlacementModifiersScope)
 val flower: List<PlacementModifier>
     get() = listOf(
         SquarePlacementModifier.of(),
-        PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+        PlacedFeatures.HEIGHTMAP,
         BiomePlacementModifier.of(),
     )
 
@@ -177,7 +177,7 @@ context(PlacementModifiersScope)
 val undergroundFlower: List<PlacementModifier>
     get() = listOf(
         SquarePlacementModifier.of(),
-        PlacedFeatures.BOTTOM_TO_120_RANGE,
+        PlacedFeatures.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
         EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12),
         RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1)),
         BiomePlacementModifier.of(),
