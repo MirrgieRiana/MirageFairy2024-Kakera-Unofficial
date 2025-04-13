@@ -95,7 +95,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         block.registerDefaultLootTableGeneration()
 
@@ -120,7 +120,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
     // BlockState
 
     init {
-        defaultState = defaultState.with(VERTICAL_FACING, VerticalFacing.SIDE)
+        defaultBlockState = defaultBlockState.with(VERTICAL_FACING, VerticalFacing.SIDE)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -135,7 +135,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
             else -> VerticalFacing.SIDE
         }
         val facing = if (verticalFacing == VerticalFacing.SIDE) ctx.side.opposite else ctx.horizontalPlayerFacing
-        return defaultState.with(VERTICAL_FACING, verticalFacing).with(FACING, facing)
+        return defaultBlockState.with(VERTICAL_FACING, verticalFacing).with(FACING, facing)
     }
 
 }

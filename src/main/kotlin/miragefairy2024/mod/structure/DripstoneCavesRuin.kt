@@ -98,15 +98,15 @@ object DripstoneCavesRuinCard {
         val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 RuleStructureProcessor(
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultState),
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.LANTERN, 0.8F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultState),
+                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultBlockState),
+                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.LANTERN, 0.8F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState),
                     StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.REDSTONE_TORCH, 0.05F), AlwaysTrueRuleTest.INSTANCE, DiamondLuminariaCard.block.withAge(3)),
-                    StructureProcessorRule(BlockMatchRuleTest(Blocks.REDSTONE_TORCH), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultState),
+                    StructureProcessorRule(BlockMatchRuleTest(Blocks.REDSTONE_TORCH), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState),
                 ),
                 RuleStructureProcessor(
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.AIR), Blocks.AIR.defaultState),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultState),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultState),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.AIR), Blocks.AIR.defaultBlockState),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultBlockState),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState),
                 ),
             )
         }

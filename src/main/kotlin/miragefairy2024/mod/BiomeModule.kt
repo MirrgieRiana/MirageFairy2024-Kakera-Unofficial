@@ -263,11 +263,11 @@ object DeepFairyForestBiomeCard : BiomeCard(
                         MaterialRules.sequence(
                             MaterialRules.condition(
                                 MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, 1.75 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.block(Blocks.COARSE_DIRT.defaultState)
+                                MaterialRules.block(Blocks.COARSE_DIRT.defaultBlockState)
                             ),
                             MaterialRules.condition(
                                 MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, -0.95 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.block(Blocks.PODZOL.defaultState)
+                                MaterialRules.block(Blocks.PODZOL.defaultBlockState)
                             ),
                         ),
                     ),

@@ -215,7 +215,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
         if (!isOnGround && velocity.y < 0.0) velocity = velocity.multiply(1.0, 0.6, 1.0)
 
-        if (world.isClient) {
+        if (world.isClientSide) {
 
             if (isFirstClientTick) {
                 isFirstClientTick = false

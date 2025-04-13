@@ -68,7 +68,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     open fun onStackChange(slot: Int?) {
         // TODO スロットアップデートのための軽量カスタムパケット
         if (slot == null || card.inventorySlotConfigurations[slot].isObservable) {
-            world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+            world?.updateListeners(pos, cachedState, cachedState, Block.UPDATE_ALL)
         }
     }
 

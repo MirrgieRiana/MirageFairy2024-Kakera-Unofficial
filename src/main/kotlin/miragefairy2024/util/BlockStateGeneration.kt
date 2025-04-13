@@ -20,7 +20,7 @@ import net.minecraft.core.Direction
 
 context(ModContext)
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateCollector.accept(object : BlockStateSupplier {
+    it.blockStateOutput.accept(object : BlockStateSupplier {
         override fun get() = creator()
         override fun getBlock() = this@registerBlockStateGeneration
     })
@@ -47,7 +47,7 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 
 context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
+    it.blockStateOutput.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
 }
 
 

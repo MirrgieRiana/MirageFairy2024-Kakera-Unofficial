@@ -58,7 +58,7 @@ fun initPlacedItemModule() {
 
             // 成功
 
-            world.setBlockState(blockPos, PlacedItemCard.block.defaultState, Block.NOTIFY_LISTENERS)
+            world.setBlockState(blockPos, PlacedItemCard.block.defaultBlockState, Block.NOTIFY_LISTENERS)
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの配置に失敗した
             blockEntity.itemStack = itemStack
             blockEntity.itemX = packet.itemX

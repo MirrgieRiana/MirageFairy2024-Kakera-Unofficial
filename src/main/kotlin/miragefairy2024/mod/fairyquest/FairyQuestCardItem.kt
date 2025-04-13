@@ -54,7 +54,7 @@ object FairyQuestCardCard {
     val item = FairyQuestCardItem(Item.Settings())
 }
 
-private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "“%s”", "『%s』")
+private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.descriptionId + ".format" }, "“%s”", "『%s』")
 
 context(ModContext)
 fun initFairyQuestCardItem() {
@@ -110,7 +110,7 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
-        if (world.isClient) return TypedActionResult.success(itemStack)
+        if (world.isClientSide) return TypedActionResult.success(itemStack)
         user.openHandledScreen(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                 return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPos))

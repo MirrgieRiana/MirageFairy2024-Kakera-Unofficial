@@ -20,20 +20,20 @@ fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapa
 
 context(ModContext)
 fun Block.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 context(ModContext)
 fun Item.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 context(ModContext)
 fun EntityType<*>.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 

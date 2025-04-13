@@ -36,7 +36,7 @@ class ItemGroupCard(
     icon: () -> ItemStack,
 ) {
     val translation = Translation({ "itemGroup.${identifier.toTranslationKey()}" }, enName, jaName)
-    val itemGroupKey = RegistryKeys.ITEM_GROUP with identifier
+    val itemGroupKey = RegistryKeys.CREATIVE_MODE_TAB with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
         .displayName(text { translation() })
@@ -44,7 +44,7 @@ class ItemGroupCard(
 
     context(ModContext)
     fun init() {
-        itemGroup.register(Registries.ITEM_GROUP, identifier)
+        itemGroup.register(Registries.CREATIVE_MODE_TAB, identifier)
         translation.enJa()
     }
 }

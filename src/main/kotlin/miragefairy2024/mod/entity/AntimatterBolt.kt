@@ -58,8 +58,8 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
     var maxDistance by MAX_DISTANCE
 
     override fun initDataTracker() {
-        dataTracker.startTracking(DAMAGE, 0F)
-        dataTracker.startTracking(MAX_DISTANCE, 0F)
+        entityData.startTracking(DAMAGE, 0F)
+        entityData.startTracking(MAX_DISTANCE, 0F)
     }
 
     override fun writeCustomDataToNbt(nbt: NbtCompound) {

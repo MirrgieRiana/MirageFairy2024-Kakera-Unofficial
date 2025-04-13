@@ -90,7 +90,7 @@ fun initFairyFountainModule() {
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
 
@@ -133,7 +133,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isSneaking) {
-            if (world.isClient) return ActionResult.SUCCESS
+            if (world.isClientSide) return ActionResult.SUCCESS
 
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
@@ -191,7 +191,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
 
             // エフェクト
             if (world.isServer) world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
-            if (world.isClient) {
+            if (world.isClientSide) {
                 // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
                 repeat(3) {
                     world.addParticle(
@@ -206,7 +206,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
                 }
             }
 
-            return ActionResult.success(world.isClient)
+            return ActionResult.success(world.isClientSide)
         }
     }
 

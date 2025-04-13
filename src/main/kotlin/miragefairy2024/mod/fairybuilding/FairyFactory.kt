@@ -60,7 +60,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
     }
 
     init {
-        defaultState = defaultState.with(STATUS, Status.OFFLINE)
+        defaultBlockState = defaultBlockState.with(STATUS, Status.OFFLINE)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -83,7 +83,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     fun setStatus(status: FairyFactoryBlock.Status) {
         val world = world ?: return
         if (cachedState[FairyFactoryBlock.STATUS] != status) {
-            world.setBlockState(pos, cachedState.with(FairyFactoryBlock.STATUS, status), Block.NOTIFY_ALL)
+            world.setBlockState(pos, cachedState.with(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
         }
     }
 

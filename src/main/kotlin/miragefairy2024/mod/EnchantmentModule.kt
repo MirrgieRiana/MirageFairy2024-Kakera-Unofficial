@@ -37,11 +37,11 @@ context(ModContext)
 fun initEnchantmentModule() {
     EnchantmentCard.entries.forEach { card ->
         card.enchantment.register(Registries.ENCHANTMENT, card.identifier)
-        en { card.enchantment.translationKey to card.en }
-        ja { card.enchantment.translationKey to card.ja }
+        en { card.enchantment.descriptionId to card.en }
+        ja { card.enchantment.descriptionId to card.ja }
     }
     OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
-        if (enchantment != Enchantments.FORTUNE) return@register oldLevel
+        if (enchantment != Enchantments.BLOCK_FORTUNE) return@register oldLevel
         if (oldLevel == 0) return@register 0
         oldLevel + EnchantmentHelper.getLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
     }

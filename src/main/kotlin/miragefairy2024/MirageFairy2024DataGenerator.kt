@@ -134,7 +134,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput ->
             object : SimpleFabricLootTableProvider(output, LootContextTypes.ENTITY) {
                 override fun accept(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateEntityLootTable.fire { it { entityType, builder -> exporter.accept(entityType.lootTableId, builder) } }
+                    DataGenerationEvents.onGenerateEntityLootTable.fire { it { entityType, builder -> exporter.accept(entityType.lootTable, builder) } }
                 }
             }
         }

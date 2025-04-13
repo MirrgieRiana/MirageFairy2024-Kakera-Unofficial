@@ -105,7 +105,7 @@ object WeatheredAncientRemnantsCard {
                         RandomBlockMatchRuleTest(Blocks.GRAVEL, 0.2F),
                         AlwaysTrueRuleTest.INSTANCE,
                         AlwaysTruePosRuleTest.INSTANCE,
-                        Blocks.SUSPICIOUS_GRAVEL.defaultState,
+                        Blocks.SUSPICIOUS_GRAVEL.defaultBlockState,
                         AppendLootRuleBlockEntityModifier(archaeologyLootTable),
                     ),
                 ),
@@ -114,7 +114,7 @@ object WeatheredAncientRemnantsCard {
                     StructureProcessorRule(
                         BlockMatchRuleTest(PlacedItemCard.block),
                         BlockMatchRuleTest(Blocks.WATER),
-                        Blocks.WATER.defaultState,
+                        Blocks.WATER.defaultBlockState,
                     ),
                 ),
             )

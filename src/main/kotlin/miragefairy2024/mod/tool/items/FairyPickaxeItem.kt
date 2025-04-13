@@ -26,7 +26,7 @@ class FairyPickaxeConfiguration(
         this.attackSpeed = -2.8F
         this.tags += ItemTags.PICKAXES
         this.tags += ItemTags.CLUSTER_MAX_HARVESTABLES
-        this.effectiveBlockTags += BlockTags.PICKAXE_MINEABLE
+        this.effectiveBlockTags += BlockTags.MINEABLE_WITH_PICKAXE
     }
 }
 

@@ -79,7 +79,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     final override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
         super.onPlaced(world, pos, state, placer, itemStack)
         run {
-            if (world.isClient) return@run
+            if (world.isClientSide) return@run
             val blockEntity = world.getBlockEntity(pos) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = itemStack.getTraitStacks() ?: return@run
             blockEntity.setTraitStacks(traitStacks)
@@ -239,7 +239,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isSneaking) {
-            if (world.isClient) {
+            if (world.isClientSide) {
                 return ActionResult.SUCCESS
             } else {
                 val traitStacks = run {
@@ -261,7 +261,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
             }
         }
         if (!tryPick(world, pos, player, player.mainHandStack, true, true)) return ActionResult.PASS
-        return ActionResult.success(world.isClient)
+        return ActionResult.success(world.isClientSide)
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */

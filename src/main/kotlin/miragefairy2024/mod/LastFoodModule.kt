@@ -25,7 +25,7 @@ fun initLastFoodModule() {
     LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
 
     EatFoodCallback.EVENT.register { entity, world, stack ->
-        if (world.isClient) return@register
+        if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
         if (!stack.isFood) return@register

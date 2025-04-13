@@ -77,7 +77,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 
-        block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         registerShapedRecipeGeneration(item) {
             pattern("XXX")
@@ -104,7 +104,7 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
     }
 
     init {
-        defaultState = defaultState.with(LIT, false)
+        defaultBlockState = defaultBlockState.with(LIT, false)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -155,7 +155,7 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
     fun setLit(lit: Boolean) {
         val world = world ?: return
         if (cachedState[AuraReflectorFurnaceBlock.LIT] != lit) {
-            world.setBlockState(pos, cachedState.with(AuraReflectorFurnaceBlock.LIT, lit), Block.NOTIFY_ALL)
+            world.setBlockState(pos, cachedState.with(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
         }
     }
 

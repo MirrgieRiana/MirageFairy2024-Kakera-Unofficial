@@ -75,7 +75,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     val maxAge: Int = agePropertyCache.values.max()
 
     init {
-        defaultState = defaultState.with(agePropertyCache, 0)
+        defaultBlockState = defaultBlockState.with(agePropertyCache, 0)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -84,7 +84,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
 
     fun getAge(state: BlockState) = state[agePropertyCache]!!
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
-    fun withAge(age: Int): BlockState = defaultState.with(agePropertyCache, age atLeast 0 atMost maxAge)
+    fun withAge(age: Int): BlockState = defaultBlockState.with(agePropertyCache, age atLeast 0 atMost maxAge)
 
 
     // Shape
@@ -106,7 +106,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     override fun getAdditionalDrops(world: World, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
-        val fortune = if (tool != null) EnchantmentHelper.getLevel(Enchantments.FORTUNE, tool).toDouble() else 0.0
+        val fortune = if (tool != null) EnchantmentHelper.getLevel(Enchantments.BLOCK_FORTUNE, tool).toDouble() else 0.0
         val luck = player?.getAttributeValue(EntityAttributes.GENERIC_LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]

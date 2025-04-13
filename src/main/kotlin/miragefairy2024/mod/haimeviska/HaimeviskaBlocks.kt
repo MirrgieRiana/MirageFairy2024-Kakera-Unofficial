@@ -305,12 +305,12 @@ fun initHaimeviskaBlocks() {
                 conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
                 conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 2))
+                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
             }) {
                 conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
                 conditionally(RandomChanceLootCondition.builder(0.01F))
@@ -328,7 +328,7 @@ fun initHaimeviskaBlocks() {
                 conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
                 conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
@@ -357,7 +357,7 @@ class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
     }
 
     init {
-        defaultState = defaultState.with(CHARGED, true)
+        defaultBlockState = defaultBlockState.with(CHARGED, true)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -394,12 +394,12 @@ class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
         if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getStackInHand(hand)
         if (!toolItemStack.isIn(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 剣でなければスルー
-        if (world.isClient) return ActionResult.SUCCESS
+        if (world.isClientSide) return ActionResult.SUCCESS
         val direction = if (hit.side.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.side
 
         // 加工
         toolItemStack.damage(1, player) { it.sendToolBreakStatus(hand) }
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultState.with(HorizontalFacingBlock.FACING, direction), NOTIFY_ALL or REDRAW_ON_MAIN_THREAD)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.with(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.incrementStat(Stats.USED.getOrCreateStat(toolItemStack.item))
 
         // エフェクト
@@ -414,7 +414,7 @@ class IncisedHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBloc
     override fun hasRandomTicks(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
-            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultState.with(FACING, state.get(FACING)), Block.NOTIFY_ALL)
+            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.with(FACING, state.get(FACING)), Block.UPDATE_ALL)
         }
     }
 }
@@ -422,15 +422,15 @@ class IncisedHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBloc
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClient) return ActionResult.SUCCESS
+        if (world.isClientSide) return ActionResult.SUCCESS
         val toolItemStack = player.getStackInHand(hand)
         val direction = state.get(FACING)
 
         // 消費
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultState.with(FACING, direction), Block.NOTIFY_ALL or Block.REDRAW_ON_MAIN_THREAD)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.with(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
-            val actualCount = world.random.randomInt(count) atMost item.maxCount
+            val actualCount = world.random.randomInt(count) atMost item.maxStackSize
             if (actualCount <= 0) return
             val itemStack = item.createItemStack(actualCount)
             val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.offsetX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.offsetZ * 0.65, itemStack)
@@ -439,12 +439,12 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
         }
 
         // 生産
-        val fortune = EnchantmentHelper.getLevel(Enchantments.FORTUNE, toolItemStack)
+        val fortune = EnchantmentHelper.getLevel(Enchantments.BLOCK_FORTUNE, toolItemStack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
-        world.playSound(null, pos, SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * world.random.nextFloat())
+        world.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * world.random.nextFloat())
 
         return ActionResult.CONSUME
     }

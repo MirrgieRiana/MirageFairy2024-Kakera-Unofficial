@@ -94,7 +94,7 @@ class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
         val blockEntity = context.world.getMagicPlantBlockEntity(context.blockPos) ?: return ActionResult.PASS
-        if (context.world.isClient) return ActionResult.CONSUME
+        if (context.world.isClientSide) return ActionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
         val b = context.stack.getTraitStacks() ?: TraitStacks.EMPTY
         if (context.player?.isSneaking != true) {
@@ -107,7 +107,7 @@ class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
-        if (world.isClient) return TypedActionResult.success(itemStack)
+        if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
         if (!user.isSneaking) {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shl 1).let { level -> if (level <= 0) 1 else level } }))

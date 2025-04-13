@@ -98,7 +98,7 @@ fun initTelescopeModule() {
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
 
@@ -173,7 +173,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
         }
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultBlockState.with(FACING, ctx.horizontalPlayerFacing)
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
@@ -183,7 +183,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClient) return ActionResult.SUCCESS
+        if (world.isClientSide) return ActionResult.SUCCESS
         player as ServerPlayerEntity
 
         val now = Instant.now()

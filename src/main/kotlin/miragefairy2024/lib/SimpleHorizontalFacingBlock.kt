@@ -9,7 +9,7 @@ import net.minecraft.core.Direction
 
 open class SimpleHorizontalFacingBlock(settings: Settings) : HorizontalFacingBlock(settings) {
     init {
-        defaultState = defaultState.with(FACING, Direction.NORTH)
+        defaultBlockState = defaultBlockState.with(FACING, Direction.NORTH)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -17,6 +17,6 @@ open class SimpleHorizontalFacingBlock(settings: Settings) : HorizontalFacingBlo
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
-        return defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
+        return defaultBlockState.with(FACING, ctx.horizontalPlayerFacing.opposite)
     }
 }

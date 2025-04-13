@@ -156,7 +156,7 @@ fun initOresModule() {
 
         card.block.registerOreLootTableGeneration(card.dropItem)
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
         card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
         card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
 
@@ -166,8 +166,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

@@ -180,7 +180,7 @@ class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
-        if (world.isClient) return TypedActionResult.success(itemStack)
+        if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {
             val selectedSlot = user.inventory.selectedSlot
             if (!PlayerInventory.isValidHotbarIndex(selectedSlot)) return TypedActionResult.fail(itemStack)
@@ -266,7 +266,7 @@ class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
 
     override fun onItemEntityDestroyed(entity: ItemEntity) {
         val world = entity.world
-        if (world.isClient) return
+        if (world.isClientSide) return
         val bagInventory = entity.stack.getBagInventory() ?: return
         bagInventory.stacks.forEach { itemStack ->
             world.spawnEntity(ItemEntity(world, entity.x, entity.y, entity.z, itemStack))

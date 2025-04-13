@@ -19,15 +19,15 @@ val experienceStatusEffect = ExperienceStatusEffect()
 context(ModContext)
 fun initStatusEffectModule() {
     experienceStatusEffect.register(Registries.STATUS_EFFECT, MirageFairy2024.identifier("experience"))
-    en { experienceStatusEffect.translationKey to "Experience" }
-    ja { experienceStatusEffect.translationKey to "経験値獲得" }
+    en { experienceStatusEffect.descriptionId to "Experience" }
+    ja { experienceStatusEffect.descriptionId to "経験値獲得" }
 }
 
 class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {
     override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = true
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         super.applyUpdateEffect(entity, amplifier)
-        val world = entity.world
+        val world = entity.level
         if (world.time % 5 != 0L) return
         if (world.isServer && entity is PlayerEntity) {
             entity.addExperience(1 + amplifier)

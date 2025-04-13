@@ -69,7 +69,7 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 context(ModContext)
 fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable {
-    it.addDrop(this, initializer(it).randomSequenceId(this.lootTableId))
+    it.addDrop(this, initializer(it).randomSequenceId(this.lootTable))
 }
 
 context(ModContext)
@@ -89,7 +89,7 @@ fun registerArchaeologyLootTableGeneration(lootTableId: Identifier, initializer:
 
 context(ModContext)
 fun EntityType<*>.registerLootTableGeneration(initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable {
-    it(this, initializer().randomSequenceId(this.lootTableId))
+    it(this, initializer().randomSequenceId(this.lootTable))
 }
 
 enum class FortuneEffect {
@@ -104,8 +104,8 @@ fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloa
         if (additionalCount != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             FortuneEffect.IGNORE -> Unit
-            FortuneEffect.ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
-            FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+            FortuneEffect.ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.BLOCK_FORTUNE))
+            FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
         }
     }))
 }

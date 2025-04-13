@@ -908,7 +908,7 @@ class DrinkItem(settings: Settings, private val flaming: Int? = null) : Item(set
         if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
         if (user is PlayerEntity) user.incrementStat(Stats.USED.getOrCreateStat(this))
         user.emitGameEvent(GameEvent.DRINK)
-        if (!world.isClient) {
+        if (!world.isClientSide) {
             if (flaming != null) user.setOnFireFor(flaming)
         }
         return if (stack.isEmpty) {

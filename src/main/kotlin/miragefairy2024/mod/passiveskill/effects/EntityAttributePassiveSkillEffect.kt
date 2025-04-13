@@ -22,7 +22,7 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
 
     override fun getText(value: Value): Text {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.translationKey) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
+            text { translate(attribute.descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 

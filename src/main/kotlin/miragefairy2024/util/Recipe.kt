@@ -229,7 +229,7 @@ fun Item.registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
     biome: (() -> RegistryKey<Biome>)? = null,
-) = this.registerLootTableModification({ Blocks.GRASS.lootTableId }) { tableBuilder ->
+) = this.registerLootTableModification({ Blocks.GRASS.lootTable }) { tableBuilder ->
     tableBuilder.configure {
         pool(LootPool(AlternativeLootPoolEntry {
             alternatively(EmptyLootPoolEntry {
@@ -238,7 +238,7 @@ fun Item.registerGrassDrop(
             alternatively(ItemLootPoolEntry(this@registerGrassDrop) {
                 conditionally(RandomChanceLootCondition.builder(0.125F * amount))
                 if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
+                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.builder())
             })
         }))
@@ -250,7 +250,7 @@ fun Item.registerExtraOreDrop(
     oreBlock: Block,
     chance: Float = 1.0F,
     fortuneMultiplier: Int = 0,
-) = this.registerLootTableModification({ oreBlock.lootTableId }) { tableBuilder ->
+) = this.registerLootTableModification({ oreBlock.lootTable }) { tableBuilder ->
     tableBuilder.configure {
         pool(LootPool(AlternativeLootPoolEntry {
             alternatively(EmptyLootPoolEntry {
@@ -258,7 +258,7 @@ fun Item.registerExtraOreDrop(
             })
             alternatively(ItemLootPoolEntry(this@registerExtraOreDrop) {
                 if (chance < 1.0F) conditionally(RandomChanceLootCondition.builder(chance))
-                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, fortuneMultiplier))
+                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.builder())
             })
         }))
@@ -272,7 +272,7 @@ fun Item.registerMobDrop(
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) = this.registerLootTableModification({ entityType.lootTableId }) { tableBuilder ->
+) = this.registerLootTableModification({ entityType.lootTable }) { tableBuilder ->
     tableBuilder.configure {
         pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
             if (amount != null) apply(SetCountLootFunction.builder(amount, false))

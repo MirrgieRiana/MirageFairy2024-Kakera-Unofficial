@@ -125,7 +125,7 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 context(ModContext)
 fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
     val texturedModel = texturedModelCreator()
-    texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
+    texturedModel.template.upload(identifierGetter(), texturedModel.mapping, it.modelOutput)
 }
 
 context(ModContext)
@@ -135,10 +135,10 @@ context(ModContext)
 fun Item.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this) }) = this.registerModelGeneration { model with textureMapCreator() }
 
 context(ModContext)
-fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.GENERATED)
+fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
 
 context(ModContext)
-fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(block) }
+fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block) }
 
 context(ModContext)
 fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }
