@@ -4,17 +4,17 @@ import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.EtheroballisticBoltCard
 import miragefairy2024.mod.entity.EtheroballisticBoltEntity
 import miragefairy2024.util.times
-import net.minecraft.client.model.ModelPart
-import net.minecraft.client.model.ModelPartBuilder
-import net.minecraft.client.model.ModelTransform
-import net.minecraft.client.render.OverlayTexture
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.entity.EntityRenderer
-import net.minecraft.client.render.entity.EntityRendererFactory
-import net.minecraft.client.render.entity.model.SinglePartEntityModel
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.RotationAxis
+import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
+import net.minecraft.client.model.geom.PartPose as ModelTransform
+import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
+import net.minecraft.client.renderer.entity.EntityRenderer
+import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
+import net.minecraft.client.model.HierarchicalModel as SinglePartEntityModel
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.util.Mth as MathHelper
+import com.mojang.math.Axis as RotationAxis
 
 class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<EtheroballisticBoltEntity>(context) {
     companion object {

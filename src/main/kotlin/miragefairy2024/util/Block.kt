@@ -3,11 +3,11 @@ package miragefairy2024.util
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.registry.Registries
-import net.minecraft.state.property.Property
-import net.minecraft.util.Identifier
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.resources.ResourceLocation as Identifier
 
 /** レジストリに登録する前に呼び出すことはできません。 */
 fun Block.getIdentifier() = Registries.BLOCK.getId(this)

@@ -10,14 +10,14 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.cmp
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.text.Style
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.Util
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.Util
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 
 // api
 

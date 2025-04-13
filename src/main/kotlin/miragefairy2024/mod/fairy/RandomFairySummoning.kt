@@ -27,22 +27,22 @@ import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.UseAction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.item.UseAnim as UseAction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
 import kotlin.math.pow
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")

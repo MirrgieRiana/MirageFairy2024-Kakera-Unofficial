@@ -16,13 +16,13 @@ import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
-import net.minecraft.block.BlockState
-import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.math.BlockBox
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.item.Items
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"

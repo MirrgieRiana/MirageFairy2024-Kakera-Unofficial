@@ -12,10 +12,10 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.core.BlockPos
 
 fun ToolConfiguration.cutAll() = this.also {
     this.merge(CutAllToolEffectType, true) { enabled ->

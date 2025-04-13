@@ -24,7 +24,7 @@ import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.translate
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>(CommonMotifRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {

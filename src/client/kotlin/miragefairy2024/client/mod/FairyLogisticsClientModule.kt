@@ -10,8 +10,8 @@ import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierCard
 import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initFairyLogisticsClientModule() {
     HandledScreens.register(FairyPassiveSupplierCard.screenHandlerType) { gui, inventory, title -> FairyPassiveSupplierScreen(FairyPassiveSupplierCard, MachineScreen.Arguments(gui, inventory, title)) }

@@ -9,13 +9,13 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.obtain
 import miragefairy2024.util.registerServerPacketReceiver
-import net.minecraft.block.Block
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.level.block.Block
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
+import net.minecraft.core.BlockPos
 
 val PLACE_ITEM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.place_item" }, "Place Item", "アイテムを置く")
 

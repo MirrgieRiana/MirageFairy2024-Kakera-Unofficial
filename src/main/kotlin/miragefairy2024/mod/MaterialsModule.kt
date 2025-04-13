@@ -47,33 +47,33 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancement.criterion.Criteria
-import net.minecraft.block.Blocks
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.FoodComponent
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsage
-import net.minecraft.item.Items
-import net.minecraft.loot.LootTables
-import net.minecraft.recipe.Ingredient
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.stat.Stats
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.StringHelper
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.UseAction
-import net.minecraft.world.World
-import net.minecraft.world.event.GameEvent
+import net.minecraft.advancements.CriteriaTriggers as Criteria
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
+import net.minecraft.world.effect.MobEffects as StatusEffects
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.food.FoodProperties as FoodComponent
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemUtils as ItemUsage
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.stats.Stats
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.util.StringUtil as StringHelper
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.item.UseAnim as UseAction
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.gameevent.GameEvent
 import kotlin.math.pow
 
 class MaterialCard(

@@ -15,21 +15,21 @@ import miragefairy2024.util.tree
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.PillarBlock
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.intprovider.ConstantIntProvider
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.TreeFeatureConfig
-import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
-import net.minecraft.world.gen.foliage.LargeOakFoliagePlacer
-import net.minecraft.world.gen.stateprovider.BlockStateProvider
-import net.minecraft.world.gen.treedecorator.TreeDecorator
-import net.minecraft.world.gen.treedecorator.TreeDecoratorType
-import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.Direction
+import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration as TreeFeatureConfig
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer as LargeOakFoliagePlacer
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType
+import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer as LargeOakTrunkPlacer
 import java.util.OptionalInt
 
 object HaimeviskaTreeDecoratorCard {

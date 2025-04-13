@@ -11,35 +11,35 @@ import miragefairy2024.util.toBlockPos
 import miragefairy2024.util.toBox
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.block.Block
-import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
-import net.minecraft.block.Fertilizable
-import net.minecraft.block.PlantBlock
-import net.minecraft.block.SideShapeType
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundCategory
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
-import net.minecraft.world.WorldView
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.BonemealableBlock as Fertilizable
+import net.minecraft.world.level.block.BushBlock as PlantBlock
+import net.minecraft.world.level.block.SupportType as SideShapeType
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.storage.loot.LootParams as LootContextParameterSet
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams as LootContextParameters
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.LevelReader as WorldView
 
 abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 

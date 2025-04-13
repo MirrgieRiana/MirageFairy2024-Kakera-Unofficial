@@ -6,9 +6,9 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.register
 import miragefairy2024.util.toIdentifier
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     val length = buf.readInt()

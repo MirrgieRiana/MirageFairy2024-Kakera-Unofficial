@@ -31,21 +31,21 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.level.Level as World
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"

@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityTicker
-import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 
 fun <A : BlockEntity, E : BlockEntity> checkType(
     actualType: BlockEntityType<A>,

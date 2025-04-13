@@ -36,12 +36,12 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
-import net.minecraft.data.client.Models
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.item.Item
-import net.minecraft.item.Items
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
 
 context(ModContext)
 fun initToolCard() {

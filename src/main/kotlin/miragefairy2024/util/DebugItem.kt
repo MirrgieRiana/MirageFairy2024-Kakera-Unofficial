@@ -4,18 +4,18 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import mirrg.kotlin.hydrogen.toUpperCamelCase
-import net.minecraft.data.client.Models
-import net.minecraft.data.client.TextureMap
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.registry.Registries
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureMapping as TextureMap
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.level.Level as World
 import java.io.File
 import java.io.IOException
 

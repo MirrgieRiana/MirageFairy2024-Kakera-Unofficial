@@ -31,17 +31,17 @@ import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.recipe.RecipeType
-import net.minecraft.util.ItemScatterer
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.Containers as ItemScatterer
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 import kotlin.jvm.optionals.getOrNull
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {

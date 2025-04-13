@@ -47,7 +47,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {

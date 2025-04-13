@@ -9,12 +9,12 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
-import net.minecraft.block.BlockState
-import net.minecraft.item.Items
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.item.Items
+import net.minecraft.tags.ItemTags
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
     override fun getPath() = "fairy_house"

@@ -15,15 +15,15 @@ import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.EnumProperty
-import net.minecraft.util.StringIdentifiable
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.util.StringRepresentable as StringIdentifiable
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 import kotlin.math.log
 
 abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {

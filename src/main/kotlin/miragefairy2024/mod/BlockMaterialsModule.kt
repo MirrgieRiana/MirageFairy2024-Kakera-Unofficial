@@ -26,27 +26,27 @@ import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.minecraft.block.AbstractBlock
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.MapColor
-import net.minecraft.block.TransparentBlock
-import net.minecraft.data.client.TextureKey
-import net.minecraft.data.client.TexturedModel
-import net.minecraft.entity.Entity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.block.HalfTransparentBlock as TransparentBlock
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 enum class BlockMaterialCard(
     path: String,

@@ -5,11 +5,11 @@ import miragefairy2024.ModContext
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
 import miragefairy2024.util.writeAction
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.item.Items
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.Items
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
 import kotlin.jvm.optionals.getOrElse
 
 enum class BlockTagCard(path: String) {

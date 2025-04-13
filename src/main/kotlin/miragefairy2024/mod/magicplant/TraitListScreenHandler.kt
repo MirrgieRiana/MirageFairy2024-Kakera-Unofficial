@@ -10,15 +10,15 @@ import miragefairy2024.util.register
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtList
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.ListTag as NbtList
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val traitListScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY, TraitListScreenHandler.read(buf))

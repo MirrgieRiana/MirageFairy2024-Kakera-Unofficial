@@ -12,19 +12,19 @@ import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 // TODO WIP
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {

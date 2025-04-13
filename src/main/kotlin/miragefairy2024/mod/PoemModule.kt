@@ -12,9 +12,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
-import net.minecraft.item.Item
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.world.item.Item
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.ChatFormatting as Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
 

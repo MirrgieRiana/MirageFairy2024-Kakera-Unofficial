@@ -8,47 +8,47 @@ import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
-import net.minecraft.block.Block
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.registry.Registerable
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.registry.entry.RegistryEntryList
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.structure.pool.StructurePool
-import net.minecraft.structure.pool.StructurePoolElement
-import net.minecraft.structure.processor.RuleStructureProcessor
-import net.minecraft.structure.processor.StructureProcessor
-import net.minecraft.structure.processor.StructureProcessorList
-import net.minecraft.structure.processor.StructureProcessorRule
-import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DataPool
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.intprovider.ConstantIntProvider
-import net.minecraft.util.math.intprovider.IntProvider
-import net.minecraft.util.math.intprovider.WeightedListIntProvider
-import net.minecraft.world.biome.Biome
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.YOffset
-import net.minecraft.world.gen.blockpredicate.BlockPredicate
-import net.minecraft.world.gen.feature.ConfiguredFeature
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.FeatureConfig
-import net.minecraft.world.gen.feature.PlacedFeature
-import net.minecraft.world.gen.feature.PlacedFeatures
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountMultilayerPlacementModifier
-import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
-import net.minecraft.world.gen.placementmodifier.EnvironmentScanPlacementModifier
-import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
-import net.minecraft.world.gen.placementmodifier.PlacementModifier
-import net.minecraft.world.gen.placementmodifier.RandomOffsetPlacementModifier
-import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
-import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
-import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.data.worldgen.BootstapContext as Registerable
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.core.HolderSet as RegistryEntryList
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor as RuleStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.util.random.SimpleWeightedRandomList as DataPool
+import net.minecraft.core.Direction
+import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
+import net.minecraft.util.valueproviders.IntProvider
+import net.minecraft.util.valueproviders.WeightedListInt as WeightedListIntProvider
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
+import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.world.level.levelgen.placement.BiomeFilter as BiomePlacementModifier
+import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement as CountMultilayerPlacementModifier
+import net.minecraft.world.level.levelgen.placement.CountPlacement as CountPlacementModifier
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement as EnvironmentScanPlacementModifier
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement as HeightRangePlacementModifier
+import net.minecraft.world.level.levelgen.placement.PlacementModifier
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement as RandomOffsetPlacementModifier
+import net.minecraft.world.level.levelgen.placement.RarityFilter as RarityFilterPlacementModifier
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement as SquarePlacementModifier
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter as SurfaceWaterDepthFilterPlacementModifier
 import java.util.function.Predicate
 import kotlin.math.roundToInt
 

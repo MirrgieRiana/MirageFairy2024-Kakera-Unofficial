@@ -1,17 +1,17 @@
 package miragefairy2024.mod.magicplant
 
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
-import net.minecraft.world.biome.Biome
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.biome.Biome
 
 class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType, pos, state) {
 

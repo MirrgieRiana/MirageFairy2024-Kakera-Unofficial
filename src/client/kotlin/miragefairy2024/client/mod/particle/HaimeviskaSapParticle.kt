@@ -1,12 +1,12 @@
 package miragefairy2024.client.mod.particle
 
-import net.minecraft.client.particle.ParticleTextureSheet
-import net.minecraft.client.particle.SpriteBillboardParticle
-import net.minecraft.client.particle.SpriteProvider
-import net.minecraft.client.world.ClientWorld
-import net.minecraft.particle.ParticleEffect
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
+import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
+import net.minecraft.client.particle.SpriteSet as SpriteProvider
+import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
+import net.minecraft.core.particles.ParticleOptions as ParticleEffect
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
 
 @Suppress("LeakingThis")
 open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Double) : SpriteBillboardParticle(world, x, y, z) {

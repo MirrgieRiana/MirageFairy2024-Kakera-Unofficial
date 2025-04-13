@@ -14,7 +14,7 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object ManaBoostPassiveSkillEffect : AbstractPassiveSkillEffect<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
     class Value(val map: Map<Motif?, Double>)

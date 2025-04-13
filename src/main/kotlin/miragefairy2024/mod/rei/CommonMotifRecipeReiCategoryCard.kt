@@ -16,8 +16,8 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
 
 object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>("common_motif_recipe", "Common Fairy", "コモン妖精") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {

@@ -3,10 +3,10 @@ package miragefairy2024.client.util
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Size
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.toast.Toast
-import net.minecraft.client.toast.ToastManager
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.components.toasts.Toast
+import net.minecraft.client.gui.components.toasts.ToastComponent as ToastManager
 
 fun createOwoToast(component: Component) = object : Toast {
 

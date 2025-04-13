@@ -2,9 +2,9 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import net.minecraft.block.Block
-import net.minecraft.entity.EntityType
-import net.minecraft.item.Item
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
 
 context(ModContext)
 fun en(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateEnglishTranslation {

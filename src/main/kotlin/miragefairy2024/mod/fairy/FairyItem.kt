@@ -51,13 +51,13 @@ import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.Level as World
 import kotlin.math.log
 import kotlin.math.roundToInt
 

@@ -46,24 +46,24 @@ import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.item.Item
-import net.minecraft.item.Items
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.world.biome.Biome
-import net.minecraft.world.biome.BiomeKeys
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
+import net.minecraft.world.effect.MobEffect as StatusEffect
+import net.minecraft.world.effect.MobEffects as StatusEffects
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.tags.TagKey
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
 val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()

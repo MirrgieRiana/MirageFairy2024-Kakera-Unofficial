@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
-import net.minecraft.entity.Entity
-import net.minecraft.item.ItemStack
-import net.minecraft.util.Hand
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.InteractionHand as Hand
 
 /** @param itemStack 内部でコピーされるため、破壊されません。 */
 fun Entity.obtain(itemStack: ItemStack) {

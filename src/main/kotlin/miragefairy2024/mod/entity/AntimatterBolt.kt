@@ -11,24 +11,24 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
-import net.minecraft.entity.EntityDimensions
-import net.minecraft.entity.EntityStatuses
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.entity.data.DataTracker
-import net.minecraft.entity.data.TrackedData
-import net.minecraft.entity.data.TrackedDataHandlerRegistry
-import net.minecraft.entity.projectile.ProjectileEntity
-import net.minecraft.entity.projectile.ProjectileUtil
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.EntityTypeTags
-import net.minecraft.sound.SoundCategory
-import net.minecraft.util.hit.EntityHitResult
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.Vec3d
-import net.minecraft.world.World
+import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityEvent as EntityStatuses
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.network.syncher.SynchedEntityData as DataTracker
+import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
+import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
+import net.minecraft.world.entity.projectile.Projectile as ProjectileEntity
+import net.minecraft.world.entity.projectile.ProjectileUtil
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.EntityTypeTags
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.phys.EntityHitResult
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3 as Vec3d
+import net.minecraft.world.level.Level as World
 
 object AntimatterBoltCard {
     val spawnGroup = SpawnGroup.MISC

@@ -4,7 +4,7 @@ import me.shedaniel.math.Point
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.entry.EntryStack
 import me.shedaniel.rei.api.common.util.EntryStacks
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 
 
 fun ItemStack.toEntryStack(): EntryStack<ItemStack> = EntryStacks.of(this)

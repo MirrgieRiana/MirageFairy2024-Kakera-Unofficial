@@ -11,9 +11,9 @@ import miragefairy2024.mod.machine.SimpleMachineScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.client.util.math.Rect2i
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.client.renderer.Rect2i
 import java.util.Optional
 import kotlin.math.roundToInt
 

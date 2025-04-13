@@ -5,8 +5,8 @@ import miragefairy2024.client.util.stack
 import miragefairy2024.mod.fairy.FairyStatueBlockItem
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyStatueMotif
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.model.json.ModelTransformationMode
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
 
 fun initFairyStatueClientModule() {

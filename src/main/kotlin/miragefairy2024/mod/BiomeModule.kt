@@ -13,28 +13,28 @@ import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.Blocks
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryEntryLookup
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.BiomeTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.world.biome.Biome
-import net.minecraft.world.biome.BiomeEffects
-import net.minecraft.world.biome.GenerationSettings
-import net.minecraft.world.biome.SpawnSettings
-import net.minecraft.world.biome.source.util.MultiNoiseUtil
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.carver.ConfiguredCarver
-import net.minecraft.world.gen.feature.DefaultBiomeFeatures
-import net.minecraft.world.gen.feature.OceanPlacedFeatures
-import net.minecraft.world.gen.feature.PlacedFeature
-import net.minecraft.world.gen.feature.VegetationPlacedFeatures
-import net.minecraft.world.gen.noise.NoiseParametersKeys
-import net.minecraft.world.gen.surfacebuilder.MaterialRules
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.core.Registry
+import net.minecraft.core.HolderGetter as RegistryEntryLookup
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.BiomeTags
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.BiomeSpecialEffects as BiomeEffects
+import net.minecraft.world.level.biome.BiomeGenerationSettings as GenerationSettings
+import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
+import net.minecraft.world.level.biome.Climate as MultiNoiseUtil
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
+import net.minecraft.data.worldgen.BiomeDefaultFeatures as DefaultBiomeFeatures
+import net.minecraft.data.worldgen.placement.AquaticPlacements as OceanPlacedFeatures
+import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.data.worldgen.placement.VegetationPlacements as VegetationPlacedFeatures
+import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
+import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
 import terrablender.api.ParameterUtils
 import terrablender.api.Region
 import terrablender.api.RegionType

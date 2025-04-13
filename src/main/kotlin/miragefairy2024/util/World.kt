@@ -1,21 +1,21 @@
 package miragefairy2024.util
 
 import miragefairy2024.mod.SoundEventCard
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.block.FarmlandBlock
-import net.minecraft.block.OperatorBlock
-import net.minecraft.entity.ItemEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.util.math.BlockBox
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
-import net.minecraft.util.math.Direction
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
+import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.AABB as Box
+import net.minecraft.core.Direction
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 val World.isServer get() = !this.isClient
 

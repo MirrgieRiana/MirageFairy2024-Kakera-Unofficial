@@ -7,11 +7,11 @@ import miragefairy2024.util.Channel
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvent
-import net.minecraft.util.math.BlockPos
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.core.BlockPos
 
 enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: List<String>) {
     MAGIC1("magic1", "Magic fired", "魔法が発射される", listOf("magic1")),

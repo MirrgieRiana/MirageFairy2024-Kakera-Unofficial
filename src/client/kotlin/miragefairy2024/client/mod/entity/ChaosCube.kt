@@ -4,15 +4,15 @@ import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.ChaosCubeEntity
 import miragefairy2024.util.times
-import net.minecraft.client.model.ModelPart
-import net.minecraft.client.model.ModelPartBuilder
-import net.minecraft.client.model.ModelTransform
-import net.minecraft.client.render.VertexConsumer
-import net.minecraft.client.render.entity.EntityRendererFactory
-import net.minecraft.client.render.entity.MobEntityRenderer
-import net.minecraft.client.render.entity.model.EntityModel
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.MathHelper
+import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
+import net.minecraft.client.model.geom.PartPose as ModelTransform
+import com.mojang.blaze3d.vertex.VertexConsumer
+import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
+import net.minecraft.client.renderer.entity.MobRenderer as MobEntityRenderer
+import net.minecraft.client.model.EntityModel
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.util.Mth as MathHelper
 import org.joml.Quaternionf
 import kotlin.math.atan
 import kotlin.math.sqrt

@@ -13,13 +13,13 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.damage.DamageTypes
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.DamageTypeTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.text.Text
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.TagKey
+import net.minecraft.network.chat.Component as Text
 
 object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
     class Value(val attackMap: Map<Element, Double>, val defenceMap: Map<Element, Double>)

@@ -12,18 +12,18 @@ import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.screen.slot.Slot
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.Identifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.world.inventory.Slot
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.resources.ResourceLocation as Identifier
 
 val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readString()))!!, ScreenHandlerContext.EMPTY)

@@ -1,17 +1,17 @@
 package miragefairy2024.util
 
 import mirrg.kotlin.hydrogen.castOrNull
-import net.minecraft.nbt.AbstractNbtNumber
-import net.minecraft.nbt.NbtByte
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtDouble
-import net.minecraft.nbt.NbtElement
-import net.minecraft.nbt.NbtFloat
-import net.minecraft.nbt.NbtInt
-import net.minecraft.nbt.NbtList
-import net.minecraft.nbt.NbtLong
-import net.minecraft.nbt.NbtShort
-import net.minecraft.nbt.NbtString
+import net.minecraft.nbt.NumericTag as AbstractNbtNumber
+import net.minecraft.nbt.ByteTag as NbtByte
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.DoubleTag as NbtDouble
+import net.minecraft.nbt.Tag as NbtElement
+import net.minecraft.nbt.FloatTag as NbtFloat
+import net.minecraft.nbt.IntTag as NbtInt
+import net.minecraft.nbt.ListTag as NbtList
+import net.minecraft.nbt.LongTag as NbtLong
+import net.minecraft.nbt.ShortTag as NbtShort
+import net.minecraft.nbt.StringTag as NbtString
 import kotlin.reflect.KProperty
 
 

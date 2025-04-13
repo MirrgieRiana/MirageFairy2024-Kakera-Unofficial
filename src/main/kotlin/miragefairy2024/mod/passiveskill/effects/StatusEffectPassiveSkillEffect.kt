@@ -7,9 +7,9 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
-import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.text.Text
+import net.minecraft.world.effect.MobEffect as StatusEffect
+import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
+import net.minecraft.network.chat.Component as Text
 
 object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<StatusEffect, Entry>)

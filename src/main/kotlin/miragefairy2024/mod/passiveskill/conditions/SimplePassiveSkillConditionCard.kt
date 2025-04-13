@@ -10,10 +10,10 @@ import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.registry.tag.FluidTags
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.world.Heightmap
-import net.minecraft.world.biome.Biome
+import net.minecraft.tags.FluidTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.biome.Biome
 
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, context.blockPos).y
 private fun biomeHasNoPrecipitation(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitation(context.blockPos) == Biome.Precipitation.NONE

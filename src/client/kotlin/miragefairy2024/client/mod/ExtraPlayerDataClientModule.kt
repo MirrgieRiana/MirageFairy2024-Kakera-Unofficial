@@ -4,7 +4,7 @@ import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.mod.ExtraPlayerDataSynchronizationChannel
 import miragefairy2024.mod.ExtraPlayerDataSynchronizationPacket
 import miragefairy2024.mod.extraPlayerDataContainer
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft as MinecraftClient
 
 fun initExtraPlayerDataClientModule() {
     ExtraPlayerDataSynchronizationChannel.registerClientPacketReceiver { packet ->

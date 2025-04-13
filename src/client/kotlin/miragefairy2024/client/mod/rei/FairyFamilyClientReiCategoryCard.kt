@@ -17,7 +17,7 @@ import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCategoryCard.Display>(FairyFamilyReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {

@@ -7,9 +7,9 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.entity.ExperienceOrbEntity
-import net.minecraft.entity.ItemEntity
-import net.minecraft.util.math.Box
+import net.minecraft.world.entity.ExperienceOrb as ExperienceOrbEntity
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.phys.AABB as Box
 
 fun ToolConfiguration.collection() = this.also {
     this.merge(CollectionToolEffectType, true) { enabled ->

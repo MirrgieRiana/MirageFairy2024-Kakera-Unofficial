@@ -13,21 +13,21 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.toSidedInventoryDelegate
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.entity.projectile.ArrowEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.ChunkSectionPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.RaycastContext
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.entity.projectile.Arrow as ArrowEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.phys.HitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.core.SectionPos as ChunkSectionPos
+import net.minecraft.core.Direction
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.ClipContext as RaycastContext
+import net.minecraft.world.level.Level as World
 
 // TODO WIP
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {

@@ -28,18 +28,18 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.piston.PistonBehavior
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.EnumProperty
-import net.minecraft.util.StringIdentifiable
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.util.StringRepresentable as StringIdentifiable
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 
 abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlockEntity<E>, H : FairyLogisticsScreenHandler> : MachineCard<B, E, H>() {
 
