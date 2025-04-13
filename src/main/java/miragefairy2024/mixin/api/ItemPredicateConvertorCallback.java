@@ -2,7 +2,7 @@ package miragefairy2024.mixin.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface ItemPredicateConvertorCallback {
     Event<ItemPredicateConvertorCallback> EVENT = EventFactory.createArrayBacked(ItemPredicateConvertorCallback.class, callbacks -> itemStack -> {

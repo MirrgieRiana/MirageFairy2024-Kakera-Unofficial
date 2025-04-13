@@ -2,8 +2,8 @@ package miragefairy2024.mixin.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface DamageCallback {
     Event<DamageCallback> EVENT = EventFactory.createArrayBacked(DamageCallback.class, callbacks -> (entity, source, amount) -> {
