@@ -3,13 +3,13 @@ package miragefairy2024.util
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SidedInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.slot.Slot
-import net.minecraft.util.math.Direction
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.WorldlyContainer as SidedInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.Slot
+import net.minecraft.core.Direction
 import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)

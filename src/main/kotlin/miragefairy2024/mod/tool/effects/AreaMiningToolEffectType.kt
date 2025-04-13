@@ -11,8 +11,8 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
     this.merge(AreaMiningToolEffectType, level) { level ->

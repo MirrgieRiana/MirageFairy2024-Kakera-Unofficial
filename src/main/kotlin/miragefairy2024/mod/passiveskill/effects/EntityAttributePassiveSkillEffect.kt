@@ -7,9 +7,9 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.attribute.EntityAttributeModifier
-import net.minecraft.text.Text
+import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
+import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
+import net.minecraft.network.chat.Component as Text
 import java.util.UUID
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {

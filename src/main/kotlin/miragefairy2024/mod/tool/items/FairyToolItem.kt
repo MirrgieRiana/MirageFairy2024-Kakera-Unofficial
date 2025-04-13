@@ -2,18 +2,18 @@ package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.tool.ToolConfiguration
 import net.fabricmc.yarn.constants.MiningLevels
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.entity.Entity
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.BlockTags
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 
 interface FairyToolItem {
     val configuration: ToolConfiguration

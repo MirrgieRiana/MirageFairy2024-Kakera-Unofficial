@@ -8,11 +8,11 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.register
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.potion.PotionUtil
-import net.minecraft.potion.Potions
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.world.item.alchemy.PotionUtils as PotionUtil
+import net.minecraft.world.item.alchemy.Potions
 
 val mirageFairy2024ItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("miragefairy2024"), "MF24KU", "MF24KU",

@@ -17,10 +17,10 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
 import miragefairy2024.util.size
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.util.InputUtil
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import com.mojang.blaze3d.platform.InputConstants as InputUtil
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 
 class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
 

@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
-import net.minecraft.entity.Entity
-import net.minecraft.entity.data.TrackedData
+import net.minecraft.world.entity.Entity
+import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
 import kotlin.reflect.KProperty
 
 context(E)

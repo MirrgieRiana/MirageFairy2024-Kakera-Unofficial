@@ -48,49 +48,49 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.block.AbstractBlock
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.LeavesBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.PillarBlock
-import net.minecraft.block.SaplingBlock
-import net.minecraft.block.enums.Instrument
-import net.minecraft.block.piston.PistonBehavior
-import net.minecraft.block.sapling.SaplingGenerator
-import net.minecraft.client.util.ParticleUtil
-import net.minecraft.data.client.Models
-import net.minecraft.data.client.TextureKey
-import net.minecraft.data.server.loottable.BlockLootTableGenerator
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.loot.condition.RandomChanceLootCondition
-import net.minecraft.loot.function.ApplyBonusLootFunction
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.stat.Stats
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.BooleanProperty
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
+import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.block.grower.AbstractTreeGrower as SaplingGenerator
+import net.minecraft.util.ParticleUtils as ParticleUtil
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.data.loot.BlockLootSubProvider as BlockLootTableGenerator
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
 
 class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {

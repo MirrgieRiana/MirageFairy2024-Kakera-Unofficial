@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.ScreenHandler
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 fun ScreenHandler.quickMove(slotIndex: Int, destinationIndices: Iterable<Int>): ItemStack {
     if (slotIndex < 0 || slotIndex >= slots.size) return EMPTY_ITEM_STACK

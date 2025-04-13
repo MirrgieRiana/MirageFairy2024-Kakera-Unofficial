@@ -8,13 +8,13 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
 import net.fabricmc.yarn.constants.MiningLevels
-import net.minecraft.item.Item
-import net.minecraft.item.Items
-import net.minecraft.item.ToolMaterial
-import net.minecraft.item.ToolMaterials
-import net.minecraft.recipe.Ingredient
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.Tiers as ToolMaterials
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
 
 enum class FairyToolMaterials(
     private val miningLevel: Int,

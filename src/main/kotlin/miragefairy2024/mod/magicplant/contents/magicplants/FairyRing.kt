@@ -2,13 +2,13 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.MathHelper
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.FeatureConfig
-import net.minecraft.world.gen.feature.PlacedFeature
-import net.minecraft.world.gen.feature.util.FeatureContext
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.core.BlockPos
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
+import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 
 class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius: Float, val ySpread: Int, val feature: RegistryEntry<PlacedFeature>) : FeatureConfig {
     companion object {

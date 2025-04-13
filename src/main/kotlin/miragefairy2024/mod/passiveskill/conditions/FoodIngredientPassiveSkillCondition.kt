@@ -10,7 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.text
-import net.minecraft.item.Item
+import net.minecraft.world.item.Item
 import java.time.Instant
 
 class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {

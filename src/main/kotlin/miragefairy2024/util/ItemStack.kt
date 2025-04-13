@@ -1,9 +1,9 @@
 package miragefairy2024.util
 
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
 import java.util.Objects
 
 fun Item.createItemStack(count: Int = 1) = ItemStack(this, count atMost this.maxCount)

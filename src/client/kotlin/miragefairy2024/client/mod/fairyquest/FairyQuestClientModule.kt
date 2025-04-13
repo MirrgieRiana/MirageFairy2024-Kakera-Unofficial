@@ -6,13 +6,13 @@ import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.fairyquest.fairyQuestCardScreenHandlerType
 import miragefairy2024.mod.fairyquest.getFairyQuestRecipe
 import miragefairy2024.util.createItemStack
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.client.render.model.json.ModelTransformationMode
-import net.minecraft.client.util.ModelIdentifier
-import net.minecraft.item.Items
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.RotationAxis
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
+import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
+import net.minecraft.world.item.Items
+import net.minecraft.util.Mth as MathHelper
+import com.mojang.math.Axis as RotationAxis
 
 fun initFairyQuestClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->

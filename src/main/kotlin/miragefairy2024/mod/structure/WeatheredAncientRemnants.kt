@@ -21,33 +21,33 @@ import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.Blocks
-import net.minecraft.item.Items
-import net.minecraft.item.map.MapIcon
-import net.minecraft.loot.function.EnchantRandomlyLootFunction
-import net.minecraft.loot.function.ExplorationMapLootFunction
-import net.minecraft.loot.function.SetNameLootFunction
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.structure.StructureSet
-import net.minecraft.structure.pool.StructurePool
-import net.minecraft.structure.pool.StructurePools
-import net.minecraft.structure.processor.BlockIgnoreStructureProcessor
-import net.minecraft.structure.processor.GravityStructureProcessor
-import net.minecraft.structure.processor.StructureProcessorRule
-import net.minecraft.structure.rule.AlwaysTruePosRuleTest
-import net.minecraft.structure.rule.AlwaysTrueRuleTest
-import net.minecraft.structure.rule.BlockMatchRuleTest
-import net.minecraft.structure.rule.RandomBlockMatchRuleTest
-import net.minecraft.structure.rule.blockentity.AppendLootRuleBlockEntityModifier
-import net.minecraft.world.Heightmap
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.StructureTerrainAdaptation
-import net.minecraft.world.gen.YOffset
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement
-import net.minecraft.world.gen.chunk.placement.SpreadType
-import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
-import net.minecraft.world.gen.structure.Structure
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.saveddata.maps.MapDecoration as MapIcon
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
+import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction as ExplorationMapLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetNameFunction as SetNameLootFunction
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.data.worldgen.Pools as StructurePools
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor as BlockIgnoreStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor as GravityStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.PosAlwaysTrueTest as AlwaysTruePosRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.AppendLoot as AppendLootRuleBlockEntityModifier
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight as ConstantHeightProvider
+import net.minecraft.world.level.levelgen.structure.Structure
 import java.util.Optional
 
 object WeatheredAncientRemnantsCard {

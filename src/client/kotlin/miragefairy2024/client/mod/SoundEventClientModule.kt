@@ -2,7 +2,7 @@ package miragefairy2024.client.mod
 
 import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.mod.SoundEventChannel
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft as MinecraftClient
 
 fun initSoundEventClientModule() {
     SoundEventChannel.registerClientPacketReceiver { packet ->

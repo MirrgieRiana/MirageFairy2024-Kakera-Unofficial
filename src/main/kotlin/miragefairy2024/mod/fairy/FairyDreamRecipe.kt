@@ -1,12 +1,12 @@
 package miragefairy2024.mod.fairy
 
 import mirrg.kotlin.hydrogen.unit
-import net.minecraft.block.Block
-import net.minecraft.entity.EntityType
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.Registry
+import net.minecraft.tags.TagKey
 import kotlin.jvm.optionals.getOrElse
 
 object FairyDreamRecipes {

@@ -7,51 +7,51 @@ import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.block.ComposterBlock
-import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder
-import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
-import net.minecraft.data.server.recipe.RecipeProvider
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.EntityType
-import net.minecraft.inventory.RecipeInputInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.loot.LootTable
-import net.minecraft.loot.condition.KilledByPlayerLootCondition
-import net.minecraft.loot.condition.LocationCheckLootCondition
-import net.minecraft.loot.condition.MatchToolLootCondition
-import net.minecraft.loot.condition.RandomChanceLootCondition
-import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
-import net.minecraft.loot.entry.LeafEntry
-import net.minecraft.loot.function.ApplyBonusLootFunction
-import net.minecraft.loot.function.ExplosionDecayLootFunction
-import net.minecraft.loot.function.LootingEnchantLootFunction
-import net.minecraft.loot.function.SetCountLootFunction
-import net.minecraft.loot.provider.number.LootNumberProvider
-import net.minecraft.loot.provider.number.UniformLootNumberProvider
-import net.minecraft.predicate.NumberRange
-import net.minecraft.predicate.entity.LocationPredicate
-import net.minecraft.predicate.item.EnchantmentPredicate
-import net.minecraft.predicate.item.ItemPredicate
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.Recipe
-import net.minecraft.recipe.SpecialCraftingRecipe
-import net.minecraft.recipe.SpecialRecipeSerializer
-import net.minecraft.recipe.book.RecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
-import net.minecraft.world.World
-import net.minecraft.world.biome.Biome
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ComposterBlock
+import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
+import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
+import net.minecraft.data.recipes.RecipeProvider
+import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
+import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.inventory.CraftingContainer as RecipeInputInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck as LocationCheckLootCondition
+import net.minecraft.world.level.storage.loot.predicates.MatchTool as MatchToolLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition as RandomChanceWithLootingLootCondition
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay as ExplosionDecayLootFunction
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction as LootingEnchantLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider as LootNumberProvider
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.advancements.critereon.MinMaxBounds as NumberRange
+import net.minecraft.advancements.critereon.LocationPredicate
+import net.minecraft.advancements.critereon.EnchantmentPredicate
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.core.RegistryAccess as DynamicRegistryManager
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.tags.TagKey
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.NonNullList as DefaultedList
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.biome.Biome
 
 // Crafting
 

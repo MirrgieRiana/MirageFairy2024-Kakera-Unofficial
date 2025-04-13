@@ -12,10 +12,10 @@ import miragefairy2024.util.temperatureCategory
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.world.biome.Biome
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.biome.Biome
 
 // module
 

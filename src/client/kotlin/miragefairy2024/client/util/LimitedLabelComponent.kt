@@ -9,10 +9,10 @@ import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
 import io.wispforest.owo.util.Observable
-import net.minecraft.client.MinecraftClient
-import net.minecraft.text.OrderedText
-import net.minecraft.text.Style
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.util.FormattedCharSequence as OrderedText
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.Component as Text
 import java.util.function.Function
 import kotlin.math.min
 

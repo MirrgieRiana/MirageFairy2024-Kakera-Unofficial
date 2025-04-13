@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
-import net.minecraft.text.ClickEvent
-import net.minecraft.text.HoverEvent
-import net.minecraft.text.Text
+import net.minecraft.network.chat.ClickEvent
+import net.minecraft.network.chat.HoverEvent
+import net.minecraft.network.chat.Component as Text
 import java.io.File
 
 inline fun text(block: TextScope.() -> Text) = block(TextScope)

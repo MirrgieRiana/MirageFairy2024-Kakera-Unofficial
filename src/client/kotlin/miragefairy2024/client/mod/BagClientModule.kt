@@ -15,9 +15,9 @@ import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.BagCard
 import miragefairy2024.mod.BagScreenHandler
 import mirrg.kotlin.hydrogen.atLeast
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 
 fun initBagClientModule() {
     HandledScreens.register(BagCard.screenHandlerType) { gui, inventory, title -> BagScreen(gui, inventory, title) }

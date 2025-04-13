@@ -12,8 +12,8 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.mineAll() = this.also {
     this.merge(MineAllToolEffectType, true) { enabled ->

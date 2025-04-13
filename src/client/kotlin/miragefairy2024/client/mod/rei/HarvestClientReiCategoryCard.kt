@@ -16,7 +16,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryStack
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCard.Display>(HarvestReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {

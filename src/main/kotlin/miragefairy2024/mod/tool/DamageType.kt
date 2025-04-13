@@ -8,10 +8,10 @@ import miragefairy2024.util.ja
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
-import net.minecraft.entity.damage.DamageType
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.DamageTypeTags
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.TagKey
 
 @Suppress("LeakingThis")
 abstract class DamageTypeCard {

@@ -5,16 +5,16 @@ import miragefairy2024.mod.particle.MagicSquareParticleChannel
 import miragefairy2024.mod.particle.MagicSquareParticleEffect
 import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.particle.ParticleFactory
-import net.minecraft.client.particle.ParticleTextureSheet
-import net.minecraft.client.particle.SpriteBillboardParticle
-import net.minecraft.client.particle.SpriteProvider
-import net.minecraft.client.render.Camera
-import net.minecraft.client.render.VertexConsumer
-import net.minecraft.client.world.ClientWorld
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.particle.ParticleProvider as ParticleFactory
+import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
+import net.minecraft.client.particle.SpriteSet as SpriteProvider
+import net.minecraft.client.Camera
+import com.mojang.blaze3d.vertex.VertexConsumer
+import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.phys.Vec3 as Vec3d
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.roundToInt

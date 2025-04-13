@@ -8,27 +8,27 @@ import miragefairy2024.RenderingProxyBlockEntity
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
-import net.minecraft.block.Block
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.color.world.BiomeColors
-import net.minecraft.client.color.world.FoliageColors
-import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.block.entity.BlockEntityRenderer
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory
-import net.minecraft.client.render.model.json.ModelTransformationMode
-import net.minecraft.client.util.ModelIdentifier
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.RotationAxis
-import net.minecraft.world.BlockRenderView
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.renderer.BiomeColors
+import net.minecraft.world.level.FoliageColor as FoliageColors
+import net.minecraft.client.renderer.RenderType as RenderLayer
+import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers as BlockEntityRendererFactories
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider as BlockEntityRendererFactory
+import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
+import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import com.mojang.math.Axis as RotationAxis
+import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
 
 class ClientProxyImpl : ClientProxy {
     override fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit) {

@@ -12,7 +12,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 import kotlin.math.pow
 
 enum class TraitEffectKeyCard(

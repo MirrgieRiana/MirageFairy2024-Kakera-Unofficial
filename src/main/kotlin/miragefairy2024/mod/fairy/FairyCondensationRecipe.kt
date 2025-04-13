@@ -7,8 +7,8 @@ import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.size
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.NonNullList as DefaultedList
 
 context(ModContext)
 fun initFairyCondensationRecipe() {

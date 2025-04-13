@@ -17,27 +17,27 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
-import net.minecraft.block.Block
-import net.minecraft.data.DataOutput
+import net.minecraft.world.level.block.Block
+import net.minecraft.data.PackOutput as DataOutput
 import net.minecraft.data.DataProvider
-import net.minecraft.data.DataWriter
-import net.minecraft.data.client.BlockStateModelGenerator
-import net.minecraft.data.client.ItemModelGenerator
-import net.minecraft.data.server.recipe.RecipeJsonProvider
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.damage.DamageType
-import net.minecraft.item.Item
-import net.minecraft.loot.LootTable
-import net.minecraft.loot.context.LootContextTypes
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryBuilder
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.RegistryWrapper
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
-import net.minecraft.world.biome.Biome
-import net.minecraft.world.gen.structure.Structure
+import net.minecraft.data.CachedOutput as DataWriter
+import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
+import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
+import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
+import net.minecraft.core.Registry
+import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.HolderLookup as RegistryWrapper
+import net.minecraft.tags.TagKey
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.structure.Structure
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 import java.util.function.Consumer

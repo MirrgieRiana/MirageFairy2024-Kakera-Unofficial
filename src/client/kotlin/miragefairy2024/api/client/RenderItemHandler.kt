@@ -1,10 +1,10 @@
 package miragefairy2024.api.client
 
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.model.BakedModel
-import net.minecraft.client.render.model.json.ModelTransformationMode
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.item.ItemStack
+import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
+import net.minecraft.client.resources.model.BakedModel
+import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.world.item.ItemStack
 
 fun interface RenderItemHandler {
     companion object {

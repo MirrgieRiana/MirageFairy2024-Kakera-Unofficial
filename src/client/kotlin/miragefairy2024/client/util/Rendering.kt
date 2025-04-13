@@ -1,10 +1,10 @@
 package miragefairy2024.client.util
 
-import net.minecraft.client.font.TextRenderer
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.text.OrderedText
-import net.minecraft.text.Text
+import net.minecraft.client.gui.Font as TextRenderer
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.util.FormattedCharSequence as OrderedText
+import net.minecraft.network.chat.Component as Text
 
 inline fun <T> MatrixStack.stack(block: () -> T): T {
     this.push()

@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.util.Identifier
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceLocation as Identifier
 
 val Identifier.string get() = this.toString()
 

@@ -16,25 +16,25 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
-import net.minecraft.block.BlockState
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ToolItem
-import net.minecraft.item.ToolMaterial
-import net.minecraft.item.Vanishable
-import net.minecraft.sound.SoundCategory
-import net.minecraft.stat.Stats
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TieredItem as ToolItem
+import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.Vanishable
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.stats.Stats
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 
 class FairyShootingStaffConfiguration(
     override val toolMaterialCard: ToolMaterialCard,

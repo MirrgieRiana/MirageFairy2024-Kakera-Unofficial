@@ -3,24 +3,24 @@ package miragefairy2024.util
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
-import net.minecraft.block.Block
-import net.minecraft.data.server.loottable.BlockLootTableGenerator
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.EntityType
-import net.minecraft.item.Item
-import net.minecraft.loot.LootPool
-import net.minecraft.loot.LootTable
-import net.minecraft.loot.entry.AlternativeEntry
-import net.minecraft.loot.entry.EmptyEntry
-import net.minecraft.loot.entry.GroupEntry
-import net.minecraft.loot.entry.ItemEntry
-import net.minecraft.loot.entry.LeafEntry
-import net.minecraft.loot.entry.LootPoolEntry
-import net.minecraft.loot.entry.SequenceEntry
-import net.minecraft.loot.function.ApplyBonusLootFunction
-import net.minecraft.loot.function.SetCountLootFunction
-import net.minecraft.loot.provider.number.UniformLootNumberProvider
-import net.minecraft.util.Identifier
+import net.minecraft.world.level.block.Block
+import net.minecraft.data.loot.BlockLootSubProvider as BlockLootTableGenerator
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.storage.loot.LootPool
+import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry as AlternativeEntry
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem as EmptyEntry
+import net.minecraft.world.level.storage.loot.entries.EntryGroup as GroupEntry
+import net.minecraft.world.level.storage.loot.entries.LootItem as ItemEntry
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer as LootPoolEntry
+import net.minecraft.world.level.storage.loot.entries.SequentialEntry as SequenceEntry
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.resources.ResourceLocation as Identifier
 
 inline fun <T> T.configure(block: T.() -> Unit) = this.apply(block)
 

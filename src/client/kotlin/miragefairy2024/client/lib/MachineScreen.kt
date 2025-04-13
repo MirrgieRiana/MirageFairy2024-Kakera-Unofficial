@@ -2,10 +2,10 @@ package miragefairy2024.client.lib
 
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 import java.util.Optional
 
 open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard<*, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {

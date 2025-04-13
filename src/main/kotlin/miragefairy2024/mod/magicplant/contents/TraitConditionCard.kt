@@ -19,10 +19,10 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.Heightmap
-import net.minecraft.world.World
+import net.minecraft.tags.BlockTags
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.Level as World
 
 enum class TraitConditionCard(
     path: String,

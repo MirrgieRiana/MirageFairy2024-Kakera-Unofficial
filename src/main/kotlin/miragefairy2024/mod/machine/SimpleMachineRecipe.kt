@@ -12,27 +12,27 @@ import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.JsonWrapper
 import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.advancement.Advancement
-import net.minecraft.advancement.AdvancementRewards
-import net.minecraft.advancement.CriterionMerger
-import net.minecraft.advancement.criterion.CriterionConditions
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
-import net.minecraft.data.server.recipe.RecipeJsonProvider
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.Recipe
-import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.RecipeType
-import net.minecraft.recipe.book.RecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.registry.Registries
-import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
-import net.minecraft.world.World
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementRewards
+import net.minecraft.advancements.RequirementsStrategy as CriterionMerger
+import net.minecraft.advancements.CriterionTriggerInstance as CriterionConditions
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
+import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
+import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.core.RegistryAccess as DynamicRegistryManager
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.NonNullList as DefaultedList
+import net.minecraft.world.level.Level as World
 import java.util.function.Consumer
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
