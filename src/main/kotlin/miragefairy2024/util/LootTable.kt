@@ -2,9 +2,6 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import miragefairy2024.util.FortuneEffect.IGNORE
-import miragefairy2024.util.FortuneEffect.ORE
-import miragefairy2024.util.FortuneEffect.UNIFORM
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.minecraft.block.Block
 import net.minecraft.data.server.loottable.BlockLootTableGenerator
@@ -102,13 +99,13 @@ enum class FortuneEffect {
 }
 
 context(ModContext)
-fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = ORE) = this.registerLootTableGeneration {
+fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration {
     BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
         if (additionalCount != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
-            IGNORE -> Unit
-            ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
-            UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
+            FortuneEffect.IGNORE -> Unit
+            FortuneEffect.ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
+            FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE))
         }
     }))
 }

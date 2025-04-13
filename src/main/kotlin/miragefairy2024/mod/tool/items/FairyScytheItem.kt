@@ -35,7 +35,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.RaycastContext.FluidHandling
+import net.minecraft.world.RaycastContext
 import net.minecraft.world.World
 
 class FairyScytheConfiguration(
@@ -103,7 +103,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
         if (!user.isSneaking) {
             val itemStack = user.getStackInHand(hand)
-            val blockHitResult = raycast(world, user, FluidHandling.NONE)
+            val blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false
             // TODO 貫通判定
