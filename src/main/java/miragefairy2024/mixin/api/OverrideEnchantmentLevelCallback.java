@@ -2,8 +2,8 @@ package miragefairy2024.mixin.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public interface OverrideEnchantmentLevelCallback {
     Event<OverrideEnchantmentLevelCallback> EVENT = EventFactory.createArrayBacked(OverrideEnchantmentLevelCallback.class, callbacks -> (enchantment, itemStack, oldLevel) -> {
