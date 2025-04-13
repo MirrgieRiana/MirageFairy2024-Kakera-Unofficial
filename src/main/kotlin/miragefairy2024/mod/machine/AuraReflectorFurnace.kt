@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
-import miragefairy2024.mod.fairybuilding.FairyBuildingCard.Companion.PropertyConfiguration
+import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.TextureMap
@@ -65,8 +65,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     )
     override val slots = inputSlots + fuelSlot + outputSlots
 
-    val FUEL_PROPERTY = PropertyConfiguration<AuraReflectorFurnaceBlockEntity>({ fuel }, { fuel = it })
-    val FUEL_MAX_PROPERTY = PropertyConfiguration<AuraReflectorFurnaceBlockEntity>({ fuelMax }, { fuelMax = it })
+    val FUEL_PROPERTY = FairyBuildingCard.PropertyConfiguration<AuraReflectorFurnaceBlockEntity>({ fuel }, { fuel = it })
+    val FUEL_MAX_PROPERTY = FairyBuildingCard.PropertyConfiguration<AuraReflectorFurnaceBlockEntity>({ fuelMax }, { fuelMax = it })
     override val properties = super.properties + FUEL_PROPERTY + FUEL_MAX_PROPERTY
 
     override val recipeType = AuraReflectorFurnaceRecipeCard.type

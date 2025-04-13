@@ -2,8 +2,6 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.BaseStoneType.DEEPSLATE
-import miragefairy2024.mod.BaseStoneType.STONE
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -68,45 +66,45 @@ enum class OreCard(
     MAGNETITE_ORE(
         "magnetite_ore", "Magnetite Ore", "磁鉄鉱鉱石",
         null,
-        STONE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+        BaseStoneType.STONE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
     ),
     DEEPSLATE_MAGNETITE_ORE(
         "deepslate_magnetite_ore", "Deepslate Magnetite Ore", "深層磁鉄鉱鉱石",
         null,
-        DEEPSLATE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
     ),
     FLUORITE_ORE(
         "fluorite_ore", "Fluorite Ore", "蛍石鉱石",
         null,
-        STONE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+        BaseStoneType.STONE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
     ),
     DEEPSLATE_FLUORITE_ORE(
         "deepslate_fluorite_ore", "Deepslate Fluorite Ore", "深層蛍石鉱石",
         null,
-        DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
     ),
     MIRANAGITE_ORE(
         "miranagite_ore", "Miranagite Ore", "蒼天石鉱石",
         PoemList(1).poem("What lies beyond a Garden of Eden?", "秩序の石は楽園の先に何を見るのか？"),
-        STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
+        BaseStoneType.STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
     ),
     DEEPSLATE_MIRANAGITE_ORE(
         "deepslate_miranagite_ore", "Deepslate Miranagite Ore", "深層蒼天石鉱石",
         PoemList(1).poem("Singularities built by the Creator", "楽園が楽園であるための奇跡。"),
-        DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
     ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
     val block = run {
         val settings = when (baseStoneType) {
-            STONE -> FabricBlockSettings.create()
+            BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE_GRAY)
                 .instrument(Instrument.BASEDRUM)
                 .requiresTool()
                 .strength(3.0F, 3.0F)
 
-            DEEPSLATE -> FabricBlockSettings.create()
+            BaseStoneType.DEEPSLATE -> FabricBlockSettings.create()
                 .mapColor(MapColor.DEEPSLATE_GRAY)
                 .instrument(Instrument.BASEDRUM)
                 .requiresTool()
@@ -118,8 +116,8 @@ enum class OreCard(
     val item = BlockItem(block, Item.Settings())
     val texturedModelFactory = TexturedModel.Factory {
         val baseStoneTexture = when (baseStoneType) {
-            STONE -> Identifier("minecraft", "block/stone")
-            DEEPSLATE -> Identifier("minecraft", "block/deepslate")
+            BaseStoneType.STONE -> Identifier("minecraft", "block/stone")
+            BaseStoneType.DEEPSLATE -> Identifier("minecraft", "block/deepslate")
         }
         OreModelCard.model.with(
             TextureKey.BACK to baseStoneTexture,
@@ -168,8 +166,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
-                DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultState))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultState))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

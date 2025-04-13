@@ -36,7 +36,7 @@ import net.minecraft.structure.rule.RandomBlockMatchRuleTest
 import net.minecraft.util.collection.Pool
 import net.minecraft.world.StructureSpawns
 import net.minecraft.world.biome.BiomeKeys
-import net.minecraft.world.biome.SpawnSettings.SpawnEntry
+import net.minecraft.world.biome.SpawnSettings
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.StructureTerrainAdaptation
 import net.minecraft.world.gen.YOffset
@@ -185,7 +185,7 @@ object DripstoneCavesRuinCard {
                         SpawnGroup.MONSTER to StructureSpawns(
                             StructureSpawns.BoundingBox.PIECE,
                             Pool.of(
-                                SpawnEntry(ChaosCubeCard.entityType, 10, 1, 4),
+                                SpawnSettings.SpawnEntry(ChaosCubeCard.entityType, 10, 1, 4),
                             )
                         ),
                     ),

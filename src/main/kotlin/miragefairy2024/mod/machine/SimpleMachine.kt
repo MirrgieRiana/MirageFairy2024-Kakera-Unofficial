@@ -6,7 +6,7 @@ import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.fairybuilding.FairyBuildingCard.Companion.PropertyConfiguration
+import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -46,8 +46,8 @@ import kotlin.jvm.optionals.getOrNull
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
     companion object {
-        val PROGRESS_PROPERTY = PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progress }, { progress = it })
-        val PROGRESS_MAX_PROPERTY = PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progressMax }, { progressMax = it })
+        val PROGRESS_PROPERTY = FairyBuildingCard.PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progress }, { progress = it })
+        val PROGRESS_MAX_PROPERTY = FairyBuildingCard.PropertyConfiguration<SimpleMachineBlockEntity<*>>({ progressMax }, { progressMax = it })
     }
 
     abstract val name: EnJa

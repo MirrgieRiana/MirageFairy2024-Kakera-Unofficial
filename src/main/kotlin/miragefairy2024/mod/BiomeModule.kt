@@ -26,9 +26,7 @@ import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.GenerationSettings
 import net.minecraft.world.biome.SpawnSettings
-import net.minecraft.world.biome.SpawnSettings.SpawnEntry
 import net.minecraft.world.biome.source.util.MultiNoiseUtil
-import net.minecraft.world.biome.source.util.MultiNoiseUtil.ParameterRange
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.carver.ConfiguredCarver
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures
@@ -60,12 +58,12 @@ abstract class BiomeCard(
     ja: String,
     val regionType: RegionType,
     val weight: Int,
-    val temperature: ParameterRange,
-    val humidity: ParameterRange,
-    val continentalness: ParameterRange,
-    val erosion: ParameterRange,
-    val weirdness: ParameterRange,
-    val depth: ParameterRange,
+    val temperature: MultiNoiseUtil.ParameterRange,
+    val humidity: MultiNoiseUtil.ParameterRange,
+    val continentalness: MultiNoiseUtil.ParameterRange,
+    val erosion: MultiNoiseUtil.ParameterRange,
+    val weirdness: MultiNoiseUtil.ParameterRange,
+    val depth: MultiNoiseUtil.ParameterRange,
     val offset: Float,
     vararg val tags: TagKey<Biome>,
 ) {
@@ -143,14 +141,14 @@ object FairyForestBiomeCard : BiomeCard(
 
                 DefaultBiomeFeatures.addCaveMobs(spawnSettings)
 
-                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnEntry(EntityType.RABBIT, 4, 2, 3))
-                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnEntry(EntityType.FOX, 8, 2, 4))
+                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.RABBIT, 4, 2, 3))
+                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.FOX, 8, 2, 4))
 
-                spawnSettings.spawn(SpawnGroup.MONSTER, SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
+                spawnSettings.spawn(SpawnGroup.MONSTER, SpawnSettings.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
 
                 // River Mobs
-                spawnSettings.spawn(SpawnGroup.WATER_CREATURE, SpawnEntry(EntityType.SQUID, 2, 1, 4))
-                spawnSettings.spawn(SpawnGroup.WATER_AMBIENT, SpawnEntry(EntityType.SALMON, 5, 1, 5))
+                spawnSettings.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.SQUID, 2, 1, 4))
+                spawnSettings.spawn(SpawnGroup.WATER_AMBIENT, SpawnSettings.SpawnEntry(EntityType.SALMON, 5, 1, 5))
 
             }.build())
             .generationSettings(GenerationSettings.LookupBackedBuilder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
@@ -215,13 +213,13 @@ object DeepFairyForestBiomeCard : BiomeCard(
             .spawnSettings(SpawnSettings.Builder().also { spawnSettings ->
 
                 DefaultBiomeFeatures.addBatsAndMonsters(spawnSettings)
-                spawnSettings.spawn(SpawnGroup.MONSTER, SpawnEntry(EntityType.WITCH, 100, 1, 4))
+                spawnSettings.spawn(SpawnGroup.MONSTER, SpawnSettings.SpawnEntry(EntityType.WITCH, 100, 1, 4))
 
-                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnEntry(EntityType.WOLF, 8, 4, 4))
+                spawnSettings.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.WOLF, 8, 4, 4))
 
                 // River Mobs
-                spawnSettings.spawn(SpawnGroup.WATER_CREATURE, SpawnEntry(EntityType.SQUID, 2, 1, 4))
-                spawnSettings.spawn(SpawnGroup.WATER_AMBIENT, SpawnEntry(EntityType.SALMON, 5, 1, 5))
+                spawnSettings.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.SQUID, 2, 1, 4))
+                spawnSettings.spawn(SpawnGroup.WATER_AMBIENT, SpawnSettings.SpawnEntry(EntityType.SALMON, 5, 1, 5))
 
             }.build())
             .generationSettings(GenerationSettings.LookupBackedBuilder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
