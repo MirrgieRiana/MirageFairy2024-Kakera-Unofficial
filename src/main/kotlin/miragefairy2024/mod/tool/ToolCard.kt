@@ -342,7 +342,7 @@ class ToolCard(
         ) { registerAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_KNIFE = !ToolCard(
             "resonite_knife", EnJa("Resonite Knife", "共鳴のナイフ"),
-            PoemList(5).poem(EnJa(en = "The ultrasonic vibration knife", "音波を超えた破壊の力。")),
+            PoemList(5).poem(EnJa("The ultrasonic vibration knife", "音波を超えた破壊の力。")),
             FairyKnifeConfiguration(ToolMaterialCard.RESONITE).areaMining().enchantment(Enchantments.EFFICIENCY, 6).soulStreamContainable(),
         ) { registerKnifeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_SCYTHE = !ToolCard(
