@@ -26,7 +26,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.resources.ResourceLocation as Identifier
 
 val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readString()))!!, ScreenHandlerContext.NULL)
+    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readUtf()))!!, ScreenHandlerContext.NULL)
 }
 
 val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toLanguageKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")

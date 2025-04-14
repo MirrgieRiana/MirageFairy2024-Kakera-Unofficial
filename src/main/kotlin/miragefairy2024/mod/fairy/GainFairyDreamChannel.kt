@@ -8,11 +8,11 @@ import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
 
 object GainFairyDreamChannel : Channel<Motif>(MirageFairy2024.identifier("gain_fairy_dream")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: Motif) {
-        buf.writeString(packet.getIdentifier()!!.string)
+        buf.writeUtf(packet.getIdentifier()!!.string)
     }
 
     override fun readFromBuf(buf: PacketByteBuf): Motif {
-        val motifId = buf.readString()
+        val motifId = buf.readUtf()
         return motifRegistry.get(motifId.toIdentifier())!!
     }
 }

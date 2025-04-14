@@ -54,7 +54,7 @@ import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 
-val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("fairy_quest_recipe"))
+val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface FairyQuestRecipe {

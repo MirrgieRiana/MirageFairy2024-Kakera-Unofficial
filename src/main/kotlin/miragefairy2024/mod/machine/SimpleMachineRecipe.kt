@@ -159,7 +159,7 @@ open class SimpleMachineRecipe(
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): R {
-            val group = buf.readString()
+            val group = buf.readUtf()
             val inputCount = buf.readInt()
             val inputs = (0 until inputCount).map {
                 Pair(Ingredient.fromPacket(buf), buf.readInt())
@@ -176,7 +176,7 @@ open class SimpleMachineRecipe(
         }
 
         override fun write(buf: PacketByteBuf, recipe: R) {
-            buf.writeString(recipe.group)
+            buf.writeUtf(recipe.group)
             buf.writeInt(recipe.inputs.size)
             recipe.inputs.forEach {
                 it.first.write(buf)

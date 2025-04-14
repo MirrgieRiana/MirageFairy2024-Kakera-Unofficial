@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.resources.ResourceLocation as Identifier
 
 /** レジストリに登録する前に呼び出すことはできません。 */
-fun Block.getIdentifier() = Registries.BLOCK.getId(this)
+fun Block.getIdentifier() = Registries.BLOCK.getKey(this)
 
 fun Identifier.toBlock() = Registries.BLOCK.get(this)
 
