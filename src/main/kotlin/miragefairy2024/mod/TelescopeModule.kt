@@ -173,7 +173,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
         }
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultBlockState.with(FACING, ctx.horizontalPlayerFacing)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultBlockState.setValue(FACING, ctx.horizontalDirection)
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false

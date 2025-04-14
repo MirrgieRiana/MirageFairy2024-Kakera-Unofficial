@@ -25,7 +25,7 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
 
 context(ModContext)
 fun initMotifTableScreenHandler() {
-    motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("motif_table"))
+    motifTableScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("motif_table"))
 }
 
 class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {

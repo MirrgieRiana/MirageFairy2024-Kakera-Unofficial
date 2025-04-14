@@ -37,7 +37,7 @@ class FermentationBarrelRecipe(
         val remainder = super.getCustomizedRemainder(itemStack)
         if (remainder.isNotEmpty) return remainder
 
-        if (itemStack.isOf(Items.POTION)) return Items.GLASS_BOTTLE.createItemStack()
+        if (itemStack.`is`(Items.POTION)) return Items.GLASS_BOTTLE.createItemStack()
 
         return EMPTY_ITEM_STACK
     }

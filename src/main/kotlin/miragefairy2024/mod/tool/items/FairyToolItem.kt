@@ -23,9 +23,9 @@ interface FairyToolItem {
 fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
     val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.miningSpeedMultiplier
     return when {
-        configuration.superEffectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier * 10F
-        configuration.effectiveBlocks.any { state.isOf(it) } -> miningSpeedMultiplier
-        configuration.effectiveBlockTags.any { state.isIn(it) } -> miningSpeedMultiplier
+        configuration.superEffectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier * 10F
+        configuration.effectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier
+        configuration.effectiveBlockTags.any { state.`is`(it) } -> miningSpeedMultiplier
         else -> 1.0F
     }
 }
@@ -33,13 +33,13 @@ fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: Item
 fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
     val itemMiningLevel = configuration.toolMaterialCard.toolMaterial.miningLevel
     return when {
-        itemMiningLevel < MiningLevels.DIAMOND && state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> false
-        itemMiningLevel < MiningLevels.IRON && state.isIn(BlockTags.NEEDS_IRON_TOOL) -> false
-        itemMiningLevel < MiningLevels.STONE && state.isIn(BlockTags.NEEDS_STONE_TOOL) -> false
+        itemMiningLevel < MiningLevels.DIAMOND && state.`is`(BlockTags.NEEDS_DIAMOND_TOOL) -> false
+        itemMiningLevel < MiningLevels.IRON && state.`is`(BlockTags.NEEDS_IRON_TOOL) -> false
+        itemMiningLevel < MiningLevels.STONE && state.`is`(BlockTags.NEEDS_STONE_TOOL) -> false
         else -> when {
-            configuration.superEffectiveBlocks.any { state.isOf(it) } -> true
-            configuration.effectiveBlocks.any { state.isOf(it) } -> true
-            configuration.effectiveBlockTags.any { state.isIn(it) } -> true
+            configuration.superEffectiveBlocks.any { state.`is`(it) } -> true
+            configuration.effectiveBlocks.any { state.`is`(it) } -> true
+            configuration.effectiveBlockTags.any { state.`is`(it) } -> true
             else -> false
         }
     }

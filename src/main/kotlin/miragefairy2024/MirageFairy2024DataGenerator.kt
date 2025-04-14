@@ -82,34 +82,34 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                 override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateBlockTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateBlockTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider<Biome>(output, RegistryKeys.BIOME, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateBiomeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateBiomeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider<Structure>(output, RegistryKeys.STRUCTURE, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider<EntityType<*>>(output, RegistryKeys.ENTITY_TYPE, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricTagProvider<DamageType>(output, RegistryKeys.DAMAGE_TYPE, registriesFuture) {
-                override fun configure(arg: RegistryWrapper.WrapperLookup) = DataGenerationEvents.onGenerateDamageTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateDamageTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput ->
@@ -143,10 +143,10 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                 override fun generate(exporter: Consumer<RecipeJsonProvider>) = DataGenerationEvents.onGenerateRecipe.fire { it { recipe -> exporter.accept(recipe) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
             object : FabricDynamicRegistryProvider(output, registriesFuture) {
                 override fun getName() = "World Gen"
-                override fun configure(registries: RegistryWrapper.WrapperLookup, entries: Entries) {
+                override fun configure(registries: RegistryWrapper.Provider, entries: Entries) {
                     dynamicGenerationRegistries.forEach {
                         entries.addAll(registries.getWrapperOrThrow(it))
                     }
@@ -165,7 +165,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : DataProvider {
-                private val pathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "nine_patch_textures")
+                private val pathResolver = output.getResolver(DataOutput.Target.RESOURCE_PACK, "nine_patch_textures")
                 override fun getName() = "Nine Patch Textures"
                 override fun run(writer: DataWriter): CompletableFuture<*> {
                     val futures = mutableListOf<CompletableFuture<*>>()
@@ -202,7 +202,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                     }
                     if (map.isEmpty()) return CompletableFuture.allOf()
 
-                    val path = output.resolvePath(DataOutput.OutputType.RESOURCE_PACK).resolve(destination.namespace).resolve(destination.path + ".json")
+                    val path = output.resolvePath(DataOutput.Target.RESOURCE_PACK).resolve(destination.namespace).resolve(destination.path + ".json")
 
                     val jsonElement = map.map { (path, entry) ->
                         path to jsonObjectNotNull(
@@ -217,7 +217,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : DataProvider {
-                private val pathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "particles")
+                private val pathResolver = output.getResolver(DataOutput.Target.RESOURCE_PACK, "particles")
                 override fun getName() = "Particles"
                 override fun run(writer: DataWriter): CompletableFuture<*> {
 

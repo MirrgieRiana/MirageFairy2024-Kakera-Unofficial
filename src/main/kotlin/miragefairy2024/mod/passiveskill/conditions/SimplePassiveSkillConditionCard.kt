@@ -33,17 +33,17 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     THUNDERING("thundering", "Thundering", "雷雨", { it.world.isThundering && !biomeHasNoPrecipitation(it) }),
     DAYTIME("daytime", "Daytime", "昼間", { isDaytime(it) }),
     NIGHT("night", "Night", "夜間", { !isDaytime(it) }),
-    UNDERWATER("underwater", "Underwater", "水中", { it.player.world.getBlockState(it.player.eyeBlockPos).fluidState.isIn(FluidTags.WATER) }),
+    UNDERWATER("underwater", "Underwater", "水中", { it.player.world.getBlockState(it.player.eyeBlockPos).fluidState.`is`(FluidTags.WATER) }),
     IN_THE_AIR("in_the_air", "In the Air", "空中", { !it.player.isOnGround }),
     ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
-    IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
-    NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).isIn(ConventionalBiomeTags.IN_NETHER) }),
+    IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),
+    NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),
 
-    PICKAXE("pickaxe", "Pickaxe", "つるはし", { it.player.mainHandStack.isIn(ItemTags.PICKAXES) }),
-    AXE("axe", "Axe", "斧", { it.player.mainHandStack.isIn(ItemTags.AXES) }),
-    SHOVEL("shovel", "Shovel", "シャベル", { it.player.mainHandStack.isIn(ItemTags.SHOVELS) }),
-    HOE("hoe", "Hoe", "クワ", { it.player.mainHandStack.isIn(ItemTags.HOES) }),
-    SWORD("sword", "Sword", "剣", { it.player.mainHandStack.isIn(ItemTags.SWORDS) }),
+    PICKAXE("pickaxe", "Pickaxe", "つるはし", { it.player.mainHandItem.`is`(ItemTags.PICKAXES) }),
+    AXE("axe", "Axe", "斧", { it.player.mainHandItem.`is`(ItemTags.AXES) }),
+    SHOVEL("shovel", "Shovel", "シャベル", { it.player.mainHandItem.`is`(ItemTags.SHOVELS) }),
+    HOE("hoe", "Hoe", "クワ", { it.player.mainHandItem.`is`(ItemTags.HOES) }),
+    SWORD("sword", "Sword", "剣", { it.player.mainHandItem.`is`(ItemTags.SWORDS) }),
     ;
 
     val identifier = MirageFairy2024.identifier(path)

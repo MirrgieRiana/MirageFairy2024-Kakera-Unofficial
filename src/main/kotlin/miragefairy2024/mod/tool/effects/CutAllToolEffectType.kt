@@ -40,7 +40,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
             if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
             if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
-            if (!state.isIn(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
+            if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
             // 発動
 
@@ -48,7 +48,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
 
             val logBlockPosList = mutableListOf<BlockPos>()
             blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
+                world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
@@ -71,7 +71,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 }
             }
             blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
+                world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                 if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か

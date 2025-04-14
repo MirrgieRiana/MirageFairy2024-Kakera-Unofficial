@@ -59,7 +59,7 @@ enum class TraitConditionCard(
 
 private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
     val blockState = world.getBlockState(blockPos.down())
-    if (!blockState.isIn(BlockTags.MINEABLE_WITH_PICKAXE)) return 0.0
+    if (!blockState.`is`(BlockTags.MINEABLE_WITH_PICKAXE)) return 0.0
     val hardness = blockState.getHardness(world, blockPos.down())
     if (hardness < 0) return 0.0
     return hardness / 2.0 atMost 2.0
@@ -68,8 +68,8 @@ private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
 private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimension.natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
-        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_NETHER) -> 0.0
-        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_THE_END) -> 1.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 0.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 1.0
         else -> 0.0
     }
 }
@@ -77,8 +77,8 @@ private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
 private fun World.getLowAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimension.natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
-        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_NETHER) -> 1.0
-        this.getBiome(blockPos).isIn(ConventionalBiomeTags.IN_THE_END) -> 0.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 1.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 0.0
         else -> 0.0
     }
 }

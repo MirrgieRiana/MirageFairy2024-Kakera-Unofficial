@@ -64,7 +64,7 @@ enum class BagCard(
         "plant_bag", EnJa("Plant Bag", "植物カバン"),
         1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
         5, 3,
-        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.isIn(BlockTags.SWORD_EFFICIENT) == true },
+        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.`is`(BlockTags.SWORD_EFFICIENT) == true },
     ),
     SEED_BAG(
         "seed_bag", EnJa("Seed Bag", "種子カバン"),
@@ -107,7 +107,7 @@ fun initBagModule() {
     }
 
 
-    BagCard.screenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("bag"))
+    BagCard.screenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("bag"))
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()

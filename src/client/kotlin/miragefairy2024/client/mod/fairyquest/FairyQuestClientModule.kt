@@ -16,7 +16,7 @@ import com.mojang.math.Axis as RotationAxis
 
 fun initFairyQuestClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
-        if (!stack.isOf(FairyQuestCardCard.item)) return@RenderItemHandler
+        if (!stack.`is`(FairyQuestCardCard.item)) return@RenderItemHandler
         matrices.stack {
             model.transformation.getTransformation(renderMode).apply(leftHanded, matrices)
 

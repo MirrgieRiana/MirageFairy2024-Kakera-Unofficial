@@ -21,14 +21,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val traitListScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-    TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY, TraitListScreenHandler.read(buf))
+    TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, TraitListScreenHandler.read(buf))
 }
 
 val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toTranslationKey()}" }, "Traits", "特性")
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    traitListScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("trait_list"))
+    traitListScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("trait_list"))
     traitListScreenTranslation.enJa()
 }
 

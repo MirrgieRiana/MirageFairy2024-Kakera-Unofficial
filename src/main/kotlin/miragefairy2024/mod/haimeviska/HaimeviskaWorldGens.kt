@@ -88,14 +88,14 @@ class HaimeviskaTreeDecorator : TreeDecorator() {
     override fun getType() = HaimeviskaTreeDecoratorCard.type
     override fun generate(generator: Generator) {
         generator.logPositions.forEach { blockPos ->
-            if (!generator.world.testBlockState(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState.with(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
+            if (!generator.world.testBlockState(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState.setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
             val direction = Direction.fromHorizontal(generator.random.nextInt(4))
             if (!generator.isAir(blockPos.offset(direction))) return@forEach // 正面が空気の場合のみ
             val r = generator.random.nextInt(100)
             if (r < 25) {
-                generator.replace(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.with(HorizontalFacingBlock.FACING, direction))
+                generator.replace(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.setValue(HorizontalFacingBlock.FACING, direction))
             } else if (r < 35) {
-                generator.replace(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState.with(HorizontalFacingBlock.FACING, direction))
+                generator.replace(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState.setValue(HorizontalFacingBlock.FACING, direction))
             }
         }
     }

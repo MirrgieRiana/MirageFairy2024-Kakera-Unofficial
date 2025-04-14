@@ -38,7 +38,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
             if (miner.isSneaking) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
             if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
-            if (!state.isIn(ConventionalBlockTags.ORES)) return@fail // 掘ったブロックが鉱石ではない
+            if (!state.`is`(ConventionalBlockTags.ORES)) return@fail // 掘ったブロックが鉱石ではない
 
             // 発動
 

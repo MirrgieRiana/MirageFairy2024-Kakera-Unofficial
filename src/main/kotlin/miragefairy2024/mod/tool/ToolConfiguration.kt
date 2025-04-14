@@ -43,7 +43,7 @@ fun initToolConfiguration() {
 
     ServerLivingEntityEvents.AFTER_DEATH.register { entity, damageSource ->
         val attacker = damageSource.attacker as? LivingEntity ?: return@register
-        val item = attacker.mainHandStack.item
+        val item = attacker.mainHandItem.item
         if (item !is FairyToolItem) return@register
         item.onKilled(entity, attacker, damageSource)
     }
