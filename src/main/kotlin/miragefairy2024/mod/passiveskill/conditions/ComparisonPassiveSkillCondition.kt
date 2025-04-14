@@ -14,8 +14,8 @@ import net.minecraft.network.chat.Component as Text
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
-        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _, _ -> context.player.world.getLightLevel(context.player.eyeBlockPos) }
-        val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _, _ -> context.player.hungerManager.foodLevel }
+        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _, _ -> context.player.level().getMaxLocalRawBrightness(context.player.eyeBlockPos) }
+        val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _, _ -> context.player.foodData.foodLevel }
         val LEVEL_TERM = Term(Emoji.LEVEL) { context, _, _ -> context.player.experienceLevel }
     }
 

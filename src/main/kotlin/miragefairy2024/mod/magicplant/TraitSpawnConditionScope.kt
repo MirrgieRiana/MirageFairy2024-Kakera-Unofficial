@@ -79,7 +79,7 @@ context(TraitSpawnConditionScope) operator fun RegistryKey<Biome>.unaryPlus() = 
 }
 
 context(TraitSpawnConditionScope) operator fun TagKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
-    override val description = text { this@unaryPlus.id.path() }
+    override val description = text { this@unaryPlus.location().path() }
     override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(this@unaryPlus)
 }
 

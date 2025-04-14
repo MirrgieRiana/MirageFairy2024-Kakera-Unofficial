@@ -14,7 +14,7 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
     val length = buf.readInt()
     val chanceTable = mutableListOf<CondensedMotifChance>()
     repeat(length) {
-        val showingItemStack = buf.readItemStack()
+        val showingItemStack = buf.readItem()
         val motifId = buf.readUtf()
         val rate = buf.readDouble()
         val count = buf.readDouble()
@@ -29,6 +29,6 @@ fun initMotifTableScreenHandler() {
 }
 
 class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
 }

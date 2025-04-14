@@ -210,7 +210,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
         override fun fromNbt(nbt: NbtCompound): PassiveSkillResult {
             val result = PassiveSkillResult()
-            nbt.keys.forEach { key ->
+            nbt.allKeys.forEach { key ->
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
                     result.map[passiveSkillEffect] = passiveSkillEffect.fromNbt(nbt[key] as NbtCompound)
                 }

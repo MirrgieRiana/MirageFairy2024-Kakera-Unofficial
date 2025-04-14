@@ -46,6 +46,6 @@ class TraitListScreenHandler(syncId: Int, val playerInventory: PlayerInventory, 
         }
     }
 
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack = slots[slot].stack
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack = slots[slot].item
 }

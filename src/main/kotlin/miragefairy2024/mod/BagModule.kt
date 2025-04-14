@@ -212,7 +212,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
-        srcInventory[0] = slot.stack.copy()
+        srcInventory[0] = slot.item.copy()
         val destInventory = stack.getBagInventory() ?: return false
 
         // マージをシミュレートする
@@ -227,7 +227,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         }
 
         // シミュレートした結果を適用する
-        slot.stack = srcInventory[0]
+        slot.item = srcInventory[0]
         stack.setBagInventory(destInventory)
 
         return true
@@ -335,12 +335,12 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
             }
         }
 
-        override fun canUse(player: PlayerEntity): Boolean {
+        override fun stillValid(player: PlayerEntity): Boolean {
             val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
             return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
         }
 
-        override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+        override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
             val playerIndices = 9 * 4 - 1 downTo 0
             val utilityIndices = 9 * 4 until slots.size
             val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
@@ -352,7 +352,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
 }
 
 open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
-    override fun canUse(player: PlayerEntity) = false
-    override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    override fun stillValid(player: PlayerEntity) = false
+    override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
     open val card: BagCard? = null
 }

@@ -109,13 +109,13 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 val input = handler.recipe.inputs.getOrNull(i)
                                 val inputItemStacks = input?.first?.matchingStacks?.map { it.copyWithCount(input.second) } ?: listOf()
                                 child(GhostItemComponent(inputItemStacks).apply {
-                                    onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
+                                    onScreenUpdate += { showItemStack = handler.getSlot(index).item.isEmpty }
                                     overlayColor = 0x20FF0000
                                     onScreenUpdate += {
                                         showOverlay = when {
                                             input == null -> false
-                                            !input.first.test(handler.getSlot(index).stack) -> true
-                                            handler.getSlot(index).stack.count < input.second -> true
+                                            !input.first.test(handler.getSlot(index).item) -> true
+                                            handler.getSlot(index).item.count < input.second -> true
                                             else -> false
                                         }
                                     }
@@ -139,9 +139,9 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 child(slotAsComponent(index))
                                 val outputItemStack = handler.recipe.outputs.getOrNull(i)
                                 child(GhostItemComponent(outputItemStack?.let { listOf(it) } ?: listOf()).apply {
-                                    onScreenUpdate += { showItemStack = handler.getSlot(index).stack.isEmpty }
+                                    onScreenUpdate += { showItemStack = handler.getSlot(index).item.isEmpty }
                                     overlayColor = 0x2000FF00
-                                    onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).stack.isEmpty }
+                                    onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).item.isEmpty }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
                                         drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().lastFrameDuration)
                                     }

@@ -22,4 +22,4 @@ fun Iterable<Pair<String, NbtElement>>.toNbtCompound(): NbtCompound {
 fun NbtList(vararg elements: NbtElement) = elements.toList().toNbtList()
 fun NbtCompound(vararg entries: Pair<String, NbtElement>) = entries.toList().toNbtCompound()
 
-fun String.toNbtString(): NbtString = NbtString.of(this)
+fun String.toNbtString(): NbtString = NbtString.valueOf(this)

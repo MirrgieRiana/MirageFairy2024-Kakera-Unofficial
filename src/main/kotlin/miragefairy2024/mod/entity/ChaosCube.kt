@@ -418,7 +418,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             val world = mob.world
             if (world.time % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
             if (!world.structureAccessor.getStructureAt(mob.blockPos, structure).hasChildren()) return false
             return super.canStart()
         }

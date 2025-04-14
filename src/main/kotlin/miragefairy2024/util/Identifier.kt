@@ -11,4 +11,4 @@ fun String.toIdentifier() = Identifier(this)
 operator fun String.times(identifier: Identifier) = Identifier(identifier.namespace, this + identifier.path)
 operator fun Identifier.times(string: String) = Identifier(this.namespace, this.path + string)
 
-infix fun <T> RegistryKey<out Registry<T>>.with(value: Identifier): RegistryKey<T> = RegistryKey.of(this, value)
+infix fun <T> RegistryKey<out Registry<T>>.with(value: Identifier): RegistryKey<T> = RegistryKey.create(this, value)

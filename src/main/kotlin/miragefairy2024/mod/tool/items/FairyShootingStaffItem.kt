@@ -50,7 +50,7 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
+    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
     override fun isSuitableFor(state: BlockState) = isSuitableForImpl(state)
 
@@ -121,7 +121,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         itemStack.damage(1, user) {
             it.sendToolBreakStatus(hand)
         }
-        if (!user.isCreative) user.addExperience(-experienceCost)
+        if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
 
         user.itemCooldownManager.set(this, world.random.randomInt(10.0 / frequency))
 

@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation as Identifier
 
 abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {
-        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollission().ticksRandomly().pushReaction(PistonBehavior.DESTROY)
+        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollission().randomTicks().pushReaction(PistonBehavior.DESTROY)
     }
 
     abstract val card: C
