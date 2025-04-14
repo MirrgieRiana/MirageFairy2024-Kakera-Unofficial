@@ -166,7 +166,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultDisks(lookupBackedBuilder)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY)
                 DefaultBiomeFeatures.addForestTrees(lookupBackedBuilder)
 
                 DefaultBiomeFeatures.addDefaultFlowers(lookupBackedBuilder)
@@ -175,9 +175,9 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultVegetation(lookupBackedBuilder)
                 DefaultBiomeFeatures.addSweetBerryBushes(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
             }.build()).build()
     }
@@ -238,14 +238,14 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultDisks(lookupBackedBuilder)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
-                lookupBackedBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
+                lookupBackedBuilder.feature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
             }.build()).build()
     }

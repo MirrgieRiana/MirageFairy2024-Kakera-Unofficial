@@ -287,7 +287,7 @@ fun initFairyQuestRecipe() {
         val placementModifiers = placementModifiers { per(256) + flower }
         RegistryKeys.CONFIGURED_FEATURE[configuredFeatureKey] with placementModifiers
     }
-    placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
+    placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
 

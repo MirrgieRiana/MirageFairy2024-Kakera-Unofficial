@@ -132,7 +132,7 @@ object WeatheredAncientRemnantsCard {
                 config = Structure.Config(
                     RegistryKeys.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
                     mapOf(),
-                    GenerationStep.Feature.SURFACE_STRUCTURES,
+                    GenerationStep.Decoration.SURFACE_STRUCTURES,
                     StructureTerrainAdaptation.NONE,
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
