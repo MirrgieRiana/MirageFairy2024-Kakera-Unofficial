@@ -82,7 +82,7 @@ open class SimpleMachineRecipe(
 
     open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
-    override fun getRemainder(inventory: Inventory): DefaultedList<ItemStack> {
+    override fun getRemainingItems(inventory: Inventory): DefaultedList<ItemStack> {
         val list = DefaultedList.of<ItemStack>()
         inputs.forEachIndexed { index, input ->
             val remainder = getCustomizedRemainder(inventory.getStack(index))
@@ -98,8 +98,8 @@ open class SimpleMachineRecipe(
         return list
     }
 
-    override fun craft(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
-    override fun fits(width: Int, height: Int) = width * height >= inputs.size
+    override fun assemble(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
+    override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
     override fun getOutput(registryManager: DynamicRegistryManager?) = output
     override fun createIcon() = card.icon
     override fun getId() = recipeId
@@ -206,7 +206,7 @@ fun <R : SimpleMachineRecipe> registerSimpleMachineRecipeGeneration(
         }
         block(builder)
         val identifier = settings.idModifiers.fold(output.item.getIdentifier()) { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
+        builder.save(it, identifier)
     }
     return settings
 }
@@ -221,16 +221,16 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     private val advancementBuilder: Advancement.Builder = Advancement.Builder.createUntelemetered()
     private var group = ""
 
-    override fun criterion(name: String, conditions: CriterionConditions) = this.also { advancementBuilder.criterion(name, conditions) }
+    override fun unlockedBy(name: String, conditions: CriterionConditions) = this.also { advancementBuilder.addCriterion(name, conditions) }
     override fun group(string: String?) = this.also { this.group = string ?: "" }
     override fun getOutputItem(): Item = output.item
 
-    override fun offerTo(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
+    override fun save(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
         check(advancementBuilder.criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
 
         advancementBuilder
             .parent(CraftingRecipeJsonBuilder.ROOT)
-            .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+            .addCriterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
             .rewards(AdvancementRewards.Builder.recipe(recipeId))
             .criteriaMerger(CriterionMerger.OR)
 

@@ -28,7 +28,7 @@ inline fun <T> T.configure(block: T.() -> Unit) = this.apply(block)
 @Suppress("FunctionName")
 fun LootTable(vararg pools: LootPool.Builder, initializer: LootTable.Builder.() -> Unit = {}): LootTable.Builder = LootTable.builder().configure {
     pools.forEach {
-        this.pool(it)
+        this.withPool(it)
     }
     initializer.invoke(this)
 }
@@ -36,7 +36,7 @@ fun LootTable(vararg pools: LootPool.Builder, initializer: LootTable.Builder.() 
 @Suppress("FunctionName")
 fun LootPool(vararg entries: LootPoolEntry.Builder<*>, initializer: LootPool.Builder.() -> Unit = {}): LootPool.Builder = LootPool.builder().configure {
     entries.forEach {
-        this.with(it)
+        this.add(it)
     }
     initializer.invoke(this)
 }
@@ -101,11 +101,11 @@ enum class FortuneEffect {
 context(ModContext)
 fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration {
     BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
-        if (additionalCount != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(additionalCount.start, additionalCount.endInclusive)))
+        if (additionalCount != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             FortuneEffect.IGNORE -> Unit
             FortuneEffect.ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.BLOCK_FORTUNE))
-            FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
+            FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
         }
     }))
 }

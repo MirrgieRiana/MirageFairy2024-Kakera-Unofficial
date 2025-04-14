@@ -94,16 +94,16 @@ object ChaosCubeCard {
         entityType.registerLootTableGeneration {
             LootTable(
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item)).configure {
-                    apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0F, 2.0F)))
-                    apply(LootingEnchantLootFunction.builder(UniformLootNumberProvider.create(0.0F, 1.0F)))
+                    apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(0.0F, 2.0F)))
+                    apply(LootingEnchantLootFunction.lootingMultiplier(UniformLootNumberProvider.between(0.0F, 1.0F)))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item)).configure {
-                    conditionally(KilledByPlayerLootCondition.builder())
-                    conditionally(RandomChanceWithLootingLootCondition.builder(0.05F, 0.02F))
+                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.05F, 0.02F))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item)).configure {
-                    conditionally(KilledByPlayerLootCondition.builder())
-                    conditionally(RandomChanceWithLootingLootCondition.builder(0.3F, 0.1F))
+                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.3F, 0.1F))
                 },
             )
         }

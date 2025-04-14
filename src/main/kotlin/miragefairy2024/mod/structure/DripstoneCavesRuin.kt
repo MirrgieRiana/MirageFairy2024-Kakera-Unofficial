@@ -59,10 +59,10 @@ object DripstoneCavesRuinCard {
         registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(Items.BOOK).weight(2).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 10.0F))),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(1.0F, 10.0F))),
                 ) {
-                    rolls(UniformLootNumberProvider.create(5.0F, 15.0F))
+                    rolls(UniformLootNumberProvider.between(5.0F, 15.0F))
                 },
             )
         }

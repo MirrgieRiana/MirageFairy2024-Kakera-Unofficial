@@ -287,10 +287,10 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
@@ -299,21 +299,21 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
             }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
-                conditionally(RandomChanceLootCondition.builder(0.01F))
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(RandomChanceLootCondition.randomChance(0.01F))
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
@@ -322,15 +322,15 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
-                conditionally(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
