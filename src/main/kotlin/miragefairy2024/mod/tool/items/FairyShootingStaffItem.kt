@@ -86,8 +86,8 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         const val BASE_EXPERIENCE_COST = 2
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { DESCRIPTION_TRANSLATION().yellow }
     }
 
@@ -126,7 +126,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         user.itemCooldownManager.set(this, world.random.randomInt(10.0 / frequency))
 
         // 統計
-        user.incrementStat(Stats.USED.getOrCreateStat(this))
+        user.awardStat(Stats.ITEM_USED.get(this))
 
         // エフェクト
         world.playSound(null, user.x, user.y, user.z, SoundEventCard.MAGIC2.soundEvent, SoundCategory.PLAYERS, 0.6F, 0.90F + (world.random.nextFloat() - 0.5F) * 0.3F)

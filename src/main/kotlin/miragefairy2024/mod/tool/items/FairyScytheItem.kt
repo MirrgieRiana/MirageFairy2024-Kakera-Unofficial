@@ -94,8 +94,8 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }
 

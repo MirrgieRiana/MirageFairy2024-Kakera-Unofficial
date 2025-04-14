@@ -35,8 +35,8 @@ import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level as World
 
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         if (world == null) return
         val player = clientProxy?.getClientPlayer() ?: return
 

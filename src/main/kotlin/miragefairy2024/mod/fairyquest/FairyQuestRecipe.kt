@@ -247,7 +247,7 @@ fun initFairyQuestRecipe() {
                 LootTables.VILLAGE_FISHER_CHEST,
                 LootTables.VILLAGE_TANNERY_CHEST,
                 LootTables.VILLAGE_TEMPLE_CHEST,
-                LootTables.VILLAGE_DESERT_HOUSE_CHEST,
+                LootTables.VILLAGE_DESERT_HOUSE,
                 LootTables.VILLAGE_PLAINS_CHEST,
                 LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
                 LootTables.VILLAGE_SNOWY_HOUSE_CHEST,

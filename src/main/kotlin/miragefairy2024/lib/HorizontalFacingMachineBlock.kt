@@ -93,7 +93,7 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
             override fun getDisplayName() = blockEntity.displayName
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
         })
-        player.incrementStat(Stats.USED.getOrCreateStat(this.asItem()))
+        player.awardStat(Stats.ITEM_USED.get(this.asItem()))
         return ActionResult.CONSUME
     }
 

@@ -128,7 +128,7 @@ enum class MotifCard(
         "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.STRENGTH(2)
+            + StatusEffects.DAMAGE_BOOST(2)
             + overall.attack(0.4)
             + miningSpeed(0.3)
             + StatusEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
@@ -251,8 +251,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.defence(0.8)
             + miningSpeed(0.4)
-            + StatusEffects.RESISTANCE() * ToolMaterialCard.STONE()
-            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
+            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.STONE()
+            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld + Blocks.STONE,
     ),
     DRIPSTONE(
@@ -290,8 +290,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + overall.defence(0.6)
-            + StatusEffects.RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
-            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
+            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
+            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R + Blocks.COPPER_BLOCK + Items.COPPER_INGOT + BlockTags.COPPER_ORES,
     ),
     IRON(
@@ -300,8 +300,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + miningSpeed(0.5)
-            + StatusEffects.STRENGTH() * ToolMaterialCard.IRON()
-            + StatusEffects.STRENGTH(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
+            + StatusEffects.DAMAGE_BOOST() * ToolMaterialCard.IRON()
+            + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R + Blocks.IRON_BLOCK + Items.IRON_INGOT + BlockTags.IRON_ORES,
     ),
     GOLD(
@@ -321,7 +321,7 @@ enum class MotifCard(
             + melee.attack(0.6)
             + luck(0.4)
             + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
-            + StatusEffects.STRENGTH(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
+            + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + Blocks.NETHERITE_BLOCK + Items.NETHERITE_INGOT,
     ),
 
@@ -568,7 +568,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.7) * light.atMost(5)
             + magic.attack(0.7) * light.atMost(5)
-            + StatusEffects.STRENGTH(2) * light.atMost(5),
+            + StatusEffects.DAMAGE_BOOST(2) * light.atMost(5),
         MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK) + EntityType.WARDEN,
     ),
 
@@ -816,8 +816,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + overall.defence(1.0)
-            + StatusEffects.RESISTANCE() * ToolMaterialCard.LUMINITE()
-            + StatusEffects.RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
+            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.LUMINITE()
+            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
         MotifCardRecipes().R + MaterialCard.LUMINITE.item,
     ),
     GLOW_LICHEN(
@@ -1119,15 +1119,15 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + StatusEffects.SPEED() * skyVisible
-            + StatusEffects.RESISTANCE() * skyVisible
+            + StatusEffects.DAMAGE_RESISTANCE() * skyVisible
             + StatusEffects.JUMP_BOOST() * skyVisible
-            + StatusEffects.STRENGTH() * skyVisible
+            + StatusEffects.DAMAGE_BOOST() * skyVisible
             + StatusEffects.HASTE() * skyVisible
             + regeneration(0.1) * skyVisible * fairyLevel.atLeast(12.0)
             + StatusEffects.SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
-            + StatusEffects.RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
+            + StatusEffects.DAMAGE_RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
             + StatusEffects.JUMP_BOOST(2) * skyVisible * fairyLevel.atLeast(15.0)
-            + StatusEffects.STRENGTH(2) * skyVisible * fairyLevel.atLeast(16.0)
+            + StatusEffects.DAMAGE_BOOST(2) * skyVisible * fairyLevel.atLeast(16.0)
             + StatusEffects.HASTE(2) * skyVisible * fairyLevel.atLeast(17.0),
         MotifCardRecipes().R + Blocks.BEACON,
     ),

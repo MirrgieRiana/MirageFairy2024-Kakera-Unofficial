@@ -409,9 +409,9 @@ class ToolCard(
                 pattern(" IG")
                 pattern(" RI")
                 pattern("I  ")
-                input('R', MaterialCard.MIRANAGITE_ROD.item)
-                input('G', Items.GLASS)
-                input('I', Items.COPPER_INGOT)
+                define('R', MaterialCard.MIRANAGITE_ROD.item)
+                define('G', Items.GLASS)
+                define('I', Items.COPPER_INGOT)
             } on MaterialCard.MIRANAGITE.item
         }
         val MIRANAGI_STAFF = !ToolCard(
@@ -423,10 +423,10 @@ class ToolCard(
                 pattern(" IG")
                 pattern(" #I")
                 pattern("N  ")
-                input('#', MIRANAGI_STAFF_0.item)
-                input('G', Items.DIAMOND)
-                input('I', Items.IRON_INGOT)
-                input('N', Items.IRON_NUGGET)
+                define('#', MIRANAGI_STAFF_0.item)
+                define('G', Items.DIAMOND)
+                define('I', Items.IRON_INGOT)
+                define('N', Items.IRON_NUGGET)
             } on MaterialCard.MIRANAGITE.item
         }
         val XARPITE_PICKAXE = !ToolCard(
@@ -503,8 +503,8 @@ private fun registerPickaxeRecipeGeneration(item: Item, inputItem: Item) = regis
     pattern("###")
     pattern(" R ")
     pattern(" R ")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -512,8 +512,8 @@ private fun registerAxeRecipeGeneration(item: Item, inputItem: Item) = registerS
     pattern("##")
     pattern("#R")
     pattern(" R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -521,8 +521,8 @@ private fun registerShovelRecipeGeneration(item: Item, inputItem: Item) = regist
     pattern("#")
     pattern("R")
     pattern("R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -530,16 +530,16 @@ private fun registerHoeRecipeGeneration(item: Item, inputItem: Item) = registerS
     pattern("##")
     pattern(" R")
     pattern(" R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
 private fun registerKnifeRecipeGeneration(item: Item, inputItem: Item) = registerShapedRecipeGeneration(item) {
     pattern("#")
     pattern("R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -547,8 +547,8 @@ private fun registerScytheRecipeGeneration(item: Item, inputItem: Item) = regist
     pattern(" ##")
     pattern("# R")
     pattern("  R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -556,8 +556,8 @@ private fun registerSwordRecipeGeneration(item: Item, inputItem: Item) = registe
     pattern("#")
     pattern("#")
     pattern("R")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem
 
 context(ModContext)
@@ -565,6 +565,6 @@ private fun registerBattleAxeRecipeGeneration(item: Item, inputItem: Item) = reg
     pattern("###")
     pattern("#R#")
     pattern(" R ")
-    input('#', inputItem)
-    input('R', Items.STICK)
+    define('#', inputItem)
+    define('R', Items.STICK)
 } on inputItem

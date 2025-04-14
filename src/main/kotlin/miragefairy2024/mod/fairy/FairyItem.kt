@@ -65,7 +65,7 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = FairyItem(Item.Properties().fireproof())
+    val item = FairyItem(Item.Properties().fireResistant())
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")
@@ -161,8 +161,8 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
