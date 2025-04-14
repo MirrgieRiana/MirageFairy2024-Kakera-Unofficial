@@ -145,7 +145,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                 targetInventory.toSidedInventoryDelegate(targetSide),
                 srcIndices = FairyActiveConsumerCard.CONTAINER_SLOTS.mapNotNull { card.inventorySlotIndexTable[it] },
             )
-            if (result.movedItemCount > 0) markDirty()
+            if (result.movedItemCount > 0) setChanged()
         }
 
         // フィルタを取得
@@ -202,12 +202,12 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                         if (availableDestIndices.isEmpty()) return@finishSrcIndices
                     }
                 }
-                if (srcChanged) src.markDirty()
+                if (srcChanged) src.setChanged()
 
                 if (availableDestIndices.isEmpty()) return@finishSuppliers
             }
         }
-        if (changed) markDirty()
+        if (changed) setChanged()
 
     }
 }

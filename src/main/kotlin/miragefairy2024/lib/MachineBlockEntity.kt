@@ -85,34 +85,34 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
             inventory[slot] = stack
         }
         onStackChange(slot)
-        markDirty()
+        setChanged()
     }
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack {
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
         onStackChange(slot)
-        markDirty()
-        return Inventories.splitStack(inventory, slot, amount)
+        setChanged()
+        return Inventories.removeItem(inventory, slot, amount)
     }
 
-    override fun removeStack(slot: Int): ItemStack {
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
         onStackChange(slot)
-        markDirty()
-        return Inventories.removeStack(inventory, slot)
+        setChanged()
+        return Inventories.takeItem(inventory, slot)
     }
 
-    override fun isValid(slot: Int, stack: ItemStack) = card.inventorySlotConfigurations[slot].isValid(stack)
+    override fun canPlaceItem(slot: Int, stack: ItemStack) = card.inventorySlotConfigurations[slot].isValid(stack)
 
     abstract fun getActualSide(side: Direction): Direction
 
     override fun getAvailableSlots(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).id]
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && isValid(slot, stack)
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && canPlaceItem(slot, stack)
 
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
 
     override fun clear() {
         onStackChange(null)
-        markDirty()
+        setChanged()
         inventory.replaceAll { EMPTY_ITEM_STACK }
     }
 
@@ -121,7 +121,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
             if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
         }
         onStackChange(null)
-        markDirty()
+        setChanged()
     }
 
 

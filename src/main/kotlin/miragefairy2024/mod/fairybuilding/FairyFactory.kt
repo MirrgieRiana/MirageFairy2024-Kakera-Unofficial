@@ -139,7 +139,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
                 }
             }
         }
-        if (changed) markDirty()
+        if (changed) setChanged()
 
     }
 

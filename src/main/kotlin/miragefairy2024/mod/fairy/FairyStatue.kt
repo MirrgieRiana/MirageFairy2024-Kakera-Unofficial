@@ -244,7 +244,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     fun setMotif(motif: Motif?) {
         this.motif = motif
         itemStackCache = motif?.createFairyItemStack()
-        markDirty()
+        setChanged()
     }
 
 

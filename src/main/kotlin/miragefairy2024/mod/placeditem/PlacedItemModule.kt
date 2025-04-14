@@ -67,7 +67,7 @@ fun initPlacedItemModule() {
             blockEntity.itemRotateX = packet.itemRotateX
             blockEntity.itemRotateY = packet.itemRotateY
             blockEntity.updateShapeCache()
-            blockEntity.markDirty()
+            blockEntity.setChanged()
 
             world.playSound(null, blockPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
 
