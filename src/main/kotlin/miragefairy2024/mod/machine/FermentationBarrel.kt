@@ -55,9 +55,9 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
             pattern("ILI")
             pattern("LRL")
             pattern("ILI")
-            input('L', HaimeviskaBlockCard.LOG.item)
-            input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
-            input('I', Items.IRON_NUGGET)
+            define('L', HaimeviskaBlockCard.LOG.item)
+            define('R', MaterialCard.HAIMEVISKA_ROSIN.item)
+            define('I', Items.IRON_NUGGET)
         } on MaterialCard.HAIMEVISKA_ROSIN.item
     }
 }

@@ -182,9 +182,9 @@ fun initBlockMaterialsModule() {
         pattern("XMX")
         pattern("MCM")
         pattern("XMX")
-        input('X', MaterialCard.XARPITE.item)
-        input('M', MaterialCard.MIRANAGITE.item)
-        input('C', MaterialCard.FAIRY_CRYSTAL.item)
+        define('X', MaterialCard.XARPITE.item)
+        define('M', MaterialCard.MIRANAGITE.item)
+        define('C', MaterialCard.FAIRY_CRYSTAL.item)
     } on MaterialCard.FAIRY_CRYSTAL.item
 
 }

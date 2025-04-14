@@ -204,11 +204,11 @@ context(ModContext)
 fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
     registerShapelessRecipeGeneration(higherItem, count = 1) {
         repeat(count) {
-            input(lowerItem)
+            requires(lowerItem)
         }
     }.noGroup(noGroup) on lowerItem from lowerItem
     registerShapelessRecipeGeneration(lowerItem, count = count) {
-        input(higherItem)
+        requires(higherItem)
     }.noGroup(noGroup) on higherItem from higherItem
 }
 

@@ -86,8 +86,8 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
-            input('#', FairyHouseCard.item)
-            input('C', Items.CHEST)
+            define('#', FairyHouseCard.item)
+            define('C', Items.CHEST)
         } on FairyHouseCard.item
     }
 }

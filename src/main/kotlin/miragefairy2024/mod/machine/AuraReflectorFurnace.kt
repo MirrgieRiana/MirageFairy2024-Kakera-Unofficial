@@ -83,8 +83,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
             pattern("XXX")
             pattern("XFX")
             pattern("XXX")
-            input('F', Items.FURNACE)
-            input('X', MaterialCard.XARPITE.item)
+            define('F', Items.FURNACE)
+            define('X', MaterialCard.XARPITE.item)
         } on MaterialCard.XARPITE.item
     }
 

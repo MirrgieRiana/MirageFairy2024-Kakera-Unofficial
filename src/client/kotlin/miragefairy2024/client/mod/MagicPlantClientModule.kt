@@ -118,7 +118,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                     val player = MinecraftClient.getInstance().player
                     val allFactor = if (player != null) {
                         traitStack.trait.conditions
-                            .map { it.getFactor(player.world, player.blockPos) }
+                            .map { it.getFactor(player.level(), player.blockPos) }
                             .fold(1.0) { a, b -> a * b }
                     } else {
                         1.0
@@ -128,7 +128,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.conditions.forEach { condition ->
-                            val factor = if (player != null) condition.getFactor(player.world, player.blockPos) else 1.0
+                            val factor = if (player != null) condition.getFactor(player.level(), player.blockPos) else 1.0
                             val text = text { condition.emoji + " "() + (factor * 100.0 formatAs "%.1f%%")() }
                             child(Components.label(text).tooltip(condition.name))
                         }

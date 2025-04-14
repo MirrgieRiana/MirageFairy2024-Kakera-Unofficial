@@ -343,7 +343,7 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
     HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-        input(HaimeviskaBlockCard.LOG.item)
+        requires(HaimeviskaBlockCard.LOG.item)
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
