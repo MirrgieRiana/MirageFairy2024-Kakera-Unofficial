@@ -79,7 +79,7 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, ide
 
 context(ModContext)
 fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: context(DynamicGenerationScope<T>) () -> T) {
-    val registryKey = RegistryKey.ofRegistry<T>(key.registry)
+    val registryKey = RegistryKey.createRegistryKey<T>(key.registry)
     DataGenerationEvents.onBuildRegistry {
         it.addRegistry(registryKey) { context ->
             context.register(key, creator(DynamicGenerationScope(context)))

@@ -152,7 +152,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
                         buf.writeItemStack(it.showingItemStack)
-                        buf.writeString(it.motif.getIdentifier()!!.string)
+                        buf.writeUtf(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)
                     }

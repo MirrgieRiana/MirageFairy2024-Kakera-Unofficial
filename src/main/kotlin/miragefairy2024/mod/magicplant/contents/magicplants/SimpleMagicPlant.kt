@@ -107,7 +107,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
         val drops = mutableListOf<ItemStack>()
 
         val fortune = if (tool != null) EnchantmentHelper.getLevel(Enchantments.BLOCK_FORTUNE, tool).toDouble() else 0.0
-        val luck = player?.getAttributeValue(EntityAttributes.GENERIC_LUCK) ?: 0.0
+        val luck = player?.getAttributeValue(EntityAttributes.LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]
         val fruitGeneration = traitEffects[TraitEffectKeyCard.FRUITS_PRODUCTION.traitEffectKey]

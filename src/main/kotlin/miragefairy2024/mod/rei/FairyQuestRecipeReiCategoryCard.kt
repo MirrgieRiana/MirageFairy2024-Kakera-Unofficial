@@ -17,7 +17,7 @@ object FairyQuestRecipeReiCategoryCard : ReiCategoryCard<FairyQuestRecipeReiCate
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(fairyQuestRecipeRegistry.get(tag.getString("Id").toIdentifier())!!)
         }, { display, tag ->
-            fairyQuestRecipeRegistry.getId(display.recipe)?.let { tag.putString("Id", it.string) }
+            fairyQuestRecipeRegistry.getKey(display.recipe)?.let { tag.putString("Id", it.string) }
         }))
     }
 

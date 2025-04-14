@@ -28,7 +28,7 @@ import net.minecraft.resources.ResourceLocation as Identifier
 
 // Api
 
-val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("extra_player_data_loader"))
+val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface ExtraPlayerDataCategory<T : Any> {
@@ -97,7 +97,7 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
 
 object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(MirageFairy2024.identifier("extra_player_data_synchronization")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
-        buf.writeString(extraPlayerDataCategoryRegistry.getId(packet.category)!!.string)
+        buf.writeUtf(extraPlayerDataCategoryRegistry.getKey(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
             buf.writeBoolean(packet.value != null)
             if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(packet.value))
@@ -106,7 +106,7 @@ object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchroniz
     }
 
     override fun readFromBuf(buf: PacketByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
-        val identifier = buf.readString().toIdentifier()
+        val identifier = buf.readUtf().toIdentifier()
         val category = extraPlayerDataCategoryRegistry[identifier]!!
         fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
             val hasValue = buf.readBoolean()
@@ -130,17 +130,17 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      * このコンテナにオブジェクトが格納されていない場合、nullを返します。
      */
     operator fun <T : Any> get(loader: ExtraPlayerDataCategory<T>): T? {
-        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!] ?: return null
+        val value = map[extraPlayerDataCategoryRegistry.getKey(loader)!!] ?: return null
         return loader.castOrThrow(value)
     }
 
     fun <T : Any> getOrInit(loader: ExtraPlayerDataCategory<T>): T {
-        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!]
+        val value = map[extraPlayerDataCategoryRegistry.getKey(loader)!!]
         return if (value != null) {
             loader.castOrThrow(value)
         } else {
             val newValue = loader.create()
-            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = newValue
+            map[extraPlayerDataCategoryRegistry.getKey(loader)!!] = newValue
             newValue
         }
     }
@@ -153,9 +153,9 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     operator fun <T : Any> set(loader: ExtraPlayerDataCategory<T>, data: T?) {
         if (data == null) {
-            map.remove(extraPlayerDataCategoryRegistry.getId(loader)!!)
+            map.remove(extraPlayerDataCategoryRegistry.getKey(loader)!!)
         } else {
-            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = data
+            map[extraPlayerDataCategoryRegistry.getKey(loader)!!] = data
         }
     }
 

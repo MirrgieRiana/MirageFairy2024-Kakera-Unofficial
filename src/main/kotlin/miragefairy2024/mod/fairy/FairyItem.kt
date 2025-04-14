@@ -310,7 +310,7 @@ fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateNbt().wrapper
 fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
 
 fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    return createFairyItemStack(motifRegistry.getId(this)!!, condensation = condensation, count = count)
+    return createFairyItemStack(motifRegistry.getKey(this)!!, condensation = condensation, count = count)
 }
 
 fun createFairyItemStack(motifId: Identifier, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {

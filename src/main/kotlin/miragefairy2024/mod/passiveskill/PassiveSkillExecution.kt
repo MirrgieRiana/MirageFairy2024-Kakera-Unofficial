@@ -225,7 +225,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
             val nbt = NbtCompound()
             data.map.entries.forEach {
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
-                    val identifier = passiveSkillEffectRegistry.getId(passiveSkillEffect) ?: return
+                    val identifier = passiveSkillEffectRegistry.getKey(passiveSkillEffect) ?: return
                     nbt.wrapper[identifier.string].compound.set(passiveSkillEffect.toNbt(passiveSkillEffect.castOrThrow(it.value)))
                 }
 

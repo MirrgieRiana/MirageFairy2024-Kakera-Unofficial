@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation as Identifier
 
 // api
 
-val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("trait_effect_key"))
+val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("trait_effect_key"))
 val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.createSimple(traitEffectKeyRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class TraitEffectKey<T : Any> {
@@ -28,6 +28,6 @@ abstract class TraitEffectKey<T : Any> {
 
 // util
 
-fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getId(this)!!
+fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getKey(this)!!
 fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
 val TraitEffectKey<*>.style: Style get() = Style.EMPTY.withColor(this.color)

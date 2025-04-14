@@ -24,7 +24,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey as RegistryKey
 
-val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("passive_skill_effect"))
+val passiveSkillEffectRegistryKey: RegistryKey<Registry<PassiveSkillEffect<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("passive_skill_effect"))
 val passiveSkillEffectRegistry: Registry<PassiveSkillEffect<*>> = FabricRegistryBuilder.createSimple(passiveSkillEffectRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 context(ModContext)
@@ -57,7 +57,7 @@ fun initPassiveSkillModule() {
     }
 
     ModEvents.onInitialize {
-        EntityAttributePassiveSkillEffect.FORMATTERS[EntityAttributes.GENERIC_MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
+        EntityAttributePassiveSkillEffect.FORMATTERS[EntityAttributes.MOVEMENT_SPEED] = { (it / 0.1) * 100 formatAs "%+.0f%%" }
     }
 
 

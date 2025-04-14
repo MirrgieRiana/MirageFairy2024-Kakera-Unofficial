@@ -65,10 +65,10 @@ import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
-val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("motif"))
+val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
-fun Motif.getIdentifier() = motifRegistry.getId(this)
+fun Motif.getIdentifier() = motifRegistry.getKey(this)
 fun Identifier.toFairyMotif() = motifRegistry.get(this)
 
 interface Motif {
@@ -341,8 +341,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.7)
             + mana(0.4)
-            + StatusEffects.HASTE() * ToolMaterialCard.XARPITE()
-            + StatusEffects.HASTE(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
+            + StatusEffects.DIG_SPEED() * ToolMaterialCard.XARPITE()
+            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + BlockMaterialCard.XARPITE_BLOCK.block + MaterialCard.XARPITE.item,
     ),
     MIRANAGITE(
@@ -361,8 +361,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + miningSpeed(0.8)
-            + StatusEffects.HASTE() * ToolMaterialCard.CHAOS_STONE()
-            + StatusEffects.HASTE(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
+            + StatusEffects.DIG_SPEED() * ToolMaterialCard.CHAOS_STONE()
+            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + MaterialCard.CHAOS_STONE.item,
     ),
 
@@ -399,8 +399,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + miningSpeed(0.5)
-            + StatusEffects.HASTE() * ToolMaterialCard.DIAMOND()
-            + StatusEffects.HASTE(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
+            + StatusEffects.DIG_SPEED() * ToolMaterialCard.DIAMOND()
+            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + Blocks.DIAMOND_BLOCK + Items.DIAMOND + BlockTags.DIAMOND_ORES,
     ),
     EMERALD(
@@ -468,7 +468,7 @@ enum class MotifCard(
             + luck(0.4) * food.atLeast(12)
             + luck(0.4) * food(Items.CARROT)
             + luck(0.8) * food(Items.RABBIT)
-            + StatusEffects.JUMP_BOOST(2) * food(Items.CARROT) * fairyLevel.atLeast(14.0),
+            + StatusEffects.JUMP(2) * food(Items.CARROT) * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld + EntityType.RABBIT,
     ),
     WOLF(
@@ -528,7 +528,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(1.0) * health.atLeast(18.0)
             + StatusEffects.SLOW_FALLING() * health.atLeast(18.0)
-            + StatusEffects.JUMP_BOOST(5) * health.atLeast(18.0),
+            + StatusEffects.JUMP(5) * health.atLeast(18.0),
         MotifCardRecipes().SSR,
     ),
     ENDERMAN(
@@ -622,8 +622,8 @@ enum class MotifCard(
             + shooting.defence(1.0) * food.atMost(6)
             + miningSpeed(0.5) * food.atMost(6)
             + StatusEffects.SLOW_FALLING() * food.atMost(6)
-            + StatusEffects.JUMP_BOOST(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
-            + StatusEffects.SLOWNESS(3) * food.atMost(6) * fairyLevel.atMost(16.0),
+            + StatusEffects.JUMP(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
+            + StatusEffects.MOVEMENT_SLOWDOWN(3) * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().R.nether + EntityType.WITHER,
     ),
     NETHER_STAR(
@@ -632,8 +632,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + magic.attack(0.4)
-            + StatusEffects.HASTE() * ToolMaterialCard.NETHER_STAR()
-            + StatusEffects.HASTE(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
+            + StatusEffects.DIG_SPEED() * ToolMaterialCard.NETHER_STAR()
+            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R + Items.NETHER_STAR,
     ),
 
@@ -850,8 +850,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0)
-            + StatusEffects.SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
-            + StatusEffects.SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
+            + StatusEffects.MOVEMENT_SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
+            + StatusEffects.MOVEMENT_SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
             + mending(1.0) * ToolMaterialCard.WOOD(),
         MotifCardRecipes().SR.overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
@@ -1118,17 +1118,17 @@ enum class MotifCard(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.SPEED() * skyVisible
+            + StatusEffects.MOVEMENT_SPEED() * skyVisible
             + StatusEffects.DAMAGE_RESISTANCE() * skyVisible
-            + StatusEffects.JUMP_BOOST() * skyVisible
+            + StatusEffects.JUMP() * skyVisible
             + StatusEffects.DAMAGE_BOOST() * skyVisible
-            + StatusEffects.HASTE() * skyVisible
+            + StatusEffects.DIG_SPEED() * skyVisible
             + regeneration(0.1) * skyVisible * fairyLevel.atLeast(12.0)
-            + StatusEffects.SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
+            + StatusEffects.MOVEMENT_SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
             + StatusEffects.DAMAGE_RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
-            + StatusEffects.JUMP_BOOST(2) * skyVisible * fairyLevel.atLeast(15.0)
+            + StatusEffects.JUMP(2) * skyVisible * fairyLevel.atLeast(15.0)
             + StatusEffects.DAMAGE_BOOST(2) * skyVisible * fairyLevel.atLeast(16.0)
-            + StatusEffects.HASTE(2) * skyVisible * fairyLevel.atLeast(17.0),
+            + StatusEffects.DIG_SPEED(2) * skyVisible * fairyLevel.atLeast(17.0),
         MotifCardRecipes().R + Blocks.BEACON,
     ),
 
@@ -1159,7 +1159,7 @@ enum class MotifCard(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.SPEED(2)
+            + StatusEffects.MOVEMENT_SPEED(2)
             + speed(0.5) * fairyLevel.atLeast(16.0)
             + mana(5.0) { TIME },
         MotifCardRecipes().SR.always,
@@ -1332,9 +1332,9 @@ private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: Status
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
 private fun attribute(attribute: EntityAttribute, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
-private fun speed(factor: Double) = attribute(EntityAttributes.GENERIC_MOVEMENT_SPEED, factor * 0.002)
-private fun health(factor: Double) = attribute(EntityAttributes.GENERIC_MAX_HEALTH, factor * 0.4)
-private fun luck(factor: Double) = attribute(EntityAttributes.GENERIC_LUCK, factor * 0.1)
+private fun speed(factor: Double) = attribute(EntityAttributes.MOVEMENT_SPEED, factor * 0.002)
+private fun health(factor: Double) = attribute(EntityAttributes.MAX_HEALTH, factor * 0.4)
+private fun luck(factor: Double) = attribute(EntityAttributes.LUCK, factor * 0.1)
 private operator fun StatusEffect.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
     return StatusEffectPassiveSkillEffect { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
 }

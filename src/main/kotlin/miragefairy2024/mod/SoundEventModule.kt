@@ -36,9 +36,9 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
 
 object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier("sound")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: SoundEventPacket) {
-        buf.writeIdentifier(Registries.SOUND_EVENT.getId(packet.soundEvent))
+        buf.writeIdentifier(Registries.SOUND_EVENT.getKey(packet.soundEvent))
         buf.writeBlockPos(packet.pos)
-        buf.writeString(packet.category.name)
+        buf.writeUtf(packet.category.name)
         buf.writeFloat(packet.volume)
         buf.writeFloat(packet.pitch)
         buf.writeBoolean(packet.useDistance)
@@ -47,7 +47,7 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
     override fun readFromBuf(buf: PacketByteBuf): SoundEventPacket {
         val soundEvent = Registries.SOUND_EVENT.get(buf.readIdentifier())!!
         val pos = buf.readBlockPos()
-        val category = buf.readString().let { name -> SoundCategory.entries.first { it.name == name } }
+        val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }
         val volume = buf.readFloat()
         val pitch = buf.readFloat()
         val useDistance = buf.readBoolean()

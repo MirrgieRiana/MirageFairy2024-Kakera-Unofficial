@@ -82,11 +82,11 @@ object ChaosCubeCard {
     fun init() {
         entityType.register(Registries.ENTITY_TYPE, identifier)
         val attributes = HostileEntity.createHostileAttributes()
-            .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
+            .add(EntityAttributes.MAX_HEALTH, 100.0)
             .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4)
             .add(EntityAttributes.GENERIC_ARMOR, 12.0)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1)
+            .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)

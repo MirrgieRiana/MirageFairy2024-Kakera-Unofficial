@@ -119,7 +119,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
             override fun getDisplayName() = recipe.title
 
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeString(fairyQuestRecipeRegistry.getId(recipe)!!.string)
+                buf.writeUtf(fairyQuestRecipeRegistry.getKey(recipe)!!.string)
             }
         })
         return TypedActionResult.consume(itemStack)
@@ -130,7 +130,7 @@ fun ItemStack.getFairyQuestRecipeId(): Identifier? = nbt.or { return null }.wrap
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
 fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyQuestRecipe"].string.set(identifier.string)
-fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getId(recipe)!!)
+fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {
     ModelData(
