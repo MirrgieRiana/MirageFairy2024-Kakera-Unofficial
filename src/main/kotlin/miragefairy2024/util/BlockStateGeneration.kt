@@ -127,7 +127,7 @@ fun normal(model: Identifier) = listOf(propertiesOf() with BlockStateVariant(mod
 
 context(VariantsBlockStateGenerationRegistrationScope)
 fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>, modelFunction: (Identifier, PropertyEntry<T>) -> Identifier): List<BlockStateVariantEntry> {
-    return property.values.flatMap { value ->
+    return property.possibleValues.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
             propertiesOf(*properties.toTypedArray(), entry) with variant.with(model = modelFunction(variant.getModel()!!, entry))
@@ -142,7 +142,7 @@ infix fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Proper
 
 context(VariantsBlockStateGenerationRegistrationScope)
 fun List<BlockStateVariantEntry>.withHorizontalRotation(property: Property<Direction>): List<BlockStateVariantEntry> {
-    return property.values.flatMap { value ->
+    return property.possibleValues.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
             val y = when (value) {

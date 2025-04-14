@@ -101,7 +101,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
 
-        if (!user.isSneaking) {
+        if (!user.isShiftKeyDown) {
             val itemStack = user.getStackInHand(hand)
             val blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE)
             val blockPos = blockHitResult.blockPos
@@ -145,7 +145,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
         if (world.isClientSide) return
-        if (player?.isSneaking == true) return
+        if (player?.isShiftKeyDown == true) return
         (-1..1).forEach { x ->
             (-1..1).forEach { y ->
                 (-1..1).forEach { z ->

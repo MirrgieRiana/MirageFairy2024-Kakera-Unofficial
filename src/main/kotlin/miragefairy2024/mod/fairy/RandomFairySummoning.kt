@@ -68,7 +68,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
-        if (!user.isSneaking) {
+        if (!user.isShiftKeyDown) {
 
             // 使用開始
             user.setCurrentHand(hand)
@@ -218,7 +218,7 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 }
 
 fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
-    val biome = player.world.getBiome(player.blockPos)
+    val biome = player.world.getBiome(player.blockPosition())
     return COMMON_MOTIF_RECIPES.filter {
         when (it) {
             is AlwaysCommonMotifRecipe -> true

@@ -52,7 +52,7 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
 
         // 見た目
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
-        card.block.getAgeProperty().values.forEach { age ->
+        card.block.getAgeProperty().possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * card.block.getIdentifier() * "_age$age")
             }
@@ -72,17 +72,17 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
     private val agePropertyCache = getAgeProperty()
 
-    val maxAge: Int = agePropertyCache.values.max()
+    val maxAge: Int = agePropertyCache.possibleValues.max()
 
     init {
         registerDefaultState(defaultBlockState().setValue(agePropertyCache, 0))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
         builder.add(getAgeProperty()/* この関数は親クラスのinitで呼ばれるのでフィールドを参照できない */)
     }
 
-    fun getAge(state: BlockState) = state[agePropertyCache]!!
+    fun getAge(state: BlockState) = state.getValue(agePropertyCache)!!
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
     fun withAge(age: Int): BlockState = defaultBlockState().setValue(agePropertyCache, age atLeast 0 atMost maxAge)
 

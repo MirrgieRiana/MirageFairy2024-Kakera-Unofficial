@@ -123,8 +123,8 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
         registerDefaultState(defaultBlockState().setValue(VERTICAL_FACING, VerticalFacing.SIDE))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        super.appendProperties(builder)
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
         builder.add(VERTICAL_FACING)
     }
 

@@ -92,7 +92,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                     }
                 }
 
-                val traitEffects = trait.getTraitEffects(world, player.blockPos, level)
+                val traitEffects = trait.getTraitEffects(world, player.blockPosition(), level)
                 tooltip += if (traitEffects != null) {
                     val description = text {
                         traitEffects.effects
@@ -111,7 +111,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
     }
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
-        if (context.player?.isSneaking == true) return ActionResult.PASS
+        if (context.player?.isShiftKeyDown == true) return ActionResult.PASS
         return super.useOnBlock(context)
     }
 
@@ -128,13 +128,13 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
     override fun hasGlint(stack: ItemStack) = stack.isRare() || super.hasGlint(stack)
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (user.isSneaking) {
+        if (user.isShiftKeyDown) {
             val itemStack = user.getStackInHand(hand)
             if (world.isClientSide) return TypedActionResult.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
             user.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }

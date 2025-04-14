@@ -22,7 +22,7 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties as Properties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -113,13 +113,13 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
             // 小さな塊
             registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上
@@ -145,5 +145,5 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
 class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

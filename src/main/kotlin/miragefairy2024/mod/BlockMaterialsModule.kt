@@ -233,7 +233,7 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
-    override fun hasRandomTicks(state: BlockState) = true
+    override fun isRandomlyTicking(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         @Suppress("DEPRECATION")
@@ -245,7 +245,7 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
         if (targetBlockState.isAir) return
         if (targetBlockState.getHardness(world, targetBlockPos) < 0) return
         if (targetBlockState.`is`(state.block)) return
-        world.setBlockState(targetBlockPos, state)
+        world.setBlockAndUpdate(targetBlockPos, state)
     }
 
     override fun onSteppedOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {

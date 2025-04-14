@@ -297,7 +297,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     if (!entity.isSilent) {
                         val soundEventPacket = SoundEventPacket(
                             SoundEventCard.ENTITY_CHAOS_CUBE_ATTACK.soundEvent,
-                            entity.blockPos,
+                            entity.blockPosition(),
                             SoundCategory.HOSTILE,
                             2.0F,
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
@@ -356,7 +356,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         if (!entity.isSilent) {
                             val soundEventPacket = SoundEventPacket(
                                 SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_SHOOT.soundEvent,
-                                entity.blockPos,
+                                entity.blockPosition(),
                                 SoundCategory.HOSTILE,
                                 2.0F,
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
@@ -419,7 +419,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             if (world.time % 20L != 0L) return false
             if (world !is ServerWorld) return false
             val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
-            if (!world.structureAccessor.getStructureAt(mob.blockPos, structure).hasChildren()) return false
+            if (!world.structureAccessor.getStructureAt(mob.blockPosition(), structure).hasChildren()) return false
             return super.canStart()
         }
     }

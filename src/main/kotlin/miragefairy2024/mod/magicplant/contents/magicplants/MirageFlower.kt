@@ -30,7 +30,7 @@ import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties as Properties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -51,7 +51,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sounds(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),
@@ -129,13 +129,13 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
                 val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-                FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上とエンド用PlacedFeature
@@ -175,7 +175,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerConfiguration)
 
 class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
 fun getMirageFlour(count: Int, random: Random): List<ItemStack> {

@@ -205,7 +205,7 @@ fun collectItem(
     }
     val targetTable = world.getEntitiesByClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
-    }.groupBy { it.blockPos }
+    }.groupBy { it.blockPosition() }
 
     var remainingAmount = maxCount
     var processedCount = 0
