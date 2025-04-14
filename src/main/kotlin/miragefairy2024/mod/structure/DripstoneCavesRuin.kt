@@ -189,7 +189,7 @@ object DripstoneCavesRuinCard {
                             )
                         ),
                     ),
-                    GenerationStep.Feature.UNDERGROUND_STRUCTURES,
+                    GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
                     StructureTerrainAdaptation.BURY,
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[mainTemplatePoolKey],

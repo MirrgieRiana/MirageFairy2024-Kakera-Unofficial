@@ -72,7 +72,7 @@ fun initDebrisModule() {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower }
             RegistryKeys.CONFIGURED_FEATURE[card.configuredFeatureKey] with placementModifiers
         }
-        card.placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION, card.biomeSelectorCreator)
+        card.placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION, card.biomeSelectorCreator)
     }
 
 }

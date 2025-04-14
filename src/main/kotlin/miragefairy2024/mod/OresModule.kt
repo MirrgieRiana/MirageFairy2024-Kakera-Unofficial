@@ -176,7 +176,7 @@ fun initOresModule() {
             val placementModifiers = placementModifiers { randomIntCount(countPerCube * (range.last - range.first + 1).toDouble() / 16.0) + uniformOre(range.first, range.last) }
             RegistryKeys.CONFIGURED_FEATURE[configuredKey] with placementModifiers
         }.also {
-            it.registerFeature(GenerationStep.Feature.UNDERGROUND_ORES) { overworld }
+            it.registerFeature(GenerationStep.Decoration.UNDERGROUND_ORES) { overworld }
         }
 
     }

@@ -53,9 +53,9 @@ fun initHaimeviskaWorldGens() {
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
         Feature.TREE with TreeFeatureConfig.Builder(
-            BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
+            BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
-            BlockStateProvider.of(HaimeviskaBlockCard.LEAVES.block),
+            BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block),
             LargeOakFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(2), 4),
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
@@ -80,7 +80,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
+    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
 
 }
 
