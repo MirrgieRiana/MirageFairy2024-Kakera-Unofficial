@@ -128,8 +128,8 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         nbt.wrapper["Fuel"].int.set(fuel)
     }
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         shouldUpdateFuel = true
     }
 
@@ -148,7 +148,7 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
             fuelItemStack.decrement(1)
             fuelMax = 20 * 10
             fuel = fuelMax
-            markDirty()
+            setChanged()
         }
     }
 

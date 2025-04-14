@@ -127,8 +127,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         nbt.wrapper["Progress"].int.set(progress)
     }
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         shouldUpdateRecipe = true
         shouldUpdateWaiting = true
     }
@@ -176,7 +176,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
             waitingInventory += recipe.output.copy()
             waitingInventory += remainder
             progressMax = recipe.duration
-            markDirty()
+            setChanged()
         }
     }
 
@@ -218,12 +218,12 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
                     }
 
                     progress++
-                    markDirty()
+                    setChanged()
                     return@success
                 }
 
                 progress = 0
-                markDirty()
+                setChanged()
             }
 
             // プログレスが完了していれば、クラフトの完了を試みる
@@ -236,12 +236,12 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
                         this.toInventoryDelegate(),
                         destIndices = card.outputSlots.map { card.inventorySlotIndexTable[it]!! },
                     )
-                    if (result.movementTimes > 0) markDirty()
+                    if (result.movementTimes > 0) setChanged()
                     if (result.completed) {
                         progress = 0
                         progressMax = 0
                         craftingInventory.clear()
-                        markDirty()
+                        setChanged()
                     }
 
                 }

@@ -119,8 +119,8 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     var sortSpeed = 0
 
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         updateCache()
     }
 
@@ -138,7 +138,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
             return
         }
 
-        markDirty()
+        setChanged()
 
         folia -= 10
 

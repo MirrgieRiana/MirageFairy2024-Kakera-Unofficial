@@ -21,7 +21,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setTraitStacks(traitStacks: TraitStacks) {
         this.traitStacks = traitStacks
-        markDirty()
+        setChanged()
     }
 
 
@@ -31,7 +31,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setRare(isRare: Boolean) {
         this.isRare = isRare
-        markDirty()
+        setChanged()
     }
 
 
@@ -41,7 +41,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setNatural(isNatural: Boolean) {
         this.isNatural = isNatural
-        markDirty()
+        setChanged()
     }
 
 

@@ -276,7 +276,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 }
 
 class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {
-    override fun isValid(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canBeNested()
+    override fun canPlaceItem(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canBeNested()
 }
 
 fun ItemStack.getBagInventory(): BagInventory? {
@@ -303,12 +303,12 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
         override fun size() = bagInventory.size()
         override fun isEmpty() = bagInventory.isEmpty()
         override fun getStack(slot: Int) = bagInventory.getStack(slot)
-        override fun removeStack(slot: Int, amount: Int) = bagInventory.removeStack(slot, amount)
-        override fun removeStack(slot: Int) = bagInventory.removeStack(slot)
+        override fun removeItem(slot: Int, amount: Int) = bagInventory.removeItem(slot, amount)
+        override fun removeItemNoUpdate(slot: Int) = bagInventory.removeItemNoUpdate(slot)
         override fun setStack(slot: Int, stack: ItemStack) = bagInventory.setStack(slot, stack)
         override fun getMaxCountPerStack() = bagInventory.maxCountPerStack
-        override fun markDirty() {
-            bagInventory.markDirty()
+        override fun setChanged() {
+            bagInventory.setChanged()
             itemStackInstance.setBagInventory(bagInventory)
             expectedItemStack = itemStackInstance.copy()
         }
@@ -316,7 +316,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
         override fun canPlayerUse(player: PlayerEntity) = bagInventory.canPlayerUse(player)
         override fun onOpen(player: PlayerEntity) = bagInventory.onOpen(player)
         override fun onClose(player: PlayerEntity) = bagInventory.onClose(player)
-        override fun isValid(slot: Int, stack: ItemStack) = bagInventory.isValid(slot, stack)
+        override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)
         override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTransferTo(hopperInventory, slot, stack)
     }
 
