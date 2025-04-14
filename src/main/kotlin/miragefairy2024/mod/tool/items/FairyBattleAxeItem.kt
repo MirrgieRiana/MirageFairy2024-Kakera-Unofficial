@@ -23,7 +23,7 @@ class FairyBattleAxeConfiguration(
     attackDamage: Float,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyBattleAxeItem(this, Item.Settings())
+    override fun createItem() = FairyBattleAxeItem(this, Item.Properties())
 
     init {
         this.attackDamage = attackDamage
@@ -33,7 +33,7 @@ class FairyBattleAxeConfiguration(
     }
 }
 
-class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     BattleAxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
@@ -68,7 +68,7 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
 }
 
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
+open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.damage(1, attacker) { e ->
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)

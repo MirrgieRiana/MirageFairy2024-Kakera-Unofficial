@@ -104,7 +104,7 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
     }
 
     init {
-        defaultBlockState = defaultBlockState.setValue(LIT, false)
+        registerDefaultState(defaultBlockState().setValue(LIT, false))
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {

@@ -46,8 +46,8 @@ import net.minecraft.world.level.Level as World
 import kotlin.math.pow
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
-val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
-val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
+val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
+val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
 
 context(ModContext)
 fun initRandomFairySummoning() {
@@ -55,7 +55,7 @@ fun initRandomFairySummoning() {
     MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION.enJa()
 }
 
-class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settings) : Item(settings) {
+class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }

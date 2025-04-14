@@ -51,7 +51,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
                 Widgets.createRecipeBase(bounds),
                 Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
                     is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
-                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toTranslationKey("biome")) }
+                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toLanguageKey("biome")) }
                     is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.id.path() }
                 })
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())

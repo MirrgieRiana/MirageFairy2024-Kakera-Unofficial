@@ -136,15 +136,15 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
 
     val identifier = MirageFairy2024.identifier(configuration.path)
     val block = blockCreator()
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 }
 
-private fun createLeavesSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never)
-private fun createBaseWoodSetting() = AbstractBlock.Settings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
+private fun createLeavesSettings() = AbstractBlock.Properties.create().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never)
+private fun createBaseWoodSetting() = AbstractBlock.Properties.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createSaplingSettings() = AbstractBlock.Settings.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
+private fun createSaplingSettings() = AbstractBlock.Properties.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -351,13 +351,13 @@ fun initHaimeviskaBlocks() {
 }
 
 
-class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
+class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     companion object {
         val CHARGED: BooleanProperty = BooleanProperty.of("charged")
     }
 
     init {
-        defaultBlockState = defaultBlockState.setValue(CHARGED, true)
+        registerDefaultState(defaultBlockState().setValue(CHARGED, true))
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -389,7 +389,7 @@ class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
+class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getStackInHand(hand)
@@ -399,7 +399,7 @@ class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
 
         // 加工
         toolItemStack.damage(1, player) { it.sendToolBreakStatus(hand) }
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.incrementStat(Stats.USED.getOrCreateStat(toolItemStack.item))
 
         // エフェクト
@@ -410,24 +410,24 @@ class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class IncisedHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     override fun hasRandomTicks(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
-            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.setValue(FACING, state.get(FACING)), Block.UPDATE_ALL)
+            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(FACING, state.get(FACING)), Block.UPDATE_ALL)
         }
     }
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         val toolItemStack = player.getStackInHand(hand)
         val direction = state.get(FACING)
 
         // 消費
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
             val actualCount = world.random.randomInt(count) atMost item.maxStackSize

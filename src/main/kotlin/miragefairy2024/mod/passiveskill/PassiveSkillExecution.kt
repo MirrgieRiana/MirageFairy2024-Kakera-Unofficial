@@ -30,11 +30,11 @@ import net.minecraft.resources.ResourceLocation as Identifier
 import kotlin.math.log
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
-val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}" }, "Passive Skills", "パッシブスキル")
-val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.disabled" }, "Outside target slot", "対象スロット外")
-val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
-val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.supporting" }, "Supporting other item", "他のアイテムを支援中")
-val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.effective" }, "Effective", "発動中")
+val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}" }, "Passive Skills", "パッシブスキル")
+val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.disabled" }, "Outside target slot", "対象スロット外")
+val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
+val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.supporting" }, "Supporting other item", "他のアイテムを支援中")
+val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.effective" }, "Effective", "発動中")
 
 context(ModContext)
 fun initPassiveSkillExecution() {

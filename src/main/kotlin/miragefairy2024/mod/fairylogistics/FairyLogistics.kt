@@ -120,7 +120,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
     // BlockState
 
     init {
-        defaultBlockState = defaultBlockState.setValue(VERTICAL_FACING, VerticalFacing.SIDE)
+        registerDefaultState(defaultBlockState().setValue(VERTICAL_FACING, VerticalFacing.SIDE))
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -135,7 +135,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
             else -> VerticalFacing.SIDE
         }
         val facing = if (verticalFacing == VerticalFacing.SIDE) ctx.side.opposite else ctx.horizontalDirection
-        return defaultBlockState.setValue(VERTICAL_FACING, verticalFacing).setValue(FACING, facing)
+        return defaultBlockState().setValue(VERTICAL_FACING, verticalFacing).setValue(FACING, facing)
     }
 
 }

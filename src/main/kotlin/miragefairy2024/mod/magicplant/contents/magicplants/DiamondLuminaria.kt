@@ -127,7 +127,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
 
 object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>(DiamondLuminariaConfiguration)
 
-class DiamondLuminariaBlock(settings: Settings) : SimpleMagicPlantBlock(DiamondLuminariaConfiguration, settings) {
+class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(DiamondLuminariaConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 

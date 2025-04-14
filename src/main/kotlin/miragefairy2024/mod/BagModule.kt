@@ -80,12 +80,12 @@ enum class BagCard(
             createBagScreenHandler(syncId, playerInventory, slotIndex)
         }
 
-        val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toTranslationKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
-        val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toTranslationKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
+        val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
+        val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(this, Item.Settings().maxCount(1))
+    val item = BagItem(this, Item.Properties().maxCount(1))
     val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
@@ -131,7 +131,7 @@ fun initBagModule() {
 }
 
 
-class BagItem(val card: BagCard, settings: Settings) : Item(settings) {
+class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
     override fun getName(stack: ItemStack): Text {
         val bagInventory = stack.getBagInventory() ?: return super.getName(stack)

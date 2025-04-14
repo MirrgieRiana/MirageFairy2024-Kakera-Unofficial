@@ -76,7 +76,7 @@ object ChaosCubeCard {
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
         .build()
-    val spawnEggItem = SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Settings())
+    val spawnEggItem = SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties())
 
     context(ModContext)
     fun init() {

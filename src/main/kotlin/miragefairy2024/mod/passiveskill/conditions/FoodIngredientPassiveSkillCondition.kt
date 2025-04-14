@@ -16,7 +16,7 @@ import java.time.Instant
 class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     companion object {
         val identifier = MirageFairy2024.identifier("food_ingredient")
-        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
+        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toLanguageKey()}" }, "%s Dishes", "%s料理")
     }
 
     override val text get() = text { translation(item.name) }

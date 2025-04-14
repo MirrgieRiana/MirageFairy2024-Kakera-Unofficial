@@ -11,7 +11,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 
 object ExperiencePassiveSkillEffect : AbstractDoublePassiveSkillEffect("experience") {
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Gain XP: %s/s", "経験値獲得: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return

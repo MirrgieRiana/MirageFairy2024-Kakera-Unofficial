@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level as World
 class FairyPickaxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyPickaxeItem(this, Item.Settings())
+    override fun createItem() = FairyPickaxeItem(this, Item.Properties())
 
     init {
         this.attackDamage = 1F
@@ -30,7 +30,7 @@ class FairyPickaxeConfiguration(
     }
 }
 
-class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     PickaxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

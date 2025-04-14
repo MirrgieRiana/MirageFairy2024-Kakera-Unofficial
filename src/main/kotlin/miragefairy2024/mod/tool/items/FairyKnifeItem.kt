@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level as World
 class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyKnifeItem(this, Item.Settings())
+    override fun createItem() = FairyKnifeItem(this, Item.Properties())
 
     init {
         this.attackDamage = 2.0F
@@ -35,7 +35,7 @@ class FairyKnifeConfiguration(
     }
 }
 
-class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     KnifeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
@@ -70,7 +70,7 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 
 }
 
-open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Settings) : AxeItem(material, attackDamage, attackSpeed, settings) {
+open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, attackDamage, attackSpeed, settings) {
     override fun useOnBlock(context: ItemUsageContext?) = ActionResult.PASS
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.damage(1, attacker) { e ->

@@ -61,7 +61,7 @@ enum class BlockMaterialCard(
     restrictsSpawning: Boolean = false,
     velocityMultiplier: Float? = null,
     blockSoundGroup: BlockSoundGroup? = null,
-    blockCreator: ((AbstractBlock.Settings) -> Block)? = null,
+    blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
     val texturedModelFactory: TexturedModel.Factory? = null,
     val isCutoutRenderLayer: Boolean = false,
@@ -129,7 +129,7 @@ enum class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val block = run {
-        val settings = AbstractBlock.Settings.create()
+        val settings = AbstractBlock.Properties.create()
         settings.mapColor(mapColor)
         if (requiresTool) settings.requiresTool()
         if (dropsNothing) settings.dropsNothing()
@@ -139,7 +139,7 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sounds(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 }
 
 context(ModContext)
@@ -232,7 +232,7 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
+class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
     override fun hasRandomTicks(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
@@ -256,7 +256,7 @@ class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
     }
 }
 
-class SemiOpaqueTransparentBlock(settings: Settings) : TransparentBlock(settings) {
+class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }

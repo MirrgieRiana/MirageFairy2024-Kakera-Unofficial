@@ -76,7 +76,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // Item
 
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 
 
     // ScreenHandler

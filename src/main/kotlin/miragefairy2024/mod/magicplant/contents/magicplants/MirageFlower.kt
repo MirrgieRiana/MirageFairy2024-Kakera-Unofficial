@@ -174,7 +174,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerConfiguration)
 
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
+class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 

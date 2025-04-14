@@ -123,7 +123,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerConfiguration)
 
-class PhantomFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
+class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }
 

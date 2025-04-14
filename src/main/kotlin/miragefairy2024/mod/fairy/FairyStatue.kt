@@ -83,7 +83,7 @@ object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
         FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
     }
-    val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toTranslationKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
+    val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.of("case")
     val BASE: TextureKey = TextureKey.of("base")
     val END: TextureKey = TextureKey.of("end")
@@ -99,8 +99,8 @@ class FairyStatueCard(
     val identifier = MirageFairy2024.identifier(path)
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format)
+    val item = FairyStatueBlockItem(this, block, Item.Properties())
+    val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
         .poem(poem)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
@@ -193,7 +193,7 @@ fun initFairyStatue() {
 }
 
 
-class FairyStatueBlock(private val card: FairyStatueCard, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
+class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
         private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
@@ -273,7 +273,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
 }
 
 
-class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Settings) : BlockItem(block, settings), FairyDreamProviderItem {
+class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Properties) : BlockItem(block, settings), FairyDreamProviderItem {
 
     override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 

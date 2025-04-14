@@ -60,7 +60,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
     }
 
     init {
-        defaultBlockState = defaultBlockState.setValue(STATUS, Status.OFFLINE)
+        registerDefaultState(defaultBlockState().setValue(STATUS, Status.OFFLINE))
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {

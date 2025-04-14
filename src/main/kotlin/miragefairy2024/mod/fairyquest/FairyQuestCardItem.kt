@@ -51,7 +51,7 @@ object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
     val jaName = "破損したフェアリークエストカード"
     val identifier = MirageFairy2024.identifier("fairy_quest_card")
-    val item = FairyQuestCardItem(Item.Settings())
+    val item = FairyQuestCardItem(Item.Properties())
 }
 
 private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.descriptionId + ".format" }, "“%s”", "『%s』")
@@ -87,7 +87,7 @@ fun initFairyQuestCardItem() {
     FairyQuestCardIngredient.SERIALIZER.register()
 }
 
-class FairyQuestCardItem(settings: Settings) : Item(settings) {
+class FairyQuestCardItem(settings: Properties) : Item(settings) {
     override fun getName(stack: ItemStack): Text {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return text { fairyQuestCardFairyQuestTranslation(recipe.title) }

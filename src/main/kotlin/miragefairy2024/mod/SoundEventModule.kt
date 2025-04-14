@@ -30,7 +30,7 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
 
     val identifier = MirageFairy2024.identifier(path)
     val sounds = soundPaths.map { MirageFairy2024.identifier(it) }
-    val translation = Translation({ identifier.toTranslationKey("subtitles") }, en, ja)
+    val translation = Translation({ identifier.toLanguageKey("subtitles") }, en, ja)
     val soundEvent: SoundEvent = SoundEvent.of(identifier)
 }
 

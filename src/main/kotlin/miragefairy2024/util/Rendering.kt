@@ -43,7 +43,7 @@ fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClient
 context(ModContext)
 fun BlockItem.registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
     val block = itemStack.item.castOrThrow<BlockItem>().block
-    clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultBlockState, null, null, tintIndex)
+    clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultBlockState(), null, null, tintIndex)
 }
 
 

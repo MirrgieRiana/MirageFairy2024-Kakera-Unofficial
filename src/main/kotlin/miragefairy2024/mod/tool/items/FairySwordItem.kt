@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level as World
 class FairySwordConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairySwordItem(this, Item.Settings())
+    override fun createItem() = FairySwordItem(this, Item.Properties())
 
     init {
         this.attackDamage = 3.0F
@@ -32,7 +32,7 @@ class FairySwordConfiguration(
     }
 }
 
-class FairySwordItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairySwordItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     SwordItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.toInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

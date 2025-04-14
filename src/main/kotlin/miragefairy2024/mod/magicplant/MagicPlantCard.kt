@@ -13,7 +13,7 @@ open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicP
     val block = configuration.createBlock()
     private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(configuration, blockPos, blockState)
     val blockEntityType: BlockEntityType<MagicPlantBlockEntity> = BlockEntityType(::createBlockEntity, setOf(block), null)
-    val item = MagicPlantSeedItem(block, Item.Settings())
+    val item = MagicPlantSeedItem(block, Item.Properties())
     val possibleTraits = configuration.possibleTraits
 
     context(ModContext)

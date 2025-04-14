@@ -65,7 +65,7 @@ import net.minecraft.world.level.Level as World
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
     val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).strength(1.0F).nonOpaque())
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 }
 
 context(ModContext)
@@ -106,9 +106,9 @@ fun initFairyFountainModule() {
     } on MaterialCard.FAIRY_SCALES.item
 }
 
-class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
-        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toTranslationKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
+        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toLanguageKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
         private val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
         val recipes = mutableListOf<Recipe>()
     }

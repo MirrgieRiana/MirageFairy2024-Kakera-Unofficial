@@ -31,8 +31,8 @@ import net.minecraft.world.level.ClipContext as RaycastContext
 import net.minecraft.world.level.Level as World
 
 private val identifier = MirageFairy2024.identifier("fairy_dream")
-val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
-val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
+val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
+val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
 
 context(ModContext)
 fun initFairyDream() {
