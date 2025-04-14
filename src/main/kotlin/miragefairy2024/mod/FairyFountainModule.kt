@@ -132,7 +132,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (player.isSneaking) {
+        if (player.isShiftKeyDown) {
             if (world.isClientSide) return ActionResult.SUCCESS
 
             val chanceTable2 = getChanceTable()
@@ -206,7 +206,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                 }
             }
 
-            return ActionResult.success(world.isClientSide)
+            return ActionResult.sidedSuccess(world.isClientSide)
         }
     }
 

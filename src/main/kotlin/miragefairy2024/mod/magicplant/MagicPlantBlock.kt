@@ -57,7 +57,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     // Behaviour
 
-    override fun canPlantOnTop(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isSideSolid(world, pos, Direction.UP, SideShapeType.CENTER) || floor.`is`(Blocks.FARMLAND)
+    override fun mayPlaceOn(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isFaceSturdy(world, pos, Direction.UP, SideShapeType.CENTER) || floor.`is`(Blocks.FARMLAND)
 
 
     // Trait
@@ -111,14 +111,14 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
             val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * 0.2 * nutrition * temperature * (0.2 + humidity) * (1 + growthBoost) * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
-                world.setBlockState(blockPos, newBlockState, NOTIFY_LISTENERS)
+                world.setBlock(blockPos, newBlockState, UPDATE_CLIENTS)
             }
         }
 
         // 自動収穫
         if (autoPick && canAutoPick(blockState)) run {
-            if (world.getEntitiesByType(EntityType.ITEM, blockPos.toBox()) { true }.isNotEmpty()) return@run // アイテムがそこに存在する場合は中止
-            if (world.getEntitiesByType(EntityType.EXPERIENCE_ORB, blockPos.toBox()) { true }.isNotEmpty()) return@run // 経験値がそこに存在する場合は中止
+            if (world.getEntities(EntityType.ITEM, blockPos.toBox()) { true }.isNotEmpty()) return@run // アイテムがそこに存在する場合は中止
+            if (world.getEntities(EntityType.EXPERIENCE_ORB, blockPos.toBox()) { true }.isNotEmpty()) return@run // 経験値がそこに存在する場合は中止
             val naturalAbscission = traitEffects[TraitEffectKeyCard.NATURAL_ABSCISSION.traitEffectKey]
             if (!(world.random.nextDouble() < naturalAbscission)) return@run // 確率で失敗
             pick(world, blockPos, null, null, false)
@@ -126,14 +126,14 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     }
 
-    final override fun hasRandomTicks(state: BlockState) = true
+    final override fun isRandomlyTicking(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) = move(world, pos, state, autoPick = true)
 
-    final override fun isFertilizable(world: WorldView, pos: BlockPos, state: BlockState, isClient: Boolean) = canGrow(state)
-    final override fun canGrow(world: World, random: Random, pos: BlockPos, state: BlockState) = true
-    final override fun grow(world: ServerWorld, random: Random, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
+    final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState, isClient: Boolean) = canGrow(state)
+    final override fun isBonemealSuccess(world: World, random: Random, pos: BlockPos, state: BlockState) = true
+    final override fun performBonemeal(world: ServerWorld, random: Random, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
 
 
     // Drop
@@ -222,23 +222,23 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
         drops.forEach { itemStack ->
             popResource(world, blockPos, itemStack)
         }
-        if (experience > 0) dropExperience(world, blockPos, experience)
+        if (experience > 0) popExperience(world, blockPos, experience)
 
         // 成長段階を消費
-        world.setBlockState(blockPos, getBlockStateAfterPicking(blockState), NOTIFY_LISTENERS)
+        world.setBlock(blockPos, getBlockStateAfterPicking(blockState), UPDATE_CLIENTS)
 
         // 天然フラグを除去
         blockEntity.setNatural(false)
 
         // エフェクト
-        world.playSound(null, blockPos, soundGroup.breakSound, SoundCategory.BLOCKS, (soundGroup.volume + 1.0F) / 2.0F * 0.5F, soundGroup.pitch * 0.8F)
+        world.playSound(null, blockPos, soundType.breakSound, SoundCategory.BLOCKS, (soundType.volume + 1.0F) / 2.0F * 0.5F, soundType.pitch * 0.8F)
 
     }
 
     /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (player.isSneaking) {
+        if (player.isShiftKeyDown) {
             if (world.isClientSide) {
                 return ActionResult.SUCCESS
             } else {
@@ -248,7 +248,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
                 }
                 player.openMenu(object : ExtendedScreenHandlerFactory {
                     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
+                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
                     }
 
                     override fun getDisplayName() = text { traitListScreenTranslation() }
@@ -261,7 +261,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
             }
         }
         if (!tryPick(world, pos, player, player.mainHandItem, true, true)) return ActionResult.PASS
-        return ActionResult.success(world.isClientSide)
+        return ActionResult.sidedSuccess(world.isClientSide)
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
@@ -274,20 +274,20 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     /** 破損時、LootTableと同じところで収穫物を追加する。 */
     // 本来 LootTable を使ってすべて行う想定だが、他にドロップを自由に制御できる場所がないため苦肉の策でここでプログラムで生成する
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun getDroppedStacks(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
+    final override fun getDrops(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
         val itemStacks = mutableListOf<ItemStack>()
         @Suppress("DEPRECATION")
-        itemStacks += super.getDroppedStacks(state, builder)
+        itemStacks += super.getDrops(state, builder)
         run {
-            val world = builder.world ?: return@run
-            val blockPos = builder.getOptional(LootContextParameters.ORIGIN).or { return@run }.toBlockPos()
-            val blockState = builder.getOptional(LootContextParameters.BLOCK_STATE) ?: return@run
+            val world = builder.level ?: return@run
+            val blockPos = builder.getOptionalParameter(LootContextParameters.ORIGIN).or { return@run }.toBlockPos()
+            val blockState = builder.getOptionalParameter(LootContextParameters.BLOCK_STATE) ?: return@run
             val block = blockState.block
-            val blockEntity = builder.getOptional(LootContextParameters.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
+            val blockEntity = builder.getOptionalParameter(LootContextParameters.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = blockEntity.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
-            val player = builder.getOptional(LootContextParameters.THIS_ENTITY) as? PlayerEntity
-            val tool = builder.getOptional(LootContextParameters.TOOL)
+            val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? PlayerEntity
+            val tool = builder.getOptionalParameter(LootContextParameters.TOOL)
 
             itemStacks += createSeed(traitStacks, isRare = blockEntity.isRare())
             itemStacks += getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
@@ -305,7 +305,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
             val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, pos, traitStacks)
             val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
-            if (experience > 0) dropExperience(world, pos, experience)
+            if (experience > 0) popExperience(world, pos, experience)
         }
         @Suppress("DEPRECATION")
         super.onRemove(state, world, pos, newState, moved)

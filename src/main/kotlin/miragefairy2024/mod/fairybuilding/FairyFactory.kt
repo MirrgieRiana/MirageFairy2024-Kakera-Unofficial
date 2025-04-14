@@ -63,8 +63,8 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
         registerDefaultState(defaultBlockState().setValue(STATUS, Status.OFFLINE))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        super.appendProperties(builder)
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
         builder.add(STATUS)
     }
 }
@@ -83,7 +83,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     fun setStatus(status: FairyFactoryBlock.Status) {
         val world = world ?: return
         if (cachedState[FairyFactoryBlock.STATUS] != status) {
-            world.setBlockState(pos, cachedState.setValue(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
+            world.setBlock(pos, cachedState.setValue(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
         }
     }
 
@@ -134,7 +134,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
                 if (blockState[HaimeviskaLeavesBlock.CHARGED]) {
                     folia += 1000
                     changed = true
-                    world.setBlockState(blockPos, blockState.setValue(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
+                    world.setBlock(blockPos, blockState.setValue(HaimeviskaLeavesBlock.CHARGED, false), Block.UPDATE_CLIENTS)
                     if (folia >= card.maxFolia) return@finished
                 }
             }

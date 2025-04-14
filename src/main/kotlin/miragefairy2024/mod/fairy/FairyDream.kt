@@ -47,7 +47,7 @@ fun initFairyDream() {
         if (!fairyItemStack.`is`(FairyCard.item)) return@registerServerDebugItem
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
-        if (!player.isSneaking) {
+        if (!player.isShiftKeyDown) {
             player.fairyDreamContainer[motif] = true
             GainFairyDreamChannel.sendToClient(player, motif)
         } else {
@@ -122,8 +122,8 @@ fun initFairyDream() {
                     }
 
                     // 足元判定
-                    insertBlockPos(player.blockPos)
-                    insertBlockPos(player.blockPos.down())
+                    insertBlockPos(player.blockPosition())
+                    insertBlockPos(player.blockPosition().down())
 
                     // 視線判定
                     val start = player.eyePos

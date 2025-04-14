@@ -37,7 +37,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
 
-            if (miner.isSneaking) return@fail // 使用者がスニーク中
+            if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
             if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない

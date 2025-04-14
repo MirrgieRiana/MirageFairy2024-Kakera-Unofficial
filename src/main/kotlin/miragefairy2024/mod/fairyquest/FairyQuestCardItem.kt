@@ -113,7 +113,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         user.openMenu(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPos))
+                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPosition()))
             }
 
             override fun getDisplayName() = recipe.title

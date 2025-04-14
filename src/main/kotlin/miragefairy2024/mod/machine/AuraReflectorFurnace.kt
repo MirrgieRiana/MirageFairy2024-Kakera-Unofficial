@@ -34,7 +34,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties as Properties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level as World
@@ -100,15 +100,15 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
 class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card) {
     companion object {
-        val LIT: BooleanProperty = Properties.LIT
+        val LIT: BooleanProperty = BlockStateProperties.LIT
     }
 
     init {
         registerDefaultState(defaultBlockState().setValue(LIT, false))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        super.appendProperties(builder)
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
         builder.add(LIT)
     }
 }
@@ -155,7 +155,7 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
     fun setLit(lit: Boolean) {
         val world = world ?: return
         if (cachedState[AuraReflectorFurnaceBlock.LIT] != lit) {
-            world.setBlockState(pos, cachedState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
+            world.setBlock(pos, cachedState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
         }
     }
 

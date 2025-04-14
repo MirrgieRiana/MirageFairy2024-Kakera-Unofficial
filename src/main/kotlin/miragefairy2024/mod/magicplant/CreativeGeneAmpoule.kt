@@ -97,7 +97,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         if (context.world.isClientSide) return ActionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
         val b = context.stack.getTraitStacks() ?: TraitStacks.EMPTY
-        if (context.player?.isSneaking != true) {
+        if (context.player?.isShiftKeyDown != true) {
             blockEntity.setTraitStacks(a + b)
         } else {
             blockEntity.setTraitStacks(a - b)
@@ -109,7 +109,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         val itemStack = user.getStackInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
-        if (!user.isSneaking) {
+        if (!user.isShiftKeyDown) {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shl 1).let { level -> if (level <= 0) 1 else level } }))
         } else {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shr 1).let { level -> if (level <= 0) 1 else level } }))

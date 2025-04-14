@@ -12,7 +12,7 @@ open class SimpleHorizontalFacingBlock(settings: Properties) : HorizontalFacingB
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
         builder.add(FACING)
     }
 

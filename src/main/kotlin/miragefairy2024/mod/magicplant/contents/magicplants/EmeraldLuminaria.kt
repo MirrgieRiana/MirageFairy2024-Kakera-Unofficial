@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties as Properties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -116,7 +116,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
             val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 
         // 地上に配置
@@ -140,5 +140,5 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
 
 class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties as Properties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -110,7 +110,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         // 地形生成
         registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {
             val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+            Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(16) + flower }
@@ -124,6 +124,6 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerConfiguration)
 
 class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
