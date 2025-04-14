@@ -54,7 +54,7 @@ object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
     val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
-    val onMapsTag: TagKey<Structure> = TagKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
+    val onMapsTag: TagKey<Structure> = TagKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
 
     context(ModContext)
     fun init() {

@@ -85,7 +85,7 @@ enum class BagCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(this, Item.Properties().maxCount(1))
+    val item = BagItem(this, Item.Properties().stacksTo(1))
     val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
@@ -139,8 +139,8 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return text { super.getName(stack) + (if (count > 0) " ($count / ${card.inventorySize})"() else ""()) }
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
 
         val inventory = stack.getBagInventory() ?: return
         var first = true

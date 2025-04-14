@@ -17,7 +17,7 @@ enum class BlockTagCard(path: String) {
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, identifier)
+    val tag: TagKey<Block> = TagKey.create(RegistryKeys.BLOCK, identifier)
 }
 
 context(ModContext)

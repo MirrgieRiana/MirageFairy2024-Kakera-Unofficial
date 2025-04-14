@@ -42,7 +42,7 @@ import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
 
-val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, MirageFairy2024.identifier("fairy"))
+val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.create(RegistryKeys.BIOME, MirageFairy2024.identifier("fairy"))
 
 @Suppress("unused")
 object BiomeCards {

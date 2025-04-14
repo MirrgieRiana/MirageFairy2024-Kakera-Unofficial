@@ -160,8 +160,8 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
 
-    override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer() ?: return
 
         val now = Instant.now()

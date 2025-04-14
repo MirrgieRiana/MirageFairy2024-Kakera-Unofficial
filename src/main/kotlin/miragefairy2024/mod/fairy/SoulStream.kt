@@ -40,7 +40,7 @@ import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
+val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
 
 context(ModContext)
 fun initSoulStream() {

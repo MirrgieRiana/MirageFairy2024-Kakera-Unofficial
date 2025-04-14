@@ -93,8 +93,8 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         return text { fairyQuestCardFairyQuestTranslation(recipe.title) }
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val recipeId = stack.getFairyQuestRecipeId()
         if (recipeId == null) {
             tooltip += text { "null"() }

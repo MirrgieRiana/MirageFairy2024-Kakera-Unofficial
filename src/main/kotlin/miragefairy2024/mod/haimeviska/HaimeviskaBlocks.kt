@@ -257,7 +257,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 
-val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.of(RegistryKeys.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(RegistryKeys.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
@@ -400,7 +400,7 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
         // 加工
         toolItemStack.damage(1, player) { it.sendToolBreakStatus(hand) }
         world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
-        player.incrementStat(Stats.USED.getOrCreateStat(toolItemStack.item))
+        player.awardStat(Stats.ITEM_USED.get(toolItemStack.item))
 
         // エフェクト
         world.playSound(null, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)

@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.tags.TagKey
 
-fun Item.toIngredient(): Ingredient = Ingredient.ofItems(this)
+fun Item.toIngredient(): Ingredient = Ingredient.of(this)
 fun ItemStack.toIngredient(): Ingredient = Ingredient.ofStacks(this)
 fun TagKey<Item>.toIngredient(): Ingredient = Ingredient.fromTag(this)
 

@@ -56,15 +56,15 @@ fun initRandomFairySummoning() {
 }
 
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
         tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
         tooltip += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
-    override fun getUseAction(stack: ItemStack) = UseAction.BOW
-    override fun getMaxUseTime(stack: ItemStack) = 72000 // 1時間
+    override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
+    override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
