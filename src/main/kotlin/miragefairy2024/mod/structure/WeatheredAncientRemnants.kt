@@ -65,21 +65,21 @@ object WeatheredAncientRemnantsCard {
         registerArchaeologyLootTableGeneration(archaeologyLootTable) {
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.RAW_IRON).weight(10),
-                    ItemLootPoolEntry(Items.RAW_COPPER).weight(10),
-                    ItemLootPoolEntry(Items.GOLD_NUGGET).weight(10),
-                    ItemLootPoolEntry(Items.GLASS_PANE).weight(5),
-                    ItemLootPoolEntry(MaterialCard.XARPITE.item).weight(20),
+                    ItemLootPoolEntry(Items.RAW_IRON).setWeight(10),
+                    ItemLootPoolEntry(Items.RAW_COPPER).setWeight(10),
+                    ItemLootPoolEntry(Items.GOLD_NUGGET).setWeight(10),
+                    ItemLootPoolEntry(Items.GLASS_PANE).setWeight(5),
+                    ItemLootPoolEntry(MaterialCard.XARPITE.item).setWeight(20),
 
-                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).weight(3),
-                    ItemLootPoolEntry(Items.AMETHYST_SHARD).weight(3),
-                    ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item).weight(3),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).setWeight(1).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).setWeight(1).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).setWeight(1).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).setWeight(3),
+                    ItemLootPoolEntry(Items.AMETHYST_SHARD).setWeight(3),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.builder()),
+                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item).setWeight(3),
                     ItemLootPoolEntry(Items.MAP) {
                         apply(
                             ExplorationMapLootFunction.builder()
@@ -89,7 +89,7 @@ object WeatheredAncientRemnantsCard {
                                 .withSkipExistingChunks(false)
                         )
                         apply(SetNameLootFunction.builder(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
-                    }.weight(2),
+                    }.setWeight(2),
                 ),
             )
         }

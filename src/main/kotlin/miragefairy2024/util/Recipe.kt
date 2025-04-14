@@ -55,8 +55,8 @@ import net.minecraft.world.level.biome.Biome
 
 // Crafting
 
-fun <T : CraftingRecipeJsonBuilder> T.criterion(item: Item) = this.also { it.criterion("has_${item.getIdentifier().path}", RecipeProvider.conditionsFromItem(item)) }
-fun <T : CraftingRecipeJsonBuilder> T.criterion(tagKey: TagKey<Item>) = this.also { it.criterion("has_${tagKey.location().path}", RecipeProvider.conditionsFromTag(tagKey)) }
+fun <T : CraftingRecipeJsonBuilder> T.criterion(item: Item) = this.also { it.unlockedBy("has_${item.getIdentifier().path}", RecipeProvider.has(item)) }
+fun <T : CraftingRecipeJsonBuilder> T.criterion(tagKey: TagKey<Item>) = this.also { it.unlockedBy("has_${tagKey.location().path}", RecipeProvider.has(tagKey)) }
 fun <T : CraftingRecipeJsonBuilder> T.group(item: Item) = this.also { it.group(recipeGroupRegistry[item] ?: "${item.getIdentifier()}") }
 
 class RecipeGenerationSettings<T> {
@@ -98,7 +98,7 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
         if (!settings.noGroup) builder.group(item)
         block(builder)
         val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
+        builder.save(it, identifier)
     }
     return settings
 }
@@ -108,14 +108,14 @@ fun registerShapedRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapedRecipeJsonBuilder.() -> Unit = {},
-): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::create, item, count, block)
+): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::shaped, item, count, block)
 
 context(ModContext)
 fun registerShapelessRecipeGeneration(
     item: Item,
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
-): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::create, item, count, block)
+): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::shapeless, item, count, block)
 
 context(ModContext)
 fun registerSmeltingRecipeGeneration(
@@ -127,14 +127,14 @@ fun registerSmeltingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.createSmelting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
         builder.group(output)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
         val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
+        builder.save(it, identifier)
     }
     return settings
 }
@@ -149,14 +149,14 @@ fun registerBlastingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.createBlasting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
+        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
         builder.group(output)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
         val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
-        builder.offerTo(it, identifier)
+        builder.save(it, identifier)
     }
     return settings
 }
@@ -171,18 +171,18 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInve
     serializer = SpecialRecipeSerializer { _, category ->
         object : SpecialCraftingRecipe(identifier, category) {
             override fun matches(inventory: RecipeInputInventory, world: World) = matcher(inventory) != null
-            override fun craft(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
-            override fun getRemainder(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
-                override fun getRemainder(inventory: RecipeInputInventory) = super.getRemainder(inventory)
-            }.getRemainder(inventory)
+            override fun assemble(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
+            override fun getRemainingItems(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
+                override fun getRemainingItems(inventory: RecipeInputInventory) = super.getRemainingItems(inventory)
+            }.getRemainingItems(inventory)
 
-            override fun fits(width: Int, height: Int) = width * height >= minSlots
+            override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
             override fun getSerializer() = serializer
         }
     }
     serializer.register(Registries.RECIPE_SERIALIZER, identifier)
     DataGenerationEvents.onGenerateRecipe {
-        ComplexRecipeJsonBuilder.create(serializer).offerTo(it, identifier.string)
+        ComplexRecipeJsonBuilder.special(serializer).save(it, identifier.string)
     }
 }
 
@@ -231,15 +231,15 @@ fun Item.registerGrassDrop(
     biome: (() -> RegistryKey<Biome>)? = null,
 ) = this.registerLootTableModification({ Blocks.GRASS.lootTable }) { tableBuilder ->
     tableBuilder.configure {
-        pool(LootPool(AlternativeLootPoolEntry {
-            alternatively(EmptyLootPoolEntry {
-                conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().items(Items.SHEARS)))
+        withPool(LootPool(AlternativeLootPoolEntry {
+            otherwise(EmptyLootPoolEntry {
+                `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)))
             })
-            alternatively(ItemLootPoolEntry(this@registerGrassDrop) {
-                conditionally(RandomChanceLootCondition.builder(0.125F * amount))
-                if (biome != null) conditionally(LocationCheckLootCondition.builder(LocationPredicate.Builder.create().biome(biome())))
-                apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
-                apply(ExplosionDecayLootFunction.builder())
+            otherwise(ItemLootPoolEntry(this@registerGrassDrop) {
+                `when`(RandomChanceLootCondition.randomChance(0.125F * amount))
+                if (biome != null) `when`(LocationCheckLootCondition.checkLocation(LocationPredicate.Builder.location().setBiome(biome())))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
+                apply(ExplosionDecayLootFunction.explosionDecay())
             })
         }))
     }
@@ -252,14 +252,14 @@ fun Item.registerExtraOreDrop(
     fortuneMultiplier: Int = 0,
 ) = this.registerLootTableModification({ oreBlock.lootTable }) { tableBuilder ->
     tableBuilder.configure {
-        pool(LootPool(AlternativeLootPoolEntry {
-            alternatively(EmptyLootPoolEntry {
-                conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().enchantment(EnchantmentPredicate(Enchantments.SILK_TOUCH, NumberRange.IntRange.atLeast(1)))))
+        withPool(LootPool(AlternativeLootPoolEntry {
+            otherwise(EmptyLootPoolEntry {
+                `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().hasEnchantment(EnchantmentPredicate(Enchantments.SILK_TOUCH, NumberRange.Ints.atLeast(1)))))
             })
-            alternatively(ItemLootPoolEntry(this@registerExtraOreDrop) {
-                if (chance < 1.0F) conditionally(RandomChanceLootCondition.builder(chance))
-                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
-                apply(ExplosionDecayLootFunction.builder())
+            otherwise(ItemLootPoolEntry(this@registerExtraOreDrop) {
+                if (chance < 1.0F) `when`(RandomChanceLootCondition.randomChance(chance))
+                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
+                apply(ExplosionDecayLootFunction.explosionDecay())
             })
         }))
     }
@@ -274,12 +274,12 @@ fun Item.registerMobDrop(
     fortuneFactor: LootNumberProvider? = null,
 ) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder ->
     tableBuilder.configure {
-        pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
-            if (amount != null) apply(SetCountLootFunction.builder(amount, false))
-            if (fortuneFactor != null) apply(LootingEnchantLootFunction.builder(fortuneFactor))
+        withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+            if (amount != null) apply(SetCountLootFunction.setCount(amount, false))
+            if (fortuneFactor != null) apply(LootingEnchantLootFunction.lootingMultiplier(fortuneFactor))
         }) {
-            if (onlyKilledByPlayer) conditionally(KilledByPlayerLootCondition.builder())
-            if (dropRate != null) conditionally(RandomChanceWithLootingLootCondition.builder(dropRate.first, dropRate.second))
+            if (onlyKilledByPlayer) `when`(KilledByPlayerLootCondition.killedByPlayer())
+            if (dropRate != null) `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(dropRate.first, dropRate.second))
         })
     }
 }
@@ -293,9 +293,9 @@ fun Item.registerChestLoot(
 ) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder ->
     tableBuilder.modifyPools { lootPool ->
         lootPool.configure {
-            with(ItemLootPoolEntry(this@registerChestLoot) {
-                weight(weight)
-                if (count != null) apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(count.first.toFloat(), count.last.toFloat())))
+            add(ItemLootPoolEntry(this@registerChestLoot) {
+                setWeight(weight)
+                if (count != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(count.first.toFloat(), count.last.toFloat())))
                 block(this)
             })
         }
@@ -304,7 +304,7 @@ fun Item.registerChestLoot(
 
 context(ModContext)
 fun Item.registerComposterInput(chance: Float) = ModEvents.onInitialize {
-    ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(this, chance)
+    ComposterBlock.COMPOSTABLES.put(this, chance)
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */
