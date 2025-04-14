@@ -73,10 +73,10 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
             pattern("#A#")
             pattern("DCD")
             pattern("###")
-            input('A', BlockMaterialCard.AURA_STONE.item)
-            input('#', ItemTags.PLANKS)
-            input('C', Items.BARREL)
-            input('D', Items.PINK_DYE)
+            define('A', BlockMaterialCard.AURA_STONE.item)
+            define('#', ItemTags.PLANKS)
+            define('C', Items.BARREL)
+            define('D', Items.PINK_DYE)
         } on BlockMaterialCard.AURA_STONE.item
     }
 }

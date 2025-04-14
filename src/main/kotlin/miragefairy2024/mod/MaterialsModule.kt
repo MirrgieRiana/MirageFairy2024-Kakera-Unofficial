@@ -114,7 +114,7 @@ class MaterialCard(
                 pattern("  #")
                 pattern(" # ")
                 pattern("#  ")
-                input('#', MIRANAGITE.item)
+                define('#', MIRANAGITE.item)
             } on MIRANAGITE.item from MIRANAGITE.item
         }
         val CHAOS_STONE = !MaterialCard(
@@ -143,13 +143,13 @@ class MaterialCard(
             fuelValue = 100,
         ) {
             registerShapelessRecipeGeneration(item) {
-                input(MIRAGE_LEAVES.item)
+                requires(MIRAGE_LEAVES.item)
             } on MIRAGE_LEAVES.item
             item.registerComposterInput(0.5F)
             registerShapedRecipeGeneration(Items.STICK, 2) {
                 pattern("#")
                 pattern("#")
-                input('#', item)
+                define('#', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_GLASS_FIBER = !MaterialCard(
@@ -161,12 +161,12 @@ class MaterialCard(
                 pattern("###")
                 pattern("# #")
                 pattern("###")
-                input('#', MIRAGE_STEM.item)
+                define('#', MIRAGE_STEM.item)
             } on MIRAGE_STEM.item
             registerShapedRecipeGeneration(Items.STRING) {
                 pattern("##")
                 pattern("##")
-                input('#', item)
+                define('#', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_CRYSTAL = !MaterialCard(
@@ -311,8 +311,8 @@ class MaterialCard(
             registerShapedRecipeGeneration(Items.TORCH) {
                 pattern("#")
                 pattern("S")
-                input('#', item)
-                input('S', Items.STICK)
+                define('#', item)
+                define('S', Items.STICK)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val HAIMEVISKA_ROSIN = !MaterialCard(
@@ -324,8 +324,8 @@ class MaterialCard(
             registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
                 pattern("S")
                 pattern("P")
-                input('P', Blocks.PISTON)
-                input('S', item)
+                define('P', Blocks.PISTON)
+                define('S', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC = !MaterialCard(

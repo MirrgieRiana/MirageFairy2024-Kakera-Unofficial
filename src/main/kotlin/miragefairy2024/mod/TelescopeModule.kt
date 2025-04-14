@@ -108,9 +108,9 @@ fun initTelescopeModule() {
         pattern("IIG")
         pattern(" S ")
         pattern("S S")
-        input('S', Items.STICK)
-        input('I', Items.COPPER_INGOT)
-        input('G', MaterialCard.FAIRY_CRYSTAL.item)
+        define('S', Items.STICK)
+        define('I', Items.COPPER_INGOT)
+        define('G', MaterialCard.FAIRY_CRYSTAL.item)
     } on MaterialCard.FAIRY_CRYSTAL.item
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()

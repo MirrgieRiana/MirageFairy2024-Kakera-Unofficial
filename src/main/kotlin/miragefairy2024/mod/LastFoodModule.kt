@@ -39,7 +39,7 @@ fun initLastFoodModule() {
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
         if (entity.isSpectator) return@register
-        if (entity.world.gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
+        if (entity.level().gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
         entity.lastFood.itemStack = null
         entity.lastFood.time = null
         LastFoodExtraPlayerDataCategory.sync(entity)

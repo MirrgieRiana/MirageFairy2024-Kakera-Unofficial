@@ -69,12 +69,12 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")
-            input('#', HaimeviskaBlockCard.LOG.item)
-            input('U', Items.LANTERN)
-            input('D', ItemTags.WOOL_CARPETS)
-            input('L', ConventionalItemTags.GLASS_PANES)
-            input('R', ItemTags.WOODEN_DOORS)
-            input('*', MaterialCard.FAIRY_CRYSTAL.item)
+            define('#', HaimeviskaBlockCard.LOG.item)
+            define('U', Items.LANTERN)
+            define('D', ItemTags.WOOL_CARPETS)
+            define('L', ConventionalItemTags.GLASS_PANES)
+            define('R', ItemTags.WOODEN_DOORS)
+            define('*', MaterialCard.FAIRY_CRYSTAL.item)
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
 }

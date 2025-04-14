@@ -79,10 +79,10 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
             pattern("#A#")
             pattern("DCD")
             pattern("###")
-            input('A', BlockMaterialCard.AURA_STONE.item)
-            input('#', Items.IRON_INGOT)
-            input('C', Items.ITEM_FRAME)
-            input('D', Items.LIGHT_BLUE_DYE)
+            define('A', BlockMaterialCard.AURA_STONE.item)
+            define('#', Items.IRON_INGOT)
+            define('C', Items.ITEM_FRAME)
+            define('D', Items.LIGHT_BLUE_DYE)
         } on BlockMaterialCard.AURA_STONE.item
     }
 }

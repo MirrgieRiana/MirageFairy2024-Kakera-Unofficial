@@ -117,16 +117,16 @@ fun initBagModule() {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        input('S', MaterialCard.FAIRY_GLASS_FIBER.item)
-        input('L', MaterialCard.MIRAGE_LEAVES.item)
+        define('S', MaterialCard.FAIRY_GLASS_FIBER.item)
+        define('L', MaterialCard.MIRAGE_LEAVES.item)
     } on MaterialCard.MIRAGE_LEAVES.item
 
     registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        input('S', MaterialCard.FAIRY_GLASS_FIBER.item)
-        input('L', MaterialCard.PHANTOM_LEAVES.item)
+        define('S', MaterialCard.FAIRY_GLASS_FIBER.item)
+        define('L', MaterialCard.PHANTOM_LEAVES.item)
     } on MaterialCard.PHANTOM_LEAVES.item
 }
 
