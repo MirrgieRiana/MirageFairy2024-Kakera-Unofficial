@@ -89,7 +89,7 @@ class HaimeviskaTreeDecorator : TreeDecorator() {
     override fun generate(generator: Generator) {
         generator.logPositions.forEach { blockPos ->
             if (!generator.world.testBlockState(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
-            val direction = Direction.fromHorizontal(generator.random.nextInt(4))
+            val direction = Direction.from2DDataValue(generator.random.nextInt(4))
             if (!generator.isAir(blockPos.offset(direction))) return@forEach // 正面が空気の場合のみ
             val r = generator.random.nextInt(100)
             if (r < 25) {

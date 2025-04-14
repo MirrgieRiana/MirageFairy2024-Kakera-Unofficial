@@ -56,7 +56,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollission().strength(1.0F).pushReaction(PistonBehavior.DESTROY)
 
 
     context(ModContext)

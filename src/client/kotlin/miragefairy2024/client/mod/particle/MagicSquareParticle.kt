@@ -167,12 +167,12 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         if (age >= maxAge) markDead()
 
         prevAngle = angle
-        angle += MathHelper.TAU / 60F
+        angle += MathHelper.TWO_PI / 60F
 
         // TODO 魔方陣の周りのパーティクル
     }
 
-    override fun getSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TAU))
+    override fun getSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TWO_PI))
 
     override fun getBrightness(tint: Float): Int {
         val brightness = super.getBrightness(tint)

@@ -111,7 +111,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         val itemStack = user.getStackInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
-        user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+        user.openMenu(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                 return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPos))
             }

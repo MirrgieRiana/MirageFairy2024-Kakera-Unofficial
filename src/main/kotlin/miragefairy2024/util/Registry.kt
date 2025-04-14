@@ -13,4 +13,4 @@ fun <T> T.register(registry: Registry<T>, identifier: Identifier) {
     }
 }
 
-val <T> Registry<T>.sortedEntrySet: List<Map.Entry<RegistryKey<T>, T>> get() = this.entrySet.sortedBy { it.key.value }
+val <T> Registry<T>.sortedEntrySet: List<Map.Entry<RegistryKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

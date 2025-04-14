@@ -47,7 +47,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
             blockEntity.itemX = (4.0 + 8.0 * random.nextDouble()) / 16.0
             blockEntity.itemY = 0.5 / 16.0
             blockEntity.itemZ = (4.0 + 8.0 * random.nextDouble()) / 16.0
-            blockEntity.itemRotateY = MathHelper.TAU * random.nextDouble()
+            blockEntity.itemRotateY = MathHelper.TWO_PI * random.nextDouble()
             blockEntity.updateShapeCache()
             blockEntity.markDirty()
 

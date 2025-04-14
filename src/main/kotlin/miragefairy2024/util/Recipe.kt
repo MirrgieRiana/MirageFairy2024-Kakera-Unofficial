@@ -272,7 +272,7 @@ fun Item.registerMobDrop(
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) = this.registerLootTableModification({ entityType.lootTable }) { tableBuilder ->
+) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder ->
     tableBuilder.configure {
         pool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
             if (amount != null) apply(SetCountLootFunction.builder(amount, false))

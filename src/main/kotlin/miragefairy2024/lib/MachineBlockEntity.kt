@@ -43,20 +43,20 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Data
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         inventory.reset()
         inventory.readFromNbt(nbt)
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         inventory.writeToNbt(nbt)
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
 
     // Inventory

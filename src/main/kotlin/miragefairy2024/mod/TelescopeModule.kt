@@ -140,10 +140,10 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
         val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
         private val FACING_TO_SHAPE: Map<Direction, VoxelShape> = mapOf(
-            Direction.NORTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
-            Direction.SOUTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
-            Direction.WEST to createCuboidShape(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
-            Direction.EAST to createCuboidShape(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
+            Direction.NORTH to box(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
+            Direction.SOUTH to box(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
+            Direction.WEST to box(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
+            Direction.EAST to box(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
         )
         private val identifier = MirageFairy2024.identifier("telescope")
         val FIRST_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.first" }, "First-time reward", "初回報酬")
@@ -179,10 +179,10 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         player as ServerPlayerEntity
 

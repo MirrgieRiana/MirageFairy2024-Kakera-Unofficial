@@ -81,7 +81,7 @@ import net.minecraft.world.level.Level as World
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
+        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet().random().value)
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.of("case")
@@ -195,20 +195,20 @@ fun initFairyStatue() {
 
 class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
-        private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
+        private val SHAPE: VoxelShape = box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
+    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
+        return blockEntity.triggerEvent(type, data)
     }
 
-    override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack)
+    override fun setPlacedBy(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+        super.setPlacedBy(world, pos, state, placer, itemStack)
         if (world.isClientSide) return
         val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
         blockEntity.setMotif(itemStack.getFairyStatueMotif())
@@ -218,9 +218,9 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
-    override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
         return asItem().createItemStack().setFairyStatueMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif())
     }
 
@@ -248,24 +248,24 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     }
 
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["Motif"].string.set(getMotif()?.getIdentifier()?.string)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         setMotif(nbt.wrapper["Motif"].string.get()?.toIdentifier()?.toFairyMotif())
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         renderingProxy.stack {
             renderingProxy.translate(8.0 / 16.0, 5.5 / 16.0, 8.0 / 16.0)
-            renderingProxy.rotateY(-(cachedState[HorizontalFacingBlock.FACING].horizontal * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-(cachedState[HorizontalFacingBlock.FACING].get2DDataValue() * 90) / 180F * Math.PI.toFloat())
             renderingProxy.renderItemStack(itemStackCache ?: INVALID_ITEM_STACK)
         }
     }

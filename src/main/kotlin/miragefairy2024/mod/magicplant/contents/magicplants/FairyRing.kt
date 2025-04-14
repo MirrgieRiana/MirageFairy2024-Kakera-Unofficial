@@ -46,7 +46,7 @@ class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRing
         val mutableBlockPos = BlockPos.Mutable()
         for (l in 0 until config.tries) {
             val r = random.nextFloat() * radiusRange + minRadius
-            val theta = random.nextFloat() * MathHelper.TAU
+            val theta = random.nextFloat() * MathHelper.TWO_PI
             val x = MathHelper.floor(MathHelper.cos(theta) * r)
             val y = random.nextInt(y1) - random.nextInt(y1)
             val z = MathHelper.floor(MathHelper.sin(theta) * r)

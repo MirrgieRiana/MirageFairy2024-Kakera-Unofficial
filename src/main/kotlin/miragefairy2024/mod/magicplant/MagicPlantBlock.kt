@@ -45,13 +45,13 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     // Block Entity
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(configuration, pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(configuration, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
+    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
+        return blockEntity.triggerEvent(type, data)
     }
 
 
@@ -76,8 +76,8 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     }
 
     /** 種子によって置かれた際にその特性をコピーする。 */
-    final override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack)
+    final override fun setPlacedBy(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+        super.setPlacedBy(world, pos, state, placer, itemStack)
         run {
             if (world.isClientSide) return@run
             val blockEntity = world.getBlockEntity(pos) as? MagicPlantBlockEntity ?: return@run
@@ -220,7 +220,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
         // アイテムを生成
         drops.forEach { itemStack ->
-            dropStack(world, blockPos, itemStack)
+            popResource(world, blockPos, itemStack)
         }
         if (experience > 0) dropExperience(world, blockPos, experience)
 
@@ -237,7 +237,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    final override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isSneaking) {
             if (world.isClientSide) {
                 return ActionResult.SUCCESS
@@ -246,7 +246,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
                     val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
-                player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+                player.openMenu(object : ExtendedScreenHandlerFactory {
                     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                         return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
                     }
@@ -265,7 +265,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
-    final override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+    final override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
         val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return EMPTY_ITEM_STACK
         val traitStacks = blockEntity.getTraitStacks() ?: return EMPTY_ITEM_STACK
         return createSeed(traitStacks, isRare = blockEntity.isRare())
@@ -298,7 +298,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     /** 破壊時、経験値をドロップする。 */
     // 経験値のドロップを onStacksDropped で行うと BlockEntity が得られないためこちらで実装する
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+    final override fun onRemove(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
             if (world !is ServerWorld) return@run
             if (!canPick(state)) return@run
@@ -308,7 +308,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
             if (experience > 0) dropExperience(world, pos, experience)
         }
         @Suppress("DEPRECATION")
-        super.onStateReplaced(state, world, pos, newState, moved)
+        super.onRemove(state, world, pos, newState, moved)
     }
 
 

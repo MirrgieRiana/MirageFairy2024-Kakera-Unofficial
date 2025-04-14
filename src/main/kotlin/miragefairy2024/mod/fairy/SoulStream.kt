@@ -51,7 +51,7 @@ fun initSoulStream() {
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
-            player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
                 }

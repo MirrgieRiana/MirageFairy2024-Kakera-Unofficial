@@ -193,7 +193,7 @@ fun createOreModel() = Model {
     ModelData(
         parent = Identifier("minecraft", "block/block"),
         textures = ModelTexturesData(
-            TextureKey.PARTICLE.name to TextureKey.BACK.string,
+            TextureKey.PARTICLE.id to TextureKey.BACK.string,
         ),
         elements = ModelElementsData(
             ModelElementData(

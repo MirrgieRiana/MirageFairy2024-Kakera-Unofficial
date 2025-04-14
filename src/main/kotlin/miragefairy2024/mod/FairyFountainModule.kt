@@ -109,7 +109,7 @@ fun initFairyFountainModule() {
 class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
         val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toLanguageKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
-        private val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
+        private val SHAPE: VoxelShape = box(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
         val recipes = mutableListOf<Recipe>()
     }
 
@@ -128,10 +128,10 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isSneaking) {
             if (world.isClientSide) return ActionResult.SUCCESS
 
@@ -145,7 +145,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                 )
             }
 
-            player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = name
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {

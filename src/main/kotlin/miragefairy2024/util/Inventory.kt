@@ -247,7 +247,7 @@ fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound) {
         items.forEach { item ->
             item.wrapper.compound.get()?.let { itemCompound ->
                 val slotIndex = (itemCompound.wrapper["Slot"].byte.orDefault { 0 }.get() and 255.toByte()).toInt()
-                if (slotIndex in this.indices) this[slotIndex] = ItemStack.fromNbt(itemCompound)
+                if (slotIndex in this.indices) this[slotIndex] = ItemStack.of(itemCompound)
             }
         }
     }

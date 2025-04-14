@@ -99,15 +99,15 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     override fun getThis() = this
 
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         collectionProgress = nbt.wrapper["CollectionProgress"].int.get() ?: 0
         sortProgress = nbt.wrapper["SortProgress"].int.get() ?: 0
         updateCache()
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["CollectionProgress"].int.set(collectionProgress)
         nbt.wrapper["SortProgress"].int.set(sortProgress)
     }

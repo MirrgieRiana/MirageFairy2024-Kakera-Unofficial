@@ -190,7 +190,7 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
     val oldResult = player.passiveSkillResult
     player.passiveSkillResult = this
 
-    passiveSkillEffectRegistry.entrySet.forEach {
+    passiveSkillEffectRegistry.entrySet().forEach {
         fun <T> f(type: PassiveSkillEffect<T>) {
             val oldValue = oldResult[type]
             val newValue = this[type]

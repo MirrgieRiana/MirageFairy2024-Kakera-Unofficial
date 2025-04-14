@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component as Text
 
 object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCategoryCard.Display>(FairyFamilyReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
-        val childrenTable = motifRegistry.entrySet
+        val childrenTable = motifRegistry.entrySet()
             .flatMap { it.value.parents.map { parent -> parent to it.value } }
             .groupBy { it.first }
             .mapValues { it.value.map { pair -> pair.second } }

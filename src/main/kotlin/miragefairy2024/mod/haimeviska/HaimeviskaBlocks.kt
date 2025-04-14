@@ -139,12 +139,12 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     val item = BlockItem(block, Item.Properties())
 }
 
-private fun createLeavesSettings() = AbstractBlock.Properties.create().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pistonBehavior(PistonBehavior.DESTROY).solidBlock(Blocks::never)
-private fun createBaseWoodSetting() = AbstractBlock.Properties.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
+private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).solidBlock(Blocks::never)
+private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createSaplingSettings() = AbstractBlock.Properties.create().mapColor(MapColor.DARK_GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)
+private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -170,7 +170,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.LEAVES }
     card.item.registerItemTagGeneration { ItemTags.LEAVES }
-    card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
+    card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
 
 }
 
@@ -390,10 +390,10 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 縦方向でなければスルー
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getStackInHand(hand)
-        if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 剣でなければスルー
+        if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClientSide) return ActionResult.SUCCESS
         val direction = if (hit.side.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.side
 
@@ -421,7 +421,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         val toolItemStack = player.getStackInHand(hand)
         val direction = state.get(FACING)

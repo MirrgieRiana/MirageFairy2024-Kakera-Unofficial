@@ -32,7 +32,7 @@ class FairyHoeConfiguration(
         this.attackDamage = attackDamage.toFloat()
         this.attackSpeed = attackSpeed
         this.tags += ItemTags.HOES
-        this.effectiveBlockTags += BlockTags.HOE_MINEABLE
+        this.effectiveBlockTags += BlockTags.MINEABLE_WITH_HOE
     }
 }
 
