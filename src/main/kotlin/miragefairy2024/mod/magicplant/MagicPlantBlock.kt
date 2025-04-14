@@ -57,7 +57,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     // Behaviour
 
-    override fun canPlantOnTop(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isSideSolid(world, pos, Direction.UP, SideShapeType.CENTER) || floor.isOf(Blocks.FARMLAND)
+    override fun canPlantOnTop(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isSideSolid(world, pos, Direction.UP, SideShapeType.CENTER) || floor.`is`(Blocks.FARMLAND)
 
 
     // Trait
@@ -260,7 +260,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
                 return ActionResult.CONSUME
             }
         }
-        if (!tryPick(world, pos, player, player.mainHandStack, true, true)) return ActionResult.PASS
+        if (!tryPick(world, pos, player, player.mainHandItem, true, true)) return ActionResult.PASS
         return ActionResult.success(world.isClientSide)
     }
 
@@ -299,7 +299,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     // 経験値のドロップを onStacksDropped で行うと BlockEntity が得られないためこちらで実装する
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.isOf(newState.block)) run {
+        if (!state.`is`(newState.block)) run {
             if (world !is ServerWorld) return@run
             if (!canPick(state)) return@run
             val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return@run

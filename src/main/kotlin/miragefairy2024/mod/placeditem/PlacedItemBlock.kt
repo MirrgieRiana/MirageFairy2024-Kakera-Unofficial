@@ -105,7 +105,7 @@ class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider
     // 格納されているアイテムをドロップする
     override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
     override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.isOf(newState.block)) run {
+        if (!state.`is`(newState.block)) run {
             val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return@run
             dropStack(world, pos, blockEntity.itemStack)
         }

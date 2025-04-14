@@ -31,7 +31,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
         val FOLIA_PROPERTY = PropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it.toInt() * 10 })
 
         fun isFairy(itemStack: ItemStack, motif: Motif): Boolean {
-            if (!itemStack.isOf(FairyCard.item)) return false
+            if (!itemStack.`is`(FairyCard.item)) return false
             val childMotif = itemStack.getFairyMotif() ?: return false
             return childMotif in motif
         }
@@ -60,7 +60,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
     }
 
     init {
-        defaultBlockState = defaultBlockState.with(STATUS, Status.OFFLINE)
+        defaultBlockState = defaultBlockState.setValue(STATUS, Status.OFFLINE)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -72,7 +72,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
 abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
-            if (!itemStack.isOf(FairyCard.item)) return 0.0
+            if (!itemStack.`is`(FairyCard.item)) return 0.0
             val motif = itemStack.getFairyMotif() ?: return 0.0
             val count = itemStack.getFairyCondensation() * itemStack.count
             val level = motif.rare.toDouble() + log(count.toDouble(), 3.0)
@@ -83,7 +83,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     fun setStatus(status: FairyFactoryBlock.Status) {
         val world = world ?: return
         if (cachedState[FairyFactoryBlock.STATUS] != status) {
-            world.setBlockState(pos, cachedState.with(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
+            world.setBlockState(pos, cachedState.setValue(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
         }
     }
 
@@ -121,20 +121,20 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
         // 最大200ブロックのハイメヴィスカの原木を探す
         val logs = blockVisitor(listOf(pos), maxCount = 200, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
-            world.getBlockState(toBlockPos).isIn(HAIMEVISKA_LOGS)
+            world.getBlockState(toBlockPos).`is`(HAIMEVISKA_LOGS)
         }.map { it.second }.toList()
 
         // 最大距離6までの葉をすべて探す
         var changed = false
         run finished@{
             blockVisitor(logs, visitOrigins = false, maxDistance = 6) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).isOf(HaimeviskaBlockCard.LEAVES.block)
+                world.getBlockState(toBlockPos).`is`(HaimeviskaBlockCard.LEAVES.block)
             }.forEach { (_, blockPos) ->
                 val blockState = world.getBlockState(blockPos)
                 if (blockState[HaimeviskaLeavesBlock.CHARGED]) {
                     folia += 1000
                     changed = true
-                    world.setBlockState(blockPos, blockState.with(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
+                    world.setBlockState(blockPos, blockState.setValue(HaimeviskaLeavesBlock.CHARGED, false), Block.NOTIFY_LISTENERS)
                     if (folia >= card.maxFolia) return@finished
                 }
             }

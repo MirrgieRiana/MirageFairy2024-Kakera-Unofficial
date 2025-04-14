@@ -206,7 +206,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = world ?: return
         val blockState = world.getBlockState(pos)
-        if (!blockState.isOf(card.block)) return
+        if (!blockState.`is`(card.block)) return
         val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
 
         renderingProxy.stack {

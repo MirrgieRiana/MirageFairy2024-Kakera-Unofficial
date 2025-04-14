@@ -153,7 +153,7 @@ object FairyQuestCardIngredient : CustomIngredient {
     }
 
     override fun requiresTesting() = true
-    override fun test(stack: ItemStack) = stack.isOf(FairyQuestCardCard.item)
+    override fun test(stack: ItemStack) = stack.`is`(FairyQuestCardCard.item)
 
     override fun getMatchingStacks(): List<ItemStack> {
         return fairyQuestRecipeRegistry.sortedEntrySet.map {

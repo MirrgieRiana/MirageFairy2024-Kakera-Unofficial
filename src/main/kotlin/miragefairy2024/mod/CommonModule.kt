@@ -35,7 +35,7 @@ object WaterBottleIngredient : CustomIngredient {
     }
 
     override fun requiresTesting() = true
-    override fun test(stack: ItemStack) = stack.isOf(Items.POTION) && PotionUtil.getPotion(stack) == Potions.WATER
+    override fun test(stack: ItemStack) = stack.`is`(Items.POTION) && PotionUtil.getPotion(stack) == Potions.WATER
     override fun getMatchingStacks() = listOf(PotionUtil.setPotion(Items.POTION.createItemStack(), Potions.WATER))
     override fun getSerializer() = SERIALIZER
 }

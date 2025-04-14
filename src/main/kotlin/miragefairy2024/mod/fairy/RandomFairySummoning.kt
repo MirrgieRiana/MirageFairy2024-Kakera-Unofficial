@@ -223,7 +223,7 @@ fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
         when (it) {
             is AlwaysCommonMotifRecipe -> true
             is BiomeCommonMotifRecipe -> biome.matchesKey(it.biome)
-            is BiomeTagCommonMotifRecipe -> biome.isIn(it.biomeTag)
+            is BiomeTagCommonMotifRecipe -> biome.`is`(it.biomeTag)
         }
     }.map { it.motif }.toSet()
 }

@@ -64,7 +64,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("soul_stream"))
+    soulStreamScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("soul_stream"))
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
@@ -131,7 +131,7 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         }
         repeat(soulStream.size) { i ->
             addSlot(object : Slot(soulStream, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = stack.isIn(SOUL_STREAM_CONTAINABLE_TAG)
+                override fun canInsert(stack: ItemStack) = stack.`is`(SOUL_STREAM_CONTAINABLE_TAG)
             })
         }
     }

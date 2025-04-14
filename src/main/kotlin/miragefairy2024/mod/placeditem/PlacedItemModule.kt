@@ -52,8 +52,8 @@ fun initPlacedItemModule() {
             if (!world.getBlockState(blockPos).isReplaceable) return@registerServerPacketReceiver // 配置先が埋まっている
 
             // アイテム判定
-            if (player.mainHandStack.isEmpty) return@registerServerPacketReceiver // アイテムを持っていない
-            val itemStack = if (player.isCreative) player.mainHandStack.copyWithCount(1) else player.mainHandStack.split(1)
+            if (player.mainHandItem.isEmpty) return@registerServerPacketReceiver // アイテムを持っていない
+            val itemStack = if (player.isCreative) player.mainHandItem.copyWithCount(1) else player.mainHandItem.split(1)
 
 
             // 成功
@@ -92,7 +92,7 @@ fun initPlacedItemModule() {
 
             val world = player.world
 
-            if (!world.getBlockState(blockPos).isOf(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
+            if (!world.getBlockState(blockPos).`is`(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの取得に失敗した
             val itemStack = blockEntity.itemStack
 

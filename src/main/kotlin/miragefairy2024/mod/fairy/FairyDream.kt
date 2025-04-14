@@ -44,7 +44,7 @@ fun initFairyDream() {
     }
     registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
         val fairyItemStack = player.getStackInHand(hand.opposite)
-        if (!fairyItemStack.isOf(FairyCard.item)) return@registerServerDebugItem
+        if (!fairyItemStack.`is`(FairyCard.item)) return@registerServerDebugItem
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
         if (!player.isSneaking) {

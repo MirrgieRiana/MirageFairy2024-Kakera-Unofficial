@@ -57,7 +57,7 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.isOf(newState.block)) {
+        if (!state.`is`(newState.block)) {
             card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.dropItems()
             super.onStateReplaced(state, world, pos, newState, moved)
         }

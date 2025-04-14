@@ -16,7 +16,7 @@ object MendingPassiveSkillEffect : AbstractDoublePassiveSkillEffect("mending") {
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
-        context.player.mainHandStack.repair(context.world.random.randomInt(newValue))
+        context.player.mainHandItem.repair(context.world.random.randomInt(newValue))
     }
 
     context(ModContext)

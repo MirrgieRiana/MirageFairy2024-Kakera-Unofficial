@@ -48,7 +48,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
         override val x: Int,
         override val y: Int,
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
-        override fun isValid(itemStack: ItemStack) = itemStack.isOf(FairyCard.item)
+        override fun isValid(itemStack: ItemStack) = itemStack.`is`(FairyCard.item)
         override fun canInsert(direction: Direction) = true
         override fun canExtract(direction: Direction) = true
         override val isObservable = false
@@ -111,7 +111,7 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
 class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
     companion object {
         fun getLogisticsPower(itemStack: ItemStack): Int {
-            if (!itemStack.isOf(FairyCard.item)) return 0
+            if (!itemStack.`is`(FairyCard.item)) return 0
             return (FairyFactoryBlockEntity.getFairyLevel(itemStack) * 10.0).floorToInt()
         }
     }

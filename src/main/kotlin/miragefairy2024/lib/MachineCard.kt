@@ -88,7 +88,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
             playerInventory,
             SimpleInventory(inventorySlotConfigurations.size),
             ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.EMPTY,
+            ScreenHandlerContext.NULL,
         )
         createScreenHandler(arguments)
     }
@@ -119,6 +119,6 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         block.register(Registries.BLOCK, identifier)
         blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
         item.register(Registries.ITEM, identifier)
-        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
+        screenHandlerType.register(Registries.MENU, identifier)
     }
 }

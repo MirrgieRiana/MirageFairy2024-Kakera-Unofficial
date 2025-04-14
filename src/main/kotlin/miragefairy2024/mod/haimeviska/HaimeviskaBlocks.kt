@@ -357,7 +357,7 @@ class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
     }
 
     init {
-        defaultBlockState = defaultBlockState.with(CHARGED, true)
+        defaultBlockState = defaultBlockState.setValue(CHARGED, true)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -372,7 +372,7 @@ class HaimeviskaLeavesBlock(settings: Settings) : LeavesBlock(settings) {
         super.randomTick(state, world, pos, random)
         if (!state[CHARGED]) {
             if (random.randomBoolean(15, world.getLightLevel(pos))) {
-                world.setBlockState(pos, state.with(CHARGED, true), Block.NOTIFY_LISTENERS)
+                world.setBlockState(pos, state.setValue(CHARGED, true), Block.NOTIFY_LISTENERS)
             }
         }
     }
@@ -393,13 +393,13 @@ class HaimeviskaLogBlock(settings: Settings) : PillarBlock(settings) {
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getStackInHand(hand)
-        if (!toolItemStack.isIn(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 剣でなければスルー
+        if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.onUse(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClientSide) return ActionResult.SUCCESS
         val direction = if (hit.side.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.side
 
         // 加工
         toolItemStack.damage(1, player) { it.sendToolBreakStatus(hand) }
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.with(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.incrementStat(Stats.USED.getOrCreateStat(toolItemStack.item))
 
         // エフェクト
@@ -414,7 +414,7 @@ class IncisedHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBloc
     override fun hasRandomTicks(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
-            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.with(FACING, state.get(FACING)), Block.UPDATE_ALL)
+            world.setBlockState(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState.setValue(FACING, state.get(FACING)), Block.UPDATE_ALL)
         }
     }
 }
@@ -427,7 +427,7 @@ class DrippingHaimeviskaLogBlock(settings: Settings) : SimpleHorizontalFacingBlo
         val direction = state.get(FACING)
 
         // 消費
-        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.with(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
+        world.setBlockState(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState.setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
             val actualCount = world.random.randomInt(count) atMost item.maxStackSize

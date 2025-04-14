@@ -57,17 +57,17 @@ private val END_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spa
 context(TraitSpawnConditionScope) val overworld
     get() = object : TraitSpawnCondition {
         override val description = text { OVERWORLD_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_OVERWORLD)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_OVERWORLD)
     }
 context(TraitSpawnConditionScope) val nether
     get() = object : TraitSpawnCondition {
         override val description = text { NETHER_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_NETHER)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_NETHER)
     }
 context(TraitSpawnConditionScope) val end
     get() = object : TraitSpawnCondition {
         override val description = text { END_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(ConventionalBiomeTags.IN_THE_END)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_THE_END)
     }
 
 
@@ -80,7 +80,7 @@ context(TraitSpawnConditionScope) operator fun RegistryKey<Biome>.unaryPlus() = 
 
 context(TraitSpawnConditionScope) operator fun TagKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
     override val description = text { this@unaryPlus.id.path() }
-    override fun canSpawn(biome: RegistryEntry<Biome>) = biome.isIn(this@unaryPlus)
+    override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(this@unaryPlus)
 }
 
 

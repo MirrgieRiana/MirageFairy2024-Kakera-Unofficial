@@ -9,5 +9,5 @@ import net.minecraft.network.chat.Component as Text
 
 class ToolMaterialCardPassiveSkillCondition(private val card: ToolMaterialCard) : PassiveSkillCondition {
     override val text: Text get() = text { card.translation() }
-    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.mainHandStack.isIn(card.tag)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.mainHandItem.`is`(card.tag)
 }

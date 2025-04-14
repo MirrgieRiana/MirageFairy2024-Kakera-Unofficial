@@ -244,7 +244,7 @@ class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
         val targetBlockState = world.getBlockState(targetBlockPos)
         if (targetBlockState.isAir) return
         if (targetBlockState.getHardness(world, targetBlockPos) < 0) return
-        if (targetBlockState.isOf(state.block)) return
+        if (targetBlockState.`is`(state.block)) return
         world.setBlockState(targetBlockPos, state)
     }
 

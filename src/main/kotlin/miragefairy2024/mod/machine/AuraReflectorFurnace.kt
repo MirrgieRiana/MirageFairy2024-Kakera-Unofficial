@@ -104,7 +104,7 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
     }
 
     init {
-        defaultBlockState = defaultBlockState.with(LIT, false)
+        defaultBlockState = defaultBlockState.setValue(LIT, false)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
@@ -155,7 +155,7 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
     fun setLit(lit: Boolean) {
         val world = world ?: return
         if (cachedState[AuraReflectorFurnaceBlock.LIT] != lit) {
-            world.setBlockState(pos, cachedState.with(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
+            world.setBlockState(pos, cachedState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
         }
     }
 
