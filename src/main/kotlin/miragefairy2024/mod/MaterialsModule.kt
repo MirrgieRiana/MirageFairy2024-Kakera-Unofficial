@@ -85,7 +85,7 @@ class MaterialCard(
     val soulStreamContainable: Boolean = false,
     val foodComponent: FoodComponent? = null,
     val recipeRemainder: Item? = null,
-    val creator: (Item.Settings) -> Item = ::Item,
+    val creator: (Item.Properties) -> Item = ::Item,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
 ) {
     companion object {
@@ -772,7 +772,7 @@ class MaterialCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = Item.Settings()
+    val item = Item.Properties()
         .let { if (foodComponent != null) it.food(foodComponent) else it }
         .let { if (recipeRemainder != null) it.recipeRemainder(recipeRemainder) else it }
         .let { creator(it) }
@@ -780,8 +780,8 @@ class MaterialCard(
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
 
-val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toTranslationKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
-val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toTranslationKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
+val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toLanguageKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
+val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toLanguageKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
 
 context(ModContext)
 fun initMaterialsModule() {
@@ -873,16 +873,16 @@ fun initMaterialsModule() {
 
 }
 
-class MinaItem(val mina: Int, settings: Settings) : Item(settings)
+class MinaItem(val mina: Int, settings: Properties) : Item(settings)
 
-class ApostleWandItem(settings: Settings) : Item(settings) {
+class ApostleWandItem(settings: Properties) : Item(settings) {
     override fun hasRecipeRemainder() = true
     override fun getRecipeRemainder(stack: ItemStack) = stack.item.createItemStack()
 }
 
-class DrinkItem(settings: Settings, private val flaming: Int? = null) : Item(settings) {
+class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(settings) {
     companion object {
-        val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toTranslationKey()}.burning" }, "Flaming", "炎上")
+        val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toLanguageKey()}.burning" }, "Flaming", "炎上")
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

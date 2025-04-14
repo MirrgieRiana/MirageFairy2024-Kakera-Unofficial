@@ -45,7 +45,7 @@ val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
 
 object CreativeGeneAmpouleCard {
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
-    val item = CreativeGeneAmpouleItem(Item.Settings().maxCount(1))
+    val item = CreativeGeneAmpouleItem(Item.Properties().maxCount(1))
 }
 
 context(ModContext)
@@ -78,7 +78,7 @@ fun initCreativeGeneAmpoule() {
     }
 }
 
-class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
+class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         stack.getTraitStacks().or { return }.traitStackList.forEach { traitStack ->

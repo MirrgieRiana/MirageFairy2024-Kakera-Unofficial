@@ -144,6 +144,6 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
+class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }

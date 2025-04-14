@@ -139,6 +139,6 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
 
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
 
-class EmeraldLuminariaBlock(settings: Settings) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
+class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
     override fun getAgeProperty(): IntProperty = Properties.AGE_3
 }

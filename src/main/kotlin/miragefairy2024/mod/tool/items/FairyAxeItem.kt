@@ -25,7 +25,7 @@ class FairyAxeConfiguration(
     attackDamage: Float,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyAxeItem(this, Item.Settings())
+    override fun createItem() = FairyAxeItem(this, Item.Properties())
 
     init {
         this.attackDamage = attackDamage
@@ -35,7 +35,7 @@ class FairyAxeConfiguration(
     }
 }
 
-class FairyAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairyAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     AxeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

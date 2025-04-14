@@ -24,7 +24,7 @@ val traitListScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInven
     TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, TraitListScreenHandler.read(buf))
 }
 
-val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toTranslationKey()}" }, "Traits", "特性")
+val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toLanguageKey()}" }, "Traits", "特性")
 
 context(ModContext)
 fun initTraitListScreenHandler() {

@@ -41,7 +41,7 @@ import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.Level as World
 import net.minecraft.world.level.LevelReader as WorldView
 
-abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Settings) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
 

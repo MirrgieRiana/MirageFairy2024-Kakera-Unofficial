@@ -22,7 +22,7 @@ fun ToolConfiguration.mineAll() = this.also {
 }
 
 object MineAllToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
 
     context(ModContext)
     fun init() {

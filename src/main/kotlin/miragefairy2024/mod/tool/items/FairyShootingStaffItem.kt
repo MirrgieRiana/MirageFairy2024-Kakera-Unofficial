@@ -41,10 +41,10 @@ class FairyShootingStaffConfiguration(
     var basePower: Float,
     var baseMaxDistance: Float,
 ) : ToolConfiguration() {
-    override fun createItem() = FairyShootingStaffItem(this, Item.Settings())
+    override fun createItem() = FairyShootingStaffItem(this, Item.Properties())
 }
 
-class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfiguration, settings: Settings) :
+class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfiguration, settings: Properties) :
     ShootingStaffItem(configuration.toolMaterialCard.toolMaterial, configuration.basePower, configuration.baseMaxDistance, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
@@ -79,10 +79,10 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
 
 }
 
-open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Settings) : ToolItem(toolMaterial, settings), Vanishable {
+open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Properties) : ToolItem(toolMaterial, settings), Vanishable {
     companion object {
-        val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toTranslationKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
-        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toTranslationKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
+        val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toLanguageKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toLanguageKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
         const val BASE_EXPERIENCE_COST = 2
     }
 

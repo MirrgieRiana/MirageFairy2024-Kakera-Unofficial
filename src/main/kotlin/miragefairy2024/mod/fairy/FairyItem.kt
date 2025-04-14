@@ -65,15 +65,15 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = FairyItem(Item.Settings().fireproof())
+    val item = FairyItem(Item.Properties().fireproof())
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")
-private val RARE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.rare" }, "Rare", "レア")
-private val MANA_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.mana" }, "Mana", "魔力")
-private val LEVEL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.level" }, "Level", "レベル")
-private val CONDENSATION_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.condensation" }, "Condensation", "凝縮数")
-private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+private val RARE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.rare" }, "Rare", "レア")
+private val MANA_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.mana" }, "Mana", "魔力")
+private val LEVEL_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.level" }, "Level", "レベル")
+private val CONDENSATION_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.condensation" }, "Condensation", "凝縮数")
+private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 val fairiesItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("fairies"), "Fairies", "妖精",
@@ -154,7 +154,7 @@ private fun createFairyModel() = Model {
     )
 }
 
-class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
+class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
     override fun getName(stack: ItemStack): Text {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()

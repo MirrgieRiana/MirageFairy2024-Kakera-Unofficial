@@ -72,7 +72,7 @@ import java.time.ZoneOffset
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
     val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 }
 
 
@@ -135,7 +135,7 @@ fun initTelescopeModule() {
 }
 
 
-class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
         val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
         val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
@@ -146,18 +146,18 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
             Direction.EAST to createCuboidShape(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
         )
         private val identifier = MirageFairy2024.identifier("telescope")
-        val FIRST_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.first" }, "First-time reward", "初回報酬")
-        val FIRST_GAIN_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.first_gain" }, "Obtain %s Jewels", "%s ジュエルを獲得")
-        val DAILY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.daily" }, "Daily", "日間")
-        val WEEKLY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.weekly" }, "Weekly", "週間")
-        val MONTHLY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.monthly" }, "Monthly", "月間")
-        val AVAILABLE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.available" }, "Available", "獲得可能")
-        val RECEIVED_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.received" }, "Received", "獲得済")
-        val REUSE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.reuse" }, "%s left until reusable", "再使用可能まで %s")
-        val DAYS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.days" }, "%s days", "%s 日")
-        val HOURS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.hours" }, "%s hours", "%s 時間")
-        val MINUTES_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.minutes" }, "%s minutes", "%s 分")
-        val SECONDS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.seconds" }, "%s seconds", "%s 秒")
+        val FIRST_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.first" }, "First-time reward", "初回報酬")
+        val FIRST_GAIN_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.first_gain" }, "Obtain %s Jewels", "%s ジュエルを獲得")
+        val DAILY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.daily" }, "Daily", "日間")
+        val WEEKLY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.weekly" }, "Weekly", "週間")
+        val MONTHLY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.monthly" }, "Monthly", "月間")
+        val AVAILABLE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.available" }, "Available", "獲得可能")
+        val RECEIVED_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.received" }, "Received", "獲得済")
+        val REUSE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.reuse" }, "%s left until reusable", "再使用可能まで %s")
+        val DAYS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.days" }, "%s days", "%s 日")
+        val HOURS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.hours" }, "%s hours", "%s 時間")
+        val MINUTES_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.minutes" }, "%s minutes", "%s 分")
+        val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
 
     override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
@@ -173,7 +173,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
         }
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultBlockState.setValue(FACING, ctx.horizontalDirection)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultBlockState().setValue(FACING, ctx.horizontalDirection)
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false

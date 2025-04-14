@@ -28,14 +28,14 @@ abstract class ReiCategoryCard<D : BasicDisplay>(
         )
     }
 
-    val translation = Translation({ "category.rei.${MirageFairy2024.identifier(path).toTranslationKey()}" }, enName, jaName)
+    val translation = Translation({ "category.rei.${MirageFairy2024.identifier(path).toLanguageKey()}" }, enName, jaName)
 
     // Singleを取り除くとREI無しで起動するとクラッシュする
     val identifier: Single<CategoryIdentifier<D>> by lazy { Single(CategoryIdentifier.of(MirageFairy2024.MOD_ID, "plugins/$path")) }
     abstract val serializer: Single<BasicDisplay.Serializer<D>>
 }
 
-val COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION = Translation({ "gui.${MirageFairy2024.identifier("common_motif_recipe").toTranslationKey()}.always" }, "Always", "常時")
+val COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION = Translation({ "gui.${MirageFairy2024.identifier("common_motif_recipe").toLanguageKey()}.always" }, "Always", "常時")
 
 context(ModContext)
 fun initReiModule() {

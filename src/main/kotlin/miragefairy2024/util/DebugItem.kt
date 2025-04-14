@@ -21,7 +21,7 @@ import java.io.IOException
 
 context(ModContext)
 fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
-    val item = object : Item(Settings()) {
+    val item = object : Item(Properties()) {
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
         override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
             action(world, user, hand, user.getStackInHand(hand))

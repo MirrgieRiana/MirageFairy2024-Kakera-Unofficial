@@ -24,7 +24,7 @@ fun ToolConfiguration.cutAll() = this.also {
 }
 
 object CutAllToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
 
     context(ModContext)
     fun init() {

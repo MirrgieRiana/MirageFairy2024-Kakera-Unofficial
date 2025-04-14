@@ -13,7 +13,7 @@ import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.formatAs
 
 object MiningSpeedPassiveSkillEffect : AbstractDoublePassiveSkillEffect("mining_speed") {
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Mining Speed: %s", "採掘速度: %s")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Mining Speed: %s", "採掘速度: %s")
     override fun getText(value: Double) = text { translation(value * 100 formatAs "%+.1f%%") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) = Unit
 

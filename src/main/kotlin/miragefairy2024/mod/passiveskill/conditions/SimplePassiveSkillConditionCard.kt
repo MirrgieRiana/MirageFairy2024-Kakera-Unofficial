@@ -47,7 +47,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, enName, jaName)
+    val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toLanguageKey()}" }, enName, jaName)
 
     override fun test(context: PassiveSkillContext, level: Double, mana: Double) = function(context)
     override val text = text { translation() }

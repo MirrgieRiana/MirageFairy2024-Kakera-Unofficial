@@ -52,7 +52,7 @@ import java.util.Optional
 
 object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
-    val translation = Translation({ identifier.toTranslationKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
+    val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
     val onMapsTag: TagKey<Structure> = TagKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
 
@@ -105,7 +105,7 @@ object WeatheredAncientRemnantsCard {
                         RandomBlockMatchRuleTest(Blocks.GRAVEL, 0.2F),
                         AlwaysTrueRuleTest.INSTANCE,
                         AlwaysTruePosRuleTest.INSTANCE,
-                        Blocks.SUSPICIOUS_GRAVEL.defaultBlockState,
+                        Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(),
                         AppendLootRuleBlockEntityModifier(archaeologyLootTable),
                     ),
                 ),
@@ -114,7 +114,7 @@ object WeatheredAncientRemnantsCard {
                     StructureProcessorRule(
                         BlockMatchRuleTest(PlacedItemCard.block),
                         BlockMatchRuleTest(Blocks.WATER),
-                        Blocks.WATER.defaultBlockState,
+                        Blocks.WATER.defaultBlockState(),
                     ),
                 ),
             )

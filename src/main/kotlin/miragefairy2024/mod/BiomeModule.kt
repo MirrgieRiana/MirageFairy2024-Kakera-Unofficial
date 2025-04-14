@@ -73,7 +73,7 @@ abstract class BiomeCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val registryKey = RegistryKeys.BIOME with identifier
-    val translation = Translation({ identifier.toTranslationKey("biome") }, en, ja)
+    val translation = Translation({ identifier.toLanguageKey("biome") }, en, ja)
 }
 
 context(ModContext)
@@ -263,11 +263,11 @@ object DeepFairyForestBiomeCard : BiomeCard(
                         MaterialRules.sequence(
                             MaterialRules.condition(
                                 MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, 1.75 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.block(Blocks.COARSE_DIRT.defaultBlockState)
+                                MaterialRules.block(Blocks.COARSE_DIRT.defaultBlockState())
                             ),
                             MaterialRules.condition(
                                 MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, -0.95 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.block(Blocks.PODZOL.defaultBlockState)
+                                MaterialRules.block(Blocks.PODZOL.defaultBlockState())
                             ),
                         ),
                     ),

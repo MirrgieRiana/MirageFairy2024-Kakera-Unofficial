@@ -113,7 +113,7 @@ enum class OreCard(
         }
         ExperienceDroppingBlock(settings, UniformIntProvider.create(experience.first, experience.second))
     }
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
     val texturedModelFactory = TexturedModel.Factory {
         val baseStoneTexture = when (baseStoneType) {
             BaseStoneType.STONE -> Identifier("minecraft", "block/stone")
@@ -166,8 +166,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

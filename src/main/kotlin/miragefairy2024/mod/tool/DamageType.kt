@@ -20,7 +20,7 @@ abstract class DamageTypeCard {
     val registryKey = RegistryKeys.DAMAGE_TYPE with identifier
 
     open val exhaustion = 0.1F
-    val damageType = DamageType(identifier.toTranslationKey(), exhaustion)
+    val damageType = DamageType(identifier.toLanguageKey(), exhaustion)
 
     abstract fun getKillMessage(): EnJa
     abstract fun getPlayerKillMessage(): EnJa
@@ -32,10 +32,10 @@ abstract class DamageTypeCard {
             damageType
         }
 
-        en { identifier.toTranslationKey("death.attack") to getKillMessage().en }
-        ja { identifier.toTranslationKey("death.attack") to getKillMessage().ja }
-        en { identifier.toTranslationKey("death.attack", "player") to getPlayerKillMessage().en }
-        ja { identifier.toTranslationKey("death.attack", "player") to getPlayerKillMessage().ja }
+        en { identifier.toLanguageKey("death.attack") to getKillMessage().en }
+        ja { identifier.toLanguageKey("death.attack") to getKillMessage().ja }
+        en { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().en }
+        ja { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().ja }
         getTags().forEach {
             identifier.registerDamageTypeTagGeneration { it }
         }

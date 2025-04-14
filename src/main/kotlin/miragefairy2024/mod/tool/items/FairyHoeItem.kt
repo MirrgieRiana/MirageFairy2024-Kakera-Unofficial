@@ -26,7 +26,7 @@ class FairyHoeConfiguration(
     attackDamage: Int,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyHoeItem(this, Item.Settings())
+    override fun createItem() = FairyHoeItem(this, Item.Properties())
 
     init {
         this.attackDamage = attackDamage.toFloat()
@@ -36,7 +36,7 @@ class FairyHoeConfiguration(
     }
 }
 
-class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Settings) :
+class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     HoeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.roundToInt(), configuration.attackSpeed, settings),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,

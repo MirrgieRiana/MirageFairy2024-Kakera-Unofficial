@@ -55,7 +55,7 @@ import net.minecraft.world.level.Level as World
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = PlacedItemBlock(AbstractBlock.Settings.create().noCollision().strength(0.2F).pistonBehavior(PistonBehavior.DESTROY))
+    val block = PlacedItemBlock(AbstractBlock.Properties.create().noCollision().strength(0.2F).pistonBehavior(PistonBehavior.DESTROY))
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }
 
@@ -84,7 +84,7 @@ fun initPlacedItemBlock() {
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class PlacedItemBlock(settings: Settings) : Block(settings), BlockEntityProvider {
+class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvider {
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 

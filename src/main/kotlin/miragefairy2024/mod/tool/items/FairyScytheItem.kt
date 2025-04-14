@@ -42,7 +42,7 @@ class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     private val range: Int = 1
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyScytheItem(this, range, Item.Settings())
+    override fun createItem() = FairyScytheItem(this, range, Item.Properties())
 
     init {
         this.attackDamage = 4.0F
@@ -55,7 +55,7 @@ class FairyScytheConfiguration(
     }
 }
 
-class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Settings) :
+class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Properties) :
     ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, range, settings),
     FairyToolItem,
     ItemPredicateConvertorCallback {
@@ -89,9 +89,9 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Settings) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
+open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
     companion object {
-        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toTranslationKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
+        val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

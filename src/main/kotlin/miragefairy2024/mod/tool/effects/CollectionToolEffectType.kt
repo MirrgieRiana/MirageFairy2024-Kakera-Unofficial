@@ -18,7 +18,7 @@ fun ToolConfiguration.collection() = this.also {
 }
 
 object CollectionToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
 
     context(ModContext)
     fun init() {

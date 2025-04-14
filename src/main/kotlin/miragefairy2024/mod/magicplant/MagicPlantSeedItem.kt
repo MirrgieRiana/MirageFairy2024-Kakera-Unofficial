@@ -34,7 +34,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level as World
 
-class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(block, settings) {
+class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
         if (world == null) return

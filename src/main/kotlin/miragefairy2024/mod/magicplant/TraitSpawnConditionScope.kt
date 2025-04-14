@@ -74,7 +74,7 @@ context(TraitSpawnConditionScope) val end
 // バイオーム・タグ
 
 context(TraitSpawnConditionScope) operator fun RegistryKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
-    override val description = text { translate(this@unaryPlus.value.toTranslationKey("biome")) }
+    override val description = text { translate(this@unaryPlus.value.toLanguageKey("biome")) }
     override fun canSpawn(biome: RegistryEntry<Biome>) = biome.matchesKey(this@unaryPlus)
 }
 
