@@ -182,8 +182,8 @@ interface InventoryAccessor {
 val ScreenHandler.inventoryAccessor: InventoryAccessor
     get() = object : InventoryAccessor {
         override val size: Int get() = this@inventoryAccessor.slots.size
-        override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].stack
-        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].stack = itemStack }
+        override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].item
+        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].item = itemStack }
         override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxItemCount
         override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].canInsert(itemStack)
         override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].markDirty()

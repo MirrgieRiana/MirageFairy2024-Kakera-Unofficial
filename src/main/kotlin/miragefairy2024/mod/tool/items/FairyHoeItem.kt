@@ -42,7 +42,7 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getMiningSpeedMultiplier(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
+    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
     override fun isSuitableFor(state: BlockState) = isSuitableForImpl(state)
 

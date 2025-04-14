@@ -32,7 +32,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
             when (it) {
                 is AlwaysCommonMotifRecipe -> "always:"
                 is BiomeCommonMotifRecipe -> "biome:" + it.biome.location().string
-                is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.id.string
+                is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.location().string
             }
         }.forEach { recipe ->
             registry.add(CommonMotifRecipeReiCategoryCard.Display(recipe))
@@ -52,14 +52,14 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
                 Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
                     is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
                     is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toLanguageKey("biome")) }
-                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.id.path() }
+                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.location().path() }
                 })
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
                         when (val recipe = display.recipe) {
                             is AlwaysCommonMotifRecipe -> it
                             is BiomeCommonMotifRecipe -> it
-                            is BiomeTagCommonMotifRecipe -> it.tooltip(text { recipe.biomeTag.id.string() })
+                            is BiomeTagCommonMotifRecipe -> it.tooltip(text { recipe.biomeTag.location().string() })
                         }
                     }
                     .noShadow()

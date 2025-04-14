@@ -71,7 +71,7 @@ fun initFairyCondensationRecipe() {
             override fun craft() = createFairyItemStack(motifId, condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
-                    val list = DefaultedList.ofSize(inventory.size, EMPTY_ITEM_STACK)
+                    val list = DefaultedList.withSize(inventory.size, EMPTY_ITEM_STACK)
                     list[index] = createFairyItemStack(motifId, condensation = remainingCondensation)
                     list
                 } else {

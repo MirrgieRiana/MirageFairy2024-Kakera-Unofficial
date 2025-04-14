@@ -136,8 +136,8 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         }
     }
 
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 + 9 until 9 * 4 + SoulStream.SLOT_COUNT
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

@@ -28,7 +28,7 @@ fun initLastFoodModule() {
         if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
-        if (!stack.isFood) return@register
+        if (!stack.isEdible) return@register
         entity.lastFood.itemStack = stack.copy()
         entity.lastFood.time = Instant.now()
         LastFoodExtraPlayerDataCategory.sync(entity)
@@ -39,7 +39,7 @@ fun initLastFoodModule() {
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
         if (entity.isSpectator) return@register
-        if (entity.level().gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
+        if (entity.level().gameRules.getBoolean(GameRules.RULE_KEEPINVENTORY)) return@register
         entity.lastFood.itemStack = null
         entity.lastFood.time = null
         LastFoodExtraPlayerDataCategory.sync(entity)

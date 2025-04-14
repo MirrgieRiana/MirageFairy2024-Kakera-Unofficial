@@ -81,9 +81,9 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         addProperties(propertyDelegate)
     }
 
-    override fun canUse(player: PlayerEntity) = true
+    override fun stillValid(player: PlayerEntity) = true
 
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until 9 * 4 + 4 // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

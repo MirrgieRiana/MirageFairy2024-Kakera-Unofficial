@@ -17,7 +17,7 @@ object ExperiencePassiveSkillEffect : AbstractDoublePassiveSkillEffect("experien
         if (newValue <= 0.0) return
         val actualAmount = context.world.random.randomInt(newValue)
         if (actualAmount > 0) {
-            context.player.addExperience(actualAmount)
+            context.player.giveExperiencePoints(actualAmount)
         }
     }
 

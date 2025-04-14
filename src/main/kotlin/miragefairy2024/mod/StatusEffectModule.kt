@@ -30,7 +30,7 @@ class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2
         val world = entity.level
         if (world.time % 5 != 0L) return
         if (world.isServer && entity is PlayerEntity) {
-            entity.addExperience(1 + amplifier)
+            entity.giveExperiencePoints(1 + amplifier)
             world.playSound(null, entity.x, entity.y, entity.z, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
         }
     }

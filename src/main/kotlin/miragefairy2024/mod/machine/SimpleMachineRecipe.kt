@@ -164,7 +164,7 @@ open class SimpleMachineRecipe(
             val inputs = (0 until inputCount).map {
                 Pair(Ingredient.fromPacket(buf), buf.readInt())
             }
-            val output = buf.readItemStack()
+            val output = buf.readItem()
             val duration = buf.readInt()
             return card.createRecipe(
                 recipeId = id,

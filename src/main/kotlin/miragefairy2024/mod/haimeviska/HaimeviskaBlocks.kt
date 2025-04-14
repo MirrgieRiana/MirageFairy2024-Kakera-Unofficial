@@ -139,12 +139,12 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     val item = BlockItem(block, Item.Properties())
 }
 
-private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).solidBlock(Blocks::never)
+private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).randomTicks().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).solidBlock(Blocks::never)
 private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
+private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().randomTicks().breakInstantly().sounds(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -371,7 +371,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         super.randomTick(state, world, pos, random)
         if (!state[CHARGED]) {
-            if (random.randomBoolean(15, world.getLightLevel(pos))) {
+            if (random.randomBoolean(15, world.getMaxLocalRawBrightness(pos))) {
                 world.setBlockState(pos, state.setValue(CHARGED, true), Block.NOTIFY_LISTENERS)
             }
         }
@@ -439,7 +439,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         }
 
         // 生産
-        val fortune = EnchantmentHelper.getLevel(Enchantments.BLOCK_FORTUNE, toolItemStack)
+        val fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, toolItemStack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 

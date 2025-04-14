@@ -14,7 +14,7 @@ object HungerPassiveSkillEffect : AbstractDoublePassiveSkillEffect("hunger") {
     override fun getText(value: Double) = text { translation(-value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
-        context.player.addExhaustion(newValue.toFloat() * 4F)
+        context.player.causeFoodExhaustion(newValue.toFloat() * 4F)
     }
 
     context(ModContext)

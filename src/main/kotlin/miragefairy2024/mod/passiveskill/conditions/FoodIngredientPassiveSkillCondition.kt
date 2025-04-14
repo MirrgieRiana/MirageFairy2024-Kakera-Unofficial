@@ -19,7 +19,7 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveS
         val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toLanguageKey()}" }, "%s Dishes", "%s料理")
     }
 
-    override val text get() = text { translation(item.name) }
+    override val text get() = text { translation(item.description) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item)) return false
         val time = context.player.lastFood.time ?: return false

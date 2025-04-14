@@ -25,7 +25,7 @@ object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fa
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyHistoryContainer> {
         override fun fromNbt(nbt: NbtCompound): FairyHistoryContainer {
             val data = FairyHistoryContainer()
-            nbt.keys.forEach { key ->
+            nbt.allKeys.forEach { key ->
                 val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
                 data[motif] = nbt.wrapper[key].int.get()
             }

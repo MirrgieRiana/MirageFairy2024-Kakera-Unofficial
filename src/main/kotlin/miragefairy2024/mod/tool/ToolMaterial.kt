@@ -49,7 +49,7 @@ enum class FairyToolMaterials(
     ;
 
     override fun getDurability() = durability
-    override fun getMiningSpeedMultiplier() = miningSpeedMultiplier
+    override fun getSpeed() = miningSpeedMultiplier
     override fun getAttackDamage() = attackDamage
     override fun getMiningLevel() = miningLevel
     override fun getEnchantability() = enchantability

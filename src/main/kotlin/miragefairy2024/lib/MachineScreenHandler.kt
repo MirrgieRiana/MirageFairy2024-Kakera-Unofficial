@@ -67,9 +67,9 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         return slot.configuration.getTooltip()
     }
 
-    override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
+    override fun stillValid(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
 
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until slots.size
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

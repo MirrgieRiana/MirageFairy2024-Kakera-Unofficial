@@ -168,7 +168,7 @@ val NbtProperty<NbtElement, Nothing>.boolean get() = NbtProperty<Boolean?, Nothi
 val NbtProperty<NbtElement?, NbtElement?>.map
     get() = NbtProperty<Map<String, NbtElement>?, Map<String, NbtElement>?>({
         val nbt = this.get()?.castOrNull<NbtCompound>() ?: return@NbtProperty null
-        nbt.keys.associate { key -> key!! to nbt[key]!! }
+        nbt.allKeys.associate { key -> key!! to nbt[key]!! }
     }, {
         this.set(it?.let { a ->
             NbtCompound().also { nbt ->

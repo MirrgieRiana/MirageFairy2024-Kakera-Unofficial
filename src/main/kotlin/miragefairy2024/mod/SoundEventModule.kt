@@ -31,12 +31,12 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
     val identifier = MirageFairy2024.identifier(path)
     val sounds = soundPaths.map { MirageFairy2024.identifier(it) }
     val translation = Translation({ identifier.toLanguageKey("subtitles") }, en, ja)
-    val soundEvent: SoundEvent = SoundEvent.of(identifier)
+    val soundEvent: SoundEvent = SoundEvent.createVariableRangeEvent(identifier)
 }
 
 object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier("sound")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: SoundEventPacket) {
-        buf.writeIdentifier(Registries.SOUND_EVENT.getKey(packet.soundEvent))
+        buf.writeResourceLocation(Registries.SOUND_EVENT.getKey(packet.soundEvent))
         buf.writeBlockPos(packet.pos)
         buf.writeUtf(packet.category.name)
         buf.writeFloat(packet.volume)
@@ -45,7 +45,7 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
     }
 
     override fun readFromBuf(buf: PacketByteBuf): SoundEventPacket {
-        val soundEvent = Registries.SOUND_EVENT.get(buf.readIdentifier())!!
+        val soundEvent = Registries.SOUND_EVENT.get(buf.readResourceLocation())!!
         val pos = buf.readBlockPos()
         val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }
         val volume = buf.readFloat()

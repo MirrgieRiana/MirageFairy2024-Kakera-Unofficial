@@ -45,7 +45,7 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
 
                 is BiomeTagCommonMotifRecipe -> {
                     tag.wrapper["Type"].string.set("biome_tag")
-                    tag.wrapper["BiomeTag"].string.set(display.recipe.biomeTag.id.string)
+                    tag.wrapper["BiomeTag"].string.set(display.recipe.biomeTag.location().string)
                 }
             }
         }))

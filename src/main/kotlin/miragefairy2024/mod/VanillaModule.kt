@@ -44,8 +44,8 @@ fun initVanillaModule() {
     registerClientDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
         val tags = world.registryManager.get(RegistryKeys.BIOME).streamTags().toList()
         val sb = StringBuilder()
-        tags.sortedBy { it.id }.forEach { tag ->
-            sb.append("${tag.id}\n")
+        tags.sortedBy { it.location() }.forEach { tag ->
+            sb.append("${tag.location()}\n")
             val biomes = world.registryManager.get(RegistryKeys.BIOME).getEntryList(tag).getOrElse { listOf() }.toList()
             biomes.sortedBy { it.key.get().value }.forEach { biome ->
                 sb.append("  ${biome.key.get().value}\n")
