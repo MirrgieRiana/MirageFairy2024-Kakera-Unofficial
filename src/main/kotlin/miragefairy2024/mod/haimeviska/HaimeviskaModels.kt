@@ -20,8 +20,8 @@ val unchargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { bloc
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.name to TextureKey.BACK.string,
-                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.PARTICLE.id to TextureKey.BACK.string,
+                TextureKey.BACK.id to textureMap.getTexture(TextureKey.BACK).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(
@@ -48,9 +48,9 @@ val chargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Factory { block 
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.name to TextureKey.BACK.string,
-                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.FRONT.name to textureMap.getTexture(TextureKey.FRONT).string,
+                TextureKey.PARTICLE.id to TextureKey.BACK.string,
+                TextureKey.BACK.id to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.FRONT.id to textureMap.getTexture(TextureKey.FRONT).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(

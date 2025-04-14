@@ -165,17 +165,17 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     fun toNbt(): NbtCompound {
         val nbt = NbtCompound()
-        extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
+        extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                val value = map[key.value] ?: return
+                val value = map[key.location()] ?: return
                 val data = try {
                     loader.castOrThrow(value)
                 } catch (e: ClassCastException) {
-                    getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
+                    getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.location()} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(data))
+                nbt.wrapper[key.location().string].compound.set(ioHandler.toNbt(data))
             }
             f(loader)
         }
@@ -188,11 +188,11 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     fun fromNbt(nbt: NbtCompound) {
         map.clear()
-        extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
+        extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                val data = nbt.wrapper[key.value.string].compound.get() ?: return
-                map[key.value] = ioHandler.fromNbt(data)
+                val data = nbt.wrapper[key.location().string].compound.get() ?: return
+                map[key.location()] = ioHandler.fromNbt(data)
             }
             f(loader)
         }

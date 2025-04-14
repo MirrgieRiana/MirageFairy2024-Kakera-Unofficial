@@ -116,14 +116,14 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
 class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<AuraReflectorFurnaceBlockEntity>(card, pos, state) {
     override fun getThis() = this
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         fuelMax = nbt.wrapper["FuelMax"].int.get() ?: 0
         fuel = nbt.wrapper["Fuel"].int.get() ?: 0
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["FuelMax"].int.set(fuelMax)
         nbt.wrapper["Fuel"].int.set(fuel)
     }

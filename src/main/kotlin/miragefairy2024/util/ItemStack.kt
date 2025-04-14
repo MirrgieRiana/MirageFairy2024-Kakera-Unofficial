@@ -13,7 +13,7 @@ val ItemStack?.orEmpty get() = this ?: EMPTY_ITEM_STACK
 val ItemStack.isNotEmpty get() = !this.isEmpty
 
 fun ItemStack.toNbt(): NbtCompound = NbtCompound().also { this.writeNbt(it) }
-fun NbtCompound.toItemStack(): ItemStack = ItemStack.fromNbt(this)
+fun NbtCompound.toItemStack(): ItemStack = ItemStack.of(this)
 
 infix fun ItemStack.hasSameItem(other: ItemStack) = this.item === other.item
 infix fun ItemStack.hasSameItemAndNbt(other: ItemStack) = this hasSameItem other && Objects.equals(this.nbt, other.nbt)

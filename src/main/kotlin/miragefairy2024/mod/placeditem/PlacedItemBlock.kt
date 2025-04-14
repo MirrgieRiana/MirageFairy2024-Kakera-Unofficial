@@ -55,7 +55,7 @@ import net.minecraft.world.level.Level as World
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = PlacedItemBlock(AbstractBlock.Properties.create().noCollision().strength(0.2F).pistonBehavior(PistonBehavior.DESTROY))
+    val block = PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY))
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }
 
@@ -71,7 +71,7 @@ fun initPlacedItemBlock() {
                 ModelData(
                     parent = Identifier("minecraft", "block/block"),
                     textures = ModelTexturesData(
-                        TextureKey.PARTICLE.name to Identifier("minecraft", "block/glass").string,
+                        TextureKey.PARTICLE.id to Identifier("minecraft", "block/glass").string,
                     ),
                     elements = ModelElementsData(),
                 )
@@ -79,38 +79,38 @@ fun initPlacedItemBlock() {
         }
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
-        card.block.registerBlockTagGeneration { BlockTags.HOE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
     }
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
 class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvider {
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
+    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
+        return blockEntity.triggerEvent(type, data)
     }
 
     // レンダリング
-    override fun getRenderType(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
-        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.fullCube()
-        return blockEntity.shapeCache ?: VoxelShapes.fullCube()
+    override fun getRenderShape(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
+        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.block()
+        return blockEntity.shapeCache ?: VoxelShapes.block()
     }
 
     // 格納されているアイテムをドロップする
-    override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
-    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+    override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
+    override fun onRemove(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
             val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return@run
-            dropStack(world, pos, blockEntity.itemStack)
+            popResource(world, pos, blockEntity.itemStack)
         }
         @Suppress("DEPRECATION")
-        super.onStateReplaced(state, world, pos, newState, moved)
+        super.onRemove(state, world, pos, newState, moved)
     }
 
 }
@@ -126,13 +126,13 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var itemX = 8.0 / 16.0
     var itemY = 0.5 / 16.0
     var itemZ = 8.0 / 16.0
-    var itemRotateX = -MathHelper.TAU * 0.25
+    var itemRotateX = -MathHelper.TWO_PI * 0.25
     var itemRotateY = 0.0
     var shapeCache: VoxelShape? = null
 
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["ItemStack"].set(itemStack.toNbt())
         nbt.wrapper["ItemX"].double.set(itemX)
         nbt.wrapper["ItemY"].double.set(itemY)
@@ -141,9 +141,9 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         nbt.wrapper["ItemRotateY"].double.set(itemRotateY)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
-        itemStack = ItemStack.fromNbt(nbt.wrapper["ItemStack"].compound.get())
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
+        itemStack = ItemStack.of(nbt.wrapper["ItemStack"].compound.get())
         itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
         itemY = nbt.wrapper["ItemY"].double.get() ?: 0.0
         itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0
@@ -198,7 +198,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
             extend(+5.0, +5.0, -0.5)
             extend(+5.0, +5.0, +1.5)
 
-            Block.createCuboidShape(
+            Block.box(
                 itemX * 16.0 + minX atLeast 0.0,
                 itemY * 16.0 + minY atLeast 0.0,
                 itemZ * 16.0 + minZ atLeast 0.0,
@@ -209,8 +209,8 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         }
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {

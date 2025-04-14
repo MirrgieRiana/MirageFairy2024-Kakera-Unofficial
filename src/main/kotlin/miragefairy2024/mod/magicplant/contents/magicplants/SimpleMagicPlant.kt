@@ -92,7 +92,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     private val outlineShapesCache = configuration.outlineShapes.toTypedArray()
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
 
 
     // Magic Plant

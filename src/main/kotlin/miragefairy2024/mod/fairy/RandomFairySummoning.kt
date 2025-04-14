@@ -80,9 +80,9 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
-            user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            user.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
-                override fun getDisplayName() = itemStack.name
+                override fun getDisplayName() = itemStack.hoverName
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {

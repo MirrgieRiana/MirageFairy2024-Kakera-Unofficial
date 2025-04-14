@@ -129,7 +129,7 @@ enum class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val block = run {
-        val settings = AbstractBlock.Properties.create()
+        val settings = AbstractBlock.Properties.of()
         settings.mapColor(mapColor)
         if (requiresTool) settings.requiresTool()
         if (dropsNothing) settings.dropsNothing()
@@ -194,9 +194,9 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.name to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.FRONT.name to textureMap.getTexture(TextureKey.FRONT).string,
+                TextureKey.PARTICLE.id to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.BACK.id to textureMap.getTexture(TextureKey.BACK).string,
+                TextureKey.FRONT.id to textureMap.getTexture(TextureKey.FRONT).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(

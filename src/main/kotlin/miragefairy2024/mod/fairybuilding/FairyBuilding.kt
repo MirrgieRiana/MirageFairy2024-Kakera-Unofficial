@@ -161,12 +161,12 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
         private val SHAPE = VoxelShapes.union(
-            createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
-            createCuboidShape(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
-            createCuboidShape(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
-            createCuboidShape(0.0, 0.0, 15.9, 16.0, 16.0, 16.0),
-            createCuboidShape(0.0, 15.9, 0.0, 16.0, 16.0, 16.0),
-            createCuboidShape(15.9, 0.0, 0.0, 16.0, 16.0, 16.0),
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
+            box(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
+            box(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
+            box(0.0, 0.0, 15.9, 16.0, 16.0, 16.0),
+            box(0.0, 15.9, 0.0, 16.0, 16.0, 16.0),
+            box(15.9, 0.0, 0.0, 16.0, 16.0, 16.0),
         )
     }
 
@@ -183,7 +183,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
 
 }
 
@@ -211,7 +211,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
-            renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-((direction.get2DDataValue() + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
             renderRotated(renderingProxy, tickDelta, light, overlay)

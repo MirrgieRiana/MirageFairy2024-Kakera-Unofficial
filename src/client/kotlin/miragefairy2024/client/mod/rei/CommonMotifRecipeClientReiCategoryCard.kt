@@ -31,7 +31,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
         COMMON_MOTIF_RECIPES.sortedBy {
             when (it) {
                 is AlwaysCommonMotifRecipe -> "always:"
-                is BiomeCommonMotifRecipe -> "biome:" + it.biome.value.string
+                is BiomeCommonMotifRecipe -> "biome:" + it.biome.location().string
                 is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.id.string
             }
         }.forEach { recipe ->

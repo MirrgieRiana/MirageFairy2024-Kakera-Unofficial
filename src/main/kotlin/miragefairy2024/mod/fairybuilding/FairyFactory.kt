@@ -88,14 +88,14 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         folia = nbt.wrapper["Folia"].int.get() ?: 0
         foliaCollectionCooldown = nbt.wrapper["FoliaCollectionCooldown"].int.get() ?: 0
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["Folia"].int.set(folia)
         nbt.wrapper["FoliaCollectionCooldown"].int.set(foliaCollectionCooldown)
     }

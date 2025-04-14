@@ -153,7 +153,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
                         first = false
                         tooltip += text { ""() }
                     }
-                    tooltip += text { itemStack.name + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
+                    tooltip += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
                 }
             }
         }
@@ -188,12 +188,12 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         } else {
             -1
         }
-        user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+        user.openMenu(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
-            override fun getDisplayName() = itemStack.name
+            override fun getDisplayName() = itemStack.hoverName
 
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                 buf.writeInt(slotIndex)

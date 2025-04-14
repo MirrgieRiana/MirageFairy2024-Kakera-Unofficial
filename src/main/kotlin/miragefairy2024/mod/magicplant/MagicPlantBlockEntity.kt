@@ -55,29 +55,29 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
         }
     }
 
-    public override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    public override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
         isNatural = nbt.getBoolean("Natural")
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound {
-        val nbt = super.toInitialChunkDataNbt()
+    override fun getUpdateTag(): NbtCompound {
+        val nbt = super.getUpdateTag()
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
         return nbt
     }
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 }
 

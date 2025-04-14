@@ -91,27 +91,27 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
     companion object {
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
-            createCuboidShape(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 4.0, 2.0, 8.0, 16.0, 14.0), // WEST
-            createCuboidShape(2.0, 4.0, 0.0, 14.0, 16.0, 8.0), // NORTH
-            createCuboidShape(8.0, 4.0, 2.0, 16.0, 16.0, 14.0), // EAST
+            box(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
+            box(0.0, 4.0, 2.0, 8.0, 16.0, 14.0), // WEST
+            box(2.0, 4.0, 0.0, 14.0, 16.0, 8.0), // NORTH
+            box(8.0, 4.0, 2.0, 16.0, 16.0, 14.0), // EAST
 
             // SIDE
-            createCuboidShape(2.0, 2.0, 8.0, 14.0, 14.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 2.0, 2.0, 8.0, 14.0, 14.0), // WEST
-            createCuboidShape(2.0, 2.0, 0.0, 14.0, 14.0, 8.0), // NORTH
-            createCuboidShape(8.0, 2.0, 2.0, 16.0, 14.0, 14.0), // EAST
+            box(2.0, 2.0, 8.0, 14.0, 14.0, 16.0), // SOUTH
+            box(0.0, 2.0, 2.0, 8.0, 14.0, 14.0), // WEST
+            box(2.0, 2.0, 0.0, 14.0, 14.0, 8.0), // NORTH
+            box(8.0, 2.0, 2.0, 16.0, 14.0, 14.0), // EAST
 
             // DOWN
-            createCuboidShape(2.0, 0.0, 8.0, 14.0, 12.0, 16.0), // SOUTH
-            createCuboidShape(0.0, 0.0, 2.0, 8.0, 12.0, 14.0), // WEST
-            createCuboidShape(2.0, 0.0, 0.0, 14.0, 12.0, 8.0), // NORTH
-            createCuboidShape(8.0, 0.0, 2.0, 16.0, 12.0, 14.0), // EAST
+            box(2.0, 0.0, 8.0, 14.0, 12.0, 16.0), // SOUTH
+            box(0.0, 0.0, 2.0, 8.0, 12.0, 14.0), // WEST
+            box(2.0, 0.0, 0.0, 14.0, 12.0, 8.0), // NORTH
+            box(8.0, 0.0, 2.0, 16.0, 12.0, 14.0), // EAST
         )
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].horizontal]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state[VERTICAL_FACING].id + state[FACING].get2DDataValue()]
 }
 
 class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyActiveConsumerBlockEntity>(card, pos, state) {

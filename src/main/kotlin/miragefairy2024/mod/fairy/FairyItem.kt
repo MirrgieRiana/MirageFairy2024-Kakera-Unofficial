@@ -77,7 +77,7 @@ private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${identifier.t
 
 val fairiesItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("fairies"), "Fairies", "妖精",
-) { motifRegistry.entrySet.random().value.createFairyItemStack() }
+) { motifRegistry.entrySet().random().value.createFairyItemStack() }
 
 context(ModContext)
 fun initFairyItem() {
