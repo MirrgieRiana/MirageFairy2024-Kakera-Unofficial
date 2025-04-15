@@ -83,14 +83,14 @@ open class SimpleMachineRecipe(
     open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
     override fun getRemainingItems(inventory: Inventory): DefaultedList<ItemStack> {
-        val list = DefaultedList.of<ItemStack>()
+        val list = DefaultedList.create<ItemStack>()
         inputs.forEachIndexed { index, input ->
             val remainder = getCustomizedRemainder(inventory.getItem(index))
             if (remainder.isEmpty) return@forEachIndexed
 
             var totalRemainderCount = remainder.count * input.second
             while (totalRemainderCount > 0) {
-                val count = totalRemainderCount atMost remainder.maxCount
+                val count = totalRemainderCount atMost remainder.maxStackSize
                 list += remainder.copyWithCount(count)
                 totalRemainderCount -= count
             }
@@ -100,14 +100,14 @@ open class SimpleMachineRecipe(
 
     override fun assemble(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
-    override fun getOutput(registryManager: DynamicRegistryManager?) = output
-    override fun createIcon() = card.icon
+    override fun getResultItem(registryManager: DynamicRegistryManager?) = output
+    override fun getToastSymbol() = card.icon
     override fun getId() = recipeId
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
 
     class Serializer<R : SimpleMachineRecipe>(private val card: SimpleMachineRecipeCard<R>) : RecipeSerializer<R> {
-        override fun read(id: Identifier, json: JsonObject): R {
+        override fun fromJson(id: Identifier, json: JsonObject): R {
             val root = json.toJsonWrapper()
             fun readInput(json: JsonWrapper): Pair<Ingredient, Int> {
                 return Pair(
@@ -158,11 +158,11 @@ open class SimpleMachineRecipe(
             json.addProperty("duration", recipe.duration)
         }
 
-        override fun read(id: Identifier, buf: PacketByteBuf): R {
+        override fun fromNetwork(id: Identifier, buf: PacketByteBuf): R {
             val group = buf.readUtf()
             val inputCount = buf.readInt()
             val inputs = (0 until inputCount).map {
-                Pair(Ingredient.fromPacket(buf), buf.readInt())
+                Pair(Ingredient.fromNetwork(buf), buf.readInt())
             }
             val output = buf.readItem()
             val duration = buf.readInt()
@@ -175,14 +175,14 @@ open class SimpleMachineRecipe(
             )
         }
 
-        override fun write(buf: PacketByteBuf, recipe: R) {
+        override fun toNetwork(buf: PacketByteBuf, recipe: R) {
             buf.writeUtf(recipe.group)
             buf.writeInt(recipe.inputs.size)
             recipe.inputs.forEach {
-                it.first.write(buf)
+                it.first.toNetwork(buf)
                 buf.writeInt(it.second)
             }
-            buf.writeItemStack(recipe.output)
+            buf.writeItem(recipe.output)
             buf.writeInt(recipe.duration)
         }
     }
@@ -218,32 +218,32 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     private val output: ItemStack,
     private val duration: Int,
 ) : CraftingRecipeJsonBuilder {
-    private val advancementBuilder: Advancement.Builder = Advancement.Builder.createUntelemetered()
+    private val advancementBuilder: Advancement.Builder = Advancement.Builder.recipeAdvancement()
     private var group = ""
 
     override fun unlockedBy(name: String, conditions: CriterionConditions) = this.also { advancementBuilder.addCriterion(name, conditions) }
     override fun group(string: String?) = this.also { this.group = string ?: "" }
-    override fun getOutputItem(): Item = output.item
+    override fun getResult(): Item = output.item
 
     override fun save(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
         check(advancementBuilder.criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
 
         advancementBuilder
-            .parent(CraftingRecipeJsonBuilder.ROOT)
-            .addCriterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+            .parent(CraftingRecipeJsonBuilder.ROOT_RECIPE_ADVANCEMENT)
+            .addCriterion("has_the_recipe", RecipeUnlockedCriterion.unlocked(recipeId))
             .rewards(AdvancementRewards.Builder.recipe(recipeId))
-            .criteriaMerger(CriterionMerger.OR)
+            .requirements(CriterionMerger.OR)
 
-        val advancementId: Identifier = recipeId.withPrefixedPath("recipes/${category.getName()}/")
+        val advancementId: Identifier = recipeId.withPrefix("recipes/${category.folderName}/")
 
         val recipeJsonProvider = object : RecipeJsonProvider {
-            override fun serialize(json: JsonObject) {
+            override fun serializeRecipeData(json: JsonObject) {
                 card.serializer.write(json, card.createRecipe(recipeId, group, inputs, output, duration))
             }
 
-            override fun getSerializer() = card.serializer
-            override fun getRecipeId() = recipeId
-            override fun toAdvancementJson() = advancementBuilder.toJson()
+            override fun getType() = card.serializer
+            override fun getId() = recipeId
+            override fun serializeAdvancement() = advancementBuilder.serializeToJson()
             override fun getAdvancementId() = advancementId
         }
 

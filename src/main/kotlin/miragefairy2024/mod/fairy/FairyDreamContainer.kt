@@ -72,7 +72,7 @@ class FairyDreamContainer {
             set(motif, true)
             if (motif.rare <= 9) {
                 player.obtain(motif.createFairyItemStack())
-                player.sendMessage(text { GAIN_FAIRY_TRANSLATION(motif.displayName) }, true)
+                player.displayClientMessage(text { GAIN_FAIRY_TRANSLATION(motif.displayName) }, true)
             }
             GainFairyDreamChannel.sendToClient(player, motif)
         }

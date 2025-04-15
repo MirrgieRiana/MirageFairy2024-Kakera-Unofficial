@@ -103,7 +103,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
 
         if (!user.isCreative) {
             if (user.totalExperience < experienceCost) {
-                user.sendMessage(text { NOT_ENOUGH_EXPERIENCE_TRANSLATION() }, true)
+                user.displayClientMessage(text { NOT_ENOUGH_EXPERIENCE_TRANSLATION() }, true)
                 return TypedActionResult.consume(itemStack)
             }
         }
