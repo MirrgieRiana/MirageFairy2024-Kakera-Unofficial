@@ -27,7 +27,7 @@ class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2
     override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = true
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         super.applyUpdateEffect(entity, amplifier)
-        val world = entity.level
+        val world = entity.level()
         if (world.time % 5 != 0L) return
         if (world.isServer && entity is PlayerEntity) {
             entity.giveExperiencePoints(1 + amplifier)

@@ -67,7 +67,7 @@ private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
 
 private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
     return when {
-        this.dimension.natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
+        this.dimensionTypeId().natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 0.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 1.0
         else -> 0.0
@@ -76,7 +76,7 @@ private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
 
 private fun World.getLowAltitudeFactor(blockPos: BlockPos): Double {
     return when {
-        this.dimension.natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
+        this.dimensionTypeId().natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 1.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 0.0
         else -> 0.0
