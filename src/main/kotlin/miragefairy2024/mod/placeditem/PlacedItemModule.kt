@@ -36,7 +36,7 @@ fun initPlacedItemModule() {
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
 
             val blockPos = packet.blockPos
-            val blockPos2 = if (player.world.getBlockState(hitResult.blockPos).isReplaceable) hitResult.blockPos else hitResult.blockPos.offset(hitResult.side)
+            val blockPos2 = if (player.level().getBlockState(hitResult.blockPos).isReplaceable) hitResult.blockPos else hitResult.blockPos.offset(hitResult.side)
             if (blockPos != blockPos2) return@registerServerPacketReceiver // プレイヤーはその位置を見ていない
 
             if (packet.itemX !in 0.0..<1.0) return@registerServerPacketReceiver // 範囲外
@@ -46,7 +46,7 @@ fun initPlacedItemModule() {
 
             // ブロックの設置判定
 
-            val world = player.world
+            val world = player.level()
 
             // 生成環境判定
             if (!world.getBlockState(blockPos).isReplaceable) return@registerServerPacketReceiver // 配置先が埋まっている
@@ -90,7 +90,7 @@ fun initPlacedItemModule() {
 
             // ブロックの除去判定
 
-            val world = player.world
+            val world = player.level()
 
             if (!world.getBlockState(blockPos).`is`(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの取得に失敗した

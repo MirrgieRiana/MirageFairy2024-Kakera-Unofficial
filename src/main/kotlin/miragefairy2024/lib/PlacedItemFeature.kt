@@ -17,7 +17,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
     abstract fun createItemStack(context: FeatureContext<C>): ItemStack?
     override fun generate(context: FeatureContext<C>): Boolean {
         val random = context.random
-        val world = context.world
+        val world = context.level()
 
         var count = 0
         val currentBlockPos = BlockPos.Mutable()

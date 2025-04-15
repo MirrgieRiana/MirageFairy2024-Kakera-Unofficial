@@ -37,7 +37,7 @@ class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRing
         val config = context.config
         val random = context.random
         val originBlockPos = context.origin
-        val world = context.world
+        val world = context.level()
 
         var count = 0
         val minRadius = config.minRadius

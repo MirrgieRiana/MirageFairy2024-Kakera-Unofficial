@@ -149,13 +149,13 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         }
 
         // フィルタを取得
-        val filterItemStack = getStack(card.inventorySlotIndexTable[FairyActiveConsumerCard.FILTER_SLOT]!!)
+        val filterItemStack = getItem(card.inventorySlotIndexTable[FairyActiveConsumerCard.FILTER_SLOT]!!)
         if (filterItemStack.isEmpty) return
 
         // 空きスロットを列挙
         val availableDestIndices = FairyActiveConsumerCard.CONTAINER_SLOTS
             .mapNotNull { card.inventorySlotIndexTable[it] }
-            .filter { getStack(it).isEmpty }
+            .filter { getItem(it).isEmpty }
             .toMutableList()
         if (availableDestIndices.isEmpty()) return
 
@@ -197,7 +197,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                         val destIndex = availableDestIndices.removeFirst()
                         src.setItemStack(srcIndex, EMPTY_ITEM_STACK)
                         srcChanged = true
-                        setStack(destIndex, srcItemStack)
+                        setItem(destIndex, srcItemStack)
                         changed = true
                         if (availableDestIndices.isEmpty()) return@finishSrcIndices
                     }

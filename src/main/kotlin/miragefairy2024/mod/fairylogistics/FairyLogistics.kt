@@ -113,7 +113,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
         DOWN("down", 2),
         ;
 
-        override fun asString() = string
+        override fun getSerializedName() = string
     }
 
 
@@ -144,26 +144,26 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
 
     // Inventory
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
     fun getTarget(): Pair<Inventory, Direction>? {
         fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
-            val world = world ?: return null
+            val world = level ?: return null
             val blockEntity = world.getBlockEntity(blockPos) ?: return null
             if (blockEntity !is Inventory) return null
             return Pair(blockEntity, side)
         }
-        return when (cachedState[FairyLogisticsBlock.VERTICAL_FACING]) {
-            FairyLogisticsBlock.VerticalFacing.UP -> f(pos.up(), Direction.DOWN)
-            FairyLogisticsBlock.VerticalFacing.SIDE -> when (cachedState[HorizontalFacingBlock.FACING]) {
-                Direction.NORTH -> f(pos.north(), Direction.SOUTH)
-                Direction.SOUTH -> f(pos.south(), Direction.NORTH)
-                Direction.WEST -> f(pos.west(), Direction.EAST)
-                Direction.EAST -> f(pos.east(), Direction.WEST)
+        return when (blockState[FairyLogisticsBlock.VERTICAL_FACING]) {
+            FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.up(), Direction.DOWN)
+            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState[HorizontalFacingBlock.FACING]) {
+                Direction.NORTH -> f(worldPosition.north(), Direction.SOUTH)
+                Direction.SOUTH -> f(worldPosition.south(), Direction.NORTH)
+                Direction.WEST -> f(worldPosition.west(), Direction.EAST)
+                Direction.EAST -> f(worldPosition.east(), Direction.WEST)
                 else -> null
             }
 
-            FairyLogisticsBlock.VerticalFacing.DOWN -> f(pos.down(), Direction.UP)
+            FairyLogisticsBlock.VerticalFacing.DOWN -> f(worldPosition.down(), Direction.UP)
             else -> null
         }
     }

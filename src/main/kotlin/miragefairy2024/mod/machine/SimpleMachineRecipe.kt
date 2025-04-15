@@ -74,8 +74,8 @@ open class SimpleMachineRecipe(
     // TODO 順不同
     override fun matches(inventory: Inventory, world: World): Boolean {
         inputs.forEachIndexed { index, input ->
-            if (!input.first.test(inventory.getStack(index))) return false
-            if (inventory.getStack(index).count < input.second) return false
+            if (!input.first.test(inventory.getItem(index))) return false
+            if (inventory.getItem(index).count < input.second) return false
         }
         return true
     }
@@ -85,7 +85,7 @@ open class SimpleMachineRecipe(
     override fun getRemainingItems(inventory: Inventory): DefaultedList<ItemStack> {
         val list = DefaultedList.of<ItemStack>()
         inputs.forEachIndexed { index, input ->
-            val remainder = getCustomizedRemainder(inventory.getStack(index))
+            val remainder = getCustomizedRemainder(inventory.getItem(index))
             if (remainder.isEmpty) return@forEachIndexed
 
             var totalRemainderCount = remainder.count * input.second

@@ -68,19 +68,19 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     open fun onStackChange(slot: Int?) {
         // TODO スロットアップデートのための軽量カスタムパケット
         if (slot == null || card.inventorySlotConfigurations[slot].isObservable) {
-            world?.updateListeners(pos, cachedState, cachedState, Block.UPDATE_ALL)
+            level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
         }
     }
 
     private val inventory = MutableList(card.inventorySlotConfigurations.size) { EMPTY_ITEM_STACK }
 
-    override fun size() = inventory.size
+    override fun getContainerSize() = inventory.size
 
     override fun isEmpty() = inventory.all { it.isEmpty }
 
-    override fun getStack(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
+    override fun getItem(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
 
-    override fun setStack(slot: Int, stack: ItemStack) {
+    override fun setItem(slot: Int, stack: ItemStack) {
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
@@ -104,13 +104,13 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     abstract fun getActualSide(side: Direction): Direction
 
-    override fun getAvailableSlots(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).id]
+    override fun getSlotsForFace(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).get3DDataValue()]
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && canPlaceItem(slot, stack)
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && canPlaceItem(slot, stack)
 
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
+    override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
 
-    override fun clear() {
+    override fun clearContent() {
         onStackChange(null)
         setChanged()
         inventory.replaceAll { EMPTY_ITEM_STACK }
@@ -118,7 +118,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     open fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
-            if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
+            if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), itemStack)
         }
         onStackChange(null)
         setChanged()
@@ -163,22 +163,22 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     // Gui
 
     private val propertyDelegate = object : PropertyDelegate {
-        override fun size() = card.propertyConfigurations.size
+        override fun getCount() = card.propertyConfigurations.size
         override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
         override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
     }
 
-    override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
+    override fun stillValid(player: PlayerEntity) = Inventory.stillValidBlockEntity(this, player)
 
-    override fun getContainerName(): Text = card.block.name
+    override fun getDefaultName(): Text = card.block.name
 
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
             this,
             propertyDelegate,
-            ScreenHandlerContext.create(world, pos),
+            ScreenHandlerContext.create(level, worldPosition),
         )
         return card.createScreenHandler(arguments)
     }

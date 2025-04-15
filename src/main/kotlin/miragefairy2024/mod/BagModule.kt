@@ -223,7 +223,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         // 成功
 
         if (result.movementTimes > 0) {
-            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.world.getRandom().nextFloat() * 0.4F)
+            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
         }
 
         // シミュレートした結果を適用する
@@ -252,7 +252,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         // 成功
 
         if (result.movementTimes > 0) {
-            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.world.getRandom().nextFloat() * 0.4F)
+            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
         }
 
         // シミュレートした結果を適用する
@@ -265,7 +265,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     override fun canBeNested() = false
 
     override fun onItemEntityDestroyed(entity: ItemEntity) {
-        val world = entity.world
+        val world = entity.level()
         if (world.isClientSide) return
         val bagInventory = entity.stack.getBagInventory() ?: return
         bagInventory.stacks.forEach { itemStack ->
@@ -299,13 +299,13 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
     val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
     val inventoryDelegate = object : Inventory {
-        override fun clear() = bagInventory.clear()
-        override fun size() = bagInventory.size()
+        override fun clearContent() = bagInventory.clearContent()
+        override fun getContainerSize() = bagInventory.size()
         override fun isEmpty() = bagInventory.isEmpty()
-        override fun getStack(slot: Int) = bagInventory.getStack(slot)
+        override fun getItem(slot: Int) = bagInventory.getItem(slot)
         override fun removeItem(slot: Int, amount: Int) = bagInventory.removeItem(slot, amount)
         override fun removeItemNoUpdate(slot: Int) = bagInventory.removeItemNoUpdate(slot)
-        override fun setStack(slot: Int, stack: ItemStack) = bagInventory.setStack(slot, stack)
+        override fun setItem(slot: Int, stack: ItemStack) = bagInventory.setItem(slot, stack)
         override fun getMaxCountPerStack() = bagInventory.maxCountPerStack
         override fun setChanged() {
             bagInventory.setChanged()
@@ -313,7 +313,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
             expectedItemStack = itemStackInstance.copy()
         }
 
-        override fun canPlayerUse(player: PlayerEntity) = bagInventory.canPlayerUse(player)
+        override fun stillValid(player: PlayerEntity) = bagInventory.canPlayerUse(player)
         override fun onOpen(player: PlayerEntity) = bagInventory.onOpen(player)
         override fun onClose(player: PlayerEntity) = bagInventory.onClose(player)
         override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)

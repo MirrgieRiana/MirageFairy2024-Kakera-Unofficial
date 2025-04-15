@@ -165,7 +165,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
 }
 
 fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
-    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
+    val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
         val motif = passiveSkill.motif
@@ -185,7 +185,7 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
 }
 
 fun PassiveSkillResult.update(player: PlayerEntity) {
-    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
+    val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     val oldResult = player.passiveSkillResult
     player.passiveSkillResult = this

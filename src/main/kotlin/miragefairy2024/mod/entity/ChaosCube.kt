@@ -303,13 +303,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
                         )
-                        SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                        SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
                     }
                     val particlePacket = MagicSquareParticlePacket(
                         Vec3d(shootingX, shootingY, shootingZ),
                         Vec3d(target.x, target.getY(0.5), target.z),
                     )
-                    MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
+                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerWorld, entity.pos, 64.0, particlePacket)
 
 
                     repeat(40) {
@@ -337,7 +337,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         if (distance < 0.01) return@repeat // 近すぎるので射撃に失敗
 
                         // 発射体の生成
-                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.world)
+                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.level())
                         projectileEntity.owner = entity
                         projectileEntity.setPos(shootingX, shootingY, shootingZ)
                         projectileEntity.setDeltaMovement(
@@ -347,7 +347,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         )
                         projectileEntity.damage = 20.0F
                         projectileEntity.maxDistance = 32.0F
-                        entity.world.spawnEntity(projectileEntity)
+                        entity.level().spawnEntity(projectileEntity)
 
                         // ターゲットを見る
                         entity.getLookControl().setLookAt(target, 10.0F, 10.0F)
@@ -362,7 +362,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,
                             )
-                            SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                            SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
                         }
 
 
@@ -415,7 +415,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
         override fun canStart(): Boolean {
-            val world = mob.world
+            val world = mob.level()
             if (world.time % 20L != 0L) return false
             if (world !is ServerWorld) return false
             val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO

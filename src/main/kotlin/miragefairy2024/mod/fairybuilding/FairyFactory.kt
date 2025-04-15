@@ -56,7 +56,7 @@ open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlo
         PROCESSING("processing", true, true),
         ;
 
-        override fun asString() = string
+        override fun getSerializedName() = string
     }
 
     init {
@@ -81,9 +81,9 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
     fun setStatus(status: FairyFactoryBlock.Status) {
-        val world = world ?: return
-        if (cachedState[FairyFactoryBlock.STATUS] != status) {
-            world.setBlock(pos, cachedState.setValue(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
+        val world = level ?: return
+        if (blockState[FairyFactoryBlock.STATUS] != status) {
+            world.setBlock(worldPosition, blockState.setValue(FairyFactoryBlock.STATUS, status), Block.UPDATE_ALL)
         }
     }
 
@@ -117,10 +117,10 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
     private fun collectFolia() {
-        val world = world ?: return
+        val world = level ?: return
 
         // 最大200ブロックのハイメヴィスカの原木を探す
-        val logs = blockVisitor(listOf(pos), maxCount = 200, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
+        val logs = blockVisitor(listOf(worldPosition), maxCount = 200, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
             world.getBlockState(toBlockPos).`is`(HAIMEVISKA_LOGS)
         }.map { it.second }.toList()
 
@@ -144,11 +144,11 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
 
-    override val doMovePosition get() = cachedState[FairyFactoryBlock.STATUS].doMovePosition
+    override val doMovePosition get() = blockState[FairyFactoryBlock.STATUS].doMovePosition
 
     override fun renderRotated(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         super.renderRotated(renderingProxy, tickDelta, light, overlay)
-        if (cachedState[FairyFactoryBlock.STATUS].isLit) {
+        if (blockState[FairyFactoryBlock.STATUS].isLit) {
             renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN.identifier, null, 1.0F, 1.0F, 1.0F, (light and 0x0000FF) or 0xF00000, overlay)
         } else {
             renderingProxy.renderCutoutBlock(FairyBuildingModelCard.LANTERN_OFF.identifier, null, 1.0F, 1.0F, 1.0F, light, overlay)

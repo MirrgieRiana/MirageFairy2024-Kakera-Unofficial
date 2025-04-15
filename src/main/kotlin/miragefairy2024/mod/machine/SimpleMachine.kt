@@ -133,13 +133,13 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         shouldUpdateWaiting = true
     }
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
     val craftingInventory = mutableListOf<ItemStack>()
     val waitingInventory = mutableListOf<ItemStack>()
 
-    override fun clear() {
-        super.clear()
+    override fun clearContent() {
+        super.clearContent()
         craftingInventory.clear()
         waitingInventory.clear()
     }
@@ -147,7 +147,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     override fun dropItems() {
         super.dropItems()
         craftingInventory.forEach {
-            ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), it)
+            ItemScatterer.dropItemStack(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), it)
         }
     }
 

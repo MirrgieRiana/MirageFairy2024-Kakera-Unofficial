@@ -103,11 +103,11 @@ class RenderingProxyBlockEntityRenderer<T>(
             override fun rotateZ(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Z.rotation(rad))
 
             override fun renderItemStack(itemStack: ItemStack) {
-                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
+                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
             override fun renderFixedItemStack(itemStack: ItemStack) {
-                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.world, 0)
+                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
             override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {

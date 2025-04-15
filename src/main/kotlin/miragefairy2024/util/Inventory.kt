@@ -12,18 +12,18 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.core.Direction
 import kotlin.experimental.and
 
-operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
-operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, stack)
+operator fun Inventory.get(slot: Int): ItemStack = this.getItem(slot)
+operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
 val Inventory.size get() = this.size()
 val Inventory.indices get() = 0 until this.size
 val Inventory.itemStacks get() = this.indices.map { this[it] }
 
 class FilteringSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
-    override fun canInsert(stack: ItemStack) = inventory.canPlaceItem(index, stack)
+    override fun mayPlace(stack: ItemStack) = inventory.canPlaceItem(index, stack)
 }
 
 class OutputSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
-    override fun canInsert(stack: ItemStack) = false
+    override fun mayPlace(stack: ItemStack) = false
 }
 
 
@@ -148,11 +148,11 @@ class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDeleg
 fun Inventory.toInventoryDelegate() = SimpleInventoryDelegate(this)
 
 class SidedInventoryDelegate(private val inventory: Inventory, private val side: Direction) : InventoryDelegate {
-    override fun getIndices() = if (inventory is SidedInventory) inventory.getAvailableSlots(side).asIterable() else inventory.indices
+    override fun getIndices() = if (inventory is SidedInventory) inventory.getSlotsForFace(side).asIterable() else inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
-    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canExtract(index, itemStack, side) else true
-    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canInsert(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
+    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canTakeItemThroughFace(index, itemStack, side) else true
+    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canPlaceItemThroughFace(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
     override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
     override fun markDirty() = inventory.setChanged()
 }
@@ -185,7 +185,7 @@ val ScreenHandler.inventoryAccessor: InventoryAccessor
         override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].item
         override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].item = itemStack }
         override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxItemCount
-        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].canInsert(itemStack)
+        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].mayPlace(itemStack)
         override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].setChanged()
     }
 
