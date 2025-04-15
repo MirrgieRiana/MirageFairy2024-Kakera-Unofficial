@@ -99,7 +99,7 @@ object WeatheredAncientRemnantsCard {
         val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 BlockIgnoreStructureProcessor(listOf(Blocks.AIR, Blocks.DIRT, Blocks.GRASS_BLOCK)),
-                GravityStructureProcessor(Heightmap.Type.OCEAN_FLOOR_WG, -3),
+                GravityStructureProcessor(Heightmap.Types.OCEAN_FLOOR_WG, -3),
                 RuleStructureProcessor(
                     StructureProcessorRule(
                         RandomBlockMatchRuleTest(Blocks.GRAVEL, 0.2F),
@@ -137,7 +137,7 @@ object WeatheredAncientRemnantsCard {
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
                 size = 1,
-                projectStartToHeightmap = Optional.of(Heightmap.Type.WORLD_SURFACE_WG),
+                projectStartToHeightmap = Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
                 startHeight = ConstantHeightProvider.create(YOffset.fixed(0)),
                 useExpansionHack = false,
             )

@@ -111,7 +111,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
 
         // 位置更新
         prevPos = pos
-        setPosition(nextX, nextY, nextZ)
+        setPos(nextX, nextY, nextZ)
 
         // 向き更新
         if (prevPitch == 0F && prevYaw == 0F) {

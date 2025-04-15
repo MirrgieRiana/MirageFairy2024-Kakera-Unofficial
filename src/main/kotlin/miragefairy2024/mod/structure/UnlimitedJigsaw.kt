@@ -40,7 +40,7 @@ class UnlimitedJigsawStructure(
     private val size: Int,
     private val startHeight: HeightProvider,
     private val useExpansionHack: Boolean,
-    private val projectStartToHeightmap: Optional<Heightmap.Type> = Optional.empty(),
+    private val projectStartToHeightmap: Optional<Heightmap.Types> = Optional.empty(),
     private val maxDistanceFromCenter: Int = 80,
 ) : Structure(config) {
     companion object {
@@ -52,7 +52,7 @@ class UnlimitedJigsawStructure(
                 Codec.intRange(0, 256).fieldOf("size").forGetter { it.size },
                 HeightProvider.CODEC.fieldOf("start_height").forGetter { it.startHeight },
                 Codec.BOOL.fieldOf("use_expansion_hack").forGetter { it.useExpansionHack },
-                Heightmap.Type.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter { it.projectStartToHeightmap },
+                Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter { it.projectStartToHeightmap },
                 Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter { it.maxDistanceFromCenter },
             ).apply(instance, ::UnlimitedJigsawStructure)
         }, UnlimitedJigsawStructure::validate).codec()

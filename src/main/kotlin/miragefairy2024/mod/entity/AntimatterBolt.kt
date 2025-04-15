@@ -131,7 +131,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
 
         // 位置更新
         prevPos = pos
-        setPosition(nextX, nextY, nextZ)
+        setPos(nextX, nextY, nextZ)
 
     }
 
