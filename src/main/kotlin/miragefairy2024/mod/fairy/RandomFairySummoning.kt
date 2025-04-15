@@ -135,7 +135,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     }
 
     private fun craft(player: ServerPlayerEntity, itemStack: ItemStack) {
-        val world = player.world
+        val world = player.level()
 
         // 消費
         if (!player.isCreative) {
@@ -218,7 +218,7 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 }
 
 fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
-    val biome = player.world.getBiome(player.blockPosition())
+    val biome = player.level().getBiome(player.blockPosition())
     return COMMON_MOTIF_RECIPES.filter {
         when (it) {
             is AlwaysCommonMotifRecipe -> true

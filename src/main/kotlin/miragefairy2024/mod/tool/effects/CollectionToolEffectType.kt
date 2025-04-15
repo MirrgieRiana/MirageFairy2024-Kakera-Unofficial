@@ -29,7 +29,7 @@ object CollectionToolEffectType : BooleanToolEffectType() {
         if (!enabled) return
         configuration.descriptions += text { TRANSLATION() }
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
-            if (player.world != world) return@fail
+            if (player.level() != world) return@fail
             world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
                 it.teleport(player.x, player.y, player.z)
                 it.resetPickupDelay()
@@ -39,12 +39,12 @@ object CollectionToolEffectType : BooleanToolEffectType() {
             }
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
-            if (attacker.world != entity.world) return@fail
-            entity.world.getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+            if (attacker.level() != entity.level()) return@fail
+            entity.level().getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleport(attacker.x, attacker.y, attacker.z)
                 it.resetPickupDelay()
             }
-            entity.world.getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+            entity.level().getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleport(attacker.x, attacker.y, attacker.z)
             }
         }

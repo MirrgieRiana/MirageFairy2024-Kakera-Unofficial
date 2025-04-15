@@ -58,7 +58,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
         buf.writeFloat(delay)
     }
 
-    override fun asString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string
+    override fun writeToString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string
 }
 
 object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFairy2024.identifier("magic_square_particle")) {

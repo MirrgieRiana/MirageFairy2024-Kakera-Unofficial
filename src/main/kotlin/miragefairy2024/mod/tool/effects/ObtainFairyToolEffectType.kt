@@ -58,11 +58,11 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
             val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(entity.type)
 
             // 抽選
-            val result = getRandomFairy(entity.world.random, motifSet, appearanceRateBonus) ?: return@fail
+            val result = getRandomFairy(entity.level().random, motifSet, appearanceRateBonus) ?: return@fail
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-            entity.world.spawnEntity(ItemEntity(entity.world, entity.x, entity.y, entity.z, fairyItemStack))
+            entity.level().spawnEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
 
             // 妖精召喚履歴に追加
             attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count

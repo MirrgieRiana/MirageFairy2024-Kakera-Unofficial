@@ -143,7 +143,7 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
 
     if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.UPDATE_ALL)
+        world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
     if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
@@ -174,7 +174,7 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 
     if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.UPDATE_ALL)
+        world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
     if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない

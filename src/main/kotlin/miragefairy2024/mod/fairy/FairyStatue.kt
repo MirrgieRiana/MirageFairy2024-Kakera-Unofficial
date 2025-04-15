@@ -265,7 +265,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         renderingProxy.stack {
             renderingProxy.translate(8.0 / 16.0, 5.5 / 16.0, 8.0 / 16.0)
-            renderingProxy.rotateY(-(cachedState[HorizontalFacingBlock.FACING].get2DDataValue() * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-(blockState[HorizontalFacingBlock.FACING].get2DDataValue() * 90) / 180F * Math.PI.toFloat())
             renderingProxy.renderItemStack(itemStackCache ?: INVALID_ITEM_STACK)
         }
     }

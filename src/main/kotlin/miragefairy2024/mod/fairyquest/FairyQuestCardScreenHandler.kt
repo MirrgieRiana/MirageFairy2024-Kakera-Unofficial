@@ -55,7 +55,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
             else -> Unit
         }
 
-        override fun size() = 1
+        override fun getCount() = 1
     }
 
     init {
@@ -69,7 +69,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         }
         repeat(4) { i ->
             addSlot(object : Slot(inputInventory, i, 0, 0) {
-                override fun canInsert(stack: ItemStack): Boolean {
+                override fun mayPlace(stack: ItemStack): Boolean {
                     val input = recipe.inputs.getOrNull(i) ?: return false
                     return input.first.test(stack)
                 }
@@ -138,7 +138,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         if (progress >= recipe.duration) { // プログレスが満了している場合、完成処理
 
             // 材料の削除
-            processingInventory.clear()
+            processingInventory.clearContent()
 
             // 成果物の生成
             if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleInventory(recipe.outputs.size)

@@ -36,7 +36,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
     }
 
     class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
-        override fun canInsert(stack: ItemStack) = configuration.isValid(stack)
+        override fun mayPlace(stack: ItemStack) = configuration.isValid(stack)
     }
 
     init {
@@ -67,7 +67,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         return slot.configuration.getTooltip()
     }
 
-    override fun stillValid(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
+    override fun stillValid(player: PlayerEntity) = arguments.inventory.stillValid(player)
 
     override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0

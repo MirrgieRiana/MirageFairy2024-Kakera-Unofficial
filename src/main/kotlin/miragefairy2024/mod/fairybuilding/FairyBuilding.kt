@@ -191,7 +191,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Inventory
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
 
     // Move
@@ -204,7 +204,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     open val doMovePosition get() = false
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        val world = world ?: return
+        val world = level ?: return
         val blockState = world.getBlockState(pos)
         if (!blockState.`is`(card.block)) return
         val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
@@ -264,7 +264,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
     var pitch = position.pitch
 
     override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
-        val world = blockEntity.world ?: return
+        val world = blockEntity.level() ?: return
 
         // 定位置の切り替え
         val speed = animation.getSpeed(blockEntity)
@@ -329,7 +329,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
             }
 
             renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-            renderingProxy.renderItemStack(blockEntity.getStack(inventorySlotIndex))
+            renderingProxy.renderItemStack(blockEntity.getItem(inventorySlotIndex))
         }
     }
 }

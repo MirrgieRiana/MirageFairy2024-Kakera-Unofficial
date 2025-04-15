@@ -123,7 +123,7 @@ class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard
 
     private fun getLogisticsPower(): Int {
         val inventorySlotIndex = card.inventorySlotIndexTable[FairyPassiveSupplierCard.FAIRY_SLOT] ?: return 0
-        val fairyItemStack = getStack(inventorySlotIndex)
+        val fairyItemStack = getItem(inventorySlotIndex)
         return getLogisticsPower(fairyItemStack)
     }
 

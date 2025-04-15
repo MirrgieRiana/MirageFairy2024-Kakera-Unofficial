@@ -61,7 +61,7 @@ fun initFairyDream() {
         if (server.ticks % (20 * 5) == 0) {
             server.playerManager.playerList.forEach { player ->
                 if (player.isSpectator) return@forEach
-                val world = player.world
+                val world = player.level()
                 val random = world.random
 
                 val motifs = mutableSetOf<Motif>()
