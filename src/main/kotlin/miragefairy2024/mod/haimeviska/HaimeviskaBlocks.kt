@@ -434,7 +434,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
             if (actualCount <= 0) return
             val itemStack = item.createItemStack(actualCount)
             val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.offsetX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.offsetZ * 0.65, itemStack)
-            itemEntity.setVelocity(0.05 * direction.offsetX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.offsetZ + world.random.nextDouble() * 0.02)
+            itemEntity.setDeltaMovement(0.05 * direction.offsetX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.offsetZ + world.random.nextDouble() * 0.02)
             world.spawnEntity(itemEntity)
         }
 

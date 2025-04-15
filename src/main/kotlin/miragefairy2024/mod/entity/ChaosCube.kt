@@ -81,13 +81,13 @@ object ChaosCubeCard {
     context(ModContext)
     fun init() {
         entityType.register(Registries.ENTITY_TYPE, identifier)
-        val attributes = HostileEntity.createHostileAttributes()
+        val attributes = HostileEntity.createMonsterAttributes()
             .add(EntityAttributes.MAX_HEALTH, 100.0)
-            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4)
-            .add(EntityAttributes.GENERIC_ARMOR, 12.0)
-            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0)
+            .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
+            .add(EntityAttributes.ARMOR, 12.0)
+            .add(EntityAttributes.ATTACK_DAMAGE, 20.0)
             .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
+            .add(EntityAttributes.FOLLOW_RANGE, 48.0)
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
@@ -109,7 +109,7 @@ object ChaosCubeCard {
         }
 
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
-        SpawnRestriction.register(entityType, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark)
+        SpawnRestriction.register(entityType, SpawnRestriction.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -194,15 +194,15 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
 
     init {
-        experiencePoints = 20
+        xpReward = 20
     }
 
-    override fun initGoals() {
-        goalSelector.add(4, ShootGoal(this))
-        goalSelector.add(5, GoToWalkTargetGoal(this, 1.0))
-        goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
-        targetSelector.add(1, RevengeGoal(this, ChaosCubeEntity::class.java).setGroupRevenge())
-        targetSelector.add(2, TargetGoal(this, PlayerEntity::class.java))
+    override fun registerGoals() {
+        goalSelector.addGoal(4, ShootGoal(this))
+        goalSelector.addGoal(5, GoToWalkTargetGoal(this, 1.0))
+        goalSelector.addGoal(7, WanderAroundFarGoal(this, 0.5, 0.0F))
+        targetSelector.addGoal(1, RevengeGoal(this, ChaosCubeEntity::class.java).setAlertOthers())
+        targetSelector.addGoal(2, TargetGoal(this, PlayerEntity::class.java))
     }
 
 
@@ -210,8 +210,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     override fun getHurtSound(source: DamageSource) = SoundEventCard.ENTITY_CHAOS_CUBE_HURT.soundEvent
     override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH.soundEvent
 
-    override fun tickMovement() {
-        super.tickMovement()
+    override fun aiStep() {
+        super.aiStep()
 
         if (!isOnGround && velocity.y < 0.0) velocity = velocity.multiply(1.0, 0.6, 1.0)
 
@@ -254,7 +254,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     private class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
         init {
-            controls = EnumSet.of(Control.MOVE, Control.LOOK)
+            controls = EnumSet.of(Flag.MOVE, Flag.LOOK)
         }
 
         override fun shouldRunEveryTick() = true
@@ -284,14 +284,14 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     // 準備フェーズ
 
                     val target = (entity.target ?: return false)
-                    if (!entity.visibilityCache.canSee(target)) return true
+                    if (!entity.sensing.hasLineOfSight(target)) return true
 
-                    val shootingX = entity.x + entity.random.nextTriangular(0.0, 2.0)
-                    val shootingY = entity.y + entity.random.nextTriangular(2.0, 2.0)
-                    val shootingZ = entity.z + entity.random.nextTriangular(0.0, 2.0)
+                    val shootingX = entity.x + entity.random.triangle(0.0, 2.0)
+                    val shootingY = entity.y + entity.random.triangle(2.0, 2.0)
+                    val shootingZ = entity.z + entity.random.triangle(0.0, 2.0)
 
                     // ターゲットを見る
-                    entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+                    entity.getLookControl().setLookAt(target, 10.0F, 10.0F)
 
                     // エフェクト
                     if (!entity.isSilent) {
@@ -307,7 +307,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     }
                     val particlePacket = MagicSquareParticlePacket(
                         Vec3d(shootingX, shootingY, shootingZ),
-                        Vec3d(target.x, target.getBodyY(0.5), target.z),
+                        Vec3d(target.x, target.getY(0.5), target.z),
                     )
                     MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
 
@@ -328,10 +328,10 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         // 射撃フェーズ
 
                         if (entity.target != target) return false
-                        if (!entity.visibilityCache.canSee(target)) return true
+                        if (!entity.sensing.hasLineOfSight(target)) return true
 
                         val diffX = target.x - shootingX
-                        val diffY = target.getBodyY(0.5) - shootingY
+                        val diffY = target.getY(0.5) - shootingY
                         val diffZ = target.z - shootingZ
                         val distance = sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ)
                         if (distance < 0.01) return@repeat // 近すぎるので射撃に失敗
@@ -339,18 +339,18 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         // 発射体の生成
                         val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.world)
                         projectileEntity.owner = entity
-                        projectileEntity.setPosition(shootingX, shootingY, shootingZ)
-                        projectileEntity.setVelocity(
-                            0.8 * entity.getRandom().nextTriangular(diffX / distance, 0.05),
-                            0.8 * entity.getRandom().nextTriangular(diffY / distance, 0.05),
-                            0.8 * entity.getRandom().nextTriangular(diffZ / distance, 0.05),
+                        projectileEntity.setPos(shootingX, shootingY, shootingZ)
+                        projectileEntity.setDeltaMovement(
+                            0.8 * entity.getRandom().triangle(diffX / distance, 0.05),
+                            0.8 * entity.getRandom().triangle(diffY / distance, 0.05),
+                            0.8 * entity.getRandom().triangle(diffZ / distance, 0.05),
                         )
                         projectileEntity.damage = 20.0F
                         projectileEntity.maxDistance = 32.0F
                         entity.world.spawnEntity(projectileEntity)
 
                         // ターゲットを見る
-                        entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+                        entity.getLookControl().setLookAt(target, 10.0F, 10.0F)
 
                         // エフェクト
                         if (!entity.isSilent) {
@@ -374,7 +374,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                 suspend fun SequenceScope<Unit>.tryMove(): Boolean {
                     while (true) {
                         val target = entity.target ?: return false
-                        if (entity.visibilityCache.canSee(target)) return true
+                        if (entity.sensing.hasLineOfSight(target)) return true
                         entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
                         yield(Unit)
                     }

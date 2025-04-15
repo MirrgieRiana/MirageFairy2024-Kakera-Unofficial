@@ -30,7 +30,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
             )
 
             // 座標決定
-            val actualBlockPos = world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
+            val actualBlockPos = world.getTopPosition(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
 
             // 生成環境判定
             if (!world.getBlockState(actualBlockPos).isReplaceable) return@repeat // 配置先が埋まっている

@@ -110,8 +110,8 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
 
         // 生成
         val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world)
-        entity.setPosition(user.x, user.eyeY - 0.3, user.z)
-        entity.setVelocity(user, user.pitch, user.yaw, 0.0F, speed, 1.0F)
+        entity.setPos(user.x, user.eyeY - 0.3, user.z)
+        entity.setDeltaMovement(user, user.pitch, user.yaw, 0.0F, speed, 1.0F)
         entity.owner = user
         entity.damage = damage
         entity.maxDistance = maxDistance
