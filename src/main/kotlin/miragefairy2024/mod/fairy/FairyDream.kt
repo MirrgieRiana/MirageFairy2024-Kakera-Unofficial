@@ -40,7 +40,7 @@ fun initFairyDream() {
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->
         player.fairyDreamContainer.clear()
-        player.sendMessage(text { "Cleared fairy dream"() }, true)
+        player.displayClientMessage(text { "Cleared fairy dream"() }, true)
     }
     registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
         val fairyItemStack = player.getStackInHand(hand.opposite)
@@ -59,7 +59,7 @@ fun initFairyDream() {
     // 妖精の夢回収判定
     ServerTickEvents.END_SERVER_TICK.register { server ->
         if (server.ticks % (20 * 5) == 0) {
-            server.playerManager.playerList.forEach { player ->
+            server.playerList.players.forEach { player ->
                 if (player.isSpectator) return@forEach
                 val world = player.level()
                 val random = world.random

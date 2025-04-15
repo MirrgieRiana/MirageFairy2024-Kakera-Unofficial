@@ -151,7 +151,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
-                        buf.writeItemStack(it.showingItemStack)
+                        buf.writeItem(it.showingItemStack)
                         buf.writeUtf(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)
@@ -164,11 +164,11 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             // 入力判定
             val inputItemStack = player.getStackInHand(hand)
             if (!inputItemStack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
             if (inputItemStack.count < 1) { // 個数が足りない
-                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
 

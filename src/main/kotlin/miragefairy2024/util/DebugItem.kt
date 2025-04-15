@@ -52,7 +52,7 @@ fun registerServerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 
 
 fun writeAction(player: PlayerEntity, fileName: String, text: String) {
     val file = File("debug").resolve(fileName)
-    player.sendMessage(text { "Saved to "() + file() }, false)
+    player.displayClientMessage(text { "Saved to "() + file() }, false)
     when {
         file.parentFile.isDirectory -> Unit
         file.parentFile.exists() -> throw IOException("Failed to create directory: $file")

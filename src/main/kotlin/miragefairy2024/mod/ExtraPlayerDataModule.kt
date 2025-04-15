@@ -65,7 +65,7 @@ fun initExtraPlayerDataModule() {
 
     // ログイン時およびdirtyにされたとき、プレイヤーデータを同期
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        server.playerManager.playerList.forEach { player ->
+        server.playerList.players.forEach { player ->
             if (player.extraPlayerDataContainer.isDirty) {
                 player.extraPlayerDataContainer.isDirty = false
                 extraPlayerDataCategoryRegistry.forEach { category ->

@@ -86,7 +86,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
-                        buf.writeItemStack(it.showingItemStack)
+                        buf.writeItem(it.showingItemStack)
                         buf.writeUtf(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)

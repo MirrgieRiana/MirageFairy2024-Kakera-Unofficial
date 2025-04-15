@@ -61,7 +61,7 @@ fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcSlotIndex
     val srcCount = srcItemStack.count
     val oldDestCount = destItemStack.count
     val allCount = srcCount + oldDestCount
-    val newDestCount = allCount atMost dest.getMaxCountPerStack(destSlotIndex) atMost srcItemStack.maxCount atLeast oldDestCount
+    val newDestCount = allCount atMost dest.getMaxCountPerStack(destSlotIndex) atMost srcItemStack.maxStackSize atLeast oldDestCount
     val moveCount = newDestCount - oldDestCount
 
     if (moveCount == 0) return MergeResult.FAILED // 宛先にこれ以上入らない
@@ -209,7 +209,7 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
             if (insertItemStack.isEmpty) return@run // 挿入完了
             val slotItemStack = this.getItemStack(i)
             if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
-                val moveCount = insertItemStack.count atMost (slotItemStack.maxCount - slotItemStack.count atLeast 0)
+                val moveCount = insertItemStack.count atMost (slotItemStack.maxStackSize - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount
                     slotItemStack.count += moveCount
