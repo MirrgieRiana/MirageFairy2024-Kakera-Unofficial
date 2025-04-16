@@ -49,7 +49,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override fun init() {
         super.init()
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
         registerShapedRecipeGeneration(item) {
             pattern("ILI")

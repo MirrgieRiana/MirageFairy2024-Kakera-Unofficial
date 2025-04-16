@@ -88,7 +88,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         DamageCallback.EVENT.register { entity, source, amount ->
             var damage = amount
 
-            val attacker = source.attacker
+            val attacker = source.entity
             if (attacker is PlayerEntity) {
                 var attackBonus = 0.0
                 attacker.passiveSkillResult[ElementPassiveSkillEffect].attackMap.forEach { (element, value) ->

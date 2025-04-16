@@ -31,7 +31,7 @@ class FairyAxeConfiguration(
         this.attackDamage = attackDamage
         this.attackSpeed = attackSpeed
         this.tags += ItemTags.AXES
-        this.effectiveBlockTags += BlockTags.AXE_MINEABLE
+        this.effectiveBlockTags += BlockTags.MINEABLE_WITH_AXE
     }
 }
 

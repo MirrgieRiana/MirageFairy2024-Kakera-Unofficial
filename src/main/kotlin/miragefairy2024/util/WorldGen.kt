@@ -62,12 +62,12 @@ class DynamicGenerationScope<T>(val context: Registerable<T>)
 
 context(DynamicGenerationScope<*>)
 operator fun <T> RegistryKey<Registry<T>>.get(key: RegistryKey<T>): RegistryEntry<T> {
-    return this@DynamicGenerationScope.context.getRegistryLookup(this).getOrThrow(key)
+    return this@DynamicGenerationScope.context.lookup(this).getOrThrow(key)
 }
 
 context(DynamicGenerationScope<*>)
 operator fun <T> RegistryKey<Registry<T>>.get(key: TagKey<T>): RegistryEntryList.Named<T> {
-    return this@DynamicGenerationScope.context.getRegistryLookup(this).getOrThrow(key)
+    return this@DynamicGenerationScope.context.lookup(this).getOrThrow(key)
 }
 
 context(ModContext)

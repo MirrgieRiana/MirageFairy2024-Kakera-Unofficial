@@ -17,7 +17,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun getText(value: Value): Text {
         return value.map.map { (statusEffect, entry) ->
-            text { statusEffect.name + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
+            text { statusEffect.displayName + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
         }.join(text { ","() })
     }
 
@@ -36,7 +36,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
         newValue.map.forEach { (statusEffect, entry) ->
-            context.player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
+            context.player.addEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
     }
 }

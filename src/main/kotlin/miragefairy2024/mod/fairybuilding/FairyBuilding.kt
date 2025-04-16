@@ -132,7 +132,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
         block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
         block.registerDefaultLootTableGeneration()

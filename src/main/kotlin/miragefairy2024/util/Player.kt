@@ -8,7 +8,7 @@ import net.minecraft.world.InteractionHand as Hand
 fun Entity.obtain(itemStack: ItemStack) {
     val itemEntity = this.dropStack(itemStack.copy(), 0.5F)
     if (itemEntity != null) {
-        itemEntity.resetPickupDelay()
+        itemEntity.setNoPickUpDelay()
         itemEntity.setOwner(this.uuid)
     }
 }

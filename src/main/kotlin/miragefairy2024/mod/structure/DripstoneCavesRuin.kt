@@ -185,7 +185,7 @@ object DripstoneCavesRuinCard {
                         SpawnGroup.MONSTER to StructureSpawns(
                             StructureSpawns.BoundingBox.PIECE,
                             Pool.of(
-                                SpawnSettings.SpawnEntry(ChaosCubeCard.entityType, 10, 1, 4),
+                                SpawnSettings.SpawnerData(ChaosCubeCard.entityType, 10, 1, 4),
                             )
                         ),
                     ),

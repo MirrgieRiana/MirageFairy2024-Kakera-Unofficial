@@ -58,7 +58,7 @@ fun initFairyDream() {
 
     // 妖精の夢回収判定
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        if (server.ticks % (20 * 5) == 0) {
+        if (server.tickCount % (20 * 5) == 0) {
             server.playerList.players.forEach { player ->
                 if (player.isSpectator) return@forEach
                 val world = player.level()

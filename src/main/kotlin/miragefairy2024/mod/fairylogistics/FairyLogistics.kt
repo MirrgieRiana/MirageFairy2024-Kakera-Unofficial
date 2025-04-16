@@ -128,7 +128,7 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
         builder.add(VERTICAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+    override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState {
         val verticalFacing = when (ctx.side) {
             Direction.UP -> VerticalFacing.DOWN
             Direction.DOWN -> VerticalFacing.UP

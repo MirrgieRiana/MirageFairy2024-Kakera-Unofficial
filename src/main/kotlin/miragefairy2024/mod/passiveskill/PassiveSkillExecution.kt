@@ -41,7 +41,7 @@ fun initPassiveSkillExecution() {
 
     // イベント処理
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        if (server.ticks % 20 == 0) {
+        if (server.tickCount % 20 == 0) {
             server.playerList.players.forEach { player ->
 
                 // 現在装備しているパッシブスキルの列挙
@@ -136,8 +136,8 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     }
 
     // アイテムを検出
-    addItemStack(this.offHandStack, true)
-    this.armorItems.forEach {
+    addItemStack(this.offhandItem, true)
+    this.armorSlots.forEach {
         addItemStack(it, true)
     }
     repeat(SoulStream.SLOT_COUNT) { index ->
