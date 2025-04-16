@@ -13,6 +13,6 @@ fun Entity.obtain(itemStack: ItemStack) {
     }
 }
 
-val Entity.eyeBlockPos get() = this.eyePos.toBlockPos()
+val Entity.eyeBlockPos get() = this.eyePosition.toBlockPos()
 
 val Hand.opposite get() = if (this == Hand.MAIN_HAND) Hand.OFF_HAND else Hand.MAIN_HAND

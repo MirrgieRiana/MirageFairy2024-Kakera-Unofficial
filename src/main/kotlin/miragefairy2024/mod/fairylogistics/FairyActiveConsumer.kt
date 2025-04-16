@@ -170,10 +170,10 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         val reachingSuppliers = neighbourChunksSuppliers.filter { getSquaredDistance(pos, it.pos) <= 16 * 16 }
 
         // 視線判定
-        val posD = pos.toCenterPos()
+        val posD = pos.center
         val entity = ArrowEntity(world, posD.x, posD.y, posD.z)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
-            val supplierPosD = supplier.pos.toCenterPos()
+            val supplierPosD = supplier.pos.center
             val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity))
             hitResult.type == HitResult.Type.MISS
         }
