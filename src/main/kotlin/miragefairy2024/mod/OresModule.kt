@@ -101,13 +101,13 @@ enum class OreCard(
             BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE_GRAY)
                 .instrument(Instrument.BASEDRUM)
-                .requiresCorrectToolForDrops()
+                .requiresTool()
                 .strength(3.0F, 3.0F)
 
             BaseStoneType.DEEPSLATE -> FabricBlockSettings.create()
                 .mapColor(MapColor.DEEPSLATE_GRAY)
                 .instrument(Instrument.BASEDRUM)
-                .requiresCorrectToolForDrops()
+                .requiresTool()
                 .strength(4.5F, 3.0F)
                 .sound(BlockSoundGroup.DEEPSLATE)
         }

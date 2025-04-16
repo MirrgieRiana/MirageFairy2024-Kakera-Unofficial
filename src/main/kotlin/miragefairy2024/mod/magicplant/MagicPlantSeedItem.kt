@@ -116,7 +116,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
     }
 
     override fun place(context: ItemPlacementContext): ActionResult {
-        if (context.stack.getTraitStacks() != null) {
+        if (context.itemInHand.getTraitStacks() != null) {
             return super.place(context)
         } else {
             val player = context.player ?: return ActionResult.FAIL

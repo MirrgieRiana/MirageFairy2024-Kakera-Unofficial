@@ -93,10 +93,10 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
     }
 
     override fun useOn(context: ItemUsageContext): ActionResult {
-        val blockEntity = context.level.getMagicPlantBlockEntity(context.blockPos) ?: return ActionResult.PASS
+        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return ActionResult.PASS
         if (context.level.isClientSide) return ActionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
-        val b = context.stack.getTraitStacks() ?: TraitStacks.EMPTY
+        val b = context.itemInHand.getTraitStacks() ?: TraitStacks.EMPTY
         if (context.player?.isShiftKeyDown != true) {
             blockEntity.setTraitStacks(a + b)
         } else {
