@@ -138,7 +138,7 @@ object WeatheredAncientRemnantsCard {
                 startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
                 size = 1,
                 projectStartToHeightmap = Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
-                startHeight = ConstantHeightProvider.create(YOffset.fixed(0)),
+                startHeight = ConstantHeightProvider.create(YOffset.absolute(0)),
                 useExpansionHack = false,
             )
         }

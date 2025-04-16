@@ -194,7 +194,7 @@ object DripstoneCavesRuinCard {
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[mainTemplatePoolKey],
                 size = 12,
-                startHeight = UniformHeightProvider.create(YOffset.fixed(-40), YOffset.fixed(20)),
+                startHeight = UniformHeightProvider.create(YOffset.absolute(-40), YOffset.absolute(20)),
                 useExpansionHack = false,
             )
         }
