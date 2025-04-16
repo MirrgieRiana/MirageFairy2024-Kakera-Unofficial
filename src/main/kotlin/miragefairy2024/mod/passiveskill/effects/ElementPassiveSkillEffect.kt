@@ -113,7 +113,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         }
 
         DamageTypes.CACTUS.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.SWEET_BERRY_BUSH.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.STING.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.SWEET_BERRY_BUSH.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.STING.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
     }
 }

@@ -37,7 +37,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sound(BlockSoundGroup.METAL)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.ICE).sounds(BlockSoundGroup.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)
@@ -160,21 +160,21 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         if (availableDestIndices.isEmpty()) return
 
         // 対象範囲の配送所を列挙する
-        val centerChunkX = ChunkSectionPos.getSectionCoord(pos.x)
-        val centerChunkZ = ChunkSectionPos.getSectionCoord(pos.z)
+        val centerChunkX = ChunkSectionPos.blockToSectionCoord(pos.x)
+        val centerChunkZ = ChunkSectionPos.blockToSectionCoord(pos.z)
         val neighbourChunksSuppliers = (centerChunkX - 1..centerChunkX + 1).flatMap { chunkX ->
             (centerChunkZ - 1..centerChunkZ + 1).flatMap { chunkZ ->
                 world.getChunk(chunkX, chunkZ).blockEntities.values.mapNotNull { it as? FairyPassiveSupplierBlockEntity } // TODO interface
             }
         }
-        val reachingSuppliers = neighbourChunksSuppliers.filter { getSquaredDistance(pos, it.pos) <= 16 * 16 }
+        val reachingSuppliers = neighbourChunksSuppliers.filter { getSquaredDistance(pos, it.blockPos) <= 16 * 16 }
 
         // 視線判定
         val posD = pos.center
         val entity = ArrowEntity(world, posD.x, posD.y, posD.z)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
-            val supplierPosD = supplier.pos.center
-            val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity))
+            val supplierPosD = supplier.blockPos.center
+            val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.Block.COLLIDER, RaycastContext.Fluid.NONE, entity))
             hitResult.type == HitResult.Type.MISS
         }
 
@@ -202,7 +202,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                         if (availableDestIndices.isEmpty()) return@finishSrcIndices
                     }
                 }
-                if (srcChanged) src.setChanged()
+                if (srcChanged) src.markDirty()
 
                 if (availableDestIndices.isEmpty()) return@finishSuppliers
             }

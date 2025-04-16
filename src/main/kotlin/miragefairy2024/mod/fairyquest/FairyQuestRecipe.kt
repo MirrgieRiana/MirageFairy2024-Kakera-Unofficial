@@ -236,22 +236,22 @@ fun initFairyQuestRecipe() {
         // 村チェストドロップ
         run {
             val allVillageChests = listOf(
-                LootTables.VILLAGE_WEAPONSMITH_CHEST,
-                LootTables.VILLAGE_TOOLSMITH_CHEST,
-                LootTables.VILLAGE_ARMORER_CHEST,
-                LootTables.VILLAGE_CARTOGRAPHER_CHEST,
-                LootTables.VILLAGE_MASON_CHEST,
-                LootTables.VILLAGE_SHEPARD_CHEST,
-                LootTables.VILLAGE_BUTCHER_CHEST,
-                LootTables.VILLAGE_FLETCHER_CHEST,
-                LootTables.VILLAGE_FISHER_CHEST,
-                LootTables.VILLAGE_TANNERY_CHEST,
-                LootTables.VILLAGE_TEMPLE_CHEST,
+                LootTables.VILLAGE_WEAPONSMITH,
+                LootTables.VILLAGE_TOOLSMITH,
+                LootTables.VILLAGE_ARMORER,
+                LootTables.VILLAGE_CARTOGRAPHER,
+                LootTables.VILLAGE_MASON,
+                LootTables.VILLAGE_SHEPHERD,
+                LootTables.VILLAGE_BUTCHER,
+                LootTables.VILLAGE_FLETCHER,
+                LootTables.VILLAGE_FISHER,
+                LootTables.VILLAGE_TANNERY,
+                LootTables.VILLAGE_TEMPLE,
                 LootTables.VILLAGE_DESERT_HOUSE,
-                LootTables.VILLAGE_PLAINS_CHEST,
-                LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
-                LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
-                LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+                LootTables.VILLAGE_PLAINS_HOUSE,
+                LootTables.VILLAGE_TAIGA_HOUSE,
+                LootTables.VILLAGE_SNOWY_HOUSE,
+                LootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
             fun registerChestLoot(lootTableId: Identifier, weight: Int) {
@@ -317,12 +317,12 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
 class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
     companion object {
         val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
-            override fun toJson(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
-                super.toJson(jsonObject, conditionalLootFunction, jsonSerializationContext)
+            override fun serialize(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
+                super.serialize(jsonObject, conditionalLootFunction, jsonSerializationContext)
                 jsonObject.add("id", conditionalLootFunction.recipeId.string.jsonElement)
             }
 
-            override fun fromJson(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
+            override fun deserialize(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
                 val id = json.toJsonWrapper()["id"].asString().toIdentifier()
                 return SetFairyQuestRecipeLootFunction(id, conditions.toList())
             }
@@ -331,7 +331,7 @@ class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditio
 
     override fun getType() = SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE
 
-    override fun process(stack: ItemStack, context: LootContext): ItemStack {
+    override fun run(stack: ItemStack, context: LootContext): ItemStack {
         stack.setFairyQuestRecipeId(recipeId)
         return stack
     }

@@ -9,8 +9,8 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.tags.TagKey
 
 fun Item.toIngredient(): Ingredient = Ingredient.of(this)
-fun ItemStack.toIngredient(): Ingredient = Ingredient.ofStacks(this)
-fun TagKey<Item>.toIngredient(): Ingredient = Ingredient.fromTag(this)
+fun ItemStack.toIngredient(): Ingredient = Ingredient.of(this)
+fun TagKey<Item>.toIngredient(): Ingredient = Ingredient.of(this)
 
 context(ModContext)
 fun CustomIngredientSerializer<*>.register() {

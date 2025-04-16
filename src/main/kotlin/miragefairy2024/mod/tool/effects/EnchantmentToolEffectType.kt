@@ -38,9 +38,9 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
             var itemStack2 = itemStack
             if ((value.map[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
                 itemStack2 = itemStack2.copy()
-                val enchantments = EnchantmentHelper.get(itemStack2)
+                val enchantments = EnchantmentHelper.getEnchantments(itemStack2)
                 enchantments[Enchantments.SILK_TOUCH] = (enchantments[Enchantments.SILK_TOUCH] ?: 0) atLeast 1
-                EnchantmentHelper.set(enchantments, itemStack2)
+                EnchantmentHelper.setEnchantments(enchantments, itemStack2)
             }
             itemStack2
         }

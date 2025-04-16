@@ -103,7 +103,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
         if (!user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
-            val blockHitResult = getPlayerPOVHitResult(world, user, RaycastContext.FluidHandling.NONE)
+            val blockHitResult = getPlayerPOVHitResult(world, user, RaycastContext.Fluid.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false
             // TODO 貫通判定
@@ -164,7 +164,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
         return if (enchantment == Enchantments.BLOCK_FORTUNE) {
-            val enchantments = EnchantmentHelper.get(itemStack)
+            val enchantments = EnchantmentHelper.getEnchantments(itemStack)
             oldLevel max (enchantments[EnchantmentCard.FERTILITY.enchantment] ?: 0)
         } else {
             oldLevel

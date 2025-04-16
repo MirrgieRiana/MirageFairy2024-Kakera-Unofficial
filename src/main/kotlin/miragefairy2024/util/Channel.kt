@@ -21,7 +21,7 @@ fun <P> Channel<P>.sendToClient(player: ServerPlayerEntity, packet: P) {
 
 fun <P> Channel<P>.sendToAround(world: ServerWorld, pos: Vec3d, distance: Double, packet: P) {
     world.players().forEach { player ->
-        if (player.level().dimensionTypeId() == world.dimensionTypeId()) {
+        if (player.level().dimension() == world.dimension()) {
             if (pos.distanceToSqr(player.position()) <= distance * distance) {
                 this.sendToClient(player, packet)
             }

@@ -111,7 +111,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         // 生成
         val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world)
         entity.setPos(user.x, user.eyeY - 0.3, user.z)
-        entity.setDeltaMovement(user, user.xRot, user.yRot, 0.0F, speed, 1.0F)
+        entity.shootFromRotation(user, user.xRot, user.yRot, 0.0F, speed, 1.0F)
         entity.owner = user
         entity.damage = damage
         entity.maxDistance = maxDistance
@@ -123,7 +123,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         }
         if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
 
-        user.itemCooldownManager.set(this, world.random.randomInt(10.0 / frequency))
+        user.cooldowns.addCooldown(this, world.random.randomInt(10.0 / frequency))
 
         // 統計
         user.awardStat(Stats.ITEM_USED.get(this))

@@ -34,7 +34,7 @@ object UnlimitedJigsawCard {
 }
 
 class UnlimitedJigsawStructure(
-    config: Config,
+    config: StructureSettings,
     private val startPool: RegistryEntry<StructurePool>,
     private val startJigsawName: Optional<Identifier> = Optional.empty(),
     private val size: Int,
@@ -46,8 +46,8 @@ class UnlimitedJigsawStructure(
     companion object {
         val CODEC: Codec<UnlimitedJigsawStructure> = Codecs.validate(RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                configCodecBuilder(instance),
-                StructurePool.REGISTRY_CODEC.fieldOf("start_pool").forGetter { it.startPool },
+                settingsCodec(instance),
+                StructurePool.CODEC.fieldOf("start_pool").forGetter { it.startPool },
                 Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter { it.startJigsawName },
                 Codec.intRange(0, 256).fieldOf("size").forGetter { it.size },
                 HeightProvider.CODEC.fieldOf("start_height").forGetter { it.startHeight },
@@ -58,7 +58,7 @@ class UnlimitedJigsawStructure(
         }, UnlimitedJigsawStructure::validate).codec()
 
         private fun validate(structure: UnlimitedJigsawStructure): DataResult<UnlimitedJigsawStructure> {
-            val var10000 = when (structure.terrainAdaptation) {
+            val var10000 = when (structure.terrainAdaptation()) {
                 StructureTerrainAdaptation.NONE -> 0
                 StructureTerrainAdaptation.BURY, StructureTerrainAdaptation.BEARD_THIN, StructureTerrainAdaptation.BEARD_BOX -> 12
                 else -> throw IncompatibleClassChangeError()
@@ -71,12 +71,12 @@ class UnlimitedJigsawStructure(
         }
     }
 
-    override fun getStructurePosition(context: Context): Optional<StructurePosition> {
+    override fun findGenerationPoint(context: GenerationContext): Optional<GenerationStub> {
         val chunkPos = context.chunkPos()
-        val i = startHeight.get(context.random(), HeightContext(context.chunkGenerator(), context.world()))
-        val blockPos = BlockPos(chunkPos.startX, i, chunkPos.startZ)
-        return StructurePoolBasedGenerator.generate(context, startPool, startJigsawName, size, blockPos, useExpansionHack, projectStartToHeightmap, maxDistanceFromCenter)
+        val i = startHeight.sample(context.random(), HeightContext(context.chunkGenerator(), context.heightAccessor()))
+        val blockPos = BlockPos(chunkPos.minBlockX, i, chunkPos.minBlockZ)
+        return StructurePoolBasedGenerator.addPieces(context, startPool, startJigsawName, size, blockPos, useExpansionHack, projectStartToHeightmap, maxDistanceFromCenter)
     }
 
-    override fun getType(): StructureType<*> = UnlimitedJigsawCard.structureType
+    override fun type(): StructureType<*> = UnlimitedJigsawCard.structureType
 }
