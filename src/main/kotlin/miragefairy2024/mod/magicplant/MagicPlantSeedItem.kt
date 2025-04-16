@@ -125,7 +125,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
         }
     }
 
-    override fun hasGlint(stack: ItemStack) = stack.isRare() || super.hasGlint(stack)
+    override fun isFoil(stack: ItemStack) = stack.isRare() || super.isFoil(stack)
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (user.isShiftKeyDown) {

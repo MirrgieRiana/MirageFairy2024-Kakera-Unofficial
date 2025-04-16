@@ -7,7 +7,6 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
-import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Tier as ToolMaterial
@@ -15,44 +14,45 @@ import net.minecraft.world.item.Tiers as ToolMaterials
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Tiers
 
 enum class FairyToolMaterials(
-    private val miningLevel: Int,
+    private val miningLevel: Tiers,
     private val durability: Int,
     private val miningSpeedMultiplier: Float,
     private val attackDamage: Float,
     private val enchantability: Int,
     private val repairIngredient: Ingredient,
 ) : ToolMaterial {
-    COPPER(MiningLevels.IRON, 196, 5.0F, 1.0F, 18, Items.COPPER_INGOT.toIngredient()),
-    AMETHYST(MiningLevels.IRON, 218, 5.5F, 2.0F, 23, Items.AMETHYST_SHARD.toIngredient()),
-    EMERALD(MiningLevels.DIAMOND, 1192, 7.0F, 2.5F, 16, Items.EMERALD.toIngredient()),
-    ECHO_SHARD(MiningLevels.NETHERITE, 1366, 12.0F, 4.0F, 12, Items.ECHO_SHARD.toIngredient()),
-    NETHER_STAR(MiningLevels.NETHERITE, 5048, 11.0F, 5.0F, 25, Items.NETHER_STAR.toIngredient()),
+    COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 18, Items.COPPER_INGOT.toIngredient()),
+    AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 23, Items.AMETHYST_SHARD.toIngredient()),
+    EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 16, Items.EMERALD.toIngredient()),
+    ECHO_SHARD(Tiers.NETHERITE, 1366, 12.0F, 4.0F, 12, Items.ECHO_SHARD.toIngredient()),
+    NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 25, Items.NETHER_STAR.toIngredient()),
 
-    MAGNETITE(MiningLevels.STONE, 220, 5.0F, 1.5F, 3, MaterialCard.MAGNETITE.item.toIngredient()),
-    BISMUTH(MiningLevels.IRON, 16, 4.0F, 1.0F, 19, MaterialCard.BISMUTH_INGOT.item.toIngredient()),
-    FLUORITE(MiningLevels.STONE, 96, 3.0F, 1.0F, 20, MaterialCard.FLUORITE.item.toIngredient()),
+    MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 3, MaterialCard.MAGNETITE.item.toIngredient()),
+    BISMUTH(Tiers.IRON, 16, 4.0F, 1.0F, 19, MaterialCard.BISMUTH_INGOT.item.toIngredient()),
+    FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 20, MaterialCard.FLUORITE.item.toIngredient()),
 
-    MIRAGE(MiningLevels.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
-    MIRAGIUM(MiningLevels.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
-    LILAGIUM(MiningLevels.IRON, 122, 0.5F, 0.5F, 19, MaterialCard.LILAGIUM_INGOT.item.toIngredient()),
-    MIRAGIDIAN(MiningLevels.NETHERITE, 7826, 7.0F, 2.5F, 2, MaterialCard.MIRAGIDIAN.item.toIngredient()),
-    FAIRY_CRYSTAL(MiningLevels.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
-    PHANTOM_DROP(MiningLevels.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
-    LUMINITE(MiningLevels.DIAMOND, 1361, 9.0F, 4.0F, 21, MaterialCard.LUMINITE.item.toIngredient()),
-    RESONITE(MiningLevels.NETHERITE, 2705, 4.0F, 9.0F, 19, MaterialCard.RESONITE_INGOT.item.toIngredient()),
-    XARPITE(MiningLevels.IRON, 283, 1.0F, 2.0F, 20, MaterialCard.XARPITE.item.toIngredient()),
-    MIRANAGITE(MiningLevels.IRON, 256, 6.5F, 2.0F, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
-    CHAOS_STONE(MiningLevels.NETHERITE, 666, 2.0F, 2.0F, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
-    HAIMEVISKA_ROSIN(MiningLevels.WOOD, 73, 0.5F, 0.0F, 11, MaterialCard.HAIMEVISKA_ROSIN.item.toIngredient())
+    MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 17, MaterialCard.MIRAGE_STEM.item.toIngredient()),
+    MIRAGIUM(Tiers.IRON, 87, 0.5F, 0.5F, 26, MaterialCard.MIRAGIUM_INGOT.item.toIngredient()),
+    LILAGIUM(Tiers.IRON, 122, 0.5F, 0.5F, 19, MaterialCard.LILAGIUM_INGOT.item.toIngredient()),
+    MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 2, MaterialCard.MIRAGIDIAN.item.toIngredient()),
+    FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 7, MaterialCard.FAIRY_CRYSTAL.item.toIngredient()),
+    PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 12, MaterialCard.PHANTOM_DROP.item.toIngredient()),
+    LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 21, MaterialCard.LUMINITE.item.toIngredient()),
+    RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 19, MaterialCard.RESONITE_INGOT.item.toIngredient()),
+    XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 20, MaterialCard.XARPITE.item.toIngredient()),
+    MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 24, MaterialCard.MIRANAGITE.item.toIngredient()),
+    CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 15, MaterialCard.CHAOS_STONE.item.toIngredient()),
+    HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 11, MaterialCard.HAIMEVISKA_ROSIN.item.toIngredient())
     ;
 
-    override fun getDurability() = durability
+    override fun getUses() = durability
     override fun getSpeed() = miningSpeedMultiplier
-    override fun getAttackDamage() = attackDamage
-    override fun getMiningLevel() = miningLevel
-    override fun getEnchantability() = enchantability
+    override fun getAttackDamageBonus() = attackDamage
+    override fun getLevel() = miningLevel.level
+    override fun getEnchantmentValue() = enchantability
     override fun getRepairIngredient() = repairIngredient
 }
 

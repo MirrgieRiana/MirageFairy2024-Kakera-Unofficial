@@ -43,16 +43,16 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 
     override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
-    override fun isSuitableFor(state: BlockState) = isSuitableForImpl(state)
+    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
 
-    override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        super.postMine(stack, world, state, pos, miner)
+    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+        super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
     }
 
-    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        super.postHit(stack, target, attacker)
+    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
+        super.hurtEnemy(stack, target, attacker)
         postHitImpl(stack, target, attacker)
         return true
     }
@@ -66,15 +66,15 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
-    override fun hasGlint(stack: ItemStack) = super.hasGlint(stack) || hasGlintImpl(stack)
+    override fun isFoil(stack: ItemStack) = super.isFoil(stack) || hasGlintImpl(stack)
 
 }
 
 open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, attackDamage, attackSpeed, settings) {
     override fun useOnBlock(context: ItemUsageContext?) = ActionResult.PASS
-    override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
+    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.hurtAndBreak(1, attacker) { e ->
-            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
         }
         return true
     }

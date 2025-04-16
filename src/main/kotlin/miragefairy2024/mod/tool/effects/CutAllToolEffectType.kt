@@ -39,7 +39,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
             // 発動
@@ -51,7 +51,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -63,7 +63,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                         val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
                             stack.hurtAndBreak(damage, miner) {
-                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
                             }
                         }
                     }
@@ -74,7 +74,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -87,7 +87,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                             val damage = world.random.randomInt(configuration.miningDamage)
                             if (damage > 0) {
                                 stack.hurtAndBreak(damage, miner) {
-                                    it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                    it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
                                 }
                             }
                         }

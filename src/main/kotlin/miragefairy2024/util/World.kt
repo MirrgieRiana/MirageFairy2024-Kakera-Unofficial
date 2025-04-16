@@ -154,7 +154,7 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
     if (player.isCreative) return true // クリエイティブの場合、ドロップを省略
     val newItemStack = itemStack.copy()
     val canHarvest = player.canHarvest(blockState)
-    itemStack.postMine(world, blockState, blockPos, player)
+    itemStack.mineBlock(world, blockState, blockPos, player)
     if (success && canHarvest) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
 }
@@ -165,7 +165,7 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
  * [breakBlock]とは以下の点で異なります。
  * - 近接武器の採掘不能特性を無視します。
  * - 専用のツールが必要なブロックを、ツールの種類にかかわらず回収可能です。
- * - [Item.postMine]を起動せず、アイテムの耐久値の減少などが発生しません。
+ * - [Item.mineBlock]を起動せず、アイテムの耐久値の減少などが発生しません。
  */
 fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
@@ -203,7 +203,7 @@ fun collectItem(
         reach != Int.MAX_VALUE -> Box(originalBlockPos).expand(reach.toDouble())
         else -> Box.from(BlockBox.infinite())
     }
-    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, box) {
+    val targetTable = world.getEntitiesOfClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
     }.groupBy { it.blockPosition() }
 

@@ -22,7 +22,7 @@ infix fun ItemStack.hasSameItemAndNbtAndCount(other: ItemStack) = this hasSameIt
 fun ItemStack.repair(amount: Int) {
     if (amount <= 0) return
     if (!this.isDamageable) return
-    val actualAmount = amount atMost this.damage
+    val actualAmount = amount atMost this.damageValue
     if (actualAmount <= 0) return
-    this.damage -= actualAmount
+    this.damageValue -= actualAmount
 }
