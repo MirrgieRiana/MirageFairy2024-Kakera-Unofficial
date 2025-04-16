@@ -21,7 +21,7 @@ val World.isServer get() = !this.isClientSide
 
 fun BlockView.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
-    if (blockState.`is`(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.get(FarmlandBlock.MOISTURE) / 7.0)
+    if (blockState.`is`(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.getValue(FarmlandBlock.MOISTURE) / 7.0)
     if (blockState.`is`(BlockTags.DIRT)) return 0.5
     if (blockState.`is`(BlockTags.SAND)) return 0.25
     return 0.0

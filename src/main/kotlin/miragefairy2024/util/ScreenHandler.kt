@@ -11,7 +11,7 @@ fun ScreenHandler.quickMove(slotIndex: Int, destinationIndices: Iterable<Int>): 
     val originalItemStack = newItemStack.copy()
 
     if (!inventoryAccessor.insertItem(newItemStack, destinationIndices)) return EMPTY_ITEM_STACK
-    slots[slotIndex].onQuickTransfer(newItemStack, originalItemStack)
+    slots[slotIndex].onQuickCraft(newItemStack, originalItemStack)
 
     // 終了処理
     if (newItemStack.isEmpty) {

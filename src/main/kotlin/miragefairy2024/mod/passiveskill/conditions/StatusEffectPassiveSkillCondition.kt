@@ -7,5 +7,5 @@ import net.minecraft.network.chat.Component as Text
 
 class StatusEffectPassiveSkillCondition(private val statusEffect: StatusEffect) : PassiveSkillCondition {
     override val text: Text get() = statusEffect.displayName
-    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.hasStatusEffect(statusEffect)
+    override fun test(context: PassiveSkillContext, level: Double, mana: Double) = context.player.hasEffect(statusEffect)
 }

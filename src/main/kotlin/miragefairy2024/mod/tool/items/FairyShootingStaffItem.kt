@@ -119,7 +119,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
 
         // 消費
         itemStack.hurtAndBreak(1, user) {
-            it.sendToolBreakStatus(hand)
+            it.broadcastBreakEvent(hand)
         }
         if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
 

@@ -31,8 +31,8 @@ enum class TraitConditionCard(
     jaName: String,
     function: (world: World, blockPos: BlockPos) -> Double,
 ) {
-    FLOOR_MOISTURE("floor_moisture", Emoji.FLOOR_MOISTURE, "Floor Moisture", "湿った地面", { world, blockPos -> world.getMoisture(blockPos.down()) }),
-    FLOOR_CRYSTAL_ERG("floor_crystal_erg", Emoji.FLOOR_CRYSTAL_ERG, "Floor Crystal Erg", "鉱物質の地面", { world, blockPos -> world.getCrystalErg(blockPos.down()) }),
+    FLOOR_MOISTURE("floor_moisture", Emoji.FLOOR_MOISTURE, "Floor Moisture", "湿った地面", { world, blockPos -> world.getMoisture(blockPos.below()) }),
+    FLOOR_CRYSTAL_ERG("floor_crystal_erg", Emoji.FLOOR_CRYSTAL_ERG, "Floor Crystal Erg", "鉱物質の地面", { world, blockPos -> world.getCrystalErg(blockPos.below()) }),
     FLOOR_HARDNESS("floor_hardness", Emoji.FLOOR_HARDNESS, "Floor Hardness", "硬い地面", { world, blockPos -> getFloorHardness(world, blockPos) }),
     LIGHT("light", Emoji.LIGHT, "Light", "光", { world, blockPos -> (world.getMaxLocalRawBrightness(blockPos) - 8 atLeast 0) / 7.0 }),
     DARKNESS("darkness", Emoji.DARKNESS, "Darkness", "闇", { world, blockPos -> ((15 - world.getMaxLocalRawBrightness(blockPos)) - 8 atLeast 0) / 7.0 }),
@@ -58,9 +58,9 @@ enum class TraitConditionCard(
 }
 
 private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
-    val blockState = world.getBlockState(blockPos.down())
+    val blockState = world.getBlockState(blockPos.below())
     if (!blockState.`is`(BlockTags.MINEABLE_WITH_PICKAXE)) return 0.0
-    val hardness = blockState.getDestroySpeed(world, blockPos.down())
+    val hardness = blockState.getDestroySpeed(world, blockPos.below())
     if (hardness < 0) return 0.0
     return hardness / 2.0 atMost 2.0
 }

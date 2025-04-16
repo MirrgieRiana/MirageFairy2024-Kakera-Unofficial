@@ -163,7 +163,7 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
                 else -> null
             }
 
-            FairyLogisticsBlock.VerticalFacing.DOWN -> f(worldPosition.down(), Direction.UP)
+            FairyLogisticsBlock.VerticalFacing.DOWN -> f(worldPosition.below(), Direction.UP)
             else -> null
         }
     }
