@@ -21,7 +21,7 @@ import net.minecraft.core.Direction
 
 object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler, FermentationBarrelRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
     override fun createBlock() = FermentationBarrelBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FermentationBarrelBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FermentationBarrelScreenHandler(this, arguments)
