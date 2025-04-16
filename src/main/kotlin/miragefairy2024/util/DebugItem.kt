@@ -25,7 +25,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
         override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
             action(world, user, hand, user.getItemInHand(hand))
-            return TypedActionResult.success(user.getItemInHand(hand), world.isClientSide)
+            return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
         }
     }
     item.register(Registries.ITEM, MirageFairy2024.identifier(path))

@@ -34,7 +34,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
 
             // 生成環境判定
             if (!world.getBlockState(actualBlockPos).canBeReplaced()) return@repeat // 配置先が埋まっている
-            if (!world.getBlockState(actualBlockPos.down()).isOpaqueFullCube(world, actualBlockPos.down())) return@repeat // 配置先が地面でない
+            if (!world.getBlockState(actualBlockPos.below()).isOpaqueFullCube(world, actualBlockPos.below())) return@repeat // 配置先が地面でない
 
             // アイテム判定
             val itemStack = createItemStack(context) ?: return@repeat // アイテムを決定できなかった

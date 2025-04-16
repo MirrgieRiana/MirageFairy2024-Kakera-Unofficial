@@ -139,12 +139,12 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     val item = BlockItem(block, Item.Properties())
 }
 
-private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
-private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).burnable()
-private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
-private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().randomTicks().breakInstantly().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
+private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
+private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).ignitedByLava()
+private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
+private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
+private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
+private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -179,7 +179,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     DataGenerationEvents.onGenerateBlockStateModel {
-        it.registerLog(card.block).log(card.block)
+        it.woodProvider(card.block).log(card.block)
     }
 
     // 性質
@@ -199,7 +199,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     // レンダリング
     card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
     card.block.registerModelGeneration {
-        Models.ORIENTABLE.with(
+        Models.CUBE_ORIENTABLE.with(
             TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier() * "_top",
             TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier(),
             TextureKey.FRONT to "block/" * it.getIdentifier(),
@@ -281,16 +281,16 @@ fun initHaimeviskaBlocks() {
 
     // ドロップ
     HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration {
-        it.leavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.SAPLING_DROP_CHANCE)
+        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.NORMAL_LEAVES_SAPLING_CHANCES)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
-                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
@@ -299,20 +299,20 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
-                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
             }) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
                 `when`(RandomChanceLootCondition.randomChance(0.01F))
             },
         ) {
@@ -322,15 +322,15 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
-                `when`(BlockLootTableGenerator.WITH_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
             }) {
-                `when`(BlockLootTableGenerator.WITHOUT_SILK_TOUCH)
+                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
@@ -353,7 +353,7 @@ fun initHaimeviskaBlocks() {
 
 class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     companion object {
-        val CHARGED: BooleanProperty = BooleanProperty.of("charged")
+        val CHARGED: BooleanProperty = BooleanProperty.create("charged")
     }
 
     init {
@@ -377,12 +377,12 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         }
     }
 
-    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
-        super.randomDisplayTick(state, world, pos, random)
+    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+        super.animateTick(state, world, pos, random)
         if (random.nextInt(20) == 0) {
-            val blockPos = pos.down()
-            if (!isFaceFullSquare(world.getBlockState(blockPos).getCollisionShape(world, blockPos), Direction.UP)) {
-                ParticleUtil.spawnParticle(world, pos, random, ParticleTypeCard.HAIMEVISKA_BLOSSOM.particleType)
+            val blockPos = pos.below()
+            if (!isFaceFull(world.getBlockState(blockPos).getCollisionShape(world, blockPos), Direction.UP)) {
+                ParticleUtil.spawnParticleBelow(world, pos, random, ParticleTypeCard.HAIMEVISKA_BLOSSOM.particleType)
             }
         }
     }
@@ -391,19 +391,19 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
+        if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getItemInHand(hand)
         if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClientSide) return ActionResult.SUCCESS
-        val direction = if (hit.direction.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.direction
+        val direction = if (hit.direction.axis === Direction.Axis.Y) player.direction.opposite else hit.direction
 
         // 加工
-        toolItemStack.hurtAndBreak(1, player) { it.sendToolBreakStatus(hand) }
+        toolItemStack.hurtAndBreak(1, player) { it.broadcastBreakEvent(hand) }
         world.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.awardStat(Stats.ITEM_USED.get(toolItemStack.item))
 
         // エフェクト
-        world.playSound(null, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+        world.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
 
         return ActionResult.CONSUME
     }
@@ -414,7 +414,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
     override fun isRandomlyTicking(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
-            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(FACING, state.get(FACING)), Block.UPDATE_ALL)
+            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(FACING, state.getValue(FACING)), Block.UPDATE_ALL)
         }
     }
 }
@@ -424,7 +424,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         val toolItemStack = player.getItemInHand(hand)
-        val direction = state.get(FACING)
+        val direction = state.getValue(FACING)
 
         // 消費
         world.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
@@ -433,8 +433,8 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
             val actualCount = world.random.randomInt(count) atMost item.maxStackSize
             if (actualCount <= 0) return
             val itemStack = item.createItemStack(actualCount)
-            val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.offsetX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.offsetZ * 0.65, itemStack)
-            itemEntity.setDeltaMovement(0.05 * direction.offsetX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.offsetZ + world.random.nextDouble() * 0.02)
+            val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.stepX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.stepZ * 0.65, itemStack)
+            itemEntity.setDeltaMovement(0.05 * direction.stepX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.stepZ + world.random.nextDouble() * 0.02)
             world.addFreshEntity(itemEntity)
         }
 
@@ -449,21 +449,21 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         return ActionResult.CONSUME
     }
 
-    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
         if (random.nextFloat() >= 0.2F) return
 
-        val direction = state.get(FACING)
+        val direction = state.getValue(FACING)
         val destBlockPos = pos.relative(direction)
         val destBlockState = world.getBlockState(destBlockPos)
         val destShape = destBlockState.getCollisionShape(world, destBlockPos)
         val hasSpace = when (direction) {
-            Direction.NORTH -> destShape.getMax(Direction.Axis.Z) < 1.0
-            Direction.SOUTH -> destShape.getMin(Direction.Axis.Z) > 0.0
-            Direction.WEST -> destShape.getMax(Direction.Axis.X) < 1.0
-            Direction.EAST -> destShape.getMin(Direction.Axis.X) > 0.0
+            Direction.NORTH -> destShape.max(Direction.Axis.Z) < 1.0
+            Direction.SOUTH -> destShape.min(Direction.Axis.Z) > 0.0
+            Direction.WEST -> destShape.max(Direction.Axis.X) < 1.0
+            Direction.EAST -> destShape.min(Direction.Axis.X) > 0.0
             else -> throw IllegalStateException()
         }
-        if (!(hasSpace || !destBlockState.isFullCube(world, destBlockPos))) return
+        if (!(hasSpace || !destBlockState.isCollisionShapeFullBlock(world, destBlockPos))) return
 
         val position = random.nextInt(2)
         val x = when (position) {
@@ -497,5 +497,5 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
 }
 
 class HaimeviskaSaplingGenerator : SaplingGenerator() {
-    override fun getTreeFeature(random: Random, bees: Boolean) = HAIMEVISKA_CONFIGURED_FEATURE_KEY
+    override fun getConfiguredFeature(random: Random, bees: Boolean) = HAIMEVISKA_CONFIGURED_FEATURE_KEY
 }

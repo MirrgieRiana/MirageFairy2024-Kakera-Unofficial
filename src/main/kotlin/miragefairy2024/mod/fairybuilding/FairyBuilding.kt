@@ -87,7 +87,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noOcclusion().strength(2.0F).instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noOcclusion().strength(2.0F).instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON)
 
 
     // Slot

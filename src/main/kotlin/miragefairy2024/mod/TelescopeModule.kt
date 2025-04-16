@@ -179,7 +179,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
@@ -203,7 +203,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         return ActionResult.CONSUME
     }
 
-    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
         val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()

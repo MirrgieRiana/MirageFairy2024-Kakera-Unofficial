@@ -123,7 +123,7 @@ fun initFairyDream() {
 
                     // 足元判定
                     insertBlockPos(player.blockPosition())
-                    insertBlockPos(player.blockPosition().down())
+                    insertBlockPos(player.blockPosition().below())
 
                     // 視線判定
                     val start = player.eyePos
