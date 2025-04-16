@@ -34,7 +34,7 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     DAYTIME("daytime", "Daytime", "昼間", { isDaytime(it) }),
     NIGHT("night", "Night", "夜間", { !isDaytime(it) }),
     UNDERWATER("underwater", "Underwater", "水中", { it.player.world.getBlockState(it.player.eyeBlockPos).fluidState.`is`(FluidTags.WATER) }),
-    IN_THE_AIR("in_the_air", "In the Air", "空中", { !it.player.isOnGround }),
+    IN_THE_AIR("in_the_air", "In the Air", "空中", { !it.player.onGround() }),
     ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
     IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),
     NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),

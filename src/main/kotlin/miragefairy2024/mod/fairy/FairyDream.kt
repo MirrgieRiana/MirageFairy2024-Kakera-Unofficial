@@ -126,9 +126,9 @@ fun initFairyDream() {
                     insertBlockPos(player.blockPosition().below())
 
                     // 視線判定
-                    val start = player.eyePos
-                    val pitch = player.pitch
-                    val yaw = player.yaw
+                    val start = player.eyePosition
+                    val pitch = player.xRot
+                    val yaw = player.yRot
                     val d = MathHelper.cos(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
                     val a = MathHelper.sin(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
                     val e = -MathHelper.cos(-pitch * (MathHelper.PI / 180))
@@ -138,7 +138,7 @@ fun initFairyDream() {
                     if (raycastResult.type == HitResult.Type.BLOCK) insertBlockPos(raycastResult.blockPos)
 
                     // 周辺エンティティ判定
-                    val entities = world.getOtherEntities(player, Box(player.eyePos.add(-8.0, -8.0, -8.0), player.eyePos.add(8.0, 8.0, 8.0)))
+                    val entities = world.getOtherEntities(player, Box(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
                     entities.forEach {
                         entityTypes += it.type
                     }

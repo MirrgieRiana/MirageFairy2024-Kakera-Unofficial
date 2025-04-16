@@ -213,9 +213,9 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     override fun aiStep() {
         super.aiStep()
 
-        if (!isOnGround && velocity.y < 0.0) velocity = velocity.multiply(1.0, 0.6, 1.0)
+        if (!onGround() && deltaMovement.y < 0.0) deltaMovement = deltaMovement.multiply(1.0, 0.6, 1.0)
 
-        if (world.isClientSide) {
+        if (level().isClientSide) {
 
             if (isFirstClientTick) {
                 isFirstClientTick = false
@@ -236,12 +236,12 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                 animator.next()
             }
 
-            if (world.random.nextInt(10) == 0) {
-                world.addParticle(
+            if (level().random.nextInt(10) == 0) {
+                level().addParticle(
                     ParticleTypeCard.CHAOS_STONE.particleType,
-                    x + width / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
+                    x + bbWidth / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
                     y + 1.0,
-                    z + width / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
+                    z + bbWidth / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
                     0.0,
                     -0.05,
                     0.0,
@@ -254,17 +254,17 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     private class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
         init {
-            controls = EnumSet.of(Flag.MOVE, Flag.LOOK)
+            flags = EnumSet.of(Flag.MOVE, Flag.LOOK)
         }
 
-        override fun shouldRunEveryTick() = true
+        override fun requiresUpdateEveryTick() = true
 
-        override fun canStart(): Boolean {
+        override fun canUse(): Boolean {
             val livingEntity = entity.target
-            return livingEntity != null && livingEntity.isAlive && entity.canTarget(livingEntity)
+            return livingEntity != null && livingEntity.isAlive && entity.canAttack(livingEntity)
         }
 
-        override fun shouldContinue() = ticker != null && super.shouldContinue()
+        override fun canContinueToUse() = ticker != null && super.canContinueToUse()
 
         private var ticker: Iterator<Unit>? = null
 
@@ -272,7 +272,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             ticker = sequence {
 
                 suspend fun SequenceScope<Unit>.tryWait(): Boolean {
-                    repeat(entity.random.nextBetween(20 * 2, 20 * 8)) {
+                    repeat(entity.random.nextIntBetweenInclusive(20 * 2, 20 * 8)) {
                         yield(Unit)
                     }
                     return true
@@ -303,13 +303,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
                         )
-                        SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                        SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
                     }
                     val particlePacket = MagicSquareParticlePacket(
                         Vec3d(shootingX, shootingY, shootingZ),
                         Vec3d(target.x, target.getY(0.5), target.z),
                     )
-                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerWorld, entity.pos, 64.0, particlePacket)
+                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerWorld, entity.position(), 64.0, particlePacket)
 
 
                     repeat(40) {
@@ -362,7 +362,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,
                             )
-                            SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                            SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
                         }
 
 
@@ -375,7 +375,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     while (true) {
                         val target = entity.target ?: return false
                         if (entity.sensing.hasLineOfSight(target)) return true
-                        entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+                        entity.getMoveControl().setWantedPosition(target.x, target.y, target.z, 1.0)
                         yield(Unit)
                     }
                 }
@@ -414,13 +414,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     }
 
     private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
-        override fun canStart(): Boolean {
+        override fun canUse(): Boolean {
             val world = mob.level()
-            if (world.time % 20L != 0L) return false
+            if (world.gameTime % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
-            if (!world.structureAccessor.getStructureAt(mob.blockPosition(), structure).hasChildren()) return false
-            return super.canStart()
+            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid()) return false
+            return super.canUse()
         }
     }
 }

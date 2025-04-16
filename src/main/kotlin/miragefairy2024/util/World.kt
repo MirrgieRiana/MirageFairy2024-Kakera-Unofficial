@@ -245,7 +245,7 @@ fun collectItem(
     if (processedCount > 0) {
 
         // Effect
-        val pos = originalBlockPos.toCenterPos()
+        val pos = originalBlockPos.center
         world.playSound(null, pos.x, pos.y, pos.z, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
 
     }

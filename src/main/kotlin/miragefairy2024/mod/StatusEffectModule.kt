@@ -28,7 +28,7 @@ class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         super.applyUpdateEffect(entity, amplifier)
         val world = entity.level()
-        if (world.time % 5 != 0L) return
+        if (world.gameTime % 5 != 0L) return
         if (world.isServer && entity is PlayerEntity) {
             entity.giveExperiencePoints(1 + amplifier)
             world.playSound(null, entity.x, entity.y, entity.z, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)

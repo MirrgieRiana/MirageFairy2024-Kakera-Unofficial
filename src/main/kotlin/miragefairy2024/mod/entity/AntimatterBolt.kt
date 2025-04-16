@@ -49,25 +49,25 @@ object AntimatterBoltCard {
 
 class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
     companion object {
-        val DAMAGE: TrackedData<Float> = DataTracker.registerData(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
-        val MAX_DISTANCE: TrackedData<Float> = DataTracker.registerData(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
+        val DAMAGE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
+        val MAX_DISTANCE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
     }
 
 
     var damage by DAMAGE
     var maxDistance by MAX_DISTANCE
 
-    override fun initDataTracker() {
-        entityData.startTracking(DAMAGE, 0F)
-        entityData.startTracking(MAX_DISTANCE, 0F)
+    override fun defineSynchedData() {
+        entityData.define(DAMAGE, 0F)
+        entityData.define(MAX_DISTANCE, 0F)
     }
 
-    override fun writeCustomDataToNbt(nbt: NbtCompound) {
+    override fun addAdditionalSaveData(nbt: NbtCompound) {
         nbt.putFloat("Damage", damage)
         nbt.putFloat("MaxDistance", maxDistance)
     }
 
-    override fun readCustomDataFromNbt(nbt: NbtCompound) {
+    override fun readAdditionalSaveData(nbt: NbtCompound) {
         damage = nbt.getFloat("Damage")
         maxDistance = nbt.getFloat("MaxDistance")
     }
@@ -78,9 +78,9 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         super.tick()
 
         // 距離判定
-        val movingDistance = velocity.length().toFloat()
-        val stopped = if (movingDistance >= maxDistance) { // 10 >= 1 → velocity *= 0.1( = 1 / 10)
-            if (movingDistance >= 0.001F) velocity = velocity.multiply((maxDistance / movingDistance).toDouble())
+        val movingDistance = deltaMovement.length().toFloat()
+        val stopped = if (movingDistance >= maxDistance) { // 10 >= 1 → deltaMovement *= 0.1( = 1 / 10)
+            if (movingDistance >= 0.001F) deltaMovement = deltaMovement.scale((maxDistance / movingDistance).toDouble())
             true
         } else {
             false
@@ -88,14 +88,14 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         maxDistance -= movingDistance
 
         // 衝突判定
-        val hitResult = ProjectileUtil.getCollision(this) { canHit(it) }
-        if (hitResult.type != HitResult.Type.MISS) onCollision(hitResult)
+        val hitResult = ProjectileUtil.getHitResultOnMoveVector(this) { canHitEntity(it) }
+        if (hitResult.type != HitResult.Type.MISS) onHit(hitResult)
         if (isRemoved) return
 
-        checkBlockCollision()
+        checkInsideBlocks()
         if (isRemoved) return
 
-        val vec3d = velocity
+        val vec3d = deltaMovement
         val nextX = x + vec3d.x
         val nextY = y + vec3d.y
         val nextZ = z + vec3d.z
@@ -103,7 +103,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         updateRotation()
 
         // 水に触れると消滅
-        if (isInsideWaterOrBubbleColumn) {
+        if (isInWaterOrBubble) {
             discard()
             return
         }
@@ -111,7 +111,7 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         // パーティクル
         prevPos?.let { prevPos ->
             repeat(2) { i ->
-                world.addParticle(
+                level().addParticle(
                     ParticleTypeCard.AURA.particleType,
                     prevPos.x + (x - prevPos.x) * (i / 3.0),
                     prevPos.y + (y - prevPos.y) * (i / 3.0),
@@ -130,32 +130,32 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         }
 
         // 位置更新
-        prevPos = pos
+        prevPos = position()
         setPos(nextX, nextY, nextZ)
 
     }
 
-    override fun onCollision(hitResult: HitResult) {
-        super.onCollision(hitResult)
-        if (world.isServer) {
-            world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES)
+    override fun onHit(hitResult: HitResult) {
+        super.onHit(hitResult)
+        if (level().isServer) {
+            level().broadcastEntityEvent(this, EntityStatuses.DEATH)
             discard()
         }
     }
 
     override fun onHitEntity(entityHitResult: EntityHitResult) {
         super.onHitEntity(entityHitResult)
-        entityHitResult.entity.hurt(world.damageSources().create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
+        entityHitResult.entity.hurt(level().damageSources().source(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
     }
 
-    override fun handleStatus(status: Byte) {
-        super.handleStatus(status)
-        if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
+    override fun handleEntityEvent(status: Byte) {
+        super.handleEntityEvent(status)
+        if (status == EntityStatuses.DEATH) {
 
-            world.playSound(x, y, z, SoundEventCard.MAGIC_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (world.random.nextFloat() - 0.5F) * 0.3F, true)
+            level().playLocalSound(x, y, z, SoundEventCard.MAGIC_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (level().random.nextFloat() - 0.5F) * 0.3F, true)
 
             for (i in 0..7) {
-                world.addParticle(
+                level().addParticle(
                     ParticleTypeCard.AURA.particleType,
                     x, y, z,
                     (random.nextDouble() - 0.5) * 0.3,

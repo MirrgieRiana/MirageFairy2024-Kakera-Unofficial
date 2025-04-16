@@ -26,7 +26,7 @@ inline fun <T> T.configure(block: T.() -> Unit) = this.apply(block)
 
 
 @Suppress("FunctionName")
-fun LootTable(vararg pools: LootPool.Builder, initializer: LootTable.Builder.() -> Unit = {}): LootTable.Builder = LootTable.builder().configure {
+fun LootTable(vararg pools: LootPool.Builder, initializer: LootTable.Builder.() -> Unit = {}): LootTable.Builder = LootTable.lootTable().configure {
     pools.forEach {
         this.withPool(it)
     }
@@ -34,7 +34,7 @@ fun LootTable(vararg pools: LootPool.Builder, initializer: LootTable.Builder.() 
 }
 
 @Suppress("FunctionName")
-fun LootPool(vararg entries: LootPoolEntry.Builder<*>, initializer: LootPool.Builder.() -> Unit = {}): LootPool.Builder = LootPool.builder().configure {
+fun LootPool(vararg entries: LootPoolEntry.Builder<*>, initializer: LootPool.Builder.() -> Unit = {}): LootPool.Builder = LootPool.lootPool().configure {
     entries.forEach {
         this.add(it)
     }
@@ -42,54 +42,54 @@ fun LootPool(vararg entries: LootPoolEntry.Builder<*>, initializer: LootPool.Bui
 }
 
 @Suppress("FunctionName")
-fun EmptyLootPoolEntry(initializer: LeafEntry.Builder<*>.() -> Unit = {}): LeafEntry.Builder<*> = EmptyEntry.builder().configure {
+fun EmptyLootPoolEntry(initializer: LeafEntry.Builder<*>.() -> Unit = {}): LeafEntry.Builder<*> = EmptyEntry.emptyItem().configure {
     initializer.invoke(this)
 }
 
 @Suppress("FunctionName")
-fun ItemLootPoolEntry(item: Item, initializer: LeafEntry.Builder<*>.() -> Unit = {}): LeafEntry.Builder<*> = ItemEntry.builder(item).configure {
+fun ItemLootPoolEntry(item: Item, initializer: LeafEntry.Builder<*>.() -> Unit = {}): LeafEntry.Builder<*> = ItemEntry.lootTableItem(item).configure {
     initializer.invoke(this)
 }
 
 @Suppress("FunctionName")
-fun AlternativeLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: AlternativeEntry.Builder.() -> Unit = {}): AlternativeEntry.Builder = AlternativeEntry.builder(*children).configure {
+fun AlternativeLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: AlternativeEntry.Builder.() -> Unit = {}): AlternativeEntry.Builder = AlternativeEntry.alternatives(*children).configure {
     initializer.invoke(this)
 }
 
 @Suppress("FunctionName")
-fun GroupLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: GroupEntry.Builder.() -> Unit = {}): GroupEntry.Builder = GroupEntry.create(*children).configure {
+fun GroupLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: GroupEntry.Builder.() -> Unit = {}): GroupEntry.Builder = GroupEntry.list(*children).configure {
     initializer.invoke(this)
 }
 
 @Suppress("FunctionName")
-fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: SequenceEntry.Builder.() -> Unit = {}): SequenceEntry.Builder = SequenceEntry.create(*children).configure {
+fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer: SequenceEntry.Builder.() -> Unit = {}): SequenceEntry.Builder = SequenceEntry.sequential(*children).configure {
     initializer.invoke(this)
 }
 
 
 context(ModContext)
 fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable {
-    it.addDrop(this, initializer(it).randomSequenceId(this.lootTable))
+    it.add(this, initializer(it).setRandomSequence(this.lootTable))
 }
 
 context(ModContext)
 fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration {
-    it.drops(this)
+    it.createSingleItemTable(this)
 }
 
 context(ModContext)
 fun registerChestLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateChestLootTable {
-    it(lootTableId, initializer().randomSequenceId(lootTableId))
+    it(lootTableId, initializer().setRandomSequence(lootTableId))
 }
 
 context(ModContext)
 fun registerArchaeologyLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateArchaeologyLootTable {
-    it(lootTableId, initializer().randomSequenceId(lootTableId))
+    it(lootTableId, initializer().setRandomSequence(lootTableId))
 }
 
 context(ModContext)
 fun EntityType<*>.registerLootTableGeneration(initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable {
-    it(this, initializer().randomSequenceId(this.defaultLootTable))
+    it(this, initializer().setRandomSequence(this.defaultLootTable))
 }
 
 enum class FortuneEffect {
@@ -100,11 +100,11 @@ enum class FortuneEffect {
 
 context(ModContext)
 fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration {
-    BlockLootTableGenerator.dropsWithSilkTouch(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
+    BlockLootTableGenerator.createSilkTouchDispatchTable(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
         if (additionalCount != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             FortuneEffect.IGNORE -> Unit
-            FortuneEffect.ORE -> apply(ApplyBonusLootFunction.oreDrops(Enchantments.BLOCK_FORTUNE))
+            FortuneEffect.ORE -> apply(ApplyBonusLootFunction.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
             FortuneEffect.UNIFORM -> apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
         }
     }))

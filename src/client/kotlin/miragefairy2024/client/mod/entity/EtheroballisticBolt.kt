@@ -35,8 +35,8 @@ class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) 
 
     override fun render(entity: EtheroballisticBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.prevYaw, entity.yaw) - 90.0F) / 180F * MathHelper.PI))
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotation((MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch) / 180F - 0.5F) * MathHelper.PI))
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.yRotO, entity.yRot) - 90.0F) / 180F * MathHelper.PI))
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotation((MathHelper.lerp(tickDelta, entity.xRotO, entity.xRot) / 180F - 0.5F) * MathHelper.PI))
 
             model.setAngles(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.getLayer(texture))
