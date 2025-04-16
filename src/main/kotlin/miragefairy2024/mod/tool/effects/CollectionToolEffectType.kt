@@ -31,21 +31,21 @@ object CollectionToolEffectType : BooleanToolEffectType() {
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
             if (player.level() != world) return@fail
             world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleport(player.x, player.y, player.z)
-                it.resetPickupDelay()
+                it.teleportTo(player.x, player.y, player.z)
+                it.setNoPickUpDelay()
             }
             world.getEntitiesByClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleport(player.x, player.y, player.z)
+                it.teleportTo(player.x, player.y, player.z)
             }
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
             if (attacker.level() != entity.level()) return@fail
             entity.level().getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-                it.teleport(attacker.x, attacker.y, attacker.z)
-                it.resetPickupDelay()
+                it.teleportTo(attacker.x, attacker.y, attacker.z)
+                it.setNoPickUpDelay()
             }
             entity.level().getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-                it.teleport(attacker.x, attacker.y, attacker.z)
+                it.teleportTo(attacker.x, attacker.y, attacker.z)
             }
         }
     }

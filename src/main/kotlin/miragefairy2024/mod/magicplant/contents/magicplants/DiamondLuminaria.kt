@@ -43,7 +43,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).luminance { getLuminance(it.getOr(Properties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sounds(BlockSoundGroup.CROP))
+    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).luminance { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sounds(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
         createCuboidShape(4.0, 6.0),

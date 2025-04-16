@@ -34,7 +34,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PINK).sounds(BlockSoundGroup.WOOD)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.COLOR_PINK).sounds(BlockSoundGroup.WOOD)
     override fun createBlock() = FairyPassiveSupplierBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)
@@ -62,7 +62,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun init() {
         super.init()
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
 
         inventorySlotConfigurations += FAIRY_SLOT

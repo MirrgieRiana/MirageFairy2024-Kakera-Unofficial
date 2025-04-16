@@ -22,8 +22,8 @@ object CollectionPassiveSkillEffect : AbstractDoublePassiveSkillEffect("collecti
         if (actualAmount <= 0) return
         val player = context.player
         collectItem(world, player.eyeBlockPos, reach = 15, maxCount = actualAmount, predicate = { !it.boundingBox.intersects(player.boundingBox) }) { // 既に触れているアイテムには無反応
-            it.teleport(player.x, player.y, player.z)
-            it.resetPickupDelay()
+            it.teleportTo(player.x, player.y, player.z)
+            it.setNoPickUpDelay()
             true
         }
     }

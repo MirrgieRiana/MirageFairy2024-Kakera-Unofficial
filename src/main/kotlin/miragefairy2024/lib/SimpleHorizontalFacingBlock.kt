@@ -16,7 +16,7 @@ open class SimpleHorizontalFacingBlock(settings: Properties) : HorizontalFacingB
         builder.add(FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+    override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState {
         return defaultBlockState().setValue(FACING, ctx.horizontalDirection.opposite)
     }
 }

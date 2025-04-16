@@ -56,7 +56,7 @@ fun Trait.enJa(enName: String, jaName: String) {
 fun Trait.getIdentifier() = traitRegistry.getKey(this)!!
 fun Identifier.toTrait() = traitRegistry.get(this)
 
-fun Trait.getTranslationKey(): String = Util.createTranslationKey("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
+fun Trait.getTranslationKey(): String = Util.makeDescriptionId("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }
 
 val Trait.texture get() = "textures/gui/traits/" * this.getIdentifier() * ".png"
