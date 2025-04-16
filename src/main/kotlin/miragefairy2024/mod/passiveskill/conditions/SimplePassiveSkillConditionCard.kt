@@ -24,7 +24,7 @@ private fun isDaytime(context: PassiveSkillContext): Boolean {
 }
 
 enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName: String, private val function: (context: PassiveSkillContext) -> Boolean) : PassiveSkillCondition {
-    OVERWORLD("overworld", "Overworld", "地上世界", { it.world.dimensionTypeId().natural }),
+    OVERWORLD("overworld", "Overworld", "地上世界", { it.world.dimensionType().natural }),
     OUTDOOR("outdoor", "Outdoor", "屋外", { isOutdoor(it) }),
     INDOOR("indoor", "Indoor", "屋内", { !isOutdoor(it) }),
     SKY_VISIBLE("sky_visible", "Sky Visible", "空が見える", { it.world.isSkyVisible(it.blockPos) }),

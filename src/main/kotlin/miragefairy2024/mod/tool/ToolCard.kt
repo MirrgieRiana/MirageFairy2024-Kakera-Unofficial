@@ -177,7 +177,7 @@ class ToolCard(
         val FLUORITE_SWORD = !ToolCard(
             "fluorite_sword", EnJa("Fluorite Sword", "蛍石の剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.LOOTING, 1),
+            FairySwordConfiguration(ToolMaterialCard.FLUORITE).enchantment(Enchantments.MOB_LOOTING, 1),
         ) { registerSwordRecipeGeneration(item, MaterialCard.FLUORITE.item) }
         val AMETHYST_PICKAXE = !ToolCard(
             "amethyst_pickaxe", EnJa("Amethyst Pickaxe", "アメジストのつるはし"),
@@ -202,7 +202,7 @@ class ToolCard(
         val AMETHYST_SWORD = !ToolCard(
             "amethyst_sword", EnJa("Amethyst Sword", "アメジストの剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.LOOTING, 2),
+            FairySwordConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.MOB_LOOTING, 2),
         ) { registerSwordRecipeGeneration(item, Items.AMETHYST_SHARD) }
         val EMERALD_PICKAXE = !ToolCard(
             "emerald_pickaxe", EnJa("Emerald Pickaxe", "エメラルドのつるはし"),
@@ -227,27 +227,27 @@ class ToolCard(
         val EMERALD_SWORD = !ToolCard(
             "emerald_sword", EnJa("Emerald Sword", "エメラルドの剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.LOOTING, 2),
+            FairySwordConfiguration(ToolMaterialCard.EMERALD).enchantment(Enchantments.MOB_LOOTING, 2),
         ) { registerSwordRecipeGeneration(item, Items.EMERALD) }
         val ECHO_SHARD_PICKAXE = !ToolCard(
             "echo_shard_pickaxe", EnJa("Echo Pickaxe", "残響のつるはし"),
             PoemList(null),
-            FairyPickaxeConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.EFFICIENCY, 5),
+            FairyPickaxeConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.BLOCK_EFFICIENCY, 5),
         ) { registerPickaxeRecipeGeneration(item, Items.ECHO_SHARD) }
         val ECHO_SHARD_AXE = !ToolCard(
             "echo_shard_axe", EnJa("Echo Axe", "残響の斧"),
             PoemList(null),
-            FairyAxeConfiguration(ToolMaterialCard.ECHO_SHARD, 5.0F, -3.0F).enchantment(Enchantments.EFFICIENCY, 5),
+            FairyAxeConfiguration(ToolMaterialCard.ECHO_SHARD, 5.0F, -3.0F).enchantment(Enchantments.BLOCK_EFFICIENCY, 5),
         ) { registerAxeRecipeGeneration(item, Items.ECHO_SHARD) }
         val ECHO_SHARD_SHOVEL = !ToolCard(
             "echo_shard_shovel", EnJa("Echo Shovel", "残響のシャベル"),
             PoemList(null),
-            FairyShovelConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.EFFICIENCY, 5),
+            FairyShovelConfiguration(ToolMaterialCard.ECHO_SHARD).enchantment(Enchantments.BLOCK_EFFICIENCY, 5),
         ) { registerShovelRecipeGeneration(item, Items.ECHO_SHARD) }
         val ECHO_SHARD_HOE = !ToolCard(
             "echo_shard_hoe", EnJa("Echo Hoe", "残響のクワ"),
             PoemList(null),
-            FairyHoeConfiguration(ToolMaterialCard.ECHO_SHARD, -4, 0.0F).enchantment(Enchantments.EFFICIENCY, 5),
+            FairyHoeConfiguration(ToolMaterialCard.ECHO_SHARD, -4, 0.0F).enchantment(Enchantments.BLOCK_EFFICIENCY, 5),
         ) { registerHoeRecipeGeneration(item, Items.ECHO_SHARD) }
         val ECHO_SHARD_SWORD = !ToolCard(
             "echo_shard_sword", EnJa("Echo Sword", "残響の剣"),
@@ -277,7 +277,7 @@ class ToolCard(
         val NETHER_STAR_SWORD = !ToolCard(
             "nether_star_sword", EnJa("Nether Star Sword", "ネザースターの剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.NETHER_STAR).enchantment(Enchantments.LOOTING, 4).glint(),
+            FairySwordConfiguration(ToolMaterialCard.NETHER_STAR).enchantment(Enchantments.MOB_LOOTING, 4).glint(),
         ) { registerSwordRecipeGeneration(item, Items.NETHER_STAR) }
 
         val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
@@ -318,42 +318,42 @@ class ToolCard(
         val LUMINITE_PICKAXE = !ToolCard(
             "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
             PoemList(4).poem(EnJa("Energetic soul extract", "精製された魂の残滓。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.EFFICIENCY, 4).enchantment(Enchantments.BLOCK_FORTUNE, 3),
+            FairyPickaxeConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.BLOCK_EFFICIENCY, 4).enchantment(Enchantments.BLOCK_FORTUNE, 3),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val LUMINITE_AXE = !ToolCard(
             "luminite_axe", EnJa("Luminite Axe", "ルミナイトの斧"),
             PoemList(4).poem(EnJa("Spiritual ectoplasm recycler", "失われた記憶の断片。")),
-            FairyAxeConfiguration(ToolMaterialCard.LUMINITE, 5.0F, -3.0F).enchantment(Enchantments.EFFICIENCY, 4).enchantment(Enchantments.BLOCK_FORTUNE, 3),
+            FairyAxeConfiguration(ToolMaterialCard.LUMINITE, 5.0F, -3.0F).enchantment(Enchantments.BLOCK_EFFICIENCY, 4).enchantment(Enchantments.BLOCK_FORTUNE, 3),
         ) { registerAxeRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val LUMINITE_SWORD = !ToolCard(
             "luminite_sword", EnJa("Luminite Sword", "ルミナイトの剣"),
             PoemList(4).poem(EnJa("Bionic etheroluminescence illuminator", "光を生み出す力。")),
-            FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.SHARPNESS, 4).enchantment(Enchantments.LOOTING, 3),
+            FairySwordConfiguration(ToolMaterialCard.LUMINITE).enchantment(Enchantments.SHARPNESS, 4).enchantment(Enchantments.MOB_LOOTING, 3),
         ) { registerSwordRecipeGeneration(item, MaterialCard.LUMINITE.item) }
         val RESONITE_PICKAXE = !ToolCard(
             "resonite_pickaxe", EnJa("Resonance Pickaxe", "共鳴のつるはし"),
             PoemList(5).poem(EnJa("The compound of light and sound", "光と闇の純結晶。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.RESONITE).mineAll().enchantment(Enchantments.EFFICIENCY, 6).soulStreamContainable(),
+            FairyPickaxeConfiguration(ToolMaterialCard.RESONITE).mineAll().enchantment(Enchantments.BLOCK_EFFICIENCY, 6).soulStreamContainable(),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_AXE = !ToolCard(
             "resonite_axe", EnJa("Resonance Axe", "共鳴の斧"),
             PoemList(5).poem(EnJa("Wavelength matched to tree height", "共振する樹の繊維。")),
-            FairyAxeConfiguration(ToolMaterialCard.RESONITE, 4.0F, -3.0F).cutAll().enchantment(Enchantments.EFFICIENCY, 6).soulStreamContainable(),
+            FairyAxeConfiguration(ToolMaterialCard.RESONITE, 4.0F, -3.0F).cutAll().enchantment(Enchantments.BLOCK_EFFICIENCY, 6).soulStreamContainable(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_KNIFE = !ToolCard(
             "resonite_knife", EnJa("Resonite Knife", "共鳴のナイフ"),
             PoemList(5).poem(EnJa("The ultrasonic vibration knife", "音波を超えた破壊の力。")),
-            FairyKnifeConfiguration(ToolMaterialCard.RESONITE).areaMining().enchantment(Enchantments.EFFICIENCY, 6).soulStreamContainable(),
+            FairyKnifeConfiguration(ToolMaterialCard.RESONITE).areaMining().enchantment(Enchantments.BLOCK_EFFICIENCY, 6).soulStreamContainable(),
         ) { registerKnifeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_SCYTHE = !ToolCard(
             "resonite_scythe", EnJa("Resonite Scythe", "共鳴の大鎌"),
             PoemList(5).poem(EnJa("Vacuum wave that cuts down grasses", "虚空を切り裂く碧の波。")),
-            FairyScytheConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.EFFICIENCY, 6).soulStreamContainable(),
+            FairyScytheConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING_EDGE, 3).enchantment(Enchantments.BLOCK_EFFICIENCY, 6).soulStreamContainable(),
         ) { registerScytheRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_SWORD = !ToolCard(
             "resonite_sword", EnJa("Resonite Sword", "共鳴の剣"),
             PoemList(5).poem(EnJa("The pulsating ectoplasm", "生命の脈動を砥ぎ澄ませ。")),
-            FairySwordConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING, 3).enchantment(Enchantments.SHARPNESS, 6).soulStreamContainable(),
+            FairySwordConfiguration(ToolMaterialCard.RESONITE).enchantment(Enchantments.SWEEPING_EDGE, 3).enchantment(Enchantments.SHARPNESS, 6).soulStreamContainable(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val RESONITE_BATTLE_AXE = !ToolCard(
             "resonite_battle_axe", EnJa("Resonite Battle Axe", "共鳴の戦斧"),
@@ -485,7 +485,7 @@ class ToolCard(
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        item.registerModelGeneration(Models.HANDHELD)
+        item.registerModelGeneration(Models.FLAT_HANDHELD_ITEM)
 
         item.enJa(name)
 
