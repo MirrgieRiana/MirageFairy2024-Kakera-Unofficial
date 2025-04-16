@@ -92,7 +92,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
+        val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
 
         val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
@@ -115,7 +115,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         entity.owner = user
         entity.damage = damage
         entity.maxDistance = maxDistance
-        world.spawnEntity(entity)
+        world.addFreshEntity(entity)
 
         // 消費
         itemStack.damage(1, user) {

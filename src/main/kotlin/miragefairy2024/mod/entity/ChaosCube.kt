@@ -347,7 +347,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         )
                         projectileEntity.damage = 20.0F
                         projectileEntity.maxDistance = 32.0F
-                        entity.level().spawnEntity(projectileEntity)
+                        entity.level().addFreshEntity(projectileEntity)
 
                         // ターゲットを見る
                         entity.getLookControl().setLookAt(target, 10.0F, 10.0F)

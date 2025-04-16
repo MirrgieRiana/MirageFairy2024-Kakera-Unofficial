@@ -272,20 +272,20 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
     }
 
-    override fun isItemBarVisible(stack: ItemStack): Boolean {
+    override fun isBarVisible(stack: ItemStack): Boolean {
         val condensation = stack.getFairyCondensation()
         val niceCondensation = getNiceCondensation(condensation).second
         return condensation != niceCondensation
     }
 
-    override fun getItemBarStep(stack: ItemStack): Int {
+    override fun getBarWidth(stack: ItemStack): Int {
         val condensation = stack.getFairyCondensation()
         val niceCondensation = getNiceCondensation(condensation).second.toLong()
         val nextNiceCondensation = niceCondensation * 3L
         return (13.0 * (condensation.toLong() - niceCondensation).toDouble() / (nextNiceCondensation - niceCondensation).toDouble()).roundToInt()
     }
 
-    override fun getItemBarColor(stack: ItemStack) = 0x00FF00
+    override fun getBarColor(stack: ItemStack) = 0x00FF00
 
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
@@ -300,11 +300,11 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
 }
 
 
-fun ItemStack.getFairyMotifId(): Identifier? = this.nbt.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyMotif"].string.set(identifier.string)
+fun ItemStack.getFairyMotifId(): Identifier? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
 
-fun ItemStack.getFairyCondensation() = this.nbt.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
-fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateNbt().wrapper["FairyCondensation"].int.set(condensation)
+fun ItemStack.getFairyCondensation() = this.tag.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
+fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateTag().wrapper["FairyCondensation"].int.set(condensation)
 
 
 fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }

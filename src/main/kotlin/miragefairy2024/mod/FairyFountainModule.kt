@@ -162,7 +162,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             return ActionResult.CONSUME
         } else {
             // 入力判定
-            val inputItemStack = player.getStackInHand(hand)
+            val inputItemStack = player.getItemInHand(hand)
             if (!inputItemStack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
                 if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない

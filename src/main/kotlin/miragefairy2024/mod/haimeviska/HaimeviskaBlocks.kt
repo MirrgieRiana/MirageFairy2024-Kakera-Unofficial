@@ -392,7 +392,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (state.get(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
-        val toolItemStack = player.getStackInHand(hand)
+        val toolItemStack = player.getItemInHand(hand)
         if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClientSide) return ActionResult.SUCCESS
         val direction = if (hit.side.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.side
@@ -423,7 +423,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
-        val toolItemStack = player.getStackInHand(hand)
+        val toolItemStack = player.getItemInHand(hand)
         val direction = state.get(FACING)
 
         // 消費
@@ -435,7 +435,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
             val itemStack = item.createItemStack(actualCount)
             val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.offsetX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.offsetZ * 0.65, itemStack)
             itemEntity.setDeltaMovement(0.05 * direction.offsetX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.offsetZ + world.random.nextDouble() * 0.02)
-            world.spawnEntity(itemEntity)
+            world.addFreshEntity(itemEntity)
         }
 
         // 生産

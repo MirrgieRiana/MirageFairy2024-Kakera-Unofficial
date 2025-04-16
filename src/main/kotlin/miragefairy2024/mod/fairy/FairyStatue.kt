@@ -290,8 +290,8 @@ class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, sett
 
 }
 
-fun ItemStack.getFairyStatueMotifId(): Identifier? = this.nbt.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: Identifier?) = this.also { this.getOrCreateNbt().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
+fun ItemStack.getFairyStatueMotifId(): Identifier? = this.tag.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: Identifier?) = this.also { this.getOrCreateTag().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
 
 fun ItemStack.getFairyStatueMotif() = this.getFairyStatueMotifId()?.toFairyMotif()
 fun ItemStack.setFairyStatueMotif(fairyStatueMotif: Motif?) = this.setFairyStatueMotifId(fairyStatueMotif?.getIdentifier())

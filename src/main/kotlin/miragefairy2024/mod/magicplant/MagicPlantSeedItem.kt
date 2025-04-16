@@ -129,7 +129,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (user.isShiftKeyDown) {
-            val itemStack = user.getStackInHand(hand)
+            val itemStack = user.getItemInHand(hand)
             if (world.isClientSide) return TypedActionResult.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
             user.openMenu(object : ExtendedScreenHandlerFactory {
@@ -150,13 +150,13 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 }
 
 fun ItemStack.getTraitStacks(): TraitStacks? {
-    val nbt = this.nbt ?: return null
+    val nbt = this.tag ?: return null
     return TraitStacks.readFromNbt(nbt)
 }
 
 fun ItemStack.setTraitStacks(traitStacks: TraitStacks) {
-    getOrCreateNbt().put("TraitStacks", traitStacks.toNbt())
+    getOrCreateTag().put("TraitStacks", traitStacks.toNbt())
 }
 
-fun ItemStack.isRare() = this.nbt.or { return false }.wrapper["Rare"].boolean.get().or { false }
-fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateNbt().wrapper["Rare"].boolean.set(if (isRare) true else null)
+fun ItemStack.isRare() = this.tag.or { return false }.wrapper["Rare"].boolean.get().or { false }
+fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateTag().wrapper["Rare"].boolean.set(if (isRare) true else null)

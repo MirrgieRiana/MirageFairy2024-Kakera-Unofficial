@@ -154,10 +154,10 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
                 collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
-                    folia -= 500 + 30 * it.stack.count
+                    folia -= 500 + 30 * it.item.count
 
                     val index = indices.removeFirst()
-                    this[index] = it.stack.copy()
+                    this[index] = it.item.copy()
                     it.discard()
                     // TODO パーティクル
 

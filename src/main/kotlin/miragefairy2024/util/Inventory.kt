@@ -14,7 +14,7 @@ import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getItem(slot)
 operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
-val Inventory.size get() = this.size()
+val Inventory.size get() = this.getContainerSize()
 val Inventory.indices get() = 0 until this.size
 val Inventory.itemStacks get() = this.indices.map { this[it] }
 
@@ -141,7 +141,7 @@ class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDeleg
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
     override fun canExtract(index: Int, itemStack: ItemStack) = true
     override fun canInsert(index: Int, itemStack: ItemStack) = inventory.canPlaceItem(index, itemStack)
-    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
+    override fun getMaxCountPerStack(index: Int) = inventory.maxStackSize
     override fun markDirty() = inventory.setChanged()
 }
 
@@ -153,7 +153,7 @@ class SidedInventoryDelegate(private val inventory: Inventory, private val side:
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
     override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canTakeItemThroughFace(index, itemStack, side) else true
     override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canPlaceItemThroughFace(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
-    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
+    override fun getMaxCountPerStack(index: Int) = inventory.maxStackSize
     override fun markDirty() = inventory.setChanged()
 }
 
@@ -183,8 +183,8 @@ val ScreenHandler.inventoryAccessor: InventoryAccessor
     get() = object : InventoryAccessor {
         override val size: Int get() = this@inventoryAccessor.slots.size
         override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].item
-        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].item = itemStack }
-        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxItemCount
+        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].set(itemStack) }
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxStackSize
         override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].mayPlace(itemStack)
         override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].setChanged()
     }
@@ -194,7 +194,7 @@ val Inventory.inventoryAccessor: InventoryAccessor
         override val size: Int get() = this@inventoryAccessor.size
         override fun getItemStack(index: Int) = this@inventoryAccessor[index]
         override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor[index] = itemStack }
-        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.maxCountPerStack
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.maxStackSize
         override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.canPlaceItem(index, itemStack)
         override fun markDirty(index: Int) = this@inventoryAccessor.setChanged()
     }
