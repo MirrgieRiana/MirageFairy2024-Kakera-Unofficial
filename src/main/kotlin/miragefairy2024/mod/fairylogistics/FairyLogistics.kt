@@ -104,7 +104,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
 open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
-        val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.of("vertical_facing", VerticalFacing::class.java)
+        val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.create("vertical_facing", VerticalFacing::class.java)
     }
 
     enum class VerticalFacing(val string: String, val id: Int) : StringIdentifiable {
@@ -154,7 +154,7 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
             return Pair(blockEntity, side)
         }
         return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {
-            FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.up(), Direction.DOWN)
+            FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.above(), Direction.DOWN)
             FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState.getValue(HorizontalFacingBlock.FACING)) {
                 Direction.NORTH -> f(worldPosition.north(), Direction.SOUTH)
                 Direction.SOUTH -> f(worldPosition.south(), Direction.NORTH)

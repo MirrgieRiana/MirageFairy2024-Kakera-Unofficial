@@ -41,7 +41,7 @@ import net.minecraft.world.level.Level as World
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().mapColor(MapColor.NETHER).requiresCorrectToolForDrops().strength(3.0F).lightLevel(Blocks.createLightLevelFromLitBlockState(8))
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().mapColor(MapColor.NETHER).requiresTool().strength(3.0F).lightLevel(Blocks.litBlockEmission(8))
     override fun createBlock() = AuraReflectorFurnaceBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::AuraReflectorFurnaceBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = AuraReflectorFurnaceScreenHandler(this, arguments)

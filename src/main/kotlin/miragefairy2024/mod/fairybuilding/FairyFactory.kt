@@ -47,7 +47,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
 
 open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlock(card) {
     companion object {
-        val STATUS: EnumProperty<Status> = EnumProperty.of("status", Status::class.java)
+        val STATUS: EnumProperty<Status> = EnumProperty.create("status", Status::class.java)
     }
 
     enum class Status(private val string: String, val isLit: Boolean, val doMovePosition: Boolean) : StringIdentifiable {
