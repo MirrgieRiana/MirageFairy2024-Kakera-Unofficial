@@ -30,21 +30,21 @@ object CollectionToolEffectType : BooleanToolEffectType() {
         configuration.descriptions += text { TRANSLATION() }
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
             if (player.level() != world) return@fail
-            world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+            world.getEntitiesOfClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
                 it.teleportTo(player.x, player.y, player.z)
                 it.setNoPickUpDelay()
             }
-            world.getEntitiesByClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+            world.getEntitiesOfClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
                 it.teleportTo(player.x, player.y, player.z)
             }
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
             if (attacker.level() != entity.level()) return@fail
-            entity.level().getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+            entity.level().getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleportTo(attacker.x, attacker.y, attacker.z)
                 it.setNoPickUpDelay()
             }
-            entity.level().getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+            entity.level().getEntitiesOfClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleportTo(attacker.x, attacker.y, attacker.z)
             }
         }

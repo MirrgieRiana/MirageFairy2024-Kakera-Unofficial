@@ -36,7 +36,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
 
             // 発動
 
@@ -48,9 +48,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                     (-level..level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.add(x, y, z)
-                            if (item.isSuitableFor(world.getBlockState(targetBlockPos))) run skip@{
+                            if (item.isCorrectToolForDrops(world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                                 // 採掘を続行
 
@@ -62,7 +62,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                                         val damage = world.random.randomInt(configuration.miningDamage)
                                         if (damage > 0) {
                                             stack.hurtAndBreak(damage, miner) {
-                                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
                                             }
                                         }
                                     }
