@@ -84,9 +84,9 @@ object FairyStatue {
         FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet().random().value)
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
-    val CASE: TextureKey = TextureKey.of("case")
-    val BASE: TextureKey = TextureKey.of("base")
-    val END: TextureKey = TextureKey.of("end")
+    val CASE: TextureKey = TextureKey.create("case")
+    val BASE: TextureKey = TextureKey.create("base")
+    val END: TextureKey = TextureKey.create("end")
 }
 
 class FairyStatueCard(
@@ -122,7 +122,7 @@ class FairyStatueCard(
             EnJa("Broken Fairy Statue", "破損した妖精の像"),
             EnJa("%s Statue", "%sの像"),
             EnJa("Mysterious Method of Creation", "その製法は誰にも知られていない"),
-            MapColor.IRON_GRAY,
+            MapColor.METAL,
         ).also { entries += it }
         val GOLDEN_FAIRY_STATUE = FairyStatueCard(
             "golden_fairy_statue",
@@ -136,7 +136,7 @@ class FairyStatueCard(
             EnJa("Broken Fairy Statue", "破損した妖精の像"),
             EnJa("%s Statue", "%sの像"),
             EnJa("Glossier and more beautiful.", "その翅は艶やかで、本物よりも美しい。"),
-            MapColor.MAGENTA,
+            MapColor.COLOR_MAGENTA,
         ).also { entries += it }
     }
 }
@@ -181,9 +181,9 @@ fun initFairyStatue() {
         card.block.registerLootTableGeneration { provider ->
             LootTable(
                 LootPool(ItemLootPoolEntry(card.item)) {
-                    rolls(ConstantLootNumberProvider.create(1.0F))
-                    apply(CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY).withOperation("Motif", "Motif"))
-                    provider.addSurvivesExplosionCondition(card.item, this)
+                    setRolls(ConstantLootNumberProvider.exactly(1.0F))
+                    apply(CopyNbtLootFunction.copyData(ContextLootNbtProvider.BLOCK_ENTITY).copy("Motif", "Motif"))
+                    provider.applyExplosionCondition(card.item, this)
                 },
             )
         }
@@ -215,7 +215,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
@@ -265,7 +265,7 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         renderingProxy.stack {
             renderingProxy.translate(8.0 / 16.0, 5.5 / 16.0, 8.0 / 16.0)
-            renderingProxy.rotateY(-(blockState[HorizontalFacingBlock.FACING].get2DDataValue() * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-(blockState.getValue(HorizontalFacingBlock.FACING).get2DDataValue() * 90) / 180F * Math.PI.toFloat())
             renderingProxy.renderItemStack(itemStackCache ?: INVALID_ITEM_STACK)
         }
     }

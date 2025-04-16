@@ -144,7 +144,7 @@ fun initFairyDream() {
                     }
 
                     // 周辺ブロック判定
-                    insertBlockPos(player.eyeBlockPos.add(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
+                    insertBlockPos(player.eyeBlockPos.offset(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
 
                 }
                 items.forEach {

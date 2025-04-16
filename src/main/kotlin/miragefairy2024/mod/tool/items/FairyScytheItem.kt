@@ -110,7 +110,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
             (-range..range).forEach { x ->
                 (-range..range).forEach { y ->
                     (-range..range).forEach { z ->
-                        val targetBlockPos = blockPos.add(x, y, z)
+                        val targetBlockPos = blockPos.offset(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
                         val targetBlock = targetBlockState.block
                         if (targetBlock is MagicPlantBlock) {
@@ -150,7 +150,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
             (-1..1).forEach { y ->
                 (-1..1).forEach { z ->
                     if (x != 0 || y != 0 || z != 0) {
-                        val targetBlockPos = blockPos.add(x, y, z)
+                        val targetBlockPos = blockPos.offset(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
                         val targetBlock = targetBlockState.block
                         if (targetBlock is MagicPlantBlock) {

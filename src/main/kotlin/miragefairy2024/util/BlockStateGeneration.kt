@@ -47,7 +47,7 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 
 context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateOutput.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
+    it.blockStateOutput.accept(BlockStateModelGenerator.createSimpleBlock(this, "block/" * this.getIdentifier()))
 }
 
 
@@ -111,7 +111,7 @@ fun BlockStateVariant.toJson(): JsonElement = jsonObjectNotNull(
 class PropertyEntry<T : Comparable<T>>(val key: Property<T>, val value: T)
 
 val PropertyEntry<*>.keyName: String get() = this.key.name
-val <T : Comparable<T>> PropertyEntry<T>.valueName: String get() = this.key.name(this.value)
+val <T : Comparable<T>> PropertyEntry<T>.valueName: String get() = this.key.getName(this.value)
 
 infix fun <T : Comparable<T>> Property<T>.with(value: T) = PropertyEntry(this, value)
 

@@ -110,9 +110,9 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     }
 
-    override fun useOnBlock(context: ItemUsageContext): ActionResult {
+    override fun useOn(context: ItemUsageContext): ActionResult {
         if (context.player?.isShiftKeyDown == true) return ActionResult.PASS
-        return super.useOnBlock(context)
+        return super.useOn(context)
     }
 
     override fun place(context: ItemPlacementContext): ActionResult {

@@ -15,7 +15,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.biome.Biome
 
-private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getTopPosition(Heightmap.Types.MOTION_BLOCKING, context.blockPos).y
+private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, context.blockPos).y
 private fun biomeHasNoPrecipitation(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitation(context.blockPos) == Biome.Precipitation.NONE
 private fun biomeHasRain(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitation(context.blockPos) == Biome.Precipitation.RAIN
 private fun isDaytime(context: PassiveSkillContext): Boolean {

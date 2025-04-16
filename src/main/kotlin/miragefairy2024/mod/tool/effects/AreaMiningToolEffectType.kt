@@ -47,7 +47,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                 (-level..level).forEach { y ->
                     (-level..level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
-                            val targetBlockPos = pos.add(x, y, z)
+                            val targetBlockPos = pos.offset(x, y, z)
                             if (item.isCorrectToolForDrops(world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か

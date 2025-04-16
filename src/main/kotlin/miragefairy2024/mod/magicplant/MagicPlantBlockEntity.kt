@@ -45,8 +45,8 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
     }
 
 
-    override fun setWorld(world: World) {
-        super.setWorld(world)
+    override fun setLevel(world: World) {
+        super.setLevel(world)
         if (traitStacks == null) {
             val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(worldPosition), world.random)
             setTraitStacks(result.first)
