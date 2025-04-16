@@ -64,7 +64,7 @@ import net.minecraft.world.level.Level as World
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).strength(1.0F).nonOpaque())
+    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).strength(1.0F).noOcclusion())
     val item = BlockItem(block, Item.Properties())
 }
 

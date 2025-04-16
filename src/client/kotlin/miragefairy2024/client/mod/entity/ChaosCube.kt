@@ -36,7 +36,7 @@ class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntit
 
     private val texture = "textures/entity/" * ChaosCubeCard.identifier * ".png"
 
-    override fun getTexture(entity: ChaosCubeEntity) = texture
+    override fun getTextureLocation(entity: ChaosCubeEntity) = texture
 }
 
 class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeEntity>() {

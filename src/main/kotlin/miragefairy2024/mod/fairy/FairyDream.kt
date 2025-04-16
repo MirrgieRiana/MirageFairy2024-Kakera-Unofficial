@@ -134,7 +134,7 @@ fun initFairyDream() {
                     val e = -MathHelper.cos(-pitch * (MathHelper.PI / 180))
                     val c = MathHelper.sin(-pitch * (MathHelper.PI / 180))
                     val end = start.add(a * e * 32.0, c * 32.0, d * e * 32.0)
-                    val raycastResult = world.raycast(RaycastContext(start, end, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, player))
+                    val raycastResult = world.clip(RaycastContext(start, end, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, player))
                     if (raycastResult.type == HitResult.Type.BLOCK) insertBlockPos(raycastResult.blockPos)
 
                     // 周辺エンティティ判定

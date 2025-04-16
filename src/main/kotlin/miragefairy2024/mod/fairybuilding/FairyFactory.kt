@@ -37,7 +37,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
         }
     }
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().luminance { blockState -> if (blockState[FairyFactoryBlock.STATUS].isLit) 8 else 0 }
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().lightLevel { blockState -> if (blockState[FairyFactoryBlock.STATUS].isLit) 8 else 0 }
 
     override fun createPropertyConfigurations() = super.createPropertyConfigurations() + FOLIA_PROPERTY
 

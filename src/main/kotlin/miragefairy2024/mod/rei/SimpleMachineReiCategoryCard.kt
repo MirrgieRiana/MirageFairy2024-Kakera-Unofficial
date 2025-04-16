@@ -27,7 +27,7 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             val id = tag.wrapper["id"].string.get()!!
             val json = tag.wrapper["json"].string.get()!!
-            Display(this, recipeCard.serializer.read(id.toIdentifier(), json.toJsonElement() as JsonObject))
+            Display(this, recipeCard.serializer.fromJson(id.toIdentifier(), json.toJsonElement() as JsonObject))
         }, { display, tag ->
             val jsonObject = JsonObject()
             recipeCard.serializer.write(jsonObject, display.recipe)
@@ -43,7 +43,7 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
 
     open fun getInputs(recipe: R): List<EntryIngredient> {
         return recipe.inputs.map { input ->
-            input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
+            input.first.items.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
         }
     }
 

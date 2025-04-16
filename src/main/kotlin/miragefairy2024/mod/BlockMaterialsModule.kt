@@ -63,7 +63,7 @@ enum class BlockMaterialCard(
     blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
-    val texturedModelFactory: TexturedModel.Factory? = null,
+    val texturedModelFactory: TexturedModel.Provider? = null,
     val isCutoutRenderLayer: Boolean = false,
     val isTranslucentRenderLayer: Boolean = false,
 ) {
@@ -103,7 +103,7 @@ enum class BlockMaterialCard(
         MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
         tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
         isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
-        blockCreator = { SemiOpaqueTransparentBlock(it.nonOpaque().luminance { 15 }.solidBlock { _, _, _ -> false }) },
+        blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
     ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
@@ -131,12 +131,12 @@ enum class BlockMaterialCard(
     val block = run {
         val settings = AbstractBlock.Properties.of()
         settings.mapColor(mapColor)
-        if (requiresTool) settings.requiresTool()
-        if (dropsNothing) settings.dropsNothing()
-        if (restrictsSpawning) settings.allowsSpawning { _, _, _, _ -> false }
-        if (velocityMultiplier != null) settings.velocityMultiplier(velocityMultiplier)
+        if (requiresTool) settings.requiresCorrectToolForDrops()
+        if (dropsNothing) settings.noLootTable()
+        if (restrictsSpawning) settings.isValidSpawn { _, _, _, _ -> false }
+        if (velocityMultiplier != null) settings.speedFactor(velocityMultiplier)
         settings.strength(hardness, resistance)
-        if (blockSoundGroup != null) settings.sounds(blockSoundGroup)
+        if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
     val item = BlockItem(block, Item.Properties())
@@ -189,14 +189,14 @@ fun initBlockMaterialsModule() {
 
 }
 
-private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block ->
+private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.id to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.BACK.id to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.FRONT.id to textureMap.getTexture(TextureKey.FRONT).string,
+                TextureKey.PARTICLE.id to textureMap.get(TextureKey.BACK).string,
+                TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,
+                TextureKey.FRONT.id to textureMap.get(TextureKey.FRONT).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(
@@ -239,24 +239,24 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
         @Suppress("DEPRECATION")
         super.randomTick(state, world, pos, random)
 
-        val direction = Direction.random(random)
-        val targetBlockPos = pos.offset(direction)
+        val direction = Direction.getRandom(random)
+        val targetBlockPos = pos.relative(direction)
         val targetBlockState = world.getBlockState(targetBlockPos)
         if (targetBlockState.isAir) return
-        if (targetBlockState.getHardness(world, targetBlockPos) < 0) return
+        if (targetBlockState.getDestroySpeed(world, targetBlockPos) < 0) return
         if (targetBlockState.`is`(state.block)) return
         world.setBlockAndUpdate(targetBlockPos, state)
     }
 
-    override fun onSteppedOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
-        if (!entity.bypassesSteppingEffects()) {
-            entity.damage(world.damageSources.magic(), 1.0f)
+    override fun stepOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
+        if (!entity.isSteppingCarefully()) {
+            entity.hurt(world.damageSources().magic(), 1.0f)
         }
-        super.onSteppedOn(world, pos, state, entity)
+        super.stepOn(world, pos, state, entity)
     }
 }
 
 class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 1
+    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }

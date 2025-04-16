@@ -31,7 +31,7 @@ class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) 
         override fun getPart() = modelPart
     }
 
-    override fun getTexture(entity: EtheroballisticBoltEntity) = texture
+    override fun getTextureLocation(entity: EtheroballisticBoltEntity) = texture
 
     override fun render(entity: EtheroballisticBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {

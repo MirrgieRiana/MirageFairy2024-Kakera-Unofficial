@@ -40,8 +40,8 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
     }
 
     init {
-        checkSize(arguments.inventory, card.guiSlotConfigurations.size)
-        checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
+        checkContainerSize(arguments.inventory, card.guiSlotConfigurations.size)
+        checkContainerDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
         // TODO PlayerInventoryのカスタマイズ
         val y = card.guiHeight - 82
@@ -58,11 +58,11 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         }
 
         @Suppress("LeakingThis")
-        addProperties(arguments.propertyDelegate)
+        addDataSlots(arguments.propertyDelegate)
     }
 
     fun getTooltip(slot: Slot): List<Text>? {
-        if (slot.hasStack()) return null // アイテムのツールチップを優先
+        if (slot.hasItem()) return null // アイテムのツールチップを優先
         if (slot !is MachineSlot) return null
         return slot.configuration.getTooltip()
     }

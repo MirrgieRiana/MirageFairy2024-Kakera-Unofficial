@@ -141,7 +141,7 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
-    if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
+    if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
@@ -172,7 +172,7 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
-    if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
+    if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
     if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
