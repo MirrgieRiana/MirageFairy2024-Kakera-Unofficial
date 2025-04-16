@@ -145,7 +145,7 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         if (!(AuraReflectorFurnaceRecipe.FUELS.contains(fuelItemStack.item) && fuelItemStack.count >= 1)) return null
 
         return {
-            fuelItemStack.decrement(1)
+            fuelItemStack.shrink(1)
             fuelMax = 20 * 10
             fuel = fuelMax
             setChanged()
@@ -154,8 +154,8 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
 
     fun setLit(lit: Boolean) {
         val world = level ?: return
-        if (blockState[AuraReflectorFurnaceBlock.LIT] != lit) {
-            world.setBlock(pos, blockState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
+        if (blockState.getValue(AuraReflectorFurnaceBlock.LIT) != lit) {
+            world.setBlock(worldPosition, blockState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
         }
     }
 

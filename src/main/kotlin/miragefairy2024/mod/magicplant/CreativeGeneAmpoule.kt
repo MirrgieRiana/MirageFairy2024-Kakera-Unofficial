@@ -92,7 +92,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return text { traitStack.trait.getName() + " "() + traitStack.level.toString(2)() }
     }
 
-    override fun useOnBlock(context: ItemUsageContext): ActionResult {
+    override fun useOn(context: ItemUsageContext): ActionResult {
         val blockEntity = context.level.getMagicPlantBlockEntity(context.blockPos) ?: return ActionResult.PASS
         if (context.level.isClientSide) return ActionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY

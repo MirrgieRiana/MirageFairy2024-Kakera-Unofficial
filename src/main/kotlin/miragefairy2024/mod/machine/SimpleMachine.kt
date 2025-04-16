@@ -76,7 +76,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: World, inventory: Inventory) = world.recipeManager.getFirstMatch(recipeType, inventory, world).getOrNull()
+    fun match(world: World, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -147,7 +147,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     override fun dropItems() {
         super.dropItems()
         craftingInventory.forEach {
-            ItemScatterer.dropItemStack(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), it)
+            ItemScatterer.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), it)
         }
     }
 
@@ -169,7 +169,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         if (recipe.inputs.size > inventory.size) return null
 
         return {
-            val remainder = recipe.getRemainder(inventory)
+            val remainder = recipe.getRemainingItems(inventory)
             (0 until recipe.inputs.size).forEach { index ->
                 craftingInventory += inventory[index].split(recipe.inputs[index].second)
             }

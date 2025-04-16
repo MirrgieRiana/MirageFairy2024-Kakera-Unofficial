@@ -62,7 +62,7 @@ object DripstoneCavesRuinCard {
                     ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
                     ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(1.0F, 10.0F))),
                 ) {
-                    rolls(UniformLootNumberProvider.between(5.0F, 15.0F))
+                    setRolls(UniformLootNumberProvider.between(5.0F, 15.0F))
                 },
             )
         }

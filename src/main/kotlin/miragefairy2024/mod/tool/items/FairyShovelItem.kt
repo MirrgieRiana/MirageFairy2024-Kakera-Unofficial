@@ -25,7 +25,7 @@ class FairyShovelConfiguration(
         this.attackDamage = 1.5F
         this.attackSpeed = -3.0F
         this.tags += ItemTags.SHOVELS
-        this.effectiveBlockTags += BlockTags.SHOVEL_MINEABLE
+        this.effectiveBlockTags += BlockTags.MINEABLE_WITH_SHOVEL
     }
 }
 

@@ -71,7 +71,7 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 }
 
 open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, attackDamage, attackSpeed, settings) {
-    override fun useOnBlock(context: ItemUsageContext?) = ActionResult.PASS
+    override fun useOn(context: ItemUsageContext?) = ActionResult.PASS
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.hurtAndBreak(1, attacker) { e ->
             e.broadcastBreakEvent(EquipmentSlot.MAINHAND)

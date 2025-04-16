@@ -33,17 +33,17 @@ class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius
 }
 
 class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRingFeatureConfig>(codec) {
-    override fun generate(context: FeatureContext<FairyRingFeatureConfig>): Boolean {
+    override fun place(context: FeatureContext<FairyRingFeatureConfig>): Boolean {
         val config = context.config
-        val random = context.random
-        val originBlockPos = context.origin
+        val random = context.random()
+        val originBlockPos = context.origin()
         val world = context.level()
 
         var count = 0
         val minRadius = config.minRadius
         val radiusRange = config.maxRadius - minRadius
         val y1 = config.ySpread + 1
-        val mutableBlockPos = BlockPos.Mutable()
+        val mutableBlockPos = BlockPos.MutableBlockPos()
         for (l in 0 until config.tries) {
             val r = random.nextFloat() * radiusRange + minRadius
             val theta = random.nextFloat() * MathHelper.TWO_PI

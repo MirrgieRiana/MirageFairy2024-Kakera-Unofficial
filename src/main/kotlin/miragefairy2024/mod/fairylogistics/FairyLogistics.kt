@@ -153,9 +153,9 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
             if (blockEntity !is Inventory) return null
             return Pair(blockEntity, side)
         }
-        return when (blockState[FairyLogisticsBlock.VERTICAL_FACING]) {
+        return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {
             FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.up(), Direction.DOWN)
-            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState[HorizontalFacingBlock.FACING]) {
+            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState.getValue(HorizontalFacingBlock.FACING)) {
                 Direction.NORTH -> f(worldPosition.north(), Direction.SOUTH)
                 Direction.SOUTH -> f(worldPosition.south(), Direction.NORTH)
                 Direction.WEST -> f(worldPosition.west(), Direction.EAST)

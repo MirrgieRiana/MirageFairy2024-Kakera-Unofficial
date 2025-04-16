@@ -125,7 +125,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
@@ -176,7 +176,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
             // 消費
             if (!player.isCreative) {
-                if (world.isServer) inputItemStack.decrement(1)
+                if (world.isServer) inputItemStack.shrink(1)
             }
 
             // 生産

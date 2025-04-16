@@ -86,7 +86,7 @@ fun blockVisitor(
             }
 
             fun check(offsetX: Int, offsetY: Int, offsetZ: Int) {
-                val toBlockPos = fromBlockPos.add(offsetX, offsetY, offsetZ)
+                val toBlockPos = fromBlockPos.offset(offsetX, offsetY, offsetZ)
                 if (toBlockPos !in checkedBlockPosList && predicate(nextDistance, fromBlockPos, toBlockPos)) {
                     checkedBlockPosList += toBlockPos
                     nextBlockPosList += toBlockPos
@@ -137,25 +137,25 @@ fun blockVisitor(
  */
 fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
-    if (!itemStack.item.canMine(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
+    if (!itemStack.item.canAttackBlock(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
     if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
+    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
+    if (player.blockActionRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
-    block.onBreak(world, blockPos, blockState, player)
+    block.playerWillDestroy(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)
-    if (success) block.onBroken(world, blockPos, blockState)
+    if (success) block.destroy(world, blockPos, blockState)
     if (player.isCreative) return true // クリエイティブの場合、ドロップを省略
     val newItemStack = itemStack.copy()
-    val canHarvest = player.canHarvest(blockState)
+    val canHarvest = player.hasCorrectToolForDrops(blockState)
     itemStack.mineBlock(world, blockState, blockPos, player)
-    if (success && canHarvest) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
+    if (success && canHarvest) block.playerDestroy(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
 }
 
@@ -173,18 +173,18 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
     val block = blockState.block
 
     if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
+    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
+    if (player.blockActionRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
-    block.onBreak(world, blockPos, blockState, player)
+    block.playerWillDestroy(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)
-    if (success) block.onBroken(world, blockPos, blockState)
+    if (success) block.destroy(world, blockPos, blockState)
     if (player.isCreative) return true // クリエイティブの場合、ドロップを省略
     val newItemStack = itemStack.copy()
-    if (success) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
+    if (success) block.playerDestroy(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
 }
 
@@ -199,9 +199,9 @@ fun collectItem(
     process: (ItemEntity) -> Boolean,
 ) {
     val box = when {
-        region != null -> Box.from(region)
-        reach != Int.MAX_VALUE -> Box(originalBlockPos).expand(reach.toDouble())
-        else -> Box.from(BlockBox.infinite())
+        region != null -> Box.of(region)
+        reach != Int.MAX_VALUE -> Box(originalBlockPos).inflate(reach.toDouble())
+        else -> Box.of(BlockBox.infinite())
     }
     val targetTable = world.getEntitiesOfClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
@@ -211,7 +211,7 @@ fun collectItem(
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
         blockVisitor(listOf(originalBlockPos), maxDistance = reach) { _, fromBlockPos, toBlockPos ->
-            if (region != null && toBlockPos !in region) return@blockVisitor false
+            if (region != null && !region.isInside(toBlockPos)) return@blockVisitor false
             val offset = toBlockPos.subtract(fromBlockPos)
             val direction = when {
                 offset.y == -1 -> Direction.DOWN
@@ -223,9 +223,9 @@ fun collectItem(
                 else -> throw AssertionError()
             }
             if (ignoreOriginalWall && fromBlockPos == originalBlockPos) {
-                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+                !world.getBlockState(toBlockPos).isFaceSturdy(world, toBlockPos, direction.opposite)
             } else {
-                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction)
+                !world.getBlockState(toBlockPos).isFaceSturdy(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isFaceSturdy(world, fromBlockPos, direction)
             }
         }.forEach { (_, blockPos) ->
             targetTable[blockPos]?.forEach {

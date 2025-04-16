@@ -308,7 +308,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
                 FairyQuestRecipeCard.LootCategory.RARE -> table += Chance(1.0, recipe.identifier)
             }
         }
-        val recipeId = table.weightedRandom(context.random) ?: return null // 有効なレシピが一つもない
+        val recipeId = table.weightedRandom(context.random()) ?: return null // 有効なレシピが一つもない
 
         return FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipeId(recipeId) }
     }

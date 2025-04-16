@@ -1,7 +1,6 @@
 package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.tool.ToolConfiguration
-import net.fabricmc.yarn.constants.MiningLevels
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.item.enchantment.Enchantment
@@ -13,6 +12,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.BlockTags
 import net.minecraft.core.BlockPos
+import net.minecraft.world.item.Tiers
 import net.minecraft.world.level.Level as World
 
 interface FairyToolItem {
@@ -21,7 +21,7 @@ interface FairyToolItem {
 
 
 fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
-    val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.miningSpeedMultiplier
+    val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.speed
     return when {
         configuration.superEffectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier * 10F
         configuration.effectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier
@@ -31,11 +31,11 @@ fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: Item
 }
 
 fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
-    val itemMiningLevel = configuration.toolMaterialCard.toolMaterial.miningLevel
+    val itemMiningLevel = configuration.toolMaterialCard.toolMaterial.level
     return when {
-        itemMiningLevel < MiningLevels.DIAMOND && state.`is`(BlockTags.NEEDS_DIAMOND_TOOL) -> false
-        itemMiningLevel < MiningLevels.IRON && state.`is`(BlockTags.NEEDS_IRON_TOOL) -> false
-        itemMiningLevel < MiningLevels.STONE && state.`is`(BlockTags.NEEDS_STONE_TOOL) -> false
+        itemMiningLevel < Tiers.DIAMOND.level && state.`is`(BlockTags.NEEDS_DIAMOND_TOOL) -> false
+        itemMiningLevel < Tiers.IRON.level && state.`is`(BlockTags.NEEDS_IRON_TOOL) -> false
+        itemMiningLevel < Tiers.STONE.level && state.`is`(BlockTags.NEEDS_STONE_TOOL) -> false
         else -> when {
             configuration.superEffectiveBlocks.any { state.`is`(it) } -> true
             configuration.effectiveBlocks.any { state.`is`(it) } -> true

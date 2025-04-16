@@ -15,26 +15,26 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as Feature
 abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C>(codec) {
     abstract fun getCount(context: FeatureContext<C>): Int
     abstract fun createItemStack(context: FeatureContext<C>): ItemStack?
-    override fun generate(context: FeatureContext<C>): Boolean {
-        val random = context.random
+    override fun place(context: FeatureContext<C>): Boolean {
+        val random = context.random()
         val world = context.level()
 
         var count = 0
-        val currentBlockPos = BlockPos.Mutable()
+        val currentBlockPos = BlockPos.MutableBlockPos()
         repeat(getCount(context)) {
-            currentBlockPos.set(
-                context.origin,
+            currentBlockPos.setWithOffset(
+                context.origin(),
                 random.nextInt(3) - random.nextInt(3),
                 random.nextInt(3) - random.nextInt(3),
                 random.nextInt(3) - random.nextInt(3),
             )
 
             // 座標決定
-            val actualBlockPos = world.getTopPosition(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
+            val actualBlockPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
 
             // 生成環境判定
             if (!world.getBlockState(actualBlockPos).canBeReplaced()) return@repeat // 配置先が埋まっている
-            if (!world.getBlockState(actualBlockPos.below()).isOpaqueFullCube(world, actualBlockPos.below())) return@repeat // 配置先が地面でない
+            if (!world.getBlockState(actualBlockPos.below()).isSolidRender(world, actualBlockPos.below())) return@repeat // 配置先が地面でない
 
             // アイテム判定
             val itemStack = createItemStack(context) ?: return@repeat // アイテムを決定できなかった

@@ -143,7 +143,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                 // 最後の1個でない場合
 
                 // 普通に消費
-                itemStack.decrement(1)
+                itemStack.shrink(1)
 
             } else {
                 // 最後の1個の場合
@@ -166,7 +166,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                 }
 
                 // リロードできなかった場合、最後の1個を減らす
-                if (!isReloaded) itemStack.decrement(1)
+                if (!isReloaded) itemStack.shrink(1)
 
             }
         }

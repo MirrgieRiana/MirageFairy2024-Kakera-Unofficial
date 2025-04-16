@@ -89,6 +89,6 @@ class DebrisFeature(codec: Codec<Config>) : PlacedItemFeature<DebrisFeature.Conf
         }
     }
 
-    override fun getCount(context: FeatureContext<Config>) = context.config.count.get(context.random)
+    override fun getCount(context: FeatureContext<Config>) = context.config.count.get(context.random())
     override fun createItemStack(context: FeatureContext<Config>) = context.config.itemStack.copy()
 }
