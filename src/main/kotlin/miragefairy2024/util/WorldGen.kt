@@ -79,9 +79,9 @@ fun <T> registerDynamicGeneration(registryKey: RegistryKey<out Registry<T>>, ide
 
 context(ModContext)
 fun <T> registerDynamicGeneration(key: RegistryKey<T>, creator: context(DynamicGenerationScope<T>) () -> T) {
-    val registryKey = RegistryKey.createRegistryKey<T>(key.registry)
+    val registryKey = RegistryKey.createRegistryKey<T>(key.registry())
     DataGenerationEvents.onBuildRegistry {
-        it.addRegistry(registryKey) { context ->
+        it.add(registryKey) { context ->
             context.register(key, creator(DynamicGenerationScope(context)))
         }
     }
@@ -129,8 +129,8 @@ fun randomIntCount(count: Double): List<PlacementModifier> {
     if (rate == 0) return count(min)
     if (rate == 100) return count(min + 1)
     val dataPool = DataPool.builder<IntProvider>()
-        .add(ConstantIntProvider.create(min), 100 - rate)
-        .add(ConstantIntProvider.create(min + 1), rate)
+        .add(ConstantIntProvider.of(min), 100 - rate)
+        .add(ConstantIntProvider.of(min + 1), rate)
         .build()
     val intProvider = WeightedListIntProvider(dataPool)
     return listOf(CountPlacementModifier.of(intProvider))
@@ -140,47 +140,47 @@ context(PlacementModifiersScope)
 fun count(count: Int): List<PlacementModifier> = listOf(CountPlacementModifier.of(count))
 
 context(PlacementModifiersScope)
-fun per(chance: Int): List<PlacementModifier> = listOf(RarityFilterPlacementModifier.of(chance))
+fun per(chance: Int): List<PlacementModifier> = listOf(RarityFilterPlacementModifier.onAverageOnceEvery(chance))
 
 context(PlacementModifiersScope)
 fun tree(saplingBlock: Block): List<PlacementModifier> = listOf(
-    SquarePlacementModifier.of(),
-    SurfaceWaterDepthFilterPlacementModifier.of(0),
+    SquarePlacementModifier.spread(),
+    SurfaceWaterDepthFilterPlacementModifier.forMaxDepth(0),
     PlacedFeatures.HEIGHTMAP_OCEAN_FLOOR,
-    BiomePlacementModifier.of(),
-    PlacedFeatures.wouldSurvive(saplingBlock),
+    BiomePlacementModifier.biome(),
+    PlacedFeatures.filteredByBlockSurvival(saplingBlock),
 )
 
 context(PlacementModifiersScope)
 fun uniformOre(minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf(
-    SquarePlacementModifier.of(),
-    HeightRangePlacementModifier.uniform(YOffset.fixed(minOffset), YOffset.fixed(maxOffset)),
-    BiomePlacementModifier.of(),
+    SquarePlacementModifier.spread(),
+    HeightRangePlacementModifier.uniform(YOffset.absolute(minOffset), YOffset.absolute(maxOffset)),
+    BiomePlacementModifier.biome(),
 )
 
 context(PlacementModifiersScope)
 val flower: List<PlacementModifier>
     get() = listOf(
-        SquarePlacementModifier.of(),
+        SquarePlacementModifier.spread(),
         PlacedFeatures.HEIGHTMAP,
-        BiomePlacementModifier.of(),
+        BiomePlacementModifier.biome(),
     )
 
 context(PlacementModifiersScope)
 val netherFlower
     get(): List<PlacementModifier> = listOf(
         CountMultilayerPlacementModifier.of(1),
-        BiomePlacementModifier.of(),
+        BiomePlacementModifier.biome(),
     )
 
 context(PlacementModifiersScope)
 val undergroundFlower: List<PlacementModifier>
     get() = listOf(
-        SquarePlacementModifier.of(),
+        SquarePlacementModifier.spread(),
         PlacedFeatures.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-        EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 12),
-        RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1)),
-        BiomePlacementModifier.of(),
+        EnvironmentScanPlacementModifier.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+        RandomOffsetPlacementModifier.vertical(ConstantIntProvider.of(1)),
+        BiomePlacementModifier.biome(),
     )
 
 
@@ -198,7 +198,7 @@ fun StructureProcessorList(vararg processors: StructureProcessor): StructureProc
 
 context(DynamicGenerationScope<*>)
 fun SinglePoolElement(location: Identifier, processorsKey: RegistryKey<StructureProcessorList>, projection: StructurePool.Projection): StructurePoolElement {
-    return StructurePoolElement.ofProcessedSingle(location.string, RegistryKeys.PROCESSOR_LIST[processorsKey]).apply(projection)
+    return StructurePoolElement.single(location.string, RegistryKeys.PROCESSOR_LIST[processorsKey]).apply(projection)
 }
 
 context(DynamicGenerationScope<*>)

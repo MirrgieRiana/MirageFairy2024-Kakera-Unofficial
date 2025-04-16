@@ -52,11 +52,11 @@ fun initHaimeviskaWorldGens() {
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
-        Feature.TREE with TreeFeatureConfig.Builder(
+        Feature.TREE with TreeFeatureConfig.TreeConfigurationBuilder(
             BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
             BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block),
-            LargeOakFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(2), 4),
+            LargeOakFoliagePlacer(ConstantIntProvider.of(2), ConstantIntProvider.of(2), 4),
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
     }
@@ -85,17 +85,17 @@ fun initHaimeviskaWorldGens() {
 }
 
 class HaimeviskaTreeDecorator : TreeDecorator() {
-    override fun getType() = HaimeviskaTreeDecoratorCard.type
-    override fun generate(generator: Generator) {
-        generator.logPositions.forEach { blockPos ->
-            if (!generator.world.testBlockState(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
-            val direction = Direction.from2DDataValue(generator.random.nextInt(4))
+    override fun type() = HaimeviskaTreeDecoratorCard.type
+    override fun place(generator: Context) {
+        generator.logs().forEach { blockPos ->
+            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
+            val direction = Direction.from2DDataValue(generator.random().nextInt(4))
             if (!generator.isAir(blockPos.relative(direction))) return@forEach // 正面が空気の場合のみ
-            val r = generator.random.nextInt(100)
+            val r = generator.random().nextInt(100)
             if (r < 25) {
-                generator.replace(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             } else if (r < 35) {
-                generator.replace(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             }
         }
     }

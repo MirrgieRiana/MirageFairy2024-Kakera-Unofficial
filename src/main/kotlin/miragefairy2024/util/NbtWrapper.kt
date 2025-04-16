@@ -122,15 +122,15 @@ operator fun NbtProperty<NbtElement?, NbtElement>.get(index: Int): NbtProperty<N
 val NbtProperty<NbtElement?, NbtElement?>.list get() = NbtProperty<NbtList?, NbtList?>({ this.get()?.castOrNull() }, { this.set(it) })
 val NbtProperty<NbtElement?, NbtElement?>.compound get() = NbtProperty<NbtCompound?, NbtCompound?>({ this.get()?.castOrNull() }, { this.set(it) })
 
-val NbtProperty<NbtElement?, NbtElement?>.byte get() = NbtProperty<Byte?, Byte?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.byteValue() }, { this.set(it?.let { a -> NbtByte.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.short get() = NbtProperty<Short?, Short?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.shortValue() }, { this.set(it?.let { a -> NbtShort.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.int get() = NbtProperty<Int?, Int?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.intValue() }, { this.set(it?.let { a -> NbtInt.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.long get() = NbtProperty<Long?, Long?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.longValue() }, { this.set(it?.let { a -> NbtLong.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.float get() = NbtProperty<Float?, Float?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.floatValue() }, { this.set(it?.let { a -> NbtFloat.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.double get() = NbtProperty<Double?, Double?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.doubleValue() }, { this.set(it?.let { a -> NbtDouble.of(a) }) })
-val NbtProperty<NbtElement?, NbtElement?>.number get() = NbtProperty<Number?, Number?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.numberValue() }, { this.set(it?.let { a -> NbtDouble.of(a.toDouble()) }) })
-val NbtProperty<NbtElement?, NbtElement?>.string get() = NbtProperty<String?, String?>({ this.get()?.castOrNull<NbtString>()?.asString() }, { this.set(it?.toNbtString()) })
-val NbtProperty<NbtElement?, NbtElement?>.boolean get() = NbtProperty<Boolean?, Boolean?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.byteValue()?.let { it != 0.toByte() } }, { this.set(it?.let { a -> NbtByte.of(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.byte get() = NbtProperty<Byte?, Byte?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsByte() }, { this.set(it?.let { a -> NbtByte.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.short get() = NbtProperty<Short?, Short?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsShort() }, { this.set(it?.let { a -> NbtShort.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.int get() = NbtProperty<Int?, Int?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsInt() }, { this.set(it?.let { a -> NbtInt.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.long get() = NbtProperty<Long?, Long?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsLong() }, { this.set(it?.let { a -> NbtLong.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.float get() = NbtProperty<Float?, Float?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsFloat() }, { this.set(it?.let { a -> NbtFloat.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.double get() = NbtProperty<Double?, Double?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsDouble() }, { this.set(it?.let { a -> NbtDouble.valueOf(a) }) })
+val NbtProperty<NbtElement?, NbtElement?>.number get() = NbtProperty<Number?, Number?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsNumber() }, { this.set(it?.let { a -> NbtDouble.valueOf(a.toDouble()) }) })
+val NbtProperty<NbtElement?, NbtElement?>.string get() = NbtProperty<String?, String?>({ this.get()?.castOrNull<NbtString>()?.getAsString() }, { this.set(it?.toNbtString()) })
+val NbtProperty<NbtElement?, NbtElement?>.boolean get() = NbtProperty<Boolean?, Boolean?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.getAsByte()?.let { it != 0.toByte() } }, { this.set(it?.let { a -> NbtByte.valueOf(a) }) })
 
 @get:JvmName("listGetter")
 val NbtProperty<NbtElement, Nothing>.list get() = NbtProperty<NbtList?, Nothing>({ this.get().castOrNull() }, {})
@@ -139,31 +139,31 @@ val NbtProperty<NbtElement, Nothing>.list get() = NbtProperty<NbtList?, Nothing>
 val NbtProperty<NbtElement, Nothing>.compound get() = NbtProperty<NbtCompound?, Nothing>({ this.get().castOrNull() }, {})
 
 @get:JvmName("byteGetter")
-val NbtProperty<NbtElement, Nothing>.byte get() = NbtProperty<Byte?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.byteValue() }, {})
+val NbtProperty<NbtElement, Nothing>.byte get() = NbtProperty<Byte?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsByte() }, {})
 
 @get:JvmName("shortGetter")
-val NbtProperty<NbtElement, Nothing>.short get() = NbtProperty<Short?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.shortValue() }, {})
+val NbtProperty<NbtElement, Nothing>.short get() = NbtProperty<Short?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsShort() }, {})
 
 @get:JvmName("intGetter")
-val NbtProperty<NbtElement, Nothing>.int get() = NbtProperty<Int?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.intValue() }, {})
+val NbtProperty<NbtElement, Nothing>.int get() = NbtProperty<Int?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsInt() }, {})
 
 @get:JvmName("longGetter")
-val NbtProperty<NbtElement, Nothing>.long get() = NbtProperty<Long?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.longValue() }, {})
+val NbtProperty<NbtElement, Nothing>.long get() = NbtProperty<Long?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsLong() }, {})
 
 @get:JvmName("floatGetter")
-val NbtProperty<NbtElement, Nothing>.float get() = NbtProperty<Float?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.floatValue() }, {})
+val NbtProperty<NbtElement, Nothing>.float get() = NbtProperty<Float?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsFloat() }, {})
 
 @get:JvmName("doubleGetter")
-val NbtProperty<NbtElement, Nothing>.double get() = NbtProperty<Double?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.doubleValue() }, {})
+val NbtProperty<NbtElement, Nothing>.double get() = NbtProperty<Double?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsDouble() }, {})
 
 @get:JvmName("numberGetter")
-val NbtProperty<NbtElement, Nothing>.number get() = NbtProperty<Number?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.numberValue() }, {})
+val NbtProperty<NbtElement, Nothing>.number get() = NbtProperty<Number?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsNumber() }, {})
 
 @get:JvmName("stringGetter")
-val NbtProperty<NbtElement, Nothing>.string get() = NbtProperty<String?, Nothing>({ this.get().castOrNull<NbtString>()?.asString() }, {})
+val NbtProperty<NbtElement, Nothing>.string get() = NbtProperty<String?, Nothing>({ this.get().castOrNull<NbtString>()?.getAsString() }, {})
 
 @get:JvmName("booleanGetter")
-val NbtProperty<NbtElement, Nothing>.boolean get() = NbtProperty<Boolean?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.byteValue()?.let { it != 0.toByte() } }, {})
+val NbtProperty<NbtElement, Nothing>.boolean get() = NbtProperty<Boolean?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.getAsByte()?.let { it != 0.toByte() } }, {})
 
 val NbtProperty<NbtElement?, NbtElement?>.map
     get() = NbtProperty<Map<String, NbtElement>?, Map<String, NbtElement>?>({

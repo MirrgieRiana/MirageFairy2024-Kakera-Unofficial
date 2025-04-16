@@ -90,7 +90,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         return quickMove(slot, destinationIndices)
     }
 
-    override fun sendContentUpdates() {
+    override fun broadcastChanges() {
 
         // リザルトにアイテムが残っている場合、排出を試みる
         if (!resultInventory.isEmpty) {
@@ -150,8 +150,8 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
             resultInventory.mergeTo(outputInventory)
 
             // エフェクト
-            context.run { world, blockPos ->
-                world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.5F, 0.8F + 0.4F * world.random.nextFloat())
+            context.execute { world, blockPos ->
+                world.playSound(null, blockPos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.5F, 0.8F + 0.4F * world.random.nextFloat())
             }
 
             // リセット
@@ -159,17 +159,17 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
 
         }
 
-        super.sendContentUpdates()
+        super.broadcastChanges()
 
     }
 
-    override fun onClosed(player: PlayerEntity) {
-        super.onClosed(player)
-        context.run { _, _ ->
-            dropInventory(player, inputInventory)
-            dropInventory(player, processingInventory)
-            dropInventory(player, resultInventory)
-            dropInventory(player, outputInventory)
+    override fun removed(player: PlayerEntity) {
+        super.removed(player)
+        context.execute { _, _ ->
+            clearContainer(player, inputInventory)
+            clearContainer(player, processingInventory)
+            clearContainer(player, resultInventory)
+            clearContainer(player, outputInventory)
         }
     }
 }
