@@ -40,7 +40,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
 
             // 発動
 
-            val baseHardness = state.getHardness(world, pos)
+            val baseHardness = state.getDestroySpeed(world, pos)
 
             // TODO 貫通抑制
             (-level..level).forEach { x ->
@@ -55,13 +55,13 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                                 // 採掘を続行
 
                                 val targetBlockState = world.getBlockState(targetBlockPos)
-                                val targetHardness = targetBlockState.getHardness(world, targetBlockPos)
+                                val targetHardness = targetBlockState.getDestroySpeed(world, targetBlockPos)
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                     if (targetHardness > 0) {
                                         val damage = world.random.randomInt(configuration.miningDamage)
                                         if (damage > 0) {
-                                            stack.damage(damage, miner) {
+                                            stack.hurtAndBreak(damage, miner) {
                                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
                                             }
                                         }

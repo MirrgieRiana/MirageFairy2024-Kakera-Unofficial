@@ -87,7 +87,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noOcclusion().strength(2.0F).instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
 
 
     // Slot
@@ -171,7 +171,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 6
+    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 6
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun hasComparatorOutput(state: BlockState) = true

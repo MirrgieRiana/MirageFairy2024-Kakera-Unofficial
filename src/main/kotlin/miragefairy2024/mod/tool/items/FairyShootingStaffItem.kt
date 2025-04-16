@@ -118,7 +118,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         world.addFreshEntity(entity)
 
         // 消費
-        itemStack.damage(1, user) {
+        itemStack.hurtAndBreak(1, user) {
             it.sendToolBreakStatus(hand)
         }
         if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
@@ -135,15 +135,15 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     }
 
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.damage(2, attacker) { e ->
+        stack.hurtAndBreak(2, attacker) { e ->
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
         }
         return true
     }
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getHardness(world, pos) != 0.0F) {
-            stack.damage(2, miner) { e ->
+        if (state.getDestroySpeed(world, pos) != 0.0F) {
+            stack.hurtAndBreak(2, miner) { e ->
                 e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
             }
         }

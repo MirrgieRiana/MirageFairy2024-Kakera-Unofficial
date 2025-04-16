@@ -29,13 +29,13 @@ fun initPlacedItemClientModule() {
 
             if (player.isSpectator) return@run // スペクテイターモード
 
-            val hitResult = player.raycast(5.0, 0F, false)
+            val hitResult = player.pick(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@run // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@run // ブロックをターゲットにしていない
 
             if (!player.level().getBlockState(hitResult.blockPos).`is`(PlacedItemCard.block)) {
-                val blockPos = if (player.level().getBlockState(hitResult.blockPos).isReplaceable) hitResult.blockPos else hitResult.blockPos.offset(hitResult.side)
-                val rotation = when (hitResult.side) {
+                val blockPos = if (player.level().getBlockState(hitResult.blockPos).canBeReplaced()) hitResult.blockPos else hitResult.blockPos.relative(hitResult.direction)
+                val rotation = when (hitResult.direction) {
                     Direction.DOWN -> Pair(MathHelper.HALF_PI.toDouble(), -(player.yaw.toDouble() + 180.0) / 180.0 * MathHelper.PI)
                     Direction.UP, null -> Pair(-MathHelper.HALF_PI.toDouble(), -(player.yaw.toDouble() + 180.0) / 180.0 * MathHelper.PI)
                     Direction.NORTH -> Pair(0.0, 180.0 / 180.0 * MathHelper.PI)

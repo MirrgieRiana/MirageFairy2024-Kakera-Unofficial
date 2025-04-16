@@ -71,7 +71,7 @@ import java.time.ZoneOffset
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
+    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sound(BlockSoundGroup.COPPER).strength(0.5F).noOcclusion())
     val item = BlockItem(block, Item.Properties())
 }
 

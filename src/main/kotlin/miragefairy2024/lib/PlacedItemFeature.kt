@@ -33,7 +33,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
             val actualBlockPos = world.getTopPosition(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, currentBlockPos)
 
             // 生成環境判定
-            if (!world.getBlockState(actualBlockPos).isReplaceable) return@repeat // 配置先が埋まっている
+            if (!world.getBlockState(actualBlockPos).canBeReplaced()) return@repeat // 配置先が埋まっている
             if (!world.getBlockState(actualBlockPos.down()).isOpaqueFullCube(world, actualBlockPos.down())) return@repeat // 配置先が地面でない
 
             // アイテム判定

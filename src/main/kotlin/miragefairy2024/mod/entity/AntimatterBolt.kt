@@ -143,9 +143,9 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
         }
     }
 
-    override fun onEntityHit(entityHitResult: EntityHitResult) {
-        super.onEntityHit(entityHitResult)
-        entityHitResult.entity.damage(world.damageSources.create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
+    override fun onHitEntity(entityHitResult: EntityHitResult) {
+        super.onHitEntity(entityHitResult)
+        entityHitResult.entity.hurt(world.damageSources().create(MagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
     }
 
     override fun handleStatus(status: Byte) {

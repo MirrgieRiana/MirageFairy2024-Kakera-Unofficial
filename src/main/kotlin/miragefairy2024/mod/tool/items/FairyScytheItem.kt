@@ -103,7 +103,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
         if (!user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
-            val blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE)
+            val blockHitResult = getPlayerPOVHitResult(world, user, RaycastContext.FluidHandling.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false
             // TODO 貫通判定
@@ -126,16 +126,16 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     }
 
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.damage(2, attacker) { e ->
+        stack.hurtAndBreak(2, attacker) { e ->
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
         }
         return true
     }
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getHardness(world, pos) != 0.0F) {
+        if (state.getDestroySpeed(world, pos) != 0.0F) {
             if (miner.random.nextFloat() < 0.2F) {
-                stack.damage(1, miner) { e ->
+                stack.hurtAndBreak(1, miner) { e ->
                     e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
                 }
             }

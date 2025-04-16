@@ -40,7 +40,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),

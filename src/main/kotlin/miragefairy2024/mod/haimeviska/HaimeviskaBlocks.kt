@@ -139,12 +139,12 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     val item = BlockItem(block, Item.Properties())
 }
 
-private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).randomTicks().sounds(BlockSoundGroup.GRASS).nonOpaque().allowsSpawning(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).solidBlock(Blocks::never)
-private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).burnable()
+private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::canSpawnOnLeaves).suffocates(Blocks::never).blockVision(Blocks::never).burnable().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
+private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).burnable()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.get(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON_PINK else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON_PINK)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON_PINK)
-private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().randomTicks().breakInstantly().sounds(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
+private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.DARK_GREEN).noCollission().randomTicks().breakInstantly().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -395,10 +395,10 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
         val toolItemStack = player.getItemInHand(hand)
         if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
         if (world.isClientSide) return ActionResult.SUCCESS
-        val direction = if (hit.side.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.side
+        val direction = if (hit.direction.axis === Direction.Axis.Y) player.horizontalFacing.opposite else hit.direction
 
         // 加工
-        toolItemStack.damage(1, player) { it.sendToolBreakStatus(hand) }
+        toolItemStack.hurtAndBreak(1, player) { it.sendToolBreakStatus(hand) }
         world.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.awardStat(Stats.ITEM_USED.get(toolItemStack.item))
 
@@ -453,7 +453,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         if (random.nextFloat() >= 0.2F) return
 
         val direction = state.get(FACING)
-        val destBlockPos = pos.offset(direction)
+        val destBlockPos = pos.relative(direction)
         val destBlockState = world.getBlockState(destBlockPos)
         val destShape = destBlockState.getCollisionShape(world, destBlockPos)
         val hasSpace = when (direction) {

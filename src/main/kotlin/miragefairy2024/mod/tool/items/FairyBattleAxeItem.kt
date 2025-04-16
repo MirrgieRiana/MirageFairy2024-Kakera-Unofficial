@@ -70,15 +70,15 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
 open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.damage(1, attacker) { e ->
+        stack.hurtAndBreak(1, attacker) { e ->
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
         }
         return true
     }
 
     override fun postMine(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getHardness(world, pos) != 0.0F) {
-            stack.damage(2, miner) { e ->
+        if (state.getDestroySpeed(world, pos) != 0.0F) {
+            stack.hurtAndBreak(2, miner) { e ->
                 e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
             }
         }

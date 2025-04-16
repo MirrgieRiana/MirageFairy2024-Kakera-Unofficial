@@ -133,9 +133,9 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         }
     }
 
-    override fun onEntityHit(entityHitResult: EntityHitResult) {
-        super.onEntityHit(entityHitResult)
-        entityHitResult.entity.damage(world.damageSources.create(PhysicalMagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
+    override fun onHitEntity(entityHitResult: EntityHitResult) {
+        super.onHitEntity(entityHitResult)
+        entityHitResult.entity.hurt(world.damageSources().create(PhysicalMagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
         if (world.random.nextInt(5) == 0) dropItem(MaterialCard.ETHEROBALLISTIC_BOLT_FRAGMENT.item)
     }
 

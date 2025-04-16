@@ -31,7 +31,7 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
         override fun getPart() = modelPart
     }
 
-    override fun getTexture(entity: AntimatterBoltEntity) = texture
+    override fun getTextureLocation(entity: AntimatterBoltEntity) = texture
 
     override fun render(entity: AntimatterBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {

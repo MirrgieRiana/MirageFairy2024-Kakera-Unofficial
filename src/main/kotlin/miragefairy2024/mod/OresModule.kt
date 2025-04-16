@@ -101,20 +101,20 @@ enum class OreCard(
             BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE_GRAY)
                 .instrument(Instrument.BASEDRUM)
-                .requiresTool()
+                .requiresCorrectToolForDrops()
                 .strength(3.0F, 3.0F)
 
             BaseStoneType.DEEPSLATE -> FabricBlockSettings.create()
                 .mapColor(MapColor.DEEPSLATE_GRAY)
                 .instrument(Instrument.BASEDRUM)
-                .requiresTool()
+                .requiresCorrectToolForDrops()
                 .strength(4.5F, 3.0F)
-                .sounds(BlockSoundGroup.DEEPSLATE)
+                .sound(BlockSoundGroup.DEEPSLATE)
         }
         ExperienceDroppingBlock(settings, UniformIntProvider.create(experience.first, experience.second))
     }
     val item = BlockItem(block, Item.Properties())
-    val texturedModelFactory = TexturedModel.Factory {
+    val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
             BaseStoneType.STONE -> Identifier("minecraft", "block/stone")
             BaseStoneType.DEEPSLATE -> Identifier("minecraft", "block/deepslate")

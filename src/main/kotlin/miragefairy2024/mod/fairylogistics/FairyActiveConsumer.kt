@@ -37,7 +37,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sounds(BlockSoundGroup.METAL)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.PALE_PURPLE).sound(BlockSoundGroup.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)
@@ -174,7 +174,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         val entity = ArrowEntity(world, posD.x, posD.y, posD.z)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
             val supplierPosD = supplier.pos.toCenterPos()
-            val hitResult = world.raycast(RaycastContext(posD, supplierPosD, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity))
+            val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity))
             hitResult.type == HitResult.Type.MISS
         }
 

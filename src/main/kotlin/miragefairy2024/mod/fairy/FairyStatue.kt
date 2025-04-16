@@ -97,14 +97,14 @@ class FairyStatueCard(
     mapColor: MapColor,
 ) {
     val identifier = MirageFairy2024.identifier(path)
-    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
+    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).noOcclusion())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Properties())
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
         .poem(poem)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
-    val texturedModelFactory = TexturedModel.Factory {
+    val texturedModelFactory = TexturedModel.Provider {
         val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
         model.with(
             TextureKey.PARTICLE to "block/" * identifier * "_base",

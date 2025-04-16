@@ -42,7 +42,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
 
             // 発動
 
-            val baseHardness = state.getHardness(world, pos)
+            val baseHardness = state.getDestroySpeed(world, pos)
 
             blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 31) { _, _, toBlockPos ->
                 world.getBlockState(toBlockPos).block === state.block
@@ -53,13 +53,13 @@ object MineAllToolEffectType : BooleanToolEffectType() {
                 // 採掘を続行
 
                 val targetBlockState = world.getBlockState(blockPos)
-                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                val targetHardness = targetBlockState.getDestroySpeed(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
                         val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
-                            stack.damage(damage, miner) {
+                            stack.hurtAndBreak(damage, miner) {
                                 it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
                             }
                         }

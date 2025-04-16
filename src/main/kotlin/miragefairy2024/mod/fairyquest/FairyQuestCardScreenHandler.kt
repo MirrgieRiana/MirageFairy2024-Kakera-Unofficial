@@ -78,7 +78,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         repeat(4) { i ->
             addSlot(OutputSlot(outputInventory, i, 0, 0))
         }
-        addProperties(propertyDelegate)
+        addDataSlots(propertyDelegate)
     }
 
     override fun stillValid(player: PlayerEntity) = true

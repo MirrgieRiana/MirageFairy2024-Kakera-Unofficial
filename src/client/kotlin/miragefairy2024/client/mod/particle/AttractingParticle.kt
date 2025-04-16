@@ -31,7 +31,7 @@ class AttractingParticle internal constructor(
     override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
 
     override fun move(dx: Double, dy: Double, dz: Double) {
-        boundingBox = boundingBox.offset(dx, dy, dz)
+        boundingBox = boundingBox.move(dx, dy, dz)
         repositionFromBoundingBox()
     }
 
