@@ -16,7 +16,7 @@ fun ItemStack.toNbt(): NbtCompound = NbtCompound().also { this.writeNbt(it) }
 fun NbtCompound.toItemStack(): ItemStack = ItemStack.of(this)
 
 infix fun ItemStack.hasSameItem(other: ItemStack) = this.item === other.item
-infix fun ItemStack.hasSameItemAndNbt(other: ItemStack) = this hasSameItem other && Objects.equals(this.nbt, other.nbt)
+infix fun ItemStack.hasSameItemAndNbt(other: ItemStack) = this hasSameItem other && Objects.equals(this.tag, other.tag)
 infix fun ItemStack.hasSameItemAndNbtAndCount(other: ItemStack) = this hasSameItemAndNbt other && this.count == other.count
 
 fun ItemStack.repair(amount: Int) {

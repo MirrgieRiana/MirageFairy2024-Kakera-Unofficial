@@ -64,7 +64,7 @@ enum class BagCard(
         "plant_bag", EnJa("Plant Bag", "植物カバン"),
         1, EnJa("Basket wall composed of uneven stems", "人間が手掛ける、初級レベルの藁細工。"),
         5, 3,
-        { it.item.castOrNull<BlockItem>()?.block?.registryEntry?.`is`(BlockTags.SWORD_EFFICIENT) == true },
+        { it.item.castOrNull<BlockItem>()?.block?.builtInRegistryHolder()?.`is`(BlockTags.SWORD_EFFICIENT) == true },
     ),
     SEED_BAG(
         "seed_bag", EnJa("Seed Bag", "種子カバン"),
@@ -160,30 +160,30 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         if (itemCount > 10) tooltip += text { "... ${itemCount - 10}"() }
     }
 
-    override fun isItemBarVisible(stack: ItemStack): Boolean {
+    override fun isBarVisible(stack: ItemStack): Boolean {
         val bagInventory = stack.getBagInventory() ?: return false
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return count > 0
     }
 
-    override fun getItemBarStep(stack: ItemStack): Int {
+    override fun getBarWidth(stack: ItemStack): Int {
         val bagInventory = stack.getBagInventory() ?: return 0
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return (13.0 * count.toDouble() / card.inventorySize.toDouble()).roundToInt()
     }
 
-    override fun getItemBarColor(stack: ItemStack): Int {
+    override fun getBarColor(stack: ItemStack): Int {
         val bagInventory = stack.getBagInventory() ?: return 0
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
+        val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {
-            val selectedSlot = user.inventory.selectedSlot
-            if (!PlayerInventory.isValidHotbarIndex(selectedSlot)) return TypedActionResult.fail(itemStack)
+            val selectedSlot = user.inventory.selected
+            if (!PlayerInventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
             selectedSlot
         } else {
             -1
@@ -205,10 +205,10 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     // カバンを持って種子のスロットを右クリックした場合の処理
     // slot = 種子のスロット（操作後、マージが完了した場合は除去、そうでない場合は部分的除去が行われる）
     // カバンは常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun onStackClicked(stack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity): Boolean {
-        if (clickType != ClickType.RIGHT) return false
+    override fun overrideStackedOnOther(stack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity): Boolean {
+        if (clickType != ClickType.SECONDARY) return false
 
-        if (!slot.canTakeItems(player)) return false // そもそもスロットからアイテムを回収できない場合はキャンセル
+        if (!slot.mayPickup(player)) return false // そもそもスロットからアイテムを回収できない場合はキャンセル
 
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
@@ -218,16 +218,16 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         // マージをシミュレートする
         val result = srcInventory.mergeTo(destInventory)
 
-        if (!result.completed && !slot.canTakePartial(player)) return false // マージが半端である場合、スロットが部分的な回収を受け付けない場合はキャンセル
+        if (!result.completed && !slot.allowModification(player)) return false // マージが半端である場合、スロットが部分的な回収を受け付けない場合はキャンセル
 
         // 成功
 
         if (result.movementTimes > 0) {
-            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
+            player.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
         }
 
         // シミュレートした結果を適用する
-        slot.item = srcInventory[0]
+        slot.set(srcInventory[0])
         stack.setBagInventory(destInventory)
 
         return true
@@ -236,10 +236,10 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     // 種子を持ってカバンに突っ込んだ場合の処理
     // slot = カバンのスロット（操作後、変更が行われる）
     // 種子は常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun onClicked(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity, cursorStackReference: StackReference): Boolean {
-        if (clickType != ClickType.RIGHT) return false
+    override fun overrideOtherStackedOnMe(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity, cursorStackReference: StackReference): Boolean {
+        if (clickType != ClickType.SECONDARY) return false
 
-        if (!slot.canTakePartial(player)) return false // そもそもカバンのスロットが変更を受け付けない場合はキャンセル
+        if (!slot.allowModification(player)) return false // そもそもカバンのスロットが変更を受け付けない場合はキャンセル
 
         // シミュレーション用のインベントリを作成
         val srcInventory = SimpleInventory(1)
@@ -252,7 +252,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         // 成功
 
         if (result.movementTimes > 0) {
-            player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
+            player.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + player.level().getRandom().nextFloat() * 0.4F)
         }
 
         // シミュレートした結果を適用する
@@ -262,62 +262,62 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return true
     }
 
-    override fun canBeNested() = false
+    override fun canFitInsideContainerItems() = false
 
-    override fun onItemEntityDestroyed(entity: ItemEntity) {
+    override fun onDestroyed(entity: ItemEntity) {
         val world = entity.level()
         if (world.isClientSide) return
-        val bagInventory = entity.stack.getBagInventory() ?: return
-        bagInventory.stacks.forEach { itemStack ->
-            world.spawnEntity(ItemEntity(world, entity.x, entity.y, entity.z, itemStack))
+        val bagInventory = entity.item.getBagInventory() ?: return
+        bagInventory.items.forEach { itemStack ->
+            world.addFreshEntity(ItemEntity(world, entity.x, entity.y, entity.z, itemStack))
         }
     }
 
 }
 
 class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {
-    override fun canPlaceItem(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canBeNested()
+    override fun canPlaceItem(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canFitInsideContainerItems()
 }
 
 fun ItemStack.getBagInventory(): BagInventory? {
     val item = this.item as? BagItem ?: return null
     val inventory = BagInventory(item.card)
-    val nbt = this.nbt
-    if (nbt != null) Inventories.readNbt(nbt, inventory.stacks)
+    val nbt = this.tag
+    if (nbt != null) Inventories.loadAllItems(nbt, inventory.items)
     return inventory
 }
 
 fun ItemStack.setBagInventory(inventory: BagInventory) {
-    val nbt = getOrCreateNbt()
-    Inventories.writeNbt(nbt, inventory.stacks, true)
+    val nbt = getOrCreateTag()
+    Inventories.saveAllItems(nbt, inventory.items, true)
 }
 
 
 fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
-    val itemStackInstance = if (slotIndex == -1) playerInventory.offHand[0] else playerInventory.main[slotIndex]
+    val itemStackInstance = if (slotIndex == -1) playerInventory.offhand[0] else playerInventory.items[slotIndex]
     var expectedItemStack = itemStackInstance.copy()
     val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
     val inventoryDelegate = object : Inventory {
         override fun clearContent() = bagInventory.clearContent()
-        override fun getContainerSize() = bagInventory.size()
+        override fun getContainerSize() = bagInventory.getContainerSize()
         override fun isEmpty() = bagInventory.isEmpty()
         override fun getItem(slot: Int) = bagInventory.getItem(slot)
         override fun removeItem(slot: Int, amount: Int) = bagInventory.removeItem(slot, amount)
         override fun removeItemNoUpdate(slot: Int) = bagInventory.removeItemNoUpdate(slot)
         override fun setItem(slot: Int, stack: ItemStack) = bagInventory.setItem(slot, stack)
-        override fun getMaxCountPerStack() = bagInventory.maxCountPerStack
+        override fun getMaxStackSize() = bagInventory.maxStackSize
         override fun setChanged() {
             bagInventory.setChanged()
             itemStackInstance.setBagInventory(bagInventory)
             expectedItemStack = itemStackInstance.copy()
         }
 
-        override fun stillValid(player: PlayerEntity) = bagInventory.canPlayerUse(player)
-        override fun onOpen(player: PlayerEntity) = bagInventory.onOpen(player)
-        override fun onClose(player: PlayerEntity) = bagInventory.onClose(player)
+        override fun stillValid(player: PlayerEntity) = bagInventory.stillValid(player)
+        override fun startOpen(player: PlayerEntity) = bagInventory.startOpen(player)
+        override fun stopOpen(player: PlayerEntity) = bagInventory.stopOpen(player)
         override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)
-        override fun canTransferTo(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTransferTo(hopperInventory, slot, stack)
+        override fun canTakeItem(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
     }
 
     return object : BagScreenHandler(syncId) {
@@ -336,7 +336,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
         }
 
         override fun stillValid(player: PlayerEntity): Boolean {
-            val itemStack = if (slotIndex >= 0) playerInventory.main[slotIndex] else playerInventory.offHand[0]
+            val itemStack = if (slotIndex >= 0) playerInventory.items[slotIndex] else playerInventory.offhand[0]
             return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
         }
 

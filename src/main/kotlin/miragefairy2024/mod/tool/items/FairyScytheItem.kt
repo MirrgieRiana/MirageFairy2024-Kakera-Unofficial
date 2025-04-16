@@ -102,7 +102,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
 
         if (!user.isShiftKeyDown) {
-            val itemStack = user.getStackInHand(hand)
+            val itemStack = user.getItemInHand(hand)
             val blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false

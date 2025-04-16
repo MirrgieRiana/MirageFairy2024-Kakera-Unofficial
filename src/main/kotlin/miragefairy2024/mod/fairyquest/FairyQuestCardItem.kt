@@ -108,7 +108,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
+        val itemStack = user.getItemInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         user.openMenu(object : ExtendedScreenHandlerFactory {
@@ -129,7 +129,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
 fun ItemStack.getFairyQuestRecipeId(): Identifier? = nbt.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
-fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyQuestRecipe"].string.set(identifier.string)
+fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
 fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {

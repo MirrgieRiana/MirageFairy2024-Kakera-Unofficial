@@ -44,7 +44,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-            world.spawnEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
+            world.addFreshEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
 
             // 妖精召喚履歴に追加
             player.fairyHistoryContainer[result.motif] += result.condensation * result.count
@@ -62,7 +62,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-            entity.level().spawnEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
+            entity.level().addFreshEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
 
             // 妖精召喚履歴に追加
             attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count

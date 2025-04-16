@@ -15,7 +15,7 @@ fun ScreenHandler.quickMove(slotIndex: Int, destinationIndices: Iterable<Int>): 
 
     // 終了処理
     if (newItemStack.isEmpty) {
-        slots[slotIndex].item = EMPTY_ITEM_STACK
+        slots[slotIndex].set(EMPTY_ITEM_STACK)
     } else {
         slots[slotIndex].setChanged()
     }

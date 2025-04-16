@@ -67,7 +67,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
+        val itemStack = user.getItemInHand(hand)
         if (!user.isShiftKeyDown) {
 
             // 使用開始
