@@ -64,7 +64,7 @@ import net.minecraft.world.level.Level as World
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).strength(1.0F).noOcclusion())
+    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque())
     val item = BlockItem(block, Item.Properties())
 }
 
@@ -190,7 +190,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             }
 
             // エフェクト
-            if (world.isServer) world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
+            if (world.isServer) world.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
             if (world.isClientSide) {
                 // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
                 repeat(3) {

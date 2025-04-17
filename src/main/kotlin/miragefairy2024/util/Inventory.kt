@@ -19,7 +19,7 @@ val Inventory.indices get() = 0 until this.size
 val Inventory.itemStacks get() = this.indices.map { this[it] }
 
 class FilteringSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
-    override fun mayPlace(stack: ItemStack) = inventory.canPlaceItem(index, stack)
+    override fun mayPlace(stack: ItemStack) = container.canPlaceItem(index, stack)
 }
 
 class OutputSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
@@ -208,7 +208,7 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
         indices.forEach { i ->
             if (insertItemStack.isEmpty) return@run // 挿入完了
             val slotItemStack = this.getItemStack(i)
-            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.isSameItemSameTags(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
                 val moveCount = insertItemStack.count atMost (slotItemStack.maxStackSize - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount
@@ -259,7 +259,7 @@ fun List<ItemStack>.writeToNbt(nbt: NbtCompound) {
         if (itemStack.isNotEmpty) {
             val itemCompound = NbtCompound()
             itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
-            itemStack.writeNbt(itemCompound)
+            itemStack.save(itemCompound)
             nbtList.add(itemCompound)
         }
     }

@@ -40,7 +40,7 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
 
         // 削除するべきものを削除
         oldValue.map.forEach { (attribute, _) ->
-            val customInstance = context.player.attributes.getCustomInstance(attribute) ?: return@forEach
+            val customInstance = context.player.attributes.getInstance(attribute) ?: return@forEach
             if (attribute !in newValue.map) {
                 customInstance.removeModifier(uuid)
             }
@@ -48,15 +48,15 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
 
         // 追加および変更
         newValue.map.forEach { (attribute, value) ->
-            val customInstance = context.player.attributes.getCustomInstance(attribute) ?: return@forEach
+            val customInstance = context.player.attributes.getInstance(attribute) ?: return@forEach
             val oldModifier = customInstance.getModifier(uuid)
             if (oldModifier == null) {
                 val modifier = EntityAttributeModifier(uuid, "Fairy Bonus", value, EntityAttributeModifier.Operation.ADDITION)
-                customInstance.addTemporaryModifier(modifier)
-            } else if (oldModifier.value != value) {
+                customInstance.addTransientModifier(modifier)
+            } else if (oldModifier.amount != value) {
                 customInstance.removeModifier(uuid)
                 val modifier = EntityAttributeModifier(uuid, "Fairy Bonus", value, EntityAttributeModifier.Operation.ADDITION)
-                customInstance.addTemporaryModifier(modifier)
+                customInstance.addTransientModifier(modifier)
             }
         }
 

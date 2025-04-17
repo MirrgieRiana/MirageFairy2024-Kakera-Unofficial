@@ -132,7 +132,7 @@ class BlueFuelWidget(private val rectangle: Rectangle) : WidgetWithBounds() {
         val fuel = fuelMax - (System.currentTimeMillis() / 50) % fuelMax - 1
         val fuelRate = fuel.toDouble() / fuelMax.toDouble()
         val h = (rectangle.height.toDouble() * fuelRate).roundToInt()
-        context.drawTexture(
+        context.blit(
             AuraReflectorFurnaceScreen.BLUE_FUEL_TEXTURE,
             rectangle.x - 1,
             rectangle.y - 1 + (rectangle.height - h),

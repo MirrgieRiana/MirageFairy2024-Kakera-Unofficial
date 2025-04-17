@@ -69,12 +69,12 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
         matrices.stack {
             matrices.translate(0F, 0.5F, 0F)
             root.rotate(matrices)
-            matrices.multiply(Quaternionf().rotateZYX(ROLL, 0F, PITCH))
+            matrices.mulPose(Quaternionf().rotateZYX(ROLL, 0F, PITCH))
 
             repeat(8) { i ->
                 val segment = segments!![i]
                 matrices.stack {
-                    matrices.multiply(rotations[i])
+                    matrices.mulPose(rotations[i])
                     parts[segment.partIndex].render(matrices, vertices, light, overlay, red, green, blue, alpha)
                 }
             }

@@ -179,12 +179,12 @@ object DripstoneCavesRuinCard {
 
         val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
-                config = Structure.Config(
-                    RegistryEntryList.of(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
+                config = Structure.StructureSettings(
+                    RegistryEntryList.direct(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
                     mapOf(
                         SpawnGroup.MONSTER to StructureSpawns(
-                            StructureSpawns.BoundingBox.PIECE,
-                            Pool.of(
+                            StructureSpawns.BoundingBoxType.PIECE,
+                            Pool.create(
                                 SpawnSettings.SpawnerData(ChaosCubeCard.entityType, 10, 1, 4),
                             )
                         ),
@@ -194,7 +194,7 @@ object DripstoneCavesRuinCard {
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[mainTemplatePoolKey],
                 size = 12,
-                startHeight = UniformHeightProvider.create(YOffset.absolute(-40), YOffset.absolute(20)),
+                startHeight = UniformHeightProvider.of(YOffset.absolute(-40), YOffset.absolute(20)),
                 useExpansionHack = false,
             )
         }
@@ -202,7 +202,7 @@ object DripstoneCavesRuinCard {
         val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
             )

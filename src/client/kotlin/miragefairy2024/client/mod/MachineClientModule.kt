@@ -34,7 +34,7 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 
         if (handler.progressMax > 0) {
             val w = (arrowBound.width.toDouble() * (handler.progress.toDouble() / handler.progressMax.toDouble() atMost 1.0)).roundToInt()
-            context.drawTexture(
+            context.blit(
                 PROGRESS_ARROW_TEXTURE,
                 x + arrowBound.x,
                 y + arrowBound.y - 1,
@@ -81,7 +81,7 @@ class AuraReflectorFurnaceScreen(card: AuraReflectorFurnaceCard, arguments: Argu
 
         if (handler.fuelMax > 0) {
             val h = (fuelBound.height.toDouble() * (handler.fuel.toDouble() / handler.fuelMax.toDouble() atMost 1.0)).roundToInt()
-            context.drawTexture(
+            context.blit(
                 BLUE_FUEL_TEXTURE,
                 x + fuelBound.x - 1,
                 y + fuelBound.y - 1 + (fuelBound.height - h),

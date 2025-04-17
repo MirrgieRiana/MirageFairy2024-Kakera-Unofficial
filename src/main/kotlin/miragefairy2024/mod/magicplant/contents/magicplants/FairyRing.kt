@@ -18,7 +18,7 @@ class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius
                 Codec.FLOAT.fieldOf("min_radius").forGetter(FairyRingFeatureConfig::minRadius),
                 Codec.FLOAT.fieldOf("max_radius").forGetter(FairyRingFeatureConfig::maxRadius),
                 Codec.INT.fieldOf("y_spread").forGetter(FairyRingFeatureConfig::ySpread),
-                PlacedFeature.REGISTRY_CODEC.fieldOf("feature").forGetter(FairyRingFeatureConfig::feature),
+                PlacedFeature.CODEC.fieldOf("feature").forGetter(FairyRingFeatureConfig::feature),
             ).apply(instance, ::FairyRingFeatureConfig)
         }
     }
@@ -34,7 +34,7 @@ class FairyRingFeatureConfig(val tries: Int, val minRadius: Float, val maxRadius
 
 class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRingFeatureConfig>(codec) {
     override fun place(context: FeatureContext<FairyRingFeatureConfig>): Boolean {
-        val config = context.config
+        val config = context.config()
         val random = context.random()
         val originBlockPos = context.origin()
         val world = context.level()
@@ -51,8 +51,8 @@ class FairyRingFeature(codec: Codec<FairyRingFeatureConfig>) : Feature<FairyRing
             val y = random.nextInt(y1) - random.nextInt(y1)
             val z = MathHelper.floor(MathHelper.sin(theta) * r)
 
-            mutableBlockPos.set(originBlockPos, x, y, z)
-            if (config.feature.value().generateUnregistered(world, context.generator, random, mutableBlockPos)) {
+            mutableBlockPos.setWithOffset(originBlockPos, x, y, z)
+            if (config.feature.value().place(world, context.chunkGenerator(), random, mutableBlockPos)) {
                 count++
             }
         }

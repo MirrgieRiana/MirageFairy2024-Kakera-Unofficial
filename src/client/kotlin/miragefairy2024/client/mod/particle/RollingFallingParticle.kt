@@ -41,7 +41,7 @@ fun createRollingFallingParticleFactory(velocityAngleFactor: Float) = { spritePr
 
                 age++
                 if (age >= maxAge) {
-                    markDead()
+                    remove()
                     return
                 }
 

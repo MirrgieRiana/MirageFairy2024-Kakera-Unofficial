@@ -7,11 +7,11 @@ import net.minecraft.util.FormattedCharSequence as OrderedText
 import net.minecraft.network.chat.Component as Text
 
 inline fun <T> MatrixStack.stack(block: () -> T): T {
-    this.push()
+    this.pushPose()
     try {
         return block()
     } finally {
-        this.pop()
+        this.popPose()
     }
 }
 

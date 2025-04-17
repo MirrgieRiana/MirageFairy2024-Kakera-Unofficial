@@ -22,13 +22,13 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
         }
     }
 
-    override fun getCodec() = CODEC
+    override fun codec() = CODEC
 }
 
 class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val delay: Float) : ParticleEffect {
     companion object {
-        val FACTORY = object : ParticleEffect.Factory<MagicSquareParticleEffect> {
-            override fun read(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
+        val FACTORY = object : ParticleEffect.Deserializer<MagicSquareParticleEffect> {
+            override fun fromNetwork(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
                 val layer = buf.readInt()
                 val targetPositionX = buf.readDouble()
                 val targetPositionY = buf.readDouble()
@@ -37,7 +37,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
                 return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ), delay)
             }
 
-            override fun read(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
+            override fun fromCommand(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
                 val layer = reader.readInt()
                 val targetPositionX = reader.readDouble()
                 val targetPositionY = reader.readDouble()
@@ -50,7 +50,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
 
     override fun getType() = ParticleTypeCard.MAGIC_SQUARE.particleType
 
-    override fun write(buf: PacketByteBuf) {
+    override fun writeToNetwork(buf: PacketByteBuf) {
         buf.writeInt(layer)
         buf.writeDouble(targetPosition.x)
         buf.writeDouble(targetPosition.y)

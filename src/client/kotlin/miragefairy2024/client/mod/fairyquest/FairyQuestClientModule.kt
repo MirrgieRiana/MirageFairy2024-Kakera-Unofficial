@@ -24,7 +24,7 @@ fun initFairyQuestClientModule() {
             matrices.stack {
                 matrices.translate(0F, 1F / 16F, 0F)
                 matrices.scale(0.5F, 0.5F, 0.01F)
-                val resultModel = MinecraftClient.getInstance().bakedModelManager.getModel(ModelIdentifier("minecraft", "nether_portal", "axis=x"))
+                val resultModel = MinecraftClient.getInstance().modelManager.getModel(ModelIdentifier("minecraft", "nether_portal", "axis=x"))
                 MinecraftClient.getInstance().itemRenderer.renderItem(Items.DIRT.createItemStack(), ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
             }
 
@@ -39,7 +39,7 @@ fun initFairyQuestClientModule() {
                 matrices.stack {
                     matrices.translate(0F, 1F / 16F, -0.02F)
                     matrices.scale(0.45F, 0.45F, 0.01F)
-                    matrices.multiply(RotationAxis.POSITIVE_Y.rotation(MathHelper.TWO_PI * 0.5F))
+                    matrices.mulPose(RotationAxis.POSITIVE_Y.rotation(MathHelper.TWO_PI * 0.5F))
                     val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon, null, null, 0)
                     MinecraftClient.getInstance().itemRenderer.renderItem(recipe.icon, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
                 }

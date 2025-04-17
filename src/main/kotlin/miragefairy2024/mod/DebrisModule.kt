@@ -66,7 +66,7 @@ fun initDebrisModule() {
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {
-            DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.create(card.count.first, card.count.last), card.itemStackGetter())
+            DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.of(card.count.first, card.count.last), card.itemStackGetter())
         }
         registerDynamicGeneration(card.placedFeatureKey) {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower }
@@ -82,13 +82,13 @@ class DebrisFeature(codec: Codec<Config>) : PlacedItemFeature<DebrisFeature.Conf
         companion object {
             val CODEC: Codec<Config> = RecordCodecBuilder.create { instance ->
                 instance.group(
-                    IntProvider.createValidatingCodec(1, 256).fieldOf("count").forGetter { it.count },
+                    IntProvider.codec(1, 256).fieldOf("count").forGetter { it.count },
                     ItemStack.CODEC.fieldOf("item").forGetter { it.itemStack },
                 ).apply(instance, ::Config)
             }
         }
     }
 
-    override fun getCount(context: FeatureContext<Config>) = context.config.count.get(context.random())
-    override fun createItemStack(context: FeatureContext<Config>) = context.config.itemStack.copy()
+    override fun getCount(context: FeatureContext<Config>) = context.config().count.sample(context.random())
+    override fun createItemStack(context: FeatureContext<Config>) = context.config().itemStack.copy()
 }

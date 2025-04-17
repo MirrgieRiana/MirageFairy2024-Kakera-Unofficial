@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemPredicate.class)
 public class ItemPredicateMixin {
-    @Inject(method = "test", at = @At(value = "HEAD"))
+    @Inject(method = "matches", at = @At(value = "HEAD"))
     public void test(ItemStack stack, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0, argsOnly = true) LocalRef<ItemStack> stack2) {
         ItemStack itemStack = stack2.get();
         if (itemStack.getItem() instanceof ItemPredicateConvertorCallback) itemStack = ((ItemPredicateConvertorCallback) itemStack.getItem()).convertItemStack(itemStack);

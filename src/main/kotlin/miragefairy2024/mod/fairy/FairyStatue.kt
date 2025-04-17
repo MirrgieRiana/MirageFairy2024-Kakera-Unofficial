@@ -97,7 +97,7 @@ class FairyStatueCard(
     mapColor: MapColor,
 ) {
     val identifier = MirageFairy2024.identifier(path)
-    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).noOcclusion())
+    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
     val item = FairyStatueBlockItem(this, block, Item.Properties())
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)

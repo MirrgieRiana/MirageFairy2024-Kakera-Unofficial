@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class BlockMixin {
-    @Inject(method = "afterBreak", at = @At("TAIL"))
+    @Inject(method = "playerDestroy", at = @At("TAIL"))
     private void afterBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
         BlockCallback.AFTER_BREAK.invoker().afterBreak(world, player, pos, state, blockEntity, tool);
     }
