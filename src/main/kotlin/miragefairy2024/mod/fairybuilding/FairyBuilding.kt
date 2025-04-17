@@ -160,7 +160,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
 open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
-        private val SHAPE = VoxelShapes.union(
+        private val SHAPE = VoxelShapes.or(
             box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
             box(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
             box(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
@@ -174,10 +174,10 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 6
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun hasComparatorOutput(state: BlockState) = true
+    override fun hasAnalogOutputSignal(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
+    override fun getAnalogOutputSignal(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
@@ -205,7 +205,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = level ?: return
-        val blockState = world.getBlockState(pos)
+        val blockState = world.getBlockState(worldPosition)
         if (!blockState.`is`(card.block)) return
         val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
 
@@ -264,7 +264,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
     var pitch = position.pitch
 
     override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
-        val world = blockEntity.level() ?: return
+        val world = blockEntity.level ?: return
 
         // 定位置の切り替え
         val speed = animation.getSpeed(blockEntity)
