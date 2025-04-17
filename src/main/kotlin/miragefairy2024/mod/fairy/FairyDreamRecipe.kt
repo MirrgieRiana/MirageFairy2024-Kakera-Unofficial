@@ -27,7 +27,7 @@ class FairyDreamTable<T>(val registry: Registry<T>) {
             reverseMap.getOrPut(motif) { mutableSetOf() } += key
         }
         tagEntries.forEach { (tag, motif) ->
-            registry.getEntryList(tag).getOrElse { return@forEach }.map { it.value() }.forEach { key ->
+            registry.getTag(tag).getOrElse { return@forEach }.map { it.value() }.forEach { key ->
                 map.getOrPut(key) { mutableSetOf() } += motif
                 reverseMap.getOrPut(motif) { mutableSetOf() } += key
             }

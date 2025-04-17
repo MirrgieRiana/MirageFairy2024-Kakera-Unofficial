@@ -46,7 +46,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD_GREEN).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
         createCuboidShape(4.0, 6.0),

@@ -71,7 +71,7 @@ import java.time.ZoneOffset
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sound(BlockSoundGroup.COPPER).strength(0.5F).noOcclusion())
+    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
     val item = BlockItem(block, Item.Properties())
 }
 
@@ -195,7 +195,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
             it()
         }
 
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+        world.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
         player.telescopeMission.lastUsedInstant = now
         TelescopeMissionExtraPlayerDataCategory.sync(player)

@@ -97,7 +97,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         blue = (color and 0xFF).toFloat() / 255F
     }
 
-    override fun buildGeometry(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
+    override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
         if (delay > 0) return
 
         val a = age.toFloat() + tickDelta
@@ -164,7 +164,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         }
 
         age++
-        if (age >= maxAge) markDead()
+        if (age >= maxAge) remove()
 
         prevAngle = angle
         angle += MathHelper.TWO_PI / 60F

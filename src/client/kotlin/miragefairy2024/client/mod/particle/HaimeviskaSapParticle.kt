@@ -25,7 +25,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
         maxAge--
         if (maxAge <= 0) {
-            markDead()
+            remove()
             onDiedByAge()
         }
         if (dead) return
@@ -75,7 +75,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
         override fun updateVelocity() {
             if (onGround) {
-                markDead()
+                remove()
                 world.addParticle(particleEffect, x, y, z, 0.0, 0.0, 0.0)
                 world.playLocalSound(x, y, z, SoundEvents.BLOCK_BEEHIVE_DRIP, SoundCategory.BLOCKS, 0.3F + 0.7F * world.random.nextFloat(), 1.0F, false)
             }

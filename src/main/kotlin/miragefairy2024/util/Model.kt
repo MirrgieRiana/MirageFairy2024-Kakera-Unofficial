@@ -24,7 +24,7 @@ import java.util.function.Supplier
 // Model Builder
 
 fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
-    override fun upload(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
+    override fun create(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
         modelCollector.accept(id) { creator(textures).toJsonElement() }
         return id
     }
@@ -116,7 +116,7 @@ fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: Textur
 
 val TextureKey.string get() = this.toString()
 
-infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.makeFactory({ textureMap }, this).get(Blocks.AIR)
+infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.createDefault({ textureMap }, this).get(Blocks.AIR)
 fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with TextureMap(*textureEntries)
 
 
@@ -125,7 +125,7 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 context(ModContext)
 fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
     val texturedModel = texturedModelCreator()
-    texturedModel.template.upload(identifierGetter(), texturedModel.mapping, it.modelOutput)
+    texturedModel.template.create(identifierGetter(), texturedModel.mapping, it.modelOutput)
 }
 
 context(ModContext)

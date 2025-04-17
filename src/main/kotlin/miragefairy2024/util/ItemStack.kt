@@ -12,7 +12,7 @@ val EMPTY_ITEM_STACK: ItemStack get() = ItemStack.EMPTY
 val ItemStack?.orEmpty get() = this ?: EMPTY_ITEM_STACK
 val ItemStack.isNotEmpty get() = !this.isEmpty
 
-fun ItemStack.toNbt(): NbtCompound = NbtCompound().also { this.writeNbt(it) }
+fun ItemStack.toNbt(): NbtCompound = NbtCompound().also { this.save(it) }
 fun NbtCompound.toItemStack(): ItemStack = ItemStack.of(this)
 
 infix fun ItemStack.hasSameItem(other: ItemStack) = this.item === other.item
@@ -21,7 +21,7 @@ infix fun ItemStack.hasSameItemAndNbtAndCount(other: ItemStack) = this hasSameIt
 
 fun ItemStack.repair(amount: Int) {
     if (amount <= 0) return
-    if (!this.isDamageable) return
+    if (!this.isDamageableItem) return
     val actualAmount = amount atMost this.damageValue
     if (actualAmount <= 0) return
     this.damageValue -= actualAmount

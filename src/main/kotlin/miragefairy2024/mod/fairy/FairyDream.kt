@@ -78,7 +78,7 @@ fun initFairyDream() {
 
                         if (item is FairyDreamProviderItem) motifs += item.getFairyDreamMotifs(itemStack)
 
-                        val block = Block.getBlockFromItem(item)
+                        val block = Block.byItem(item)
                         if (block != Blocks.AIR) blocks += block
 
                     }
@@ -93,12 +93,12 @@ fun initFairyDream() {
 
                         run noInventory@{
                             val inventory = if (block is InventoryProvider) {
-                                block.getInventory(blockState, world, blockPos)
+                                block.getContainer(blockState, world, blockPos)
                             } else if (blockState.hasBlockEntity()) {
                                 val blockEntity = world.getBlockEntity(blockPos)
                                 if (blockEntity is Inventory) {
                                     if (blockEntity is ChestBlockEntity && block is ChestBlock) {
-                                        ChestBlock.getInventory(block, blockState, world, blockPos, true) ?: return@noInventory
+                                        ChestBlock.getContainer(block, blockState, world, blockPos, true) ?: return@noInventory
                                     } else {
                                         blockEntity
                                     }
@@ -138,7 +138,7 @@ fun initFairyDream() {
                     if (raycastResult.type == HitResult.Type.BLOCK) insertBlockPos(raycastResult.blockPos)
 
                     // 周辺エンティティ判定
-                    val entities = world.getOtherEntities(player, Box(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
+                    val entities = world.getEntities(player, Box(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
                     entities.forEach {
                         entityTypes += it.type
                     }

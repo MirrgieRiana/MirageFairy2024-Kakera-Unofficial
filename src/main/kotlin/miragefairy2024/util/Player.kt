@@ -6,10 +6,10 @@ import net.minecraft.world.InteractionHand as Hand
 
 /** @param itemStack 内部でコピーされるため、破壊されません。 */
 fun Entity.obtain(itemStack: ItemStack) {
-    val itemEntity = this.dropStack(itemStack.copy(), 0.5F)
+    val itemEntity = this.spawnAtLocation(itemStack.copy(), 0.5F)
     if (itemEntity != null) {
         itemEntity.setNoPickUpDelay()
-        itemEntity.setOwner(this.uuid)
+        itemEntity.setTarget(this.uuid)
     }
 }
 

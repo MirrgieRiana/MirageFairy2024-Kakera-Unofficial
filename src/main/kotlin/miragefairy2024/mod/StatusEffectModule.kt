@@ -18,20 +18,20 @@ val experienceStatusEffect = ExperienceStatusEffect()
 
 context(ModContext)
 fun initStatusEffectModule() {
-    experienceStatusEffect.register(Registries.STATUS_EFFECT, MirageFairy2024.identifier("experience"))
+    experienceStatusEffect.register(Registries.MOB_EFFECT, MirageFairy2024.identifier("experience"))
     en { experienceStatusEffect.descriptionId to "Experience" }
     ja { experienceStatusEffect.descriptionId to "経験値獲得" }
 }
 
 class ExperienceStatusEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x2FFF00) {
-    override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = true
-    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
-        super.applyUpdateEffect(entity, amplifier)
+    override fun isDurationEffectTick(duration: Int, amplifier: Int) = true
+    override fun applyEffectTick(entity: LivingEntity, amplifier: Int) {
+        super.applyEffectTick(entity, amplifier)
         val world = entity.level()
         if (world.gameTime % 5 != 0L) return
         if (world.isServer && entity is PlayerEntity) {
             entity.giveExperiencePoints(1 + amplifier)
-            world.playSound(null, entity.x, entity.y, entity.z, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
+            world.playSound(null, entity.x, entity.y, entity.z, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
         }
     }
 }

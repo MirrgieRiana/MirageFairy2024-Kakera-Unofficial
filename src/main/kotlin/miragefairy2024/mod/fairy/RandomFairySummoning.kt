@@ -71,7 +71,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         if (!user.isShiftKeyDown) {
 
             // 使用開始
-            user.setCurrentHand(hand)
+            user.startUsingItem(hand)
 
             return TypedActionResult.consume(itemStack)
         } else {
@@ -97,7 +97,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         }
     }
 
-    override fun usageTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
+    override fun onUseTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
         if (world.isClientSide) return
         if (user !is ServerPlayerEntity) return
 
@@ -130,7 +130,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             craft(user, stack)
         }
 
-        if (stack.isEmpty) user.clearActiveItem()
+        if (stack.isEmpty) user.stopUsingItem()
 
     }
 
@@ -185,7 +185,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
         // エフェクト
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.BLOCK_DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
+        world.playSound(null, player.x, player.y, player.z, SoundEvents.DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
 
     }
 }

@@ -30,7 +30,7 @@ open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard
     }
 
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        context.drawTexture(card.backgroundTexture, x, y, 0, 0, backgroundWidth, backgroundHeight)
+        context.blit(card.backgroundTexture, x, y, 0, 0, backgroundWidth, backgroundHeight)
     }
 
     override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {

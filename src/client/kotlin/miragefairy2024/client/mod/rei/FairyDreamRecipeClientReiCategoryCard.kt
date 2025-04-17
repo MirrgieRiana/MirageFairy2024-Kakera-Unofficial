@@ -66,7 +66,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Block, BlockFairyDreamRecipeReiCategoryCard.Display>(BlockFairyDreamRecipeReiCategoryCard) {
@@ -101,7 +101,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<EntityType<*>, EntityTypeFairyDreamRecipeReiCategoryCard.Display>(EntityTypeFairyDreamRecipeReiCategoryCard) {
@@ -135,5 +135,5 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }

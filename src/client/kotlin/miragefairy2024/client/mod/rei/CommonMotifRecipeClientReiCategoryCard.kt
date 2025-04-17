@@ -69,5 +69,5 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }

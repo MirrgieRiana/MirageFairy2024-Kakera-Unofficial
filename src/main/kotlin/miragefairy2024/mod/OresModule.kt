@@ -99,19 +99,19 @@ enum class OreCard(
     val block = run {
         val settings = when (baseStoneType) {
             BaseStoneType.STONE -> FabricBlockSettings.create()
-                .mapColor(MapColor.STONE_GRAY)
+                .mapColor(MapColor.STONE)
                 .instrument(Instrument.BASEDRUM)
                 .requiresTool()
                 .strength(3.0F, 3.0F)
 
             BaseStoneType.DEEPSLATE -> FabricBlockSettings.create()
-                .mapColor(MapColor.DEEPSLATE_GRAY)
+                .mapColor(MapColor.DEEPSLATE)
                 .instrument(Instrument.BASEDRUM)
                 .requiresTool()
                 .strength(4.5F, 3.0F)
                 .sound(BlockSoundGroup.DEEPSLATE)
         }
-        ExperienceDroppingBlock(settings, UniformIntProvider.create(experience.first, experience.second))
+        ExperienceDroppingBlock(settings, UniformIntProvider.of(experience.first, experience.second))
     }
     val item = BlockItem(block, Item.Properties())
     val texturedModelFactory = TexturedModel.Provider {
@@ -166,8 +166,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.createTarget(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

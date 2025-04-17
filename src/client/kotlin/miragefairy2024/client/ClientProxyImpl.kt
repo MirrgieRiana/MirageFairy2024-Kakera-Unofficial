@@ -38,11 +38,11 @@ class ClientProxyImpl : ClientProxy {
     }
 
     override fun registerCutoutRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout())
+        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.cutout())
     }
 
     override fun registerTranslucentRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.translucent())
     }
 
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
@@ -61,7 +61,7 @@ class ClientProxyImpl : ClientProxy {
     }
 
     override fun getFoliageBlockColorProvider() = BlockColorProvider { _, world, blockPos, _ ->
-        if (world == null || blockPos == null) FoliageColors.getDefaultColor() else BiomeColors.getFoliageColor(world as BlockRenderView?, blockPos)
+        if (world == null || blockPos == null) FoliageColors.getDefaultColor() else BiomeColors.getAverageFoliageColor(world as BlockRenderView?, blockPos)
     }
 
     override fun getItemColorProvider(item: Item): ItemColorProvider? {
@@ -88,36 +88,36 @@ class RenderingProxyBlockEntityRenderer<T>(
     override fun render(blockEntity: T, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
         val renderingProxy = object : RenderingProxy {
             override fun stack(block: () -> Unit) {
-                matrices.push()
+                matrices.pushPose()
                 try {
                     block()
                 } finally {
-                    matrices.pop()
+                    matrices.popPose()
                 }
             }
 
             override fun translate(x: Double, y: Double, z: Double) = matrices.translate(x, y, z)
             override fun scale(x: Float, y: Float, z: Float) = matrices.scale(x, y, z)
-            override fun rotateX(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_X.rotation(rad))
-            override fun rotateY(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Y.rotation(rad))
-            override fun rotateZ(rad: Float) = matrices.multiply(RotationAxis.POSITIVE_Z.rotation(rad))
+            override fun rotateX(rad: Float) = matrices.mulPose(RotationAxis.XP.rotation(rad))
+            override fun rotateY(rad: Float) = matrices.mulPose(RotationAxis.YP.rotation(rad))
+            override fun rotateZ(rad: Float) = matrices.mulPose(RotationAxis.ZP.rotation(rad))
 
             override fun renderItemStack(itemStack: ItemStack) {
-                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
+                MinecraftClient.getInstance().itemRenderer.renderStatic(itemStack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
             override fun renderFixedItemStack(itemStack: ItemStack) {
-                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
+                MinecraftClient.getInstance().itemRenderer.renderStatic(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
             override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
-                val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getCutout())
+                val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.cutout())
                 val bakedModel = if (variant != null) {
-                    MinecraftClient.getInstance().bakedModelManager.getModel(ModelIdentifier(identifier, variant))
+                    MinecraftClient.getInstance().modelManager.getModel(ModelIdentifier(identifier, variant))
                 } else {
-                    MinecraftClient.getInstance().bakedModelManager.getModel(identifier)
+                    MinecraftClient.getInstance().modelManager.getModel(identifier)
                 }
-                MinecraftClient.getInstance().blockRenderManager.modelRenderer.render(matrices.peek(), vertexConsumer, null, bakedModel, red, green, blue, light, overlay)
+                MinecraftClient.getInstance().blockRenderer.modelRenderer.renderModel(matrices.last(), vertexConsumer, null, bakedModel, red, green, blue, light, overlay)
             }
         }
         blockEntity.render(renderingProxy, tickDelta, light, overlay)

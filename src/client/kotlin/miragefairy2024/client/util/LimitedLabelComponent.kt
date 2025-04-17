@@ -160,7 +160,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
 
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
         val matrices = context.matrices
-        matrices.push()
+        matrices.pushPose()
         matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.scaleFactor, 0.0)
         var x = x
         var y = y
@@ -178,7 +178,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
         val lambdaX = x
         val lambdaY = y
         @Suppress("DEPRECATION")
-        context.draw {
+        context.drawManaged {
             for (i in wrappedText.indices) {
                 val renderText = wrappedText[i]
                 var renderX = lambdaX
@@ -192,13 +192,13 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
                 context.drawText(textRenderer, renderText, renderX, renderY, color.get().argb(), shadow)
             }
         }
-        matrices.pop()
+        matrices.popPose()
     }
 
     override fun drawTooltip(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
         super.drawTooltip(context, mouseX, mouseY, partialTicks, delta)
         if (!isInBoundingBox(mouseX.toDouble(), mouseY.toDouble())) return
-        context.drawHoverEvent(textRenderer, styleAt(mouseX - x, mouseY - y), mouseX, mouseY)
+        context.renderComponentHoverEffect(textRenderer, styleAt(mouseX - x, mouseY - y), mouseX, mouseY)
     }
 
     override fun onMouseDown(mouseX: Double, mouseY: Double, button: Int): Boolean {

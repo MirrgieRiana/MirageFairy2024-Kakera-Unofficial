@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation as Identifier
 context(ModContext)
 fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
-        it.add(this)
+        it.accept(this)
     }
 }
 
@@ -23,7 +23,7 @@ context(ModContext)
 fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
-            it.add(itemStack)
+            it.accept(itemStack)
         }
     }
 }
@@ -39,7 +39,7 @@ class ItemGroupCard(
     val itemGroupKey = RegistryKeys.CREATIVE_MODE_TAB with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
-        .displayName(text { translation() })
+        .title(text { translation() })
         .build()
 
     context(ModContext)

@@ -21,12 +21,12 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "eatFood", at = @At("HEAD"))
+    @Inject(method = "eat", at = @At("HEAD"))
     private void eatFood(Level world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
         EatFoodCallback.EVENT.invoker().eatFood((LivingEntity) (Object) this, world, stack);
     }
 
-    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0, argsOnly = true) LocalFloatRef amount2) {
         float newAmount2 = DamageCallback.EVENT.invoker().modifyDamageAmount((LivingEntity) (Object) this, source, amount2.get());
         if (newAmount2 <= 0F) {

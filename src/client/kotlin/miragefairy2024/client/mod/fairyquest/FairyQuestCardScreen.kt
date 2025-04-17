@@ -107,7 +107,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 val index = 9 + 9 * 3 + i
                                 child(slotAsComponent(index))
                                 val input = handler.recipe.inputs.getOrNull(i)
-                                val inputItemStacks = input?.first?.matchingStacks?.map { it.copyWithCount(input.second) } ?: listOf()
+                                val inputItemStacks = input?.first?.items?.map { it.copyWithCount(input.second) } ?: listOf()
                                 child(GhostItemComponent(inputItemStacks).apply {
                                     onScreenUpdate += { showItemStack = handler.getSlot(index).item.isEmpty }
                                     overlayColor = 0x20FF0000

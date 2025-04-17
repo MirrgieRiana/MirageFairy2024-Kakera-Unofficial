@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
-    @Inject(method = "handleInputEvents", at = @At(value = "HEAD"))
+    @Inject(method = "handleKeybinds", at = @At(value = "HEAD"))
     private void handleInputEvents(CallbackInfo ci) {
         for (Function0<Unit> handler : InputEventsHandlerKt.getInputEventsHandlers()) {
             handler.invoke();

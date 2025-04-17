@@ -63,7 +63,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
         if (data != null) tooltip.add(1, TooltipComponentCallback.EVENT.invoker().getComponent(data) ?: TooltipComponent.of(data))
 
         context.drawTooltip(MinecraftClient.getInstance().textRenderer, mouseX, mouseY, tooltip)
-        context.draw()
+        context.flush()
     }
 
     override fun determineHorizontalContentSize(sizing: Sizing) = 16

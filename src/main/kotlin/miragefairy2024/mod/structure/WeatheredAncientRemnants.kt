@@ -82,13 +82,13 @@ object WeatheredAncientRemnantsCard {
                     ItemLootPoolEntry(MaterialCard.JEWEL_100.item).setWeight(3),
                     ItemLootPoolEntry(Items.MAP) {
                         apply(
-                            ExplorationMapLootFunction.builder()
-                                .withDestination(onMapsTag)
-                                .withDecoration(MapIcon.Type.BANNER_BROWN)
-                                .withZoom(3)
-                                .withSkipExistingChunks(false)
+                            ExplorationMapLootFunction.makeExplorationMap()
+                                .setDestination(onMapsTag)
+                                .setMapDecoration(MapIcon.Type.BANNER_BROWN)
+                                .setZoom(3)
+                                .setSkipKnownStructures(false)
                         )
-                        apply(SetNameLootFunction.builder(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
+                        apply(SetNameLootFunction.setName(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
                     }.setWeight(2),
                 ),
             )
@@ -129,7 +129,7 @@ object WeatheredAncientRemnantsCard {
 
         val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
-                config = Structure.Config(
+                config = Structure.StructureSettings(
                     RegistryKeys.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
                     mapOf(),
                     GenerationStep.Decoration.SURFACE_STRUCTURES,
@@ -138,7 +138,7 @@ object WeatheredAncientRemnantsCard {
                 startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
                 size = 1,
                 projectStartToHeightmap = Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
-                startHeight = ConstantHeightProvider.create(YOffset.absolute(0)),
+                startHeight = ConstantHeightProvider.of(YOffset.absolute(0)),
                 useExpansionHack = false,
             )
         }
@@ -146,7 +146,7 @@ object WeatheredAncientRemnantsCard {
         val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(16, 8, SpreadType.LINEAR, 94857624),
             )

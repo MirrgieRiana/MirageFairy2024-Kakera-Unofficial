@@ -42,7 +42,7 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
         val h = (9.0 * (handler.folia / card.maxFolia.toDouble() atMost 1.0)).roundToInt()
-        context.drawTexture(SPRITES_TEXTURE, x + 164, y + backgroundHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
+        context.blit(SPRITES_TEXTURE, x + 164, y + backgroundHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
     }
 
     override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
@@ -64,8 +64,8 @@ class FairyHouseScreen(card: FairyHouseCard, arguments: Arguments<FairyHouseScre
 class FairyCollectorScreen(card: FairyCollectorCard, arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(card, arguments) {
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.drawBackground(context, delta, mouseX, mouseY)
-        context.drawTexture(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
-        context.drawTexture(SPRITES_TEXTURE, x + 80, y + 28, 0F, 0F, (18.0 * (handler.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
+        context.blit(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
+        context.blit(SPRITES_TEXTURE, x + 80, y + 28, 0F, 0F, (18.0 * (handler.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
     }
 
     override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {

@@ -57,9 +57,9 @@ class SimpleEnchantment(
     private val predicate: (ItemStack) -> Boolean,
 ) : Enchantment(rarity, EnchantmentTarget.VANISHABLE, arrayOf(EquipmentSlot.MAINHAND)), ItemFilteringEnchantment {
     override fun getMaxLevel() = maxLevel
-    override fun getMinPower(level: Int) = basePower + (level - 1) * powerPerLevel
-    override fun getMaxPower(level: Int) = super.getMinPower(level) + powerRange
-    override fun isAcceptableItem(stack: ItemStack) = predicate(stack)
-    override fun isAcceptableItemOnEnchanting(itemStack: ItemStack) = isAcceptableItem(itemStack)
-    override fun isTreasure() = isTreasure
+    override fun getMinCost(level: Int) = basePower + (level - 1) * powerPerLevel
+    override fun getMaxCost(level: Int) = super.getMinCost(level) + powerRange
+    override fun canEnchant(stack: ItemStack) = predicate(stack)
+    override fun isAcceptableItemOnEnchanting(itemStack: ItemStack) = canEnchant(itemStack)
+    override fun isTreasureOnly() = isTreasure
 }
