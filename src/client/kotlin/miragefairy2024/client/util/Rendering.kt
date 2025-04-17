@@ -16,14 +16,14 @@ inline fun <T> MatrixStack.stack(block: () -> T): T {
 }
 
 fun DrawContext.drawRightText(textRenderer: TextRenderer, text: String, rightX: Int, y: Int, color: Int, shadow: Boolean) {
-    this.drawText(textRenderer, text, rightX - textRenderer.getWidth(text), y, color, shadow)
+    this.drawString(textRenderer, text, rightX - textRenderer.width(text), y, color, shadow)
 }
 
 fun DrawContext.drawRightText(textRenderer: TextRenderer, text: Text, rightX: Int, y: Int, color: Int, shadow: Boolean) {
-    val orderedText = text.asOrderedText()
-    this.drawText(textRenderer, orderedText, rightX - textRenderer.getWidth(orderedText), y, color, shadow)
+    val orderedText = text.getVisualOrderText()
+    this.drawString(textRenderer, orderedText, rightX - textRenderer.width(orderedText), y, color, shadow)
 }
 
 fun DrawContext.drawRightText(textRenderer: TextRenderer, text: OrderedText, rightX: Int, y: Int, color: Int, shadow: Boolean) {
-    this.drawText(textRenderer, text, rightX - textRenderer.getWidth(text), y, color, shadow)
+    this.drawString(textRenderer, text, rightX - textRenderer.width(text), y, color, shadow)
 }

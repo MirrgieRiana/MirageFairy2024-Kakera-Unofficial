@@ -14,7 +14,7 @@ fun initParticleClientModule() {
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.MIRAGE_FLOUR.particleType, SuspendParticle::HappyVillagerFactory)
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.ATTRACTING_MAGIC.particleType, AttractingParticle::Factory)
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.AURA.particleType) { spriteProvider ->
-        val factory = EndRodParticle.Factory(spriteProvider)
+        val factory = EndRodParticle.Provider(spriteProvider)
         ParticleFactory { parameters, world, x, y, z, velocityX, velocityY, velocityZ ->
             factory.createParticle(parameters, world, x, y, z, velocityX, velocityY, velocityZ)?.also { particle ->
                 particle.maxAge = 20 + world.random.nextInt(12)

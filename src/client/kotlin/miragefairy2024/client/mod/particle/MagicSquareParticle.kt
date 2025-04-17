@@ -126,7 +126,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         val quaternionf = Quaternionf().rotationYXZ(yaw, pitch, MathHelper.lerp(tickDelta, prevAngle, angle))
         if (flip) quaternionf.rotateY(-MathHelper.PI)
 
-        val size = getSize(tickDelta)
+        val size = getQuadSize(tickDelta)
 
         val cameraPos = camera.pos
         val translateX = (MathHelper.lerp(tickDelta.toDouble(), prevPosX, x) - cameraPos.getX()).toFloat()
@@ -145,7 +145,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
             vector3f.add(translateX, translateY, translateZ)
         }
 
-        val brightness = getBrightness(tickDelta)
+        val brightness = getLightColor(tickDelta)
 
         vertex(vertexConsumer, vector3fs[0], maxU, maxV, brightness)
         vertex(vertexConsumer, vector3fs[1], maxU, minV, brightness)
@@ -154,7 +154,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
     }
 
     private fun vertex(vertexConsumer: VertexConsumer, pos: Vector3f, u: Float, v: Float, light: Int) {
-        vertexConsumer.vertex(pos.x().toDouble(), pos.y().toDouble(), pos.z().toDouble()).texture(u, v).color(red, green, blue, alpha).light(light).next()
+        vertexConsumer.vertex(pos.x().toDouble(), pos.y().toDouble(), pos.z().toDouble()).uv(u, v).color(red, green, blue, alpha).uv2(light).endVertex()
     }
 
     override fun tick() {
@@ -172,10 +172,10 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         // TODO 魔方陣の周りのパーティクル
     }
 
-    override fun getSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TWO_PI))
+    override fun getQuadSize(tickDelta: Float) = scale * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TWO_PI))
 
-    override fun getBrightness(tint: Float): Int {
-        val brightness = super.getBrightness(tint)
+    override fun getLightColor(tint: Float): Int {
+        val brightness = super.getLightColor(tint)
         val oldSkyLight = (brightness shr 20) and 0xF
         val oldBlockLight = (brightness shr 4) and 0xF
         val skyLight = oldSkyLight
@@ -183,6 +183,6 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         return (skyLight shl 20) or (blockLight shl 4)
     }
 
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
+    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
 
 }

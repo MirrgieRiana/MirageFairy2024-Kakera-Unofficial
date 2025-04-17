@@ -90,5 +90,5 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
         }
     }
 
-    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
 }

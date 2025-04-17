@@ -18,7 +18,7 @@ fun createOwoToast(component: Component) = object : Toast {
     private var startTime: Long = 0
     private var justUpdated = false
 
-    override fun draw(context: DrawContext, manager: ToastManager, startTime: Long): Toast.Visibility {
+    override fun render(context: DrawContext, manager: ToastManager, startTime: Long): Toast.Visibility {
         if (this.justUpdated) {
             this.startTime = startTime
             this.justUpdated = false
@@ -29,7 +29,7 @@ fun createOwoToast(component: Component) = object : Toast {
         return if ((startTime - this.startTime).toDouble() >= 5000.0 * manager.notificationDisplayTimeMultiplier) Toast.Visibility.HIDE else Toast.Visibility.SHOW
     }
 
-    override fun getWidth(): Int = component.fullSize().width()
-    override fun getHeight(): Int = component.fullSize().height()
+    override fun width(): Int = component.fullSize().width()
+    override fun height(): Int = component.fullSize().height()
 
 }

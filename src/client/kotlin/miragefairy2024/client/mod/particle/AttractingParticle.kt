@@ -28,11 +28,11 @@ class AttractingParticle internal constructor(
         scale *= 0.3F
     }
 
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
 
     override fun move(dx: Double, dy: Double, dz: Double) {
         boundingBox = boundingBox.move(dx, dy, dz)
-        repositionFromBoundingBox()
+        setLocationFromBoundingbox()
     }
 
     override fun tick() {
@@ -45,7 +45,7 @@ class AttractingParticle internal constructor(
     class Factory(private val spriteProvider: SpriteProvider) : ParticleFactory<DefaultParticleType> {
         override fun createParticle(defaultParticleType: DefaultParticleType, clientWorld: ClientWorld, d: Double, e: Double, f: Double, g: Double, h: Double, i: Double): Particle {
             val particle = AttractingParticle(clientWorld, d, e, f, g, h, i)
-            particle.setSprite(spriteProvider)
+            particle.pickSprite(spriteProvider)
             return particle
         }
     }

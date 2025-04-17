@@ -70,7 +70,7 @@ fun initFairyClientModule() {
     // ソウルストリームのキーバインド
     soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.INVENTORY_CATEGORY)
     inputEventsHandlers += {
-        while (soulStreamKey.wasPressed()) {
+        while (soulStreamKey.consumeClick()) {
             lastMousePositionInInventory = null
             OpenSoulStreamChannel.sendToServer(Unit)
         }
@@ -109,7 +109,7 @@ fun initFairyClientModule() {
                     val buttonTexture = MirageFairy2024.identifier("textures/gui/sprites/soul_stream_button.png")
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
                         lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
-                        screen.close()
+                        screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {
                         tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Text.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })

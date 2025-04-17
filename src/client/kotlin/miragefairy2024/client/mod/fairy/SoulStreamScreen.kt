@@ -30,7 +30,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
         if (isFirst) {
             isFirst = false
             if (lastMousePositionInInventory != null) {
-                InputUtil.setCursorParameters(this.client!!.window.handle, InputUtil.GLFW_CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
+                InputUtil.grabOrReleaseMouse(this.client!!.window.handle, InputUtil.GLFW_CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
             }
         }
         super.render(vanillaContext, mouseX, mouseY, delta)
@@ -109,12 +109,12 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
         }
     }
 
-    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
 
     // キー入力で閉じる
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (soulStreamKey.matchesKey(keyCode, scanCode)) {
-            close()
+        if (soulStreamKey.matches(keyCode, scanCode)) {
+            onClose()
             return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
