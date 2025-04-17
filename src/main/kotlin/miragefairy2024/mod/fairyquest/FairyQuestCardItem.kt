@@ -99,7 +99,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         if (recipeId == null) {
             tooltip += text { "null"() }
         } else {
-            if (fairyQuestRecipeRegistry.containsId(recipeId)) {
+            if (fairyQuestRecipeRegistry.containsKey(recipeId)) {
                 // nop
             } else {
                 tooltip += text { recipeId.string() }
@@ -126,7 +126,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): Identifier? = nbt.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
+fun ItemStack.getFairyQuestRecipeId(): Identifier? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
 fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
