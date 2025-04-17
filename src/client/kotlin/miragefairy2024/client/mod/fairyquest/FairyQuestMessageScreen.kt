@@ -85,7 +85,7 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (super.keyPressed(keyCode, scanCode, modifiers)) return true
-        if (client!!.options.inventoryKey.matchesKey(keyCode, scanCode)) {
+        if (client!!.options.inventoryKey.matches(keyCode, scanCode)) {
             close()
             return true
         }
@@ -98,7 +98,7 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
         return true
     }
 
-    override fun close() {
+    override fun onClose() {
         client!!.setScreen(parent)
     }
 }

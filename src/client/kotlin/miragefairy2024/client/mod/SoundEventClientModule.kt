@@ -8,7 +8,7 @@ fun initSoundEventClientModule() {
     SoundEventChannel.registerClientPacketReceiver { packet ->
         val client = MinecraftClient.getInstance() ?: return@registerClientPacketReceiver
         val world = client.level ?: return@registerClientPacketReceiver
-        world.playSoundAtBlockCenter(
+        world.playLocalSound(
             packet.pos,
             packet.soundEvent,
             packet.category,

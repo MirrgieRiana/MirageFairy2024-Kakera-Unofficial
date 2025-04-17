@@ -27,8 +27,8 @@ class FairyPassiveSupplierScreen(private val card: FairyPassiveSupplierCard, arg
         return FairyPassiveSupplierBlockEntity.getLogisticsPower(fairyItemStack)
     }
 
-    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) {
-        super.drawForeground(context, mouseX, mouseY)
+    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) {
+        super.renderLabels(context, mouseX, mouseY)
         context.drawText(textRenderer, text { "${getLogisticsPower()}/min"() }, 102, 23, 0x373737, false) // TODO 表示を改善
     }
 }

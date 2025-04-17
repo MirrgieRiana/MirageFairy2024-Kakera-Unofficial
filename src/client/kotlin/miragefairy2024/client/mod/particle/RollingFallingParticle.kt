@@ -23,8 +23,8 @@ fun createRollingFallingParticleFactory(velocityAngleFactor: Float) = { spritePr
                 setSpriteForAge(spriteProvider)
             }
 
-            override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
-            override fun getSize(tickDelta: Float): Float {
+            override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+            override fun getQuadSize(tickDelta: Float): Float {
                 val actualAge = age.toFloat() + tickDelta
                 val lifeRate = actualAge / maxAge.toFloat()
 

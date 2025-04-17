@@ -39,21 +39,21 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(card: FairyBuildi
 }
 
 open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        super.drawBackground(context, delta, mouseX, mouseY)
+    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        super.renderBg(context, delta, mouseX, mouseY)
         val h = (9.0 * (handler.folia / card.maxFolia.toDouble() atMost 1.0)).roundToInt()
         context.blit(SPRITES_TEXTURE, x + 164, y + backgroundHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
     }
 
-    override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
-        super.drawMouseoverTooltip(context, x, y)
+    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+        super.renderTooltip(context, x, y)
         run {
             if (x in this.x + 164 until this.x + 164 + 5 && y in this.y + backgroundHeight - 94 until this.y + backgroundHeight - 94 + 9) {
                 val texts = listOf(
                     text { FOLIA_TRANSLATION() },
                     text { "${handler.folia} / ${card.maxFolia}"() },
                 )
-                context.drawTooltip(textRenderer, texts, Optional.empty(), x, y)
+                context.renderTooltip(textRenderer, texts, Optional.empty(), x, y)
             }
         }
     }
@@ -62,20 +62,20 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
 class FairyHouseScreen(card: FairyHouseCard, arguments: Arguments<FairyHouseScreenHandler>) : FairyFactoryScreen<FairyHouseScreenHandler>(card, arguments)
 
 class FairyCollectorScreen(card: FairyCollectorCard, arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(card, arguments) {
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        super.drawBackground(context, delta, mouseX, mouseY)
+    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        super.renderBg(context, delta, mouseX, mouseY)
         context.blit(SPRITES_TEXTURE, x + 14, y + 28, 0F, 0F, (18.0 * (handler.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
         context.blit(SPRITES_TEXTURE, x + 80, y + 28, 0F, 0F, (18.0 * (handler.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
     }
 
-    override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
-        super.drawMouseoverTooltip(context, x, y)
+    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+        super.renderTooltip(context, x, y)
         run {
             if (x in this.x + 19 until this.x + 19 + 18 && y in this.y + 28 until this.y + 28 + 4) {
-                context.drawTooltip(textRenderer, listOf(text { "${handler.collectionProgress} / 10000 (+${handler.collectionSpeed * 20}/s)"() }), Optional.empty(), x, y)
+                context.renderTooltip(textRenderer, listOf(text { "${handler.collectionProgress} / 10000 (+${handler.collectionSpeed * 20}/s)"() }), Optional.empty(), x, y)
             }
             if (x in this.x + 76 until this.x + 76 + 18 && y in this.y + 28 until this.y + 28 + 4) {
-                context.drawTooltip(textRenderer, listOf(text { "${handler.sortProgress} / 10000 (+${handler.sortSpeed * 20}/s)"() }), Optional.empty(), x, y)
+                context.renderTooltip(textRenderer, listOf(text { "${handler.sortProgress} / 10000 (+${handler.sortSpeed * 20}/s)"() }), Optional.empty(), x, y)
             }
         }
     }

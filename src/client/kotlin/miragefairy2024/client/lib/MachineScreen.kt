@@ -20,25 +20,25 @@ open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard
 
     override fun init() {
         super.init()
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
+        titleX = (backgroundWidth - textRenderer.width(title)) / 2
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(context)
         super.render(context, mouseX, mouseY, delta)
-        drawMouseoverTooltip(context, mouseX, mouseY)
+        renderTooltip(context, mouseX, mouseY)
     }
 
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         context.blit(card.backgroundTexture, x, y, 0, 0, backgroundWidth, backgroundHeight)
     }
 
-    override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
-        super.drawMouseoverTooltip(context, x, y)
+    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+        super.renderTooltip(context, x, y)
         run {
             val slot = focusedSlot ?: return@run
             val tooltip = handler.getTooltip(slot) ?: return@run
-            context.drawTooltip(textRenderer, tooltip, Optional.empty(), x, y)
+            context.renderTooltip(textRenderer, tooltip, Optional.empty(), x, y)
         }
     }
 

@@ -17,15 +17,15 @@ import org.joml.Quaternionf
 import kotlin.math.atan
 import kotlin.math.sqrt
 
-class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntityRenderer<ChaosCubeEntity, ChaosCubeEntityModel>(context, ChaosCubeEntityModel(context.getPart(ROOT.entityModelLayer)), 0.5F) {
+class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntityRenderer<ChaosCubeEntity, ChaosCubeEntityModel>(context, ChaosCubeEntityModel(context.bakeLayer(ROOT.entityModelLayer)), 0.5F) {
     companion object {
         val ROOT = EntityModelLayerCard(ChaosCubeCard.identifier, "root", 64, 64) {
             (0..1).forEach { x ->
                 (0..1).forEach { y ->
                     (0..1).forEach { z ->
-                        it.addChild(
+                        it.addOrReplaceChild(
                             "part${x * 4 + y * 2 + z}",
-                            ModelPartBuilder.create().uv(0 + x * 20, 0 + y * 20 + (1 - z) * 10).cuboid(0F, 0F, 0F, 5F, 5F, 5F),
+                            ModelPartBuilder.create().texOffs(0 + x * 20, 0 + y * 20 + (1 - z) * 10).addBox(0F, 0F, 0F, 5F, 5F, 5F),
                             ModelTransform.pivot(-5.5F + 6F * x, -5.5F + 6F * y, -5.5F + 6F * z),
                         )
                     }
@@ -49,7 +49,7 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
     private var segments: Array<ChaosCubeEntity.Segment>? = null
     private val rotations = (0 until 8).map { Quaternionf() }.toTypedArray()
 
-    override fun setAngles(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) {
+    override fun setupAnim(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) {
         val delta = animationProgress - entity.age
 
         val f = animationProgress * 2 * MathHelper.PI / 100

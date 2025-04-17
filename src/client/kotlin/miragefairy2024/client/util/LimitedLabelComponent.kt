@@ -112,7 +112,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     override fun determineHorizontalContentSize(sizing: Sizing): Int {
         var widestText = 0
         for (line in wrappedText) {
-            val width = textRenderer.getWidth(line)
+            val width = textRenderer.width(line)
             if (width > widestText) widestText = width
         }
         return if (widestText > maxWidth) {
@@ -144,7 +144,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
                 false
             }
             wrappedText = if (style != null) {
-                listOf(OrderedText.concat(wrappedText[0], OrderedText.styledForwardsVisitedString("...", style!!)))
+                listOf(OrderedText.composite(wrappedText[0], OrderedText.forward("...", style!!)))
             } else {
                 listOf(wrappedText[0])
             }
@@ -183,8 +183,8 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
                 val renderText = wrappedText[i]
                 var renderX = lambdaX
                 when (horizontalTextAlignment) {
-                    HorizontalAlignment.CENTER -> renderX += (width - textRenderer.getWidth(renderText)) / 2
-                    HorizontalAlignment.RIGHT -> renderX += width - textRenderer.getWidth(renderText)
+                    HorizontalAlignment.CENTER -> renderX += (width - textRenderer.width(renderText)) / 2
+                    HorizontalAlignment.RIGHT -> renderX += width - textRenderer.width(renderText)
                     else -> Unit
                 }
                 var renderY = lambdaY + i * (this.lineHeight() + 2)

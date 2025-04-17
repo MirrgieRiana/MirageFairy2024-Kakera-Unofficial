@@ -182,8 +182,8 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
         }
     }
 
-    override fun handledScreenTick() {
-        super.handledScreenTick()
+    override fun containerTick() {
+        super.containerTick()
         onScreenUpdate.forEach {
             it()
         }

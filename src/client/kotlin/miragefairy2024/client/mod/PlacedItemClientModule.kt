@@ -23,7 +23,7 @@ fun initPlacedItemClientModule() {
 
     placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.GAMEPLAY_CATEGORY)
     inputEventsHandlers += {
-        while (placeItemKey.wasPressed()) run {
+        while (placeItemKey.consumeClick()) run {
 
             val player = MinecraftClient.getInstance().player ?: return@run // プレイヤーの取得に失敗した
 

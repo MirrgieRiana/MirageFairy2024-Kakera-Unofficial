@@ -29,8 +29,8 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 
     abstract val arrowBound: Rect2i
 
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        super.drawBackground(context, delta, mouseX, mouseY)
+    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        super.renderBg(context, delta, mouseX, mouseY)
 
         if (handler.progressMax > 0) {
             val w = (arrowBound.width.toDouble() * (handler.progress.toDouble() / handler.progressMax.toDouble() atMost 1.0)).roundToInt()
@@ -48,8 +48,8 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
         }
     }
 
-    override fun drawMouseoverTooltip(context: DrawContext, x: Int, y: Int) {
-        super.drawMouseoverTooltip(context, x, y)
+    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+        super.renderTooltip(context, x, y)
         run {
             val bound = Rect2i(
                 this.x + arrowBound.x,
@@ -58,7 +58,7 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
                 arrowBound.height + 1 - 1,
             )
             if (bound.contains(x, y)) {
-                context.drawTooltip(textRenderer, listOf(text { "${handler.progress} / ${handler.progressMax}"() }), Optional.empty(), x, y + 17)
+                context.renderTooltip(textRenderer, listOf(text { "${handler.progress} / ${handler.progressMax}"() }), Optional.empty(), x, y + 17)
             }
         }
     }
@@ -76,8 +76,8 @@ class AuraReflectorFurnaceScreen(card: AuraReflectorFurnaceCard, arguments: Argu
     override val arrowBound = Rect2i(89, 35, 22, 15)
     val fuelBound = Rect2i(48, 37, 13, 13)
 
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        super.drawBackground(context, delta, mouseX, mouseY)
+    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        super.renderBg(context, delta, mouseX, mouseY)
 
         if (handler.fuelMax > 0) {
             val h = (fuelBound.height.toDouble() * (handler.fuel.toDouble() / handler.fuelMax.toDouble() atMost 1.0)).roundToInt()

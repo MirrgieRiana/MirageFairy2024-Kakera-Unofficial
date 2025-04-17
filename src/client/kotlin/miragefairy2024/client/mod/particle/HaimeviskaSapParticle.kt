@@ -11,12 +11,12 @@ import net.minecraft.sounds.SoundEvents
 @Suppress("LeakingThis")
 open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Double) : SpriteBillboardParticle(world, x, y, z) {
     init {
-        setBoundingBoxSpacing(0.01F, 0.01F)
+        setSize(0.01F, 0.01F)
         gravityStrength = 0.06F
         setColor(255 / 255F, 159 / 255F, 50 / 255F)
     }
 
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
 
     override fun tick() {
         prevPosX = x
@@ -50,7 +50,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
     class Dripping(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
         init {
-            setSprite(spriteProvider)
+            pickSprite(spriteProvider)
             gravityStrength *= 0.01F
             maxAge = 100
         }
@@ -68,7 +68,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
     class Falling(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
         init {
-            setSprite(spriteProvider)
+            pickSprite(spriteProvider)
             gravityStrength = 0.01F
             maxAge = (64.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
         }
@@ -84,7 +84,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
     class Landing(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider) : HaimeviskaSapParticle(world, x, y, z) {
         init {
-            setSprite(spriteProvider)
+            pickSprite(spriteProvider)
             maxAge = (128.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
         }
     }

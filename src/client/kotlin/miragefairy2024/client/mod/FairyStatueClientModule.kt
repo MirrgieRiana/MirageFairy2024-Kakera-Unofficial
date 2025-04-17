@@ -20,7 +20,7 @@ fun initFairyStatueClientModule() {
             matrices.stack {
                 matrices.scale(0.5F, 0.5F, 0.5F)
                 val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(itemStack, null, null, 0)
-                MinecraftClient.getInstance().itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
+                MinecraftClient.getInstance().itemRenderer.render(itemStack, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
             }
         }
     }
