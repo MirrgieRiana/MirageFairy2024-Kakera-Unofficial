@@ -35,13 +35,13 @@ import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
-class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
+class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
     private lateinit var traitCardContainer: FlowLayout
 
     private fun setTraitCardContent(component: Component?) {
@@ -84,7 +84,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                                         true
                                     }) {
                                         Components.label(text {
-                                            val texts = mutableListOf<Text>()
+                                            val texts = mutableListOf<Component>()
                                             texts += traitStack.trait.getName().style(traitStack.trait.style)
                                             texts += traitStack.level.toString(2)().style(traitStack.trait.style)
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()

@@ -28,7 +28,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.TagKey
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level as World
 
@@ -96,7 +96,7 @@ abstract class ToolConfiguration {
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var miningDamage = 1.0
-    val descriptions = mutableListOf<Text>()
+    val descriptions = mutableListOf<Component>()
     var hasGlint = false
 
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()

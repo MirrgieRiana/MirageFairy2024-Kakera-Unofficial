@@ -17,7 +17,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
@@ -30,7 +30,7 @@ import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.Vanishable
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.core.BlockPos
@@ -86,7 +86,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         const val BASE_EXPERIENCE_COST = 2
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { DESCRIPTION_TRANSLATION().yellow }
     }

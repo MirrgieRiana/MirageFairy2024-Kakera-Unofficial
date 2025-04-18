@@ -51,11 +51,11 @@ import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.level.Level as World
 import kotlin.math.log
@@ -155,13 +155,13 @@ private fun createFairyModel() = Model {
 }
 
 class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()
         return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
@@ -248,12 +248,12 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
             tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
-                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
+                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
                     return run {
-                        val texts = mutableListOf<Text>()
+                        val texts = mutableListOf<Component>()
                         texts += text { " "() }
                         texts += specification.effect.getText(specification.valueProvider(actualMana))
                         if (conditionValidityList.isNotEmpty()) {

@@ -60,7 +60,7 @@ import net.minecraft.resources.ResourceKey as RegistryKey
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
@@ -72,7 +72,7 @@ fun Motif.getIdentifier() = motifRegistry.getKey(this)
 fun Identifier.toFairyMotif() = motifRegistry.get(this)
 
 interface Motif {
-    val displayName: Text
+    val displayName: Component
     val skinColor: Int
     val frontColor: Int
     val backColor: Int

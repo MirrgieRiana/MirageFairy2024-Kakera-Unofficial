@@ -47,7 +47,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -70,7 +70,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
 
     override fun createCategory() = object : DisplayCategory<TraitEncyclopediaReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = TraitEncyclopediaReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { TraitEncyclopediaReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { TraitEncyclopediaReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: TraitEncyclopediaReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
         override fun getDisplayHeight() = 140

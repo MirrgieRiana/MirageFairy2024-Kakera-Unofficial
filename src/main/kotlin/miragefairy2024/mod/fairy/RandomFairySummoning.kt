@@ -27,7 +27,7 @@ import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
@@ -37,7 +37,7 @@ import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
@@ -56,7 +56,7 @@ fun initRandomFairySummoning() {
 }
 
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
         tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }

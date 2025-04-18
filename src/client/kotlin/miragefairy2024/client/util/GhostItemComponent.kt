@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
 import net.minecraft.world.item.ItemStack
 import kotlin.jvm.optionals.getOrNull
@@ -55,7 +55,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
 
         val tooltip = mutableListOf<TooltipComponent>()
 
-        val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipContext.ADVANCED else TooltipContext.NORMAL
+        val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
         val texts = itemStack.getTooltipLines(MinecraftClient.getInstance().player, tooltipContext)
         tooltip += texts.map { TooltipComponent.create(it.getVisualOrderText()) }
 

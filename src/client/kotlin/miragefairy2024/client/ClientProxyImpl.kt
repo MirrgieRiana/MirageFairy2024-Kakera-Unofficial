@@ -25,13 +25,13 @@ import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import com.mojang.math.Axis as RotationAxis
 import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
 
 class ClientProxyImpl : ClientProxy {
-    override fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit) {
+    override fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Component>) -> Unit) {
         ItemTooltipCallback.EVENT.register { stack, _, lines ->
             block(stack, lines)
         }

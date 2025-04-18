@@ -23,9 +23,9 @@ import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
-class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
+class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: PlayerInventory, title: Component) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {

@@ -10,7 +10,7 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
@@ -22,7 +22,7 @@ class IntComparisonPassiveSkillCondition(private val term: Term, private val isG
     class Term(val emoji: Emoji, val unit: Int = 1, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Int)
 
     private fun format(double: Double) = (double formatAs "%.8f").stripTrailingZeros()
-    override val text: Text get() = text { term.emoji() + format(threshold / term.unit.toDouble())() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
+    override val text: Component get() = text { term.emoji() + format(threshold / term.unit.toDouble())() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         val value = term.getValue(context, level, mana)
         return if (isGreaterOrEquals) value >= threshold else value <= threshold
@@ -39,7 +39,7 @@ class DoubleComparisonPassiveSkillCondition(private val term: Term, private val 
     class Term(val emoji: Emoji, val unit: Double = 1.0, val getValue: (context: PassiveSkillContext, level: Double, mana: Double) -> Double)
 
     private fun format(double: Double) = (double formatAs "%.8f").stripTrailingZeros()
-    override val text: Text get() = text { term.emoji() + format(threshold / term.unit)() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
+    override val text: Component get() = text { term.emoji() + format(threshold / term.unit)() + if (isGreaterOrEquals) Emoji.UP() else Emoji.DOWN() }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         val value = term.getValue(context, level, mana)
         return if (isGreaterOrEquals) value >= threshold else value <= threshold

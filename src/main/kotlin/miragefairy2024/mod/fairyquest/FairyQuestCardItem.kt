@@ -31,7 +31,7 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.item.Item
@@ -41,7 +41,7 @@ import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
@@ -88,12 +88,12 @@ fun initFairyQuestCardItem() {
 }
 
 class FairyQuestCardItem(settings: Properties) : Item(settings) {
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return text { fairyQuestCardFairyQuestTranslation(recipe.title) }
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         val recipeId = stack.getFairyQuestRecipeId()
         if (recipeId == null) {

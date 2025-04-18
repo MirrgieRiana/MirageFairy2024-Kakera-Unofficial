@@ -26,7 +26,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
@@ -44,7 +44,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.Slot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.inventory.ClickAction as ClickType
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
@@ -133,13 +133,13 @@ fun initBagModule() {
 
 class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val bagInventory = stack.getBagInventory() ?: return super.getName(stack)
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return text { super.getName(stack) + (if (count > 0) " ($count / ${card.inventorySize})"() else ""()) }
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
 
         val inventory = stack.getBagInventory() ?: return

@@ -1,13 +1,13 @@
 package miragefairy2024.mod.magicplant
 
 import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.level.biome.Biome
 
 class TraitSpawnSpec(val condition: TraitSpawnCondition, val rarity: TraitSpawnRarity, val level: Int)
 
 interface TraitSpawnCondition {
-    val description: Text
+    val description: Component
     fun canSpawn(biome: RegistryEntry<Biome>): Boolean
 }
 

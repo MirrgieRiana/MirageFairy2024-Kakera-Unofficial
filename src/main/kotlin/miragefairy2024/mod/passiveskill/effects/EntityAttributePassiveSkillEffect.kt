@@ -9,7 +9,7 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import java.util.UUID
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
@@ -20,7 +20,7 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
 
     class Value(val map: Map<EntityAttribute, Double>)
 
-    override fun getText(value: Value): Text {
+    override fun getText(value: Value): Component {
         return value.map.map { (attribute, value) ->
             text { translate(attribute.descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })

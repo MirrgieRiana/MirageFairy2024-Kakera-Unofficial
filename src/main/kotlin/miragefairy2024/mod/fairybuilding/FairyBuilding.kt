@@ -36,7 +36,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType as NavigationTyp
 import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.Mth as MathHelper
@@ -99,7 +99,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
         val animation: FairyAnimation.Configuration? = null,
-        val tooltipGetter: (() -> List<Text>)? = null,
+        val tooltipGetter: (() -> List<Component>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
         override fun isValid(itemStack: ItemStack) = filter(itemStack)

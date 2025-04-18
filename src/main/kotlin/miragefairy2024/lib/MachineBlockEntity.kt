@@ -22,7 +22,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as B
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -170,7 +170,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     override fun stillValid(player: PlayerEntity) = Inventory.stillValidBlockEntity(this, player)
 
-    override fun getDefaultName(): Text = card.block.name
+    override fun getDefaultName(): Component = card.block.name
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
         val arguments = MachineScreenHandler.Arguments(

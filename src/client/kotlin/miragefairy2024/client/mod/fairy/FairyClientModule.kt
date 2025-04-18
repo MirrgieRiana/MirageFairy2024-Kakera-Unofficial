@@ -36,7 +36,7 @@ import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
 import net.minecraft.client.KeyMapping as KeyBinding
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 
 lateinit var soulStreamKey: KeyBinding
@@ -112,7 +112,7 @@ fun initFairyClientModule() {
                         screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {
-                        tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Text.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })
+                        tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Component.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })
                     })
 
                 })

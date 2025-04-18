@@ -38,7 +38,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.BlockItem
@@ -53,7 +53,7 @@ import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
@@ -160,7 +160,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: BlockView?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer() ?: return
 
@@ -225,7 +225,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     }
 
     private interface TelescopeActions {
-        val texts: List<Text>
+        val texts: List<Component>
         val actions: List<() -> Unit>
     }
 
@@ -241,7 +241,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         }
 
     private fun calculateTelescopeActions(now: Instant, player: PlayerEntity): TelescopeActions {
-        val texts = mutableListOf<Text>()
+        val texts = mutableListOf<Component>()
         val actions = mutableListOf<() -> Unit>()
 
         val lastUsedInstant = player.telescopeMission.lastUsedInstant

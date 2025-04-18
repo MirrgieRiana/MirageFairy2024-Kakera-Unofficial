@@ -5,12 +5,12 @@ import miragefairy2024.lib.MachineScreenHandler
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import java.util.Optional
 
 open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard<*, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
 
-    class Arguments<H>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
+    class Arguments<H>(val handler: H, val playerInventory: PlayerInventory, val title: Component)
 
     init {
         imageWidth = card.guiWidth

@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey as RegistryKey
 import net.minecraft.network.chat.Style
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level as World
 val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
-abstract class Trait(val style: Style, val poem: Text) : Comparable<Trait> {
+abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> {
     abstract val spawnSpecs: List<TraitSpawnSpec>
 
     abstract val conditions: List<TraitCondition>

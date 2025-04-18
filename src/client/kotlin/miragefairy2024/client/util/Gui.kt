@@ -12,7 +12,7 @@ import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import miragefairy2024.MirageFairy2024
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 
 enum class SlotType(val texture: Identifier) {
@@ -33,7 +33,7 @@ fun horizontalSpace(width: Int): FlowLayout = Containers.verticalFlow(Sizing.fix
 
 fun verticalSpace(height: Int): FlowLayout = Containers.verticalFlow(Sizing.content(), Sizing.fixed(height))
 
-fun inventoryNameLabel(name: Text, horizontalTextAlignment: HorizontalAlignment? = HorizontalAlignment.LEFT): LabelComponent = Components.label(name).apply {
+fun inventoryNameLabel(name: Component, horizontalTextAlignment: HorizontalAlignment? = HorizontalAlignment.LEFT): LabelComponent = Components.label(name).apply {
     margins(Insets.of(0, 0, 1, 1))
     sizing(Sizing.fill(100), Sizing.content())
     horizontalTextAlignment(horizontalTextAlignment)

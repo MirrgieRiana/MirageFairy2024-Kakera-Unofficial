@@ -12,13 +12,13 @@ import io.wispforest.owo.util.Observable
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.util.FormattedCharSequence as OrderedText
 import net.minecraft.network.chat.Style
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import java.util.function.Function
 import kotlin.math.min
 
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java
-open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
+open class LimitedLabelComponent(protected var text: Component) : BaseComponent() {
     protected val textRenderer = MinecraftClient.getInstance().font
     protected var wrappedText: List<OrderedText>
     protected var verticalTextAlignment = VerticalAlignment.TOP
@@ -35,13 +35,13 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
         lineHeight.observe { `$`: Int? -> notifyParentIfMounted() }
     }
 
-    fun text(text: Text): LimitedLabelComponent {
+    fun text(text: Component): LimitedLabelComponent {
         this.text = text
         notifyParentIfMounted()
         return this
     }
 
-    fun text(): Text {
+    fun text(): Component {
         return text
     }
 

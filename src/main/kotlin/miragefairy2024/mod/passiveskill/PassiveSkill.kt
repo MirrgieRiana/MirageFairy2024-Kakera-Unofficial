@@ -4,7 +4,7 @@ import miragefairy2024.mod.fairy.Motif
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level as World
@@ -18,13 +18,13 @@ class PassiveSkill(val providerId: Identifier, val motif: Motif?, val rare: Doub
 class PassiveSkillSpecification<T>(val conditions: List<PassiveSkillCondition>, val effect: PassiveSkillEffect<T>, val valueProvider: (mana: Double) -> T)
 
 interface PassiveSkillCondition {
-    val text: Text
+    val text: Component
     fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean
 }
 
 interface PassiveSkillEffect<T> {
     val isPreprocessor: Boolean
-    fun getText(value: T): Text
+    fun getText(value: T): Component
     val unit: T
     fun castOrThrow(value: Any?): T
     fun combine(a: T, b: T): T

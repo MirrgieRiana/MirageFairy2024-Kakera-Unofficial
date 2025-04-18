@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.inventory.Slot
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
@@ -25,7 +25,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         val x: Int
         val y: Int
         fun isValid(itemStack: ItemStack): Boolean
-        fun getTooltip(): List<Text>?
+        fun getTooltip(): List<Component>?
     }
 
     interface PropertyConfiguration<in E> {
@@ -61,7 +61,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         addDataSlots(arguments.propertyDelegate)
     }
 
-    fun getTooltip(slot: Slot): List<Text>? {
+    fun getTooltip(slot: Slot): List<Component>? {
         if (slot.hasItem()) return null // アイテムのツールチップを優先
         if (slot !is MachineSlot) return null
         return slot.configuration.getTooltip()

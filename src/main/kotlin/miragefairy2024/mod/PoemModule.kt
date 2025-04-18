@@ -13,7 +13,7 @@ import miragefairy2024.util.ja
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import net.minecraft.world.item.Item
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.ChatFormatting as Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
@@ -23,7 +23,7 @@ fun initPoemModule() {
     ModEvents.onClientInit {
         clientProxy!!.registerItemTooltipCallback { stack, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
-            val texts = mutableListOf<Text>()
+            val texts = mutableListOf<Component>()
 
             poemList.poems.filter { it.type == PoemType.POEM }.forEach {
                 texts += it.getText(stack.item)
@@ -54,7 +54,7 @@ enum class PoemType(val color: Formatting) {
 
 interface Poem {
     val type: PoemType
-    fun getText(item: Item): Text
+    fun getText(item: Item): Component
     context(ModContext)
     fun init(item: Item) = Unit
 }
@@ -72,7 +72,7 @@ class ExternalPoem(override val type: PoemType, private val keyGetter: () -> Str
     override fun getText(item: Item) = text { translate(keyGetter()).formatted(type.color) }
 }
 
-class TextPoem(override val type: PoemType, private val text: Text) : Poem {
+class TextPoem(override val type: PoemType, private val text: Component) : Poem {
     override fun getText(item: Item) = text.formatted(type.color)
 }
 
@@ -92,7 +92,7 @@ fun PoemList.description(key: String, enJa: EnJa) = this.description(key, enJa.e
 fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
 fun PoemList.description(enJa: EnJa) = this.description(enJa.en, enJa.ja)
 fun PoemList.translation(type: PoemType, translation: Translation) = this + ExternalPoem(type) { translation.keyGetter() }
-fun PoemList.text(type: PoemType, text: Text) = this + TextPoem(type, text)
+fun PoemList.text(type: PoemType, text: Component) = this + TextPoem(type, text)
 
 
 // Util

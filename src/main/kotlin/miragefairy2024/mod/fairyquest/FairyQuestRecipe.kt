@@ -48,7 +48,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey as RegistryKey
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.ItemTags
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
@@ -60,9 +60,9 @@ val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder
 interface FairyQuestRecipe {
     val color: Int
     val icon: ItemStack
-    val title: Text
-    val message: Text
-    val client: Text
+    val title: Component
+    val message: Component
+    val client: Component
     val duration: Int
     val inputs: List<Pair<Ingredient, Int>>
     val outputs: List<ItemStack>

@@ -17,7 +17,7 @@ import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
@@ -31,7 +31,7 @@ import net.minecraft.world.item.SwordItem
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.core.BlockPos
@@ -94,7 +94,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }

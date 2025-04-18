@@ -55,7 +55,7 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.world.entity.LivingEntity
@@ -72,7 +72,7 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.tags.BlockTags
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -277,7 +277,7 @@ class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, sett
 
     override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
         val motif = stack.getFairyStatueMotif() ?: return
         val fairyItemStack = motif.createFairyItemStack()

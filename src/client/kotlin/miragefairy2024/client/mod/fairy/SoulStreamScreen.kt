@@ -20,9 +20,9 @@ import miragefairy2024.util.size
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import com.mojang.blaze3d.platform.InputConstants as InputUtil
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
-class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
+class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Component) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
 
     // カーソルをインベントリ画面での位置に戻す
     private var isFirst = true

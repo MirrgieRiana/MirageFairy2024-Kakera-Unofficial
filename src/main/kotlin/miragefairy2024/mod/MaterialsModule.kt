@@ -49,7 +49,7 @@ import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.advancements.CriteriaTriggers as Criteria
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
@@ -67,7 +67,7 @@ import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.TagKey
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.util.StringUtil as StringHelper
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
@@ -885,7 +885,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toLanguageKey()}.burning" }, "Flaming", "炎上")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
         super.appendHoverText(stack, world, tooltip, context)
 
         run {

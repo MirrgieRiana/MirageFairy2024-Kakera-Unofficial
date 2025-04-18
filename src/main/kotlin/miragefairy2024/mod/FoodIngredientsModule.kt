@@ -9,7 +9,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 
 // api
@@ -50,7 +50,7 @@ class FoodIngredients(val items: List<Item> = listOf(), val categories: List<Foo
 }
 
 interface FoodIngredientCategory {
-    val text: Text
+    val text: Component
 }
 
 
