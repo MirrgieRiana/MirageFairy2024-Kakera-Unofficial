@@ -56,11 +56,11 @@ fun initRandomFairySummoning() {
 }
 
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
-        tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
-        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
-        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
+        tooltipComponents += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
+        tooltipComponents += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
+        tooltipComponents += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
     override fun getUseAnimation(stack: ItemStack) = UseAction.BOW

@@ -86,9 +86,9 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         const val BASE_EXPERIENCE_COST = 2
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
-        tooltip += text { DESCRIPTION_TRANSLATION().yellow }
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
+        tooltipComponents += text { DESCRIPTION_TRANSLATION().yellow }
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {

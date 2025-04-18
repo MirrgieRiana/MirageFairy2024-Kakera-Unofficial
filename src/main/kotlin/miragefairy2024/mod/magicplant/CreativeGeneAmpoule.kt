@@ -81,10 +81,10 @@ fun initCreativeGeneAmpoule() {
 }
 
 class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         stack.getTraitStacks().or { return }.traitStackList.forEach { traitStack ->
-            tooltip += text { traitStack.trait.getName().style(traitStack.trait.style) + " "() + traitStack.level.toString(2)() }
+            tooltipComponents += text { traitStack.trait.getName().style(traitStack.trait.style) + " "() + traitStack.level.toString(2)() }
         }
     }
 

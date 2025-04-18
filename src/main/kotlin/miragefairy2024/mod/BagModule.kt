@@ -139,8 +139,8 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return text { super.getName(stack) + (if (count > 0) " ($count / ${card.inventorySize})"() else ""()) }
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
 
         val inventory = stack.getBagInventory() ?: return
         var first = true
@@ -151,13 +151,13 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
                 if (itemCount <= 10) {
                     if (first) {
                         first = false
-                        tooltip += text { ""() }
+                        tooltipComponents += text { ""() }
                     }
-                    tooltip += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
+                    tooltipComponents += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
                 }
             }
         }
-        if (itemCount > 10) tooltip += text { "... ${itemCount - 10}"() }
+        if (itemCount > 10) tooltipComponents += text { "... ${itemCount - 10}"() }
     }
 
     override fun isBarVisible(stack: ItemStack): Boolean {

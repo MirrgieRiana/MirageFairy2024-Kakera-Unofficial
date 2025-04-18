@@ -885,8 +885,8 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toLanguageKey()}.burning" }, "Flaming", "炎上")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
 
         run {
             val foodComponent = foodProperties ?: return@run
@@ -896,11 +896,11 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
                 if (!entry.first.effect.isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.first.duration)}"() + ")"() }
                 if (entry.second != 1.0F) text = text { text + " (${entry.second * 100 formatAs "%.0f"}%)"() }
                 text = if (entry.first.effect.isBeneficial) text.blue else text.red
-                tooltip += text
+                tooltipComponents += text
             }
         }
 
-        if (flaming != null) tooltip += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
+        if (flaming != null) tooltipComponents += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
     }
 
     override fun finishUsingItem(stack: ItemStack, world: World, user: LivingEntity): ItemStack {

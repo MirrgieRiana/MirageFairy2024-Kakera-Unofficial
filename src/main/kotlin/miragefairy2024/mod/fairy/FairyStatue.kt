@@ -277,13 +277,13 @@ class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, sett
 
     override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         val motif = stack.getFairyStatueMotif() ?: return
         val fairyItemStack = motif.createFairyItemStack()
 
-        tooltip += text { empty() }
-        fairyItemStack.item.appendHoverText(fairyItemStack, world, tooltip, context)
+        tooltipComponents += text { empty() }
+        fairyItemStack.item.appendHoverText(fairyItemStack, context, tooltipComponents, tooltipFlag)
     }
 
     override fun getFairyDreamMotifs(itemStack: ItemStack) = itemStack.getFairyStatueMotif()?.let { listOf(it) } ?: listOf()

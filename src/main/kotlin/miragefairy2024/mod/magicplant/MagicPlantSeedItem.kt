@@ -35,19 +35,19 @@ import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level as World
 
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         if (world == null) return
         val player = clientProxy?.getClientPlayer() ?: return
 
         // 特性を得る、無い場合はクリエイティブ専用
         val traitStacks = stack.getTraitStacks() ?: run {
-            tooltip += text { CREATIVE_ONLY_TRANSLATION().yellow }
+            tooltipComponents += text { CREATIVE_ONLY_TRANSLATION().yellow }
             return
         }
 
         // 機能説明
-        tooltip += text { GUI_TRANSLATION().yellow }
+        tooltipComponents += text { GUI_TRANSLATION().yellow }
 
         // プレイヤーのメインハンドの種子の特性を得る
         val otherTraitStacks = if (player.mainHandItem.item == this) player.mainHandItem.getTraitStacks() else null
@@ -66,7 +66,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                 traitStacks.bitCount == otherTraitStacks.bitCount -> text { "${traitStacks.bitCount}"().darkGray }
                 else -> text { "${traitStacks.bitCount}"().darkRed }
             }
-            tooltip += text { TRAIT_TRANSLATION() + ": x"() + countText + " ("() + bitCountText + "b)"() }
+            tooltipComponents += text { TRAIT_TRANSLATION() + ": x"() + countText + " ("() + bitCountText + "b)"() }
         }
 
         // 特性行
@@ -93,7 +93,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                 }
 
                 val traitEffects = trait.getTraitEffects(world, player.blockPosition(), level)
-                tooltip += if (traitEffects != null) {
+                tooltipComponents += if (traitEffects != null) {
                     val description = text {
                         traitEffects.effects
                             .map {

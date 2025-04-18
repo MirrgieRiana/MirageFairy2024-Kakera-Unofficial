@@ -161,8 +161,8 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Component>, context: TooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
@@ -198,7 +198,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         val mana = level * (1.0 + manaBoost)
 
         // 魔力・個数
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 MANA_TRANSLATION(),
                 ": "(),
@@ -210,7 +210,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
 
         // レベル・凝縮数
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 LEVEL_TRANSLATION(),
                 ": "(),
@@ -227,7 +227,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
 
         // レア・ID
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 RARE_TRANSLATION(),
                 ": ${motif.rare}"(),
@@ -237,15 +237,15 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
 
         // 機能説明
-        tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
+        tooltipComponents += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
 
         // パッシブスキル
         if (motif.passiveSkillSpecifications.isNotEmpty()) {
 
-            tooltip += text { empty() }
+            tooltipComponents += text { empty() }
 
             val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE || status == PassiveSkillStatus.SUPPORTING
-            tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
+            tooltipComponents += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
@@ -267,7 +267,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                         texts.join()
                     }.let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
                 }
-                tooltip += getSpecificationText(specification)
+                tooltipComponents += getSpecificationText(specification)
             }
         }
     }
