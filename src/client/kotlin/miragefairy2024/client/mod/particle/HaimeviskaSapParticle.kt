@@ -12,32 +12,32 @@ import net.minecraft.sounds.SoundEvents
 open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Double) : SpriteBillboardParticle(world, x, y, z) {
     init {
         setSize(0.01F, 0.01F)
-        gravityStrength = 0.06F
+        gravity = 0.06F
         setColor(255 / 255F, 159 / 255F, 50 / 255F)
     }
 
     override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
 
     override fun tick() {
-        prevPosX = x
-        prevPosY = y
-        prevPosZ = z
+        xo = x
+        yo = y
+        zo = z
 
-        maxAge--
-        if (maxAge <= 0) {
+        lifetime--
+        if (lifetime <= 0) {
             remove()
             onDiedByAge()
         }
-        if (dead) return
+        if (removed) return
 
-        velocityY -= gravityStrength
-        move(velocityX, velocityY, velocityZ)
+        yd -= gravity
+        move(xd, yd, zd)
         updateVelocity()
-        if (dead) return
+        if (removed) return
 
-        velocityX *= 0.98F
-        velocityY *= 0.98F
-        velocityZ *= 0.98F
+        xd *= 0.98F
+        yd *= 0.98F
+        zd *= 0.98F
     }
 
     open fun onDiedByAge() {
@@ -51,33 +51,33 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
     class Dripping(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
-            gravityStrength *= 0.01F
-            maxAge = 100
+            gravity *= 0.01F
+            lifetime = 100
         }
 
         override fun onDiedByAge() {
-            world.addParticle(particleEffect, x, y, z, velocityX, velocityY, velocityZ)
+            level.addParticle(particleEffect, x, y, z, xd, yd, zd)
         }
 
         override fun updateVelocity() {
-            velocityX *= 0.02
-            velocityY *= 0.02
-            velocityZ *= 0.02
+            xd *= 0.02
+            yd *= 0.02
+            zd *= 0.02
         }
     }
 
     class Falling(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
-            gravityStrength = 0.01F
-            maxAge = (64.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
+            gravity = 0.01F
+            lifetime = (64.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
         }
 
         override fun updateVelocity() {
             if (onGround) {
                 remove()
-                world.addParticle(particleEffect, x, y, z, 0.0, 0.0, 0.0)
-                world.playLocalSound(x, y, z, SoundEvents.BLOCK_BEEHIVE_DRIP, SoundCategory.BLOCKS, 0.3F + 0.7F * world.random.nextFloat(), 1.0F, false)
+                level.addParticle(particleEffect, x, y, z, 0.0, 0.0, 0.0)
+                level.playLocalSound(x, y, z, SoundEvents.BEEHIVE_DRIP, SoundCategory.BLOCKS, 0.3F + 0.7F * level.random.nextFloat(), 1.0F, false)
             }
         }
     }
@@ -85,7 +85,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
     class Landing(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
-            maxAge = (128.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
+            lifetime = (128.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()
         }
     }
 }

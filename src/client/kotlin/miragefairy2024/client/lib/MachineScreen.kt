@@ -13,14 +13,14 @@ open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard
     class Arguments<H>(val handler: H, val playerInventory: PlayerInventory, val title: Text)
 
     init {
-        backgroundWidth = card.guiWidth
-        backgroundHeight = card.guiHeight
-        playerInventoryTitleY = backgroundHeight - 94
+        imageWidth = card.guiWidth
+        imageHeight = card.guiHeight
+        inventoryLabelY = imageHeight - 94
     }
 
     override fun init() {
         super.init()
-        titleX = (backgroundWidth - textRenderer.width(title)) / 2
+        titleLabelX = (imageWidth - font.width(title)) / 2
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
@@ -30,15 +30,15 @@ open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard
     }
 
     override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        context.blit(card.backgroundTexture, x, y, 0, 0, backgroundWidth, backgroundHeight)
+        context.blit(card.backgroundTexture, leftPos, topPos, 0, 0, imageWidth, imageHeight)
     }
 
     override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
         super.renderTooltip(context, x, y)
         run {
-            val slot = focusedSlot ?: return@run
-            val tooltip = handler.getTooltip(slot) ?: return@run
-            context.renderTooltip(textRenderer, tooltip, Optional.empty(), x, y)
+            val slot = hoveredSlot ?: return@run
+            val tooltip = menu.getTooltip(slot) ?: return@run
+            context.renderTooltip(font, tooltip, Optional.empty(), x, y)
         }
     }
 

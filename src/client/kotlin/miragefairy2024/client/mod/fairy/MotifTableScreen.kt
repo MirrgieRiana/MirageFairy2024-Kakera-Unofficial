@@ -50,7 +50,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                         child().child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
                             padding(Insets.of(0, 0, 0, 3))
 
-                            handler.chanceTable.forEach { chance ->
+                            menu.chanceTable.forEach { chance ->
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 

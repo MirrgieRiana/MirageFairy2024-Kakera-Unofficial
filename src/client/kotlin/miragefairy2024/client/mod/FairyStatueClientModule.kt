@@ -15,7 +15,7 @@ fun initFairyStatueClientModule() {
         val motif = stack.getFairyStatueMotif()
         val itemStack = motif?.createFairyItemStack() ?: return@RenderItemHandler
         matrices.stack {
-            model.transformation.getTransformation(renderMode).apply(leftHanded, matrices)
+            model.transforms.getTransform(renderMode).apply(leftHanded, matrices)
 
             matrices.stack {
                 matrices.scale(0.5F, 0.5F, 0.5F)

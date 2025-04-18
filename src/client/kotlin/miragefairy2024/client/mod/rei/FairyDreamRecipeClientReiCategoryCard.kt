@@ -120,7 +120,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.entityTypes[0].name }
+            val text = text { display.entityTypes[0].description }
                 .let { if (display.entityTypes.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }
             return listOf(
@@ -129,7 +129,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
-                    .tooltip(display.entityTypes.map { it.name }.join(text { "\n"() })),
+                    .tooltip(display.entityTypes.map { it.description }.join(text { "\n"() })),
                 Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
             )
         }

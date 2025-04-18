@@ -30,7 +30,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
         if (isFirst) {
             isFirst = false
             if (lastMousePositionInInventory != null) {
-                InputUtil.grabOrReleaseMouse(this.client!!.window.handle, InputUtil.GLFW_CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
+                InputUtil.grabOrReleaseMouse(this.minecraft!!.window.window, InputUtil.CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
             }
         }
         super.render(vanillaContext, mouseX, mouseY, delta)
@@ -68,7 +68,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
                         surface(Surface.tiled(SlotType.NORMAL.texture, 18, 18))
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
                         scrollStep(18)
-                        (9 until handler.soulStream.size).chunked(9).forEach { indices ->
+                        (9 until menu.soulStream.size).chunked(9).forEach { indices ->
                             child().child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                                 indices.forEach { index ->
                                     child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = null))
@@ -79,7 +79,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(3))
 
-                    child(inventoryNameLabel(handler.playerInventory.name))
+                    child(inventoryNameLabel(menu.playerInventory.name))
 
                     child(verticalSpace(1))
 

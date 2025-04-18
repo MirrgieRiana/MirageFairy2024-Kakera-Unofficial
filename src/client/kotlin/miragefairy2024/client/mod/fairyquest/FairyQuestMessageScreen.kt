@@ -85,8 +85,8 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (super.keyPressed(keyCode, scanCode, modifiers)) return true
-        if (client!!.options.inventoryKey.matches(keyCode, scanCode)) {
-            close()
+        if (minecraft!!.options.keyInventory.matches(keyCode, scanCode)) {
+            onClose()
             return true
         }
         return false
@@ -94,11 +94,11 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (super.mouseClicked(mouseX, mouseY, button)) return true
-        close()
+        onClose()
         return true
     }
 
     override fun onClose() {
-        client!!.setScreen(parent)
+        minecraft!!.setScreen(parent)
     }
 }

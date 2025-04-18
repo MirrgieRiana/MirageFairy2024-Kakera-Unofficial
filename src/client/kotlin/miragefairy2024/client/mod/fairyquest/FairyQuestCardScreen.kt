@@ -52,7 +52,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                 // 横幅固定メインコンテナ
                 child(Containers.verticalFlow(Sizing.fixed(18 * 9), Sizing.content()).apply {
 
-                    child(inventoryNameLabel(handler.recipe.title, HorizontalAlignment.CENTER))
+                    child(inventoryNameLabel(menu.recipe.title, HorizontalAlignment.CENTER))
 
                     child(verticalSpace(3))
 
@@ -61,7 +61,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                         // クリックしたらメッセージを全画面で表示する
                         child(ClickableContainer(Sizing.fill(100), Sizing.fixed(11 * 7 + 5), {
-                            client!!.setScreen(FairyQuestMessageScreen(this@FairyQuestCardScreen, handler.recipe.title, handler.recipe.message, handler.recipe.client, handler.recipe.title))
+                            minecraft!!.setScreen(FairyQuestMessageScreen(this@FairyQuestCardScreen, menu.recipe.title, menu.recipe.message, menu.recipe.client, menu.recipe.title))
                             true
                         }) {
 
@@ -79,7 +79,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                         padding(Insets.of(0, 1, 0, 0))
 
                                         // メッセージテキストラベル
-                                        child(Components.label(handler.recipe.message).apply {
+                                        child(Components.label(menu.recipe.message).apply {
                                             sizing(Sizing.fill(100), Sizing.content())
                                             color(Color.ofRgb(0x6B472E))
                                         })
@@ -106,21 +106,21 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 allowOverflow(true)
                                 val index = 9 + 9 * 3 + i
                                 child(slotAsComponent(index))
-                                val input = handler.recipe.inputs.getOrNull(i)
+                                val input = menu.recipe.inputs.getOrNull(i)
                                 val inputItemStacks = input?.first?.items?.map { it.copyWithCount(input.second) } ?: listOf()
                                 child(GhostItemComponent(inputItemStacks).apply {
-                                    onScreenUpdate += { showItemStack = handler.getSlot(index).item.isEmpty }
+                                    onScreenUpdate += { showItemStack = menu.getSlot(index).item.isEmpty }
                                     overlayColor = 0x20FF0000
                                     onScreenUpdate += {
                                         showOverlay = when {
                                             input == null -> false
-                                            !input.first.test(handler.getSlot(index).item) -> true
-                                            handler.getSlot(index).item.count < input.second -> true
+                                            !input.first.test(menu.getSlot(index).item) -> true
+                                            menu.getSlot(index).item.count < input.second -> true
                                             else -> false
                                         }
                                     }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().lastFrameDuration)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().deltaFrameTime)
                                     }
                                 })
                             }))
@@ -128,7 +128,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
 
                         child(FairyQuestProgress().apply {
                             onScreenUpdate += {
-                                setProgress(handler.progress / handler.recipe.duration.toDouble())
+                                setProgress(menu.progress / menu.recipe.duration.toDouble())
                             }
                         }.component)
 
@@ -137,13 +137,13 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                 allowOverflow(true)
                                 val index = 9 + 9 * 3 + 4 + i
                                 child(slotAsComponent(index))
-                                val outputItemStack = handler.recipe.outputs.getOrNull(i)
+                                val outputItemStack = menu.recipe.outputs.getOrNull(i)
                                 child(GhostItemComponent(outputItemStack?.let { listOf(it) } ?: listOf()).apply {
-                                    onScreenUpdate += { showItemStack = handler.getSlot(index).item.isEmpty }
+                                    onScreenUpdate += { showItemStack = menu.getSlot(index).item.isEmpty }
                                     overlayColor = 0x2000FF00
-                                    onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && handler.getSlot(index).item.isEmpty }
+                                    onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && menu.getSlot(index).item.isEmpty }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().lastFrameDuration)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().deltaFrameTime)
                                     }
                                 })
                             }))

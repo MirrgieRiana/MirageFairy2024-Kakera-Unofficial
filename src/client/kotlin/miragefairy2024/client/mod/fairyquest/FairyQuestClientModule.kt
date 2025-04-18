@@ -18,7 +18,7 @@ fun initFairyQuestClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
         if (!stack.`is`(FairyQuestCardCard.item)) return@RenderItemHandler
         matrices.stack {
-            model.transformation.getTransformation(renderMode).apply(leftHanded, matrices)
+            model.transforms.getTransform(renderMode).apply(leftHanded, matrices)
 
             // TODO モデルに
             matrices.stack {
@@ -39,7 +39,7 @@ fun initFairyQuestClientModule() {
                 matrices.stack {
                     matrices.translate(0F, 1F / 16F, -0.02F)
                     matrices.scale(0.45F, 0.45F, 0.01F)
-                    matrices.mulPose(RotationAxis.POSITIVE_Y.rotation(MathHelper.TWO_PI * 0.5F))
+                    matrices.mulPose(RotationAxis.YP.rotation(MathHelper.TWO_PI * 0.5F))
                     val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon, null, null, 0)
                     MinecraftClient.getInstance().itemRenderer.render(recipe.icon, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
                 }

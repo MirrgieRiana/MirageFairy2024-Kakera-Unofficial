@@ -24,7 +24,7 @@ fun createOwoToast(component: Component) = object : Toast {
             this.justUpdated = false
         }
 
-        component.draw(OwoUIDrawContext.of(context), -1000, -1000, MinecraftClient.getInstance().tickDelta, MinecraftClient.getInstance().lastFrameDuration)
+        component.draw(OwoUIDrawContext.of(context), -1000, -1000, MinecraftClient.getInstance().frameTime, MinecraftClient.getInstance().deltaFrameTime)
 
         return if ((startTime - this.startTime).toDouble() >= 5000.0 * manager.notificationDisplayTimeMultiplier) Toast.Visibility.HIDE else Toast.Visibility.SHOW
     }

@@ -31,6 +31,6 @@ class EntityModelLayerCard(
     val provider = EntityModelLayerRegistry.TexturedModelDataProvider {
         val modelData = ModelData()
         configurator(modelData.root)
-        TexturedModelData.of(modelData, textureWidth, textureHeight)
+        TexturedModelData.create(modelData, textureWidth, textureHeight)
     }
 }

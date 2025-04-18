@@ -21,7 +21,7 @@ lateinit var placeItemKey: KeyBinding
 
 fun initPlacedItemClientModule() {
 
-    placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.GAMEPLAY_CATEGORY)
+    placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.CATEGORY_GAMEPLAY)
     inputEventsHandlers += {
         while (placeItemKey.consumeClick()) run {
 
@@ -46,9 +46,9 @@ fun initPlacedItemClientModule() {
 
                 val packet = PlaceItemChannel.Packet(
                     blockPos,
-                    hitResult.pos.x - blockPos.x.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
-                    hitResult.pos.y - blockPos.y.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
-                    hitResult.pos.z - blockPos.z.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.x - blockPos.x.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.y - blockPos.y.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.z - blockPos.z.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
                     rotation.first,
                     rotation.second,
                 )

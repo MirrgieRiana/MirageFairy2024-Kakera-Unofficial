@@ -78,7 +78,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 
                             child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
-                                handler.traitStacks.traitStackList.forEach { traitStack ->
+                                menu.traitStacks.traitStackList.forEach { traitStack ->
                                     child(ClickableContainer(Sizing.fill(100), Sizing.content(), { // 特性
                                         setTraitCardContent(createTraitCardContent(traitStack))
                                         true
@@ -100,7 +100,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
             })
         }
 
-        val traitStack = handler.traitStacks.traitStackList.firstOrNull()
+        val traitStack = menu.traitStacks.traitStackList.firstOrNull()
         if (traitStack != null) setTraitCardContent(createTraitCardContent(traitStack))
     }
 

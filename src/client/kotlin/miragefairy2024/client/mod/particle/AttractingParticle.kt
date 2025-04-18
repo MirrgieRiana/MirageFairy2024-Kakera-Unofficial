@@ -18,14 +18,14 @@ class AttractingParticle internal constructor(
     private val aZ: Double
 
     init {
-        velocityX = 0.0
-        velocityY = 0.0
-        velocityZ = 0.0
-        maxAge = 40
-        aX = (toX - fromX) / (maxAge * (maxAge + 1) / 2.0)
-        aY = (toY - fromY) / (maxAge * (maxAge + 1) / 2.0)
-        aZ = (toZ - fromZ) / (maxAge * (maxAge + 1) / 2.0)
-        scale *= 0.3F
+        xd = 0.0
+        yd = 0.0
+        zd = 0.0
+        lifetime = 40
+        aX = (toX - fromX) / (lifetime * (lifetime + 1) / 2.0)
+        aY = (toY - fromY) / (lifetime * (lifetime + 1) / 2.0)
+        aZ = (toZ - fromZ) / (lifetime * (lifetime + 1) / 2.0)
+        quadSize *= 0.3F
     }
 
     override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
@@ -36,9 +36,9 @@ class AttractingParticle internal constructor(
     }
 
     override fun tick() {
-        velocityX += aX
-        velocityY += aY
-        velocityZ += aZ
+        xd += aX
+        yd += aY
+        zd += aZ
         super.tick()
     }
 
