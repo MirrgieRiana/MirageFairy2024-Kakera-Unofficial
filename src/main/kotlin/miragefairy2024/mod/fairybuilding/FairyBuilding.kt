@@ -27,23 +27,23 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.block.enums.Instrument
-import net.minecraft.entity.ai.pathing.NavigationType
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.text.Text
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.util.shape.VoxelShapes
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
+import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
@@ -87,7 +87,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON_PINK)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(BlockSoundGroup.WOOD).mapColor(MapColor.RAW_IRON)
 
 
     // Slot
@@ -132,7 +132,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
         block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
 
         block.registerDefaultLootTableGeneration()
@@ -160,30 +160,30 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
 open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
-        private val SHAPE = VoxelShapes.union(
-            createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
-            createCuboidShape(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
-            createCuboidShape(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
-            createCuboidShape(0.0, 0.0, 15.9, 16.0, 16.0, 16.0),
-            createCuboidShape(0.0, 15.9, 0.0, 16.0, 16.0, 16.0),
-            createCuboidShape(15.9, 0.0, 0.0, 16.0, 16.0, 16.0),
+        private val SHAPE = VoxelShapes.or(
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
+            box(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
+            box(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
+            box(0.0, 0.0, 15.9, 16.0, 16.0, 16.0),
+            box(0.0, 15.9, 0.0, 16.0, 16.0, 16.0),
+            box(15.9, 0.0, 0.0, 16.0, 16.0, 16.0),
         )
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 6
+    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 6
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun hasComparatorOutput(state: BlockState) = true
+    override fun hasAnalogOutputSignal(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
+    override fun getAnalogOutputSignal(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
 
 }
 
@@ -191,7 +191,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
 
     // Inventory
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
 
     // Move
@@ -204,14 +204,14 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     open val doMovePosition get() = false
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
-        val world = world ?: return
-        val blockState = world.getBlockState(pos)
-        if (!blockState.isOf(card.block)) return
+        val world = level ?: return
+        val blockState = world.getBlockState(worldPosition)
+        if (!blockState.`is`(card.block)) return
         val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
 
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
-            renderingProxy.rotateY(-((direction.horizontal + 2) * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-((direction.get2DDataValue() + 2) * 90) / 180F * Math.PI.toFloat())
             renderingProxy.translate(-0.5, -0.5, -0.5)
 
             renderRotated(renderingProxy, tickDelta, light, overlay)
@@ -264,7 +264,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
     var pitch = position.pitch
 
     override fun tick(blockEntity: FairyBuildingBlockEntity<*>) {
-        val world = blockEntity.world ?: return
+        val world = blockEntity.level ?: return
 
         // 定位置の切り替え
         val speed = animation.getSpeed(blockEntity)
@@ -329,7 +329,7 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
             }
 
             renderingProxy.translate(0.0, 2.0 / 16.0, 0.0) // なぜか4ドット分下に埋まるのを補正
-            renderingProxy.renderItemStack(blockEntity.getStack(inventorySlotIndex))
+            renderingProxy.renderItemStack(blockEntity.getItem(inventorySlotIndex))
         }
     }
 }

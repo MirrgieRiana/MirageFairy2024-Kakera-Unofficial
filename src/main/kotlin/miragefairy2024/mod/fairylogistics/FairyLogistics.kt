@@ -28,18 +28,18 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.piston.PistonBehavior
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.EnumProperty
-import net.minecraft.util.StringIdentifiable
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.util.StringRepresentable as StringIdentifiable
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 
 abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlockEntity<E>, H : FairyLogisticsScreenHandler> : MachineCard<B, E, H>() {
 
@@ -95,7 +95,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         block.registerDefaultLootTableGeneration()
 
@@ -104,7 +104,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
 open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
-        val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.of("vertical_facing", VerticalFacing::class.java)
+        val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.create("vertical_facing", VerticalFacing::class.java)
     }
 
     enum class VerticalFacing(val string: String, val id: Int) : StringIdentifiable {
@@ -113,29 +113,29 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
         DOWN("down", 2),
         ;
 
-        override fun asString() = string
+        override fun getSerializedName() = string
     }
 
 
     // BlockState
 
     init {
-        defaultState = defaultState.with(VERTICAL_FACING, VerticalFacing.SIDE)
+        registerDefaultState(defaultBlockState().setValue(VERTICAL_FACING, VerticalFacing.SIDE))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        super.appendProperties(builder)
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
         builder.add(VERTICAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
-        val verticalFacing = when (ctx.side) {
+    override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState {
+        val verticalFacing = when (ctx.clickedFace) {
             Direction.UP -> VerticalFacing.DOWN
             Direction.DOWN -> VerticalFacing.UP
             else -> VerticalFacing.SIDE
         }
-        val facing = if (verticalFacing == VerticalFacing.SIDE) ctx.side.opposite else ctx.horizontalPlayerFacing
-        return defaultState.with(VERTICAL_FACING, verticalFacing).with(FACING, facing)
+        val facing = if (verticalFacing == VerticalFacing.SIDE) ctx.clickedFace.opposite else ctx.horizontalDirection
+        return defaultBlockState().setValue(VERTICAL_FACING, verticalFacing).setValue(FACING, facing)
     }
 
 }
@@ -144,26 +144,26 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
 
     // Inventory
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
     fun getTarget(): Pair<Inventory, Direction>? {
         fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
-            val world = world ?: return null
+            val world = level ?: return null
             val blockEntity = world.getBlockEntity(blockPos) ?: return null
             if (blockEntity !is Inventory) return null
             return Pair(blockEntity, side)
         }
-        return when (cachedState[FairyLogisticsBlock.VERTICAL_FACING]) {
-            FairyLogisticsBlock.VerticalFacing.UP -> f(pos.up(), Direction.DOWN)
-            FairyLogisticsBlock.VerticalFacing.SIDE -> when (cachedState[HorizontalFacingBlock.FACING]) {
-                Direction.NORTH -> f(pos.north(), Direction.SOUTH)
-                Direction.SOUTH -> f(pos.south(), Direction.NORTH)
-                Direction.WEST -> f(pos.west(), Direction.EAST)
-                Direction.EAST -> f(pos.east(), Direction.WEST)
+        return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {
+            FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.above(), Direction.DOWN)
+            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState.getValue(HorizontalFacingBlock.FACING)) {
+                Direction.NORTH -> f(worldPosition.north(), Direction.SOUTH)
+                Direction.SOUTH -> f(worldPosition.south(), Direction.NORTH)
+                Direction.WEST -> f(worldPosition.west(), Direction.EAST)
+                Direction.EAST -> f(worldPosition.east(), Direction.WEST)
                 else -> null
             }
 
-            FairyLogisticsBlock.VerticalFacing.DOWN -> f(pos.down(), Direction.UP)
+            FairyLogisticsBlock.VerticalFacing.DOWN -> f(worldPosition.below(), Direction.UP)
             else -> null
         }
     }

@@ -21,40 +21,40 @@ import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.Blocks
-import net.minecraft.item.Items
-import net.minecraft.item.map.MapIcon
-import net.minecraft.loot.function.EnchantRandomlyLootFunction
-import net.minecraft.loot.function.ExplorationMapLootFunction
-import net.minecraft.loot.function.SetNameLootFunction
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.structure.StructureSet
-import net.minecraft.structure.pool.StructurePool
-import net.minecraft.structure.pool.StructurePools
-import net.minecraft.structure.processor.BlockIgnoreStructureProcessor
-import net.minecraft.structure.processor.GravityStructureProcessor
-import net.minecraft.structure.processor.StructureProcessorRule
-import net.minecraft.structure.rule.AlwaysTruePosRuleTest
-import net.minecraft.structure.rule.AlwaysTrueRuleTest
-import net.minecraft.structure.rule.BlockMatchRuleTest
-import net.minecraft.structure.rule.RandomBlockMatchRuleTest
-import net.minecraft.structure.rule.blockentity.AppendLootRuleBlockEntityModifier
-import net.minecraft.world.Heightmap
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.StructureTerrainAdaptation
-import net.minecraft.world.gen.YOffset
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement
-import net.minecraft.world.gen.chunk.placement.SpreadType
-import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
-import net.minecraft.world.gen.structure.Structure
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.saveddata.maps.MapDecoration as MapIcon
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
+import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction as ExplorationMapLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetNameFunction as SetNameLootFunction
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.data.worldgen.Pools as StructurePools
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor as BlockIgnoreStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor as GravityStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.PosAlwaysTrueTest as AlwaysTruePosRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.AppendLoot as AppendLootRuleBlockEntityModifier
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight as ConstantHeightProvider
+import net.minecraft.world.level.levelgen.structure.Structure
 import java.util.Optional
 
 object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
-    val translation = Translation({ identifier.toTranslationKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
+    val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
-    val onMapsTag: TagKey<Structure> = TagKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
+    val onMapsTag: TagKey<Structure> = TagKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
 
     context(ModContext)
     fun init() {
@@ -65,31 +65,31 @@ object WeatheredAncientRemnantsCard {
         registerArchaeologyLootTableGeneration(archaeologyLootTable) {
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.RAW_IRON).weight(10),
-                    ItemLootPoolEntry(Items.RAW_COPPER).weight(10),
-                    ItemLootPoolEntry(Items.GOLD_NUGGET).weight(10),
-                    ItemLootPoolEntry(Items.GLASS_PANE).weight(5),
-                    ItemLootPoolEntry(MaterialCard.XARPITE.item).weight(20),
+                    ItemLootPoolEntry(Items.RAW_IRON).setWeight(10),
+                    ItemLootPoolEntry(Items.RAW_COPPER).setWeight(10),
+                    ItemLootPoolEntry(Items.GOLD_NUGGET).setWeight(10),
+                    ItemLootPoolEntry(Items.GLASS_PANE).setWeight(5),
+                    ItemLootPoolEntry(MaterialCard.XARPITE.item).setWeight(20),
 
-                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).weight(1).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).weight(3),
-                    ItemLootPoolEntry(Items.AMETHYST_SHARD).weight(3),
-                    ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item).weight(3),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).setWeight(3),
+                    ItemLootPoolEntry(Items.AMETHYST_SHARD).setWeight(3),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item).setWeight(3),
                     ItemLootPoolEntry(Items.MAP) {
                         apply(
-                            ExplorationMapLootFunction.builder()
-                                .withDestination(onMapsTag)
-                                .withDecoration(MapIcon.Type.BANNER_BROWN)
-                                .withZoom(3)
-                                .withSkipExistingChunks(false)
+                            ExplorationMapLootFunction.makeExplorationMap()
+                                .setDestination(onMapsTag)
+                                .setMapDecoration(MapIcon.Type.BANNER_BROWN)
+                                .setZoom(3)
+                                .setSkipKnownStructures(false)
                         )
-                        apply(SetNameLootFunction.builder(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
-                    }.weight(2),
+                        apply(SetNameLootFunction.setName(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
+                    }.setWeight(2),
                 ),
             )
         }
@@ -99,13 +99,13 @@ object WeatheredAncientRemnantsCard {
         val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 BlockIgnoreStructureProcessor(listOf(Blocks.AIR, Blocks.DIRT, Blocks.GRASS_BLOCK)),
-                GravityStructureProcessor(Heightmap.Type.OCEAN_FLOOR_WG, -3),
+                GravityStructureProcessor(Heightmap.Types.OCEAN_FLOOR_WG, -3),
                 RuleStructureProcessor(
                     StructureProcessorRule(
                         RandomBlockMatchRuleTest(Blocks.GRAVEL, 0.2F),
                         AlwaysTrueRuleTest.INSTANCE,
                         AlwaysTruePosRuleTest.INSTANCE,
-                        Blocks.SUSPICIOUS_GRAVEL.defaultState,
+                        Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(),
                         AppendLootRuleBlockEntityModifier(archaeologyLootTable),
                     ),
                 ),
@@ -114,7 +114,7 @@ object WeatheredAncientRemnantsCard {
                     StructureProcessorRule(
                         BlockMatchRuleTest(PlacedItemCard.block),
                         BlockMatchRuleTest(Blocks.WATER),
-                        Blocks.WATER.defaultState,
+                        Blocks.WATER.defaultBlockState(),
                     ),
                 ),
             )
@@ -129,16 +129,16 @@ object WeatheredAncientRemnantsCard {
 
         val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
-                config = Structure.Config(
+                config = Structure.StructureSettings(
                     RegistryKeys.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
                     mapOf(),
-                    GenerationStep.Feature.SURFACE_STRUCTURES,
+                    GenerationStep.Decoration.SURFACE_STRUCTURES,
                     StructureTerrainAdaptation.NONE,
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
                 size = 1,
-                projectStartToHeightmap = Optional.of(Heightmap.Type.WORLD_SURFACE_WG),
-                startHeight = ConstantHeightProvider.create(YOffset.fixed(0)),
+                projectStartToHeightmap = Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
+                startHeight = ConstantHeightProvider.of(YOffset.absolute(0)),
                 useExpansionHack = false,
             )
         }
@@ -146,7 +146,7 @@ object WeatheredAncientRemnantsCard {
         val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(16, 8, SpreadType.LINEAR, 94857624),
             )

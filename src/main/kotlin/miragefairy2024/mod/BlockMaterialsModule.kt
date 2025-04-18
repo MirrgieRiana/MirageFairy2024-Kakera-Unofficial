@@ -26,27 +26,27 @@ import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.minecraft.block.AbstractBlock
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.MapColor
-import net.minecraft.block.TransparentBlock
-import net.minecraft.data.client.TextureKey
-import net.minecraft.data.client.TexturedModel
-import net.minecraft.entity.Entity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.block.HalfTransparentBlock as TransparentBlock
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 enum class BlockMaterialCard(
     path: String,
@@ -61,85 +61,85 @@ enum class BlockMaterialCard(
     restrictsSpawning: Boolean = false,
     velocityMultiplier: Float? = null,
     blockSoundGroup: BlockSoundGroup? = null,
-    blockCreator: ((AbstractBlock.Settings) -> Block)? = null,
+    blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
-    val texturedModelFactory: TexturedModel.Factory? = null,
+    val texturedModelFactory: TexturedModel.Provider? = null,
     val isCutoutRenderLayer: Boolean = false,
     val isTranslucentRenderLayer: Boolean = false,
 ) {
     NEPHRITE_BLOCK(
         "nephrite_block", "Nephrite Block", "ネフライトブロック",
         PoemList(null),
-        MapColor.BRIGHT_TEAL, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     XARPITE_BLOCK(
         "xarpite_block", "Xarpite Block", "紅天石ブロック",
         PoemList(2).poem("Loss and reconstruction of perception", "夢の世界の如き紅。"),
-        MapColor.DARK_RED, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     MIRANAGITE_BLOCK(
         "miranagite_block", "Miranagite Block", "蒼天石ブロック",
         PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、霊界との接合点。"),
-        MapColor.LAPIS_BLUE, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     CHAOS_STONE_BLOCK(
         "chaos_stone_block", "Chaos Stone Block", "混沌の石ブロック",
         PoemList(4).poem("The eye of entropy.", "無秩序の目。"),
         MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     MIRAGIDIAN_BLOCK(
         "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
         PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
         MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     LUMINITE_BLOCK(
         "luminite_block", "Luminite Block", "ルミナイトブロック",
         PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
-        MapColor.DIAMOND_BLUE, 6.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
         isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
-        blockCreator = { SemiOpaqueTransparentBlock(it.nonOpaque().luminance { 15 }.solidBlock { _, _, _ -> false }) },
+        blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
     ),
     DRYWALL(
         "drywall", "Drywall", "石膏ボード",
         PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
-        MapColor.PALE_YELLOW, 3.0F, 3.0F,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE),
+        MapColor.SAND, 3.0F, 3.0F,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE),
     ),
     LOCAL_VACUUM_DECAY(
         "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
         PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
-        MapColor.BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
+        MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
         tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME,
+        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
     ),
     AURA_STONE(
         "aura_stone", "Aura Stone", "霊氣石",
         PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
-        MapColor.DIAMOND_BLUE, 5.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.PICKAXE_MINEABLE, BlockTags.NEEDS_IRON_TOOL),
+        MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
         blockSoundGroup = BlockSoundGroup.METAL,
     ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
     val block = run {
-        val settings = AbstractBlock.Settings.create()
+        val settings = AbstractBlock.Properties.of()
         settings.mapColor(mapColor)
-        if (requiresTool) settings.requiresTool()
-        if (dropsNothing) settings.dropsNothing()
-        if (restrictsSpawning) settings.allowsSpawning { _, _, _, _ -> false }
-        if (velocityMultiplier != null) settings.velocityMultiplier(velocityMultiplier)
+        if (requiresTool) settings.requiresCorrectToolForDrops()
+        if (dropsNothing) settings.noLootTable()
+        if (restrictsSpawning) settings.isValidSpawn { _, _, _, _ -> false }
+        if (velocityMultiplier != null) settings.speedFactor(velocityMultiplier)
         settings.strength(hardness, resistance)
-        if (blockSoundGroup != null) settings.sounds(blockSoundGroup)
+        if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 }
 
 context(ModContext)
@@ -154,7 +154,7 @@ fun initBlockMaterialsModule() {
         if (card.texturedModelFactory != null) {
             card.block.registerModelGeneration(card.texturedModelFactory)
         } else {
-            card.block.registerModelGeneration(TexturedModel.CUBE_ALL)
+            card.block.registerModelGeneration(TexturedModel.CUBE)
         }
         if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
         if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
@@ -182,21 +182,21 @@ fun initBlockMaterialsModule() {
         pattern("XMX")
         pattern("MCM")
         pattern("XMX")
-        input('X', MaterialCard.XARPITE.item)
-        input('M', MaterialCard.MIRANAGITE.item)
-        input('C', MaterialCard.FAIRY_CRYSTAL.item)
+        define('X', MaterialCard.XARPITE.item)
+        define('M', MaterialCard.MIRANAGITE.item)
+        define('C', MaterialCard.FAIRY_CRYSTAL.item)
     } on MaterialCard.FAIRY_CRYSTAL.item
 
 }
 
-private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block ->
+private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
             parent = Identifier("minecraft", "block/block"),
             textures = ModelTexturesData(
-                TextureKey.PARTICLE.name to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.BACK.name to textureMap.getTexture(TextureKey.BACK).string,
-                TextureKey.FRONT.name to textureMap.getTexture(TextureKey.FRONT).string,
+                TextureKey.PARTICLE.id to textureMap.get(TextureKey.BACK).string,
+                TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,
+                TextureKey.FRONT.id to textureMap.get(TextureKey.FRONT).string,
             ),
             elements = ModelElementsData(
                 ModelElementData(
@@ -232,31 +232,31 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Factory { block
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class LocalVacuumDecayBlock(settings: Settings) : Block(settings) {
-    override fun hasRandomTicks(state: BlockState) = true
+class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
+    override fun isRandomlyTicking(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         @Suppress("DEPRECATION")
         super.randomTick(state, world, pos, random)
 
-        val direction = Direction.random(random)
-        val targetBlockPos = pos.offset(direction)
+        val direction = Direction.getRandom(random)
+        val targetBlockPos = pos.relative(direction)
         val targetBlockState = world.getBlockState(targetBlockPos)
         if (targetBlockState.isAir) return
-        if (targetBlockState.getHardness(world, targetBlockPos) < 0) return
-        if (targetBlockState.isOf(state.block)) return
-        world.setBlockState(targetBlockPos, state)
+        if (targetBlockState.getDestroySpeed(world, targetBlockPos) < 0) return
+        if (targetBlockState.`is`(state.block)) return
+        world.setBlockAndUpdate(targetBlockPos, state)
     }
 
-    override fun onSteppedOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
-        if (!entity.bypassesSteppingEffects()) {
-            entity.damage(world.damageSources.magic(), 1.0f)
+    override fun stepOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
+        if (!entity.isSteppingCarefully()) {
+            entity.hurt(world.damageSources().magic(), 1.0f)
         }
-        super.onSteppedOn(world, pos, state, entity)
+        super.stepOn(world, pos, state, entity)
     }
 }
 
-class SemiOpaqueTransparentBlock(settings: Settings) : TransparentBlock(settings) {
+class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOpacity(state: BlockState, world: BlockView, pos: BlockPos) = 1
+    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }

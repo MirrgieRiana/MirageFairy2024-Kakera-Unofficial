@@ -9,7 +9,7 @@ import miragefairy2024.util.double
 import miragefairy2024.util.get
 import miragefairy2024.util.register
 import miragefairy2024.util.wrapper
-import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.CompoundTag as NbtCompound
 
 abstract class AbstractPassiveSkillEffect<T>(path: String) : PassiveSkillEffect<T> {
     val identifier = MirageFairy2024.identifier(path)

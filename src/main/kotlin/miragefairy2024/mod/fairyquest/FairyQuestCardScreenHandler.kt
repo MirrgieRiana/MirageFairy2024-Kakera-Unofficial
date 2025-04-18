@@ -12,28 +12,28 @@ import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.screen.slot.Slot
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.Identifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.world.inventory.Slot
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.resources.ResourceLocation as Identifier
 
 val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readString()))!!, ScreenHandlerContext.EMPTY)
+    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readUtf()))!!, ScreenHandlerContext.NULL)
 }
 
-val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toTranslationKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
+val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toLanguageKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
-    fairyQuestCardScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("fairy_quest_card"))
+    fairyQuestCardScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("fairy_quest_card"))
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
@@ -55,7 +55,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
             else -> Unit
         }
 
-        override fun size() = 1
+        override fun getCount() = 1
     }
 
     init {
@@ -69,7 +69,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         }
         repeat(4) { i ->
             addSlot(object : Slot(inputInventory, i, 0, 0) {
-                override fun canInsert(stack: ItemStack): Boolean {
+                override fun mayPlace(stack: ItemStack): Boolean {
                     val input = recipe.inputs.getOrNull(i) ?: return false
                     return input.first.test(stack)
                 }
@@ -78,19 +78,19 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         repeat(4) { i ->
             addSlot(OutputSlot(outputInventory, i, 0, 0))
         }
-        addProperties(propertyDelegate)
+        addDataSlots(propertyDelegate)
     }
 
-    override fun canUse(player: PlayerEntity) = true
+    override fun stillValid(player: PlayerEntity) = true
 
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until 9 * 4 + 4 // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
         return quickMove(slot, destinationIndices)
     }
 
-    override fun sendContentUpdates() {
+    override fun broadcastChanges() {
 
         // リザルトにアイテムが残っている場合、排出を試みる
         if (!resultInventory.isEmpty) {
@@ -138,7 +138,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
         if (progress >= recipe.duration) { // プログレスが満了している場合、完成処理
 
             // 材料の削除
-            processingInventory.clear()
+            processingInventory.clearContent()
 
             // 成果物の生成
             if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleInventory(recipe.outputs.size)
@@ -150,8 +150,8 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
             resultInventory.mergeTo(outputInventory)
 
             // エフェクト
-            context.run { world, blockPos ->
-                world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.5F, 0.8F + 0.4F * world.random.nextFloat())
+            context.execute { world, blockPos ->
+                world.playSound(null, blockPos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.5F, 0.8F + 0.4F * world.random.nextFloat())
             }
 
             // リセット
@@ -159,17 +159,17 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInvent
 
         }
 
-        super.sendContentUpdates()
+        super.broadcastChanges()
 
     }
 
-    override fun onClosed(player: PlayerEntity) {
-        super.onClosed(player)
-        context.run { _, _ ->
-            dropInventory(player, inputInventory)
-            dropInventory(player, processingInventory)
-            dropInventory(player, resultInventory)
-            dropInventory(player, outputInventory)
+    override fun removed(player: PlayerEntity) {
+        super.removed(player)
+        context.execute { _, _ ->
+            clearContainer(player, inputInventory)
+            clearContainer(player, processingInventory)
+            clearContainer(player, resultInventory)
+            clearContainer(player, outputInventory)
         }
     }
 }

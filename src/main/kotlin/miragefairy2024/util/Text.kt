@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
-import net.minecraft.text.Style
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.ChatFormatting as Formatting
 
 fun Text.style(style: Style): Text = Text.empty().append(this).setStyle(style)
 fun Text.formatted(formatting: Formatting): Text = Text.empty().append(this).formatted(formatting)

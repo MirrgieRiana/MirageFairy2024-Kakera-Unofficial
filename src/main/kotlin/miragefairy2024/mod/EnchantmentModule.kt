@@ -9,13 +9,13 @@ import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.register
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.EnchantmentTarget
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.EnchantmentCategory as EnchantmentTarget
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
 
 enum class EnchantmentCard(
     path: String,
@@ -37,13 +37,13 @@ context(ModContext)
 fun initEnchantmentModule() {
     EnchantmentCard.entries.forEach { card ->
         card.enchantment.register(Registries.ENCHANTMENT, card.identifier)
-        en { card.enchantment.translationKey to card.en }
-        ja { card.enchantment.translationKey to card.ja }
+        en { card.enchantment.descriptionId to card.en }
+        ja { card.enchantment.descriptionId to card.ja }
     }
     OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
-        if (enchantment != Enchantments.FORTUNE) return@register oldLevel
+        if (enchantment != Enchantments.BLOCK_FORTUNE) return@register oldLevel
         if (oldLevel == 0) return@register 0
-        oldLevel + EnchantmentHelper.getLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
+        oldLevel + EnchantmentHelper.getItemEnchantmentLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
     }
 }
 
@@ -57,9 +57,9 @@ class SimpleEnchantment(
     private val predicate: (ItemStack) -> Boolean,
 ) : Enchantment(rarity, EnchantmentTarget.VANISHABLE, arrayOf(EquipmentSlot.MAINHAND)), ItemFilteringEnchantment {
     override fun getMaxLevel() = maxLevel
-    override fun getMinPower(level: Int) = basePower + (level - 1) * powerPerLevel
-    override fun getMaxPower(level: Int) = super.getMinPower(level) + powerRange
-    override fun isAcceptableItem(stack: ItemStack) = predicate(stack)
-    override fun isAcceptableItemOnEnchanting(itemStack: ItemStack) = isAcceptableItem(itemStack)
-    override fun isTreasure() = isTreasure
+    override fun getMinCost(level: Int) = basePower + (level - 1) * powerPerLevel
+    override fun getMaxCost(level: Int) = super.getMinCost(level) + powerRange
+    override fun canEnchant(stack: ItemStack) = predicate(stack)
+    override fun isAcceptableItemOnEnchanting(itemStack: ItemStack) = canEnchant(itemStack)
+    override fun isTreasureOnly() = isTreasure
 }

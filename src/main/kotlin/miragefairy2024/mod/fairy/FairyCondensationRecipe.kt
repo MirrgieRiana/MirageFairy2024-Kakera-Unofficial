@@ -7,8 +7,8 @@ import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.size
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.NonNullList as DefaultedList
 
 context(ModContext)
 fun initFairyCondensationRecipe() {
@@ -19,7 +19,7 @@ fun initFairyCondensationRecipe() {
         val notEmptyItemStacks = itemStacks.filter { it.isNotEmpty }
 
         // 余計なアイテムが入っていたら失敗
-        if (notEmptyItemStacks.any { !it.isOf(FairyCard.item) }) return@registerSpecialRecipe null
+        if (notEmptyItemStacks.any { !it.`is`(FairyCard.item) }) return@registerSpecialRecipe null
 
         // 2個以上無ければ失敗
         if (notEmptyItemStacks.size < 2) return@registerSpecialRecipe null
@@ -52,7 +52,7 @@ fun initFairyCondensationRecipe() {
         val (index, itemStack) = entries.singleOrNull() ?: return@registerSpecialRecipe null
 
         // そのアイテムは妖精でなければならない
-        if (!itemStack.isOf(FairyCard.item)) return@registerSpecialRecipe null
+        if (!itemStack.`is`(FairyCard.item)) return@registerSpecialRecipe null
 
         // 左上の場合1/10、それ以外の場合、その位置で割る
         val division = if (index == 0) 10 else index + 1
@@ -71,7 +71,7 @@ fun initFairyCondensationRecipe() {
             override fun craft() = createFairyItemStack(motifId, condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
-                    val list = DefaultedList.ofSize(inventory.size, EMPTY_ITEM_STACK)
+                    val list = DefaultedList.withSize(inventory.size, EMPTY_ITEM_STACK)
                     list[index] = createFairyItemStack(motifId, condensation = remainingCondensation)
                     list
                 } else {

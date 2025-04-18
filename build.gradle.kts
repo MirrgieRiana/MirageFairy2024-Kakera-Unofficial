@@ -75,12 +75,17 @@ repositories {
     maven("https://maven.wispforest.io") // owo-lib
 
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
+
+    maven("https://maven.parchmentmc.org") // mapping
 }
 
 dependencies {
     // バージョンを変更するには、gradle.properties ファイルを参照してください。
     "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
-    "mappings"("net.fabricmc:yarn:${project.properties["yarn_mappings"] as String}:v2")
+    "mappings"(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
+    })
     "modImplementation"("net.fabricmc:fabric-loader:${project.properties["loader_version"] as String}")
 
     // ファブリック API。 これは技術的にはオプションですが、おそらくそれでも必要になるでしょう。

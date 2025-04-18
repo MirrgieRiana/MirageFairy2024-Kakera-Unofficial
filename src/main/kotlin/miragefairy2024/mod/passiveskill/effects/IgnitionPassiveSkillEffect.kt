@@ -11,12 +11,12 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
 
 object IgnitionPassiveSkillEffect : AbstractBooleanPassiveSkillEffect("ignition") {
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Ignition", "発火")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Ignition", "発火")
     override fun getText(value: Boolean) = text { if (value) translation() else empty() }
     override fun update(context: PassiveSkillContext, oldValue: Boolean, newValue: Boolean) {
         if (!newValue) return
-        if (context.player.isWet || context.player.inPowderSnow || context.player.wasInPowderSnow) return
-        context.player.fireTicks = 30 atLeast context.player.fireTicks
+        if (context.player.isInWaterRainOrBubble || context.player.isInPowderSnow || context.player.wasInPowderSnow) return
+        context.player.remainingFireTicks = 30 atLeast context.player.remainingFireTicks
     }
 
     context(ModContext)

@@ -16,7 +16,7 @@ fun ToolConfiguration.soulStreamContainable() = this.also {
 }
 
 object SoulStreamContainableToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.soul_stream_containable" }, "Soul Stream Containable", "ソウルストリームに格納可能")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.soul_stream_containable" }, "Soul Stream Containable", "ソウルストリームに格納可能")
 
     context(ModContext)
     fun init() {

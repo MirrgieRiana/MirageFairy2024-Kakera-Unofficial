@@ -10,11 +10,11 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 
 object HungerPassiveSkillEffect : AbstractDoublePassiveSkillEffect("hunger") {
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Hunger: %s/s", "空腹: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Hunger: %s/s", "空腹: %s/秒")
     override fun getText(value: Double) = text { translation(-value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
-        context.player.addExhaustion(newValue.toFloat() * 4F)
+        context.player.causeFoodExhaustion(newValue.toFloat() * 4F)
     }
 
     context(ModContext)

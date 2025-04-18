@@ -8,10 +8,10 @@ import miragefairy2024.util.ja
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
-import net.minecraft.entity.damage.DamageType
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.DamageTypeTags
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.TagKey
 
 @Suppress("LeakingThis")
 abstract class DamageTypeCard {
@@ -20,7 +20,7 @@ abstract class DamageTypeCard {
     val registryKey = RegistryKeys.DAMAGE_TYPE with identifier
 
     open val exhaustion = 0.1F
-    val damageType = DamageType(identifier.toTranslationKey(), exhaustion)
+    val damageType = DamageType(identifier.toLanguageKey(), exhaustion)
 
     abstract fun getKillMessage(): EnJa
     abstract fun getPlayerKillMessage(): EnJa
@@ -32,10 +32,10 @@ abstract class DamageTypeCard {
             damageType
         }
 
-        en { identifier.toTranslationKey("death.attack") to getKillMessage().en }
-        ja { identifier.toTranslationKey("death.attack") to getKillMessage().ja }
-        en { identifier.toTranslationKey("death.attack", "player") to getPlayerKillMessage().en }
-        ja { identifier.toTranslationKey("death.attack", "player") to getPlayerKillMessage().ja }
+        en { identifier.toLanguageKey("death.attack") to getKillMessage().en }
+        ja { identifier.toLanguageKey("death.attack") to getKillMessage().ja }
+        en { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().en }
+        ja { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().ja }
         getTags().forEach {
             identifier.registerDamageTypeTagGeneration { it }
         }

@@ -17,18 +17,18 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.resources.ResourceLocation as Identifier
 
 
 // Api
 
-val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("extra_player_data_loader"))
+val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface ExtraPlayerDataCategory<T : Any> {
@@ -65,7 +65,7 @@ fun initExtraPlayerDataModule() {
 
     // ログイン時およびdirtyにされたとき、プレイヤーデータを同期
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        server.playerManager.playerList.forEach { player ->
+        server.playerList.players.forEach { player ->
             if (player.extraPlayerDataContainer.isDirty) {
                 player.extraPlayerDataContainer.isDirty = false
                 extraPlayerDataCategoryRegistry.forEach { category ->
@@ -97,7 +97,7 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
 
 object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(MirageFairy2024.identifier("extra_player_data_synchronization")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
-        buf.writeString(extraPlayerDataCategoryRegistry.getId(packet.category)!!.string)
+        buf.writeUtf(extraPlayerDataCategoryRegistry.getKey(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
             buf.writeBoolean(packet.value != null)
             if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(packet.value))
@@ -106,7 +106,7 @@ object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchroniz
     }
 
     override fun readFromBuf(buf: PacketByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
-        val identifier = buf.readString().toIdentifier()
+        val identifier = buf.readUtf().toIdentifier()
         val category = extraPlayerDataCategoryRegistry[identifier]!!
         fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
             val hasValue = buf.readBoolean()
@@ -130,17 +130,17 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      * このコンテナにオブジェクトが格納されていない場合、nullを返します。
      */
     operator fun <T : Any> get(loader: ExtraPlayerDataCategory<T>): T? {
-        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!] ?: return null
+        val value = map[extraPlayerDataCategoryRegistry.getKey(loader)!!] ?: return null
         return loader.castOrThrow(value)
     }
 
     fun <T : Any> getOrInit(loader: ExtraPlayerDataCategory<T>): T {
-        val value = map[extraPlayerDataCategoryRegistry.getId(loader)!!]
+        val value = map[extraPlayerDataCategoryRegistry.getKey(loader)!!]
         return if (value != null) {
             loader.castOrThrow(value)
         } else {
             val newValue = loader.create()
-            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = newValue
+            map[extraPlayerDataCategoryRegistry.getKey(loader)!!] = newValue
             newValue
         }
     }
@@ -153,9 +153,9 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     operator fun <T : Any> set(loader: ExtraPlayerDataCategory<T>, data: T?) {
         if (data == null) {
-            map.remove(extraPlayerDataCategoryRegistry.getId(loader)!!)
+            map.remove(extraPlayerDataCategoryRegistry.getKey(loader)!!)
         } else {
-            map[extraPlayerDataCategoryRegistry.getId(loader)!!] = data
+            map[extraPlayerDataCategoryRegistry.getKey(loader)!!] = data
         }
     }
 
@@ -165,17 +165,17 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     fun toNbt(): NbtCompound {
         val nbt = NbtCompound()
-        extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
+        extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                val value = map[key.value] ?: return
+                val value = map[key.location()] ?: return
                 val data = try {
                     loader.castOrThrow(value)
                 } catch (e: ClassCastException) {
-                    getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.value} for ${player.name}(${player.uuid})", e)
+                    getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.location()} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.wrapper[key.value.string].compound.set(ioHandler.toNbt(data))
+                nbt.wrapper[key.location().string].compound.set(ioHandler.toNbt(data))
             }
             f(loader)
         }
@@ -188,11 +188,11 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     fun fromNbt(nbt: NbtCompound) {
         map.clear()
-        extraPlayerDataCategoryRegistry.entrySet.forEach { (key, loader) ->
+        extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
-                val data = nbt.wrapper[key.value.string].compound.get() ?: return
-                map[key.value] = ioHandler.fromNbt(data)
+                val data = nbt.wrapper[key.location().string].compound.get() ?: return
+                map[key.location()] = ioHandler.fromNbt(data)
             }
             f(loader)
         }

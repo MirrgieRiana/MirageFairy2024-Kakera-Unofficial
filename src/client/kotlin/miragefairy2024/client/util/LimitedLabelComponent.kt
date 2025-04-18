@@ -9,25 +9,25 @@ import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
 import io.wispforest.owo.util.Observable
-import net.minecraft.client.MinecraftClient
-import net.minecraft.text.OrderedText
-import net.minecraft.text.Style
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.util.FormattedCharSequence as OrderedText
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.Component as Text
 import java.util.function.Function
 import kotlin.math.min
 
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java
 open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
-    protected val textRenderer = MinecraftClient.getInstance().textRenderer
+    protected val textRenderer = MinecraftClient.getInstance().font
     protected var wrappedText: List<OrderedText>
     protected var verticalTextAlignment = VerticalAlignment.TOP
     protected var horizontalTextAlignment = HorizontalAlignment.LEFT
     protected val color = AnimatableProperty.of(Color.WHITE)
-    protected val lineHeight = Observable.of(textRenderer.fontHeight)
+    protected val lineHeight = Observable.of(textRenderer.lineHeight)
     protected var shadow = false
     protected var maxWidth: Int
-    protected var textClickHandler = Function { style: Style? -> OwoUIDrawContext.utilityScreen().handleTextClick(style) }
+    protected var textClickHandler = Function { style: Style? -> OwoUIDrawContext.utilityScreen().handleComponentClicked(style) }
 
     init {
         wrappedText = ArrayList()
@@ -112,7 +112,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     override fun determineHorizontalContentSize(sizing: Sizing): Int {
         var widestText = 0
         for (line in wrappedText) {
-            val width = textRenderer.getWidth(line)
+            val width = textRenderer.width(line)
             if (width > widestText) widestText = width
         }
         return if (widestText > maxWidth) {
@@ -134,7 +134,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     private fun wrapLines() {
-        wrappedText = textRenderer.wrapLines(text, if (horizontalSizing.get().isContent) maxWidth else width)
+        wrappedText = textRenderer.split(text, if (horizontalSizing.get().isContent) maxWidth else width)
 
         // ■■ 追加分 {
         if (wrappedText.size >= 2) {
@@ -144,7 +144,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
                 false
             }
             wrappedText = if (style != null) {
-                listOf(OrderedText.concat(wrappedText[0], OrderedText.styledForwardsVisitedString("...", style!!)))
+                listOf(OrderedText.composite(wrappedText[0], OrderedText.forward("...", style!!)))
             } else {
                 listOf(wrappedText[0])
             }
@@ -159,9 +159,9 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
-        val matrices = context.matrices
-        matrices.push()
-        matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.scaleFactor, 0.0)
+        val matrices = context.pose()
+        matrices.pushPose()
+        matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.guiScale, 0.0)
         var x = x
         var y = y
         if (horizontalSizing.get().isContent) {
@@ -178,27 +178,27 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
         val lambdaX = x
         val lambdaY = y
         @Suppress("DEPRECATION")
-        context.draw {
+        context.drawManaged {
             for (i in wrappedText.indices) {
                 val renderText = wrappedText[i]
                 var renderX = lambdaX
                 when (horizontalTextAlignment) {
-                    HorizontalAlignment.CENTER -> renderX += (width - textRenderer.getWidth(renderText)) / 2
-                    HorizontalAlignment.RIGHT -> renderX += width - textRenderer.getWidth(renderText)
+                    HorizontalAlignment.CENTER -> renderX += (width - textRenderer.width(renderText)) / 2
+                    HorizontalAlignment.RIGHT -> renderX += width - textRenderer.width(renderText)
                     else -> Unit
                 }
                 var renderY = lambdaY + i * (this.lineHeight() + 2)
-                renderY += this.lineHeight() - textRenderer.fontHeight
-                context.drawText(textRenderer, renderText, renderX, renderY, color.get().argb(), shadow)
+                renderY += this.lineHeight() - textRenderer.lineHeight
+                context.drawString(textRenderer, renderText, renderX, renderY, color.get().argb(), shadow)
             }
         }
-        matrices.pop()
+        matrices.popPose()
     }
 
     override fun drawTooltip(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
         super.drawTooltip(context, mouseX, mouseY, partialTicks, delta)
         if (!isInBoundingBox(mouseX.toDouble(), mouseY.toDouble())) return
-        context.drawHoverEvent(textRenderer, styleAt(mouseX - x, mouseY - y), mouseX, mouseY)
+        context.renderComponentHoverEffect(textRenderer, styleAt(mouseX - x, mouseY - y), mouseX, mouseY)
     }
 
     override fun onMouseDown(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -206,7 +206,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     protected fun styleAt(mouseX: Int, mouseY: Int): Style? {
-        return textRenderer.textHandler.getStyleAt(wrappedText[min((mouseY / (this.lineHeight() + 2)).toDouble(), (wrappedText.size - 1).toDouble()).toInt()], mouseX)
+        return textRenderer.splitter.componentStyleAtWidth(wrappedText[min((mouseY / (this.lineHeight() + 2)).toDouble(), (wrappedText.size - 1).toDouble()).toInt()], mouseX)
     }
 
 }

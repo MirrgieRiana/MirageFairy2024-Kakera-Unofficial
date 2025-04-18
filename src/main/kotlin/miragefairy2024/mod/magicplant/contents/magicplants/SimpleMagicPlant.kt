@@ -16,23 +16,23 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.ShapeContext
-import net.minecraft.data.client.Models
-import net.minecraft.data.client.TextureKey
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.IntProperty
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.random.Random
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantConfiguration<C, B>() {
     abstract val outlineShapes: List<VoxelShape>
@@ -52,7 +52,7 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
 
         // 見た目
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()) with card.block.getAgeProperty() }
-        card.block.getAgeProperty().values.forEach { age ->
+        card.block.getAgeProperty().possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * card.block.getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * card.block.getIdentifier() * "_age$age")
             }
@@ -63,7 +63,7 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(configuration: SimpleMagicPlantConfiguration<*, B>) : MagicPlantCard<B>(configuration)
 
-abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantConfiguration<*, *>, settings: Settings) : MagicPlantBlock(configuration, settings) {
+abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantConfiguration<*, *>, settings: Properties) : MagicPlantBlock(configuration, settings) {
 
     // Property
 
@@ -72,19 +72,19 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
     private val agePropertyCache = getAgeProperty()
 
-    val maxAge: Int = agePropertyCache.values.max()
+    val maxAge: Int = agePropertyCache.possibleValues.max()
 
     init {
-        defaultState = defaultState.with(agePropertyCache, 0)
+        registerDefaultState(defaultBlockState().setValue(agePropertyCache, 0))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
         builder.add(getAgeProperty()/* この関数は親クラスのinitで呼ばれるのでフィールドを参照できない */)
     }
 
-    fun getAge(state: BlockState) = state[agePropertyCache]!!
+    fun getAge(state: BlockState) = state.getValue(agePropertyCache)!!
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
-    fun withAge(age: Int): BlockState = defaultState.with(agePropertyCache, age atLeast 0 atMost maxAge)
+    fun withAge(age: Int): BlockState = defaultBlockState().setValue(agePropertyCache, age atLeast 0 atMost maxAge)
 
 
     // Shape
@@ -92,7 +92,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     private val outlineShapesCache = configuration.outlineShapes.toTypedArray()
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
 
 
     // Magic Plant
@@ -106,8 +106,8 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     override fun getAdditionalDrops(world: World, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
-        val fortune = if (tool != null) EnchantmentHelper.getLevel(Enchantments.FORTUNE, tool).toDouble() else 0.0
-        val luck = player?.getAttributeValue(EntityAttributes.GENERIC_LUCK) ?: 0.0
+        val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool).toDouble() else 0.0
+        val luck = player?.getAttributeValue(EntityAttributes.LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]
         val fruitGeneration = traitEffects[TraitEffectKeyCard.FRUITS_PRODUCTION.traitEffectKey]

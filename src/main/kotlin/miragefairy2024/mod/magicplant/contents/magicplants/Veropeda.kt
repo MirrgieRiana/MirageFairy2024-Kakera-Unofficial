@@ -18,18 +18,18 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.MapColor
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeatures
-import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
-import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.stateprovider.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, VeropedaBlock>() {
     override val card get() = VeropedaCard
@@ -42,7 +42,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
-    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DARK_RED).sounds(BlockSoundGroup.CROP))
+    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),
@@ -112,14 +112,14 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 
             // 小さな塊
             registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上
@@ -134,8 +134,8 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
                 RegistryKeys.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
-            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ
-            NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
+            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ
+            NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
 
         }
 
@@ -144,6 +144,6 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
-class VeropedaBlock(settings: Settings) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

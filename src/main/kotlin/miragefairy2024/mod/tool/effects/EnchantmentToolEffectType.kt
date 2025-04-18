@@ -9,9 +9,9 @@ import miragefairy2024.util.toRomanText
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.max
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
 
 fun ToolConfiguration.enchantment(enchantment: Enchantment, level: Int = 1) = this.also {
     this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level))) { map ->
@@ -28,7 +28,7 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
     fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
         value.map.entries.forEach { (enchantment, level) ->
-            configuration.descriptions += text { translate(enchantment.translationKey) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
+            configuration.descriptions += text { translate(enchantment.descriptionId) + if (level >= 2 || enchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
         }
         configuration.onOverrideEnchantmentLevelListeners += fail@{ _, enchantment, oldLevel ->
             val newLevel = value.map[enchantment] ?: return@fail oldLevel
@@ -38,9 +38,9 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
             var itemStack2 = itemStack
             if ((value.map[Enchantments.SILK_TOUCH] ?: 0) >= 1) {
                 itemStack2 = itemStack2.copy()
-                val enchantments = EnchantmentHelper.get(itemStack2)
+                val enchantments = EnchantmentHelper.getEnchantments(itemStack2)
                 enchantments[Enchantments.SILK_TOUCH] = (enchantments[Enchantments.SILK_TOUCH] ?: 0) atLeast 1
-                EnchantmentHelper.set(enchantments, itemStack2)
+                EnchantmentHelper.setEnchantments(enchantments, itemStack2)
             }
             itemStack2
         }

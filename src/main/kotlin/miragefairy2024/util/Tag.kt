@@ -2,14 +2,14 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import net.minecraft.block.Block
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.damage.DamageType
-import net.minecraft.item.Item
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.Identifier
-import net.minecraft.world.biome.Biome
-import net.minecraft.world.gen.structure.Structure
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.item.Item
+import net.minecraft.tags.TagKey
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.structure.Structure
 
 context(ModContext)
 fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {

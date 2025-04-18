@@ -6,27 +6,27 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.reset
 import miragefairy2024.util.writeToNbt
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.LockableContainerBlockEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventories
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SidedInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.text.Text
-import net.minecraft.util.ItemScatterer
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity as LockableContainerBlockEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.ContainerHelper as Inventories
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.WorldlyContainer as SidedInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.Containers as ItemScatterer
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 
 abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory, RenderingProxyBlockEntity {
 
@@ -43,20 +43,20 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Data
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         inventory.reset()
         inventory.readFromNbt(nbt)
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         inventory.writeToNbt(nbt)
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
 
     // Inventory
@@ -68,60 +68,60 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     open fun onStackChange(slot: Int?) {
         // TODO スロットアップデートのための軽量カスタムパケット
         if (slot == null || card.inventorySlotConfigurations[slot].isObservable) {
-            world?.updateListeners(pos, cachedState, cachedState, Block.NOTIFY_ALL)
+            level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
         }
     }
 
     private val inventory = MutableList(card.inventorySlotConfigurations.size) { EMPTY_ITEM_STACK }
 
-    override fun size() = inventory.size
+    override fun getContainerSize() = inventory.size
 
     override fun isEmpty() = inventory.all { it.isEmpty }
 
-    override fun getStack(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
+    override fun getItem(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
 
-    override fun setStack(slot: Int, stack: ItemStack) {
+    override fun setItem(slot: Int, stack: ItemStack) {
         if (slot in inventory.indices) {
             inventory[slot] = stack
         }
         onStackChange(slot)
-        markDirty()
+        setChanged()
     }
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack {
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
         onStackChange(slot)
-        markDirty()
-        return Inventories.splitStack(inventory, slot, amount)
+        setChanged()
+        return Inventories.removeItem(inventory, slot, amount)
     }
 
-    override fun removeStack(slot: Int): ItemStack {
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
         onStackChange(slot)
-        markDirty()
-        return Inventories.removeStack(inventory, slot)
+        setChanged()
+        return Inventories.takeItem(inventory, slot)
     }
 
-    override fun isValid(slot: Int, stack: ItemStack) = card.inventorySlotConfigurations[slot].isValid(stack)
+    override fun canPlaceItem(slot: Int, stack: ItemStack) = card.inventorySlotConfigurations[slot].isValid(stack)
 
     abstract fun getActualSide(side: Direction): Direction
 
-    override fun getAvailableSlots(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).id]
+    override fun getSlotsForFace(side: Direction) = card.availableInventorySlotsTable[getActualSide(side).get3DDataValue()]
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && isValid(slot, stack)
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, dir: Direction?) = (dir == null || card.inventorySlotConfigurations[slot].canInsert(getActualSide(dir))) && canPlaceItem(slot, stack)
 
-    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
+    override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, dir: Direction) = card.inventorySlotConfigurations[slot].canExtract(getActualSide(dir))
 
-    override fun clear() {
+    override fun clearContent() {
         onStackChange(null)
-        markDirty()
+        setChanged()
         inventory.replaceAll { EMPTY_ITEM_STACK }
     }
 
     open fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
-            if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack)
+            if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), itemStack)
         }
         onStackChange(null)
-        markDirty()
+        setChanged()
     }
 
 
@@ -163,22 +163,22 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     // Gui
 
     private val propertyDelegate = object : PropertyDelegate {
-        override fun size() = card.propertyConfigurations.size
+        override fun getCount() = card.propertyConfigurations.size
         override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
         override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
     }
 
-    override fun canPlayerUse(player: PlayerEntity) = Inventory.canPlayerUse(this, player)
+    override fun stillValid(player: PlayerEntity) = Inventory.stillValidBlockEntity(this, player)
 
-    override fun getContainerName(): Text = card.block.name
+    override fun getDefaultName(): Text = card.block.name
 
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
             this,
             propertyDelegate,
-            ScreenHandlerContext.create(world, pos),
+            ScreenHandlerContext.create(level, worldPosition),
         )
         return card.createScreenHandler(arguments)
     }

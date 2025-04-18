@@ -24,21 +24,21 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
-import net.minecraft.block.MapColor
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.biome.BiomeKeys
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeatures
-import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
-import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.stateprovider.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCard, MirageFlowerBlock>() {
     override val card get() = MirageFlowerCard
@@ -51,7 +51,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND_BLUE).sounds(BlockSoundGroup.GLASS))
+    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),
@@ -128,14 +128,14 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-                FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 地上とエンド用PlacedFeature
@@ -162,10 +162,10 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
                 RegistryKeys.CONFIGURED_FEATURE[LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { end * !+BiomeKeys.THE_END } // エンド外縁の島々に通常クラスタ
-            NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
-            LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
+            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ
+            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { end * !+BiomeKeys.THE_END } // エンド外縁の島々に通常クラスタ
+            NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
+            LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
 
         }
 
@@ -174,8 +174,8 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerConfiguration)
 
-class MirageFlowerBlock(settings: Settings) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
 fun getMirageFlour(count: Int, random: Random): List<ItemStack> {

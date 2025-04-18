@@ -12,8 +12,8 @@ import miragefairy2024.util.toNbt
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.castOrThrow
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtList
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.ListTag as NbtList
 
 object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>("harvest", "Harvest", "収穫") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {

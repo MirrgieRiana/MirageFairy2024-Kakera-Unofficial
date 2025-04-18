@@ -12,11 +12,11 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 
 object MendingPassiveSkillEffect : AbstractDoublePassiveSkillEffect("mending") {
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}" }, "Mending: %s/s", "修繕: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Mending: %s/s", "修繕: %s/秒")
     override fun getText(value: Double) = text { translation(value formatAs "%+.3f") }
     override fun update(context: PassiveSkillContext, oldValue: Double, newValue: Double) {
         if (newValue <= 0.0) return
-        context.player.mainHandStack.repair(context.world.random.randomInt(newValue))
+        context.player.mainHandItem.repair(context.world.random.randomInt(newValue))
     }
 
     context(ModContext)

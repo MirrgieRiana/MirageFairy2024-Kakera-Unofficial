@@ -47,46 +47,46 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.data.client.TextureKey
-import net.minecraft.data.client.TexturedModel
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.ai.pathing.NavigationType
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.loot.function.CopyNbtLootFunction
-import net.minecraft.loot.provider.nbt.ContextLootNbtProvider
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction as CopyNbtLootFunction
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider as ContextLootNbtProvider
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue as ConstantLootNumberProvider
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet.random().value)
+        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet().random().value)
     }
-    val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toTranslationKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
-    val CASE: TextureKey = TextureKey.of("case")
-    val BASE: TextureKey = TextureKey.of("base")
-    val END: TextureKey = TextureKey.of("end")
+    val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
+    val CASE: TextureKey = TextureKey.create("case")
+    val BASE: TextureKey = TextureKey.create("base")
+    val END: TextureKey = TextureKey.create("end")
 }
 
 class FairyStatueCard(
@@ -99,12 +99,12 @@ class FairyStatueCard(
     val identifier = MirageFairy2024.identifier(path)
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = FairyStatueBlockItem(this, block, Item.Settings())
-    val formatTranslation = Translation({ identifier.toTranslationKey("block", "format") }, format)
+    val item = FairyStatueBlockItem(this, block, Item.Properties())
+    val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
         .poem(poem)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
-    val texturedModelFactory = TexturedModel.Factory {
+    val texturedModelFactory = TexturedModel.Provider {
         val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
         model.with(
             TextureKey.PARTICLE to "block/" * identifier * "_base",
@@ -122,7 +122,7 @@ class FairyStatueCard(
             EnJa("Broken Fairy Statue", "破損した妖精の像"),
             EnJa("%s Statue", "%sの像"),
             EnJa("Mysterious Method of Creation", "その製法は誰にも知られていない"),
-            MapColor.IRON_GRAY,
+            MapColor.METAL,
         ).also { entries += it }
         val GOLDEN_FAIRY_STATUE = FairyStatueCard(
             "golden_fairy_statue",
@@ -136,7 +136,7 @@ class FairyStatueCard(
             EnJa("Broken Fairy Statue", "破損した妖精の像"),
             EnJa("%s Statue", "%sの像"),
             EnJa("Glossier and more beautiful.", "その翅は艶やかで、本物よりも美しい。"),
-            MapColor.MAGENTA,
+            MapColor.COLOR_MAGENTA,
         ).also { entries += it }
     }
 }
@@ -175,15 +175,15 @@ fun initFairyStatue() {
         card.item.registerPoemGeneration(card.poemList)
 
         // タグ
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         // ドロップ
         card.block.registerLootTableGeneration { provider ->
             LootTable(
                 LootPool(ItemLootPoolEntry(card.item)) {
-                    rolls(ConstantLootNumberProvider.create(1.0F))
-                    apply(CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY).withOperation("Motif", "Motif"))
-                    provider.addSurvivesExplosionCondition(card.item, this)
+                    setRolls(ConstantLootNumberProvider.exactly(1.0F))
+                    apply(CopyNbtLootFunction.copyData(ContextLootNbtProvider.BLOCK_ENTITY).copy("Motif", "Motif"))
+                    provider.applyExplosionCondition(card.item, this)
                 },
             )
         }
@@ -193,34 +193,34 @@ fun initFairyStatue() {
 }
 
 
-class FairyStatueBlock(private val card: FairyStatueCard, settings: Settings) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
+class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
-        private val SHAPE: VoxelShape = createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
+        private val SHAPE: VoxelShape = box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onSyncedBlockEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
-        super.onSyncedBlockEvent(state, world, pos, type, data)
+    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+        super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
-        return blockEntity.onSyncedBlockEvent(type, data)
+        return blockEntity.triggerEvent(type, data)
     }
 
-    override fun onPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack)
-        if (world.isClient) return
+    override fun setPlacedBy(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+        super.setPlacedBy(world, pos, state, placer, itemStack)
+        if (world.isClientSide) return
         val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
         blockEntity.setMotif(itemStack.getFairyStatueMotif())
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
-    override fun getPickStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
         return asItem().createItemStack().setFairyStatueMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif())
     }
 
@@ -244,28 +244,28 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     fun setMotif(motif: Motif?) {
         this.motif = motif
         itemStackCache = motif?.createFairyItemStack()
-        markDirty()
+        setChanged()
     }
 
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["Motif"].string.set(getMotif()?.getIdentifier()?.string)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         setMotif(nbt.wrapper["Motif"].string.get()?.toIdentifier()?.toFairyMotif())
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         renderingProxy.stack {
             renderingProxy.translate(8.0 / 16.0, 5.5 / 16.0, 8.0 / 16.0)
-            renderingProxy.rotateY(-(cachedState[HorizontalFacingBlock.FACING].horizontal * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-(blockState.getValue(HorizontalFacingBlock.FACING).get2DDataValue() * 90) / 180F * Math.PI.toFloat())
             renderingProxy.renderItemStack(itemStackCache ?: INVALID_ITEM_STACK)
         }
     }
@@ -273,25 +273,25 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
 }
 
 
-class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Settings) : BlockItem(block, settings), FairyDreamProviderItem {
+class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Properties) : BlockItem(block, settings), FairyDreamProviderItem {
 
     override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val motif = stack.getFairyStatueMotif() ?: return
         val fairyItemStack = motif.createFairyItemStack()
 
         tooltip += text { empty() }
-        fairyItemStack.item.appendTooltip(fairyItemStack, world, tooltip, context)
+        fairyItemStack.item.appendHoverText(fairyItemStack, world, tooltip, context)
     }
 
     override fun getFairyDreamMotifs(itemStack: ItemStack) = itemStack.getFairyStatueMotif()?.let { listOf(it) } ?: listOf()
 
 }
 
-fun ItemStack.getFairyStatueMotifId(): Identifier? = this.nbt.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: Identifier?) = this.also { this.getOrCreateNbt().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
+fun ItemStack.getFairyStatueMotifId(): Identifier? = this.tag.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: Identifier?) = this.also { this.getOrCreateTag().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
 
 fun ItemStack.getFairyStatueMotif() = this.getFairyStatueMotifId()?.toFairyMotif()
 fun ItemStack.setFairyStatueMotif(fairyStatueMotif: Motif?) = this.setFairyStatueMotifId(fairyStatueMotif?.getIdentifier())

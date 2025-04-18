@@ -38,34 +38,34 @@ import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.Single
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.entity.ai.pathing.NavigationType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.Items
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).strength(1.0F).nonOpaque())
-    val item = BlockItem(block, Item.Settings())
+    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque())
+    val item = BlockItem(block, Item.Properties())
 }
 
 context(ModContext)
@@ -90,7 +90,7 @@ fun initFairyFountainModule() {
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
 
@@ -100,16 +100,16 @@ fun initFairyFountainModule() {
         pattern(" F ")
         pattern("SQS")
         pattern("SSS")
-        input('F', MaterialCard.FAIRY_SCALES.item)
-        input('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item)
-        input('S', Items.COBBLESTONE)
+        define('F', MaterialCard.FAIRY_SCALES.item)
+        define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item)
+        define('S', Items.COBBLESTONE)
     } on MaterialCard.FAIRY_SCALES.item
 }
 
-class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
-        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toTranslationKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
-        private val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
+        val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toLanguageKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
+        private val SHAPE: VoxelShape = box(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
         val recipes = mutableListOf<Recipe>()
     }
 
@@ -125,15 +125,15 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
 
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (player.isSneaking) {
-            if (world.isClient) return ActionResult.SUCCESS
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (player.isShiftKeyDown) {
+            if (world.isClientSide) return ActionResult.SUCCESS
 
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
@@ -145,14 +145,14 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
                 )
             }
 
-            player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = name
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
-                        buf.writeItemStack(it.showingItemStack)
-                        buf.writeString(it.motif.getIdentifier()!!.string)
+                        buf.writeItem(it.showingItemStack)
+                        buf.writeUtf(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)
                     }
@@ -162,13 +162,13 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             return ActionResult.CONSUME
         } else {
             // 入力判定
-            val inputItemStack = player.getStackInHand(hand)
-            if (!inputItemStack.isOf(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name) }, true)
+            val inputItemStack = player.getItemInHand(hand)
+            if (!inputItemStack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
+                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
             if (inputItemStack.count < 1) { // 個数が足りない
-                if (world.isServer) player.sendMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.name) }, true)
+                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
                 return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
             }
 
@@ -176,7 +176,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
 
             // 消費
             if (!player.isCreative) {
-                if (world.isServer) inputItemStack.decrement(1)
+                if (world.isServer) inputItemStack.shrink(1)
             }
 
             // 生産
@@ -190,8 +190,8 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
             }
 
             // エフェクト
-            if (world.isServer) world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
-            if (world.isClient) {
+            if (world.isServer) world.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
+            if (world.isClientSide) {
                 // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
                 repeat(3) {
                     world.addParticle(
@@ -206,7 +206,7 @@ class FairyStatueFountainBlock(settings: Settings) : SimpleHorizontalFacingBlock
                 }
             }
 
-            return ActionResult.success(world.isClient)
+            return ActionResult.sidedSuccess(world.isClientSide)
         }
     }
 

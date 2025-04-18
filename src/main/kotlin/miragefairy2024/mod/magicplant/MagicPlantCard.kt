@@ -2,10 +2,10 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.item.Item
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.item.Item
+import net.minecraft.core.BlockPos
 
 open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicPlantConfiguration<*, B>) {
     val blockIdentifier = MirageFairy2024.identifier(configuration.blockPath)
@@ -13,7 +13,7 @@ open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicP
     val block = configuration.createBlock()
     private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(configuration, blockPos, blockState)
     val blockEntityType: BlockEntityType<MagicPlantBlockEntity> = BlockEntityType(::createBlockEntity, setOf(block), null)
-    val item = MagicPlantSeedItem(block, Item.Settings())
+    val item = MagicPlantSeedItem(block, Item.Properties())
     val possibleTraits = configuration.possibleTraits
 
     context(ModContext)

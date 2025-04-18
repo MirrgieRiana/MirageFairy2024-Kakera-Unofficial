@@ -22,26 +22,26 @@ import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.data.client.TextureKey
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.state.StateManager
-import net.minecraft.state.property.BooleanProperty
-import net.minecraft.state.property.Properties
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().mapColor(MapColor.DARK_RED).requiresTool().strength(3.0F).luminance(Blocks.createLightLevelFromLitBlockState(8))
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().mapColor(MapColor.NETHER).requiresTool().strength(3.0F).lightLevel(Blocks.litBlockEmission(8))
     override fun createBlock() = AuraReflectorFurnaceBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::AuraReflectorFurnaceBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = AuraReflectorFurnaceScreenHandler(this, arguments)
@@ -77,14 +77,14 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 
-        block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         registerShapedRecipeGeneration(item) {
             pattern("XXX")
             pattern("XFX")
             pattern("XXX")
-            input('F', Items.FURNACE)
-            input('X', MaterialCard.XARPITE.item)
+            define('F', Items.FURNACE)
+            define('X', MaterialCard.XARPITE.item)
         } on MaterialCard.XARPITE.item
     }
 
@@ -100,15 +100,15 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
 class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card) {
     companion object {
-        val LIT: BooleanProperty = Properties.LIT
+        val LIT: BooleanProperty = BlockStateProperties.LIT
     }
 
     init {
-        defaultState = defaultState.with(LIT, false)
+        registerDefaultState(defaultBlockState().setValue(LIT, false))
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-        super.appendProperties(builder)
+    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
         builder.add(LIT)
     }
 }
@@ -116,20 +116,20 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
 class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<AuraReflectorFurnaceBlockEntity>(card, pos, state) {
     override fun getThis() = this
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         fuelMax = nbt.wrapper["FuelMax"].int.get() ?: 0
         fuel = nbt.wrapper["Fuel"].int.get() ?: 0
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["FuelMax"].int.set(fuelMax)
         nbt.wrapper["Fuel"].int.set(fuel)
     }
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         shouldUpdateFuel = true
     }
 
@@ -145,17 +145,17 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         if (!(AuraReflectorFurnaceRecipe.FUELS.contains(fuelItemStack.item) && fuelItemStack.count >= 1)) return null
 
         return {
-            fuelItemStack.decrement(1)
+            fuelItemStack.shrink(1)
             fuelMax = 20 * 10
             fuel = fuelMax
-            markDirty()
+            setChanged()
         }
     }
 
     fun setLit(lit: Boolean) {
-        val world = world ?: return
-        if (cachedState[AuraReflectorFurnaceBlock.LIT] != lit) {
-            world.setBlockState(pos, cachedState.with(AuraReflectorFurnaceBlock.LIT, lit), Block.NOTIFY_ALL)
+        val world = level ?: return
+        if (blockState.getValue(AuraReflectorFurnaceBlock.LIT) != lit) {
+            world.setBlock(worldPosition, blockState.setValue(AuraReflectorFurnaceBlock.LIT, lit), Block.UPDATE_ALL)
         }
     }
 

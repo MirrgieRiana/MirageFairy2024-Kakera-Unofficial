@@ -12,10 +12,10 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.core.BlockPos
 
 fun ToolConfiguration.cutAll() = this.also {
     this.merge(CutAllToolEffectType, true) { enabled ->
@@ -24,7 +24,7 @@ fun ToolConfiguration.cutAll() = this.also {
 }
 
 object CutAllToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
 
     context(ModContext)
     fun init() {
@@ -35,35 +35,35 @@ object CutAllToolEffectType : BooleanToolEffectType() {
         if (!enabled) return
         configuration.descriptions += text { TRANSLATION() }
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
-            if (world.isClient) return@fail
+            if (world.isClientSide) return@fail
 
-            if (miner.isSneaking) return@fail // 使用者がスニーク中
+            if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isSuitableFor(state)) return@fail // 掘ったブロックに対して特効でない
-            if (!state.isIn(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
+            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
             // 発動
 
-            val baseHardness = state.getHardness(world, pos)
+            val baseHardness = state.getDestroySpeed(world, pos)
 
             val logBlockPosList = mutableListOf<BlockPos>()
             blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).isIn(BlockTags.LOGS)
+                world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
                 val targetBlockState = world.getBlockState(blockPos)
-                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                val targetHardness = targetBlockState.getDestroySpeed(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
                         val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
-                            stack.damage(damage, miner) {
-                                it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                            stack.hurtAndBreak(damage, miner) {
+                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
                             }
                         }
                     }
@@ -71,23 +71,23 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 }
             }
             blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).isIn(BlockTags.LEAVES)
+                world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damage <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
                 val targetBlockState = world.getBlockState(blockPos)
-                val targetHardness = targetBlockState.getHardness(world, blockPos)
+                val targetHardness = targetBlockState.getDestroySpeed(world, blockPos)
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
                         if (miner.random.nextFloat() < 0.1F) {
                             val damage = world.random.randomInt(configuration.miningDamage)
                             if (damage > 0) {
-                                stack.damage(damage, miner) {
-                                    it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND)
+                                stack.hurtAndBreak(damage, miner) {
+                                    it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
                                 }
                             }
                         }

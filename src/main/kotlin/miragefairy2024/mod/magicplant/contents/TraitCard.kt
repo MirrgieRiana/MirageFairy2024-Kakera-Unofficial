@@ -26,9 +26,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
-import net.minecraft.world.biome.BiomeKeys
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
 @Suppress("SpellCheckingInspection")
 class TraitCard(
@@ -494,7 +494,7 @@ class TraitCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val poemTranslation = Translation({ identifier.toTranslationKey("${MirageFairy2024.MOD_ID}.trait", "poem") }, enPoem, jaPoem)
+    val poemTranslation = Translation({ identifier.toLanguageKey("${MirageFairy2024.MOD_ID}.trait", "poem") }, enPoem, jaPoem)
     val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style, text { poemTranslation() }) {
         override val spawnSpecs = mutableListOf<TraitSpawnSpec>().also { spawnSpecConfigurator(it) }
 

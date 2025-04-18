@@ -9,13 +9,13 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.obtain
 import miragefairy2024.util.registerServerPacketReceiver
-import net.minecraft.block.Block
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.level.block.Block
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
+import net.minecraft.core.BlockPos
 
 val PLACE_ITEM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.place_item" }, "Place Item", "アイテムを置く")
 
@@ -31,12 +31,12 @@ fun initPlacedItemModule() {
 
             if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
 
-            val hitResult = player.raycast(5.0, 0F, false)
+            val hitResult = player.pick(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
 
             val blockPos = packet.blockPos
-            val blockPos2 = if (player.world.getBlockState(hitResult.blockPos).isReplaceable) hitResult.blockPos else hitResult.blockPos.offset(hitResult.side)
+            val blockPos2 = if (player.level().getBlockState(hitResult.blockPos).canBeReplaced()) hitResult.blockPos else hitResult.blockPos.relative(hitResult.direction)
             if (blockPos != blockPos2) return@registerServerPacketReceiver // プレイヤーはその位置を見ていない
 
             if (packet.itemX !in 0.0..<1.0) return@registerServerPacketReceiver // 範囲外
@@ -46,19 +46,19 @@ fun initPlacedItemModule() {
 
             // ブロックの設置判定
 
-            val world = player.world
+            val world = player.level()
 
             // 生成環境判定
-            if (!world.getBlockState(blockPos).isReplaceable) return@registerServerPacketReceiver // 配置先が埋まっている
+            if (!world.getBlockState(blockPos).canBeReplaced()) return@registerServerPacketReceiver // 配置先が埋まっている
 
             // アイテム判定
-            if (player.mainHandStack.isEmpty) return@registerServerPacketReceiver // アイテムを持っていない
-            val itemStack = if (player.isCreative) player.mainHandStack.copyWithCount(1) else player.mainHandStack.split(1)
+            if (player.mainHandItem.isEmpty) return@registerServerPacketReceiver // アイテムを持っていない
+            val itemStack = if (player.isCreative) player.mainHandItem.copyWithCount(1) else player.mainHandItem.split(1)
 
 
             // 成功
 
-            world.setBlockState(blockPos, PlacedItemCard.block.defaultState, Block.NOTIFY_LISTENERS)
+            world.setBlock(blockPos, PlacedItemCard.block.defaultBlockState(), Block.UPDATE_CLIENTS)
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの配置に失敗した
             blockEntity.itemStack = itemStack
             blockEntity.itemX = packet.itemX
@@ -67,9 +67,9 @@ fun initPlacedItemModule() {
             blockEntity.itemRotateX = packet.itemRotateX
             blockEntity.itemRotateY = packet.itemRotateY
             blockEntity.updateShapeCache()
-            blockEntity.markDirty()
+            blockEntity.setChanged()
 
-            world.playSound(null, blockPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
+            world.playSound(null, blockPos, SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
 
         }
     }
@@ -80,7 +80,7 @@ fun initPlacedItemModule() {
 
             if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
 
-            val hitResult = player.raycast(5.0, 0F, false)
+            val hitResult = player.pick(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
 
@@ -90,9 +90,9 @@ fun initPlacedItemModule() {
 
             // ブロックの除去判定
 
-            val world = player.world
+            val world = player.level()
 
-            if (!world.getBlockState(blockPos).isOf(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
+            if (!world.getBlockState(blockPos).`is`(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの取得に失敗した
             val itemStack = blockEntity.itemStack
 
@@ -104,7 +104,7 @@ fun initPlacedItemModule() {
             player.obtain(itemStack)
 
             // これを入れるとSEが2重に流れる
-            //world.playSound(null, blockPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
+            //world.playSound(null, blockPos, SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F)
 
         }
     }

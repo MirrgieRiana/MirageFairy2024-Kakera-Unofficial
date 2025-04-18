@@ -51,13 +51,13 @@ import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.Level as World
 import kotlin.math.log
 import kotlin.math.roundToInt
 
@@ -65,19 +65,19 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = FairyItem(Item.Settings().fireproof())
+    val item = FairyItem(Item.Properties().fireResistant())
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")
-private val RARE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.rare" }, "Rare", "レア")
-private val MANA_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.mana" }, "Mana", "魔力")
-private val LEVEL_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.level" }, "Level", "レベル")
-private val CONDENSATION_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.condensation" }, "Condensation", "凝縮数")
-private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
+private val RARE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.rare" }, "Rare", "レア")
+private val MANA_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.mana" }, "Mana", "魔力")
+private val LEVEL_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.level" }, "Level", "レベル")
+private val CONDENSATION_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.condensation" }, "Condensation", "凝縮数")
+private val CONDENSATION_RECIPE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.condensation_recipe" }, "Can be (de)condensed by crafting table", "作業台で凝縮・展開")
 
 val fairiesItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("fairies"), "Fairies", "妖精",
-) { motifRegistry.entrySet.random().value.createFairyItemStack() }
+) { motifRegistry.entrySet().random().value.createFairyItemStack() }
 
 context(ModContext)
 fun initFairyItem() {
@@ -154,15 +154,15 @@ private fun createFairyModel() = Model {
     )
 }
 
-class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
+class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
     override fun getName(stack: ItemStack): Text {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()
         return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
@@ -246,7 +246,7 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 
             val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE || status == PassiveSkillStatus.SUPPORTING
             tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
-            val passiveSkillContext = player?.let { PassiveSkillContext(it.world, it.eyeBlockPos, it) }
+            val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
                 fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
@@ -272,20 +272,20 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
         }
     }
 
-    override fun isItemBarVisible(stack: ItemStack): Boolean {
+    override fun isBarVisible(stack: ItemStack): Boolean {
         val condensation = stack.getFairyCondensation()
         val niceCondensation = getNiceCondensation(condensation).second
         return condensation != niceCondensation
     }
 
-    override fun getItemBarStep(stack: ItemStack): Int {
+    override fun getBarWidth(stack: ItemStack): Int {
         val condensation = stack.getFairyCondensation()
         val niceCondensation = getNiceCondensation(condensation).second.toLong()
         val nextNiceCondensation = niceCondensation * 3L
         return (13.0 * (condensation.toLong() - niceCondensation).toDouble() / (nextNiceCondensation - niceCondensation).toDouble()).roundToInt()
     }
 
-    override fun getItemBarColor(stack: ItemStack) = 0x00FF00
+    override fun getBarColor(stack: ItemStack) = 0x00FF00
 
     override fun getPassiveSkill(itemStack: ItemStack): PassiveSkill? {
         val motif = itemStack.getFairyMotif() ?: return null
@@ -300,17 +300,17 @@ class FairyItem(settings: Settings) : Item(settings), PassiveSkillProvider {
 }
 
 
-fun ItemStack.getFairyMotifId(): Identifier? = this.nbt.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyMotif"].string.set(identifier.string)
+fun ItemStack.getFairyMotifId(): Identifier? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
 
-fun ItemStack.getFairyCondensation() = this.nbt.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
-fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateNbt().wrapper["FairyCondensation"].int.set(condensation)
+fun ItemStack.getFairyCondensation() = this.tag.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
+fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateTag().wrapper["FairyCondensation"].int.set(condensation)
 
 
 fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
 
 fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    return createFairyItemStack(motifRegistry.getId(this)!!, condensation = condensation, count = count)
+    return createFairyItemStack(motifRegistry.getKey(this)!!, condensation = condensation, count = count)
 }
 
 fun createFairyItemStack(motifId: Identifier, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {

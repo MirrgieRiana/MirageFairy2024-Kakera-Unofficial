@@ -10,14 +10,14 @@ import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.MapColor
-import net.minecraft.block.enums.Instrument
-import net.minecraft.item.Items
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.item.Items
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 
 object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler, FermentationBarrelRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
@@ -49,15 +49,15 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override fun init() {
         super.init()
 
-        block.registerBlockTagGeneration { BlockTags.AXE_MINEABLE }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
         registerShapedRecipeGeneration(item) {
             pattern("ILI")
             pattern("LRL")
             pattern("ILI")
-            input('L', HaimeviskaBlockCard.LOG.item)
-            input('R', MaterialCard.HAIMEVISKA_ROSIN.item)
-            input('I', Items.IRON_NUGGET)
+            define('L', HaimeviskaBlockCard.LOG.item)
+            define('R', MaterialCard.HAIMEVISKA_ROSIN.item)
+            define('I', Items.IRON_NUGGET)
         } on MaterialCard.HAIMEVISKA_ROSIN.item
     }
 }

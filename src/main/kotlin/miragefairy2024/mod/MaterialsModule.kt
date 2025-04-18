@@ -47,33 +47,33 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancement.criterion.Criteria
-import net.minecraft.block.Blocks
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.FoodComponent
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsage
-import net.minecraft.item.Items
-import net.minecraft.loot.LootTables
-import net.minecraft.recipe.Ingredient
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.stat.Stats
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.StringHelper
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.UseAction
-import net.minecraft.world.World
-import net.minecraft.world.event.GameEvent
+import net.minecraft.advancements.CriteriaTriggers as Criteria
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
+import net.minecraft.world.effect.MobEffects as StatusEffects
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.food.FoodProperties as FoodComponent
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemUtils as ItemUsage
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.stats.Stats
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.util.StringUtil as StringHelper
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.item.UseAnim as UseAction
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.gameevent.GameEvent
 import kotlin.math.pow
 
 class MaterialCard(
@@ -85,7 +85,7 @@ class MaterialCard(
     val soulStreamContainable: Boolean = false,
     val foodComponent: FoodComponent? = null,
     val recipeRemainder: Item? = null,
-    val creator: (Item.Settings) -> Item = ::Item,
+    val creator: (Item.Properties) -> Item = ::Item,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
 ) {
     companion object {
@@ -114,18 +114,18 @@ class MaterialCard(
                 pattern("  #")
                 pattern(" # ")
                 pattern("#  ")
-                input('#', MIRANAGITE.item)
+                define('#', MIRANAGITE.item)
             } on MIRANAGITE.item from MIRANAGITE.item
         }
         val CHAOS_STONE = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
         ) {
-            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON_CHEST }, 10, 3..5)
-            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT_CHEST }, 5)
-            item.registerChestLoot({ LootTables.ANCIENT_CITY_CHEST }, 10, 1..5)
-            item.registerChestLoot({ LootTables.DESERT_PYRAMID_CHEST }, 10)
-            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE_CHEST }, 3)
+            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
+            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
+            item.registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
+            item.registerChestLoot({ LootTables.DESERT_PYRAMID }, 10)
+            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 3)
             item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
             item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
@@ -143,13 +143,13 @@ class MaterialCard(
             fuelValue = 100,
         ) {
             registerShapelessRecipeGeneration(item) {
-                input(MIRAGE_LEAVES.item)
+                requires(MIRAGE_LEAVES.item)
             } on MIRAGE_LEAVES.item
             item.registerComposterInput(0.5F)
             registerShapedRecipeGeneration(Items.STICK, 2) {
                 pattern("#")
                 pattern("#")
-                input('#', item)
+                define('#', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_GLASS_FIBER = !MaterialCard(
@@ -161,12 +161,12 @@ class MaterialCard(
                 pattern("###")
                 pattern("# #")
                 pattern("###")
-                input('#', MIRAGE_STEM.item)
+                define('#', MIRAGE_STEM.item)
             } on MIRAGE_STEM.item
             registerShapedRecipeGeneration(Items.STRING) {
                 pattern("##")
                 pattern("##")
-                input('#', item)
+                define('#', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_CRYSTAL = !MaterialCard(
@@ -184,10 +184,10 @@ class MaterialCard(
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
             soulStreamContainable = true,
             foodComponent = FoodComponent.Builder()
-                .hunger(2)
-                .saturationModifier(0.3F)
-                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .alwaysEdible()
+                .nutrition(2)
+                .saturationMod(0.3F)
+                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                .alwaysEat()
                 .build(),
         )
         val MIRAGIUM_NUGGET = !MaterialCard(
@@ -198,7 +198,7 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(MIRAGE_FLOUR.item), 1),
+                    Pair(Ingredient.of(MIRAGE_FLOUR.item), 1),
                 ),
                 output = item.createItemStack(),
                 duration = 20 * 60,
@@ -226,9 +226,9 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
-                    Pair(Ingredient.ofItems(Items.LILAC), 4),
-                    Pair(Ingredient.ofItems(Items.PEONY), 4),
+                    Pair(Ingredient.of(MIRAGIUM_INGOT.item), 1),
+                    Pair(Ingredient.of(Items.LILAC), 4),
+                    Pair(Ingredient.of(Items.PEONY), 4),
                 ),
                 output = item.createItemStack(),
                 duration = 20 * 60,
@@ -242,7 +242,7 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(item), 9),
+                    Pair(Ingredient.of(item), 9),
                 ),
                 output = MIRAGIDIAN.item.createItemStack(),
                 duration = 20 * 60,
@@ -266,11 +266,11 @@ class MaterialCard(
                 .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
                 .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
             foodComponent = FoodComponent.Builder()
-                .hunger(1)
-                .saturationModifier(0.1F)
-                .snack()
-                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
-                .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 20), 0.01F)
+                .nutrition(1)
+                .saturationMod(0.1F)
+                .fast()
+                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
+                .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
                 .build(),
         ) {
             item.registerComposterInput(0.3F)
@@ -287,9 +287,9 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(MIRAGIUM_INGOT.item), 1),
-                    Pair(Ingredient.ofItems(Items.ECHO_SHARD), 1),
-                    Pair(Ingredient.ofItems(LUMINITE.item), 1),
+                    Pair(Ingredient.of(MIRAGIUM_INGOT.item), 1),
+                    Pair(Ingredient.of(Items.ECHO_SHARD), 1),
+                    Pair(Ingredient.of(LUMINITE.item), 1),
                 ),
                 output = item.createItemStack(),
                 duration = 20 * 60,
@@ -302,17 +302,17 @@ class MaterialCard(
                 .description("Gain experience by eating", "食べると経験値を獲得"),
             fuelValue = 200,
             foodComponent = FoodComponent.Builder()
-                .hunger(1)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
+                .nutrition(1)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
                 .build(),
         ) {
             // →松明
             registerShapedRecipeGeneration(Items.TORCH) {
                 pattern("#")
                 pattern("S")
-                input('#', item)
-                input('S', Items.STICK)
+                define('#', item)
+                define('S', Items.STICK)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val HAIMEVISKA_ROSIN = !MaterialCard(
@@ -324,8 +324,8 @@ class MaterialCard(
             registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
                 pattern("S")
                 pattern("P")
-                input('P', Blocks.PISTON)
-                input('S', item)
+                define('P', Blocks.PISTON)
+                define('S', item)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC = !MaterialCard(
@@ -427,7 +427,7 @@ class MaterialCard(
                 .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
                 .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) }
+            creator = { Item(it.fireResistant()) }
             // TODO 用途
         )
 
@@ -457,8 +457,8 @@ class MaterialCard(
                 pattern(" S ")
                 pattern("SFS")
                 pattern(" S ")
-                input('F', FLUORITE.item)
-                input('S', FAIRY_SCALES.item)
+                define('F', FLUORITE.item)
+                define('S', FAIRY_SCALES.item)
             } on FLUORITE.item from FLUORITE.item
         }
 
@@ -486,7 +486,7 @@ class MaterialCard(
                 .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(1, it.fireproof()) },
+            creator = { MinaItem(1, it.fireResistant()) },
         )
         val MINA_5 = !MaterialCard(
             "mina_5", "5 Mina", "5ミナ",
@@ -494,7 +494,7 @@ class MaterialCard(
                 .poem("Fairy snack", "ご縁があるよ")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(5, it.fireproof()) },
+            creator = { MinaItem(5, it.fireResistant()) },
         )
         val MINA_10 = !MaterialCard(
             "mina_10", "10 Mina", "10ミナ",
@@ -502,7 +502,7 @@ class MaterialCard(
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(10, it.fireproof()) },
+            creator = { MinaItem(10, it.fireResistant()) },
         )
         val MINA_50 = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
@@ -510,7 +510,7 @@ class MaterialCard(
                 .poem("The Society failed to replicate this.", "形而上学的有機結晶")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(50, it.fireproof()) },
+            creator = { MinaItem(50, it.fireResistant()) },
         )
         val MINA_100 = !MaterialCard(
             "mina_100", "100 Mina", "100ミナ",
@@ -518,7 +518,7 @@ class MaterialCard(
                 .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(100, it.fireproof()) },
+            creator = { MinaItem(100, it.fireResistant()) },
         )
         val MINA_500 = !MaterialCard(
             "mina_500", "500 Mina", "500ミナ",
@@ -526,7 +526,7 @@ class MaterialCard(
                 .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(500, it.fireproof()) },
+            creator = { MinaItem(500, it.fireResistant()) },
         )
         val MINA_1000 = !MaterialCard(
             "mina_1000", "1000 Mina", "1000ミナ",
@@ -534,7 +534,7 @@ class MaterialCard(
                 .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(1000, it.fireproof()) },
+            creator = { MinaItem(1000, it.fireResistant()) },
         )
         val MINA_5000 = !MaterialCard(
             "mina_5000", "5000 Mina", "5000ミナ",
@@ -542,7 +542,7 @@ class MaterialCard(
                 .poem("The price of a soul.", "魂の値段。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(5000, it.fireproof()) },
+            creator = { MinaItem(5000, it.fireResistant()) },
         )
         val MINA_10000 = !MaterialCard(
             "mina_10000", "10000 Mina", "10000ミナ",
@@ -550,7 +550,7 @@ class MaterialCard(
                 .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true,
-            creator = { MinaItem(10000, it.fireproof()) },
+            creator = { MinaItem(10000, it.fireResistant()) },
         )
 
         val JEWEL_1 = !MaterialCard(
@@ -558,75 +558,75 @@ class MaterialCard(
             PoemList(0)
                 .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_5 = !MaterialCard(
             "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
             PoemList(0)
                 .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_10 = !MaterialCard(
             "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
             PoemList(0)
                 .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_50 = !MaterialCard(
             "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
             PoemList(0)
                 .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_100 = !MaterialCard(
             "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
             PoemList(0)
                 .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_500 = !MaterialCard(
             "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
             PoemList(0)
                 .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_1000 = !MaterialCard(
             "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
             PoemList(0)
                 .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_5000 = !MaterialCard(
             "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
             PoemList(0)
                 .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
         val JEWEL_10000 = !MaterialCard(
             "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
             PoemList(0)
                 .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
             soulStreamContainable = true,
-            creator = { Item(it.fireproof()) },
+            creator = { Item(it.fireResistant()) },
         )
 
         val APOSTLE_WAND = !MaterialCard(
             "apostle_wand", "Apostle's Wand", "使徒のステッキ",
             PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
-            creator = { ApostleWandItem(it.maxCount(1)) },
+            creator = { ApostleWandItem(it.stacksTo(1)) },
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" G")
                 pattern("S ")
-                input('S', MIRAGE_STEM.item)
-                input('G', Items.GOLD_INGOT)
+                define('S', MIRAGE_STEM.item)
+                define('G', Items.GOLD_INGOT)
             } on MIRAGE_STEM.item
         }
 
@@ -635,10 +635,10 @@ class MaterialCard(
             null,
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
-                .hunger(6)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 20 * 60, 1), 1.0F)
-                .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA, 20 * 60), 0.1F)
+                .nutrition(6)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
+                .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
                 .build(),
             creator = { DrinkItem(it) },
         ) {
@@ -646,8 +646,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(Items.SUGAR_CANE), 16),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(Items.SUGAR_CANE), 16),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -660,17 +660,17 @@ class MaterialCard(
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
-                .hunger(6)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 60), 1.0F)
+                .nutrition(6)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
                 .build(),
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(Items.APPLE), 4),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(Items.APPLE), 4),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -683,9 +683,9 @@ class MaterialCard(
             PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
-                .hunger(6)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
+                .nutrition(6)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
                 .build(),
             creator = { DrinkItem(it, flaming = 5) },
         ) {
@@ -693,8 +693,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(HAIMEVISKA_SAP.item), 8),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(HAIMEVISKA_SAP.item), 8),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -707,18 +707,18 @@ class MaterialCard(
             PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
-                .hunger(6)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .statusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
+                .nutrition(6)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
                 .build(),
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(VEROPEDA_BERRIES.item), 8),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(VEROPEDA_BERRIES.item), 8),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -731,18 +731,18 @@ class MaterialCard(
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
-                .hunger(1)
-                .saturationModifier(0.1F)
-                .statusEffect(StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 9), 1.0F)
-                .statusEffect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
+                .nutrition(1)
+                .saturationMod(0.1F)
+                .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
+                .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
                 .build(),
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(Items.PUFFERFISH), 1),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(Items.PUFFERFISH), 1),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -751,8 +751,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(Items.POISONOUS_POTATO), 4),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(Items.POISONOUS_POTATO), 4),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -761,8 +761,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair(Ingredient.ofItems(Items.GLASS_BOTTLE), 1),
-                    Pair(Ingredient.ofItems(Items.SPIDER_EYE), 4),
+                    Pair(Ingredient.of(Items.GLASS_BOTTLE), 1),
+                    Pair(Ingredient.of(Items.SPIDER_EYE), 4),
                     Pair(WaterBottleIngredient.toVanilla(), 1),
                 ),
                 output = item.createItemStack(),
@@ -772,16 +772,16 @@ class MaterialCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = Item.Settings()
+    val item = Item.Properties()
         .let { if (foodComponent != null) it.food(foodComponent) else it }
-        .let { if (recipeRemainder != null) it.recipeRemainder(recipeRemainder) else it }
+        .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
         .let { creator(it) }
 }
 
-val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
+val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
 
-val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toTranslationKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
-val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toTranslationKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
+val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toLanguageKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
+val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toLanguageKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
 
 context(ModContext)
 fun initMaterialsModule() {
@@ -831,7 +831,7 @@ fun initMaterialsModule() {
     // ミーニャ⇔ミナ両替
     registerSpecialRecipe("minia_from_mina", 1) { inventory ->
         val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
-        if (itemStacks.pull { it.isOf(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
+        if (itemStacks.pull { it.`is`(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
         val itemStack = itemStacks.pull { true } ?: return@registerSpecialRecipe null // アイテム取得
         if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
         val item = itemStack.item as? MinaItem ?: return@registerSpecialRecipe null // そのアイテムはミナでなければならない
@@ -841,8 +841,8 @@ fun initMaterialsModule() {
     }
     registerSpecialRecipe("mina_from_minia", 1) { inventory ->
         val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
-        if (itemStacks.pull { it.isOf(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
-        val fairyItemStack = itemStacks.pull { it.isOf(FairyCard.item) && it.getFairyMotif() == MotifCard.MINA } ?: return@registerSpecialRecipe null // ミーニャ取得
+        if (itemStacks.pull { it.`is`(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
+        val fairyItemStack = itemStacks.pull { it.`is`(FairyCard.item) && it.getFairyMotif() == MotifCard.MINA } ?: return@registerSpecialRecipe null // ミーニャ取得
         if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
         val item = when (fairyItemStack.getFairyCondensation()) {
             1 -> MaterialCard.MINA_1.item
@@ -873,53 +873,53 @@ fun initMaterialsModule() {
 
 }
 
-class MinaItem(val mina: Int, settings: Settings) : Item(settings)
+class MinaItem(val mina: Int, settings: Properties) : Item(settings)
 
-class ApostleWandItem(settings: Settings) : Item(settings) {
-    override fun hasRecipeRemainder() = true
+class ApostleWandItem(settings: Properties) : Item(settings) {
+    override fun hasCraftingRemainingItem() = true
     override fun getRecipeRemainder(stack: ItemStack) = stack.item.createItemStack()
 }
 
-class DrinkItem(settings: Settings, private val flaming: Int? = null) : Item(settings) {
+class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(settings) {
     companion object {
-        val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toTranslationKey()}.burning" }, "Flaming", "炎上")
+        val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toLanguageKey()}.burning" }, "Flaming", "炎上")
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
 
         run {
-            val foodComponent = foodComponent ?: return@run
-            foodComponent.statusEffects.forEach { entry ->
-                var text = entry.first.effectType.name
+            val foodComponent = foodProperties ?: return@run
+            foodComponent.effects.forEach { entry ->
+                var text = entry.first.effect.displayName
                 if (entry.first.amplifier > 0) text = text { text + " "() + (entry.first.amplifier + 1).toRomanText() }
-                if (!entry.first.effectType.isInstant) text = text { text + " (${StringHelper.formatTicks(entry.first.duration)}"() + ")"() }
+                if (!entry.first.effect.isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.first.duration)}"() + ")"() }
                 if (entry.second != 1.0F) text = text { text + " (${entry.second * 100 formatAs "%.0f"}%)"() }
-                text = if (entry.first.effectType.isBeneficial) text.blue else text.red
+                text = if (entry.first.effect.isBeneficial) text.blue else text.red
                 tooltip += text
             }
         }
 
-        if (flaming != null) tooltip += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTicks(flaming * 20)}"() + ")"()).red }
+        if (flaming != null) tooltip += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
     }
 
-    override fun finishUsing(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
-        super.finishUsing(stack, world, user)
+    override fun finishUsingItem(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
+        super.finishUsingItem(stack, world, user)
         if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
-        if (user is PlayerEntity) user.incrementStat(Stats.USED.getOrCreateStat(this))
-        user.emitGameEvent(GameEvent.DRINK)
-        if (!world.isClient) {
-            if (flaming != null) user.setOnFireFor(flaming)
+        if (user is PlayerEntity) user.awardStat(Stats.ITEM_USED.get(this))
+        user.gameEvent(GameEvent.DRINK)
+        if (!world.isClientSide) {
+            if (flaming != null) user.setSecondsOnFire(flaming)
         }
         return if (stack.isEmpty) {
             Items.GLASS_BOTTLE.createItemStack()
         } else {
-            if (user !is PlayerEntity || !user.abilities.creativeMode) user.obtain(Items.GLASS_BOTTLE.createItemStack())
+            if (user !is PlayerEntity || !user.abilities.instabuild) user.obtain(Items.GLASS_BOTTLE.createItemStack())
             stack
         }
     }
 
-    override fun getMaxUseTime(stack: ItemStack) = 32
-    override fun getUseAction(stack: ItemStack) = UseAction.DRINK
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.consumeHeldItem(world, user, hand)
+    override fun getUseDuration(stack: ItemStack) = 32
+    override fun getUseAnimation(stack: ItemStack) = UseAction.DRINK
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
 }

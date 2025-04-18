@@ -32,10 +32,10 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
@@ -78,7 +78,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 
                             child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
-                                handler.traitStacks.traitStackList.forEach { traitStack ->
+                                menu.traitStacks.traitStackList.forEach { traitStack ->
                                     child(ClickableContainer(Sizing.fill(100), Sizing.content(), { // 特性
                                         setTraitCardContent(createTraitCardContent(traitStack))
                                         true
@@ -100,7 +100,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
             })
         }
 
-        val traitStack = handler.traitStacks.traitStackList.firstOrNull()
+        val traitStack = menu.traitStacks.traitStackList.firstOrNull()
         if (traitStack != null) setTraitCardContent(createTraitCardContent(traitStack))
     }
 
@@ -118,7 +118,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                     val player = MinecraftClient.getInstance().player
                     val allFactor = if (player != null) {
                         traitStack.trait.conditions
-                            .map { it.getFactor(player.world, player.blockPos) }
+                            .map { it.getFactor(player.level(), player.blockPosition()) }
                             .fold(1.0) { a, b -> a * b }
                     } else {
                         1.0
@@ -128,7 +128,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.conditions.forEach { condition ->
-                            val factor = if (player != null) condition.getFactor(player.world, player.blockPos) else 1.0
+                            val factor = if (player != null) condition.getFactor(player.level(), player.blockPosition()) else 1.0
                             val text = text { condition.emoji + " "() + (factor * 100.0 formatAs "%.1f%%")() }
                             child(Components.label(text).tooltip(condition.name))
                         }

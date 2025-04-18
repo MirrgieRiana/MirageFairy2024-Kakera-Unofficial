@@ -7,9 +7,9 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.entity.ExperienceOrbEntity
-import net.minecraft.entity.ItemEntity
-import net.minecraft.util.math.Box
+import net.minecraft.world.entity.ExperienceOrb as ExperienceOrbEntity
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.phys.AABB as Box
 
 fun ToolConfiguration.collection() = this.also {
     this.merge(CollectionToolEffectType, true) { enabled ->
@@ -18,7 +18,7 @@ fun ToolConfiguration.collection() = this.also {
 }
 
 object CollectionToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
 
     context(ModContext)
     fun init() {
@@ -29,23 +29,23 @@ object CollectionToolEffectType : BooleanToolEffectType() {
         if (!enabled) return
         configuration.descriptions += text { TRANSLATION() }
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
-            if (player.world != world) return@fail
-            world.getEntitiesByClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleport(player.x, player.y, player.z)
-                it.resetPickupDelay()
+            if (player.level() != world) return@fail
+            world.getEntitiesOfClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+                it.teleportTo(player.x, player.y, player.z)
+                it.setNoPickUpDelay()
             }
-            world.getEntitiesByClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleport(player.x, player.y, player.z)
+            world.getEntitiesOfClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
+                it.teleportTo(player.x, player.y, player.z)
             }
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
-            if (attacker.world != entity.world) return@fail
-            entity.world.getEntitiesByClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-                it.teleport(attacker.x, attacker.y, attacker.z)
-                it.resetPickupDelay()
+            if (attacker.level() != entity.level()) return@fail
+            entity.level().getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+                it.teleportTo(attacker.x, attacker.y, attacker.z)
+                it.setNoPickUpDelay()
             }
-            entity.world.getEntitiesByClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
-                it.teleport(attacker.x, attacker.y, attacker.z)
+            entity.level().getEntitiesOfClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+                it.teleportTo(attacker.x, attacker.y, attacker.z)
             }
         }
     }

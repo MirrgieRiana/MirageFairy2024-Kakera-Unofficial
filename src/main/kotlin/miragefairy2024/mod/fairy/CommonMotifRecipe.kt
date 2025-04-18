@@ -1,8 +1,8 @@
 package miragefairy2024.mod.fairy
 
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.world.biome.Biome
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.biome.Biome
 
 val COMMON_MOTIF_RECIPES = mutableListOf<CommonMotifRecipe>()
 

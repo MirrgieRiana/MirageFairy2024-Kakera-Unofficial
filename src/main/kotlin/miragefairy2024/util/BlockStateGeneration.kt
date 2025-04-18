@@ -8,19 +8,19 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
 import mirrg.kotlin.hydrogen.join
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.block.Block
-import net.minecraft.data.client.BlockStateModelGenerator
-import net.minecraft.data.client.BlockStateSupplier
-import net.minecraft.state.property.Property
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.Direction
+import net.minecraft.world.level.block.Block
+import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
+import net.minecraft.data.models.blockstates.BlockStateGenerator as BlockStateSupplier
+import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.Direction
 
 
 // registerBlockStateGeneration
 
 context(ModContext)
 fun Block.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateCollector.accept(object : BlockStateSupplier {
+    it.blockStateOutput.accept(object : BlockStateSupplier {
         override fun get() = creator()
         override fun getBlock() = this@registerBlockStateGeneration
     })
@@ -47,7 +47,7 @@ fun Block.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockState
 
 context(ModContext)
 fun Block.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
-    it.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(this, "block/" * this.getIdentifier()))
+    it.blockStateOutput.accept(BlockStateModelGenerator.createSimpleBlock(this, "block/" * this.getIdentifier()))
 }
 
 
@@ -111,7 +111,7 @@ fun BlockStateVariant.toJson(): JsonElement = jsonObjectNotNull(
 class PropertyEntry<T : Comparable<T>>(val key: Property<T>, val value: T)
 
 val PropertyEntry<*>.keyName: String get() = this.key.name
-val <T : Comparable<T>> PropertyEntry<T>.valueName: String get() = this.key.name(this.value)
+val <T : Comparable<T>> PropertyEntry<T>.valueName: String get() = this.key.getName(this.value)
 
 infix fun <T : Comparable<T>> Property<T>.with(value: T) = PropertyEntry(this, value)
 
@@ -127,7 +127,7 @@ fun normal(model: Identifier) = listOf(propertiesOf() with BlockStateVariant(mod
 
 context(VariantsBlockStateGenerationRegistrationScope)
 fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>, modelFunction: (Identifier, PropertyEntry<T>) -> Identifier): List<BlockStateVariantEntry> {
-    return property.values.flatMap { value ->
+    return property.possibleValues.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
             propertiesOf(*properties.toTypedArray(), entry) with variant.with(model = modelFunction(variant.getModel()!!, entry))
@@ -142,7 +142,7 @@ infix fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Proper
 
 context(VariantsBlockStateGenerationRegistrationScope)
 fun List<BlockStateVariantEntry>.withHorizontalRotation(property: Property<Direction>): List<BlockStateVariantEntry> {
-    return property.values.flatMap { value ->
+    return property.possibleValues.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value
             val y = when (value) {

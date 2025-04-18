@@ -20,10 +20,10 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 
 class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
@@ -50,7 +50,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                         child().child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
                             padding(Insets.of(0, 0, 0, 3))
 
-                            handler.chanceTable.forEach { chance ->
+                            menu.chanceTable.forEach { chance ->
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
@@ -58,7 +58,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
 
                                     child(Components.item(chance.showingItemStack))
                                     child(horizontalSpace(3))
-                                    child(Components.label(chance.showingItemStack.name).apply {
+                                    child(Components.label(chance.showingItemStack.hoverName).apply {
                                         sizing(Sizing.fixed(150), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.LEFT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
@@ -90,5 +90,5 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
         }
     }
 
-    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
 }

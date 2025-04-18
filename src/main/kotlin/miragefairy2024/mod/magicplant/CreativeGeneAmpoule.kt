@@ -26,18 +26,18 @@ import miragefairy2024.util.string
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsageContext
-import net.minecraft.registry.Registries
-import net.minecraft.text.Text
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.level.Level as World
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
@@ -45,7 +45,7 @@ val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
 
 object CreativeGeneAmpouleCard {
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
-    val item = CreativeGeneAmpouleItem(Item.Settings().maxCount(1))
+    val item = CreativeGeneAmpouleItem(Item.Properties().stacksTo(1))
 }
 
 context(ModContext)
@@ -78,9 +78,9 @@ fun initCreativeGeneAmpoule() {
     }
 }
 
-class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         stack.getTraitStacks().or { return }.traitStackList.forEach { traitStack ->
             tooltip += text { traitStack.trait.getName().style(traitStack.trait.style) + " "() + traitStack.level.toString(2)() }
         }
@@ -92,12 +92,12 @@ class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
         return text { traitStack.trait.getName() + " "() + traitStack.level.toString(2)() }
     }
 
-    override fun useOnBlock(context: ItemUsageContext): ActionResult {
-        val blockEntity = context.world.getMagicPlantBlockEntity(context.blockPos) ?: return ActionResult.PASS
-        if (context.world.isClient) return ActionResult.CONSUME
+    override fun useOn(context: ItemUsageContext): ActionResult {
+        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return ActionResult.PASS
+        if (context.level.isClientSide) return ActionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
-        val b = context.stack.getTraitStacks() ?: TraitStacks.EMPTY
-        if (context.player?.isSneaking != true) {
+        val b = context.itemInHand.getTraitStacks() ?: TraitStacks.EMPTY
+        if (context.player?.isShiftKeyDown != true) {
             blockEntity.setTraitStacks(a + b)
         } else {
             blockEntity.setTraitStacks(a - b)
@@ -106,10 +106,10 @@ class CreativeGeneAmpouleItem(settings: Settings) : Item(settings) {
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
-        if (world.isClient) return TypedActionResult.success(itemStack)
+        val itemStack = user.getItemInHand(hand)
+        if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
-        if (!user.isSneaking) {
+        if (!user.isShiftKeyDown) {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shl 1).let { level -> if (level <= 0) 1 else level } }))
         } else {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shr 1).let { level -> if (level <= 0) 1 else level } }))

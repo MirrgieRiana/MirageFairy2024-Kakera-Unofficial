@@ -13,13 +13,13 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.damage.DamageTypes
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.DamageTypeTags
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.text.Text
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.TagKey
+import net.minecraft.network.chat.Component as Text
 
 object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
     class Value(val attackMap: Map<Element, Double>, val defenceMap: Map<Element, Double>)
@@ -31,23 +31,23 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
 
     enum class Elements(path: String, enName: String, jaName: String, private val predicate: (DamageSource) -> Boolean) : Element {
         OVERALL("overall", "Overall", "全体", { true }),
-        MELEE("melee", "Melee", "近接", { it.isOf(DamageTypes.PLAYER_ATTACK) || it.isOf(DamageTypes.MOB_ATTACK) || it.isOf(DamageTypes.MOB_ATTACK_NO_AGGRO) }),
-        SHOOTING("shooting", "Shooting", "射撃", { it.isIn(DamageTypeTags.IS_PROJECTILE) && !it.isIn(DamageTypeTags.BYPASSES_ARMOR) }),
-        MAGIC("magic", "Magic", "魔法", { it.isIn(DamageTypeTags.BYPASSES_ARMOR) }),
-        FIRE("fire", "Fire", "火属性", { it.isIn(DamageTypeTags.IS_FIRE) }),
-        FALL("fall", "Fall", "落下", { it.isIn(DamageTypeTags.IS_FALL) }),
-        SPINE("spine", "Spine", "棘", { it.isIn(SPINE_DAMAGE_TYPE_TAG) }),
+        MELEE("melee", "Melee", "近接", { it.`is`(DamageTypes.PLAYER_ATTACK) || it.`is`(DamageTypes.MOB_ATTACK) || it.`is`(DamageTypes.MOB_ATTACK_NO_AGGRO) }),
+        SHOOTING("shooting", "Shooting", "射撃", { it.`is`(DamageTypeTags.IS_PROJECTILE) && !it.`is`(DamageTypeTags.BYPASSES_ARMOR) }),
+        MAGIC("magic", "Magic", "魔法", { it.`is`(DamageTypeTags.BYPASSES_ARMOR) }),
+        FIRE("fire", "Fire", "火属性", { it.`is`(DamageTypeTags.IS_FIRE) }),
+        FALL("fall", "Fall", "落下", { it.`is`(DamageTypeTags.IS_FALL) }),
+        SPINE("spine", "Spine", "棘", { it.`is`(SPINE_DAMAGE_TYPE_TAG) }),
         ;
 
-        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.elements.$path" }, enName, jaName)
+        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.elements.$path" }, enName, jaName)
         override val text = text { translation() }
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
 
-    private val SPINE_DAMAGE_TYPE_TAG = TagKey.of(RegistryKeys.DAMAGE_TYPE, MirageFairy2024.identifier("spine"))
+    private val SPINE_DAMAGE_TYPE_TAG = TagKey.create(RegistryKeys.DAMAGE_TYPE, MirageFairy2024.identifier("spine"))
 
-    private val attackTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.attack" }, "%s Attack", "%s攻撃力")
-    private val defenceTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toTranslationKey()}.defence" }, "%s Defence", "%s防御力")
+    private val attackTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.attack" }, "%s Attack", "%s攻撃力")
+    private val defenceTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.defence" }, "%s Defence", "%s防御力")
     override fun getText(value: Value): Text {
         return listOf(
             value.attackMap.map { (element, value) ->
@@ -88,7 +88,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         DamageCallback.EVENT.register { entity, source, amount ->
             var damage = amount
 
-            val attacker = source.attacker
+            val attacker = source.entity
             if (attacker is PlayerEntity) {
                 var attackBonus = 0.0
                 attacker.passiveSkillResult[ElementPassiveSkillEffect].attackMap.forEach { (element, value) ->
@@ -112,8 +112,8 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
             damage
         }
 
-        DamageTypes.CACTUS.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.SWEET_BERRY_BUSH.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.STING.value.registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.CACTUS.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.SWEET_BERRY_BUSH.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        DamageTypes.STING.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
     }
 }

@@ -3,18 +3,18 @@ package miragefairy2024.util
 import miragefairy2024.ModContext
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.util.Identifier
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.CreativeModeTab as ItemGroup
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.resources.ResourceLocation as Identifier
 
 context(ModContext)
 fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
-        it.add(this)
+        it.accept(this)
     }
 }
 
@@ -23,7 +23,7 @@ context(ModContext)
 fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
-            it.add(itemStack)
+            it.accept(itemStack)
         }
     }
 }
@@ -35,16 +35,16 @@ class ItemGroupCard(
     val jaName: String,
     icon: () -> ItemStack,
 ) {
-    val translation = Translation({ "itemGroup.${identifier.toTranslationKey()}" }, enName, jaName)
-    val itemGroupKey = RegistryKeys.ITEM_GROUP with identifier
+    val translation = Translation({ "itemGroup.${identifier.toLanguageKey()}" }, enName, jaName)
+    val itemGroupKey = RegistryKeys.CREATIVE_MODE_TAB with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
-        .displayName(text { translation() })
+        .title(text { translation() })
         .build()
 
     context(ModContext)
     fun init() {
-        itemGroup.register(Registries.ITEM_GROUP, identifier)
+        itemGroup.register(Registries.CREATIVE_MODE_TAB, identifier)
         translation.enJa()
     }
 }

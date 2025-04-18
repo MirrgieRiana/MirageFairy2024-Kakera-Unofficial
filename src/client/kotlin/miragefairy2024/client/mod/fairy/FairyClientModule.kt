@@ -31,12 +31,12 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.client.gui.screen.ingame.InventoryScreen
-import net.minecraft.client.gui.widget.TexturedButtonWidget
-import net.minecraft.client.option.KeyBinding
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.client.gui.screens.inventory.InventoryScreen
+import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
+import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.network.chat.Component as Text
 import org.lwjgl.glfw.GLFW
 
 lateinit var soulStreamKey: KeyBinding
@@ -61,16 +61,16 @@ fun initFairyClientModule() {
             child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
                 child(Components.label(text { GAIN_FAIRY_DREAM_TRANSLATION().black }))
                 child(verticalSpace(2))
-                child(LimitedLabelComponent(itemStack.name.darkBlue).horizontalSizing(Sizing.fixed(160 - 8 - 16 - 6 - 10 - 8)).margins(Insets.of(0, 0, 4, 0)))
+                child(LimitedLabelComponent(itemStack.hoverName.darkBlue).horizontalSizing(Sizing.fixed(160 - 8 - 16 - 6 - 10 - 8)).margins(Insets.of(0, 0, 4, 0)))
             })
         }
-        MinecraftClient.getInstance().toastManager.add(createOwoToast(component))
+        MinecraftClient.getInstance().toasts.addToast(createOwoToast(component))
     }
 
     // ソウルストリームのキーバインド
-    soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.INVENTORY_CATEGORY)
+    soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.CATEGORY_INVENTORY)
     inputEventsHandlers += {
-        while (soulStreamKey.wasPressed()) {
+        while (soulStreamKey.consumeClick()) {
             lastMousePositionInInventory = null
             OpenSoulStreamChannel.sendToServer(Unit)
         }
@@ -93,7 +93,7 @@ fun initFairyClientModule() {
                     alignment(HorizontalAlignment.RIGHT, VerticalAlignment.TOP)
 
                     fun updatePosition() {
-                        if (!screen.recipeBookWidget.isOpen) {
+                        if (!screen.recipeBookComponent.isVisible) {
                             sizing(Sizing.fixed(146), Sizing.fixed(46))
                         } else {
                             sizing(Sizing.fixed(300), Sizing.fixed(46))
@@ -108,8 +108,8 @@ fun initFairyClientModule() {
                     // ボタン
                     val buttonTexture = MirageFairy2024.identifier("textures/gui/sprites/soul_stream_button.png")
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
-                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
-                        screen.close()
+                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouseHandler.xpos(), MinecraftClient.getInstance().mouseHandler.ypos())
+                        screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {
                         tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Text.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })

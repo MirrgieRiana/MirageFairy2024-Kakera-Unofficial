@@ -17,20 +17,20 @@ import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
 import miragefairy2024.util.registerItemTagGeneration
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.enchantment.Enchantment
-import net.minecraft.entity.Entity
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.text.Text
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.TagKey
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 
 context(ModContext)
 fun initToolConfiguration() {
@@ -42,8 +42,8 @@ fun initToolConfiguration() {
     }
 
     ServerLivingEntityEvents.AFTER_DEATH.register { entity, damageSource ->
-        val attacker = damageSource.attacker as? LivingEntity ?: return@register
-        val item = attacker.mainHandStack.item
+        val attacker = damageSource.entity as? LivingEntity ?: return@register
+        val item = attacker.mainHandItem.item
         if (item !is FairyToolItem) return@register
         item.onKilled(entity, attacker, damageSource)
     }

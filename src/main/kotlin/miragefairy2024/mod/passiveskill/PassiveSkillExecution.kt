@@ -23,26 +23,26 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.Identifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.resources.ResourceLocation as Identifier
 import kotlin.math.log
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
-val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}" }, "Passive Skills", "パッシブスキル")
-val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.disabled" }, "Outside target slot", "対象スロット外")
-val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
-val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.supporting" }, "Supporting other item", "他のアイテムを支援中")
-val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.effective" }, "Effective", "発動中")
+val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}" }, "Passive Skills", "パッシブスキル")
+val PASSIVE_SKILL_DISABLED_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.disabled" }, "Outside target slot", "対象スロット外")
+val PASSIVE_SKILL_OVERFLOWED_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.overflowed" }, "Too many passive skills!", "パッシブスキルが多すぎます！")
+val PASSIVE_SKILL_SUPPORTING_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.supporting" }, "Supporting other item", "他のアイテムを支援中")
+val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.effective" }, "Effective", "発動中")
 
 context(ModContext)
 fun initPassiveSkillExecution() {
 
     // イベント処理
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        if (server.ticks % 20 == 0) {
-            server.playerManager.playerList.forEach { player ->
+        if (server.tickCount % 20 == 0) {
+            server.playerList.players.forEach { player ->
 
                 // 現在装備しているパッシブスキルの列挙
                 val passiveSkillProviders = player.findPassiveSkillProviders()
@@ -136,8 +136,8 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     }
 
     // アイテムを検出
-    addItemStack(this.offHandStack, true)
-    this.armorItems.forEach {
+    addItemStack(this.offhandItem, true)
+    this.armorSlots.forEach {
         addItemStack(it, true)
     }
     repeat(SoulStream.SLOT_COUNT) { index ->
@@ -165,7 +165,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
 }
 
 fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
-    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
+    val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
         val motif = passiveSkill.motif
@@ -185,12 +185,12 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
 }
 
 fun PassiveSkillResult.update(player: PlayerEntity) {
-    val context = PassiveSkillContext(player.world, player.eyeBlockPos, player)
+    val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     val oldResult = player.passiveSkillResult
     player.passiveSkillResult = this
 
-    passiveSkillEffectRegistry.entrySet.forEach {
+    passiveSkillEffectRegistry.entrySet().forEach {
         fun <T> f(type: PassiveSkillEffect<T>) {
             val oldValue = oldResult[type]
             val newValue = this[type]
@@ -210,7 +210,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
         override fun fromNbt(nbt: NbtCompound): PassiveSkillResult {
             val result = PassiveSkillResult()
-            nbt.keys.forEach { key ->
+            nbt.allKeys.forEach { key ->
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
                     result.map[passiveSkillEffect] = passiveSkillEffect.fromNbt(nbt[key] as NbtCompound)
                 }
@@ -225,7 +225,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
             val nbt = NbtCompound()
             data.map.entries.forEach {
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
-                    val identifier = passiveSkillEffectRegistry.getId(passiveSkillEffect) ?: return
+                    val identifier = passiveSkillEffectRegistry.getKey(passiveSkillEffect) ?: return
                     nbt.wrapper[identifier.string].compound.set(passiveSkillEffect.toNbt(passiveSkillEffect.castOrThrow(it.value)))
                 }
 

@@ -5,19 +5,19 @@ import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.SimpleContainerData as ArrayPropertyDelegate
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScreenHandler> {
@@ -76,7 +76,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // Item
 
-    val item = BlockItem(block, Item.Settings())
+    val item = BlockItem(block, Item.Properties())
 
 
     // ScreenHandler
@@ -88,7 +88,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
             playerInventory,
             SimpleInventory(inventorySlotConfigurations.size),
             ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.EMPTY,
+            ScreenHandlerContext.NULL,
         )
         createScreenHandler(arguments)
     }
@@ -119,6 +119,6 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         block.register(Registries.BLOCK, identifier)
         blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
         item.register(Registries.ITEM, identifier)
-        screenHandlerType.register(Registries.SCREEN_HANDLER, identifier)
+        screenHandlerType.register(Registries.MENU, identifier)
     }
 }

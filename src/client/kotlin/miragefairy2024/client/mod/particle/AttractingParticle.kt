@@ -1,12 +1,12 @@
 package miragefairy2024.client.mod.particle
 
 import net.minecraft.client.particle.Particle
-import net.minecraft.client.particle.ParticleFactory
-import net.minecraft.client.particle.ParticleTextureSheet
-import net.minecraft.client.particle.SpriteBillboardParticle
-import net.minecraft.client.particle.SpriteProvider
-import net.minecraft.client.world.ClientWorld
-import net.minecraft.particle.DefaultParticleType
+import net.minecraft.client.particle.ParticleProvider as ParticleFactory
+import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
+import net.minecraft.client.particle.SpriteSet as SpriteProvider
+import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
+import net.minecraft.core.particles.SimpleParticleType as DefaultParticleType
 
 class AttractingParticle internal constructor(
     clientWorld: ClientWorld,
@@ -18,34 +18,34 @@ class AttractingParticle internal constructor(
     private val aZ: Double
 
     init {
-        velocityX = 0.0
-        velocityY = 0.0
-        velocityZ = 0.0
-        maxAge = 40
-        aX = (toX - fromX) / (maxAge * (maxAge + 1) / 2.0)
-        aY = (toY - fromY) / (maxAge * (maxAge + 1) / 2.0)
-        aZ = (toZ - fromZ) / (maxAge * (maxAge + 1) / 2.0)
-        scale *= 0.3F
+        xd = 0.0
+        yd = 0.0
+        zd = 0.0
+        lifetime = 40
+        aX = (toX - fromX) / (lifetime * (lifetime + 1) / 2.0)
+        aY = (toY - fromY) / (lifetime * (lifetime + 1) / 2.0)
+        aZ = (toZ - fromZ) / (lifetime * (lifetime + 1) / 2.0)
+        quadSize *= 0.3F
     }
 
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
 
     override fun move(dx: Double, dy: Double, dz: Double) {
-        boundingBox = boundingBox.offset(dx, dy, dz)
-        repositionFromBoundingBox()
+        boundingBox = boundingBox.move(dx, dy, dz)
+        setLocationFromBoundingbox()
     }
 
     override fun tick() {
-        velocityX += aX
-        velocityY += aY
-        velocityZ += aZ
+        xd += aX
+        yd += aY
+        zd += aZ
         super.tick()
     }
 
     class Factory(private val spriteProvider: SpriteProvider) : ParticleFactory<DefaultParticleType> {
         override fun createParticle(defaultParticleType: DefaultParticleType, clientWorld: ClientWorld, d: Double, e: Double, f: Double, g: Double, h: Double, i: Double): Particle {
             val particle = AttractingParticle(clientWorld, d, e, f, g, h, i)
-            particle.setSprite(spriteProvider)
+            particle.pickSprite(spriteProvider)
             return particle
         }
     }

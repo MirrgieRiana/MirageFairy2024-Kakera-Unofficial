@@ -7,15 +7,15 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.data.client.Model
-import net.minecraft.data.client.Models
-import net.minecraft.data.client.TextureKey
-import net.minecraft.data.client.TextureMap
-import net.minecraft.data.client.TexturedModel
-import net.minecraft.item.Item
-import net.minecraft.util.Identifier
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.data.models.model.ModelTemplate as Model
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.data.models.model.TextureMapping as TextureMap
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.world.item.Item
+import net.minecraft.resources.ResourceLocation as Identifier
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
@@ -24,7 +24,7 @@ import java.util.function.Supplier
 // Model Builder
 
 fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
-    override fun upload(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
+    override fun create(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
         modelCollector.accept(id) { creator(textures).toJsonElement() }
         return id
     }
@@ -116,7 +116,7 @@ fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: Textur
 
 val TextureKey.string get() = this.toString()
 
-infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.makeFactory({ textureMap }, this).get(Blocks.AIR)
+infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.createDefault({ textureMap }, this).get(Blocks.AIR)
 fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with TextureMap(*textureEntries)
 
 
@@ -125,7 +125,7 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with 
 context(ModContext)
 fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
     val texturedModel = texturedModelCreator()
-    texturedModel.model.upload(identifierGetter(), texturedModel.textures, it.modelCollector)
+    texturedModel.template.create(identifierGetter(), texturedModel.mapping, it.modelOutput)
 }
 
 context(ModContext)
@@ -135,10 +135,10 @@ context(ModContext)
 fun Item.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this) }) = this.registerModelGeneration { model with textureMapCreator() }
 
 context(ModContext)
-fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.GENERATED)
+fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
 
 context(ModContext)
-fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.GENERATED) { TextureMap.layer0(block) }
+fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block) }
 
 context(ModContext)
-fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Factory) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }
+fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Provider) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }

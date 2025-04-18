@@ -1,15 +1,15 @@
 package miragefairy2024.lib
 
 import miragefairy2024.util.quickMove
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.screen.slot.Slot
-import net.minecraft.text.Text
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.world.inventory.Slot
+import net.minecraft.network.chat.Component as Text
 
 open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
@@ -36,12 +36,12 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
     }
 
     class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
-        override fun canInsert(stack: ItemStack) = configuration.isValid(stack)
+        override fun mayPlace(stack: ItemStack) = configuration.isValid(stack)
     }
 
     init {
-        checkSize(arguments.inventory, card.guiSlotConfigurations.size)
-        checkDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
+        checkContainerSize(arguments.inventory, card.guiSlotConfigurations.size)
+        checkContainerDataCount(arguments.propertyDelegate, card.propertyConfigurations.size)
 
         // TODO PlayerInventoryのカスタマイズ
         val y = card.guiHeight - 82
@@ -58,18 +58,18 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         }
 
         @Suppress("LeakingThis")
-        addProperties(arguments.propertyDelegate)
+        addDataSlots(arguments.propertyDelegate)
     }
 
     fun getTooltip(slot: Slot): List<Text>? {
-        if (slot.hasStack()) return null // アイテムのツールチップを優先
+        if (slot.hasItem()) return null // アイテムのツールチップを優先
         if (slot !is MachineSlot) return null
         return slot.configuration.getTooltip()
     }
 
-    override fun canUse(player: PlayerEntity) = arguments.inventory.canPlayerUse(player)
+    override fun stillValid(player: PlayerEntity) = arguments.inventory.stillValid(player)
 
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until slots.size
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

@@ -6,10 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Channel
 import miragefairy2024.util.string
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.particle.ParticleEffect
-import net.minecraft.particle.ParticleType
-import net.minecraft.util.math.Vec3d
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.particles.ParticleOptions as ParticleEffect
+import net.minecraft.core.particles.ParticleType
+import net.minecraft.world.phys.Vec3 as Vec3d
 
 class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquareParticleEffect>(alwaysSpawn, MagicSquareParticleEffect.FACTORY) {
     companion object {
@@ -22,13 +22,13 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
         }
     }
 
-    override fun getCodec() = CODEC
+    override fun codec() = CODEC
 }
 
 class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val delay: Float) : ParticleEffect {
     companion object {
-        val FACTORY = object : ParticleEffect.Factory<MagicSquareParticleEffect> {
-            override fun read(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
+        val FACTORY = object : ParticleEffect.Deserializer<MagicSquareParticleEffect> {
+            override fun fromNetwork(type: ParticleType<MagicSquareParticleEffect>, buf: PacketByteBuf): MagicSquareParticleEffect {
                 val layer = buf.readInt()
                 val targetPositionX = buf.readDouble()
                 val targetPositionY = buf.readDouble()
@@ -37,7 +37,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
                 return MagicSquareParticleEffect(layer, Vec3d(targetPositionX, targetPositionY, targetPositionZ), delay)
             }
 
-            override fun read(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
+            override fun fromCommand(type: ParticleType<MagicSquareParticleEffect>, reader: StringReader): MagicSquareParticleEffect {
                 val layer = reader.readInt()
                 val targetPositionX = reader.readDouble()
                 val targetPositionY = reader.readDouble()
@@ -50,7 +50,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
 
     override fun getType() = ParticleTypeCard.MAGIC_SQUARE.particleType
 
-    override fun write(buf: PacketByteBuf) {
+    override fun writeToNetwork(buf: PacketByteBuf) {
         buf.writeInt(layer)
         buf.writeDouble(targetPosition.x)
         buf.writeDouble(targetPosition.y)
@@ -58,7 +58,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
         buf.writeFloat(delay)
     }
 
-    override fun asString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string
+    override fun writeToString() = ParticleTypeCard.MAGIC_SQUARE.identifier.string
 }
 
 object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFairy2024.identifier("magic_square_particle")) {

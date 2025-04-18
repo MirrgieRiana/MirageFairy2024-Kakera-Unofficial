@@ -7,9 +7,9 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
-import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.text.Text
+import net.minecraft.world.effect.MobEffect as StatusEffect
+import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
+import net.minecraft.network.chat.Component as Text
 
 object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<StatusEffect, Entry>)
@@ -17,7 +17,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun getText(value: Value): Text {
         return value.map.map { (statusEffect, entry) ->
-            text { statusEffect.name + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
+            text { statusEffect.displayName + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
         }.join(text { ","() })
     }
 
@@ -36,7 +36,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
         newValue.map.forEach { (statusEffect, entry) ->
-            context.player.addStatusEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
+            context.player.addEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
     }
 }

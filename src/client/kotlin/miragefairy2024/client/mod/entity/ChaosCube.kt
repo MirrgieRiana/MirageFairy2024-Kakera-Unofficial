@@ -4,29 +4,29 @@ import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.ChaosCubeEntity
 import miragefairy2024.util.times
-import net.minecraft.client.model.ModelPart
-import net.minecraft.client.model.ModelPartBuilder
-import net.minecraft.client.model.ModelTransform
-import net.minecraft.client.render.VertexConsumer
-import net.minecraft.client.render.entity.EntityRendererFactory
-import net.minecraft.client.render.entity.MobEntityRenderer
-import net.minecraft.client.render.entity.model.EntityModel
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.MathHelper
+import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
+import net.minecraft.client.model.geom.PartPose as ModelTransform
+import com.mojang.blaze3d.vertex.VertexConsumer
+import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
+import net.minecraft.client.renderer.entity.MobRenderer as MobEntityRenderer
+import net.minecraft.client.model.EntityModel
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.util.Mth as MathHelper
 import org.joml.Quaternionf
 import kotlin.math.atan
 import kotlin.math.sqrt
 
-class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntityRenderer<ChaosCubeEntity, ChaosCubeEntityModel>(context, ChaosCubeEntityModel(context.getPart(ROOT.entityModelLayer)), 0.5F) {
+class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntityRenderer<ChaosCubeEntity, ChaosCubeEntityModel>(context, ChaosCubeEntityModel(context.bakeLayer(ROOT.entityModelLayer)), 0.5F) {
     companion object {
         val ROOT = EntityModelLayerCard(ChaosCubeCard.identifier, "root", 64, 64) {
             (0..1).forEach { x ->
                 (0..1).forEach { y ->
                     (0..1).forEach { z ->
-                        it.addChild(
+                        it.addOrReplaceChild(
                             "part${x * 4 + y * 2 + z}",
-                            ModelPartBuilder.create().uv(0 + x * 20, 0 + y * 20 + (1 - z) * 10).cuboid(0F, 0F, 0F, 5F, 5F, 5F),
-                            ModelTransform.pivot(-5.5F + 6F * x, -5.5F + 6F * y, -5.5F + 6F * z),
+                            ModelPartBuilder.create().texOffs(0 + x * 20, 0 + y * 20 + (1 - z) * 10).addBox(0F, 0F, 0F, 5F, 5F, 5F),
+                            ModelTransform.offset(-5.5F + 6F * x, -5.5F + 6F * y, -5.5F + 6F * z),
                         )
                     }
                 }
@@ -36,7 +36,7 @@ class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntit
 
     private val texture = "textures/entity/" * ChaosCubeCard.identifier * ".png"
 
-    override fun getTexture(entity: ChaosCubeEntity) = texture
+    override fun getTextureLocation(entity: ChaosCubeEntity) = texture
 }
 
 class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeEntity>() {
@@ -49,11 +49,11 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
     private var segments: Array<ChaosCubeEntity.Segment>? = null
     private val rotations = (0 until 8).map { Quaternionf() }.toTypedArray()
 
-    override fun setAngles(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) {
-        val delta = animationProgress - entity.age
+    override fun setupAnim(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) {
+        val delta = animationProgress - entity.tickCount
 
         val f = animationProgress * 2 * MathHelper.PI / 100
-        root.yaw = f
+        root.yRot = f
 
         segments = entity.segments
         repeat(8) { i ->
@@ -64,17 +64,17 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
         }
     }
 
-    override fun render(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
+    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
         if (!root.visible) return
         matrices.stack {
             matrices.translate(0F, 0.5F, 0F)
-            root.rotate(matrices)
-            matrices.multiply(Quaternionf().rotateZYX(ROLL, 0F, PITCH))
+            root.translateAndRotate(matrices)
+            matrices.mulPose(Quaternionf().rotateZYX(ROLL, 0F, PITCH))
 
             repeat(8) { i ->
                 val segment = segments!![i]
                 matrices.stack {
-                    matrices.multiply(rotations[i])
+                    matrices.mulPose(rotations[i])
                     parts[segment.partIndex].render(matrices, vertices, light, overlay, red, green, blue, alpha)
                 }
             }

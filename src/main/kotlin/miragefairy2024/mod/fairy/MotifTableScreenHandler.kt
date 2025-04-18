@@ -6,16 +6,16 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.register
 import miragefairy2024.util.toIdentifier
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
     val length = buf.readInt()
     val chanceTable = mutableListOf<CondensedMotifChance>()
     repeat(length) {
-        val showingItemStack = buf.readItemStack()
-        val motifId = buf.readString()
+        val showingItemStack = buf.readItem()
+        val motifId = buf.readUtf()
         val rate = buf.readDouble()
         val count = buf.readDouble()
         chanceTable += CondensedMotifChance(showingItemStack, motifRegistry.get(motifId.toIdentifier())!!, rate, count)
@@ -25,10 +25,10 @@ val motifTableScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInve
 
 context(ModContext)
 fun initMotifTableScreenHandler() {
-    motifTableScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("motif_table"))
+    motifTableScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("motif_table"))
 }
 
 class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
 }

@@ -24,15 +24,15 @@ import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.translate
-import net.minecraft.text.Text
+import net.minecraft.network.chat.Component as Text
 
 object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>(CommonMotifRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
         COMMON_MOTIF_RECIPES.sortedBy {
             when (it) {
                 is AlwaysCommonMotifRecipe -> "always:"
-                is BiomeCommonMotifRecipe -> "biome:" + it.biome.value.string
-                is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.id.string
+                is BiomeCommonMotifRecipe -> "biome:" + it.biome.location().string
+                is BiomeTagCommonMotifRecipe -> "biome_tag:" + it.biomeTag.location().string
             }
         }.forEach { recipe ->
             registry.add(CommonMotifRecipeReiCategoryCard.Display(recipe))
@@ -51,15 +51,15 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
                 Widgets.createRecipeBase(bounds),
                 Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
                     is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
-                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.value.toTranslationKey("biome")) }
-                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.id.path() }
+                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.location().toLanguageKey("biome")) }
+                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.location().path() }
                 })
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
                         when (val recipe = display.recipe) {
                             is AlwaysCommonMotifRecipe -> it
                             is BiomeCommonMotifRecipe -> it
-                            is BiomeTagCommonMotifRecipe -> it.tooltip(text { recipe.biomeTag.id.string() })
+                            is BiomeTagCommonMotifRecipe -> it.tooltip(text { recipe.biomeTag.location().string() })
                         }
                     }
                     .noShadow()
@@ -69,5 +69,5 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }

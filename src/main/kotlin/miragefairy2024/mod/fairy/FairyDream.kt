@@ -13,26 +13,26 @@ import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.block.ChestBlock
-import net.minecraft.block.InventoryProvider
-import net.minecraft.block.entity.ChestBlockEntity
-import net.minecraft.entity.EntityType
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
-import net.minecraft.util.math.MathHelper
-import net.minecraft.world.RaycastContext
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ChestBlock
+import net.minecraft.world.WorldlyContainerHolder as InventoryProvider
+import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.phys.HitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.AABB as Box
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.level.ClipContext as RaycastContext
+import net.minecraft.world.level.Level as World
 
 private val identifier = MirageFairy2024.identifier("fairy_dream")
-val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
-val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
+val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
+val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
 
 context(ModContext)
 fun initFairyDream() {
@@ -40,14 +40,14 @@ fun initFairyDream() {
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->
         player.fairyDreamContainer.clear()
-        player.sendMessage(text { "Cleared fairy dream"() }, true)
+        player.displayClientMessage(text { "Cleared fairy dream"() }, true)
     }
     registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
-        val fairyItemStack = player.getStackInHand(hand.opposite)
-        if (!fairyItemStack.isOf(FairyCard.item)) return@registerServerDebugItem
+        val fairyItemStack = player.getItemInHand(hand.opposite)
+        if (!fairyItemStack.`is`(FairyCard.item)) return@registerServerDebugItem
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
-        if (!player.isSneaking) {
+        if (!player.isShiftKeyDown) {
             player.fairyDreamContainer[motif] = true
             GainFairyDreamChannel.sendToClient(player, motif)
         } else {
@@ -58,10 +58,10 @@ fun initFairyDream() {
 
     // 妖精の夢回収判定
     ServerTickEvents.END_SERVER_TICK.register { server ->
-        if (server.ticks % (20 * 5) == 0) {
-            server.playerManager.playerList.forEach { player ->
+        if (server.tickCount % (20 * 5) == 0) {
+            server.playerList.players.forEach { player ->
                 if (player.isSpectator) return@forEach
-                val world = player.world
+                val world = player.level()
                 val random = world.random
 
                 val motifs = mutableSetOf<Motif>()
@@ -78,7 +78,7 @@ fun initFairyDream() {
 
                         if (item is FairyDreamProviderItem) motifs += item.getFairyDreamMotifs(itemStack)
 
-                        val block = Block.getBlockFromItem(item)
+                        val block = Block.byItem(item)
                         if (block != Blocks.AIR) blocks += block
 
                     }
@@ -93,12 +93,12 @@ fun initFairyDream() {
 
                         run noInventory@{
                             val inventory = if (block is InventoryProvider) {
-                                block.getInventory(blockState, world, blockPos)
+                                block.getContainer(blockState, world, blockPos)
                             } else if (blockState.hasBlockEntity()) {
                                 val blockEntity = world.getBlockEntity(blockPos)
                                 if (blockEntity is Inventory) {
                                     if (blockEntity is ChestBlockEntity && block is ChestBlock) {
-                                        ChestBlock.getInventory(block, blockState, world, blockPos, true) ?: return@noInventory
+                                        ChestBlock.getContainer(block, blockState, world, blockPos, true) ?: return@noInventory
                                     } else {
                                         blockEntity
                                     }
@@ -122,29 +122,29 @@ fun initFairyDream() {
                     }
 
                     // 足元判定
-                    insertBlockPos(player.blockPos)
-                    insertBlockPos(player.blockPos.down())
+                    insertBlockPos(player.blockPosition())
+                    insertBlockPos(player.blockPosition().below())
 
                     // 視線判定
-                    val start = player.eyePos
-                    val pitch = player.pitch
-                    val yaw = player.yaw
+                    val start = player.eyePosition
+                    val pitch = player.xRot
+                    val yaw = player.yRot
                     val d = MathHelper.cos(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
                     val a = MathHelper.sin(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
                     val e = -MathHelper.cos(-pitch * (MathHelper.PI / 180))
                     val c = MathHelper.sin(-pitch * (MathHelper.PI / 180))
                     val end = start.add(a * e * 32.0, c * 32.0, d * e * 32.0)
-                    val raycastResult = world.raycast(RaycastContext(start, end, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, player))
+                    val raycastResult = world.clip(RaycastContext(start, end, RaycastContext.Block.OUTLINE, RaycastContext.Fluid.NONE, player))
                     if (raycastResult.type == HitResult.Type.BLOCK) insertBlockPos(raycastResult.blockPos)
 
                     // 周辺エンティティ判定
-                    val entities = world.getOtherEntities(player, Box(player.eyePos.add(-8.0, -8.0, -8.0), player.eyePos.add(8.0, 8.0, 8.0)))
+                    val entities = world.getEntities(player, Box(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
                     entities.forEach {
                         entityTypes += it.type
                     }
 
                     // 周辺ブロック判定
-                    insertBlockPos(player.eyeBlockPos.add(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
+                    insertBlockPos(player.eyeBlockPos.offset(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8))
 
                 }
                 items.forEach {

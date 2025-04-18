@@ -21,26 +21,26 @@ import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventories
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.slot.Slot
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.ContainerHelper as Inventories
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.TagKey
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.Slot
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
+val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
 
 context(ModContext)
 fun initSoulStream() {
@@ -51,7 +51,7 @@ fun initSoulStream() {
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
-            player.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
                 }
@@ -64,7 +64,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("soul_stream"))
+    soulStreamScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("soul_stream"))
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
@@ -81,14 +81,14 @@ object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
         override fun fromNbt(nbt: NbtCompound): SoulStream {
             val data = SoulStream()
-            Inventories.readNbt(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.stacks)
+            Inventories.loadAllItems(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.items)
             return data
         }
 
         override fun toNbt(data: SoulStream): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
-                Inventories.writeNbt(it, data.stacks)
+                Inventories.saveAllItems(it, data.items)
             })
             return nbt
         }
@@ -131,13 +131,13 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory,
         }
         repeat(soulStream.size) { i ->
             addSlot(object : Slot(soulStream, i, 0, 0) {
-                override fun canInsert(stack: ItemStack) = stack.isIn(SOUL_STREAM_CONTAINABLE_TAG)
+                override fun mayPlace(stack: ItemStack) = stack.`is`(SOUL_STREAM_CONTAINABLE_TAG)
             })
         }
     }
 
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 + 9 until 9 * 4 + SoulStream.SLOT_COUNT
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

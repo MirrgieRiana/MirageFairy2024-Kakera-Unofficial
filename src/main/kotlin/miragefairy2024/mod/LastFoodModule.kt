@@ -11,11 +11,11 @@ import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.world.GameRules
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.world.level.GameRules
 import java.time.Instant
 
 context(ModContext)
@@ -25,10 +25,10 @@ fun initLastFoodModule() {
     LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
 
     EatFoodCallback.EVENT.register { entity, world, stack ->
-        if (world.isClient) return@register
+        if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
-        if (!stack.isFood) return@register
+        if (!stack.isEdible) return@register
         entity.lastFood.itemStack = stack.copy()
         entity.lastFood.time = Instant.now()
         LastFoodExtraPlayerDataCategory.sync(entity)
@@ -39,7 +39,7 @@ fun initLastFoodModule() {
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
         if (entity.isSpectator) return@register
-        if (entity.world.gameRules.getBoolean(GameRules.KEEP_INVENTORY)) return@register
+        if (entity.level().gameRules.getBoolean(GameRules.RULE_KEEPINVENTORY)) return@register
         entity.lastFood.itemStack = null
         entity.lastFood.time = null
         LastFoodExtraPlayerDataCategory.sync(entity)

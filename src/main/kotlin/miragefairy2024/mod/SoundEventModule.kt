@@ -7,11 +7,11 @@ import miragefairy2024.util.Channel
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvent
-import net.minecraft.util.math.BlockPos
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.core.BlockPos
 
 enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: List<String>) {
     MAGIC1("magic1", "Magic fired", "魔法が発射される", listOf("magic1")),
@@ -30,24 +30,24 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
 
     val identifier = MirageFairy2024.identifier(path)
     val sounds = soundPaths.map { MirageFairy2024.identifier(it) }
-    val translation = Translation({ identifier.toTranslationKey("subtitles") }, en, ja)
-    val soundEvent: SoundEvent = SoundEvent.of(identifier)
+    val translation = Translation({ identifier.toLanguageKey("subtitles") }, en, ja)
+    val soundEvent: SoundEvent = SoundEvent.createVariableRangeEvent(identifier)
 }
 
 object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier("sound")) {
     override fun writeToBuf(buf: PacketByteBuf, packet: SoundEventPacket) {
-        buf.writeIdentifier(Registries.SOUND_EVENT.getId(packet.soundEvent))
+        buf.writeResourceLocation(Registries.SOUND_EVENT.getKey(packet.soundEvent))
         buf.writeBlockPos(packet.pos)
-        buf.writeString(packet.category.name)
+        buf.writeUtf(packet.category.name)
         buf.writeFloat(packet.volume)
         buf.writeFloat(packet.pitch)
         buf.writeBoolean(packet.useDistance)
     }
 
     override fun readFromBuf(buf: PacketByteBuf): SoundEventPacket {
-        val soundEvent = Registries.SOUND_EVENT.get(buf.readIdentifier())!!
+        val soundEvent = Registries.SOUND_EVENT.get(buf.readResourceLocation())!!
         val pos = buf.readBlockPos()
-        val category = buf.readString().let { name -> SoundCategory.entries.first { it.name == name } }
+        val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }
         val volume = buf.readFloat()
         val pitch = buf.readFloat()
         val useDistance = buf.readBoolean()

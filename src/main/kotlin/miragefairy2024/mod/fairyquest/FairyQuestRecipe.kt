@@ -35,26 +35,26 @@ import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.loot.LootTables
-import net.minecraft.loot.condition.LootCondition
-import net.minecraft.loot.context.LootContext
-import net.minecraft.loot.function.ConditionalLootFunction
-import net.minecraft.loot.function.LootFunctionType
-import net.minecraft.recipe.Ingredient
-import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.ItemTags
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.DefaultFeatureConfig
-import net.minecraft.world.gen.feature.util.FeatureContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition as LootCondition
+import net.minecraft.world.level.storage.loot.LootContext
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction as ConditionalLootFunction
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType as LootFunctionType
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.ItemTags
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 
-val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("fairy_quest_recipe"))
+val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface FairyQuestRecipe {
@@ -236,22 +236,22 @@ fun initFairyQuestRecipe() {
         // 村チェストドロップ
         run {
             val allVillageChests = listOf(
-                LootTables.VILLAGE_WEAPONSMITH_CHEST,
-                LootTables.VILLAGE_TOOLSMITH_CHEST,
-                LootTables.VILLAGE_ARMORER_CHEST,
-                LootTables.VILLAGE_CARTOGRAPHER_CHEST,
-                LootTables.VILLAGE_MASON_CHEST,
-                LootTables.VILLAGE_SHEPARD_CHEST,
-                LootTables.VILLAGE_BUTCHER_CHEST,
-                LootTables.VILLAGE_FLETCHER_CHEST,
-                LootTables.VILLAGE_FISHER_CHEST,
-                LootTables.VILLAGE_TANNERY_CHEST,
-                LootTables.VILLAGE_TEMPLE_CHEST,
-                LootTables.VILLAGE_DESERT_HOUSE_CHEST,
-                LootTables.VILLAGE_PLAINS_CHEST,
-                LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
-                LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
-                LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+                LootTables.VILLAGE_WEAPONSMITH,
+                LootTables.VILLAGE_TOOLSMITH,
+                LootTables.VILLAGE_ARMORER,
+                LootTables.VILLAGE_CARTOGRAPHER,
+                LootTables.VILLAGE_MASON,
+                LootTables.VILLAGE_SHEPHERD,
+                LootTables.VILLAGE_BUTCHER,
+                LootTables.VILLAGE_FLETCHER,
+                LootTables.VILLAGE_FISHER,
+                LootTables.VILLAGE_TANNERY,
+                LootTables.VILLAGE_TEMPLE,
+                LootTables.VILLAGE_DESERT_HOUSE,
+                LootTables.VILLAGE_PLAINS_HOUSE,
+                LootTables.VILLAGE_TAIGA_HOUSE,
+                LootTables.VILLAGE_SNOWY_HOUSE,
+                LootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
             fun registerChestLoot(lootTableId: Identifier, weight: Int) {
@@ -287,7 +287,7 @@ fun initFairyQuestRecipe() {
         val placementModifiers = placementModifiers { per(256) + flower }
         RegistryKeys.CONFIGURED_FEATURE[configuredFeatureKey] with placementModifiers
     }
-    placedFeatureKey.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { overworld }
+    placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
     SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
 
@@ -308,7 +308,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
                 FairyQuestRecipeCard.LootCategory.RARE -> table += Chance(1.0, recipe.identifier)
             }
         }
-        val recipeId = table.weightedRandom(context.random) ?: return null // 有効なレシピが一つもない
+        val recipeId = table.weightedRandom(context.random()) ?: return null // 有効なレシピが一つもない
 
         return FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipeId(recipeId) }
     }
@@ -317,12 +317,12 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
 class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
     companion object {
         val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
-            override fun toJson(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
-                super.toJson(jsonObject, conditionalLootFunction, jsonSerializationContext)
+            override fun serialize(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
+                super.serialize(jsonObject, conditionalLootFunction, jsonSerializationContext)
                 jsonObject.add("id", conditionalLootFunction.recipeId.string.jsonElement)
             }
 
-            override fun fromJson(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
+            override fun deserialize(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
                 val id = json.toJsonWrapper()["id"].asString().toIdentifier()
                 return SetFairyQuestRecipeLootFunction(id, conditions.toList())
             }
@@ -331,7 +331,7 @@ class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditio
 
     override fun getType() = SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE
 
-    override fun process(stack: ItemStack, context: LootContext): ItemStack {
+    override fun run(stack: ItemStack, context: LootContext): ItemStack {
         stack.setFairyQuestRecipeId(recipeId)
         return stack
     }

@@ -16,27 +16,27 @@ import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.block.Block
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.AliasedBlockItem
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsageContext
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.ItemNameBlockItem as AliasedBlockItem
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.level.Level as World
 
-class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(block, settings) {
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         if (world == null) return
         val player = clientProxy?.getClientPlayer() ?: return
 
@@ -50,7 +50,7 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
         tooltip += text { GUI_TRANSLATION().yellow }
 
         // プレイヤーのメインハンドの種子の特性を得る
-        val otherTraitStacks = if (player.mainHandStack.item == this) player.mainHandStack.getTraitStacks() else null
+        val otherTraitStacks = if (player.mainHandItem.item == this) player.mainHandItem.getTraitStacks() else null
 
         // ヘッダー行
         run {
@@ -92,7 +92,7 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
                     }
                 }
 
-                val traitEffects = trait.getTraitEffects(world, player.blockPos, level)
+                val traitEffects = trait.getTraitEffects(world, player.blockPosition(), level)
                 tooltip += if (traitEffects != null) {
                     val description = text {
                         traitEffects.effects
@@ -110,13 +110,13 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
 
     }
 
-    override fun useOnBlock(context: ItemUsageContext): ActionResult {
-        if (context.player?.isSneaking == true) return ActionResult.PASS
-        return super.useOnBlock(context)
+    override fun useOn(context: ItemUsageContext): ActionResult {
+        if (context.player?.isShiftKeyDown == true) return ActionResult.PASS
+        return super.useOn(context)
     }
 
     override fun place(context: ItemPlacementContext): ActionResult {
-        if (context.stack.getTraitStacks() != null) {
+        if (context.itemInHand.getTraitStacks() != null) {
             return super.place(context)
         } else {
             val player = context.player ?: return ActionResult.FAIL
@@ -125,16 +125,16 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
         }
     }
 
-    override fun hasGlint(stack: ItemStack) = stack.isRare() || super.hasGlint(stack)
+    override fun isFoil(stack: ItemStack) = stack.isRare() || super.isFoil(stack)
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (user.isSneaking) {
-            val itemStack = user.getStackInHand(hand)
-            if (world.isClient) return TypedActionResult.success(itemStack)
+        if (user.isShiftKeyDown) {
+            val itemStack = user.getItemInHand(hand)
+            if (world.isClientSide) return TypedActionResult.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
-            user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            user.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPos), traitStacks)
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
@@ -150,13 +150,13 @@ class MagicPlantSeedItem(block: Block, settings: Settings) : AliasedBlockItem(bl
 }
 
 fun ItemStack.getTraitStacks(): TraitStacks? {
-    val nbt = this.nbt ?: return null
+    val nbt = this.tag ?: return null
     return TraitStacks.readFromNbt(nbt)
 }
 
 fun ItemStack.setTraitStacks(traitStacks: TraitStacks) {
-    getOrCreateNbt().put("TraitStacks", traitStacks.toNbt())
+    getOrCreateTag().put("TraitStacks", traitStacks.toNbt())
 }
 
-fun ItemStack.isRare() = this.nbt.or { return false }.wrapper["Rare"].boolean.get().or { false }
-fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateNbt().wrapper["Rare"].boolean.set(if (isRare) true else null)
+fun ItemStack.isRare() = this.tag.or { return false }.wrapper["Rare"].boolean.get().or { false }
+fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateTag().wrapper["Rare"].boolean.set(if (isRare) true else null)

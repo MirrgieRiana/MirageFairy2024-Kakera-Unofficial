@@ -31,30 +31,30 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.level.Level as World
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
     val jaName = "破損したフェアリークエストカード"
     val identifier = MirageFairy2024.identifier("fairy_quest_card")
-    val item = FairyQuestCardItem(Item.Settings())
+    val item = FairyQuestCardItem(Item.Properties())
 }
 
-private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.translationKey + ".format" }, "“%s”", "『%s』")
+private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.descriptionId + ".format" }, "“%s”", "『%s』")
 
 context(ModContext)
 fun initFairyQuestCardItem() {
@@ -81,25 +81,25 @@ fun initFairyQuestCardItem() {
     fairyQuestCardFairyQuestTranslation.enJa()
 
     registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
-        input(FairyQuestCardIngredient.toVanilla())
+        requires(FairyQuestCardIngredient.toVanilla())
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
     FairyQuestCardIngredient.SERIALIZER.register()
 }
 
-class FairyQuestCardItem(settings: Settings) : Item(settings) {
+class FairyQuestCardItem(settings: Properties) : Item(settings) {
     override fun getName(stack: ItemStack): Text {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return text { fairyQuestCardFairyQuestTranslation(recipe.title) }
     }
 
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val recipeId = stack.getFairyQuestRecipeId()
         if (recipeId == null) {
             tooltip += text { "null"() }
         } else {
-            if (fairyQuestRecipeRegistry.containsId(recipeId)) {
+            if (fairyQuestRecipeRegistry.containsKey(recipeId)) {
                 // nop
             } else {
                 tooltip += text { recipeId.string() }
@@ -108,29 +108,29 @@ class FairyQuestCardItem(settings: Settings) : Item(settings) {
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
+        val itemStack = user.getItemInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
-        if (world.isClient) return TypedActionResult.success(itemStack)
-        user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+        if (world.isClientSide) return TypedActionResult.success(itemStack)
+        user.openMenu(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPos))
+                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPosition()))
             }
 
             override fun getDisplayName() = recipe.title
 
             override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeString(fairyQuestRecipeRegistry.getId(recipe)!!.string)
+                buf.writeUtf(fairyQuestRecipeRegistry.getKey(recipe)!!.string)
             }
         })
         return TypedActionResult.consume(itemStack)
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): Identifier? = nbt.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
+fun ItemStack.getFairyQuestRecipeId(): Identifier? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
-fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateNbt().wrapper["FairyQuestRecipe"].string.set(identifier.string)
-fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getId(recipe)!!)
+fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
+fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {
     ModelData(
@@ -153,7 +153,7 @@ object FairyQuestCardIngredient : CustomIngredient {
     }
 
     override fun requiresTesting() = true
-    override fun test(stack: ItemStack) = stack.isOf(FairyQuestCardCard.item)
+    override fun test(stack: ItemStack) = stack.`is`(FairyQuestCardCard.item)
 
     override fun getMatchingStacks(): List<ItemStack> {
         return fairyQuestRecipeRegistry.sortedEntrySet.map {

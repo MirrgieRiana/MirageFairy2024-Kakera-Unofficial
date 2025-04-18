@@ -2,9 +2,9 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.util.bitCount
 import miragefairy2024.util.toNbtList
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtElement
-import net.minecraft.nbt.NbtList
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.Tag as NbtElement
+import net.minecraft.nbt.ListTag as NbtList
 import java.util.SortedMap
 
 // api
@@ -31,8 +31,8 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
         val EMPTY = of()
 
         fun readFromNbt(parent: NbtCompound, key: String = "TraitStacks"): TraitStacks? {
-            if (!parent.contains(key, NbtElement.LIST_TYPE.toInt())) return null
-            return parent.getList(key, NbtElement.COMPOUND_TYPE.toInt()).toTraitStacks()
+            if (!parent.contains(key, NbtElement.TAG_LIST.toInt())) return null
+            return parent.getList(key, NbtElement.TAG_COMPOUND.toInt()).toTraitStacks()
         }
     }
 

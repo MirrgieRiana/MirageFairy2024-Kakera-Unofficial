@@ -20,14 +20,14 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.hydrogen.Single
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 
 abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: String, enName: String, jaName: String) : ReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(path, enName, jaName) {
     override val serializer: Single<BasicDisplay.Serializer<Display<R>>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             val id = tag.wrapper["id"].string.get()!!
             val json = tag.wrapper["json"].string.get()!!
-            Display(this, recipeCard.serializer.read(id.toIdentifier(), json.toJsonElement() as JsonObject))
+            Display(this, recipeCard.serializer.fromJson(id.toIdentifier(), json.toJsonElement() as JsonObject))
         }, { display, tag ->
             val jsonObject = JsonObject()
             recipeCard.serializer.write(jsonObject, display.recipe)
@@ -43,7 +43,7 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
 
     open fun getInputs(recipe: R): List<EntryIngredient> {
         return recipe.inputs.map { input ->
-            input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
+            input.first.items.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient()
         }
     }
 

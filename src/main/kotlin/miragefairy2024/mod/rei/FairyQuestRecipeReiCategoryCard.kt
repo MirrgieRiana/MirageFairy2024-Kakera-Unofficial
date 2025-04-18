@@ -17,14 +17,14 @@ object FairyQuestRecipeReiCategoryCard : ReiCategoryCard<FairyQuestRecipeReiCate
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(fairyQuestRecipeRegistry.get(tag.getString("Id").toIdentifier())!!)
         }, { display, tag ->
-            fairyQuestRecipeRegistry.getId(display.recipe)?.let { tag.putString("Id", it.string) }
+            fairyQuestRecipeRegistry.getKey(display.recipe)?.let { tag.putString("Id", it.string) }
         }))
     }
 
     class Display(val recipe: FairyQuestRecipe) : BasicDisplay(
         listOf(
             FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(recipe) }.toEntryStack().toEntryIngredient(),
-            *recipe.inputs.map { input -> input.first.matchingStacks.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient() }.toTypedArray(),
+            *recipe.inputs.map { input -> input.first.items.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient() }.toTypedArray(),
         ),
         recipe.outputs.map { it.toEntryStack().toEntryIngredient() },
     ) {

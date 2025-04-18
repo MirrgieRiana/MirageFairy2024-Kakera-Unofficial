@@ -3,8 +3,8 @@ package miragefairy2024.mod
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.util.createItemStack
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 
 val harvestNotations = mutableListOf<HarvestNotation>()
 

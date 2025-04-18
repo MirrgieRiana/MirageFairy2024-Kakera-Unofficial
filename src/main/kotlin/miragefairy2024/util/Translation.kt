@@ -2,9 +2,9 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
-import net.minecraft.block.Block
-import net.minecraft.entity.EntityType
-import net.minecraft.item.Item
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
 
 context(ModContext)
 fun en(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateEnglishTranslation {
@@ -20,20 +20,20 @@ fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapa
 
 context(ModContext)
 fun Block.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 context(ModContext)
 fun Item.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 context(ModContext)
 fun EntityType<*>.enJa(name: EnJa) {
-    en { this.translationKey to name.en }
-    ja { this.translationKey to name.ja }
+    en { this.descriptionId to name.en }
+    ja { this.descriptionId to name.ja }
 }
 
 

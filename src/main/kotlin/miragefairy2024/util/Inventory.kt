@@ -3,27 +3,27 @@ package miragefairy2024.util
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SidedInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.slot.Slot
-import net.minecraft.util.math.Direction
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.WorldlyContainer as SidedInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.Slot
+import net.minecraft.core.Direction
 import kotlin.experimental.and
 
-operator fun Inventory.get(slot: Int): ItemStack = this.getStack(slot)
-operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setStack(slot, stack)
-val Inventory.size get() = this.size()
+operator fun Inventory.get(slot: Int): ItemStack = this.getItem(slot)
+operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
+val Inventory.size get() = this.getContainerSize()
 val Inventory.indices get() = 0 until this.size
 val Inventory.itemStacks get() = this.indices.map { this[it] }
 
 class FilteringSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
-    override fun canInsert(stack: ItemStack) = inventory.isValid(index, stack)
+    override fun mayPlace(stack: ItemStack) = container.canPlaceItem(index, stack)
 }
 
 class OutputSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
-    override fun canInsert(stack: ItemStack) = false
+    override fun mayPlace(stack: ItemStack) = false
 }
 
 
@@ -61,7 +61,7 @@ fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcSlotIndex
     val srcCount = srcItemStack.count
     val oldDestCount = destItemStack.count
     val allCount = srcCount + oldDestCount
-    val newDestCount = allCount atMost dest.getMaxCountPerStack(destSlotIndex) atMost srcItemStack.maxCount atLeast oldDestCount
+    val newDestCount = allCount atMost dest.getMaxCountPerStack(destSlotIndex) atMost srcItemStack.maxStackSize atLeast oldDestCount
     val moveCount = newDestCount - oldDestCount
 
     if (moveCount == 0) return MergeResult.FAILED // 宛先にこれ以上入らない
@@ -140,21 +140,21 @@ class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDeleg
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
     override fun canExtract(index: Int, itemStack: ItemStack) = true
-    override fun canInsert(index: Int, itemStack: ItemStack) = inventory.isValid(index, itemStack)
-    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
-    override fun markDirty() = inventory.markDirty()
+    override fun canInsert(index: Int, itemStack: ItemStack) = inventory.canPlaceItem(index, itemStack)
+    override fun getMaxCountPerStack(index: Int) = inventory.maxStackSize
+    override fun markDirty() = inventory.setChanged()
 }
 
 fun Inventory.toInventoryDelegate() = SimpleInventoryDelegate(this)
 
 class SidedInventoryDelegate(private val inventory: Inventory, private val side: Direction) : InventoryDelegate {
-    override fun getIndices() = if (inventory is SidedInventory) inventory.getAvailableSlots(side).asIterable() else inventory.indices
+    override fun getIndices() = if (inventory is SidedInventory) inventory.getSlotsForFace(side).asIterable() else inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
-    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canExtract(index, itemStack, side) else true
-    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canInsert(index, itemStack, side) else true) && inventory.isValid(index, itemStack)
-    override fun getMaxCountPerStack(index: Int) = inventory.maxCountPerStack
-    override fun markDirty() = inventory.markDirty()
+    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canTakeItemThroughFace(index, itemStack, side) else true
+    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canPlaceItemThroughFace(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
+    override fun getMaxCountPerStack(index: Int) = inventory.maxStackSize
+    override fun markDirty() = inventory.setChanged()
 }
 
 fun Inventory.toSidedInventoryDelegate(side: Direction) = SidedInventoryDelegate(this, side)
@@ -182,11 +182,11 @@ interface InventoryAccessor {
 val ScreenHandler.inventoryAccessor: InventoryAccessor
     get() = object : InventoryAccessor {
         override val size: Int get() = this@inventoryAccessor.slots.size
-        override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].stack
-        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].stack = itemStack }
-        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxItemCount
-        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].canInsert(itemStack)
-        override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].markDirty()
+        override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].item
+        override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor.slots[index].set(itemStack) }
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.slots[index].maxStackSize
+        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.slots[index].mayPlace(itemStack)
+        override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].setChanged()
     }
 
 val Inventory.inventoryAccessor: InventoryAccessor
@@ -194,9 +194,9 @@ val Inventory.inventoryAccessor: InventoryAccessor
         override val size: Int get() = this@inventoryAccessor.size
         override fun getItemStack(index: Int) = this@inventoryAccessor[index]
         override fun setItemStack(index: Int, itemStack: ItemStack) = unit { this@inventoryAccessor[index] = itemStack }
-        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.maxCountPerStack
-        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.isValid(index, itemStack)
-        override fun markDirty(index: Int) = this@inventoryAccessor.markDirty()
+        override fun getMaxItemCount(index: Int) = this@inventoryAccessor.maxStackSize
+        override fun canInsert(index: Int, itemStack: ItemStack) = this@inventoryAccessor.canPlaceItem(index, itemStack)
+        override fun markDirty(index: Int) = this@inventoryAccessor.setChanged()
     }
 
 /** @see ScreenHandler.insertItem */
@@ -208,8 +208,8 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
         indices.forEach { i ->
             if (insertItemStack.isEmpty) return@run // 挿入完了
             val slotItemStack = this.getItemStack(i)
-            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.canCombine(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
-                val moveCount = insertItemStack.count atMost (slotItemStack.maxCount - slotItemStack.count atLeast 0)
+            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.isSameItemSameTags(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+                val moveCount = insertItemStack.count atMost (slotItemStack.maxStackSize - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount
                     slotItemStack.count += moveCount
@@ -247,7 +247,7 @@ fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound) {
         items.forEach { item ->
             item.wrapper.compound.get()?.let { itemCompound ->
                 val slotIndex = (itemCompound.wrapper["Slot"].byte.orDefault { 0 }.get() and 255.toByte()).toInt()
-                if (slotIndex in this.indices) this[slotIndex] = ItemStack.fromNbt(itemCompound)
+                if (slotIndex in this.indices) this[slotIndex] = ItemStack.of(itemCompound)
             }
         }
     }
@@ -259,7 +259,7 @@ fun List<ItemStack>.writeToNbt(nbt: NbtCompound) {
         if (itemStack.isNotEmpty) {
             val itemCompound = NbtCompound()
             itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
-            itemStack.writeNbt(itemCompound)
+            itemStack.save(itemCompound)
             nbtList.add(itemCompound)
         }
     }

@@ -7,9 +7,9 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.item.Item
-import net.minecraft.item.Items
-import net.minecraft.text.Text
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
+import net.minecraft.network.chat.Component as Text
 
 
 // api

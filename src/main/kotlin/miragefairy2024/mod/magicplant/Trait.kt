@@ -10,18 +10,18 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.cmp
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.text.Style
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.Util
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.Util
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level as World
 
 // api
 
-val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.ofRegistry(MirageFairy2024.identifier("trait"))
+val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class Trait(val style: Style, val poem: Text) : Comparable<Trait> {
@@ -53,10 +53,10 @@ fun Trait.enJa(enName: String, jaName: String) {
 
 // util
 
-fun Trait.getIdentifier() = traitRegistry.getId(this)!!
+fun Trait.getIdentifier() = traitRegistry.getKey(this)!!
 fun Identifier.toTrait() = traitRegistry.get(this)
 
-fun Trait.getTranslationKey(): String = Util.createTranslationKey("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
+fun Trait.getTranslationKey(): String = Util.makeDescriptionId("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }
 
 val Trait.texture get() = "textures/gui/traits/" * this.getIdentifier() * ".png"

@@ -11,8 +11,8 @@ import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.nbt.CompoundTag as NbtCompound
 
 context(ModContext)
 fun initFairyHistoryContainer() {
@@ -25,7 +25,7 @@ object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fa
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyHistoryContainer> {
         override fun fromNbt(nbt: NbtCompound): FairyHistoryContainer {
             val data = FairyHistoryContainer()
-            nbt.keys.forEach { key ->
+            nbt.allKeys.forEach { key ->
                 val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
                 data[motif] = nbt.wrapper[key].int.get()
             }

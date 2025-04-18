@@ -34,35 +34,35 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.MapColor
-import net.minecraft.block.ShapeContext
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.ai.pathing.NavigationType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.text.Text
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.random.Random
-import net.minecraft.util.shape.VoxelShape
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
@@ -71,8 +71,8 @@ import java.time.ZoneOffset
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
-    val item = BlockItem(block, Item.Settings())
+    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
+    val item = BlockItem(block, Item.Properties())
 }
 
 
@@ -98,7 +98,7 @@ fun initTelescopeModule() {
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.PICKAXE_MINEABLE }
+        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
 
@@ -108,9 +108,9 @@ fun initTelescopeModule() {
         pattern("IIG")
         pattern(" S ")
         pattern("S S")
-        input('S', Items.STICK)
-        input('I', Items.COPPER_INGOT)
-        input('G', MaterialCard.FAIRY_CRYSTAL.item)
+        define('S', Items.STICK)
+        define('I', Items.COPPER_INGOT)
+        define('G', MaterialCard.FAIRY_CRYSTAL.item)
     } on MaterialCard.FAIRY_CRYSTAL.item
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()
@@ -129,39 +129,39 @@ fun initTelescopeModule() {
     registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xDDC442) { world, player, _, _ ->
         player.telescopeMission.lastUsedInstant = null
         TelescopeMissionExtraPlayerDataCategory.sync(player)
-        player.sendMessage(text { "The last time the telescope was used has been reset"() }, true)
+        player.displayClientMessage(text { "The last time the telescope was used has been reset"() }, true)
     }
 
 }
 
 
-class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings) {
+class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
         val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
         val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
         private val FACING_TO_SHAPE: Map<Direction, VoxelShape> = mapOf(
-            Direction.NORTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
-            Direction.SOUTH to createCuboidShape(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
-            Direction.WEST to createCuboidShape(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
-            Direction.EAST to createCuboidShape(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
+            Direction.NORTH to box(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
+            Direction.SOUTH to box(4.0, 0.0, 1.0, 12.0, 16.0, 15.0),
+            Direction.WEST to box(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
+            Direction.EAST to box(1.0, 0.0, 4.0, 15.0, 16.0, 12.0),
         )
         private val identifier = MirageFairy2024.identifier("telescope")
-        val FIRST_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.first" }, "First-time reward", "初回報酬")
-        val FIRST_GAIN_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.first_gain" }, "Obtain %s Jewels", "%s ジュエルを獲得")
-        val DAILY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.daily" }, "Daily", "日間")
-        val WEEKLY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.weekly" }, "Weekly", "週間")
-        val MONTHLY_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.monthly" }, "Monthly", "月間")
-        val AVAILABLE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.available" }, "Available", "獲得可能")
-        val RECEIVED_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.received" }, "Received", "獲得済")
-        val REUSE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.reuse" }, "%s left until reusable", "再使用可能まで %s")
-        val DAYS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.days" }, "%s days", "%s 日")
-        val HOURS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.hours" }, "%s hours", "%s 時間")
-        val MINUTES_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.minutes" }, "%s minutes", "%s 分")
-        val SECONDS_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.seconds" }, "%s seconds", "%s 秒")
+        val FIRST_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.first" }, "First-time reward", "初回報酬")
+        val FIRST_GAIN_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.first_gain" }, "Obtain %s Jewels", "%s ジュエルを獲得")
+        val DAILY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.daily" }, "Daily", "日間")
+        val WEEKLY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.weekly" }, "Weekly", "週間")
+        val MONTHLY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.monthly" }, "Monthly", "月間")
+        val AVAILABLE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.available" }, "Available", "獲得可能")
+        val RECEIVED_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.received" }, "Received", "獲得済")
+        val REUSE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.reuse" }, "%s left until reusable", "再使用可能まで %s")
+        val DAYS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.days" }, "%s days", "%s 日")
+        val HOURS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.hours" }, "%s hours", "%s 時間")
+        val MINUTES_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.minutes" }, "%s minutes", "%s 分")
+        val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
 
-    override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         val player = clientProxy?.getClientPlayer() ?: return
 
         val now = Instant.now()
@@ -173,17 +173,17 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
         }
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing)
+    override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState = defaultBlockState().setValue(FACING, ctx.horizontalDirection)
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.get(FACING)]
+    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClient) return ActionResult.SUCCESS
+    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (world.isClientSide) return ActionResult.SUCCESS
         player as ServerPlayerEntity
 
         val now = Instant.now()
@@ -195,7 +195,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
             it()
         }
 
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+        world.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
         player.telescopeMission.lastUsedInstant = now
         TelescopeMissionExtraPlayerDataCategory.sync(player)
@@ -203,7 +203,7 @@ class TelescopeBlock(settings: Settings) : SimpleHorizontalFacingBlock(settings)
         return ActionResult.CONSUME
     }
 
-    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
         val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()

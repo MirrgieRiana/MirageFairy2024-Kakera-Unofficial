@@ -20,20 +20,20 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.MapColor
-import net.minecraft.item.Items
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.state.property.IntProperty
-import net.minecraft.state.property.Properties
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.biome.BiomeKeys
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.PlacedFeatures
-import net.minecraft.world.gen.feature.RandomPatchFeatureConfig
-import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig
-import net.minecraft.world.gen.stateprovider.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.item.Items
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLuminariaCard, EmeraldLuminariaBlock>() {
     override val card get() = EmeraldLuminariaCard
@@ -46,7 +46,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).luminance { getLuminance(it.getOr(Properties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD_GREEN).sounds(BlockSoundGroup.CROP))
+    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
         createCuboidShape(4.0, 6.0),
@@ -115,8 +115,8 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
 
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.of(card.block.withAge(card.block.maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+            val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 
         // 地上に配置
@@ -124,21 +124,21 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
             val placementModifiers = placementModifiers { per(32) + flower }
             RegistryKeys.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.JUNGLE }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
+        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.JUNGLE }
+        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
 
         // 地下に配置
         registerDynamicGeneration(UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { count(32) + undergroundFlower }
             RegistryKeys.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +BiomeKeys.LUSH_CAVES }
+        UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeKeys.LUSH_CAVES }
 
     }
 }
 
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
 
-class EmeraldLuminariaBlock(settings: Settings) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
-    override fun getAgeProperty(): IntProperty = Properties.AGE_3
+class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

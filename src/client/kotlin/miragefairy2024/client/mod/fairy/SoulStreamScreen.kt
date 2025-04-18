@@ -17,10 +17,10 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
 import miragefairy2024.util.size
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.util.InputUtil
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import com.mojang.blaze3d.platform.InputConstants as InputUtil
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.network.chat.Component as Text
 
 class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
 
@@ -30,7 +30,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
         if (isFirst) {
             isFirst = false
             if (lastMousePositionInInventory != null) {
-                InputUtil.setCursorParameters(this.client!!.window.handle, InputUtil.GLFW_CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
+                InputUtil.grabOrReleaseMouse(this.minecraft!!.window.window, InputUtil.CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
             }
         }
         super.render(vanillaContext, mouseX, mouseY, delta)
@@ -68,7 +68,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
                         surface(Surface.tiled(SlotType.NORMAL.texture, 18, 18))
                         scrollbar(ScrollContainer.Scrollbar.vanilla())
                         scrollStep(18)
-                        (9 until handler.soulStream.size).chunked(9).forEach { indices ->
+                        (9 until menu.soulStream.size).chunked(9).forEach { indices ->
                             child().child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                                 indices.forEach { index ->
                                     child(slotContainer(slotAsComponent(9 * 3 + 9 + index), type = null))
@@ -79,7 +79,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
 
                     child(verticalSpace(3))
 
-                    child(inventoryNameLabel(handler.playerInventory.name))
+                    child(inventoryNameLabel(menu.playerInventory.name))
 
                     child(verticalSpace(1))
 
@@ -109,12 +109,12 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Player
         }
     }
 
-    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
 
     // キー入力で閉じる
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (soulStreamKey.matchesKey(keyCode, scanCode)) {
-            close()
+        if (soulStreamKey.matches(keyCode, scanCode)) {
+            onClose()
             return true
         }
         return super.keyPressed(keyCode, scanCode, modifiers)

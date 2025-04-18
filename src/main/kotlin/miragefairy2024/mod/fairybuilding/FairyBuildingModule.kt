@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation as Identifier
 
 enum class FairyBuildingModelCard(val identifier: Identifier) {
     LANTERN(MirageFairy2024.identifier("block/fairy_building/lantern")),
@@ -17,8 +17,8 @@ val fairyBuildingCards: List<FairyBuildingCard<*, *, *>> = listOf(
 )
 
 private val identifier = MirageFairy2024.identifier("fairy_building")
-val FOLIA_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.folia" }, "Folia", "フォリア")
-val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ "gui.${identifier.toTranslationKey()}.specified_fairy_slot" }, "Only %s Family", "%s系統のみ")
+val FOLIA_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.folia" }, "Folia", "フォリア")
+val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.specified_fairy_slot" }, "Only %s Family", "%s系統のみ")
 
 context(ModContext)
 fun initFairyBuildingModule() {

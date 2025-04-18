@@ -27,27 +27,27 @@ import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.text.Text
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.UseAction
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.World
+import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.item.UseAnim as UseAction
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.Level as World
 import kotlin.math.pow
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
-val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
-val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.${identifier.toTranslationKey()}.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
+val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
+val MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.sneaking_use" }, "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
 
 context(ModContext)
 fun initRandomFairySummoning() {
@@ -55,39 +55,39 @@ fun initRandomFairySummoning() {
     MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION.enJa()
 }
 
-class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settings) : Item(settings) {
-    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendTooltip(stack, world, tooltip, context)
+class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
+    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendHoverText(stack, world, tooltip, context)
         tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
         tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
         tooltip += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
-    override fun getUseAction(stack: ItemStack) = UseAction.BOW
-    override fun getMaxUseTime(stack: ItemStack) = 72000 // 1時間
+    override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
+    override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        val itemStack = user.getStackInHand(hand)
-        if (!user.isSneaking) {
+        val itemStack = user.getItemInHand(hand)
+        if (!user.isShiftKeyDown) {
 
             // 使用開始
-            user.setCurrentHand(hand)
+            user.startUsingItem(hand)
 
             return TypedActionResult.consume(itemStack)
         } else {
-            if (world.isClient) return TypedActionResult.success(itemStack)
+            if (world.isClientSide) return TypedActionResult.success(itemStack)
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
-            user.openHandledScreen(object : ExtendedScreenHandlerFactory {
+            user.openMenu(object : ExtendedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
-                override fun getDisplayName() = itemStack.name
+                override fun getDisplayName() = itemStack.hoverName
                 override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
                     buf.writeInt(chanceTable.size)
                     chanceTable.forEach {
-                        buf.writeItemStack(it.showingItemStack)
-                        buf.writeString(it.motif.getIdentifier()!!.string)
+                        buf.writeItem(it.showingItemStack)
+                        buf.writeUtf(it.motif.getIdentifier()!!.string)
                         buf.writeDouble(it.rate)
                         buf.writeDouble(it.count)
                     }
@@ -97,8 +97,8 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         }
     }
 
-    override fun usageTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
-        if (world.isClient) return
+    override fun onUseTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
+        if (world.isClientSide) return
         if (user !is ServerPlayerEntity) return
 
         run {
@@ -130,12 +130,12 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
             craft(user, stack)
         }
 
-        if (stack.isEmpty) user.clearActiveItem()
+        if (stack.isEmpty) user.stopUsingItem()
 
     }
 
     private fun craft(player: ServerPlayerEntity, itemStack: ItemStack) {
-        val world = player.world
+        val world = player.level()
 
         // 消費
         if (!player.isCreative) {
@@ -143,7 +143,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
                 // 最後の1個でない場合
 
                 // 普通に消費
-                itemStack.decrement(1)
+                itemStack.shrink(1)
 
             } else {
                 // 最後の1個の場合
@@ -166,7 +166,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
                 }
 
                 // リロードできなかった場合、最後の1個を減らす
-                if (!isReloaded) itemStack.decrement(1)
+                if (!isReloaded) itemStack.shrink(1)
 
             }
         }
@@ -185,7 +185,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Settin
         FairyHistoryContainerExtraPlayerDataCategory.sync(player)
 
         // エフェクト
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.BLOCK_DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
+        world.playSound(null, player.x, player.y, player.z, SoundEvents.DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)
 
     }
 }
@@ -218,12 +218,12 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 }
 
 fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
-    val biome = player.world.getBiome(player.blockPos)
+    val biome = player.level().getBiome(player.blockPosition())
     return COMMON_MOTIF_RECIPES.filter {
         when (it) {
             is AlwaysCommonMotifRecipe -> true
-            is BiomeCommonMotifRecipe -> biome.matchesKey(it.biome)
-            is BiomeTagCommonMotifRecipe -> biome.isIn(it.biomeTag)
+            is BiomeCommonMotifRecipe -> biome.`is`(it.biome)
+            is BiomeTagCommonMotifRecipe -> biome.`is`(it.biomeTag)
         }
     }.map { it.motif }.toSet()
 }

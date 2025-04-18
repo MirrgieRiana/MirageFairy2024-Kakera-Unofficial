@@ -10,25 +10,25 @@ import miragefairy2024.util.register
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.NbtList
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.ListTag as NbtList
+import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val traitListScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-    TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY, TraitListScreenHandler.read(buf))
+    TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, TraitListScreenHandler.read(buf))
 }
 
-val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toTranslationKey()}" }, "Traits", "特性")
+val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toLanguageKey()}" }, "Traits", "特性")
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    traitListScreenHandlerType.register(Registries.SCREEN_HANDLER, MirageFairy2024.identifier("trait_list"))
+    traitListScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("trait_list"))
     traitListScreenTranslation.enJa()
 }
 
@@ -46,6 +46,6 @@ class TraitListScreenHandler(syncId: Int, val playerInventory: PlayerInventory, 
         }
     }
 
-    override fun canUse(player: PlayerEntity) = true
-    override fun quickMove(player: PlayerEntity, slot: Int): ItemStack = slots[slot].stack
+    override fun stillValid(player: PlayerEntity) = true
+    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack = slots[slot].item
 }

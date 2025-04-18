@@ -31,17 +31,17 @@ import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.recipe.RecipeType
-import net.minecraft.util.ItemScatterer
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.Containers as ItemScatterer
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 import kotlin.jvm.optionals.getOrNull
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
@@ -76,7 +76,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: World, inventory: Inventory) = world.recipeManager.getFirstMatch(recipeType, inventory, world).getOrNull()
+    fun match(world: World, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -109,8 +109,8 @@ open class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalF
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         craftingInventory.reset()
         nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it) }
         waitingInventory.reset()
@@ -119,27 +119,27 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt())
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
         nbt.wrapper["ProgressMax"].int.set(progressMax)
         nbt.wrapper["Progress"].int.set(progress)
     }
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         shouldUpdateRecipe = true
         shouldUpdateWaiting = true
     }
 
-    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(cachedState, side)
+    override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
     val craftingInventory = mutableListOf<ItemStack>()
     val waitingInventory = mutableListOf<ItemStack>()
 
-    override fun clear() {
-        super.clear()
+    override fun clearContent() {
+        super.clearContent()
         craftingInventory.clear()
         waitingInventory.clear()
     }
@@ -147,7 +147,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     override fun dropItems() {
         super.dropItems()
         craftingInventory.forEach {
-            ItemScatterer.spawn(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), it)
+            ItemScatterer.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), it)
         }
     }
 
@@ -169,14 +169,14 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         if (recipe.inputs.size > inventory.size) return null
 
         return {
-            val remainder = recipe.getRemainder(inventory)
+            val remainder = recipe.getRemainingItems(inventory)
             (0 until recipe.inputs.size).forEach { index ->
                 craftingInventory += inventory[index].split(recipe.inputs[index].second)
             }
             waitingInventory += recipe.output.copy()
             waitingInventory += remainder
             progressMax = recipe.duration
-            markDirty()
+            setChanged()
         }
     }
 
@@ -218,12 +218,12 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
                     }
 
                     progress++
-                    markDirty()
+                    setChanged()
                     return@success
                 }
 
                 progress = 0
-                markDirty()
+                setChanged()
             }
 
             // プログレスが完了していれば、クラフトの完了を試みる
@@ -236,12 +236,12 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
                         this.toInventoryDelegate(),
                         destIndices = card.outputSlots.map { card.inventorySlotIndexTable[it]!! },
                     )
-                    if (result.movementTimes > 0) markDirty()
+                    if (result.movementTimes > 0) setChanged()
                     if (result.completed) {
                         progress = 0
                         progressMax = 0
                         craftingInventory.clear()
-                        markDirty()
+                        setChanged()
                     }
 
                 }

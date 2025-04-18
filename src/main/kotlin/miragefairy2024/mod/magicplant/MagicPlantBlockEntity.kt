@@ -1,17 +1,17 @@
 package miragefairy2024.mod.magicplant
 
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.listener.ClientPlayPacketListener
-import net.minecraft.network.packet.Packet
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.random.Random
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
-import net.minecraft.world.biome.Biome
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.biome.Biome
 
 class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType, pos, state) {
 
@@ -21,7 +21,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setTraitStacks(traitStacks: TraitStacks) {
         this.traitStacks = traitStacks
-        markDirty()
+        setChanged()
     }
 
 
@@ -31,7 +31,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setRare(isRare: Boolean) {
         this.isRare = isRare
-        markDirty()
+        setChanged()
     }
 
 
@@ -41,43 +41,43 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
 
     fun setNatural(isNatural: Boolean) {
         this.isNatural = isNatural
-        markDirty()
+        setChanged()
     }
 
 
-    override fun setWorld(world: World) {
-        super.setWorld(world)
+    override fun setLevel(world: World) {
+        super.setLevel(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(pos), world.random)
+            val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(worldPosition), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
         }
     }
 
-    public override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    public override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
         isNatural = nbt.getBoolean("Natural")
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound {
-        val nbt = super.toInitialChunkDataNbt()
+    override fun getUpdateTag(): NbtCompound {
+        val nbt = super.getUpdateTag()
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
         return nbt
     }
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 }
 

@@ -9,35 +9,35 @@ import miragefairy2024.mod.placeditem.RemovePlacedItemChannel
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.option.KeyBinding
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.hit.HitResult
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.MathHelper
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
+import net.minecraft.core.Direction
+import net.minecraft.util.Mth as MathHelper
 import org.lwjgl.glfw.GLFW
 
 lateinit var placeItemKey: KeyBinding
 
 fun initPlacedItemClientModule() {
 
-    placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.GAMEPLAY_CATEGORY)
+    placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.CATEGORY_GAMEPLAY)
     inputEventsHandlers += {
-        while (placeItemKey.wasPressed()) run {
+        while (placeItemKey.consumeClick()) run {
 
             val player = MinecraftClient.getInstance().player ?: return@run // プレイヤーの取得に失敗した
 
             if (player.isSpectator) return@run // スペクテイターモード
 
-            val hitResult = player.raycast(5.0, 0F, false)
+            val hitResult = player.pick(5.0, 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@run // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@run // ブロックをターゲットにしていない
 
-            if (!player.world.getBlockState(hitResult.blockPos).isOf(PlacedItemCard.block)) {
-                val blockPos = if (player.world.getBlockState(hitResult.blockPos).isReplaceable) hitResult.blockPos else hitResult.blockPos.offset(hitResult.side)
-                val rotation = when (hitResult.side) {
-                    Direction.DOWN -> Pair(MathHelper.HALF_PI.toDouble(), -(player.yaw.toDouble() + 180.0) / 180.0 * MathHelper.PI)
-                    Direction.UP, null -> Pair(-MathHelper.HALF_PI.toDouble(), -(player.yaw.toDouble() + 180.0) / 180.0 * MathHelper.PI)
+            if (!player.level().getBlockState(hitResult.blockPos).`is`(PlacedItemCard.block)) {
+                val blockPos = if (player.level().getBlockState(hitResult.blockPos).canBeReplaced()) hitResult.blockPos else hitResult.blockPos.relative(hitResult.direction)
+                val rotation = when (hitResult.direction) {
+                    Direction.DOWN -> Pair(MathHelper.HALF_PI.toDouble(), -(player.yRot.toDouble() + 180.0) / 180.0 * MathHelper.PI)
+                    Direction.UP, null -> Pair(-MathHelper.HALF_PI.toDouble(), -(player.yRot.toDouble() + 180.0) / 180.0 * MathHelper.PI)
                     Direction.NORTH -> Pair(0.0, 180.0 / 180.0 * MathHelper.PI)
                     Direction.SOUTH -> Pair(0.0, 0.0 / 180.0 * MathHelper.PI)
                     Direction.WEST -> Pair(0.0, 270.0 / 180.0 * MathHelper.PI)
@@ -46,9 +46,9 @@ fun initPlacedItemClientModule() {
 
                 val packet = PlaceItemChannel.Packet(
                     blockPos,
-                    hitResult.pos.x - blockPos.x.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
-                    hitResult.pos.y - blockPos.y.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
-                    hitResult.pos.z - blockPos.z.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.x - blockPos.x.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.y - blockPos.y.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
+                    hitResult.location.z - blockPos.z.toDouble() atLeast 0.5 / 16.0 atMost 15.5 / 16.0,
                     rotation.first,
                     rotation.second,
                 )

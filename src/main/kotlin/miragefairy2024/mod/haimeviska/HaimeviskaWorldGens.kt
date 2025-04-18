@@ -15,21 +15,21 @@ import miragefairy2024.util.tree
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.PillarBlock
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.intprovider.ConstantIntProvider
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.TreeFeatureConfig
-import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
-import net.minecraft.world.gen.foliage.LargeOakFoliagePlacer
-import net.minecraft.world.gen.stateprovider.BlockStateProvider
-import net.minecraft.world.gen.treedecorator.TreeDecorator
-import net.minecraft.world.gen.treedecorator.TreeDecoratorType
-import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.Direction
+import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration as TreeFeatureConfig
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer as LargeOakFoliagePlacer
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType
+import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer as LargeOakTrunkPlacer
 import java.util.OptionalInt
 
 object HaimeviskaTreeDecoratorCard {
@@ -52,11 +52,11 @@ fun initHaimeviskaWorldGens() {
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
-        Feature.TREE with TreeFeatureConfig.Builder(
-            BlockStateProvider.of(HaimeviskaBlockCard.LOG.block),
+        Feature.TREE with TreeFeatureConfig.TreeConfigurationBuilder(
+            BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
-            BlockStateProvider.of(HaimeviskaBlockCard.LEAVES.block),
-            LargeOakFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(2), 4),
+            BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block),
+            LargeOakFoliagePlacer(ConstantIntProvider.of(2), ConstantIntProvider.of(2), 4),
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
     }
@@ -80,22 +80,22 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Feature.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
+    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
 
 }
 
 class HaimeviskaTreeDecorator : TreeDecorator() {
-    override fun getType() = HaimeviskaTreeDecoratorCard.type
-    override fun generate(generator: Generator) {
-        generator.logPositions.forEach { blockPos ->
-            if (!generator.world.testBlockState(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultState.with(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
-            val direction = Direction.fromHorizontal(generator.random.nextInt(4))
-            if (!generator.isAir(blockPos.offset(direction))) return@forEach // 正面が空気の場合のみ
-            val r = generator.random.nextInt(100)
+    override fun type() = HaimeviskaTreeDecoratorCard.type
+    override fun place(generator: Context) {
+        generator.logs().forEach { blockPos ->
+            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
+            val direction = Direction.from2DDataValue(generator.random().nextInt(4))
+            if (!generator.isAir(blockPos.relative(direction))) return@forEach // 正面が空気の場合のみ
+            val r = generator.random().nextInt(100)
             if (r < 25) {
-                generator.replace(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultState.with(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             } else if (r < 35) {
-                generator.replace(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultState.with(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             }
         }
     }

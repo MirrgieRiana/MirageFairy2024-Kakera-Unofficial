@@ -26,11 +26,11 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
-import net.minecraft.block.Block
-import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.EntityType
-import net.minecraft.item.Item
-import net.minecraft.text.Text
+import net.minecraft.world.level.block.Block
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.network.chat.Component as Text
 
 abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
 
@@ -50,7 +50,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
         override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.items[0].name }
+            val text = text { display.items[0].description }
                 .let { if (display.items.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }
             return listOf(
@@ -60,13 +60,13 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
-                    .tooltip(display.items.map { it.name }.join(text { "\n"() })),
+                    .tooltip(display.items.map { it.description }.join(text { "\n"() })),
                 Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
             )
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<Block, BlockFairyDreamRecipeReiCategoryCard.Display>(BlockFairyDreamRecipeReiCategoryCard) {
@@ -101,7 +101,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }
 
 object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientReiCategoryCard<EntityType<*>, EntityTypeFairyDreamRecipeReiCategoryCard.Display>(EntityTypeFairyDreamRecipeReiCategoryCard) {
@@ -120,7 +120,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
             val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer[display.motif]
-            val text = text { display.entityTypes[0].name }
+            val text = text { display.entityTypes[0].description }
                 .let { if (display.entityTypes.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }
             return listOf(
@@ -129,11 +129,11 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
                     .leftAligned()
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .noShadow()
-                    .tooltip(display.entityTypes.map { it.name }.join(text { "\n"() })),
+                    .tooltip(display.entityTypes.map { it.description }.join(text { "\n"() })),
                 Widgets.createSlot(p + Point(133, 1)).entries(display.outputEntries.getOrNull(0) ?: EntryIngredient.empty()).markOutput(),
             )
         }
     }
 
-    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().matchingStacks.map { it.toEntryStack() }.toEntryIngredient())
+    override fun getWorkstations() = listOf(MIRAGE_FLOUR_TAG.toIngredient().items.map { it.toEntryStack() }.toEntryIngredient())
 }

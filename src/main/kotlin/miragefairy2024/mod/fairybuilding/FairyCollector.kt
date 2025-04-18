@@ -16,13 +16,13 @@ import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
-import net.minecraft.block.BlockState
-import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.math.BlockBox
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.item.Items
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level as World
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"
@@ -49,7 +49,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
                 this += p(7.0, 0.1, 8.0, 0.0F, 275.0F, 40.0)
                 this += p(12.0, 0.1, 8.0, 0.0F, 265.0F, 40.0)
                 this += p(8.0, 0.1, 6.0, 0.0F, 20.0F, 40.0)
-            })) { it.isOf(FairyCard.item) }, // 仕分け妖精
+            })) { it.`is`(FairyCard.item) }, // 仕分け妖精
             FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, animation = ac(NONE, p(4.0, 2.0, 4.5, 0.0F, 270.0F, 200.0))), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
@@ -86,8 +86,8 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
-            input('#', FairyHouseCard.item)
-            input('C', Items.CHEST)
+            define('#', FairyHouseCard.item)
+            define('C', Items.CHEST)
         } on FairyHouseCard.item
     }
 }
@@ -99,15 +99,15 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     override fun getThis() = this
 
 
-    override fun readNbt(nbt: NbtCompound) {
-        super.readNbt(nbt)
+    override fun load(nbt: NbtCompound) {
+        super.load(nbt)
         collectionProgress = nbt.wrapper["CollectionProgress"].int.get() ?: 0
         sortProgress = nbt.wrapper["SortProgress"].int.get() ?: 0
         updateCache()
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
+    override fun saveAdditional(nbt: NbtCompound) {
+        super.saveAdditional(nbt)
         nbt.wrapper["CollectionProgress"].int.set(collectionProgress)
         nbt.wrapper["SortProgress"].int.set(sortProgress)
     }
@@ -119,8 +119,8 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     var sortSpeed = 0
 
 
-    override fun markDirty() {
-        super.markDirty()
+    override fun setChanged() {
+        super.setChanged()
         updateCache()
     }
 
@@ -138,7 +138,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
             return
         }
 
-        markDirty()
+        setChanged()
 
         folia -= 10
 
@@ -154,10 +154,10 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
                 val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
                 collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
-                    folia -= 500 + 30 * it.stack.count
+                    folia -= 500 + 30 * it.item.count
 
                     val index = indices.removeFirst()
-                    this[index] = it.stack.copy()
+                    this[index] = it.item.copy()
                     it.discard()
                     // TODO パーティクル
 

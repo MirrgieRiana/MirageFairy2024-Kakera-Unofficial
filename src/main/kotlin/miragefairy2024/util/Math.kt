@@ -1,6 +1,6 @@
 package miragefairy2024.util
 
-import net.minecraft.util.math.random.Random
+import net.minecraft.util.RandomSource as Random
 import kotlin.math.floor
 
 /** 期待値がdになるように整数の乱数を生成します。 */

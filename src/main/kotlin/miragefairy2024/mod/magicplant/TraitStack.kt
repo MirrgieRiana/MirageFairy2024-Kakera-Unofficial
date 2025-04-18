@@ -5,7 +5,7 @@ import miragefairy2024.util.int
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
-import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.CompoundTag as NbtCompound
 
 // api
 

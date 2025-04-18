@@ -27,11 +27,11 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.Element
-import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.util.math.Rect2i
-import net.minecraft.screen.ScreenHandler
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.components.events.GuiEventListener as Element
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
+import net.minecraft.client.renderer.Rect2i
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import kotlin.math.roundToInt
 
 abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
@@ -132,7 +132,7 @@ class BlueFuelWidget(private val rectangle: Rectangle) : WidgetWithBounds() {
         val fuel = fuelMax - (System.currentTimeMillis() / 50) % fuelMax - 1
         val fuelRate = fuel.toDouble() / fuelMax.toDouble()
         val h = (rectangle.height.toDouble() * fuelRate).roundToInt()
-        context.drawTexture(
+        context.blit(
             AuraReflectorFurnaceScreen.BLUE_FUEL_TEXTURE,
             rectangle.x - 1,
             rectangle.y - 1 + (rectangle.height - h),

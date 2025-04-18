@@ -1,7 +1,7 @@
 package miragefairy2024
 
 import net.fabricmc.api.ModInitializer
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation as Identifier
 
 object ModEvents {
     val onRegistration = InitializationEventRegistry<() -> Unit>()

@@ -18,36 +18,36 @@ import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerStructureTagGeneration
 import miragefairy2024.util.times
-import net.minecraft.block.Blocks
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.item.Items
-import net.minecraft.loot.function.EnchantRandomlyLootFunction
-import net.minecraft.loot.function.SetCountLootFunction
-import net.minecraft.loot.provider.number.UniformLootNumberProvider
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntryList
-import net.minecraft.structure.StructureSet
-import net.minecraft.structure.pool.StructurePool
-import net.minecraft.structure.pool.StructurePools
-import net.minecraft.structure.processor.StructureProcessorRule
-import net.minecraft.structure.rule.AlwaysTrueRuleTest
-import net.minecraft.structure.rule.BlockMatchRuleTest
-import net.minecraft.structure.rule.RandomBlockMatchRuleTest
-import net.minecraft.util.collection.Pool
-import net.minecraft.world.StructureSpawns
-import net.minecraft.world.biome.BiomeKeys
-import net.minecraft.world.biome.SpawnSettings
-import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.StructureTerrainAdaptation
-import net.minecraft.world.gen.YOffset
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement
-import net.minecraft.world.gen.chunk.placement.SpreadType
-import net.minecraft.world.gen.heightprovider.UniformHeightProvider
-import net.minecraft.world.gen.structure.Structure
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.HolderSet as RegistryEntryList
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.data.worldgen.Pools as StructurePools
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
+import net.minecraft.util.random.WeightedRandomList as Pool
+import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride as StructureSpawns
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight as UniformHeightProvider
+import net.minecraft.world.level.levelgen.structure.Structure
 
 object DripstoneCavesRuinCard {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
-    val translation = Translation({ identifier.toTranslationKey("structure") }, "Dripstone Caves Ruin", "鍾乳洞の遺跡")
+    val translation = Translation({ identifier.toLanguageKey("structure") }, "Dripstone Caves Ruin", "鍾乳洞の遺跡")
 
     context(ModContext)
     fun init() {
@@ -59,10 +59,10 @@ object DripstoneCavesRuinCard {
         registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.BOOK).weight(10).apply(EnchantRandomlyLootFunction.builder()),
-                    ItemLootPoolEntry(Items.BOOK).weight(2).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 10.0F))),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(1.0F, 10.0F))),
                 ) {
-                    rolls(UniformLootNumberProvider.create(5.0F, 15.0F))
+                    setRolls(UniformLootNumberProvider.between(5.0F, 15.0F))
                 },
             )
         }
@@ -98,15 +98,15 @@ object DripstoneCavesRuinCard {
         val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 RuleStructureProcessor(
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultState),
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.LANTERN, 0.8F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultState),
+                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultBlockState()),
+                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.LANTERN, 0.8F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()),
                     StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.REDSTONE_TORCH, 0.05F), AlwaysTrueRuleTest.INSTANCE, DiamondLuminariaCard.block.withAge(3)),
-                    StructureProcessorRule(BlockMatchRuleTest(Blocks.REDSTONE_TORCH), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultState),
+                    StructureProcessorRule(BlockMatchRuleTest(Blocks.REDSTONE_TORCH), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()),
                 ),
                 RuleStructureProcessor(
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.AIR), Blocks.AIR.defaultState),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultState),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultState),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.AIR), Blocks.AIR.defaultBlockState()),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultBlockState()),
+                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()),
                 ),
             )
         }
@@ -179,22 +179,22 @@ object DripstoneCavesRuinCard {
 
         val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
-                config = Structure.Config(
-                    RegistryEntryList.of(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
+                config = Structure.StructureSettings(
+                    RegistryEntryList.direct(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
                     mapOf(
                         SpawnGroup.MONSTER to StructureSpawns(
-                            StructureSpawns.BoundingBox.PIECE,
-                            Pool.of(
-                                SpawnSettings.SpawnEntry(ChaosCubeCard.entityType, 10, 1, 4),
+                            StructureSpawns.BoundingBoxType.PIECE,
+                            Pool.create(
+                                SpawnSettings.SpawnerData(ChaosCubeCard.entityType, 10, 1, 4),
                             )
                         ),
                     ),
-                    GenerationStep.Feature.UNDERGROUND_STRUCTURES,
+                    GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
                     StructureTerrainAdaptation.BURY,
                 ),
                 startPool = RegistryKeys.TEMPLATE_POOL[mainTemplatePoolKey],
                 size = 12,
-                startHeight = UniformHeightProvider.create(YOffset.fixed(-40), YOffset.fixed(20)),
+                startHeight = UniformHeightProvider.of(YOffset.absolute(-40), YOffset.absolute(20)),
                 useExpansionHack = false,
             )
         }
@@ -202,7 +202,7 @@ object DripstoneCavesRuinCard {
         val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.WeightedEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
             )

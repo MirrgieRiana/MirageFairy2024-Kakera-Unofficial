@@ -13,8 +13,8 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.entity.ItemEntity
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
     this.merge(ObtainFairyToolEffectType, appearanceRateBonus) { appearanceRateBonus ->
@@ -23,7 +23,7 @@ fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
 }
 
 object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toTranslationKey()}.obtain_fairy" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.obtain_fairy" }, "Obtain a fairy when mined or killed", "採掘・撃破時に妖精を入手")
 
     context(ModContext)
     fun init() {
@@ -44,7 +44,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-            world.spawnEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
+            world.addFreshEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
 
             // 妖精召喚履歴に追加
             player.fairyHistoryContainer[result.motif] += result.condensation * result.count
@@ -58,11 +58,11 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
             val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(entity.type)
 
             // 抽選
-            val result = getRandomFairy(entity.world.random, motifSet, appearanceRateBonus) ?: return@fail
+            val result = getRandomFairy(entity.level().random, motifSet, appearanceRateBonus) ?: return@fail
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
-            entity.world.spawnEntity(ItemEntity(entity.world, entity.x, entity.y, entity.z, fairyItemStack))
+            entity.level().addFreshEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
 
             // 妖精召喚履歴に追加
             attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count

@@ -2,10 +2,10 @@ package miragefairy2024.mixin.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface BlockBreakingCallback {
     Event<BlockBreakingCallback> EVENT = EventFactory.createArrayBacked(BlockBreakingCallback.class, callbacks -> (state, player, world, pos, blockBreakingDelta) -> {
@@ -15,5 +15,5 @@ public interface BlockBreakingCallback {
         return blockBreakingDelta;
     });
 
-    float calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, float blockBreakingDelta);
+    float calcBlockBreakingDelta(BlockState state, Player player, BlockGetter world, BlockPos pos, float blockBreakingDelta);
 }

@@ -28,40 +28,40 @@ import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
-import net.minecraft.entity.EntityDimensions
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.entity.SpawnRestriction
-import net.minecraft.entity.ai.goal.ActiveTargetGoal
-import net.minecraft.entity.ai.goal.GoToWalkTargetGoal
-import net.minecraft.entity.ai.goal.Goal
-import net.minecraft.entity.ai.goal.RevengeGoal
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal
-import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.mob.HostileEntity
-import net.minecraft.entity.mob.MobEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.SpawnEggItem
-import net.minecraft.loot.condition.KilledByPlayerLootCondition
-import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition
-import net.minecraft.loot.function.LootingEnchantLootFunction
-import net.minecraft.loot.function.SetCountLootFunction
-import net.minecraft.loot.provider.number.UniformLootNumberProvider
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.EntityTypeTags
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundCategory
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
-import net.minecraft.world.Heightmap
-import net.minecraft.world.World
-import net.minecraft.world.biome.BiomeKeys
+import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.entity.SpawnPlacements as SpawnRestriction
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal as ActiveTargetGoal
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal as GoToWalkTargetGoal
+import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal as RevengeGoal
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal as WanderAroundFarGoal
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.monster.Monster as HostileEntity
+import net.minecraft.world.entity.Mob as MobEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.SpawnEggItem
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition as RandomChanceWithLootingLootCondition
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction as LootingEnchantLootFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.tags.EntityTypeTags
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.phys.Vec3 as Vec3d
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import org.joml.Quaternionf
 import java.util.EnumSet
 import kotlin.math.sqrt
@@ -76,40 +76,40 @@ object ChaosCubeCard {
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
         .build()
-    val spawnEggItem = SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Settings())
+    val spawnEggItem = SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties())
 
     context(ModContext)
     fun init() {
         entityType.register(Registries.ENTITY_TYPE, identifier)
-        val attributes = HostileEntity.createHostileAttributes()
-            .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
-            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.4)
-            .add(EntityAttributes.GENERIC_ARMOR, 12.0)
-            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1)
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
+        val attributes = HostileEntity.createMonsterAttributes()
+            .add(EntityAttributes.MAX_HEALTH, 100.0)
+            .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
+            .add(EntityAttributes.ARMOR, 12.0)
+            .add(EntityAttributes.ATTACK_DAMAGE, 20.0)
+            .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
+            .add(EntityAttributes.FOLLOW_RANGE, 48.0)
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
         entityType.registerLootTableGeneration {
             LootTable(
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item)).configure {
-                    apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0F, 2.0F)))
-                    apply(LootingEnchantLootFunction.builder(UniformLootNumberProvider.create(0.0F, 1.0F)))
+                    apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(0.0F, 2.0F)))
+                    apply(LootingEnchantLootFunction.lootingMultiplier(UniformLootNumberProvider.between(0.0F, 1.0F)))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item)).configure {
-                    conditionally(KilledByPlayerLootCondition.builder())
-                    conditionally(RandomChanceWithLootingLootCondition.builder(0.05F, 0.02F))
+                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.05F, 0.02F))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item)).configure {
-                    conditionally(KilledByPlayerLootCondition.builder())
-                    conditionally(RandomChanceWithLootingLootCondition.builder(0.3F, 0.1F))
+                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.3F, 0.1F))
                 },
             )
         }
 
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
-        SpawnRestriction.register(entityType, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark)
+        SpawnRestriction.register(entityType, SpawnRestriction.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -194,15 +194,15 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
 
     init {
-        experiencePoints = 20
+        xpReward = 20
     }
 
-    override fun initGoals() {
-        goalSelector.add(4, ShootGoal(this))
-        goalSelector.add(5, GoToWalkTargetGoal(this, 1.0))
-        goalSelector.add(7, WanderAroundFarGoal(this, 0.5, 0.0F))
-        targetSelector.add(1, RevengeGoal(this, ChaosCubeEntity::class.java).setGroupRevenge())
-        targetSelector.add(2, TargetGoal(this, PlayerEntity::class.java))
+    override fun registerGoals() {
+        goalSelector.addGoal(4, ShootGoal(this))
+        goalSelector.addGoal(5, GoToWalkTargetGoal(this, 1.0))
+        goalSelector.addGoal(7, WanderAroundFarGoal(this, 0.5, 0.0F))
+        targetSelector.addGoal(1, RevengeGoal(this, ChaosCubeEntity::class.java).setAlertOthers())
+        targetSelector.addGoal(2, TargetGoal(this, PlayerEntity::class.java))
     }
 
 
@@ -210,12 +210,12 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     override fun getHurtSound(source: DamageSource) = SoundEventCard.ENTITY_CHAOS_CUBE_HURT.soundEvent
     override fun getDeathSound() = SoundEventCard.ENTITY_CHAOS_CUBE_DEATH.soundEvent
 
-    override fun tickMovement() {
-        super.tickMovement()
+    override fun aiStep() {
+        super.aiStep()
 
-        if (!isOnGround && velocity.y < 0.0) velocity = velocity.multiply(1.0, 0.6, 1.0)
+        if (!onGround() && deltaMovement.y < 0.0) deltaMovement = deltaMovement.multiply(1.0, 0.6, 1.0)
 
-        if (world.isClient) {
+        if (level().isClientSide) {
 
             if (isFirstClientTick) {
                 isFirstClientTick = false
@@ -236,12 +236,12 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                 animator.next()
             }
 
-            if (world.random.nextInt(10) == 0) {
-                world.addParticle(
+            if (level().random.nextInt(10) == 0) {
+                level().addParticle(
                     ParticleTypeCard.CHAOS_STONE.particleType,
-                    x + width / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
+                    x + bbWidth / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
                     y + 1.0,
-                    z + width / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
+                    z + bbWidth / 2.0 * (2.0 * random.nextDouble() - 1.0) * 0.8,
                     0.0,
                     -0.05,
                     0.0,
@@ -254,17 +254,17 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
 
     private class ShootGoal(private val entity: ChaosCubeEntity) : Goal() {
         init {
-            controls = EnumSet.of(Control.MOVE, Control.LOOK)
+            flags = EnumSet.of(Flag.MOVE, Flag.LOOK)
         }
 
-        override fun shouldRunEveryTick() = true
+        override fun requiresUpdateEveryTick() = true
 
-        override fun canStart(): Boolean {
+        override fun canUse(): Boolean {
             val livingEntity = entity.target
-            return livingEntity != null && livingEntity.isAlive && entity.canTarget(livingEntity)
+            return livingEntity != null && livingEntity.isAlive && entity.canAttack(livingEntity)
         }
 
-        override fun shouldContinue() = ticker != null && super.shouldContinue()
+        override fun canContinueToUse() = ticker != null && super.canContinueToUse()
 
         private var ticker: Iterator<Unit>? = null
 
@@ -272,7 +272,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             ticker = sequence {
 
                 suspend fun SequenceScope<Unit>.tryWait(): Boolean {
-                    repeat(entity.random.nextBetween(20 * 2, 20 * 8)) {
+                    repeat(entity.random.nextIntBetweenInclusive(20 * 2, 20 * 8)) {
                         yield(Unit)
                     }
                     return true
@@ -284,32 +284,32 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                     // 準備フェーズ
 
                     val target = (entity.target ?: return false)
-                    if (!entity.visibilityCache.canSee(target)) return true
+                    if (!entity.sensing.hasLineOfSight(target)) return true
 
-                    val shootingX = entity.x + entity.random.nextTriangular(0.0, 2.0)
-                    val shootingY = entity.y + entity.random.nextTriangular(2.0, 2.0)
-                    val shootingZ = entity.z + entity.random.nextTriangular(0.0, 2.0)
+                    val shootingX = entity.x + entity.random.triangle(0.0, 2.0)
+                    val shootingY = entity.y + entity.random.triangle(2.0, 2.0)
+                    val shootingZ = entity.z + entity.random.triangle(0.0, 2.0)
 
                     // ターゲットを見る
-                    entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+                    entity.getLookControl().setLookAt(target, 10.0F, 10.0F)
 
                     // エフェクト
                     if (!entity.isSilent) {
                         val soundEventPacket = SoundEventPacket(
                             SoundEventCard.ENTITY_CHAOS_CUBE_ATTACK.soundEvent,
-                            entity.blockPos,
+                            entity.blockPosition(),
                             SoundCategory.HOSTILE,
                             2.0F,
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
                         )
-                        SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                        SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
                     }
                     val particlePacket = MagicSquareParticlePacket(
                         Vec3d(shootingX, shootingY, shootingZ),
-                        Vec3d(target.x, target.getBodyY(0.5), target.z),
+                        Vec3d(target.x, target.getY(0.5), target.z),
                     )
-                    MagicSquareParticleChannel.sendToAround(entity.world as ServerWorld, entity.pos, 64.0, particlePacket)
+                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerWorld, entity.position(), 64.0, particlePacket)
 
 
                     repeat(40) {
@@ -328,41 +328,41 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                         // 射撃フェーズ
 
                         if (entity.target != target) return false
-                        if (!entity.visibilityCache.canSee(target)) return true
+                        if (!entity.sensing.hasLineOfSight(target)) return true
 
                         val diffX = target.x - shootingX
-                        val diffY = target.getBodyY(0.5) - shootingY
+                        val diffY = target.getY(0.5) - shootingY
                         val diffZ = target.z - shootingZ
                         val distance = sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ)
                         if (distance < 0.01) return@repeat // 近すぎるので射撃に失敗
 
                         // 発射体の生成
-                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.world)
+                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.level())
                         projectileEntity.owner = entity
-                        projectileEntity.setPosition(shootingX, shootingY, shootingZ)
-                        projectileEntity.setVelocity(
-                            0.8 * entity.getRandom().nextTriangular(diffX / distance, 0.05),
-                            0.8 * entity.getRandom().nextTriangular(diffY / distance, 0.05),
-                            0.8 * entity.getRandom().nextTriangular(diffZ / distance, 0.05),
+                        projectileEntity.setPos(shootingX, shootingY, shootingZ)
+                        projectileEntity.setDeltaMovement(
+                            0.8 * entity.getRandom().triangle(diffX / distance, 0.05),
+                            0.8 * entity.getRandom().triangle(diffY / distance, 0.05),
+                            0.8 * entity.getRandom().triangle(diffZ / distance, 0.05),
                         )
                         projectileEntity.damage = 20.0F
                         projectileEntity.maxDistance = 32.0F
-                        entity.world.spawnEntity(projectileEntity)
+                        entity.level().addFreshEntity(projectileEntity)
 
                         // ターゲットを見る
-                        entity.getLookControl().lookAt(target, 10.0F, 10.0F)
+                        entity.getLookControl().setLookAt(target, 10.0F, 10.0F)
 
                         // エフェクト
                         if (!entity.isSilent) {
                             val soundEventPacket = SoundEventPacket(
                                 SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_SHOOT.soundEvent,
-                                entity.blockPos,
+                                entity.blockPosition(),
                                 SoundCategory.HOSTILE,
                                 2.0F,
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,
                             )
-                            SoundEventChannel.sendToAround(entity.world as ServerWorld, entity.eyePos, 64.0, soundEventPacket)
+                            SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
                         }
 
 
@@ -374,8 +374,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
                 suspend fun SequenceScope<Unit>.tryMove(): Boolean {
                     while (true) {
                         val target = entity.target ?: return false
-                        if (entity.visibilityCache.canSee(target)) return true
-                        entity.getMoveControl().moveTo(target.x, target.y, target.z, 1.0)
+                        if (entity.sensing.hasLineOfSight(target)) return true
+                        entity.getMoveControl().setWantedPosition(target.x, target.y, target.z, 1.0)
                         yield(Unit)
                     }
                 }
@@ -414,13 +414,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
     }
 
     private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
-        override fun canStart(): Boolean {
-            val world = mob.world
-            if (world.time % 20L != 0L) return false
+        override fun canUse(): Boolean {
+            val world = mob.level()
+            if (world.gameTime % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureAccessor.registryManager.get(RegistryKeys.STRUCTURE).get(RegistryKey.of(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
-            if (!world.structureAccessor.getStructureAt(mob.blockPos, structure).hasChildren()) return false
-            return super.canStart()
+            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid()) return false
+            return super.canUse()
         }
     }
 }

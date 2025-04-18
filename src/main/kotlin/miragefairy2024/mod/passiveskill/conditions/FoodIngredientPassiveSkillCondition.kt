@@ -10,16 +10,16 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.text
-import net.minecraft.item.Item
+import net.minecraft.world.item.Item
 import java.time.Instant
 
 class ItemFoodIngredientPassiveSkillCondition(private val item: Item) : PassiveSkillCondition {
     companion object {
         val identifier = MirageFairy2024.identifier("food_ingredient")
-        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toTranslationKey()}" }, "%s Dishes", "%s料理")
+        val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_condition.${identifier.toLanguageKey()}" }, "%s Dishes", "%s料理")
     }
 
-    override val text get() = text { translation(item.name) }
+    override val text get() = text { translation(item.description) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
         if (!(context.player.lastFood.itemStack.orEmpty.item containsAsFoodIngredient item)) return false
         val time = context.player.lastFood.time ?: return false

@@ -1,29 +1,29 @@
 package miragefairy2024.util
 
 import miragefairy2024.mod.SoundEventCard
-import net.minecraft.block.Block
-import net.minecraft.block.Blocks
-import net.minecraft.block.FarmlandBlock
-import net.minecraft.block.OperatorBlock
-import net.minecraft.entity.ItemEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
-import net.minecraft.util.math.BlockBox
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
-import net.minecraft.util.math.Direction
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
+import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.BlockTags
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.AABB as Box
+import net.minecraft.core.Direction
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.Level as World
 
-val World.isServer get() = !this.isClient
+val World.isServer get() = !this.isClientSide
 
 fun BlockView.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
-    if (blockState.isOf(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.get(FarmlandBlock.MOISTURE) / 7.0)
-    if (blockState.isIn(BlockTags.DIRT)) return 0.5
-    if (blockState.isIn(BlockTags.SAND)) return 0.25
+    if (blockState.`is`(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.getValue(FarmlandBlock.MOISTURE) / 7.0)
+    if (blockState.`is`(BlockTags.DIRT)) return 0.5
+    if (blockState.`is`(BlockTags.SAND)) return 0.25
     return 0.0
 }
 
@@ -86,7 +86,7 @@ fun blockVisitor(
             }
 
             fun check(offsetX: Int, offsetY: Int, offsetZ: Int) {
-                val toBlockPos = fromBlockPos.add(offsetX, offsetY, offsetZ)
+                val toBlockPos = fromBlockPos.offset(offsetX, offsetY, offsetZ)
                 if (toBlockPos !in checkedBlockPosList && predicate(nextDistance, fromBlockPos, toBlockPos)) {
                     checkedBlockPosList += toBlockPos
                     nextBlockPosList += toBlockPos
@@ -137,25 +137,25 @@ fun blockVisitor(
  */
 fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
-    if (!itemStack.item.canMine(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
+    if (!itemStack.item.canAttackBlock(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
-    if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.NOTIFY_ALL)
+    if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
+    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
+        world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.interactionManager.gameMode)) return false // 破壊する権限がない
+    if (player.blockActionRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
-    block.onBreak(world, blockPos, blockState, player)
+    block.playerWillDestroy(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)
-    if (success) block.onBroken(world, blockPos, blockState)
+    if (success) block.destroy(world, blockPos, blockState)
     if (player.isCreative) return true // クリエイティブの場合、ドロップを省略
     val newItemStack = itemStack.copy()
-    val canHarvest = player.canHarvest(blockState)
-    itemStack.postMine(world, blockState, blockPos, player)
-    if (success && canHarvest) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
+    val canHarvest = player.hasCorrectToolForDrops(blockState)
+    itemStack.mineBlock(world, blockState, blockPos, player)
+    if (success && canHarvest) block.playerDestroy(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
 }
 
@@ -165,26 +165,26 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
  * [breakBlock]とは以下の点で異なります。
  * - 近接武器の採掘不能特性を無視します。
  * - 専用のツールが必要なブロックを、ツールの種類にかかわらず回収可能です。
- * - [Item.postMine]を起動せず、アイテムの耐久値の減少などが発生しません。
+ * - [Item.mineBlock]を起動せず、アイテムの耐久値の減少などが発生しません。
  */
 fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
-    if (blockState.getHardness(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.isCreativeLevelTwoOp) {
-        world.updateListeners(blockPos, blockState, blockState, Block.NOTIFY_ALL)
+    if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
+    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
+        world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
-    if (player.isBlockBreakingRestricted(world, blockPos, player.interactionManager.gameMode)) return false // 破壊する権限がない
+    if (player.blockActionRestricted(world, blockPos, player.gameMode.gameModeForPlayer)) return false // 破壊する権限がない
 
-    block.onBreak(world, blockPos, blockState, player)
+    block.playerWillDestroy(world, blockPos, blockState, player)
     val success = world.removeBlock(blockPos, false)
-    if (success) block.onBroken(world, blockPos, blockState)
+    if (success) block.destroy(world, blockPos, blockState)
     if (player.isCreative) return true // クリエイティブの場合、ドロップを省略
     val newItemStack = itemStack.copy()
-    if (success) block.afterBreak(world, player, blockPos, blockState, blockEntity, newItemStack)
+    if (success) block.playerDestroy(world, player, blockPos, blockState, blockEntity, newItemStack)
     return true
 }
 
@@ -199,19 +199,19 @@ fun collectItem(
     process: (ItemEntity) -> Boolean,
 ) {
     val box = when {
-        region != null -> Box.from(region)
-        reach != Int.MAX_VALUE -> Box(originalBlockPos).expand(reach.toDouble())
-        else -> Box.from(BlockBox.infinite())
+        region != null -> Box.of(region)
+        reach != Int.MAX_VALUE -> Box(originalBlockPos).inflate(reach.toDouble())
+        else -> Box.of(BlockBox.infinite())
     }
-    val targetTable = world.getEntitiesByClass(ItemEntity::class.java, box) {
+    val targetTable = world.getEntitiesOfClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応
-    }.groupBy { it.blockPos }
+    }.groupBy { it.blockPosition() }
 
     var remainingAmount = maxCount
     var processedCount = 0
     if (targetTable.isNotEmpty()) run finish@{
         blockVisitor(listOf(originalBlockPos), maxDistance = reach) { _, fromBlockPos, toBlockPos ->
-            if (region != null && toBlockPos !in region) return@blockVisitor false
+            if (region != null && !region.isInside(toBlockPos)) return@blockVisitor false
             val offset = toBlockPos.subtract(fromBlockPos)
             val direction = when {
                 offset.y == -1 -> Direction.DOWN
@@ -223,9 +223,9 @@ fun collectItem(
                 else -> throw AssertionError()
             }
             if (ignoreOriginalWall && fromBlockPos == originalBlockPos) {
-                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite)
+                !world.getBlockState(toBlockPos).isFaceSturdy(world, toBlockPos, direction.opposite)
             } else {
-                !world.getBlockState(toBlockPos).isSideSolidFullSquare(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isSideSolidFullSquare(world, fromBlockPos, direction)
+                !world.getBlockState(toBlockPos).isFaceSturdy(world, toBlockPos, direction.opposite) && !world.getBlockState(fromBlockPos).isFaceSturdy(world, fromBlockPos, direction)
             }
         }.forEach { (_, blockPos) ->
             targetTable[blockPos]?.forEach {
@@ -245,7 +245,7 @@ fun collectItem(
     if (processedCount > 0) {
 
         // Effect
-        val pos = originalBlockPos.toCenterPos()
+        val pos = originalBlockPos.center
         world.playSound(null, pos.x, pos.y, pos.z, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
 
     }

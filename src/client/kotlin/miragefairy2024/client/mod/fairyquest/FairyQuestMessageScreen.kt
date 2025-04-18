@@ -17,8 +17,8 @@ import miragefairy2024.client.mod.surface
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component as Text
 
 class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuestTitle: Text, private val fairyQuestMessage: Text, private val fairyQuestClient: Text, title: Text) : BaseOwoScreen<FlowLayout>(title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
@@ -85,8 +85,8 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (super.keyPressed(keyCode, scanCode, modifiers)) return true
-        if (client!!.options.inventoryKey.matchesKey(keyCode, scanCode)) {
-            close()
+        if (minecraft!!.options.keyInventory.matches(keyCode, scanCode)) {
+            onClose()
             return true
         }
         return false
@@ -94,11 +94,11 @@ class FairyQuestMessageScreen(private val parent: Screen, private val fairyQuest
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (super.mouseClicked(mouseX, mouseY, button)) return true
-        close()
+        onClose()
         return true
     }
 
-    override fun close() {
-        client!!.setScreen(parent)
+    override fun onClose() {
+        minecraft!!.setScreen(parent)
     }
 }

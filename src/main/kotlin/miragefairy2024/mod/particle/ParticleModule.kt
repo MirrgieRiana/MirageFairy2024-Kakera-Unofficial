@@ -9,10 +9,10 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
-import net.minecraft.particle.ParticleEffect
-import net.minecraft.particle.ParticleType
-import net.minecraft.registry.Registries
-import net.minecraft.util.Identifier
+import net.minecraft.core.particles.ParticleOptions as ParticleEffect
+import net.minecraft.core.particles.ParticleType
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.resources.ResourceLocation as Identifier
 
 class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
     path: String,
