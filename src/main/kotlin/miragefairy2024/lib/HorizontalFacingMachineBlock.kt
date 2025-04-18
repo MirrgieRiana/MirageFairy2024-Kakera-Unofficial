@@ -21,6 +21,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
 open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
@@ -85,9 +86,9 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
     override fun getMenuProvider(state: BlockState, world: Level, pos: BlockPos) = world.getBlockEntity(pos) as? NamedScreenHandlerFactory
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClientSide) return ActionResult.SUCCESS
-        val blockEntity = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos)) ?: return ActionResult.CONSUME
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
+        if (level.isClientSide) return ActionResult.SUCCESS
+        val blockEntity = card.blockEntityAccessor.castOrNull(level.getBlockEntity(pos)) ?: return ActionResult.CONSUME
         player.openMenu(object : ExtendedScreenHandlerFactory {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
             override fun getDisplayName() = blockEntity.displayName

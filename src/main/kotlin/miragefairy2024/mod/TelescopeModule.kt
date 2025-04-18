@@ -66,7 +66,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
@@ -186,8 +185,8 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClientSide) return ActionResult.SUCCESS
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
+        if (level.isClientSide) return ActionResult.SUCCESS
         player as ServerPlayerEntity
 
         val now = Instant.now()
@@ -199,7 +198,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
             it()
         }
 
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+        level.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
         player.telescopeMission.lastUsedInstant = now
         TelescopeMissionExtraPlayerDataCategory.sync(player)

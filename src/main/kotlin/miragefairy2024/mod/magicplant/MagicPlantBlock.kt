@@ -36,6 +36,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.entity.player.Player
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.Level
@@ -237,18 +238,18 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    final override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
         if (player.isShiftKeyDown) {
-            if (world.isClientSide) {
+            if (level.isClientSide) {
                 return ActionResult.SUCCESS
             } else {
                 val traitStacks = run {
-                    val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
+                    val blockEntity = level.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
                 player.openMenu(object : ExtendedScreenHandlerFactory {
                     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
+                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks)
                     }
 
                     override fun getDisplayName() = text { traitListScreenTranslation() }
@@ -260,8 +261,8 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
                 return ActionResult.CONSUME
             }
         }
-        if (!tryPick(world, pos, player, player.mainHandItem, true, true)) return ActionResult.PASS
-        return ActionResult.sidedSuccess(world.isClientSide)
+        if (!tryPick(level, pos, player, player.mainHandItem, true, true)) return ActionResult.PASS
+        return ActionResult.sidedSuccess(level.isClientSide)
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */

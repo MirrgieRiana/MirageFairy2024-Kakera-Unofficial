@@ -58,6 +58,7 @@ import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -132,9 +133,9 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
         if (player.isShiftKeyDown) {
-            if (world.isClientSide) return ActionResult.SUCCESS
+            if (level.isClientSide) return ActionResult.SUCCESS
 
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
