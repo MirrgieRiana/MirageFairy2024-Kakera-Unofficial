@@ -19,15 +19,15 @@ import kotlin.math.min
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java
 open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
-    protected val textRenderer = MinecraftClient.getInstance().textRenderer
+    protected val textRenderer = MinecraftClient.getInstance().font
     protected var wrappedText: List<OrderedText>
     protected var verticalTextAlignment = VerticalAlignment.TOP
     protected var horizontalTextAlignment = HorizontalAlignment.LEFT
     protected val color = AnimatableProperty.of(Color.WHITE)
-    protected val lineHeight = Observable.of(textRenderer.fontHeight)
+    protected val lineHeight = Observable.of(textRenderer.lineHeight)
     protected var shadow = false
     protected var maxWidth: Int
-    protected var textClickHandler = Function { style: Style? -> OwoUIDrawContext.utilityScreen().handleTextClick(style) }
+    protected var textClickHandler = Function { style: Style? -> OwoUIDrawContext.utilityScreen().handleComponentClicked(style) }
 
     init {
         wrappedText = ArrayList()
@@ -134,7 +134,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     private fun wrapLines() {
-        wrappedText = textRenderer.wrapLines(text, if (horizontalSizing.get().isContent) maxWidth else width)
+        wrappedText = textRenderer.split(text, if (horizontalSizing.get().isContent) maxWidth else width)
 
         // ■■ 追加分 {
         if (wrappedText.size >= 2) {
@@ -159,9 +159,9 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
-        val matrices = context.matrices
+        val matrices = context.pose()
         matrices.pushPose()
-        matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.scaleFactor, 0.0)
+        matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.guiScale, 0.0)
         var x = x
         var y = y
         if (horizontalSizing.get().isContent) {
@@ -188,8 +188,8 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
                     else -> Unit
                 }
                 var renderY = lambdaY + i * (this.lineHeight() + 2)
-                renderY += this.lineHeight() - textRenderer.fontHeight
-                context.drawText(textRenderer, renderText, renderX, renderY, color.get().argb(), shadow)
+                renderY += this.lineHeight() - textRenderer.lineHeight
+                context.drawString(textRenderer, renderText, renderX, renderY, color.get().argb(), shadow)
             }
         }
         matrices.popPose()
@@ -206,7 +206,7 @@ open class LimitedLabelComponent(protected var text: Text) : BaseComponent() {
     }
 
     protected fun styleAt(mouseX: Int, mouseY: Int): Style? {
-        return textRenderer.textHandler.getStyleAt(wrappedText[min((mouseY / (this.lineHeight() + 2)).toDouble(), (wrappedText.size - 1).toDouble()).toInt()], mouseX)
+        return textRenderer.splitter.componentStyleAtWidth(wrappedText[min((mouseY / (this.lineHeight() + 2)).toDouble(), (wrappedText.size - 1).toDouble()).toInt()], mouseX)
     }
 
 }

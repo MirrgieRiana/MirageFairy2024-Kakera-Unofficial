@@ -26,7 +26,7 @@ class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntit
                         it.addOrReplaceChild(
                             "part${x * 4 + y * 2 + z}",
                             ModelPartBuilder.create().texOffs(0 + x * 20, 0 + y * 20 + (1 - z) * 10).addBox(0F, 0F, 0F, 5F, 5F, 5F),
-                            ModelTransform.pivot(-5.5F + 6F * x, -5.5F + 6F * y, -5.5F + 6F * z),
+                            ModelTransform.offset(-5.5F + 6F * x, -5.5F + 6F * y, -5.5F + 6F * z),
                         )
                     }
                 }
@@ -50,10 +50,10 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
     private val rotations = (0 until 8).map { Quaternionf() }.toTypedArray()
 
     override fun setupAnim(entity: ChaosCubeEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) {
-        val delta = animationProgress - entity.age
+        val delta = animationProgress - entity.tickCount
 
         val f = animationProgress * 2 * MathHelper.PI / 100
-        root.yaw = f
+        root.yRot = f
 
         segments = entity.segments
         repeat(8) { i ->
@@ -64,11 +64,11 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
         }
     }
 
-    override fun render(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
+    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
         if (!root.visible) return
         matrices.stack {
             matrices.translate(0F, 0.5F, 0F)
-            root.rotate(matrices)
+            root.translateAndRotate(matrices)
             matrices.mulPose(Quaternionf().rotateZYX(ROLL, 0F, PITCH))
 
             repeat(8) { i ->

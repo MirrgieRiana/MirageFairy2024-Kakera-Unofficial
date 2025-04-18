@@ -19,7 +19,7 @@ import com.mojang.math.Axis as RotationAxis
 class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<AntimatterBoltEntity>(context) {
     companion object {
         val MAIN = EntityModelLayerCard(AntimatterBoltCard.identifier, "main", 16, 16) {
-            it.addOrReplaceChild("main", ModelPartBuilder.create().texOffs(0, 0).addBox(-6F, -1F, -1F, 12F, 2F, 2F), ModelTransform.NONE)
+            it.addOrReplaceChild("main", ModelPartBuilder.create().texOffs(0, 0).addBox(-6F, -1F, -1F, 12F, 2F, 2F), ModelTransform.ZERO)
         }
     }
 
@@ -35,12 +35,12 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
 
     override fun render(entity: AntimatterBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
         matrices.stack {
-            matrices.mulPose(RotationAxis.POSITIVE_Y.rotation((MathHelper.lerp(tickDelta, entity.yRotO, entity.yRot) - 90.0F) / 180F * MathHelper.PI))
-            matrices.mulPose(RotationAxis.POSITIVE_Z.rotation(MathHelper.lerp(tickDelta, entity.xRotO, entity.xRot) / 180F * MathHelper.PI))
+            matrices.mulPose(RotationAxis.YP.rotation((MathHelper.lerp(tickDelta, entity.yRotO, entity.yRot) - 90.0F) / 180F * MathHelper.PI))
+            matrices.mulPose(RotationAxis.ZP.rotation(MathHelper.lerp(tickDelta, entity.xRotO, entity.xRot) / 180F * MathHelper.PI))
 
             model.setupAnim(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.renderType(texture))
-            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F)
+            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F)
         }
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
     }

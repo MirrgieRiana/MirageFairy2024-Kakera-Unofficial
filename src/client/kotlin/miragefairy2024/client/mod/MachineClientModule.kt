@@ -32,12 +32,12 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
     override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
 
-        if (handler.progressMax > 0) {
-            val w = (arrowBound.width.toDouble() * (handler.progress.toDouble() / handler.progressMax.toDouble() atMost 1.0)).roundToInt()
+        if (menu.progressMax > 0) {
+            val w = (arrowBound.width.toDouble() * (menu.progress.toDouble() / menu.progressMax.toDouble() atMost 1.0)).roundToInt()
             context.blit(
                 PROGRESS_ARROW_TEXTURE,
-                x + arrowBound.x,
-                y + arrowBound.y - 1,
+                leftPos + arrowBound.x,
+                topPos + arrowBound.y - 1,
                 0F,
                 0F,
                 w,
@@ -52,13 +52,13 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
         super.renderTooltip(context, x, y)
         run {
             val bound = Rect2i(
-                this.x + arrowBound.x,
-                this.y + arrowBound.y - 1,
+                this.leftPos + arrowBound.x,
+                this.topPos + arrowBound.y - 1,
                 arrowBound.width - 1,
                 arrowBound.height + 1 - 1,
             )
             if (bound.contains(x, y)) {
-                context.renderTooltip(textRenderer, listOf(text { "${handler.progress} / ${handler.progressMax}"() }), Optional.empty(), x, y + 17)
+                context.renderTooltip(font, listOf(text { "${menu.progress} / ${menu.progressMax}"() }), Optional.empty(), x, y + 17)
             }
         }
     }
@@ -79,12 +79,12 @@ class AuraReflectorFurnaceScreen(card: AuraReflectorFurnaceCard, arguments: Argu
     override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
 
-        if (handler.fuelMax > 0) {
-            val h = (fuelBound.height.toDouble() * (handler.fuel.toDouble() / handler.fuelMax.toDouble() atMost 1.0)).roundToInt()
+        if (menu.fuelMax > 0) {
+            val h = (fuelBound.height.toDouble() * (menu.fuel.toDouble() / menu.fuelMax.toDouble() atMost 1.0)).roundToInt()
             context.blit(
                 BLUE_FUEL_TEXTURE,
-                x + fuelBound.x - 1,
-                y + fuelBound.y - 1 + (fuelBound.height - h),
+                leftPos + fuelBound.x - 1,
+                topPos + fuelBound.y - 1 + (fuelBound.height - h),
                 0F,
                 fuelBound.height.toFloat() - h.toFloat(),
                 fuelBound.width,

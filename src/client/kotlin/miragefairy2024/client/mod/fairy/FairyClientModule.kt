@@ -64,11 +64,11 @@ fun initFairyClientModule() {
                 child(LimitedLabelComponent(itemStack.hoverName.darkBlue).horizontalSizing(Sizing.fixed(160 - 8 - 16 - 6 - 10 - 8)).margins(Insets.of(0, 0, 4, 0)))
             })
         }
-        MinecraftClient.getInstance().toastManager.add(createOwoToast(component))
+        MinecraftClient.getInstance().toasts.addToast(createOwoToast(component))
     }
 
     // ソウルストリームのキーバインド
-    soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.INVENTORY_CATEGORY)
+    soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.CATEGORY_INVENTORY)
     inputEventsHandlers += {
         while (soulStreamKey.consumeClick()) {
             lastMousePositionInInventory = null
@@ -93,7 +93,7 @@ fun initFairyClientModule() {
                     alignment(HorizontalAlignment.RIGHT, VerticalAlignment.TOP)
 
                     fun updatePosition() {
-                        if (!screen.recipeBookWidget.isOpen) {
+                        if (!screen.recipeBookComponent.isVisible) {
                             sizing(Sizing.fixed(146), Sizing.fixed(46))
                         } else {
                             sizing(Sizing.fixed(300), Sizing.fixed(46))
@@ -108,7 +108,7 @@ fun initFairyClientModule() {
                     // ボタン
                     val buttonTexture = MirageFairy2024.identifier("textures/gui/sprites/soul_stream_button.png")
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
-                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouse.x, MinecraftClient.getInstance().mouse.y)
+                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouseHandler.xpos(), MinecraftClient.getInstance().mouseHandler.ypos())
                         screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {
