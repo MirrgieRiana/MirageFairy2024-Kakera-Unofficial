@@ -90,7 +90,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
@@ -377,7 +377,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         }
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         super.animateTick(state, world, pos, random)
         if (random.nextInt(20) == 0) {
             val blockPos = pos.below()
@@ -390,7 +390,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
         val toolItemStack = player.getItemInHand(hand)
         if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
@@ -421,7 +421,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         val toolItemStack = player.getItemInHand(hand)
         val direction = state.getValue(FACING)
@@ -449,7 +449,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         return ActionResult.CONSUME
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         if (random.nextFloat() >= 0.2F) return
 
         val direction = state.getValue(FACING)

@@ -58,9 +58,10 @@ import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
@@ -125,13 +126,13 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isShiftKeyDown) {
             if (world.isClientSide) return ActionResult.SUCCESS
 

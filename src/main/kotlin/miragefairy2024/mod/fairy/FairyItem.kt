@@ -57,7 +57,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.math.log
 import kotlin.math.roundToInt
 

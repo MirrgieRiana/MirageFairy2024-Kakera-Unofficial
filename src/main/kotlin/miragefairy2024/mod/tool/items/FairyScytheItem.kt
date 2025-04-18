@@ -36,7 +36,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
@@ -64,7 +64,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
     override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
 
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -76,7 +76,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
@@ -99,7 +99,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         tooltipComponents += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
 
         if (!user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
@@ -132,7 +132,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         return true
     }
 
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         if (state.getDestroySpeed(world, pos) != 0.0F) {
             if (miner.random.nextFloat() < 0.2F) {
                 stack.hurtAndBreak(1, miner) { e ->
@@ -143,7 +143,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         return true
     }
 
-    override fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
+    override fun postTryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
         if (world.isClientSide) return
         if (player?.isShiftKeyDown == true) return
         (-1..1).forEach { x ->

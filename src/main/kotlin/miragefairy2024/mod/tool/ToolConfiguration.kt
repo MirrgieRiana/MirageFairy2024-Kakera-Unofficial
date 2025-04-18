@@ -30,7 +30,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.TagKey
 import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 context(ModContext)
 fun initToolConfiguration() {
@@ -99,10 +99,10 @@ abstract class ToolConfiguration {
     val descriptions = mutableListOf<Component>()
     var hasGlint = false
 
-    val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
-    val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: World, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
+    val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
+    val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
-    val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
+    val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
     val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Enchantment, old: Int) -> Int>()
     val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 

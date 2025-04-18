@@ -59,10 +59,14 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
@@ -176,13 +180,13 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState = defaultBlockState().setValue(FACING, ctx.horizontalDirection)
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (world.isClientSide) return ActionResult.SUCCESS
         player as ServerPlayerEntity
 
@@ -203,7 +207,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         return ActionResult.CONSUME
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()

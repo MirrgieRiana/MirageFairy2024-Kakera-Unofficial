@@ -38,7 +38,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader as WorldView
 
 abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
@@ -48,7 +48,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = MagicPlantBlockEntity(configuration, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+    override fun triggerEvent(state: BlockState, world: Level, pos: BlockPos, type: Int, data: Int): Boolean {
         super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
         return blockEntity.triggerEvent(type, data)
@@ -63,10 +63,10 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     // Trait
 
     /** 隣接する同種の植物が交配種子を生産するときに参加できるか否か */
-    protected abstract fun canCross(world: World, blockPos: BlockPos, blockState: BlockState): Boolean
+    protected abstract fun canCross(world: Level, blockPos: BlockPos, blockState: BlockState): Boolean
 
     /** あるワールド上の地点における特性の効果を計算する。 */
-    protected fun calculateTraitEffects(world: World, blockPos: BlockPos, traitStacks: TraitStacks): MutableTraitEffects {
+    protected fun calculateTraitEffects(world: Level, blockPos: BlockPos, traitStacks: TraitStacks): MutableTraitEffects {
         val allTraitEffects = MutableTraitEffects()
         traitStacks.traitStackMap.forEach { (trait, level) ->
             val traitEffects = trait.getTraitEffects(world, blockPos, level)
@@ -76,7 +76,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     }
 
     /** 種子によって置かれた際にその特性をコピーする。 */
-    final override fun setPlacedBy(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+    final override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
         super.setPlacedBy(world, pos, state, placer, itemStack)
         run {
             if (world.isClientSide) return@run
@@ -132,7 +132,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) = move(world, pos, state, autoPick = true)
 
     final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState, isClient: Boolean) = canGrow(state)
-    final override fun isBonemealSuccess(world: World, random: Random, pos: BlockPos, state: BlockState) = true
+    final override fun isBonemealSuccess(world: Level, random: Random, pos: BlockPos, state: BlockState) = true
     final override fun performBonemeal(world: ServerWorld, random: Random, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
 
 
@@ -148,7 +148,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     protected abstract fun getBlockStateAfterPicking(blockState: BlockState): BlockState
 
     /** 確定で戻って来る本来の種子以外の追加種子及び生産物を計算する。 */
-    protected abstract fun getAdditionalDrops(world: World, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
+    protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
 
     /** この植物本来の種子を返す。 */
     protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean = false): ItemStack {
@@ -159,7 +159,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     }
 
     /** 交配が可能であれば交配された種子、そうでなければこの植物本来の種子を返す。 */
-    protected fun calculateCrossedSeed(world: World, blockPos: BlockPos, traitStacks: TraitStacks, crossbreedingRate: Double): ItemStack {
+    protected fun calculateCrossedSeed(world: Level, blockPos: BlockPos, traitStacks: TraitStacks, crossbreedingRate: Double): ItemStack {
         val targetTraitStacksList = mutableListOf<TraitStacks>()
         fun check(targetBlockPos: BlockPos) {
             val targetBlockState = world.getBlockState(targetBlockPos)
@@ -192,7 +192,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
         return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
     }
 
-    fun tryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
+    fun tryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
         val result = canPick(world.getBlockState(blockPos))
         if (result && world.isServer) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
         if (causingEvent) {
@@ -237,7 +237,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    final override fun use(state: BlockState, world: Level, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (player.isShiftKeyDown) {
             if (world.isClientSide) {
                 return ActionResult.SUCCESS
@@ -298,7 +298,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     /** 破壊時、経験値をドロップする。 */
     // 経験値のドロップを onStacksDropped で行うと BlockEntity が得られないためこちらで実装する
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun onRemove(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+    final override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
             if (world !is ServerWorld) return@run
             if (!canPick(state)) return@run
@@ -319,5 +319,5 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 }
 
 interface PostTryPickHandlerItem {
-    fun postTryPick(world: World, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean)
+    fun postTryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean)
 }

@@ -22,7 +22,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"
@@ -130,7 +130,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     }
 
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         if (folia < 3_000) {

@@ -39,11 +39,12 @@ import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
@@ -177,10 +178,10 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     override fun hasAnalogOutputSignal(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getAnalogOutputSignal(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
+    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE

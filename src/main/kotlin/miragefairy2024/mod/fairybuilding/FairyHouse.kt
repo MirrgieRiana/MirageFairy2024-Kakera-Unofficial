@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.tags.ItemTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
     override fun getPath() = "fairy_house"
@@ -83,7 +83,7 @@ class FairyHouseBlock(card: FairyHouseCard) : FairyFactoryBlock(card)
 
 class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
     override fun getThis() = this
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         if (folia < 1_000) {

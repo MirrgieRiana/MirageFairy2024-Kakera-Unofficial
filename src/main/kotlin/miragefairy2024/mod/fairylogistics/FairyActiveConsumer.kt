@@ -27,7 +27,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 // TODO WIP
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
@@ -128,7 +128,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
 
     private var t = -1
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // 1分に1回発動する

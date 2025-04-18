@@ -39,7 +39,7 @@ import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
@@ -107,7 +107,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return ActionResult.CONSUME
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY

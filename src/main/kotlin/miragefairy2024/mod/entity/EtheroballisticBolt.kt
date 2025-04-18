@@ -29,13 +29,13 @@ import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.Vec3 as Vec3d
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object EtheroballisticBoltCard {
     val spawnGroup = SpawnGroup.MISC
     val width = 0.5F
     val height = 0.5F
-    fun createEntity(entityType: EntityType<EtheroballisticBoltEntity>, world: World) = EtheroballisticBoltEntity(entityType, world)
+    fun createEntity(entityType: EntityType<EtheroballisticBoltEntity>, world: Level) = EtheroballisticBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("etheroballistic_bolt")
     val entityType: EntityType<EtheroballisticBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
@@ -48,7 +48,7 @@ object EtheroballisticBoltCard {
     }
 }
 
-class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
+class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEntity>, world: Level) : ProjectileEntity(entityType, world) {
     companion object {
         val DAMAGE: TrackedData<Float> = DataTracker.defineId(EtheroballisticBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
         val MAX_DISTANCE: TrackedData<Float> = DataTracker.defineId(EtheroballisticBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)

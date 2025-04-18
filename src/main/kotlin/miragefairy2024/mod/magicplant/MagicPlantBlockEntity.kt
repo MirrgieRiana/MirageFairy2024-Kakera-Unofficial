@@ -10,7 +10,7 @@ import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 
 class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType, pos, state) {
@@ -45,7 +45,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
     }
 
 
-    override fun setLevel(world: World) {
+    override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
             val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(worldPosition), world.random)

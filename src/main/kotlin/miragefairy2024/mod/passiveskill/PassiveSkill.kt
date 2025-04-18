@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 interface PassiveSkillProvider {
     fun getPassiveSkill(itemStack: ItemStack): PassiveSkill?
@@ -33,4 +33,4 @@ interface PassiveSkillEffect<T> {
     fun update(context: PassiveSkillContext, oldValue: T, newValue: T)
 }
 
-class PassiveSkillContext(val world: World, val blockPos: BlockPos, val player: PlayerEntity)
+class PassiveSkillContext(val world: Level, val blockPos: BlockPos, val player: PlayerEntity)

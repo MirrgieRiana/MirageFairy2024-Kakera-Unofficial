@@ -48,7 +48,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.inventory.ClickAction as ClickType
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
 
 enum class BagCard(
@@ -178,7 +178,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {

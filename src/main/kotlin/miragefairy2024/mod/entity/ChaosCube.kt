@@ -60,7 +60,7 @@ import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.Vec3 as Vec3d
 import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import org.joml.Quaternionf
 import java.util.EnumSet
@@ -70,7 +70,7 @@ object ChaosCubeCard {
     val spawnGroup = SpawnGroup.MONSTER
     val width = 0.8F
     val height = 1.5F
-    fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: World) = ChaosCubeEntity(entityType, world)
+    fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: Level) = ChaosCubeEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("chaos_cube")
     val name = EnJa("Chaos Cube", "混沌のキューブ")
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
@@ -118,7 +118,7 @@ object ChaosCubeCard {
     }
 }
 
-class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World) : HostileEntity(entityType, world) {
+class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level) : HostileEntity(entityType, world) {
 
     class Segment(val partIndex: Int) {
         val prevRotation = Quaternionf()

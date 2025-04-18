@@ -27,7 +27,7 @@ import miragefairy2024.util.register
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
 @Suppress("SpellCheckingInspection")
@@ -502,7 +502,7 @@ class TraitCard(
         override val primaryEffect = traitEffectKeyCardStacks.first().first.traitEffectKey
         override val effectStacks = traitEffectKeyCardStacks.map { Pair(it.first.traitEffectKey, it.second) }
 
-        override fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects? {
+        override fun getTraitEffects(world: Level, blockPos: BlockPos, level: Int): MutableTraitEffects? {
             val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos) }.fold(1.0) { a, b -> a * b }
             return if (factor != 0.0) {
                 val traitEffects = MutableTraitEffects()

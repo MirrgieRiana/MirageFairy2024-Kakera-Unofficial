@@ -32,7 +32,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantConfiguration<C, B>() {
     abstract val outlineShapes: List<VoxelShape>
@@ -97,13 +97,13 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
 
     // Magic Plant
 
-    override fun canCross(world: World, blockPos: BlockPos, blockState: BlockState) = isMaxAge(blockState)
+    override fun canCross(world: Level, blockPos: BlockPos, blockState: BlockState) = isMaxAge(blockState)
     override fun canGrow(blockState: BlockState) = !isMaxAge(blockState)
     override fun getBlockStateAfterGrowth(blockState: BlockState, amount: Int) = withAge(getAge(blockState) + amount atMost maxAge)
     override fun canPick(blockState: BlockState) = isMaxAge(blockState)
     override fun getBlockStateAfterPicking(blockState: BlockState) = withAge(0)
 
-    override fun getAdditionalDrops(world: World, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
+    override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
         val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool).toDouble() else 0.0

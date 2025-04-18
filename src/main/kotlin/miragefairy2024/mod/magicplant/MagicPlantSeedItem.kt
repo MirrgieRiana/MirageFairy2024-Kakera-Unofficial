@@ -32,7 +32,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
@@ -127,7 +127,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     override fun isFoil(stack: ItemStack) = stack.isRare() || super.isFoil(stack)
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
             if (world.isClientSide) return TypedActionResult.success(itemStack)

@@ -15,15 +15,15 @@ import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import java.io.File
 import java.io.IOException
 
 context(ModContext)
-fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
     val item = object : Item(Properties()) {
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
-        override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
             action(world, user, hand, user.getItemInHand(hand))
             return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
         }
@@ -35,7 +35,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
 }
 
 context(ModContext)
-fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (World, PlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
         if (world.isServer) return@registerDebugItem
         action(world, player, hand, itemStack)

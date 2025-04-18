@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 // api
 
@@ -32,7 +32,7 @@ abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> 
     abstract val effectStacks: List<Pair<TraitEffectKey<*>, Double>>
 
     /** 呼び出された時点でそこにブロックの実体が存在しない場合があります。 */
-    abstract fun getTraitEffects(world: World, blockPos: BlockPos, level: Int): MutableTraitEffects?
+    abstract fun getTraitEffects(world: Level, blockPos: BlockPos, level: Int): MutableTraitEffects?
 
     override fun compareTo(other: Trait): Int {
         (this.primaryEffect.sortValue cmp other.primaryEffect.sortValue).let { if (it != 0) return it }

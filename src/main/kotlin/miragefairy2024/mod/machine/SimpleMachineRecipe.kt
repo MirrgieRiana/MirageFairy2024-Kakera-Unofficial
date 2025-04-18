@@ -32,7 +32,7 @@ import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import java.util.function.Consumer
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
@@ -72,7 +72,7 @@ open class SimpleMachineRecipe(
     override fun getGroup() = group
 
     // TODO 順不同
-    override fun matches(inventory: Inventory, world: World): Boolean {
+    override fun matches(inventory: Inventory, world: Level): Boolean {
         inputs.forEachIndexed { index, input ->
             if (!input.first.test(inventory.getItem(index))) return false
             if (inventory.getItem(index).count < input.second) return false

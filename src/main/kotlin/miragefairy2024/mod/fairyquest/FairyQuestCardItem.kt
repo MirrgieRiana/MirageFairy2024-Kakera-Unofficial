@@ -45,7 +45,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
@@ -107,7 +107,7 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         }
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
         if (world.isClientSide) return TypedActionResult.success(itemStack)

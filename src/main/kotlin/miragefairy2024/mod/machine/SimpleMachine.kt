@@ -41,7 +41,7 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.jvm.optionals.getOrNull
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
@@ -76,7 +76,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: World, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
+    fun match(world: Level, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -156,7 +156,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     var progressMax = 0
     var progress = 0
 
-    fun checkRecipe(world: World): (() -> Unit)? {
+    fun checkRecipe(world: Level): (() -> Unit)? {
         if (!shouldUpdateRecipe) return null
         shouldUpdateRecipe = false
 
@@ -180,20 +180,20 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         }
     }
 
-    open fun onRecipeCheck(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    open fun onRecipeCheck(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         listeners += checkRecipe(world) ?: return false
         return true
     }
 
-    open fun onCraftingTick(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    open fun onCraftingTick(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         return true
     }
 
-    open fun onPostServerTick(world: World, pos: BlockPos, state: BlockState) {
+    open fun onPostServerTick(world: Level, pos: BlockPos, state: BlockState) {
 
     }
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // クラフトが開始されていなければ、開始を試みる

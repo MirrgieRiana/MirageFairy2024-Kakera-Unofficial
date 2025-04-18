@@ -26,7 +26,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory, RenderingProxyBlockEntity {
 
@@ -127,7 +127,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Move
 
-    open fun serverTick(world: World, pos: BlockPos, state: BlockState) = Unit
+    open fun serverTick(world: Level, pos: BlockPos, state: BlockState) = Unit
 
 
     // Rendering
@@ -143,7 +143,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     private val animations = card.animationConfigurations.mapNotNull { it.createAnimation() }
 
-    open fun clientTick(world: World, pos: BlockPos, state: BlockState) {
+    open fun clientTick(world: Level, pos: BlockPos, state: BlockState) {
         animations.forEach {
             it.tick(getThis())
         }

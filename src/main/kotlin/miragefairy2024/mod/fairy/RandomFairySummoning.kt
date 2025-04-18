@@ -42,7 +42,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.math.pow
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
@@ -66,7 +66,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
     override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (!user.isShiftKeyDown) {
 
@@ -97,7 +97,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         }
     }
 
-    override fun onUseTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
+    override fun onUseTick(world: Level, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
         if (world.isClientSide) return
         if (user !is ServerPlayerEntity) return
 

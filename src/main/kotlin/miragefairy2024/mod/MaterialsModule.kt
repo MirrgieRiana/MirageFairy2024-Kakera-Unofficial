@@ -72,7 +72,7 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.util.StringUtil as StringHelper
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.gameevent.GameEvent
 import kotlin.math.pow
 
@@ -903,7 +903,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         if (flaming != null) tooltipComponents += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
     }
 
-    override fun finishUsingItem(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
+    override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         super.finishUsingItem(stack, world, user)
         if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
         if (user is PlayerEntity) user.awardStat(Stats.ITEM_USED.get(this))
@@ -921,5 +921,5 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
 
     override fun getUseDuration(stack: ItemStack) = 32
     override fun getUseAnimation(stack: ItemStack) = UseAction.DRINK
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
 }

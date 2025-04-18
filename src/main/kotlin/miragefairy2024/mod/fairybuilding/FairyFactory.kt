@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.util.StringRepresentable as StringIdentifiable
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.math.log
 
 abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {
@@ -104,7 +104,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     var folia = 0
     private var foliaCollectionCooldown = 0
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--

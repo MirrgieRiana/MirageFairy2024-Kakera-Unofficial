@@ -46,7 +46,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 enum class BlockMaterialCard(
     path: String,
@@ -248,7 +248,7 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
         world.setBlockAndUpdate(targetBlockPos, state)
     }
 
-    override fun stepOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
+    override fun stepOn(world: Level, pos: BlockPos, state: BlockState, entity: Entity) {
         if (!entity.isSteppingCarefully()) {
             entity.hurt(world.damageSources().magic(), 1.0f)
         }

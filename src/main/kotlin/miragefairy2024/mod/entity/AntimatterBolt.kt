@@ -28,13 +28,13 @@ import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3 as Vec3d
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object AntimatterBoltCard {
     val spawnGroup = SpawnGroup.MISC
     val width = 0.5F
     val height = 0.5F
-    fun createEntity(entityType: EntityType<AntimatterBoltEntity>, world: World) = AntimatterBoltEntity(entityType, world)
+    fun createEntity(entityType: EntityType<AntimatterBoltEntity>, world: Level) = AntimatterBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("antimatter_bolt")
     val entityType: EntityType<AntimatterBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
@@ -47,7 +47,7 @@ object AntimatterBoltCard {
     }
 }
 
-class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
+class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: Level) : ProjectileEntity(entityType, world) {
     companion object {
         val DAMAGE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
         val MAX_DISTANCE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)

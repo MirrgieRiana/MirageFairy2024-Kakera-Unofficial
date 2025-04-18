@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
 
 /**
@@ -46,7 +46,7 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
 
     override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
 
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -58,7 +58,7 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }

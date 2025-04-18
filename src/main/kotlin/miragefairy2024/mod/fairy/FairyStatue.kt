@@ -75,9 +75,10 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.BlockPos
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
@@ -201,13 +202,13 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+    override fun triggerEvent(state: BlockState, world: Level, pos: BlockPos, type: Int, data: Int): Boolean {
         super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
         return blockEntity.triggerEvent(type, data)
     }
 
-    override fun setPlacedBy(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+    override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
         super.setPlacedBy(world, pos, state, placer, itemStack)
         if (world.isClientSide) return
         val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
@@ -215,7 +216,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
@@ -224,7 +225,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
         return asItem().createItemStack().setFairyStatueMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif())
     }
 
-    override fun getFairyDreamMotifs(world: World, blockPos: BlockPos): List<Motif> {
+    override fun getFairyDreamMotifs(world: Level, blockPos: BlockPos): List<Motif> {
         val blockEntity = world.getBlockEntity(blockPos) as? FairyStatueBlockEntity ?: return listOf()
         return blockEntity.getMotif()?.let { listOf(it) } ?: listOf()
     }

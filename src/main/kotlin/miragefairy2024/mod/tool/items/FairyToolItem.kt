@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.BlockTags
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.Tiers
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 interface FairyToolItem {
     val configuration: ToolConfiguration
@@ -45,13 +45,13 @@ fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : Fair
     }
 }
 
-fun <I> I.postMineImpl(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
+fun <I> I.postMineImpl(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
     configuration.onPostMineListeners.forEach {
         it(this, stack, world, state, pos, miner)
     }
 }
 
-fun <I> I.onAfterBreakBlock(world: World, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) where I : Item, I : FairyToolItem {
+fun <I> I.onAfterBreakBlock(world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) where I : Item, I : FairyToolItem {
     configuration.onAfterBreakBlockListeners.forEach {
         it(this, world, player, pos, state, blockEntity, tool)
     }
@@ -67,7 +67,7 @@ fun <I> I.onKilled(entity: LivingEntity, attacker: LivingEntity, damageSource: D
     }
 }
 
-fun <I> I.inventoryTickImpl(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) where I : Item, I : FairyToolItem {
+fun <I> I.inventoryTickImpl(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) where I : Item, I : FairyToolItem {
     configuration.onInventoryTickListeners.forEach {
         it(this, stack, world, entity, slot, selected)
     }

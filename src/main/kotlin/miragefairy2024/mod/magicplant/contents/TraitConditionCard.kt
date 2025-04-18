@@ -22,14 +22,14 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.tags.BlockTags
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 enum class TraitConditionCard(
     path: String,
     emoji: Emoji,
     enName: String,
     jaName: String,
-    function: (world: World, blockPos: BlockPos) -> Double,
+    function: (world: Level, blockPos: BlockPos) -> Double,
 ) {
     FLOOR_MOISTURE("floor_moisture", Emoji.FLOOR_MOISTURE, "Floor Moisture", "湿った地面", { world, blockPos -> world.getMoisture(blockPos.below()) }),
     FLOOR_CRYSTAL_ERG("floor_crystal_erg", Emoji.FLOOR_CRYSTAL_ERG, "Floor Crystal Erg", "鉱物質の地面", { world, blockPos -> world.getCrystalErg(blockPos.below()) }),
@@ -53,11 +53,11 @@ enum class TraitConditionCard(
     val traitCondition = object : TraitCondition {
         override val emoji = emoji()
         override val name = text { translation() }
-        override fun getFactor(world: World, blockPos: BlockPos) = function(world, blockPos)
+        override fun getFactor(world: Level, blockPos: BlockPos) = function(world, blockPos)
     }
 }
 
-private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
+private fun getFloorHardness(world: Level, blockPos: BlockPos): Double {
     val blockState = world.getBlockState(blockPos.below())
     if (!blockState.`is`(BlockTags.MINEABLE_WITH_PICKAXE)) return 0.0
     val hardness = blockState.getDestroySpeed(world, blockPos.below())
@@ -65,7 +65,7 @@ private fun getFloorHardness(world: World, blockPos: BlockPos): Double {
     return hardness / 2.0 atMost 2.0
 }
 
-private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
+private fun Level.getHighAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimensionType().natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 0.0
@@ -74,7 +74,7 @@ private fun World.getHighAltitudeFactor(blockPos: BlockPos): Double {
     }
 }
 
-private fun World.getLowAltitudeFactor(blockPos: BlockPos): Double {
+private fun Level.getLowAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimensionType().natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
         this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 1.0

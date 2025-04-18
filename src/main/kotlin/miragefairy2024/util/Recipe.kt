@@ -50,7 +50,7 @@ import net.minecraft.resources.ResourceKey as RegistryKey
 import net.minecraft.tags.TagKey
 import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 
 // Crafting
@@ -170,7 +170,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInve
     lateinit var serializer: SpecialRecipeSerializer<*>
     serializer = SpecialRecipeSerializer { _, category ->
         object : SpecialCraftingRecipe(identifier, category) {
-            override fun matches(inventory: RecipeInputInventory, world: World) = matcher(inventory) != null
+            override fun matches(inventory: RecipeInputInventory, world: Level) = matcher(inventory) != null
             override fun assemble(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
             override fun getRemainingItems(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
                 override fun getRemainingItems(inventory: RecipeInputInventory) = super.getRemainingItems(inventory)

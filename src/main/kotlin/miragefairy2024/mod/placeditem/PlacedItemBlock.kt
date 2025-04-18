@@ -51,7 +51,7 @@ import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
@@ -89,7 +89,7 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+    override fun triggerEvent(state: BlockState, world: Level, pos: BlockPos, type: Int, data: Int): Boolean {
         super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
         return blockEntity.triggerEvent(type, data)
@@ -104,7 +104,7 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
 
     // 格納されているアイテムをドロップする
     override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
-    override fun onRemove(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
             val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return@run
             popResource(world, pos, blockEntity.itemStack)

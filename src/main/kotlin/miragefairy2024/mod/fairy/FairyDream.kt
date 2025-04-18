@@ -28,7 +28,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.AABB as Box
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 private val identifier = MirageFairy2024.identifier("fairy_dream")
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
@@ -175,5 +175,5 @@ interface FairyDreamProviderItem {
 }
 
 interface FairyDreamProviderBlock {
-    fun getFairyDreamMotifs(world: World, blockPos: BlockPos): List<Motif>
+    fun getFairyDreamMotifs(world: Level, blockPos: BlockPos): List<Motif>
 }

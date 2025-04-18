@@ -37,7 +37,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.Level
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
@@ -159,19 +159,19 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         }
     }
 
-    override fun onRecipeCheck(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    override fun onRecipeCheck(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         if (!super.onRecipeCheck(world, pos, state, listeners)) return false
         if (fuel == 0) listeners += checkFuelInsert() ?: return false
         return true
     }
 
-    override fun onCraftingTick(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    override fun onCraftingTick(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         if (!super.onCraftingTick(world, pos, state, listeners)) return false
         if (fuel == 0) listeners += checkFuelInsert() ?: return false
         return true
     }
 
-    override fun onPostServerTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun onPostServerTick(world: Level, pos: BlockPos, state: BlockState) {
         super.onPostServerTick(world, pos, state)
         val oldFuel = fuel
         if (fuel > 0) fuel--
