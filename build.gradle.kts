@@ -1,9 +1,9 @@
 import java.net.URL
 
 plugins {
-    id("fabric-loom") version "1.7-SNAPSHOT"
+    id("fabric-loom") version "1.10-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.1.20"
     id("com.modrinth.minotaur") version "2.+"
 }
 
@@ -12,8 +12,8 @@ java {
     // この行を削除すると、ソースが生成されません。
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 // 生成されたリソースをメイン ソース セットに追加します。
@@ -112,12 +112,12 @@ dependencies {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release.set(17)
+    options.release.set(21)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
         freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
