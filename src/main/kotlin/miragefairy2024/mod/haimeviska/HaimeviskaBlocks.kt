@@ -179,7 +179,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     DataGenerationEvents.onGenerateBlockStateModel {
-        it.woodProvider(card.block).log(card.block)
+        it.woodProvider(card.block).logWithHorizontal(card.block)
     }
 
     // 性質
