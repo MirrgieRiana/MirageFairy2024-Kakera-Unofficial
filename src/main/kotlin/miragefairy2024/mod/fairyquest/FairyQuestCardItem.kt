@@ -36,14 +36,15 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level
 
@@ -111,30 +112,28 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         val itemStack = user.getItemInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
-        user.openMenu(object : ExtendedScreenHandlerFactory {
+        user.openMenu(object : ExtendedScreenHandlerFactory<ResourceLocation> {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                 return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPosition()))
             }
 
             override fun getDisplayName() = recipe.title
 
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeUtf(fairyQuestRecipeRegistry.getKey(recipe)!!.string)
-            }
+            override fun getScreenOpeningData(player: ServerPlayer) = fairyQuestRecipeRegistry.getKey(recipe)!!
         })
         return TypedActionResult.consume(itemStack)
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): Identifier? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
+fun ItemStack.getFairyQuestRecipeId(): ResourceLocation? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
 fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
 
-fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
+fun ItemStack.setFairyQuestRecipeId(identifier: ResourceLocation) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
 fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
 
 private fun createFairyQuestCardModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/fairy_quest_card_background").string,
             "layer1" to MirageFairy2024.identifier("item/fairy_quest_card_frame").string,
@@ -148,8 +147,8 @@ object FairyQuestCardIngredient : CustomIngredient {
         override fun getIdentifier() = ID
         override fun read(json: JsonObject) = FairyQuestCardIngredient
         override fun write(json: JsonObject, ingredient: FairyQuestCardIngredient) = Unit
-        override fun read(buf: PacketByteBuf) = FairyQuestCardIngredient
-        override fun write(buf: PacketByteBuf, ingredient: FairyQuestCardIngredient) = Unit
+        override fun read(buf: FriendlyByteBuf) = FairyQuestCardIngredient
+        override fun write(buf: FriendlyByteBuf, ingredient: FairyQuestCardIngredient) = Unit
     }
 
     override fun requiresTesting() = true

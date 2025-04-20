@@ -2,15 +2,15 @@ package miragefairy2024.util
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3 as Vec3d
 
-abstract class Channel<P>(val packetId: Identifier) {
-    abstract fun writeToBuf(buf: PacketByteBuf, packet: P)
-    abstract fun readFromBuf(buf: PacketByteBuf): P
+abstract class Channel<P>(val packetId: ResourceLocation) {
+    abstract fun writeToBuf(buf: FriendlyByteBuf, packet: P)
+    abstract fun readFromBuf(buf: FriendlyByteBuf): P
 }
 
 fun <P> Channel<P>.sendToClient(player: ServerPlayerEntity, packet: P) {

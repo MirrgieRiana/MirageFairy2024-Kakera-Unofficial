@@ -45,7 +45,7 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.tags.BlockTags
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -69,9 +69,9 @@ fun initPlacedItemBlock() {
         card.block.registerModelGeneration {
             Model {
                 ModelData(
-                    parent = Identifier("minecraft", "block/block"),
+                    parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
                     textures = ModelTexturesData(
-                        TextureKey.PARTICLE.id to Identifier("minecraft", "block/glass").string,
+                        TextureKey.PARTICLE.id to ResourceLocation.fromNamespaceAndPath("minecraft", "block/glass").string,
                     ),
                     elements = ModelElementsData(),
                 )

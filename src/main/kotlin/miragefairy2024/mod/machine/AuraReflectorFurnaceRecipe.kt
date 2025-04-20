@@ -6,20 +6,20 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 object AuraReflectorFurnaceRecipeCard : SimpleMachineRecipeCard<AuraReflectorFurnaceRecipe>() {
     override val identifier = MirageFairy2024.identifier("aura_reflector_furnace")
     override val icon = AuraReflectorFurnaceCard.item.createItemStack()
     override val recipeClass = AuraReflectorFurnaceRecipe::class.java
-    override fun createRecipe(recipeId: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): AuraReflectorFurnaceRecipe {
+    override fun createRecipe(recipeId: ResourceLocation, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): AuraReflectorFurnaceRecipe {
         return AuraReflectorFurnaceRecipe(this, recipeId, group, inputs, output, duration)
     }
 }
 
 class AuraReflectorFurnaceRecipe(
     card: AuraReflectorFurnaceRecipeCard,
-    identifier: Identifier,
+    identifier: ResourceLocation,
     group: String,
     inputs: List<Pair<Ingredient, Int>>,
     output: ItemStack,

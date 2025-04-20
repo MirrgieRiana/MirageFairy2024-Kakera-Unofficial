@@ -7,12 +7,12 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.CreativeModeTab as ItemGroup
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 context(ModContext)
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
+fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         it.accept(this)
     }
@@ -20,7 +20,7 @@ fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
 
 context(ModContext)
 @Suppress("UnusedReceiverParameter")
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) {
+fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.accept(itemStack)
@@ -30,7 +30,7 @@ fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> Li
 
 
 class ItemGroupCard(
-    val identifier: Identifier,
+    val identifier: ResourceLocation,
     val enName: String,
     val jaName: String,
     icon: () -> ItemStack,

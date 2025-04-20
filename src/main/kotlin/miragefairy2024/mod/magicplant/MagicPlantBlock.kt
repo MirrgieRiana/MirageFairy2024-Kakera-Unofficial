@@ -11,36 +11,34 @@ import miragefairy2024.util.toBlockPos
 import miragefairy2024.util.toBox
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.BonemealableBlock as Fertilizable
-import net.minecraft.world.level.block.BushBlock as PlantBlock
-import net.minecraft.world.level.block.SupportType as SideShapeType
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.storage.loot.LootParams as LootContextParameterSet
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams as LootContextParameters
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.LevelReader as WorldView
+import net.minecraft.world.level.block.BonemealableBlock as Fertilizable
+import net.minecraft.world.level.block.BushBlock as PlantBlock
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
+import net.minecraft.world.level.block.SupportType as SideShapeType
+import net.minecraft.world.level.storage.loot.LootParams as LootContextParameterSet
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams as LootContextParameters
 
 abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
@@ -247,16 +245,14 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
                     val blockEntity = level.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
-                player.openMenu(object : ExtendedScreenHandlerFactory {
+                player.openMenu(object : ExtendedScreenHandlerFactory<TraitStacks> {
                     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                         return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks)
                     }
 
                     override fun getDisplayName() = text { traitListScreenTranslation() }
 
-                    override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                        TraitListScreenHandler.write(buf, traitStacks)
-                    }
+                    override fun getScreenOpeningData(player: ServerPlayer) = traitStacks
                 })
                 return ActionResult.CONSUME
             }

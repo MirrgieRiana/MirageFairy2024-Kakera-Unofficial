@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.item.alchemy.PotionUtils as PotionUtil
 import net.minecraft.world.item.alchemy.Potions
 
@@ -30,8 +30,8 @@ object WaterBottleIngredient : CustomIngredient {
         override fun getIdentifier() = ID
         override fun read(json: JsonObject) = WaterBottleIngredient
         override fun write(json: JsonObject, ingredient: WaterBottleIngredient) = Unit
-        override fun read(buf: PacketByteBuf) = WaterBottleIngredient
-        override fun write(buf: PacketByteBuf, ingredient: WaterBottleIngredient) = Unit
+        override fun read(buf: FriendlyByteBuf) = WaterBottleIngredient
+        override fun write(buf: FriendlyByteBuf, ingredient: WaterBottleIngredient) = Unit
     }
 
     override fun requiresTesting() = true

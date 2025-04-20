@@ -46,9 +46,9 @@ import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as Speci
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
@@ -61,7 +61,7 @@ fun <T : CraftingRecipeJsonBuilder> T.group(item: Item) = this.also { it.group(r
 
 class RecipeGenerationSettings<T> {
     val listeners = mutableListOf<(T) -> Unit>()
-    val idModifiers = mutableListOf<(Identifier) -> Identifier>()
+    val idModifiers = mutableListOf<(ResourceLocation) -> ResourceLocation>()
     var recipeCategory = RecipeCategory.MISC
     var noGroup = false
 }
@@ -71,7 +71,7 @@ infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: I
 }
 
 infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
-    this.idModifiers += { Identifier(modId, it.path) }
+    this.idModifiers += { ResourceLocation.fromNamespaceAndPath(modId, it.path) }
 }
 
 infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
@@ -213,7 +213,7 @@ fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count
 }
 
 context(ModContext)
-fun Item.registerLootTableModification(lootTableIdGetter: () -> Identifier, block: (LootTable.Builder) -> Unit) = ModEvents.onInitialize {
+fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceLocation, block: (LootTable.Builder) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
         if (source.isBuiltin) {
@@ -228,7 +228,7 @@ context(ModContext)
 fun Item.registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
-    biome: (() -> RegistryKey<Biome>)? = null,
+    biome: (() -> ResourceKey<Biome>)? = null,
 ) = this.registerLootTableModification({ Blocks.GRASS.lootTable }) { tableBuilder ->
     tableBuilder.configure {
         withPool(LootPool(AlternativeLootPoolEntry {
@@ -286,7 +286,7 @@ fun Item.registerMobDrop(
 
 context(ModContext)
 fun Item.registerChestLoot(
-    lootTableIdGetter: () -> Identifier,
+    lootTableIdGetter: () -> ResourceLocation,
     weight: Int = 10,
     count: IntRange? = null,
     block: LeafEntry.Builder<*>.() -> Unit = {},

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.BlockGetter as BlockView
 
@@ -47,7 +47,7 @@ interface RenderingProxy {
 
     fun renderItemStack(itemStack: ItemStack)
     fun renderFixedItemStack(itemStack: ItemStack)
-    fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
+    fun renderCutoutBlock(identifier: ResourceLocation, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
 }
 
 interface RenderingProxyBlockEntity {

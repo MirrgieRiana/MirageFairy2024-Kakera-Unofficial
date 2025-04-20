@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.item.Item
 import net.minecraft.tags.TagKey
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.structure.Structure
 
@@ -32,12 +32,12 @@ fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = Da
 }
 
 context(ModContext)
-fun Identifier.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
+fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
     it(tagProvider()).add(this)
 }
 
 context(ModContext)
-fun Identifier.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = DataGenerationEvents.onGenerateStructureTag {
+fun ResourceLocation.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = DataGenerationEvents.onGenerateStructureTag {
     it(tagProvider()).add(this)
 }
 
@@ -57,7 +57,7 @@ fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> Tag
 }
 
 context(ModContext)
-fun Identifier.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
+fun ResourceLocation.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
     it(tagProvider()).add(this)
 }
 

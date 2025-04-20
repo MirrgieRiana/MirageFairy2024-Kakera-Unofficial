@@ -12,7 +12,7 @@ import miragefairy2024.util.temperatureCategory
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
@@ -73,7 +73,7 @@ context(TraitSpawnConditionScope) val end
 
 // バイオーム・タグ
 
-context(TraitSpawnConditionScope) operator fun RegistryKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
+context(TraitSpawnConditionScope) operator fun ResourceKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
     override val description = text { translate(this@unaryPlus.location().toLanguageKey("biome")) }
     override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(this@unaryPlus)
 }

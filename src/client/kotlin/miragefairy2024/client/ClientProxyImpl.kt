@@ -26,7 +26,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import com.mojang.math.Axis as RotationAxis
 import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
 
@@ -110,7 +110,7 @@ class RenderingProxyBlockEntityRenderer<T>(
                 MinecraftClient.getInstance().itemRenderer.renderStatic(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
-            override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
+            override fun renderCutoutBlock(identifier: ResourceLocation, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
                 val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.cutout())
                 val bakedModel = if (variant != null) {
                     MinecraftClient.getInstance().modelManager.getModel(ModelIdentifier(identifier, variant))

@@ -8,7 +8,6 @@ import miragefairy2024.mod.fairy.FairyStatueCard
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
-import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.mod.fairy.setFairyStatueMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.Chance
@@ -29,7 +28,6 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
-import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.totalWeight
@@ -38,31 +36,28 @@ import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.Single
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.pathfinder.PathComputationType
-import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
@@ -147,18 +142,10 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                 )
             }
 
-            player.openMenu(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = name
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    buf.writeInt(chanceTable.size)
-                    chanceTable.forEach {
-                        buf.writeItem(it.showingItemStack)
-                        buf.writeUtf(it.motif.getIdentifier()!!.string)
-                        buf.writeDouble(it.rate)
-                        buf.writeDouble(it.count)
-                    }
-                }
+                override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
 
             return ActionResult.CONSUME

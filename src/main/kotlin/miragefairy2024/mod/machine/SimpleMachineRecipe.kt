@@ -14,30 +14,32 @@ import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementRewards
+import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.RequirementsStrategy as CriterionMerger
-import net.minecraft.advancements.CriterionTriggerInstance as CriterionConditions
+import net.minecraft.advancements.CriterionTriggerInstance as CriterionTriggerInstance
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
 import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
 import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
 import net.minecraft.world.Container as Inventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.world.level.Level
 import java.util.function.Consumer
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
-    abstract val identifier: Identifier
+    abstract val identifier: ResourceLocation
 
     abstract val icon: ItemStack
 
@@ -50,7 +52,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     abstract val recipeClass: Class<R>
 
-    abstract fun createRecipe(recipeId: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
+    abstract fun createRecipe(recipeId: ResourceLocation, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
 
     context(ModContext)
     fun init() {
@@ -62,7 +64,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
 open class SimpleMachineRecipe(
     private val card: SimpleMachineRecipeCard<*>,
-    val recipeId: Identifier,
+    val recipeId: ResourceLocation,
     private val group: String,
     val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
@@ -107,7 +109,7 @@ open class SimpleMachineRecipe(
     override fun getType() = card.type
 
     class Serializer<R : SimpleMachineRecipe>(private val card: SimpleMachineRecipeCard<R>) : RecipeSerializer<R> {
-        override fun fromJson(id: Identifier, json: JsonObject): R {
+        override fun fromJson(id: ResourceLocation, json: JsonObject): R {
             val root = json.toJsonWrapper()
             fun readInput(json: JsonWrapper): Pair<Ingredient, Int> {
                 return Pair(
@@ -128,7 +130,7 @@ open class SimpleMachineRecipe(
                 output = run {
                     val itemId = root["output"]["item"].asString()
                     val count = root["output"]["count"].asInt()
-                    ItemStack(Registries.ITEM[Identifier(itemId)], count)
+                    ItemStack(Registries.ITEM[ResourceLocation.parse(itemId)], count)
                 },
                 duration = root["duration"].asInt(),
             )
@@ -158,7 +160,7 @@ open class SimpleMachineRecipe(
             json.addProperty("duration", recipe.duration)
         }
 
-        override fun fromNetwork(id: Identifier, buf: PacketByteBuf): R {
+        override fun fromNetwork(id: ResourceLocation, buf: FriendlyByteBuf): R {
             val group = buf.readUtf()
             val inputCount = buf.readInt()
             val inputs = (0 until inputCount).map {
@@ -175,7 +177,7 @@ open class SimpleMachineRecipe(
             )
         }
 
-        override fun toNetwork(buf: PacketByteBuf, recipe: R) {
+        override fun toNetwork(buf: FriendlyByteBuf, recipe: R) {
             buf.writeUtf(recipe.group)
             buf.writeInt(recipe.inputs.size)
             recipe.inputs.forEach {
@@ -221,11 +223,11 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     private val advancementBuilder: Advancement.Builder = Advancement.Builder.recipeAdvancement()
     private var group = ""
 
-    override fun unlockedBy(name: String, conditions: CriterionConditions) = this.also { advancementBuilder.addCriterion(name, conditions) }
+    override fun unlockedBy(name: String, condition: Criterion<*>) = this.also { advancementBuilder.addCriterion(name, condition) }
     override fun group(string: String?) = this.also { this.group = string ?: "" }
     override fun getResult(): Item = output.item
 
-    override fun save(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
+    override fun save(recipeOutput: RecipeOutput, recipeId: ResourceLocation) {
         check(advancementBuilder.criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
 
         advancementBuilder
@@ -234,7 +236,7 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
             .rewards(AdvancementRewards.Builder.recipe(recipeId))
             .requirements(CriterionMerger.OR)
 
-        val advancementId: Identifier = recipeId.withPrefix("recipes/${category.folderName}/")
+        val advancementId: ResourceLocation = recipeId.withPrefix("recipes/${category.folderName}/")
 
         val recipeJsonProvider = object : RecipeJsonProvider {
             override fun serializeRecipeData(json: JsonObject) {
@@ -247,6 +249,6 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
             override fun getAdvancementId() = advancementId
         }
 
-        exporter.accept(recipeJsonProvider)
+        recipeOutput.accept(recipeJsonProvider)
     }
 }

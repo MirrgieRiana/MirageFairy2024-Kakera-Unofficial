@@ -3,26 +3,24 @@ package miragefairy2024.lib
 import miragefairy2024.util.checkType
 import miragefairy2024.util.getOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.stats.Stats
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.world.MenuProvider as NamedScreenHandlerFactory
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.stats.Stats
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.MenuProvider as NamedScreenHandlerFactory
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
 
 open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
     companion object {
@@ -89,10 +87,10 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
         if (level.isClientSide) return ActionResult.SUCCESS
         val blockEntity = card.blockEntityAccessor.castOrNull(level.getBlockEntity(pos)) ?: return ActionResult.CONSUME
-        player.openMenu(object : ExtendedScreenHandlerFactory {
+        player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
             override fun getDisplayName() = blockEntity.displayName
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
+            override fun getScreenOpeningData(player: ServerPlayer) = Unit
         })
         player.awardStat(Stats.ITEM_USED.get(this.asItem()))
         return ActionResult.CONSUME

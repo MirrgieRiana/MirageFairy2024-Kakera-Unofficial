@@ -5,19 +5,20 @@ import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.world.inventory.SimpleContainerData as ArrayPropertyDelegate
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.world.inventory.SimpleContainerData as ArrayPropertyDelegate
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScreenHandler> {
@@ -33,7 +34,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // Specification
 
-    abstract fun createIdentifier(): Identifier
+    abstract fun createIdentifier(): ResourceLocation
     val identifier = createIdentifier()
 
 
@@ -82,7 +83,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     // ScreenHandler
 
     abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
-    val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
+    val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
@@ -91,7 +92,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
             ScreenHandlerContext.NULL,
         )
         createScreenHandler(arguments)
-    }
+    }, StreamCodec.unit(Unit))
 
 
     // Gui

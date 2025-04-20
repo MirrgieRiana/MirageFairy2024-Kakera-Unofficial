@@ -7,12 +7,12 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.world.level.block.state.properties.Property
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 /** レジストリに登録する前に呼び出すことはできません。 */
 fun Block.getIdentifier() = Registries.BLOCK.getKey(this)
 
-fun Identifier.toBlock() = Registries.BLOCK.get(this)
+fun ResourceLocation.toBlock() = Registries.BLOCK.get(this)
 
 context(ModContext)
 fun Block.registerFlammable(burn: Int, spread: Int) = ModEvents.onInitialize {

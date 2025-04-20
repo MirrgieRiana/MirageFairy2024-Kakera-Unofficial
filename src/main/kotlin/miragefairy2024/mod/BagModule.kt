@@ -26,30 +26,30 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.item.TooltipFlag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.ContainerHelper as Inventories
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.SlotAccess as StackReference
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.Slot
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component
-import net.minecraft.world.inventory.ClickAction as ClickType
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
+import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.ContainerHelper as Inventories
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.entity.SlotAccess as StackReference
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ClickAction as ClickType
 
 enum class BagCard(
     path: String,
@@ -75,10 +75,9 @@ enum class BagCard(
     ;
 
     companion object {
-        val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-            val slotIndex = buf.readInt()
-            createBagScreenHandler(syncId, playerInventory, slotIndex)
-        }
+        val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+            createBagScreenHandler(syncId, playerInventory, buf)
+        }, ByteBufCodecs.INT)
 
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
@@ -188,16 +187,14 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         } else {
             -1
         }
-        user.openMenu(object : ExtendedScreenHandlerFactory {
+        user.openMenu(object : ExtendedScreenHandlerFactory<Int> {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
             override fun getDisplayName() = itemStack.hoverName
 
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeInt(slotIndex)
-            }
+            override fun getScreenOpeningData(player: ServerPlayer) = slotIndex
         })
         return TypedActionResult.consume(itemStack)
     }

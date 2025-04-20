@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.PushReaction as PistonBehavior
 import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.tags.BlockTags
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {
@@ -39,7 +39,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
 
     abstract fun createBlock(): B
 
-    abstract val family: Identifier
+    abstract val family: ResourceLocation
     abstract val possibleTraits: Set<Trait>
 
     open val baseGrowth = 1.0

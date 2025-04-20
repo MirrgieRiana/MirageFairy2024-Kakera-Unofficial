@@ -56,7 +56,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 import kotlin.math.log
 import kotlin.math.roundToInt
@@ -143,7 +143,7 @@ fun initFairyItem() {
 
 private fun createFairyModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/fairy_skin").string,
             "layer1" to MirageFairy2024.identifier("item/fairy_front").string,
@@ -300,8 +300,8 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
 }
 
 
-fun ItemStack.getFairyMotifId(): Identifier? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
+fun ItemStack.getFairyMotifId(): ResourceLocation? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyMotifId(identifier: ResourceLocation) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
 
 fun ItemStack.getFairyCondensation() = this.tag.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
 fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateTag().wrapper["FairyCondensation"].int.set(condensation)
@@ -313,7 +313,7 @@ fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void,
     return createFairyItemStack(motifRegistry.getKey(this)!!, condensation = condensation, count = count)
 }
 
-fun createFairyItemStack(motifId: Identifier, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+fun createFairyItemStack(motifId: ResourceLocation, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
     val itemStack = FairyCard.item.createItemStack(count)
     itemStack.setFairyMotifId(motifId)
     itemStack.setFairyCondensation(condensation)

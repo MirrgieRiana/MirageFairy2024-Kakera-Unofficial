@@ -41,7 +41,7 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource as Random
@@ -192,7 +192,7 @@ fun initBlockMaterialsModule() {
 private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
-            parent = Identifier("minecraft", "block/block"),
+            parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
             textures = ModelTexturesData(
                 TextureKey.PARTICLE.id to textureMap.get(TextureKey.BACK).string,
                 TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,

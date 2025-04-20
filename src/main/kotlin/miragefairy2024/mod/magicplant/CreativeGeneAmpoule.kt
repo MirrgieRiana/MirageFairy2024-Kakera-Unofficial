@@ -37,7 +37,7 @@ import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level
 
@@ -122,7 +122,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
 
 private fun createCreativeGeneAmpouleModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/creative_gene_ampoule_casing").string,
             "layer1" to MirageFairy2024.identifier("item/creative_gene_ampoule_liquid").string,

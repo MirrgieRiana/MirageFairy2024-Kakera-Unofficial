@@ -10,7 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs as Codecs
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.levelgen.Heightmap
@@ -36,7 +36,7 @@ object UnlimitedJigsawCard {
 class UnlimitedJigsawStructure(
     config: StructureSettings,
     private val startPool: RegistryEntry<StructurePool>,
-    private val startJigsawName: Optional<Identifier> = Optional.empty(),
+    private val startJigsawName: Optional<ResourceLocation> = Optional.empty(),
     private val size: Int,
     private val startHeight: HeightProvider,
     private val useExpansionHack: Boolean,
@@ -48,7 +48,7 @@ class UnlimitedJigsawStructure(
             instance.group(
                 settingsCodec(instance),
                 StructurePool.CODEC.fieldOf("start_pool").forGetter { it.startPool },
-                Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter { it.startJigsawName },
+                ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter { it.startJigsawName },
                 Codec.intRange(0, 256).fieldOf("size").forGetter { it.size },
                 HeightProvider.CODEC.fieldOf("start_height").forGetter { it.startHeight },
                 Codec.BOOL.fieldOf("use_expansion_hack").forGetter { it.useExpansionHack },

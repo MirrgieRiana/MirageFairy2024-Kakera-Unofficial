@@ -45,16 +45,16 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType as 
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.ItemTags
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 
-val fairyQuestRecipeRegistryKey: RegistryKey<Registry<FairyQuestRecipe>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
+val fairyQuestRecipeRegistryKey: ResourceKey<Registry<FairyQuestRecipe>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface FairyQuestRecipe {
@@ -254,7 +254,7 @@ fun initFairyQuestRecipe() {
                 LootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
-            fun registerChestLoot(lootTableId: Identifier, weight: Int) {
+            fun registerChestLoot(lootTableId: ResourceLocation, weight: Int) {
                 FairyQuestCardCard.item.registerChestLoot({ lootTableId }, weight) {
                     apply { SetFairyQuestRecipeLootFunction(card.identifier) }
                 }
@@ -300,7 +300,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
     override fun createItemStack(context: FeatureContext<DefaultFeatureConfig>): ItemStack? {
 
         // レシピ抽選
-        val table = mutableListOf<Chance<Identifier>>()
+        val table = mutableListOf<Chance<ResourceLocation>>()
         FairyQuestRecipeCard.entries.forEach { recipe ->
             when (recipe.lootCategory) {
                 FairyQuestRecipeCard.LootCategory.NONE -> Unit
@@ -314,7 +314,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
     }
 }
 
-class SetFairyQuestRecipeLootFunction(private val recipeId: Identifier, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
+class SetFairyQuestRecipeLootFunction(private val recipeId: ResourceLocation, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
     companion object {
         val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
             override fun serialize(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {

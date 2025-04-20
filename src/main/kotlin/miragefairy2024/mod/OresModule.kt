@@ -42,7 +42,7 @@ import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -116,8 +116,8 @@ enum class OreCard(
     val item = BlockItem(block, Item.Properties())
     val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
-            BaseStoneType.STONE -> Identifier("minecraft", "block/stone")
-            BaseStoneType.DEEPSLATE -> Identifier("minecraft", "block/deepslate")
+            BaseStoneType.STONE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/stone")
+            BaseStoneType.DEEPSLATE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/deepslate")
         }
         OreModelCard.model.with(
             TextureKey.BACK to baseStoneTexture,
@@ -191,7 +191,7 @@ fun initOresModule() {
 
 fun createOreModel() = Model {
     ModelData(
-        parent = Identifier("minecraft", "block/block"),
+        parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
         textures = ModelTexturesData(
             TextureKey.PARTICLE.id to TextureKey.BACK.string,
         ),

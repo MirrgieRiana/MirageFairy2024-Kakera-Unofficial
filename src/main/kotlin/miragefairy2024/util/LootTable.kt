@@ -20,7 +20,7 @@ import net.minecraft.world.level.storage.loot.entries.SequentialEntry as Sequenc
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 inline fun <T> T.configure(block: T.() -> Unit) = this.apply(block)
 
@@ -78,12 +78,12 @@ fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneratio
 }
 
 context(ModContext)
-fun registerChestLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateChestLootTable {
+fun registerChestLootTableGeneration(lootTableId: ResourceLocation, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateChestLootTable {
     it(lootTableId, initializer().setRandomSequence(lootTableId))
 }
 
 context(ModContext)
-fun registerArchaeologyLootTableGeneration(lootTableId: Identifier, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateArchaeologyLootTable {
+fun registerArchaeologyLootTableGeneration(lootTableId: ResourceLocation, initializer: () -> LootTable.Builder) = DataGenerationEvents.onGenerateArchaeologyLootTable {
     it(lootTableId, initializer().setRandomSequence(lootTableId))
 }
 

@@ -13,9 +13,9 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import miragefairy2024.MirageFairy2024
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
-enum class SlotType(val texture: Identifier) {
+enum class SlotType(val texture: ResourceLocation) {
     NORMAL(MirageFairy2024.identifier("textures/gui/slot.png")),
     FAIRY(MirageFairy2024.identifier("textures/gui/fairy_slot.png")),
 }

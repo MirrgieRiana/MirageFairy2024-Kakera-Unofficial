@@ -15,7 +15,7 @@ import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.data.models.model.TextureMapping as TextureMap
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.world.item.Item
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
@@ -24,18 +24,18 @@ import java.util.function.Supplier
 // Model Builder
 
 fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
-    override fun create(id: Identifier, textures: TextureMap, modelCollector: BiConsumer<Identifier, Supplier<JsonElement>>): Identifier {
+    override fun create(id: ResourceLocation, textures: TextureMap, modelCollector: BiConsumer<ResourceLocation, Supplier<JsonElement>>): ResourceLocation {
         modelCollector.accept(id) { creator(textures).toJsonElement() }
         return id
     }
 }
 
-fun Model(parent: Identifier, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.empty(), *textureKeys)
+fun Model(parent: ResourceLocation, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.empty(), *textureKeys)
 
-fun Model(parent: Identifier, variant: String, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.of(variant), *textureKeys)
+fun Model(parent: ResourceLocation, variant: String, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.of(variant), *textureKeys)
 
 class ModelData(
-    val parent: Identifier,
+    val parent: ResourceLocation,
     val textures: ModelTexturesData? = null,
     val elements: ModelElementsData? = null,
 ) {
@@ -105,7 +105,7 @@ class ModelFaceData(
 
 // Util
 
-fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: TextureMap.() -> Unit = {}): TextureMap {
+fun TextureMap(vararg entries: Pair<TextureKey, ResourceLocation>, initializer: TextureMap.() -> Unit = {}): TextureMap {
     val textureMap = TextureMap()
     entries.forEach {
         textureMap.put(it.first, it.second)
@@ -117,13 +117,13 @@ fun TextureMap(vararg entries: Pair<TextureKey, Identifier>, initializer: Textur
 val TextureKey.string get() = this.toString()
 
 infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.createDefault({ textureMap }, this).get(Blocks.AIR)
-fun Model.with(vararg textureEntries: Pair<TextureKey, Identifier>) = this with TextureMap(*textureEntries)
+fun Model.with(vararg textureEntries: Pair<TextureKey, ResourceLocation>) = this with TextureMap(*textureEntries)
 
 
 // registerModelGeneration
 
 context(ModContext)
-fun registerModelGeneration(identifierGetter: () -> Identifier, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
+fun registerModelGeneration(identifierGetter: () -> ResourceLocation, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
     val texturedModel = texturedModelCreator()
     texturedModel.template.create(identifierGetter(), texturedModel.mapping, it.modelOutput)
 }

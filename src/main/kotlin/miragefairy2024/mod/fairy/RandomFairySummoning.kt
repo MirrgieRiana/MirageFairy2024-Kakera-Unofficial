@@ -17,7 +17,6 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.set
 import miragefairy2024.util.size
-import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
@@ -27,23 +26,23 @@ import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.item.TooltipFlag
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.item.UseAnim as UseAction
-import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import kotlin.math.pow
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.UseAnim as UseAction
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
 val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
@@ -80,18 +79,10 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
-            user.openMenu(object : ExtendedScreenHandlerFactory {
+            user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = itemStack.hoverName
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    buf.writeInt(chanceTable.size)
-                    chanceTable.forEach {
-                        buf.writeItem(it.showingItemStack)
-                        buf.writeUtf(it.motif.getIdentifier()!!.string)
-                        buf.writeDouble(it.rate)
-                        buf.writeDouble(it.count)
-                    }
-                }
+                override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
             return TypedActionResult.consume(itemStack)
         }

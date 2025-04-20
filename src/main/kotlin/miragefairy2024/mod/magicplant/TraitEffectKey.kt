@@ -4,14 +4,14 @@ import miragefairy2024.MirageFairy2024
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 // api
 
-val traitEffectKeyRegistryKey: RegistryKey<Registry<TraitEffectKey<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("trait_effect_key"))
+val traitEffectKeyRegistryKey: ResourceKey<Registry<TraitEffectKey<*>>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("trait_effect_key"))
 val traitEffectKeyRegistry: Registry<TraitEffectKey<*>> = FabricRegistryBuilder.createSimple(traitEffectKeyRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class TraitEffectKey<T : Any> {
@@ -29,5 +29,5 @@ abstract class TraitEffectKey<T : Any> {
 // util
 
 fun TraitEffectKey<*>.getIdentifier() = traitEffectKeyRegistry.getKey(this)!!
-fun Identifier.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
+fun ResourceLocation.toTraitEffectKey() = traitEffectKeyRegistry.get(this)
 val TraitEffectKey<*>.style: Style get() = Style.EMPTY.withColor(this.color)

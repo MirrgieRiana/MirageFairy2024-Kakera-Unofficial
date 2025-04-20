@@ -18,7 +18,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory as SpawnGroup
 import net.minecraft.core.Registry
 import net.minecraft.core.HolderGetter as RegistryEntryLookup
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.BiomeTags
 import net.minecraft.tags.TagKey
@@ -100,7 +100,7 @@ fun initBiomeModule() {
 
             // バイオームをTerraBlenderに登録
             Regions.register(object : Region(card.identifier, card.regionType, card.weight) {
-                override fun addBiomes(registry: Registry<Biome>, mapper: Consumer<Pair<MultiNoiseUtil.ParameterPoint, RegistryKey<Biome>>>) {
+                override fun addBiomes(registry: Registry<Biome>, mapper: Consumer<Pair<MultiNoiseUtil.ParameterPoint, ResourceKey<Biome>>>) {
                     addBiome(mapper, card.temperature, card.humidity, card.continentalness, card.erosion, card.weirdness, card.depth, card.offset, card.registryKey)
                 }
             })

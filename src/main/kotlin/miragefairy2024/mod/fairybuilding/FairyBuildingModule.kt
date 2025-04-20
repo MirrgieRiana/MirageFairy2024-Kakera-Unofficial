@@ -4,9 +4,9 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
-enum class FairyBuildingModelCard(val identifier: Identifier) {
+enum class FairyBuildingModelCard(val identifier: ResourceLocation) {
     LANTERN(MirageFairy2024.identifier("block/fairy_building/lantern")),
     LANTERN_OFF(MirageFairy2024.identifier("block/fairy_building/lantern_off")),
 }

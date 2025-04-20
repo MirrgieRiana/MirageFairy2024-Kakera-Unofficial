@@ -73,7 +73,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as B
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.tags.BlockTags
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -291,8 +291,8 @@ class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, sett
 
 }
 
-fun ItemStack.getFairyStatueMotifId(): Identifier? = this.tag.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: Identifier?) = this.also { this.getOrCreateTag().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
+fun ItemStack.getFairyStatueMotifId(): ResourceLocation? = this.tag.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
+fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: ResourceLocation?) = this.also { this.getOrCreateTag().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
 
 fun ItemStack.getFairyStatueMotif() = this.getFairyStatueMotifId()?.toFairyMotif()
 fun ItemStack.setFairyStatueMotif(fairyStatueMotif: Motif?) = this.setFairyStatueMotifId(fairyStatueMotif?.getIdentifier())

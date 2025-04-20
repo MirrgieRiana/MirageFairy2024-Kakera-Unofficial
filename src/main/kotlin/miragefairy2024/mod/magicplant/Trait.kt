@@ -11,17 +11,17 @@ import mirrg.kotlin.hydrogen.cmp
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 
 // api
 
-val traitRegistryKey: RegistryKey<Registry<Trait>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("trait"))
+val traitRegistryKey: ResourceKey<Registry<Trait>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("trait"))
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> {
@@ -54,7 +54,7 @@ fun Trait.enJa(enName: String, jaName: String) {
 // util
 
 fun Trait.getIdentifier() = traitRegistry.getKey(this)!!
-fun Identifier.toTrait() = traitRegistry.get(this)
+fun ResourceLocation.toTrait() = traitRegistry.get(this)
 
 fun Trait.getTranslationKey(): String = Util.makeDescriptionId("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }

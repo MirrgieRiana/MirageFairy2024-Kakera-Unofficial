@@ -10,7 +10,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.obtain
 import miragefairy2024.util.registerServerPacketReceiver
 import net.minecraft.world.level.block.Block
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.phys.BlockHitResult
@@ -124,7 +124,7 @@ object PlaceItemChannel : Channel<PlaceItemChannel.Packet>(MirageFairy2024.ident
         val itemRotateY: Double,
     )
 
-    override fun writeToBuf(buf: PacketByteBuf, packet: Packet) {
+    override fun writeToBuf(buf: FriendlyByteBuf, packet: Packet) {
         buf.writeInt(packet.blockPos.x)
         buf.writeInt(packet.blockPos.y)
         buf.writeInt(packet.blockPos.z)
@@ -135,7 +135,7 @@ object PlaceItemChannel : Channel<PlaceItemChannel.Packet>(MirageFairy2024.ident
         buf.writeDouble(packet.itemRotateY)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf): Packet {
+    override fun readFromBuf(buf: FriendlyByteBuf): Packet {
         val blockPos = run {
             val x = buf.readInt()
             val y = buf.readInt()
@@ -156,13 +156,13 @@ object RemovePlacedItemChannel : Channel<RemovePlacedItemChannel.Packet>(MirageF
 
     class Packet(val blockPos: BlockPos)
 
-    override fun writeToBuf(buf: PacketByteBuf, packet: Packet) {
+    override fun writeToBuf(buf: FriendlyByteBuf, packet: Packet) {
         buf.writeInt(packet.blockPos.x)
         buf.writeInt(packet.blockPos.y)
         buf.writeInt(packet.blockPos.z)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf): Packet {
+    override fun readFromBuf(buf: FriendlyByteBuf): Packet {
         val blockPos = run {
             val x = buf.readInt()
             val y = buf.readInt()

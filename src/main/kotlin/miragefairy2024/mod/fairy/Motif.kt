@@ -56,20 +56,20 @@ import net.minecraft.world.effect.MobEffects as StatusEffects
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
-val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("motif"))
+val motifRegistryKey: ResourceKey<Registry<Motif>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 fun Motif.getIdentifier() = motifRegistry.getKey(this)
-fun Identifier.toFairyMotif() = motifRegistry.get(this)
+fun ResourceLocation.toFairyMotif() = motifRegistry.get(this)
 
 interface Motif {
     val displayName: Component
@@ -1267,7 +1267,7 @@ private val MotifCardRecipes.SSR get() = this.fairyStatueFountainRecipe(FairySta
 private val MotifCardRecipes.PICKUP_SSR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.PICKUP_SSR).SSR
 
 private fun MotifCardRecipes.common() = this.onInit { COMMON_MOTIF_RECIPES += AlwaysCommonMotifRecipe(it) }
-private fun MotifCardRecipes.common(biome: RegistryKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
+private fun MotifCardRecipes.common(biome: ResourceKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
 private fun MotifCardRecipes.common(biomeTag: TagKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeTagCommonMotifRecipe(it, biomeTag) }
 private val MotifCardRecipes.always get() = this.common()
 private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags.IN_OVERWORLD)

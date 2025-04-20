@@ -7,20 +7,20 @@ import miragefairy2024.util.isNotEmpty
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 object FermentationBarrelRecipeCard : SimpleMachineRecipeCard<FermentationBarrelRecipe>() {
     override val identifier = MirageFairy2024.identifier("fermentation_barrel")
     override val icon = FermentationBarrelCard.item.createItemStack()
     override val recipeClass = FermentationBarrelRecipe::class.java
-    override fun createRecipe(recipeId: Identifier, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): FermentationBarrelRecipe {
+    override fun createRecipe(recipeId: ResourceLocation, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): FermentationBarrelRecipe {
         return FermentationBarrelRecipe(this, recipeId, group, inputs, output, duration)
     }
 }
 
 class FermentationBarrelRecipe(
     card: FermentationBarrelRecipeCard,
-    identifier: Identifier,
+    identifier: ResourceLocation,
     group: String,
     inputs: List<Pair<Ingredient, Int>>,
     output: ItemStack,

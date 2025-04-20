@@ -19,16 +19,16 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 
 // Api
 
-val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
+val extraPlayerDataCategoryRegistryKey: ResourceKey<Registry<ExtraPlayerDataCategory<*>>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface ExtraPlayerDataCategory<T : Any> {
@@ -96,7 +96,7 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
 }
 
 object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(MirageFairy2024.identifier("extra_player_data_synchronization")) {
-    override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
+    override fun writeToBuf(buf: FriendlyByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
         buf.writeUtf(extraPlayerDataCategoryRegistry.getKey(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
             buf.writeBoolean(packet.value != null)
@@ -105,7 +105,7 @@ object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchroniz
         f(packet)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
+    override fun readFromBuf(buf: FriendlyByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
         val identifier = buf.readUtf().toIdentifier()
         val category = extraPlayerDataCategoryRegistry[identifier]!!
         fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
@@ -123,7 +123,7 @@ class ExtraPlayerDataSynchronizationPacket<T : Any>(val category: ExtraPlayerDat
 // Mixin Impl
 
 class ExtraPlayerDataContainer(private val player: PlayerEntity) {
-    private val map = mutableMapOf<Identifier, Any>()
+    private val map = mutableMapOf<ResourceLocation, Any>()
 
     /**
      * このコンテナに格納されているオブジェクトを取得します。
@@ -145,7 +145,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         }
     }
 
-    val entries: Set<Map.Entry<Identifier, Any>> get() = map.entries
+    val entries: Set<Map.Entry<ResourceLocation, Any>> get() = map.entries
 
     /**
      * このコンテナにオブジェクトを代入します。

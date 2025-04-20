@@ -9,7 +9,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition as ModelData
 import net.minecraft.client.model.geom.builders.PartDefinition as ModelPartData
 import net.minecraft.client.model.geom.builders.LayerDefinition as TexturedModelData
 import net.minecraft.client.model.geom.ModelLayerLocation as EntityModelLayer
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 
 fun initEntityClientModule() {
     EntityModelLayerRegistry.registerModelLayer(AntimatterBoltEntityRenderer.MAIN.entityModelLayer, AntimatterBoltEntityRenderer.MAIN.provider)
@@ -21,7 +21,7 @@ fun initEntityClientModule() {
 }
 
 class EntityModelLayerCard(
-    identifier: Identifier,
+    identifier: ResourceLocation,
     layerName: String,
     private val textureWidth: Int,
     private val textureHeight: Int,

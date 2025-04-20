@@ -21,21 +21,22 @@ import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.ContainerHelper as Inventories
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.tags.TagKey
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
 import net.minecraft.core.registries.BuiltInRegistries as Registries
 import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.TagKey
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.ContainerHelper as Inventories
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.Slot
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
@@ -51,14 +52,14 @@ fun initSoulStream() {
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
-            player.openMenu(object : ExtendedScreenHandlerFactory {
+            player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
                 }
 
                 override fun getDisplayName() = text { SOUL_STREAM_TRANSLATION() }
 
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) = Unit
+                override fun getScreenOpeningData(player: ServerPlayer) = Unit
             })
         }
     }
@@ -108,16 +109,16 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 // ソウルストリームを開く要求パケット
 
 object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_soul_stream")) {
-    override fun writeToBuf(buf: PacketByteBuf, packet: Unit) = Unit
-    override fun readFromBuf(buf: PacketByteBuf) = Unit
+    override fun writeToBuf(buf: FriendlyByteBuf, packet: Unit) = Unit
+    override fun readFromBuf(buf: FriendlyByteBuf) = Unit
 }
 
 
 // GUI
 
-val soulStreamScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, _ ->
+val soulStreamScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
     SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
-}
+}, StreamCodec.unit(Unit))
 
 class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val soulStream: Inventory) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
     init {

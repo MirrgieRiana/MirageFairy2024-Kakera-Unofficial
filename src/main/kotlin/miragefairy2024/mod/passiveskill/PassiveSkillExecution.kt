@@ -26,7 +26,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import kotlin.math.log
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
@@ -104,7 +104,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     val passiveSkillCount = this.getPassiveSkillCount()
 
     val providers = mutableListOf<Triple<ItemStack, PassiveSkillStatus, Slot<PassiveSkill>>>()
-    val passiveSkillSlotListTable = mutableMapOf<Identifier, MutableList<Slot<PassiveSkill>>>()
+    val passiveSkillSlotListTable = mutableMapOf<ResourceLocation, MutableList<Slot<PassiveSkill>>>()
 
     fun addItemStack(itemStack: ItemStack, enabled: Boolean) {
         val item = itemStack.item

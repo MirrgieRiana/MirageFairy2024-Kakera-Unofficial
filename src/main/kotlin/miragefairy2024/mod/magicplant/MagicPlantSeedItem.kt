@@ -24,11 +24,12 @@ import net.minecraft.world.item.ItemNameBlockItem as AliasedBlockItem
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
@@ -132,16 +133,14 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
             val itemStack = user.getItemInHand(hand)
             if (world.isClientSide) return TypedActionResult.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
-            user.openMenu(object : ExtendedScreenHandlerFactory {
+            user.openMenu(object : ExtendedScreenHandlerFactory<TraitStacks> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
 
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    TraitListScreenHandler.write(buf, traitStacks)
-                }
+                override fun getScreenOpeningData(player: ServerPlayer) = traitStacks
             })
             return TypedActionResult.consume(itemStack)
         }

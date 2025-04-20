@@ -51,12 +51,12 @@ import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction a
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
 import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries as RegistryKeys
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.phys.Vec3 as Vec3d
 import net.minecraft.world.level.levelgen.Heightmap
@@ -113,7 +113,7 @@ object ChaosCubeCard {
 
         spawnEggItem.register(Registries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        spawnEggItem.registerModelGeneration(Model(Identifier("minecraft", "item/template_spawn_egg")))
+        spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
     }
 }
@@ -418,7 +418,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
             val world = mob.level()
             if (world.gameTime % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(ResourceKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
             if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid()) return false
             return super.canUse()
         }
