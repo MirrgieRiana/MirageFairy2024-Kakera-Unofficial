@@ -14,7 +14,7 @@ import net.minecraft.world.entity.MobCategory as SpawnGroup
 import net.minecraft.data.worldgen.BootstapContext as Registerable
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.core.HolderSet as RegistryEntryList
 import net.minecraft.tags.TagKey
@@ -198,10 +198,10 @@ fun StructureProcessorList(vararg processors: StructureProcessor): StructureProc
 
 context(DynamicGenerationScope<*>)
 fun SinglePoolElement(location: ResourceLocation, processorsKey: ResourceKey<StructureProcessorList>, projection: StructurePool.Projection): StructurePoolElement {
-    return StructurePoolElement.single(location.string, RegistryKeys.PROCESSOR_LIST[processorsKey]).apply(projection)
+    return StructurePoolElement.single(location.string, Registries.PROCESSOR_LIST[processorsKey]).apply(projection)
 }
 
 context(DynamicGenerationScope<*>)
 fun StructurePool(fallbackKey: ResourceKey<StructurePool>, vararg elements: Pair<StructurePoolElement, Int>): StructurePool {
-    return StructurePool(RegistryKeys.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
+    return StructurePool(Registries.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
 }

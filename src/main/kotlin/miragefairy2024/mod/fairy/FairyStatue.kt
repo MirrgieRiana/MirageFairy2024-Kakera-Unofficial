@@ -70,7 +70,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -153,9 +153,9 @@ fun initFairyStatue() {
     FairyStatueCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         // アイテムグループ
         card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {

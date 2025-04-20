@@ -27,7 +27,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration as MapIcon
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction as ExplorationMapLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction as SetNameLootFunction
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.levelgen.structure.StructureSet
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
@@ -54,7 +54,7 @@ object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
     val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
-    val onMapsTag: TagKey<Structure> = TagKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
+    val onMapsTag: TagKey<Structure> = TagKey.create(Registries.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
 
     context(ModContext)
     fun init() {
@@ -96,7 +96,7 @@ object WeatheredAncientRemnantsCard {
 
         val element = identifier
 
-        val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
+        val processorListKey = registerDynamicGeneration(Registries.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 BlockIgnoreStructureProcessor(listOf(Blocks.AIR, Blocks.DIRT, Blocks.GRASS_BLOCK)),
                 GravityStructureProcessor(Heightmap.Types.OCEAN_FLOOR_WG, -3),
@@ -120,22 +120,22 @@ object WeatheredAncientRemnantsCard {
             )
         }
 
-        val templatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier) {
+        val templatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier) {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(element, processorListKey, StructurePool.Projection.RIGID) to 1,
             )
         }
 
-        val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
+        val structureKey = registerDynamicGeneration(Registries.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
                 config = Structure.StructureSettings(
-                    RegistryKeys.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
+                    Registries.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
                     mapOf(),
                     GenerationStep.Decoration.SURFACE_STRUCTURES,
                     StructureTerrainAdaptation.NONE,
                 ),
-                startPool = RegistryKeys.TEMPLATE_POOL[templatePoolKey],
+                startPool = Registries.TEMPLATE_POOL[templatePoolKey],
                 size = 1,
                 projectStartToHeightmap = Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
                 startHeight = ConstantHeightProvider.of(YOffset.absolute(0)),
@@ -143,10 +143,10 @@ object WeatheredAncientRemnantsCard {
             )
         }
 
-        val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
+        val structureSetKey = registerDynamicGeneration(Registries.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(Registries.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(16, 8, SpreadType.LINEAR, 94857624),
             )

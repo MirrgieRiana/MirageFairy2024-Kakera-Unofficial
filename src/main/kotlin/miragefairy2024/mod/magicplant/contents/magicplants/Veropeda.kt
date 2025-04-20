@@ -19,7 +19,7 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -98,10 +98,10 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
         //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
-    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
-    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
-    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
-    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
+    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
+    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
 
     context(ModContext)
     override fun init() {
@@ -125,13 +125,13 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
             // 地上
             registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(16) + flower }
-                RegistryKeys.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+                Registries.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(8) + netherFlower }
-                RegistryKeys.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+                Registries.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ

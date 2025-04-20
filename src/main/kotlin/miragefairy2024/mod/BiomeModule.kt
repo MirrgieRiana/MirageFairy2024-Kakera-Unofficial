@@ -19,7 +19,7 @@ import net.minecraft.world.entity.MobCategory as SpawnGroup
 import net.minecraft.core.Registry
 import net.minecraft.core.HolderGetter as RegistryEntryLookup
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BiomeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
@@ -42,7 +42,7 @@ import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
 
-val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.create(RegistryKeys.BIOME, MirageFairy2024.identifier("fairy"))
+val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.create(Registries.BIOME, MirageFairy2024.identifier("fairy"))
 
 @Suppress("unused")
 object BiomeCards {
@@ -72,7 +72,7 @@ abstract class BiomeCard(
     open fun init() = Unit
 
     val identifier = MirageFairy2024.identifier(path)
-    val registryKey = RegistryKeys.BIOME with identifier
+    val registryKey = Registries.BIOME with identifier
     val translation = Translation({ identifier.toLanguageKey("biome") }, en, ja)
 }
 
@@ -82,7 +82,7 @@ fun initBiomeModule() {
 
         // バイオームの生成
         registerDynamicGeneration(card.registryKey) {
-            card.createBiome(context.lookup(RegistryKeys.PLACED_FEATURE), context.lookup(RegistryKeys.CONFIGURED_CARVER))
+            card.createBiome(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER))
         }
 
         // このバイオームをタグに登録

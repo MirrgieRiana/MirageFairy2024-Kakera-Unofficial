@@ -12,7 +12,7 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.nbt.ListTag as NbtList
 import net.minecraft.network.FriendlyByteBuf
@@ -29,7 +29,7 @@ val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    traitListScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("trait_list"))
+    traitListScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("trait_list"))
     traitListScreenTranslation.enJa()
 }
 

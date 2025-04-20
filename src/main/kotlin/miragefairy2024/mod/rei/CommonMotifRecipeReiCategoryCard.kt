@@ -16,7 +16,7 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 
 object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>("common_motif_recipe", "Common Fairy", "コモン妖精") {
@@ -26,8 +26,8 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
                 val motif = motifRegistry.get(tag.wrapper["Motif"].string.get()!!.toIdentifier())!!
                 when (val type = tag.wrapper["Type"].string.get()) {
                     "always" -> AlwaysCommonMotifRecipe(motif)
-                    "biome" -> BiomeCommonMotifRecipe(motif, tag.wrapper["Biome"].string.get()!!.let { RegistryKeys.BIOME with it.toIdentifier() })
-                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.let { TagKey.create(RegistryKeys.BIOME, it.toIdentifier()) })
+                    "biome" -> BiomeCommonMotifRecipe(motif, tag.wrapper["Biome"].string.get()!!.let { Registries.BIOME with it.toIdentifier() })
+                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.let { TagKey.create(Registries.BIOME, it.toIdentifier()) })
                     else -> throw IllegalArgumentException(type)
                 }
             })

@@ -11,7 +11,7 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
 import net.minecraft.core.particles.ParticleOptions as ParticleEffect
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 
 class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
@@ -45,7 +45,7 @@ class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
 context(ModContext)
 fun initParticleModule() {
     ParticleTypeCard.entries.forEach { card ->
-        card.particleType.register(Registries.PARTICLE_TYPE, card.identifier)
+        card.particleType.register(BuiltInRegistries.PARTICLE_TYPE, card.identifier)
         DataGenerationEvents.onGenerateParticles {
             val data = jsonObject(
                 "textures" to card.textures.map { it.string.jsonElement }.jsonArray,

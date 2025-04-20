@@ -24,7 +24,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.core.HolderSet as RegistryEntryList
 import net.minecraft.world.level.levelgen.structure.StructureSet
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
@@ -95,7 +95,7 @@ object DripstoneCavesRuinCard {
         val mobElement = identifier * "/mob"
         val mobEmptyElement = identifier * "/mob_empty"
 
-        val processorListKey = registerDynamicGeneration(RegistryKeys.PROCESSOR_LIST, identifier) {
+        val processorListKey = registerDynamicGeneration(Registries.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 RuleStructureProcessor(
                     StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultBlockState()),
@@ -111,20 +111,20 @@ object DripstoneCavesRuinCard {
             )
         }
 
-        val mainTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/main") {
+        val mainTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/main") {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(mainElement, processorListKey, StructurePool.Projection.RIGID) to 1,
             )
         }
 
-        val roadEndTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/road_end") {
+        val roadEndTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/road_end") {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(roadEndElement, processorListKey, StructurePool.Projection.RIGID) to 1,
             )
         }
-        val roadTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/road") {
+        val roadTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/road") {
             StructurePool(
                 roadEndTemplatePoolKey,
                 SinglePoolElement(roadStraightElement, processorListKey, StructurePool.Projection.RIGID) to 40,
@@ -137,7 +137,7 @@ object DripstoneCavesRuinCard {
                 SinglePoolElement(roadMobs, processorListKey, StructurePool.Projection.RIGID) to 10,
             )
         }
-        val stairsTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/stairs") {
+        val stairsTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/stairs") {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(stairsTopElement, processorListKey, StructurePool.Projection.RIGID) to 1,
@@ -145,13 +145,13 @@ object DripstoneCavesRuinCard {
                 SinglePoolElement(stairsBottomElement, processorListKey, StructurePool.Projection.RIGID) to 1,
             )
         }
-        val roomEndTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/room_end") {
+        val roomEndTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/room_end") {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(roomEndElement, processorListKey, StructurePool.Projection.RIGID) to 1,
             )
         }
-        val roomTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/room") {
+        val roomTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/room") {
             StructurePool(
                 roomEndTemplatePoolKey,
                 SinglePoolElement(roomConferenceElement, processorListKey, StructurePool.Projection.RIGID) to 10,
@@ -169,7 +169,7 @@ object DripstoneCavesRuinCard {
                 SinglePoolElement(roomEndElement, processorListKey, StructurePool.Projection.RIGID) to 2,
             )
         }
-        val mobTemplatePoolKey = registerDynamicGeneration(RegistryKeys.TEMPLATE_POOL, identifier * "/mob") {
+        val mobTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/mob") {
             StructurePool(
                 StructurePools.EMPTY,
                 SinglePoolElement(mobElement, processorListKey, StructurePool.Projection.RIGID) to 10,
@@ -177,10 +177,10 @@ object DripstoneCavesRuinCard {
             )
         }
 
-        val structureKey = registerDynamicGeneration(RegistryKeys.STRUCTURE, identifier) {
+        val structureKey = registerDynamicGeneration(Registries.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
                 config = Structure.StructureSettings(
-                    RegistryEntryList.direct(RegistryKeys.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
+                    RegistryEntryList.direct(Registries.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
                     mapOf(
                         SpawnGroup.MONSTER to StructureSpawns(
                             StructureSpawns.BoundingBoxType.PIECE,
@@ -192,17 +192,17 @@ object DripstoneCavesRuinCard {
                     GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
                     StructureTerrainAdaptation.BURY,
                 ),
-                startPool = RegistryKeys.TEMPLATE_POOL[mainTemplatePoolKey],
+                startPool = Registries.TEMPLATE_POOL[mainTemplatePoolKey],
                 size = 12,
                 startHeight = UniformHeightProvider.of(YOffset.absolute(-40), YOffset.absolute(20)),
                 useExpansionHack = false,
             )
         }
 
-        val structureSetKey = registerDynamicGeneration(RegistryKeys.STRUCTURE_SET, identifier) {
+        val structureSetKey = registerDynamicGeneration(Registries.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
-                    StructureSet.StructureSelectionEntry(RegistryKeys.STRUCTURE[structureKey], 1),
+                    StructureSet.StructureSelectionEntry(Registries.STRUCTURE[structureKey], 1),
                 ),
                 RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
             )

@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.effect.MobEffect as StatusEffect
 import net.minecraft.world.effect.MobEffectCategory as StatusEffectCategory
 import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.sounds.SoundEvents
 
@@ -18,7 +18,7 @@ val experienceStatusEffect = ExperienceStatusEffect()
 
 context(ModContext)
 fun initStatusEffectModule() {
-    experienceStatusEffect.register(Registries.MOB_EFFECT, MirageFairy2024.identifier("experience"))
+    experienceStatusEffect.register(BuiltInRegistries.MOB_EFFECT, MirageFairy2024.identifier("experience"))
     en { experienceStatusEffect.descriptionId to "Experience" }
     ja { experienceStatusEffect.descriptionId to "経験値獲得" }
 }

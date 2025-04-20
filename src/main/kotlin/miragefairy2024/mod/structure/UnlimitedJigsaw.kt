@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.register
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
@@ -24,7 +24,7 @@ import java.util.Optional
 context(ModContext)
 fun initUnlimitedJigsaw() {
     UnlimitedJigsawCard.let { card ->
-        card.structureType.register(Registries.STRUCTURE_TYPE, card.identifier)
+        card.structureType.register(BuiltInRegistries.STRUCTURE_TYPE, card.identifier)
     }
 }
 

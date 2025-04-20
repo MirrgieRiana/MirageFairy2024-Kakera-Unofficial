@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.CreativeModeTab as ItemGroup
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 
 context(ModContext)
@@ -36,7 +36,7 @@ class ItemGroupCard(
     icon: () -> ItemStack,
 ) {
     val translation = Translation({ "itemGroup.${identifier.toLanguageKey()}" }, enName, jaName)
-    val itemGroupKey = RegistryKeys.CREATIVE_MODE_TAB with identifier
+    val itemGroupKey = Registries.CREATIVE_MODE_TAB with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
         .title(text { translation() })
@@ -44,7 +44,7 @@ class ItemGroupCard(
 
     context(ModContext)
     fun init() {
-        itemGroup.register(Registries.CREATIVE_MODE_TAB, identifier)
+        itemGroup.register(BuiltInRegistries.CREATIVE_MODE_TAB, identifier)
         translation.enJa()
     }
 }

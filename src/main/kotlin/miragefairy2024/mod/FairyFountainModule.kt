@@ -50,7 +50,7 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
@@ -71,8 +71,8 @@ fun initFairyFountainModule() {
 
     FairyStatueFountainCard.let { card ->
 
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

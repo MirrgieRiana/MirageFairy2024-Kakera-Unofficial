@@ -47,7 +47,7 @@ import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContex
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
@@ -86,8 +86,8 @@ fun initTelescopeModule() {
 
     TelescopeCard.let { card ->
 
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

@@ -4,15 +4,15 @@ import mirrg.kotlin.hydrogen.unit
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagKey
 import kotlin.jvm.optionals.getOrElse
 
 object FairyDreamRecipes {
-    val ITEM = FairyDreamTable<Item>(Registries.ITEM)
-    val BLOCK = FairyDreamTable<Block>(Registries.BLOCK)
-    val ENTITY_TYPE = FairyDreamTable<EntityType<*>>(Registries.ENTITY_TYPE)
+    val ITEM = FairyDreamTable<Item>(BuiltInRegistries.ITEM)
+    val BLOCK = FairyDreamTable<Block>(BuiltInRegistries.BLOCK)
+    val ENTITY_TYPE = FairyDreamTable<EntityType<*>>(BuiltInRegistries.ENTITY_TYPE)
 }
 
 class FairyDreamTable<T>(val registry: Registry<T>) {

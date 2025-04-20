@@ -31,7 +31,7 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.world.level.Level
@@ -56,8 +56,8 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     context(ModContext)
     fun init() {
-        type.register(Registries.RECIPE_TYPE, identifier)
-        serializer.register(Registries.RECIPE_SERIALIZER, identifier)
+        type.register(BuiltInRegistries.RECIPE_TYPE, identifier)
+        serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
     }
 
 }
@@ -130,7 +130,7 @@ open class SimpleMachineRecipe(
                 output = run {
                     val itemId = root["output"]["item"].asString()
                     val count = root["output"]["count"].asInt()
-                    ItemStack(Registries.ITEM[ResourceLocation.parse(itemId)], count)
+                    ItemStack(BuiltInRegistries.ITEM[ResourceLocation.parse(itemId)], count)
                 },
                 duration = root["duration"].asInt(),
             )

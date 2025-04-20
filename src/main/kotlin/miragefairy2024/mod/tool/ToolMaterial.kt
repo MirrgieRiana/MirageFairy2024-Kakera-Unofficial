@@ -12,7 +12,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.Tiers as ToolMaterials
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Tiers
 
@@ -89,7 +89,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, identifier)
+    val tag: TagKey<Item> = TagKey.create(Registries.ITEM, identifier)
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.tool_material.$path" }, enName, jaName)
 }
 

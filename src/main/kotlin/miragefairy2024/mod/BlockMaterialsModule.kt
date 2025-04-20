@@ -36,7 +36,7 @@ import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
@@ -145,8 +145,8 @@ enum class BlockMaterialCard(
 context(ModContext)
 fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

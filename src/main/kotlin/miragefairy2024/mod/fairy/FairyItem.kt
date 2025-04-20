@@ -54,7 +54,7 @@ import mirrg.kotlin.hydrogen.or
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
@@ -82,7 +82,7 @@ val fairiesItemGroupCard = ItemGroupCard(
 context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }

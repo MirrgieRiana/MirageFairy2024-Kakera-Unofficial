@@ -8,7 +8,7 @@ import miragefairy2024.util.writeAction
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.item.Items
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import kotlin.jvm.optionals.getOrElse
 
@@ -17,7 +17,7 @@ enum class BlockTagCard(path: String) {
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Block> = TagKey.create(RegistryKeys.BLOCK, identifier)
+    val tag: TagKey<Block> = TagKey.create(Registries.BLOCK, identifier)
 }
 
 context(ModContext)
@@ -42,11 +42,11 @@ fun initVanillaModule() {
 
 
     registerClientDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
-        val tags = world.registryAccess().registryOrThrow(RegistryKeys.BIOME).getTagNames().toList()
+        val tags = world.registryAccess().registryOrThrow(Registries.BIOME).getTagNames().toList()
         val sb = StringBuilder()
         tags.sortedBy { it.location() }.forEach { tag ->
             sb.append("${tag.location()}\n")
-            val biomes = world.registryAccess().registryOrThrow(RegistryKeys.BIOME).getTag(tag).getOrElse { listOf() }.toList()
+            val biomes = world.registryAccess().registryOrThrow(Registries.BIOME).getTag(tag).getOrElse { listOf() }.toList()
             biomes.sortedBy { it.unwrapKey().get().location() }.forEach { biome ->
                 sb.append("  ${biome.unwrapKey().get().location()}\n")
             }

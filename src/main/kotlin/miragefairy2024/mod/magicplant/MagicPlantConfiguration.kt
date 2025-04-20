@@ -18,7 +18,7 @@ import miragefairy2024.util.registerItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.resources.ResourceLocation
 
@@ -49,9 +49,9 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     open fun init() {
 
         // 登録
-        card.block.register(Registries.BLOCK, card.blockIdentifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.blockIdentifier)
-        card.item.register(Registries.ITEM, card.itemIdentifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.blockIdentifier)
+        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.blockIdentifier)
+        card.item.register(BuiltInRegistries.ITEM, card.itemIdentifier)
 
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

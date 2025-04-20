@@ -22,7 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandler
 import net.minecraft.world.entity.projectile.Projectile as ProjectileEntity
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.phys.EntityHitResult
@@ -42,7 +42,7 @@ object AntimatterBoltCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(Registries.ENTITY_TYPE, identifier)
+        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }

@@ -72,8 +72,8 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -258,7 +258,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 
-val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(RegistryKeys.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
@@ -266,8 +266,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         // カテゴリ
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

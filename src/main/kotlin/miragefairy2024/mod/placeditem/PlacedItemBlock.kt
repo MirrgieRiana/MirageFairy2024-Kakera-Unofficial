@@ -43,7 +43,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.core.BlockPos
@@ -62,8 +62,8 @@ object PlacedItemCard {
 context(ModContext)
 fun initPlacedItemBlock() {
     PlacedItemCard.let { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {

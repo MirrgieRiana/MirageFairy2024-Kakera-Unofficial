@@ -34,7 +34,7 @@ import net.minecraft.core.Registry
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Recipe
@@ -95,22 +95,22 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-            object : FabricTagProvider<Biome>(output, RegistryKeys.BIOME, registriesFuture) {
+            object : FabricTagProvider<Biome>(output, Registries.BIOME, registriesFuture) {
                 override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateBiomeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-            object : FabricTagProvider<Structure>(output, RegistryKeys.STRUCTURE, registriesFuture) {
+            object : FabricTagProvider<Structure>(output, Registries.STRUCTURE, registriesFuture) {
                 override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-            object : FabricTagProvider<EntityType<*>>(output, RegistryKeys.ENTITY_TYPE, registriesFuture) {
+            object : FabricTagProvider<EntityType<*>>(output, Registries.ENTITY_TYPE, registriesFuture) {
                 override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-            object : FabricTagProvider<DamageType>(output, RegistryKeys.DAMAGE_TYPE, registriesFuture) {
+            object : FabricTagProvider<DamageType>(output, Registries.DAMAGE_TYPE, registriesFuture) {
                 override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateDamageTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }

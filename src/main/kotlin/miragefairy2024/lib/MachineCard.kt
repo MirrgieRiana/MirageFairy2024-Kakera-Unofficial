@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.inventory.SimpleContainerData as ArrayPropertyDelegate
@@ -117,9 +117,9 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     context(ModContext)
     open fun init() {
-        block.register(Registries.BLOCK, identifier)
-        blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, identifier)
-        item.register(Registries.ITEM, identifier)
-        screenHandlerType.register(Registries.MENU, identifier)
+        block.register(BuiltInRegistries.BLOCK, identifier)
+        blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier)
+        item.register(BuiltInRegistries.ITEM, identifier)
+        screenHandlerType.register(BuiltInRegistries.MENU, identifier)
     }
 }

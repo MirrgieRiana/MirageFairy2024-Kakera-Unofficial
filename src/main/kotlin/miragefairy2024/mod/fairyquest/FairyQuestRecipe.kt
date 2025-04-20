@@ -43,10 +43,10 @@ import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction as ConditionalLootFunction
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType as LootFunctionType
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.ItemTags
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -280,18 +280,18 @@ fun initFairyQuestRecipe() {
     }
 
     // 地形生成
-    val configuredFeatureKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
+    val configuredFeatureKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
-    val placedFeatureKey = registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
+    val placedFeatureKey = registerDynamicGeneration(Registries.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
         val placementModifiers = placementModifiers { per(256) + flower }
-        RegistryKeys.CONFIGURED_FEATURE[configuredFeatureKey] with placementModifiers
+        Registries.CONFIGURED_FEATURE[configuredFeatureKey] with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
-    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(Registries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
+    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
 
-    FAIRY_QUEST_CARD_FEATURE.register(Registries.FEATURE, MirageFairy2024.identifier("fairy_quest_card"))
+    FAIRY_QUEST_CARD_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card"))
 
 }
 

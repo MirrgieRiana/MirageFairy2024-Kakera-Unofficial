@@ -50,9 +50,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWit
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction as LootingEnchantLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
@@ -80,7 +80,7 @@ object ChaosCubeCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(Registries.ENTITY_TYPE, identifier)
+        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
         val attributes = HostileEntity.createMonsterAttributes()
             .add(EntityAttributes.MAX_HEALTH, 100.0)
             .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
@@ -111,7 +111,7 @@ object ChaosCubeCard {
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
         SpawnRestriction.register(entityType, SpawnRestriction.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
-        spawnEggItem.register(Registries.ITEM, identifier * "_egg")
+        spawnEggItem.register(BuiltInRegistries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
@@ -418,7 +418,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
             val world = mob.level()
             if (world.gameTime % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(ResourceKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            val structure = world.structureManager().registryAccess().registryOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
             if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid()) return false
             return super.canUse()
         }

@@ -37,7 +37,7 @@ import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
@@ -60,7 +60,7 @@ private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCa
 context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.sortedEntrySet.map {
                 val itemStack = card.item.createItemStack()

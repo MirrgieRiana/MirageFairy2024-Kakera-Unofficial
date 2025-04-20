@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.world.InteractionHand as Hand
@@ -28,7 +28,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
             return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
         }
     }
-    item.register(Registries.ITEM, MirageFairy2024.identifier(path))
+    item.register(BuiltInRegistries.ITEM, MirageFairy2024.identifier(path))
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
     item.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
     item.registerColorProvider { _, _ -> color }

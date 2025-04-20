@@ -39,7 +39,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.Container as Inventory
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.InteractionHand as Hand
@@ -93,7 +93,7 @@ enum class BagCard(
 context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.itemName)
@@ -106,7 +106,7 @@ fun initBagModule() {
     }
 
 
-    BagCard.screenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("bag"))
+    BagCard.screenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag"))
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()

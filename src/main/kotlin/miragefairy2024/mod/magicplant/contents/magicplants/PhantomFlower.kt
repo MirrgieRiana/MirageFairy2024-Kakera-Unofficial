@@ -17,7 +17,7 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -100,8 +100,8 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
-    val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
-    val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
+    val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
+    val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
 
     context(ModContext)
     override fun init() {
@@ -114,7 +114,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         }
         registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(16) + flower }
-            RegistryKeys.CONFIGURED_FEATURE[PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+            Registries.CONFIGURED_FEATURE[PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
         PHANTOM_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
 

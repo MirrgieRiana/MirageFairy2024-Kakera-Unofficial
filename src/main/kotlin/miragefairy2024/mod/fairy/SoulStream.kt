@@ -27,8 +27,8 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.Container as Inventory
@@ -41,7 +41,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
+val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
 
 context(ModContext)
 fun initSoulStream() {
@@ -65,7 +65,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("soul_stream"))
+    soulStreamScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream"))
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()

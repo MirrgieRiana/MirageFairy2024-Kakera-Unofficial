@@ -15,7 +15,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory as EnchantmentTa
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 
 enum class EnchantmentCard(
     path: String,
@@ -36,7 +36,7 @@ enum class EnchantmentCard(
 context(ModContext)
 fun initEnchantmentModule() {
     EnchantmentCard.entries.forEach { card ->
-        card.enchantment.register(Registries.ENCHANTMENT, card.identifier)
+        card.enchantment.register(BuiltInRegistries.ENCHANTMENT, card.identifier)
         en { card.enchantment.descriptionId to card.en }
         ja { card.enchantment.descriptionId to card.ja }
     }

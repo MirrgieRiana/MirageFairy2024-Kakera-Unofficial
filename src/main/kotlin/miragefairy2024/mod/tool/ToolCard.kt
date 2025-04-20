@@ -40,7 +40,7 @@ import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 
 context(ModContext)
@@ -481,7 +481,7 @@ class ToolCard(
 
     context(ModContext)
     fun init() {
-        item.register(Registries.ITEM, identifier)
+        item.register(BuiltInRegistries.ITEM, identifier)
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

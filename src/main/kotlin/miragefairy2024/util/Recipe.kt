@@ -45,7 +45,7 @@ import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import net.minecraft.resources.ResourceLocation
@@ -180,7 +180,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInve
             override fun getSerializer() = serializer
         }
     }
-    serializer.register(Registries.RECIPE_SERIALIZER, identifier)
+    serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
     DataGenerationEvents.onGenerateRecipe {
         ComplexRecipeJsonBuilder.special(serializer).save(it, identifier.string)
     }
