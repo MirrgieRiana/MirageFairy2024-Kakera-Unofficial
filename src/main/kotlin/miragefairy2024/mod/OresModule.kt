@@ -111,7 +111,7 @@ enum class OreCard(
                 .strength(4.5F, 3.0F)
                 .sound(BlockSoundGroup.DEEPSLATE)
         }
-        ExperienceDroppingBlock(settings, UniformIntProvider.of(experience.first, experience.second))
+        ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }
     val item = BlockItem(block, Item.Properties())
     val texturedModelFactory = TexturedModel.Provider {

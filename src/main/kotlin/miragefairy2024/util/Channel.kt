@@ -1,22 +1,37 @@
 package miragefairy2024.util
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.phys.Vec3 as Vec3d
 
-abstract class Channel<P>(val packetId: ResourceLocation) {
+abstract class Channel<P>(packetId: ResourceLocation) {
+    val streamCodec = object : StreamCodec<FriendlyByteBuf, Payload<P>> {
+        override fun encode(`object`: FriendlyByteBuf, object2: Payload<P>) {
+            writeToBuf(`object`, object2.data)
+        }
+
+        override fun decode(`object`: FriendlyByteBuf): Payload<P> {
+            return Payload(this@Channel, readFromBuf(`object`))
+        }
+    }
+    val type = CustomPacketPayload.Type<Payload<P>>(packetId)
+
     abstract fun writeToBuf(buf: FriendlyByteBuf, packet: P)
     abstract fun readFromBuf(buf: FriendlyByteBuf): P
+
+    class Payload<P>(val channel: Channel<P>, val data: P) : CustomPacketPayload {
+        override fun type() = channel.type
+    }
 }
 
 fun <P> Channel<P>.sendToClient(player: ServerPlayerEntity, packet: P) {
-    val buf = PacketByteBufs.create()
-    this.writeToBuf(buf, packet)
-    ServerPlayNetworking.send(player, this.packetId, buf)
+    ServerPlayNetworking.send(player, Channel.Payload(this, packet))
 }
 
 fun <P> Channel<P>.sendToAround(world: ServerWorld, pos: Vec3d, distance: Double, packet: P) {
@@ -30,10 +45,11 @@ fun <P> Channel<P>.sendToAround(world: ServerWorld, pos: Vec3d, distance: Double
 }
 
 fun <P> Channel<P>.registerServerPacketReceiver(handler: (ServerPlayerEntity, P) -> Unit) {
-    ServerPlayNetworking.registerGlobalReceiver(this.packetId) { server, player, _, buf, _ ->
-        val data = this.readFromBuf(buf) // ここはネットワークスレッドなのでここで player にアクセスすることはできない
-        server.execute {
-            handler(player, data)
+    PayloadTypeRegistry.playC2S().register(this.type, this.streamCodec)
+    ServerPlayNetworking.registerGlobalReceiver(this.type) { payload, context ->
+        // ここはネットワークスレッドなのでここで player にアクセスすることはできない
+        context.server().execute {
+            handler(context.player(), payload.data)
         }
     }
 }
