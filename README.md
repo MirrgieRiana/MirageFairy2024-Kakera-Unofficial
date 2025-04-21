@@ -12,6 +12,8 @@ Japanese MirageFairy-Kakera-Unofficial Website: https://miragefairy-kakera-unoff
 
 Japanese Unofficial Wiki: https://wikiwiki.jp/mifai2024/
 
+MF24KU Lang Table: https://mirrgieriana.github.io/MirageFairy2024-Kakera-Unofficial/lang_table.html
+
 # Documentation
 
 The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
