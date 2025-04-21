@@ -3219,40 +3219,6 @@ Rumeri</td>
 </tr>
     </tbody>
 </table>
-<script>
-    function also(value, block) {
-        block(value);
-        return value;
-    }
-    addEventListener('load', async () => {
-        const en = await (await fetch('https://raw.githubusercontent.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/refs/heads/main/src/main/generated/assets/miragefairy2024/lang/en_us.json')).json();
-        const ja = await (await fetch('https://raw.githubusercontent.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/refs/heads/main/src/main/generated/assets/miragefairy2024/lang/ja_jp.json')).json();
-        const keys = [...new Set([...Object.keys(en), ...Object.keys(ja)])]
-            .sort((a, b) => {
-                if (a < b) return -1;
-                if (a > b) return 1;
-                return 0;
-            });
-
-        const tbody = document.querySelector('#langTable tbody');
-        keys.forEach(key => {
-            tbody.appendChild(also(document.createElement('tr'), tr => {
-                tr.appendChild(also(document.createElement('td'), td => {
-                    td.classList.add('key');
-                    td.textContent = key;
-                }));
-                tr.appendChild(also(document.createElement('td'), td => {
-                    td.classList.add('value');
-                    td.textContent = en[key];
-                }));
-                tr.appendChild(also(document.createElement('td'), td => {
-                    td.classList.add('value');
-                    td.textContent = ja[key];
-                }));
-            }));
-        });
-    });
-</script>
 </body>
 </html>
         
