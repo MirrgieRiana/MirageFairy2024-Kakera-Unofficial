@@ -19,7 +19,7 @@ jobs:
 
       - name: Build
         working-directory: src
-        run: bash pages.bash
+        run: bash gradlew buildPages
 
       - name: Checkout dest
         uses: actions/checkout@v3
