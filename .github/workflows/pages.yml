@@ -1,0 +1,46 @@
+name: pages
+on:
+  push:
+    branches:
+      - main
+
+#permissions:
+#  contents: write
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout src
+        uses: actions/checkout@v3
+        with:
+          path: src
+          fetch-depth: 0
+
+      - name: Build
+        working-directory: src
+        run: bash pages.bash
+
+      - name: Checkout dest
+        uses: actions/checkout@v3
+        with:
+          path: dest
+          ref: pages
+          fetch-depth: 0
+
+      - name: Copy to dest
+        working-directory: dest
+        run: |
+          git rm -rf .
+          cp -R ../src/build/pages/* .
+
+      - name: Commit & Push
+        working-directory: dest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Workflow"
+          git config user.email "GitHub Workflow"
+          git add .
+          git commit -m "From main@${{ github.sha }}" || echo "No changes to commit"
+          git push origin pages --force
