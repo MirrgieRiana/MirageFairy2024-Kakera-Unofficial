@@ -6,7 +6,7 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.container.StackLayout
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
@@ -76,8 +76,8 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
         override fun getDisplayHeight() = 140
         override fun setupDisplay(display: TraitEncyclopediaReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             lateinit var container: StackLayout
-            lateinit var separatedView: Component
-            lateinit var cardView: Component
+            lateinit var separatedView: OwoComponent
+            lateinit var cardView: OwoComponent
             return listOf(
                 Widgets.createRecipeBase(bounds), // 外枠
                 ReiUIAdapter(bounds, Containers::verticalFlow).also { adapter ->

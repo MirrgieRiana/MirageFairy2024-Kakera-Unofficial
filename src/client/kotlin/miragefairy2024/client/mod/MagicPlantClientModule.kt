@@ -6,7 +6,7 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIAdapter
@@ -44,7 +44,7 @@ fun initMagicPlantClientModule() {
 class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
     private lateinit var traitCardContainer: FlowLayout
 
-    private fun setTraitCardContent(component: Component?) {
+    private fun setTraitCardContent(component: OwoComponent?) {
         traitCardContainer.clearChildren()
         if (component != null) traitCardContainer.child(component)
         uiAdapter.inflateAndMount()
@@ -104,7 +104,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
         if (traitStack != null) setTraitCardContent(createTraitCardContent(traitStack))
     }
 
-    private fun createTraitCardContent(traitStack: TraitStack): Component {
+    private fun createTraitCardContent(traitStack: TraitStack): OwoComponent {
         return topBorderLayout(Sizing.fill(100), Sizing.fill(100)).apply {
             gap = 5
 

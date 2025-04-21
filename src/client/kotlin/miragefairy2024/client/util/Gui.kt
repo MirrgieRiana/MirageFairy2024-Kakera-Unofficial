@@ -6,7 +6,7 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
@@ -20,7 +20,7 @@ enum class SlotType(val texture: ResourceLocation) {
     FAIRY(MirageFairy2024.identifier("textures/gui/fairy_slot.png")),
 }
 
-fun slotContainer(slotComponent: Component, type: SlotType? = SlotType.NORMAL): FlowLayout {
+fun slotContainer(slotComponent: OwoComponent, type: SlotType? = SlotType.NORMAL): FlowLayout {
     return Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
         padding(Insets.of(1))
         if (type != null) surface(Surface.tiled(type.texture, 18, 18))

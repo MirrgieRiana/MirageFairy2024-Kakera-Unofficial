@@ -3,7 +3,7 @@ package miragefairy2024.client.util
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.StackLayout
 import io.wispforest.owo.ui.container.WrappingParentComponent
-import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Size
@@ -41,12 +41,12 @@ class BorderLayout(val direction: Direction, horizontalSizing: Sizing, verticalS
         child.child(child2)
     }
 
-    fun child1(component: Component?) {
+    fun child1(component: OwoComponent?) {
         child1.clearChildren()
         if (component != null) child1.child(component)
     }
 
-    fun child2(component: Component?) {
+    fun child2(component: OwoComponent?) {
         child2.clearChildren()
         if (component != null) child2.child(component)
     }
