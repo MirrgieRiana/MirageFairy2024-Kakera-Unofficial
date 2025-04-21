@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.js.parser.sourcemaps.JsonObject
+import org.jetbrains.kotlin.js.parser.sourcemaps.JsonString
+import org.jetbrains.kotlin.js.parser.sourcemaps.parseJson
 import java.net.URL
 
 plugins {
@@ -203,5 +206,120 @@ publishing {
         // ここに公開するリポジトリを追加します。
         // 注意: このブロックには、最上位のブロックと同じ機能はありません。
         // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
+    }
+}
+
+tasks.register("buildPages") {
+    dependsOn("runDatagen")
+    doLast {
+        println("Building pages...")
+        val en = parseJson(File("src/main/generated/assets/miragefairy2024/lang/en_us.json").readText()) as JsonObject
+        val ja = parseJson(File("src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText()) as JsonObject
+        val keys = (en.properties.keys + ja.properties.keys).sorted()
+
+        mkdir("build/pages")
+        """
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MF24KU Lang Table</title>
+    <style>
+        #langTable {
+            border-collapse: collapse;
+        }
+
+        #langTable th {
+            background-color: #ddd;
+        }
+        #langTable tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        #langTable th, #langTable td {
+            padding: 0 0.5em;
+        }
+        #langTable th.value, #langTable td.value {
+            border-left: 1px solid #888;
+        }
+
+        #langTable td.key {
+            word-break: break-all;
+        }
+        #langTable td.value {
+            white-space: pre-line;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<h1>MF24KU Lang Table</h1>
+<table id="langTable">
+    <colgroup>
+        <col style="width: 20%;">
+        <col style="width: 40%;">
+        <col style="width: 40%;">
+    </colgroup>
+    <thead>
+    <tr>
+        <th class="key">Key</th>
+        <th class="value">English</th>
+        <th class="value">Japanese</th>
+    </tr>
+    </thead>
+    <tbody>
+        ${
+            keys.joinToString("") { key ->
+                """
+<tr>
+    <td class="key">$key</td>
+    <td class="value">${(en.properties[key] as JsonString?)?.value ?: "-"}</td>
+    <td class="value">${(ja.properties[key] as JsonString?)?.value ?: "-"}</td>
+</tr>
+                """.trimIndent()
+            }
+        }
+    </tbody>
+</table>
+<script>
+    function also(value, block) {
+        block(value);
+        return value;
+    }
+    addEventListener('load', async () => {
+        const en = await (await fetch('https://raw.githubusercontent.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/refs/heads/main/src/main/generated/assets/miragefairy2024/lang/en_us.json')).json();
+        const ja = await (await fetch('https://raw.githubusercontent.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/refs/heads/main/src/main/generated/assets/miragefairy2024/lang/ja_jp.json')).json();
+        const keys = [...new Set([...Object.keys(en), ...Object.keys(ja)])]
+            .sort((a, b) => {
+                if (a < b) return -1;
+                if (a > b) return 1;
+                return 0;
+            });
+
+        const tbody = document.querySelector('#langTable tbody');
+        keys.forEach(key => {
+            tbody.appendChild(also(document.createElement('tr'), tr => {
+                tr.appendChild(also(document.createElement('td'), td => {
+                    td.classList.add('key');
+                    td.textContent = key;
+                }));
+                tr.appendChild(also(document.createElement('td'), td => {
+                    td.classList.add('value');
+                    td.textContent = en[key];
+                }));
+                tr.appendChild(also(document.createElement('td'), td => {
+                    td.classList.add('value');
+                    td.textContent = ja[key];
+                }));
+            }));
+        });
+    });
+</script>
+</body>
+</html>
+        """.let { File("build/pages/lang_table.html").writeText(it) }
+        """
+[MF24KU Lang Table](lang_table.html)
+        """.let { File("build/pages/index.md").writeText(it) }
     }
 }
