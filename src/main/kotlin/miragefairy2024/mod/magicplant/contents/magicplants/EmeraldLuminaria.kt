@@ -20,20 +20,20 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.item.Items
 import net.minecraft.core.registries.Registries
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLuminariaCard, EmeraldLuminariaBlock>() {
     override val card get() = EmeraldLuminariaCard

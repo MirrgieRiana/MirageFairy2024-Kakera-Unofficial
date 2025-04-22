@@ -13,34 +13,34 @@ import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobCategory as SpawnGroup
 import net.minecraft.core.Registry
-import net.minecraft.core.HolderGetter as RegistryEntryLookup
-import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.BiomeTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.biome.BiomeSpecialEffects as BiomeEffects
-import net.minecraft.world.level.biome.BiomeGenerationSettings as GenerationSettings
-import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
-import net.minecraft.world.level.biome.Climate as MultiNoiseUtil
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
-import net.minecraft.data.worldgen.BiomeDefaultFeatures as DefaultBiomeFeatures
-import net.minecraft.data.worldgen.placement.AquaticPlacements as OceanPlacedFeatures
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
-import net.minecraft.data.worldgen.placement.VegetationPlacements as VegetationPlacedFeatures
-import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
-import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
 import terrablender.api.ParameterUtils
 import terrablender.api.Region
 import terrablender.api.RegionType
 import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
+import net.minecraft.core.HolderGetter as RegistryEntryLookup
+import net.minecraft.data.worldgen.BiomeDefaultFeatures as DefaultBiomeFeatures
+import net.minecraft.data.worldgen.placement.AquaticPlacements as OceanPlacedFeatures
+import net.minecraft.data.worldgen.placement.VegetationPlacements as VegetationPlacedFeatures
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.level.biome.BiomeGenerationSettings as GenerationSettings
+import net.minecraft.world.level.biome.BiomeSpecialEffects as BiomeEffects
+import net.minecraft.world.level.biome.Climate as MultiNoiseUtil
+import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
+import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
+import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
 
 val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.create(Registries.BIOME, MirageFairy2024.identifier("fairy"))
 

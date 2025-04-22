@@ -16,23 +16,23 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.core.BlockPos
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.core.BlockPos
-import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantConfiguration<C, B>() {
     abstract val outlineShapes: List<VoxelShape>

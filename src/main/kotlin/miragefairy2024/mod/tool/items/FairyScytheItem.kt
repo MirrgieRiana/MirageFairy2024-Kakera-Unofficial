@@ -15,28 +15,28 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
+import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.SwordItem
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.SwordItem
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.network.chat.Component
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.Level
 
 class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,

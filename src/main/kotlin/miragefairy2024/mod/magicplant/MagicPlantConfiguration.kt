@@ -16,11 +16,11 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
-import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.tags.BlockTags
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
     companion object {

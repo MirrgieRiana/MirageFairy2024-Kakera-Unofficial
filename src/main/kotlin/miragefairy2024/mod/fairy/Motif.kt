@@ -46,23 +46,23 @@ import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.effect.MobEffect as StatusEffect
-import net.minecraft.world.effect.MobEffects as StatusEffects
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.Items
 import net.minecraft.core.Registry
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.effect.MobEffect as StatusEffect
+import net.minecraft.world.effect.MobEffects as StatusEffects
+import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
 val motifRegistryKey: ResourceKey<Registry<Motif>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("motif"))

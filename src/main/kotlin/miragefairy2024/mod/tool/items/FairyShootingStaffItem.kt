@@ -16,25 +16,25 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.stats.Stats
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TieredItem as ToolItem
-import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.Vanishable
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.TieredItem as ToolItem
 
 class FairyShootingStaffConfiguration(
     override val toolMaterialCard: ToolMaterialCard,

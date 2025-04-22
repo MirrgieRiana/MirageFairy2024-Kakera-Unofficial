@@ -13,9 +13,9 @@ import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.resources.ResourceKey
-import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.core.Holder as RegistryEntry
 
 // module
 

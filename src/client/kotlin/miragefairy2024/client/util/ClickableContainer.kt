@@ -1,9 +1,9 @@
 package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.container.WrappingParentComponent
-import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
+import io.wispforest.owo.ui.core.Component as OwoComponent
 
 class ClickableContainer<C : OwoComponent>(horizontalSizing: Sizing, verticalSizing: Sizing, private val action: () -> Boolean, child: () -> C) : WrappingParentComponent<C>(horizontalSizing, verticalSizing, child()) {
     // これを設定してもchildが受け取ってしまうのでカーソルを設定することができない

@@ -4,9 +4,9 @@ import miragefairy2024.MirageFairy2024
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey
-import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
 // api

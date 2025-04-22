@@ -26,6 +26,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.server.level.ServerPlayer
@@ -39,7 +40,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.Container as Inventory
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.InteractionHand as Hand

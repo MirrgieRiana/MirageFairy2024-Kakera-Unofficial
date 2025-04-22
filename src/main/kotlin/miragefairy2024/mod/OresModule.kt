@@ -30,23 +30,23 @@ import miragefairy2024.util.uniformOre
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
-import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.data.models.model.TexturedModel
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
+import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration as OreFeatureConfig
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
 
 enum class BaseStoneType {
     STONE,

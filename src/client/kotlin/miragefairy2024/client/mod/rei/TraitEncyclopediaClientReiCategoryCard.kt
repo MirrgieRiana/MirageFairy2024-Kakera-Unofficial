@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.container.StackLayout
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
@@ -48,6 +47,7 @@ import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.network.chat.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 
 object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {

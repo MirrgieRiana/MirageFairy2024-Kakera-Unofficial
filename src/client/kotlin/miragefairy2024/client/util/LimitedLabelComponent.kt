@@ -9,12 +9,12 @@ import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
 import io.wispforest.owo.util.Observable
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.util.FormattedCharSequence as OrderedText
-import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import java.util.function.Function
 import kotlin.math.min
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.util.FormattedCharSequence as OrderedText
 
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java

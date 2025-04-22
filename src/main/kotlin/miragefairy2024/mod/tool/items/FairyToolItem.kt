@@ -1,19 +1,19 @@
 package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.tool.ToolConfiguration
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.tags.BlockTags
-import net.minecraft.core.BlockPos
 import net.minecraft.world.item.Tiers
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 interface FairyToolItem {
     val configuration: ToolConfiguration

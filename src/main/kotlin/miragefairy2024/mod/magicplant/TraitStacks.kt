@@ -2,10 +2,10 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.util.bitCount
 import miragefairy2024.util.toNbtList
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.nbt.Tag as NbtElement
-import net.minecraft.nbt.ListTag as NbtList
 import java.util.SortedMap
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.ListTag as NbtList
+import net.minecraft.nbt.Tag as NbtElement
 
 // api
 

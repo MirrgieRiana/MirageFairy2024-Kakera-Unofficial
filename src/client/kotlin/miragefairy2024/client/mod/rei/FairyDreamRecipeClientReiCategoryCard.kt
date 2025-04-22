@@ -26,11 +26,11 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
-import net.minecraft.world.level.block.Block
-import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
-import net.minecraft.network.chat.Component
+import net.minecraft.world.level.block.Block
+import net.minecraft.client.Minecraft as MinecraftClient
 
 abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
 

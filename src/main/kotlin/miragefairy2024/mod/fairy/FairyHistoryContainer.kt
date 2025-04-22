@@ -11,8 +11,8 @@ import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyHistoryContainer() {

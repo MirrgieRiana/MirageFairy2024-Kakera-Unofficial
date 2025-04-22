@@ -12,11 +12,11 @@ import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.entity.player.Inventory as PlayerInventory

@@ -6,13 +6,13 @@ import miragefairy2024.util.en
 import miragefairy2024.util.isServer
 import miragefairy2024.util.ja
 import miragefairy2024.util.register
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.effect.MobEffect as StatusEffect
 import net.minecraft.world.effect.MobEffectCategory as StatusEffectCategory
 import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
 
 val experienceStatusEffect = ExperienceStatusEffect()
 

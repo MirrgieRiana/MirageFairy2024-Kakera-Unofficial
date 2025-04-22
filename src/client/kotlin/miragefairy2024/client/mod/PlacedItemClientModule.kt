@@ -9,13 +9,13 @@ import miragefairy2024.mod.placeditem.RemovePlacedItemChannel
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.core.Direction
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
-import net.minecraft.core.Direction
-import net.minecraft.util.Mth as MathHelper
 import org.lwjgl.glfw.GLFW
+import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.util.Mth as MathHelper
 
 lateinit var placeItemKey: KeyBinding
 

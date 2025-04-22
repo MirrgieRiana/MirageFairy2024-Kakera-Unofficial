@@ -20,9 +20,9 @@ import miragefairy2024.util.enJa
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 
 val passiveSkillEffectRegistryKey: ResourceKey<Registry<PassiveSkillEffect<*>>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("passive_skill_effect"))
 val passiveSkillEffectRegistry: Registry<PassiveSkillEffect<*>> = FabricRegistryBuilder.createSimple(passiveSkillEffectRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()

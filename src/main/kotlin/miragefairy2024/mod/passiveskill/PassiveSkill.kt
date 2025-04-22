@@ -1,13 +1,13 @@
 package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.mod.fairy.Motif
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.core.BlockPos
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 interface PassiveSkillProvider {
     fun getPassiveSkill(itemStack: ItemStack): PassiveSkill?

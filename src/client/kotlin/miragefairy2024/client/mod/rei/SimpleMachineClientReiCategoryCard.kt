@@ -27,12 +27,12 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
+import net.minecraft.client.renderer.Rect2i
+import kotlin.math.roundToInt
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.components.events.GuiEventListener as Element
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
-import net.minecraft.client.renderer.Rect2i
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import kotlin.math.roundToInt
 
 abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
     override fun registerDisplays(registry: DisplayRegistry) {

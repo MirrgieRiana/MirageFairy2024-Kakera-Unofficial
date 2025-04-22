@@ -11,12 +11,12 @@ import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.level.GameRules
 import java.time.Instant
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initLastFoodModule() {

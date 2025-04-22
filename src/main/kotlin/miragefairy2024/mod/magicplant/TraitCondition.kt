@@ -1,7 +1,7 @@
 package miragefairy2024.mod.magicplant
 
-import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.world.level.Level
 
 // api

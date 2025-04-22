@@ -26,20 +26,18 @@ import miragefairy2024.util.string
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.or
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
-import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.level.Level
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",

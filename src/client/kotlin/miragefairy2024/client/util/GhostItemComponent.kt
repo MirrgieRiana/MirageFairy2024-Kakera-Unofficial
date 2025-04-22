@@ -5,13 +5,13 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
-import net.minecraft.world.item.TooltipFlag
-import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import kotlin.jvm.optionals.getOrNull
+import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
 
 class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseComponent() {
     var showItemStack = true

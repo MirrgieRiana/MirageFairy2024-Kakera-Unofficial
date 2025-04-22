@@ -2,8 +2,8 @@ package miragefairy2024.client.mod.particle
 
 import miragefairy2024.mod.particle.ParticleTypeCard
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
-import net.minecraft.client.particle.EnchantmentTableParticle as EnchantGlyphParticle
 import net.minecraft.client.particle.EndRodParticle
+import net.minecraft.client.particle.EnchantmentTableParticle as EnchantGlyphParticle
 import net.minecraft.client.particle.ParticleProvider as ParticleFactory
 import net.minecraft.client.particle.SuspendedTownParticle as SuspendParticle
 

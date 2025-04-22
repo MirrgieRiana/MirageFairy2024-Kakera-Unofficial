@@ -7,14 +7,14 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.world.item.Tiers as ToolMaterials
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.Tiers
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.Tiers as ToolMaterials
 
 enum class FairyToolMaterials(
     private val miningLevel: Tiers,

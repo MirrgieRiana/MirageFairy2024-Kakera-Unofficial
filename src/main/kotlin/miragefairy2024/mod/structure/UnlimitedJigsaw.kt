@@ -6,20 +6,20 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.register
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.ExtraCodecs as Codecs
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.levelgen.WorldGenerationContext as HeightContext
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
 import java.util.Optional
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.util.ExtraCodecs as Codecs
+import net.minecraft.world.level.levelgen.WorldGenerationContext as HeightContext
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
 
 context(ModContext)
 fun initUnlimitedJigsaw() {

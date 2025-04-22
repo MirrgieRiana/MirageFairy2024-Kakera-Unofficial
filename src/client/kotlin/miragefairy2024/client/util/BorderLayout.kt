@@ -3,11 +3,11 @@ package miragefairy2024.client.util
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.StackLayout
 import io.wispforest.owo.ui.container.WrappingParentComponent
-import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
+import io.wispforest.owo.ui.core.Component as OwoComponent
 
 fun topBorderLayout(horizontalSizing: Sizing, verticalSizing: Sizing) = BorderLayout(BorderLayout.Direction.TOP, horizontalSizing, verticalSizing)
 fun bottomBorderLayout(horizontalSizing: Sizing, verticalSizing: Sizing) = BorderLayout(BorderLayout.Direction.BOTTOM, horizontalSizing, verticalSizing)

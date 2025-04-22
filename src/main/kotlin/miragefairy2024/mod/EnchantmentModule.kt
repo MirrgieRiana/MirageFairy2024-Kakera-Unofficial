@@ -9,13 +9,13 @@ import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.register
-import net.minecraft.world.item.enchantment.Enchantment
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.item.enchantment.EnchantmentCategory as EnchantmentTarget
-import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.item.enchantment.EnchantmentCategory as EnchantmentTarget
 
 enum class EnchantmentCard(
     path: String,

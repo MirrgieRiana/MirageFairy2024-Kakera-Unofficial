@@ -15,27 +15,25 @@ import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.Criterion
-import net.minecraft.advancements.RequirementsStrategy as CriterionMerger
-import net.minecraft.advancements.CriterionTriggerInstance as CriterionTriggerInstance
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
-import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
-import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
-import net.minecraft.world.Container as Inventory
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.data.recipes.RecipeOutput
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
-import net.minecraft.data.recipes.RecipeCategory
-import net.minecraft.data.recipes.RecipeOutput
-import net.minecraft.core.RegistryAccess as DynamicRegistryManager
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.world.level.Level
-import java.util.function.Consumer
+import net.minecraft.advancements.RequirementsStrategy as CriterionMerger
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
+import net.minecraft.core.NonNullList as DefaultedList
+import net.minecraft.core.RegistryAccess as DynamicRegistryManager
+import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
+import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
+import net.minecraft.world.Container as Inventory
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 

@@ -7,9 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Channel
 import miragefairy2024.util.string
+import net.minecraft.core.particles.ParticleType
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.core.particles.ParticleOptions as ParticleEffect
-import net.minecraft.core.particles.ParticleType
 import net.minecraft.world.phys.Vec3 as Vec3d
 
 class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquareParticleEffect>(alwaysSpawn, MagicSquareParticleEffect.FACTORY) {

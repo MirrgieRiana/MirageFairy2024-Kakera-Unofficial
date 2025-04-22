@@ -1,23 +1,23 @@
 package miragefairy2024.client.mod.particle
 
+import com.mojang.blaze3d.vertex.VertexConsumer
 import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.mod.particle.MagicSquareParticleChannel
 import miragefairy2024.mod.particle.MagicSquareParticleEffect
 import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.particle.ParticleProvider as ParticleFactory
-import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
-import net.minecraft.client.particle.SpriteSet as SpriteProvider
 import net.minecraft.client.Camera
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.phys.Vec3 as Vec3d
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.roundToInt
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
+import net.minecraft.client.particle.ParticleProvider as ParticleFactory
+import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
+import net.minecraft.client.particle.SpriteSet as SpriteProvider
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.phys.Vec3 as Vec3d
 
 fun initMagicSquareParticle() {
     MagicSquareParticleChannel.registerClientPacketReceiver { packet ->

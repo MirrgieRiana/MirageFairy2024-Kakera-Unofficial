@@ -31,13 +31,13 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
-import net.minecraft.client.KeyMapping as KeyBinding
 import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
+import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 lateinit var soulStreamKey: KeyBinding
 

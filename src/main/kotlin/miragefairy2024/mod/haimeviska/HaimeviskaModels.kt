@@ -11,9 +11,9 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.data.models.model.TextureSlot as TextureKey
 
 val unchargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->

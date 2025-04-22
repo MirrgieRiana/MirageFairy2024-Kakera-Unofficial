@@ -1,9 +1,9 @@
 package miragefairy2024.util
 
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.nbt.Tag as NbtElement
 import net.minecraft.nbt.ListTag as NbtList
 import net.minecraft.nbt.StringTag as NbtString
+import net.minecraft.nbt.Tag as NbtElement
 
 fun Collection<NbtElement>.toNbtList(): NbtList {
     val nbtList = NbtList()

@@ -47,34 +47,34 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancements.CriteriaTriggers as Criteria
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.item.TooltipFlag
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.stats.Stats
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.gameevent.GameEvent
+import kotlin.math.pow
+import net.minecraft.advancements.CriteriaTriggers as Criteria
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.util.StringUtil as StringHelper
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
 import net.minecraft.world.effect.MobEffects as StatusEffects
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.food.FoodProperties as FoodComponent
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils as ItemUsage
-import net.minecraft.world.item.Items
-import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.tags.TagKey
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.util.StringUtil as StringHelper
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.gameevent.GameEvent
-import kotlin.math.pow
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
 
 class MaterialCard(
     path: String,

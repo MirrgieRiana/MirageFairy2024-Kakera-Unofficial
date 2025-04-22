@@ -35,24 +35,24 @@ import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition as LootCondition
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.storage.loot.LootContext
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction as ConditionalLootFunction
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType as LootFunctionType
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries
-import net.minecraft.tags.ItemTags
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition as LootCondition
 
 val fairyQuestRecipeRegistryKey: ResourceKey<Registry<FairyQuestRecipe>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()

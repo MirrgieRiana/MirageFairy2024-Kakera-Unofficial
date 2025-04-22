@@ -17,13 +17,13 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.core.Registry
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceKey
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 
 // Api

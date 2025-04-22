@@ -7,10 +7,10 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
-import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
 import net.minecraft.network.chat.Component
 import java.util.UUID
+import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
+import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
     val FORMATTERS = mutableMapOf<EntityAttribute, (Double) -> String>()

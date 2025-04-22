@@ -13,22 +13,22 @@ import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.ChestBlock
-import net.minecraft.world.WorldlyContainerHolder as InventoryProvider
-import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.Container as Inventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.phys.HitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.AABB as Box
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.level.ClipContext as RaycastContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ChestBlock
+import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraft.world.phys.HitResult
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.Container as Inventory
+import net.minecraft.world.WorldlyContainerHolder as InventoryProvider
+import net.minecraft.world.level.ClipContext as RaycastContext
+import net.minecraft.world.phys.AABB as Box
 
 private val identifier = MirageFairy2024.identifier("fairy_dream")
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")

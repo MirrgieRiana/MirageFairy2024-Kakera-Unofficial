@@ -18,17 +18,17 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BiomeTags
 import net.minecraft.util.valueproviders.IntProvider
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 import java.util.function.Predicate
+import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
 
 val DEBRIS_FEATURE = DebrisFeature(DebrisFeature.Config.CODEC)
 

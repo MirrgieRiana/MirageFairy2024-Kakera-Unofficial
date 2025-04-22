@@ -37,6 +37,7 @@ import mirrg.kotlin.hydrogen.Single
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
@@ -50,7 +51,6 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.entity.player.Inventory as PlayerInventory

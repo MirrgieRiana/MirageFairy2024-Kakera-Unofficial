@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
@@ -14,6 +13,7 @@ import io.wispforest.owo.ui.core.Surface
 import miragefairy2024.MirageFairy2024
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import io.wispforest.owo.ui.core.Component as OwoComponent
 
 enum class SlotType(val texture: ResourceLocation) {
     NORMAL(MirageFairy2024.identifier("textures/gui/slot.png")),

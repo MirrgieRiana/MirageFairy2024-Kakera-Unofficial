@@ -12,8 +12,8 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.Heightmap
 
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, context.blockPos).y
 private fun biomeHasNoPrecipitation(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitationAt(context.blockPos) == Biome.Precipitation.NONE
