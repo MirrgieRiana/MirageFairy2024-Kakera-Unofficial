@@ -9,10 +9,12 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
 context(ModContext)
-fun <T> T.register(registry: Registry<T>, identifier: ResourceLocation) {
+fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation): () -> Holder<T> {
+    lateinit var holder: Holder<T>
     ModEvents.onRegistration {
-        Registry.register(registry, identifier, this@register)
+        holder = Registry.registerForHolder(registry, identifier, this@register)
     }
+    return { holder }
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

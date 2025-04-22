@@ -8,11 +8,11 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import net.minecraft.network.chat.Component
-import net.minecraft.world.effect.MobEffect as StatusEffect
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
 
 object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectPassiveSkillEffect.Value>("status_effect") {
-    class Value(val map: Map<StatusEffect, Entry>)
+    class Value(val map: Map<MobEffect, Entry>)
     class Entry(val level: Int, val additionalSeconds: Int)
 
     override fun getText(value: Value): Component {
