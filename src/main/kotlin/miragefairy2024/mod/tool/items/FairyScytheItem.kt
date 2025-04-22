@@ -163,7 +163,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     }
 
     override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int): Int {
-        return if (enchantment == Enchantments.BLOCK_FORTUNE) {
+        return if (enchantment == Enchantments.FORTUNE) {
             val enchantments = EnchantmentHelper.getEnchantments(itemStack)
             oldLevel max (enchantments[EnchantmentCard.FERTILITY.enchantment] ?: 0)
         } else {

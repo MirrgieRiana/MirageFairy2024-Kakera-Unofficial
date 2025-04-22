@@ -106,7 +106,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
-        val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool).toDouble() else 0.0
+        val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FORTUNE, tool).toDouble() else 0.0
         val luck = player?.getAttributeValue(EntityAttributes.LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]

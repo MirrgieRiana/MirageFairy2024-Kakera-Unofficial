@@ -47,38 +47,36 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
 import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.item.TooltipFlag
-import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.network.chat.Component
+import net.minecraft.network.protocol.Packet
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction as CopyNbtLootFunction
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider as ContextLootNbtProvider
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue as ConstantLootNumberProvider
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.tags.BlockTags
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.pathfinder.PathComputationType
-import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue as ConstantLootNumberProvider
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
@@ -179,11 +177,11 @@ fun initFairyStatue() {
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         // ドロップ
-        card.block.registerLootTableGeneration { provider ->
+        card.block.registerLootTableGeneration { provider, _ ->
             LootTable(
                 LootPool(ItemLootPoolEntry(card.item)) {
                     setRolls(ConstantLootNumberProvider.exactly(1.0F))
-                    apply(CopyNbtLootFunction.copyData(ContextLootNbtProvider.BLOCK_ENTITY).copy("Motif", "Motif"))
+                    apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(motifDataComponent))
                     provider.applyExplosionCondition(card.item, this)
                 },
             )

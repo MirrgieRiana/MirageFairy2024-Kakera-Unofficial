@@ -22,6 +22,7 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
@@ -48,50 +49,47 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.LeavesBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
-import net.minecraft.world.level.block.SaplingBlock
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
-import net.minecraft.world.level.block.grower.AbstractTreeGrower as SaplingGenerator
-import net.minecraft.util.ParticleUtils as ParticleUtil
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.data.loot.BlockLootSubProvider as BlockLootTableGenerator
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.stats.Stats
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.ParticleUtils as ParticleUtil
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.grower.AbstractTreeGrower as SaplingGenerator
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
 class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
@@ -281,57 +279,57 @@ fun initHaimeviskaBlocks() {
     }
 
     // ドロップ
-    HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration {
-        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.NORMAL_LEAVES_SAPLING_CHANCES)
+    HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration { it, _ ->
+        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, 0.05F, 0.0625F, 0.083333336F, 0.1F)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
-    HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
         }
     }
-    HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
                 `when`(RandomChanceLootCondition.randomChance(0.01F))
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
         }
     }
-    HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
@@ -440,7 +438,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         }
 
         // 生産
-        val fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, toolItemStack)
+        val fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FORTUNE, toolItemStack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 

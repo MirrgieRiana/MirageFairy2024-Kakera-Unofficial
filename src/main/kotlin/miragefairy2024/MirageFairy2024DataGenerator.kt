@@ -19,30 +19,29 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
-import net.minecraft.world.level.block.Block
-import net.minecraft.data.PackOutput as DataOutput
-import net.minecraft.data.DataProvider
-import net.minecraft.data.CachedOutput as DataWriter
-import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
-import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.damagesource.DamageType
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 import net.minecraft.core.Registry
-import net.minecraft.data.recipes.RecipeOutput
-import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
-import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries
-import net.minecraft.tags.TagKey
+import net.minecraft.data.DataProvider
+import net.minecraft.data.recipes.RecipeOutput
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
-import java.util.function.Consumer
+import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
+import net.minecraft.data.CachedOutput as DataWriter
+import net.minecraft.data.PackOutput as DataOutput
+import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
+import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 
 object DataGenerationEvents {
     val onInitializeDataGenerator = InitializationEventRegistry<() -> Unit>()
@@ -55,10 +54,10 @@ object DataGenerationEvents {
     val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
-    val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
-    val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit) -> Unit>()
-    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit) -> Unit>()
-    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit) -> Unit>()
+    val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider, HolderLookup.Provider) -> Unit>()
+    val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateRecipe = InitializationEventRegistry<((location: ResourceLocation, recipe: Recipe<*>, advancement: AdvancementHolder?) -> Unit) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
@@ -115,28 +114,34 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
             object : FabricBlockLootTableProvider(output, registriesFuture) {
-                override fun generate() = DataGenerationEvents.onGenerateBlockLootTable.fire { it(this) }
+                override fun generate() {
+                    DataGenerationEvents.onGenerateBlockLootTable.fire { it(this, registries) }
+                }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
             object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.CHEST) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
+                    DataGenerationEvents.onGenerateChestLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
             object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ARCHAEOLOGY) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
+                    DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
             object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ENTITY) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateEntityLootTable.fire { it { entityType, builder -> exporter.accept(entityType.defaultLootTable, builder) } }
+                    DataGenerationEvents.onGenerateEntityLootTable.fire { it({ entityType, builder -> exporter.accept(entityType.defaultLootTable, builder) }, registries) }
                 }
             }
         }

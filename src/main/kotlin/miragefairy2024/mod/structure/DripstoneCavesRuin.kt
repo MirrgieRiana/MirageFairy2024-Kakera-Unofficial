@@ -18,32 +18,33 @@ import miragefairy2024.util.registerChestLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerStructureTagGeneration
 import miragefairy2024.util.times
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.entity.MobCategory as SpawnGroup
+import miragefairy2024.util.with
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
+import net.minecraft.core.HolderSet as RegistryEntryList
+import net.minecraft.data.worldgen.Pools as StructurePools
+import net.minecraft.util.random.WeightedRandomList as Pool
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight as UniformHeightProvider
+import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride as StructureSpawns
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.core.registries.Registries
-import net.minecraft.core.HolderSet as RegistryEntryList
-import net.minecraft.world.level.levelgen.structure.StructureSet
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.data.worldgen.Pools as StructurePools
-import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
-import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
-import net.minecraft.util.random.WeightedRandomList as Pool
-import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride as StructureSpawns
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
-import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
-import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
-import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
-import net.minecraft.world.level.levelgen.heightproviders.UniformHeight as UniformHeightProvider
-import net.minecraft.world.level.levelgen.structure.Structure
 
 object DripstoneCavesRuinCard {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
@@ -56,10 +57,10 @@ object DripstoneCavesRuinCard {
         translation.enJa()
 
 
-        registerChestLootTableGeneration("chests/" * identifier * "/chest_books") {
+        registerChestLootTableGeneration(Registries.LOOT_TABLE with "chests/" * identifier * "/chest_books") { registries ->
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
                     ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(1.0F, 10.0F))),
                 ) {
                     setRolls(UniformLootNumberProvider.between(5.0F, 15.0F))

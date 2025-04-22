@@ -20,35 +20,37 @@ import miragefairy2024.util.registerArchaeologyLootTableGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
+import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.block.Blocks
+import net.minecraft.core.registries.Registries
+import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.saveddata.maps.MapDecoration as MapIcon
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes
+import net.minecraft.world.level.storage.loot.functions.SetNameFunction
+import java.util.Optional
+import net.minecraft.data.worldgen.Pools as StructurePools
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight as ConstantHeightProvider
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor as BlockIgnoreStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor as GravityStructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.PosAlwaysTrueTest as AlwaysTruePosRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.AppendLoot as AppendLootRuleBlockEntityModifier
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction as ExplorationMapLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction as SetNameLootFunction
-import net.minecraft.core.registries.Registries
-import net.minecraft.tags.TagKey
-import net.minecraft.world.level.levelgen.structure.StructureSet
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.data.worldgen.Pools as StructurePools
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor as BlockIgnoreStructureProcessor
-import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor as GravityStructureProcessor
-import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
-import net.minecraft.world.level.levelgen.structure.templatesystem.PosAlwaysTrueTest as AlwaysTruePosRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.AppendLoot as AppendLootRuleBlockEntityModifier
-import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
-import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
-import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight as ConstantHeightProvider
-import net.minecraft.world.level.levelgen.structure.Structure
-import java.util.Optional
 
 object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
@@ -61,8 +63,8 @@ object WeatheredAncientRemnantsCard {
 
         translation.enJa()
 
-        val archaeologyLootTable = "archaeology/" * identifier
-        registerArchaeologyLootTableGeneration(archaeologyLootTable) {
+        val archaeologyLootTable = Registries.LOOT_TABLE with "archaeology/" * identifier
+        registerArchaeologyLootTableGeneration(archaeologyLootTable) { registries ->
             LootTable(
                 LootPool(
                     ItemLootPoolEntry(Items.RAW_IRON).setWeight(10),
@@ -71,24 +73,24 @@ object WeatheredAncientRemnantsCard {
                     ItemLootPoolEntry(Items.GLASS_PANE).setWeight(5),
                     ItemLootPoolEntry(MaterialCard.XARPITE.item).setWeight(20),
 
-                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
                     ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).setWeight(3),
                     ItemLootPoolEntry(Items.AMETHYST_SHARD).setWeight(3),
-                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment()),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
                     ItemLootPoolEntry(MaterialCard.JEWEL_100.item).setWeight(3),
                     ItemLootPoolEntry(Items.MAP) {
                         apply(
                             ExplorationMapLootFunction.makeExplorationMap()
                                 .setDestination(onMapsTag)
-                                .setMapDecoration(MapIcon.Type.BANNER_BROWN)
+                                .setMapDecoration(MapDecorationTypes.BROWN_BANNER)
                                 .setZoom(3)
                                 .setSkipKnownStructures(false)
                         )
-                        apply(SetNameLootFunction.setName(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }))
+                        apply(SetNameLootFunction.setName(text { MAP_TRANSLATION(DripstoneCavesRuinCard.translation()) }, SetNameFunction.Target.ITEM_NAME))
                     }.setWeight(2),
                 ),
             )
