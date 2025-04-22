@@ -8,49 +8,49 @@ import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.data.worldgen.BootstapContext as Registerable
-import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey
-import net.minecraft.core.registries.Registries
-import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.core.HolderSet as RegistryEntryList
-import net.minecraft.tags.TagKey
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor as RuleStructureProcessor
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
-import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.random.SimpleWeightedRandomList as DataPool
 import net.minecraft.core.Direction
-import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.worldgen.BootstrapContext
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.util.valueproviders.IntProvider
-import net.minecraft.util.valueproviders.WeightedListInt as WeightedListIntProvider
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.world.level.levelgen.placement.PlacementModifier
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
+import java.util.function.Predicate
+import kotlin.math.roundToInt
+import net.minecraft.core.Holder as RegistryEntry
+import net.minecraft.core.HolderSet as RegistryEntryList
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.util.random.SimpleWeightedRandomList as DataPool
+import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
+import net.minecraft.util.valueproviders.WeightedListInt as WeightedListIntProvider
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
 import net.minecraft.world.level.levelgen.placement.BiomeFilter as BiomePlacementModifier
 import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement as CountMultilayerPlacementModifier
 import net.minecraft.world.level.levelgen.placement.CountPlacement as CountPlacementModifier
 import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement as EnvironmentScanPlacementModifier
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement as HeightRangePlacementModifier
-import net.minecraft.world.level.levelgen.placement.PlacementModifier
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement as SquarePlacementModifier
 import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement as RandomOffsetPlacementModifier
 import net.minecraft.world.level.levelgen.placement.RarityFilter as RarityFilterPlacementModifier
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement as SquarePlacementModifier
 import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter as SurfaceWaterDepthFilterPlacementModifier
-import java.util.function.Predicate
-import kotlin.math.roundToInt
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor as RuleStructureProcessor
 
 infix fun <C : FeatureConfig, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
 infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<PlacementModifier>) = PlacedFeature(this, placementModifiers)
@@ -58,31 +58,29 @@ infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<P
 
 // Init
 
-class DynamicGenerationScope<T>(val context: Registerable<T>)
-
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 operator fun <T> ResourceKey<Registry<T>>.get(key: ResourceKey<T>): RegistryEntry<T> {
-    return this@DynamicGenerationScope.context.lookup(this).getOrThrow(key)
+    return this@BootstrapContext.lookup(this).getOrThrow(key)
 }
 
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 operator fun <T> ResourceKey<Registry<T>>.get(key: TagKey<T>): RegistryEntryList.Named<T> {
-    return this@DynamicGenerationScope.context.lookup(this).getOrThrow(key)
+    return this@BootstrapContext.lookup(this).getOrThrow(key)
 }
 
 context(ModContext)
-fun <T> registerDynamicGeneration(registryKey: ResourceKey<out Registry<T>>, identifier: ResourceLocation, creator: context(DynamicGenerationScope<T>) () -> T): ResourceKey<T> {
+fun <T : Any> registerDynamicGeneration(registryKey: ResourceKey<out Registry<T>>, identifier: ResourceLocation, creator: context(BootstrapContext<T>) () -> T): ResourceKey<T> {
     val key = registryKey with identifier
     registerDynamicGeneration(key, creator)
     return key
 }
 
 context(ModContext)
-fun <T> registerDynamicGeneration(key: ResourceKey<T>, creator: context(DynamicGenerationScope<T>) () -> T) {
+fun <T : Any> registerDynamicGeneration(key: ResourceKey<T>, creator: context(BootstrapContext<T>) () -> T) {
     val registryKey = ResourceKey.createRegistryKey<T>(key.registry())
     DataGenerationEvents.onBuildRegistry {
-        it.add(registryKey) { context ->
-            context.register(key, creator(DynamicGenerationScope(context)))
+        it.add<T>(registryKey) { context ->
+            context.register(key, creator(context))
         }
     }
     DataGenerationEvents.onInitializeDataGenerator {
@@ -186,22 +184,22 @@ val undergroundFlower: List<PlacementModifier>
 
 // Structure
 
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 fun RuleStructureProcessor(vararg rules: StructureProcessorRule): RuleStructureProcessor {
     return RuleStructureProcessor(rules.toList())
 }
 
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 fun StructureProcessorList(vararg processors: StructureProcessor): StructureProcessorList {
     return StructureProcessorList(processors.toList())
 }
 
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 fun SinglePoolElement(location: ResourceLocation, processorsKey: ResourceKey<StructureProcessorList>, projection: StructurePool.Projection): StructurePoolElement {
     return StructurePoolElement.single(location.string, Registries.PROCESSOR_LIST[processorsKey]).apply(projection)
 }
 
-context(DynamicGenerationScope<*>)
+context(BootstrapContext<*>)
 fun StructurePool(fallbackKey: ResourceKey<StructurePool>, vararg elements: Pair<StructurePoolElement, Int>): StructurePool {
     return StructurePool(Registries.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
 }
