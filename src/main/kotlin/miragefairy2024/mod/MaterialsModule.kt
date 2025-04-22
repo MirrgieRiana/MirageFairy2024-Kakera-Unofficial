@@ -47,6 +47,7 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -185,9 +186,9 @@ class MaterialCard(
             soulStreamContainable = true,
             foodComponent = FoodComponent.Builder()
                 .nutrition(2)
-                .saturationMod(0.3F)
+                .saturationModifier(0.3F)
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .alwaysEat()
+                .alwaysEdible()
                 .build(),
         )
         val MIRAGIUM_NUGGET = !MaterialCard(
@@ -267,7 +268,7 @@ class MaterialCard(
                 .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .fast()
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
@@ -303,7 +304,7 @@ class MaterialCard(
             fuelValue = 200,
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
                 .build(),
         ) {
@@ -636,7 +637,7 @@ class MaterialCard(
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
                 .build(),
@@ -661,7 +662,7 @@ class MaterialCard(
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
                 .build(),
             creator = { DrinkItem(it) },
@@ -684,7 +685,7 @@ class MaterialCard(
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
                 .build(),
             creator = { DrinkItem(it, flaming = 5) },
@@ -708,7 +709,7 @@ class MaterialCard(
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
                 .build(),
@@ -732,7 +733,7 @@ class MaterialCard(
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
                 .build(),
@@ -889,18 +890,18 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
 
         run {
-            val foodComponent = foodProperties ?: return@run
+            val foodComponent = stack[DataComponents.FOOD] ?: return@run
             foodComponent.effects.forEach { entry ->
-                var text = entry.first.effect.displayName
-                if (entry.first.amplifier > 0) text = text { text + " "() + (entry.first.amplifier + 1).toRomanText() }
-                if (!entry.first.effect.isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.first.duration)}"() + ")"() }
-                if (entry.second != 1.0F) text = text { text + " (${entry.second * 100 formatAs "%.0f"}%)"() }
-                text = if (entry.first.effect.isBeneficial) text.blue else text.red
+                var text = entry.effect.effect.value().displayName
+                if (entry.effect.amplifier > 0) text = text { text + " "() + (entry.effect.amplifier + 1).toRomanText() }
+                if (!entry.effect.effect.value().isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.effect.duration, context.tickRate())}"() + ")"() }
+                if (entry.probability != 1.0F) text = text { text + " (${entry.probability * 100 formatAs "%.0f"}%)"() }
+                text = if (entry.effect.effect.value().isBeneficial) text.blue else text.red
                 tooltipComponents += text
             }
         }
 
-        if (flaming != null) tooltipComponents += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
+        if (flaming != null) tooltipComponents += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20, context.tickRate())}"() + ")"()).red }
     }
 
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
@@ -909,7 +910,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         if (user is PlayerEntity) user.awardStat(Stats.ITEM_USED.get(this))
         user.gameEvent(GameEvent.DRINK)
         if (!world.isClientSide) {
-            if (flaming != null) user.setSecondsOnFire(flaming)
+            if (flaming != null) user.igniteForSeconds(flaming.toFloat())
         }
         return if (stack.isEmpty) {
             Items.GLASS_BOTTLE.createItemStack()
