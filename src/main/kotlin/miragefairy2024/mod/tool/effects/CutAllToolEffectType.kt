@@ -40,7 +40,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
             // 発動

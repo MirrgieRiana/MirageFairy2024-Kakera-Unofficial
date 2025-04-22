@@ -62,7 +62,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
     override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
+    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
@@ -89,7 +89,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, attackDamage.toInt(), attackSpeed, settings), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
+open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, settings.attributes(createAttributes(material, attackDamage.toInt(), attackSpeed))), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
     companion object {
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }

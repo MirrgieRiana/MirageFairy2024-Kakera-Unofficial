@@ -37,7 +37,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
 
             // 発動
 
@@ -49,7 +49,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                     (-level..level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.offset(x, y, z)
-                            if (item.isCorrectToolForDrops(world.getBlockState(targetBlockPos))) run skip@{
+                            if (item.isCorrectToolForDrops(stack, world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
                                 if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 

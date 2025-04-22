@@ -52,7 +52,7 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
 
     override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
+    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)

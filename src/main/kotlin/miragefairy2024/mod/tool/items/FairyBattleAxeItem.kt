@@ -41,7 +41,7 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
     override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
 
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
+    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
@@ -68,7 +68,7 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
 }
 
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
+open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, settings.attributes(createAttributes(toolMaterial, attackDamage, attackSpeed))) {
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         stack.hurtAndBreak(1, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         return true
