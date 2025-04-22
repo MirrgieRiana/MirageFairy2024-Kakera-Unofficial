@@ -29,12 +29,12 @@ import mirrg.kotlin.hydrogen.or
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
@@ -92,9 +92,9 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return text { traitStack.trait.getName() + " "() + traitStack.level.toString(2)() }
     }
 
-    override fun useOn(context: ItemUsageContext): ActionResult {
-        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return ActionResult.PASS
-        if (context.level.isClientSide) return ActionResult.CONSUME
+    override fun useOn(context: ItemUsageContext): InteractionResult {
+        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return InteractionResult.PASS
+        if (context.level.isClientSide) return InteractionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
         val b = context.itemInHand.getTraitStacks() ?: TraitStacks.EMPTY
         if (context.player?.isShiftKeyDown != true) {
@@ -102,7 +102,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         } else {
             blockEntity.setTraitStacks(a - b)
         }
-        return ActionResult.CONSUME
+        return InteractionResult.CONSUME
     }
 
     override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {

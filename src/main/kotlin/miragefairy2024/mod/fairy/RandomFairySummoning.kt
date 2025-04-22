@@ -63,7 +63,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     }
 
     override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
-    override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
+    override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 72000 // 1時間
 
     override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)

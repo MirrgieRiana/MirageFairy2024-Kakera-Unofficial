@@ -19,8 +19,8 @@ import miragefairy2024.util.yellow
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.stats.Stats
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -118,9 +118,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         world.addFreshEntity(entity)
 
         // 消費
-        itemStack.hurtAndBreak(1, user) {
-            it.broadcastBreakEvent(hand)
-        }
+        itemStack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand))
         if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
 
         user.cooldowns.addCooldown(this, world.random.randomInt(10.0 / frequency))
@@ -135,17 +133,13 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     }
 
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(2, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
+        stack.hurtAndBreak(2, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         return true
     }
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         if (state.getDestroySpeed(world, pos) != 0.0F) {
-            stack.hurtAndBreak(2, miner) { e ->
-                e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-            }
+            stack.hurtAndBreak(2, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         }
         return true
     }

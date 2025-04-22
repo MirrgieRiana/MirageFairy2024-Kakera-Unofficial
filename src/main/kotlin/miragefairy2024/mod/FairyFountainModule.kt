@@ -41,9 +41,13 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
@@ -52,7 +56,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -127,10 +130,59 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+
+        // 入力判定
+        if (!stack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
+        }
+        if (stack.count < 1) { // 個数が足りない
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
+        }
+
+        // 成立
+
+        // 消費
+        if (!player.isCreative) {
+            if (level.isServer) stack.shrink(1)
+        }
+
+        // 生産
+        if (level.isServer) {
+            val outputItemStack = run {
+                val chanceTable = getChanceTable()
+                val entry = chanceTable.weightedRandom(level.random)?.first
+                entry?.let { it.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
+            }
+            player.obtain(outputItemStack)
+        }
+
+        // エフェクト
+        if (level.isServer) level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (level.random.nextFloat() - level.random.nextFloat()) * 0.35F + 0.9F)
+        if (level.isClientSide) {
+            // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
+            repeat(3) {
+                level.addParticle(
+                    ParticleTypeCard.MISSION.particleType,
+                    pos.x + 2.0 / 16.0 + level.random.nextDouble() * 12.0 / 16.0,
+                    pos.y + 2.0 / 16.0 + level.random.nextDouble() * 4.0 / 16.0,
+                    pos.z + 2.0 / 16.0 + level.random.nextDouble() * 12.0 / 16.0,
+                    level.random.nextGaussian() * 0.02,
+                    level.random.nextGaussian() * 0.02,
+                    level.random.nextGaussian() * 0.02,
+                )
+            }
+        }
+
+        return ItemInteractionResult.SUCCESS
+    }
+
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
         if (player.isShiftKeyDown) {
-            if (level.isClientSide) return ActionResult.SUCCESS
+            if (level.isClientSide) return InteractionResult.SUCCESS
 
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
@@ -148,54 +200,10 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
                 override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
 
-            return ActionResult.CONSUME
+            return InteractionResult.CONSUME
         } else {
-            // 入力判定
-            val inputItemStack = player.getItemInHand(hand)
-            if (!inputItemStack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
-                return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
-            }
-            if (inputItemStack.count < 1) { // 個数が足りない
-                if (world.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
-                return ActionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
-            }
-
-            // 成立
-
-            // 消費
-            if (!player.isCreative) {
-                if (world.isServer) inputItemStack.shrink(1)
-            }
-
-            // 生産
-            if (world.isServer) {
-                val outputItemStack = run {
-                    val chanceTable = getChanceTable()
-                    val entry = chanceTable.weightedRandom(world.random)?.first
-                    entry?.let { it.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
-                }
-                player.obtain(outputItemStack)
-            }
-
-            // エフェクト
-            if (world.isServer) world.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (world.random.nextFloat() - world.random.nextFloat()) * 0.35F + 0.9F)
-            if (world.isClientSide) {
-                // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
-                repeat(3) {
-                    world.addParticle(
-                        ParticleTypeCard.MISSION.particleType,
-                        pos.x + 2.0 / 16.0 + world.random.nextDouble() * 12.0 / 16.0,
-                        pos.y + 2.0 / 16.0 + world.random.nextDouble() * 4.0 / 16.0,
-                        pos.z + 2.0 / 16.0 + world.random.nextDouble() * 12.0 / 16.0,
-                        world.random.nextGaussian() * 0.02,
-                        world.random.nextGaussian() * 0.02,
-                        world.random.nextGaussian() * 0.02,
-                    )
-                }
-            }
-
-            return ActionResult.sidedSuccess(world.isClientSide)
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            return InteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
     }
 

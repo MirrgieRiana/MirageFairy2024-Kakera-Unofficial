@@ -11,7 +11,8 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
@@ -61,9 +62,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                                     if (targetHardness > 0) {
                                         val damage = world.random.randomInt(configuration.miningDamage)
                                         if (damage > 0) {
-                                            stack.hurtAndBreak(damage, miner) {
-                                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                                            }
+                                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
                                         }
                                     }
                                 }

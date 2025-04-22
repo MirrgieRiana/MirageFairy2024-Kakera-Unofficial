@@ -19,8 +19,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -126,18 +126,14 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     }
 
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(2, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
+        stack.hurtAndBreak(2, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         return true
     }
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         if (state.getDestroySpeed(world, pos) != 0.0F) {
             if (miner.random.nextFloat() < 0.2F) {
-                stack.hurtAndBreak(1, miner) { e ->
-                    e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                }
+                stack.hurtAndBreak(1, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
             }
         }
         return true

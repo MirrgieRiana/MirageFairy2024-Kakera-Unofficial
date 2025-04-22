@@ -7,8 +7,8 @@ import miragefairy2024.mod.tool.ToolMaterialCard
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.Item
@@ -70,17 +70,13 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
 open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(1, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
+        stack.hurtAndBreak(1, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         return true
     }
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         if (state.getDestroySpeed(world, pos) != 0.0F) {
-            stack.hurtAndBreak(2, miner) { e ->
-                e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-            }
+            stack.hurtAndBreak(2, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
         }
         return true
     }

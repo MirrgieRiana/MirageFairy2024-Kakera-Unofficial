@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -14,7 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.MenuProvider as NamedScreenHandlerFactory
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
@@ -75,16 +75,16 @@ open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) 
     override fun getMenuProvider(state: BlockState, world: Level, pos: BlockPos) = world.getBlockEntity(pos) as? NamedScreenHandlerFactory
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
-        if (level.isClientSide) return ActionResult.SUCCESS
-        val blockEntity = card.blockEntityAccessor.castOrNull(level.getBlockEntity(pos)) ?: return ActionResult.CONSUME
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
+        if (level.isClientSide) return InteractionResult.SUCCESS
+        val blockEntity = card.blockEntityAccessor.castOrNull(level.getBlockEntity(pos)) ?: return InteractionResult.CONSUME
         player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
             override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
             override fun getDisplayName() = blockEntity.displayName
             override fun getScreenOpeningData(player: ServerPlayer) = Unit
         })
         player.awardStat(Stats.ITEM_USED.get(this.asItem()))
-        return ActionResult.CONSUME
+        return InteractionResult.CONSUME
     }
 
 }

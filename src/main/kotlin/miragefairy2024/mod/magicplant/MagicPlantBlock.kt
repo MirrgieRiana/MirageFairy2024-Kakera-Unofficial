@@ -14,11 +14,13 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
@@ -26,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
@@ -236,10 +237,10 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
     /** 右クリック時、スニーク中であれば特性GUIを出し、そうでない場合、収穫が可能であれば収穫する。 */
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
+    final override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
         if (player.isShiftKeyDown) {
             if (level.isClientSide) {
-                return ActionResult.SUCCESS
+                return InteractionResult.SUCCESS
             } else {
                 val traitStacks = run {
                     val blockEntity = level.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
@@ -254,15 +255,15 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
 
                     override fun getScreenOpeningData(player: ServerPlayer) = traitStacks
                 })
-                return ActionResult.CONSUME
+                return InteractionResult.CONSUME
             }
         }
-        if (!tryPick(level, pos, player, player.mainHandItem, true, true)) return ActionResult.PASS
-        return ActionResult.sidedSuccess(level.isClientSide)
+        if (!tryPick(level, pos, player, player.mainHandItem, true, true)) return InteractionResult.PASS
+        return InteractionResult.sidedSuccess(level.isClientSide)
     }
 
     /** 中央クリックをした際は、この植物の本来の種子を返す。 */
-    final override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState): ItemStack {
+    final override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
         val blockEntity = world.getMagicPlantBlockEntity(pos) ?: return EMPTY_ITEM_STACK
         val traitStacks = blockEntity.getTraitStacks() ?: return EMPTY_ITEM_STACK
         return createSeed(traitStacks, isRare = blockEntity.isRare())

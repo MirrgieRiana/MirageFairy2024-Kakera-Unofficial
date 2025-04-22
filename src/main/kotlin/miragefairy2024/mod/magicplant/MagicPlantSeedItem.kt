@@ -18,12 +18,12 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
@@ -109,17 +109,17 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     }
 
-    override fun useOn(context: ItemUsageContext): ActionResult {
-        if (context.player?.isShiftKeyDown == true) return ActionResult.PASS
+    override fun useOn(context: ItemUsageContext): InteractionResult {
+        if (context.player?.isShiftKeyDown == true) return InteractionResult.PASS
         return super.useOn(context)
     }
 
-    override fun place(context: ItemPlacementContext): ActionResult {
+    override fun place(context: ItemPlacementContext): InteractionResult {
         if (context.itemInHand.getTraitStacks() != null) {
             return super.place(context)
         } else {
-            val player = context.player ?: return ActionResult.FAIL
-            if (!player.isCreative) return ActionResult.FAIL
+            val player = context.player ?: return InteractionResult.FAIL
+            if (!player.isCreative) return InteractionResult.FAIL
             return super.place(context)
         }
     }

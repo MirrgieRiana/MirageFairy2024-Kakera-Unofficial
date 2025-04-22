@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
-import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import net.minecraft.ChatFormatting as Formatting
 
 fun Component.style(style: Style): Component = Component.empty().append(this).setStyle(style)

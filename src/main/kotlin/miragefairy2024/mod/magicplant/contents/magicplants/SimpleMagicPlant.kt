@@ -7,6 +7,7 @@ import miragefairy2024.mod.magicplant.MagicPlantConfiguration
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
+import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.normal
 import miragefairy2024.util.randomInt
@@ -17,6 +18,7 @@ import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
@@ -106,7 +108,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
     override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
-        val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FORTUNE, tool).toDouble() else 0.0
+        val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], tool).toDouble() else 0.0
         val luck = player?.getAttributeValue(EntityAttributes.LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]

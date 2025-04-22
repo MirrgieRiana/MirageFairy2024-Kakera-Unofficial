@@ -14,7 +14,8 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
-import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.cutAll() = this.also {
@@ -62,9 +63,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                     if (targetHardness > 0) {
                         val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner) {
-                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                            }
+                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
                         }
                     }
                     logBlockPosList += blockPos
@@ -86,9 +85,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                         if (miner.random.nextFloat() < 0.1F) {
                             val damage = world.random.randomInt(configuration.miningDamage)
                             if (damage > 0) {
-                                stack.hurtAndBreak(damage, miner) {
-                                    it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                                }
+                                stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
                             }
                         }
                     }

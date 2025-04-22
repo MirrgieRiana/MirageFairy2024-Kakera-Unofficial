@@ -40,6 +40,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -61,7 +62,6 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -182,14 +182,14 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
-        if (level.isClientSide) return ActionResult.SUCCESS
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
+        if (level.isClientSide) return InteractionResult.SUCCESS
         player as ServerPlayerEntity
 
         val now = Instant.now()
         val result = calculateTelescopeActions(now, player)
         val actions = result.actions
-        if (actions.isEmpty()) return ActionResult.CONSUME
+        if (actions.isEmpty()) return InteractionResult.CONSUME
 
         actions.forEach {
             it()
@@ -200,7 +200,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         player.telescopeMission.lastUsedInstant = now
         TelescopeMissionExtraPlayerDataCategory.sync(player)
 
-        return ActionResult.CONSUME
+        return InteractionResult.CONSUME
     }
 
     override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {

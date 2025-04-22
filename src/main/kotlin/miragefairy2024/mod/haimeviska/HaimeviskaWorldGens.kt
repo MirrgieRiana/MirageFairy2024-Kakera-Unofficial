@@ -1,6 +1,6 @@
 package miragefairy2024.mod.haimeviska
 
-import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.count
@@ -35,7 +35,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer 
 object HaimeviskaTreeDecoratorCard {
     val identifier = MirageFairy2024.identifier("haimeviska")
     val treeDecorator = HaimeviskaTreeDecorator()
-    private val codec: Codec<HaimeviskaTreeDecorator> = Codec.unit { treeDecorator }
+    private val codec: MapCodec<HaimeviskaTreeDecorator> = MapCodec.unit { treeDecorator }
     val type: TreeDecoratorType<HaimeviskaTreeDecorator> = TreeDecoratorType(codec)
 }
 

@@ -12,7 +12,8 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
-import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.mineAll() = this.also {
@@ -59,9 +60,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
                     if (targetHardness > 0) {
                         val damage = world.random.randomInt(configuration.miningDamage)
                         if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner) {
-                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                            }
+                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
                         }
                     }
                 }

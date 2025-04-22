@@ -919,7 +919,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         }
     }
 
-    override fun getUseDuration(stack: ItemStack) = 32
+    override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 32
     override fun getUseAnimation(stack: ItemStack) = UseAction.DRINK
     override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
 }

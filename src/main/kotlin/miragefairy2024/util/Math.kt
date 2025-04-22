@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
-import net.minecraft.util.RandomSource as Random
 import kotlin.math.floor
+import net.minecraft.util.RandomSource as Random
 
 /** 期待値がdになるように整数の乱数を生成します。 */
 fun Random.randomInt(d: Double): Int {

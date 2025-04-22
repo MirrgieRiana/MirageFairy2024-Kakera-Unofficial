@@ -58,10 +58,14 @@ import net.minecraft.stats.Stats
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
@@ -79,7 +83,6 @@ import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.ParticleUtils as ParticleUtil
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.InteractionResult as ActionResult
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
@@ -389,22 +392,21 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
-    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
-        if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, level, pos, player, hand, hit) // 縦方向でなければスルー
-        val toolItemStack = player.getItemInHand(hand)
-        if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, level, pos, player, hand, hit) // 剣でなければスルー
-        if (level.isClientSide) return ActionResult.SUCCESS
-        val direction = if (hit.direction.axis === Direction.Axis.Y) player.direction.opposite else hit.direction
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+        if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 縦方向でなければスルー
+        if (!stack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 剣でなければスルー
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS
+        val direction = if (hitResult.direction.axis === Direction.Axis.Y) player.direction.opposite else hitResult.direction
 
         // 加工
-        toolItemStack.hurtAndBreak(1, player) { it.broadcastBreakEvent(hand) }
+        stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand))
         level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
-        player.awardStat(Stats.ITEM_USED.get(toolItemStack.item))
+        player.awardStat(Stats.ITEM_USED.get(stack.item))
 
         // エフェクト
         level.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
 
-        return ActionResult.CONSUME
+        return ItemInteractionResult.CONSUME
     }
 }
 
@@ -420,32 +422,31 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
-    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): ActionResult {
-        if (level.isClientSide) return ActionResult.SUCCESS
-        val toolItemStack = player.getItemInHand(hand)
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS
         val direction = state.getValue(FACING)
 
         // 消費
         level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
-            val actualCount = level.random.randomInt(count) atMost item.maxStackSize
+            val actualCount = level.random.randomInt(count) atMost item.defaultMaxStackSize
             if (actualCount <= 0) return
             val itemStack = item.createItemStack(actualCount)
             val itemEntity = ItemEntity(level, pos.x + 0.5 + direction.stepX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.stepZ * 0.65, itemStack)
-            itemEntity.setDeltaMovement(0.05 * direction.stepX + level.random.nextDouble() * 0.02, 0.05, 0.05 * direction.stepZ + world.random.nextDouble() * 0.02)
+            itemEntity.setDeltaMovement(0.05 * direction.stepX + level.random.nextDouble() * 0.02, 0.05, 0.05 * direction.stepZ + level.random.nextDouble() * 0.02)
             level.addFreshEntity(itemEntity)
         }
 
         // 生産
-        val fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FORTUNE, toolItemStack)
+        val fortune = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], stack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
         level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * level.random.nextFloat())
 
-        return ActionResult.CONSUME
+        return ItemInteractionResult.CONSUME
     }
 
     override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
