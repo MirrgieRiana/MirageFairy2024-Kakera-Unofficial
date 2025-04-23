@@ -36,8 +36,8 @@ import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
-        if (world == null) return
         val player = clientProxy?.getClientPlayer() ?: return
+        val world = player.level() ?: return
 
         // 特性を得る、無い場合はクリエイティブ専用
         val traitStacks = stack.getTraitStacks() ?: run {

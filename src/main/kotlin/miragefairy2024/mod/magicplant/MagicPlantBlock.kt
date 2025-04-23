@@ -131,7 +131,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguratio
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) = move(world, pos, state, autoPick = true)
 
-    final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState, isClient: Boolean) = canGrow(state)
+    final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState) = canGrow(state)
     final override fun isBonemealSuccess(world: Level, random: Random, pos: BlockPos, state: BlockState) = true
     final override fun performBonemeal(world: ServerWorld, random: Random, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
 

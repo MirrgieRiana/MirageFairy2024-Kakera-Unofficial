@@ -107,27 +107,27 @@ class ToolCard(
         val BISMUTH_PICKAXE = !ToolCard(
             "bismuth_pickaxe", EnJa("Bismuth Pickaxe", "ビスマスのつるはし"),
             PoemList(null),
-            FairyPickaxeConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.enchantment, 1),
+            FairyPickaxeConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val BISMUTH_AXE = !ToolCard(
             "bismuth_axe", EnJa("Bismuth Axe", "ビスマスの斧"),
             PoemList(null),
-            FairyAxeConfiguration(ToolMaterialCard.BISMUTH, 6.5F, -3.2F).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.enchantment, 1),
+            FairyAxeConfiguration(ToolMaterialCard.BISMUTH, 6.5F, -3.2F).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1),
         ) { registerAxeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val BISMUTH_SHOVEL = !ToolCard(
             "bismuth_shovel", EnJa("Bismuth Shovel", "ビスマスのシャベル"),
             PoemList(null),
-            FairyShovelConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.enchantment, 1),
+            FairyShovelConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1),
         ) { registerShovelRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val BISMUTH_HOE = !ToolCard(
             "bismuth_hoe", EnJa("Bismuth Hoe", "ビスマスのクワ"),
             PoemList(null),
-            FairyHoeConfiguration(ToolMaterialCard.BISMUTH, -2, -1.5F).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.enchantment, 1),
+            FairyHoeConfiguration(ToolMaterialCard.BISMUTH, -2, -1.5F).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1),
         ) { registerHoeRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val BISMUTH_SWORD = !ToolCard(
             "bismuth_sword", EnJa("Bismuth Sword", "ビスマスの剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.enchantment, 1),
+            FairySwordConfiguration(ToolMaterialCard.BISMUTH).enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1),
         ) { registerSwordRecipeGeneration(item, MaterialCard.BISMUTH_INGOT.item) }
         val COPPER_PICKAXE = !ToolCard(
             "copper_pickaxe", EnJa("Copper Pickaxe", "銅のつるはし"),

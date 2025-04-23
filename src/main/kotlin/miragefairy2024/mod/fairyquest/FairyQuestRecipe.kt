@@ -1,9 +1,8 @@
 package miragefairy2024.mod.fairyquest
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.PlacedItemFeature
@@ -24,14 +23,10 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
-import miragefairy2024.util.string
 import miragefairy2024.util.text
-import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.with
-import mirrg.kotlin.gson.hydrogen.jsonElement
-import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
@@ -47,6 +42,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.storage.loot.LootContext
+import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
 import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
@@ -254,9 +250,9 @@ fun initFairyQuestRecipe() {
                 LootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
-            fun registerChestLoot(lootTableId: ResourceLocation, weight: Int) {
+            fun registerChestLoot(lootTableId: ResourceKey<LootTable>, weight: Int) {
                 FairyQuestCardCard.item.registerChestLoot({ lootTableId }, weight) {
-                    apply { SetFairyQuestRecipeLootFunction(card.identifier) }
+                    apply { SetFairyQuestRecipeLootFunction(listOf(), card.identifier) }
                 }
             }
 
@@ -314,18 +310,12 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
     }
 }
 
-class SetFairyQuestRecipeLootFunction(private val recipeId: ResourceLocation, conditions: List<LootCondition> = listOf()) : ConditionalLootFunction(conditions.toTypedArray()) {
+class SetFairyQuestRecipeLootFunction(conditions: List<LootCondition>, private val recipeId: ResourceLocation) : ConditionalLootFunction(conditions) {
     companion object {
-        val SERIALIZER = object : Serializer<SetFairyQuestRecipeLootFunction>() {
-            override fun serialize(jsonObject: JsonObject, conditionalLootFunction: SetFairyQuestRecipeLootFunction, jsonSerializationContext: JsonSerializationContext) {
-                super.serialize(jsonObject, conditionalLootFunction, jsonSerializationContext)
-                jsonObject.add("id", conditionalLootFunction.recipeId.string.jsonElement)
-            }
-
-            override fun deserialize(json: JsonObject, context: JsonDeserializationContext, conditions: Array<LootCondition>): SetFairyQuestRecipeLootFunction {
-                val id = json.toJsonWrapper()["id"].asString().toIdentifier()
-                return SetFairyQuestRecipeLootFunction(id, conditions.toList())
-            }
+        val SERIALIZER: MapCodec<SetFairyQuestRecipeLootFunction> = RecordCodecBuilder.mapCodec { instance ->
+            commonFields(instance)
+                .and(ResourceLocation.CODEC.fieldOf("id").forGetter { it.recipeId })
+                .apply(instance, ::SetFairyQuestRecipeLootFunction)
         }
     }
 

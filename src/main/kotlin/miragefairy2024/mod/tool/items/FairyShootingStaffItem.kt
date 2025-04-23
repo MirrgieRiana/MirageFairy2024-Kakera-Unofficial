@@ -11,6 +11,7 @@ import miragefairy2024.mod.entity.AntimatterBoltEntity
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation
+import miragefairy2024.util.get
 import miragefairy2024.util.getLevel
 import miragefairy2024.util.getRate
 import miragefairy2024.util.invoke
@@ -18,6 +19,7 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
@@ -100,11 +102,11 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
 
-        val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
-        val maxDistance = baseMaxDistance + 3F * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
-        val speed = 2.0F + 2.0F * EnchantmentCard.MAGIC_REACH.enchantment.getRate(itemStack).toFloat()
-        val frequency = 0.5 + 0.5 * EnchantmentCard.MAGIC_ACCELERATION.enchantment.getRate(itemStack)
-        val experienceCost = BASE_EXPERIENCE_COST + 1 * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack)
+        val damage = basePower + 0.5F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_POWER.key].getLevel(itemStack).toFloat()
+        val maxDistance = baseMaxDistance + 3F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_REACH.key].getLevel(itemStack)
+        val speed = 2.0F + 2.0F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_REACH.key].getRate(itemStack).toFloat()
+        val frequency = 0.5 + 0.5 * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_ACCELERATION.key].getRate(itemStack)
+        val experienceCost = BASE_EXPERIENCE_COST + 1 * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_POWER.key].getLevel(itemStack)
 
         if (!user.isCreative) {
             if (user.totalExperience < experienceCost) {

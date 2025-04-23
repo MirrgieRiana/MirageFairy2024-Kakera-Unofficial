@@ -2,6 +2,7 @@ package miragefairy2024.mod.structure
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -13,9 +14,13 @@ import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
+import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings
 import java.util.Optional
 import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.util.ExtraCodecs as Codecs
 import net.minecraft.world.level.levelgen.WorldGenerationContext as HeightContext
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
@@ -42,9 +47,12 @@ class UnlimitedJigsawStructure(
     private val useExpansionHack: Boolean,
     private val projectStartToHeightmap: Optional<Heightmap.Types> = Optional.empty(),
     private val maxDistanceFromCenter: Int = 80,
+    private val poolAliases: List<PoolAliasBinding>,
+    private val dimensionPadding: DimensionPadding,
+    private val liquidSettings: LiquidSettings,
 ) : Structure(config) {
     companion object {
-        val CODEC: Codec<UnlimitedJigsawStructure> = Codecs.validate(RecordCodecBuilder.mapCodec { instance ->
+        val CODEC: MapCodec<UnlimitedJigsawStructure> = RecordCodecBuilder.mapCodec<UnlimitedJigsawStructure> { instance ->
             instance.group(
                 settingsCodec(instance),
                 StructurePool.CODEC.fieldOf("start_pool").forGetter { it.startPool },
@@ -54,8 +62,11 @@ class UnlimitedJigsawStructure(
                 Codec.BOOL.fieldOf("use_expansion_hack").forGetter { it.useExpansionHack },
                 Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter { it.projectStartToHeightmap },
                 Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter { it.maxDistanceFromCenter },
+                Codec.list(PoolAliasBinding.CODEC).optionalFieldOf("pool_aliases", listOf()).forGetter { it.poolAliases },
+                DimensionPadding.CODEC.optionalFieldOf("dimension_padding", JigsawStructure.DEFAULT_DIMENSION_PADDING).forGetter { it.dimensionPadding },
+                LiquidSettings.CODEC.optionalFieldOf("liquid_settings", JigsawStructure.DEFAULT_LIQUID_SETTINGS).forGetter { it.liquidSettings },
             ).apply(instance, ::UnlimitedJigsawStructure)
-        }, UnlimitedJigsawStructure::validate).codec()
+        }.validate(UnlimitedJigsawStructure::validate)
 
         private fun validate(structure: UnlimitedJigsawStructure): DataResult<UnlimitedJigsawStructure> {
             val var10000 = when (structure.terrainAdaptation()) {
@@ -75,7 +86,19 @@ class UnlimitedJigsawStructure(
         val chunkPos = context.chunkPos()
         val i = startHeight.sample(context.random(), HeightContext(context.chunkGenerator(), context.heightAccessor()))
         val blockPos = BlockPos(chunkPos.minBlockX, i, chunkPos.minBlockZ)
-        return StructurePoolBasedGenerator.addPieces(context, startPool, startJigsawName, size, blockPos, useExpansionHack, projectStartToHeightmap, maxDistanceFromCenter)
+        return StructurePoolBasedGenerator.addPieces(
+            context,
+            startPool,
+            startJigsawName,
+            size,
+            blockPos,
+            useExpansionHack,
+            projectStartToHeightmap,
+            maxDistanceFromCenter,
+            PoolAliasLookup.create(poolAliases, blockPos, context.seed()),
+            dimensionPadding,
+            liquidSettings,
+        )
     }
 
     override fun type(): StructureType<*> = UnlimitedJigsawCard.structureType

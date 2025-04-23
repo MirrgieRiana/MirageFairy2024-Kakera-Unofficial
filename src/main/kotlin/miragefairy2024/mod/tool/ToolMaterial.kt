@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Tiers
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.Tiers as ToolMaterials
 
@@ -51,7 +52,7 @@ enum class FairyToolMaterials(
     override fun getUses() = durability
     override fun getSpeed() = miningSpeedMultiplier
     override fun getAttackDamageBonus() = attackDamage
-    override fun getLevel() = miningLevel.level
+    override fun getIncorrectBlocksForDrops(): TagKey<Block> = miningLevel.incorrectBlocksForDrops
     override fun getEnchantmentValue() = enchantability
     override fun getRepairIngredient() = repairIngredient
 }

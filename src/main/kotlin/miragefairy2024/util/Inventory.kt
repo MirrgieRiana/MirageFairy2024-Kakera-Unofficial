@@ -208,7 +208,7 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
         indices.forEach { i ->
             if (insertItemStack.isEmpty) return@run // 挿入完了
             val slotItemStack = this.getItemStack(i)
-            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.isSameItemSameTags(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.isSameItemSameComponents(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
                 val moveCount = insertItemStack.count atMost (slotItemStack.maxStackSize - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount

@@ -12,6 +12,7 @@ import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
@@ -58,9 +59,9 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
     var damage by DAMAGE
     var maxDistance by MAX_DISTANCE
 
-    override fun defineSynchedData() {
-        entityData.define(DAMAGE, 0F)
-        entityData.define(MAX_DISTANCE, 0F)
+    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
+        builder.define(DAMAGE, 0F)
+        builder.define(MAX_DISTANCE, 0F)
     }
 
     override fun addAdditionalSaveData(nbt: NbtCompound) {
