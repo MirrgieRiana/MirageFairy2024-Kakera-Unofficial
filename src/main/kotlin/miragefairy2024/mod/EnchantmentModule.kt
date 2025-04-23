@@ -2,64 +2,114 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mixin.api.ItemFilteringEnchantment
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
-import miragefairy2024.mod.tool.items.ScytheItem
-import miragefairy2024.mod.tool.items.ShootingStaffItem
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
-import miragefairy2024.util.register
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.item.ItemStack
+import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.registerEnchantmentTagGeneration
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
+import net.minecraft.tags.EnchantmentTags
+import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.EquipmentSlotGroup
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.item.enchantment.EnchantmentCategory as EnchantmentTarget
+
+val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("magic_weapon"))
+val SCYTHE_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("scythe"))
+val NONE_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("none"))
+
+enum class EnchantmentRarity(val weight: Int, val anvilCost: Int) {
+    COMMON(10, 1),
+    UNCOMMON(5, 2),
+    RARE(2, 4),
+    VERY_RARE(1, 8),
+}
 
 enum class EnchantmentCard(
     path: String,
-    val en: String,
-    val ja: String,
-    val enchantment: Enchantment,
+    private val description: EnJa,
+    private val targetItemTag: TagKey<Item>,
+    private val primaryItemTag: TagKey<Item>,
+    private val rarity: EnchantmentRarity,
+    private val maxLevel: Int,
+    private val basePower: Int,
+    private val powerPerLevel: Int,
+    private val powerRange: Int,
+    private val tags: List<TagKey<Enchantment>> = listOf(),
 ) {
-    MAGIC_POWER("magic_power", "Magic Power", "魔法ダメージ増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
-    MAGIC_REACH("magic_reach", "Magic Reach", "魔法射程増加", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
-    MAGIC_ACCELERATION("magic_acceleration", "Magic Acceleration", "魔法加速", SimpleEnchantment(Enchantment.Rarity.COMMON, 5, 1, 10, 30) { it.item is ShootingStaffItem }),
-    FERTILITY("fertility", "Fertility", "豊穣", SimpleEnchantment(Enchantment.Rarity.RARE, 3, 15, 9, 50) { it.item is ScytheItem }),
-    FORTUNE_UP("fortune_up", "Fortune Up", "幸運強化", SimpleEnchantment(Enchantment.Rarity.RARE, 3, 25, 25, 50, isTreasure = true) { false })
+    MAGIC_POWER(
+        "magic_power", EnJa("Magic Power", "魔法ダメージ増加"),
+        MAGIC_WEAPON_ITEM_TAG, MAGIC_WEAPON_ITEM_TAG, EnchantmentRarity.COMMON,
+        5, 1, 10, 30,
+        tags = listOf(EnchantmentTags.NON_TREASURE),
+    ),
+    MAGIC_REACH(
+        "magic_reach", EnJa("Magic Reach", "魔法射程増加"),
+        MAGIC_WEAPON_ITEM_TAG, MAGIC_WEAPON_ITEM_TAG, EnchantmentRarity.COMMON,
+        5, 1, 10, 30,
+        tags = listOf(EnchantmentTags.NON_TREASURE),
+    ),
+    MAGIC_ACCELERATION(
+        "magic_acceleration", EnJa("Magic Acceleration", "魔法加速"),
+        MAGIC_WEAPON_ITEM_TAG, MAGIC_WEAPON_ITEM_TAG, EnchantmentRarity.COMMON,
+        5, 1, 10, 30,
+        tags = listOf(EnchantmentTags.NON_TREASURE),
+    ),
+    FERTILITY(
+        "fertility", EnJa("Fertility", "豊穣"),
+        SCYTHE_ITEM_TAG, SCYTHE_ITEM_TAG, EnchantmentRarity.RARE,
+        3, 15, 9, 50,
+        tags = listOf(EnchantmentTags.NON_TREASURE),
+    ),
+    FORTUNE_UP(
+        "fortune_up", EnJa("Fortune Up", "幸運強化"),
+        NONE_ITEM_TAG, NONE_ITEM_TAG, EnchantmentRarity.RARE,
+        3, 25, 25, 50,
+        tags = listOf(EnchantmentTags.TREASURE),
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
+    val key: ResourceKey<Enchantment> = ResourceKey.create(Registries.ENCHANTMENT, identifier)
+
+    context(ModContext)
+    fun init() {
+        registerDynamicGeneration(key) {
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    lookup(Registries.ITEM).getOrThrow(targetItemTag),
+                    lookup(Registries.ITEM).getOrThrow(primaryItemTag),
+                    rarity.weight,
+                    maxLevel,
+                    Enchantment.dynamicCost(basePower, powerPerLevel),
+                    Enchantment.dynamicCost(basePower + powerRange, powerPerLevel),
+                    rarity.anvilCost,
+                    EquipmentSlotGroup.MAINHAND,
+                )
+            )
+                .build(identifier)
+        }
+        en { identifier.toLanguageKey("enchantment") to description.en }
+        ja { identifier.toLanguageKey("enchantment") to description.ja }
+        tags.forEach {
+            key.registerEnchantmentTagGeneration { it }
+        }
+    }
 }
 
 context(ModContext)
 fun initEnchantmentModule() {
     EnchantmentCard.entries.forEach { card ->
-        card.enchantment.register(BuiltInRegistries.ENCHANTMENT, card.identifier)
-        en { card.enchantment.descriptionId to card.en }
-        ja { card.enchantment.descriptionId to card.ja }
+        card.init()
     }
+
     OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
         if (enchantment != Enchantments.FORTUNE) return@register oldLevel
         if (oldLevel == 0) return@register 0
         oldLevel + EnchantmentHelper.getItemEnchantmentLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
     }
-}
-
-class SimpleEnchantment(
-    rarity: Rarity,
-    private val maxLevel: Int,
-    private val basePower: Int,
-    private val powerPerLevel: Int,
-    private val powerRange: Int,
-    private val isTreasure: Boolean = false,
-    private val predicate: (ItemStack) -> Boolean,
-) : Enchantment(rarity, EnchantmentTarget.VANISHABLE, arrayOf(EquipmentSlot.MAINHAND)), ItemFilteringEnchantment {
-    override fun getMaxLevel() = maxLevel
-    override fun getMinCost(level: Int) = basePower + (level - 1) * powerPerLevel
-    override fun getMaxCost(level: Int) = super.getMinCost(level) + powerRange
-    override fun canEnchant(stack: ItemStack) = predicate(stack)
-    override fun isAcceptableItemOnEnchanting(itemStack: ItemStack) = canEnchant(itemStack)
-    override fun isTreasureOnly() = isTreasure
 }

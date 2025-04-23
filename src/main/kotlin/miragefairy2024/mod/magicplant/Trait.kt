@@ -10,7 +10,6 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.cmp
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.network.chat.Component
@@ -56,7 +55,7 @@ fun Trait.enJa(enName: String, jaName: String) {
 fun Trait.getIdentifier() = traitRegistry.getKey(this)!!
 fun ResourceLocation.toTrait() = traitRegistry.get(this)
 
-fun Trait.getTranslationKey(): String = Util.makeDescriptionId("${MirageFairy2024.MOD_ID}.trait", this.getIdentifier())
+fun Trait.getTranslationKey(): String = this.getIdentifier().toLanguageKey("${MirageFairy2024.MOD_ID}.trait")
 fun Trait.getName() = run { text { translate(this@run.getTranslationKey()) } }
 
 val Trait.texture get() = "textures/gui/traits/" * this.getIdentifier() * ".png"

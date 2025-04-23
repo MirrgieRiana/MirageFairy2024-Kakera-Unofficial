@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.EnchantmentCard
+import miragefairy2024.mod.SCYTHE_ITEM_TAG
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.PostTryPickHandlerItem
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
@@ -50,6 +51,7 @@ class FairyScytheConfiguration(
         this.miningDamage = 0.2
         this.areaMining(range)
         this.tags += ItemTags.SWORDS
+        this.tags += SCYTHE_ITEM_TAG
         this.superEffectiveBlocks += Blocks.COBWEB
         this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
     }

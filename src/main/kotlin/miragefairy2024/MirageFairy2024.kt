@@ -12,7 +12,7 @@ object ModEvents {
 
 object MirageFairy2024 : ModInitializer {
     const val MOD_ID = "miragefairy2024"
-    fun identifier(path: String) = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+    fun identifier(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
     override fun onInitialize() {
         Modules.init()
         ModEvents.onRegistration.fire { it() }

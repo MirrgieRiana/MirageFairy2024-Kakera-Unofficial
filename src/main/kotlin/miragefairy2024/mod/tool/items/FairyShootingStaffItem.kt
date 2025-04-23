@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.EnchantmentCard
+import miragefairy2024.mod.MAGIC_WEAPON_ITEM_TAG
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.AntimatterBoltEntity
@@ -42,6 +43,10 @@ class FairyShootingStaffConfiguration(
     var baseMaxDistance: Float,
 ) : ToolConfiguration() {
     override fun createItem() = FairyShootingStaffItem(this, Item.Properties())
+
+    init {
+        this.tags += MAGIC_WEAPON_ITEM_TAG
+    }
 }
 
 class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfiguration, settings: Properties) :
