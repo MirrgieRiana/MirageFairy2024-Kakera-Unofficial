@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
@@ -27,8 +28,10 @@ import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
@@ -38,6 +41,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.ItemContainerContents
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
 import net.minecraft.world.Container as Inventory
@@ -272,18 +276,38 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
 }
 
-class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {
+class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {/*
+    companion object {
+        val CODEC: Codec<BagInventory> = ItemContainerContents.CODEC.xmap(          )
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, BagInventory> = ItemContainerContents.STREAM_CODEC
+        fun of(itemStacks :List<ItemStack>) : BagInventory {
+            return BagInventory(itemStacks.size ) .also {
+
+            }
+        }
+    }*/
     override fun canPlaceItem(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canFitInsideContainerItems()
 }
 
-fun ItemStack.getBagInventory(): BagInventory? {
+fun ItemStack.getBagInventory(/*levelRegistry: HolderLookup.Provider*/): BagInventory? {
     val item = this.item as? BagItem ?: return null
     val inventory = BagInventory(item.card)
     val nbt = this.tag
     if (nbt != null) Inventories.loadAllItems(nbt, inventory.items)
     return inventory
 }
+/*
+fun loadAllItems(tag: CompoundTag, items: NonNullList<ItemStack>, levelRegistry: HolderLookup.Provider) {
+    ListTag listTag = tag.getList("Items", 10);
 
+    for (int i = 0; i < listTag.size(); i++) {
+        CompoundTag compoundTag = listTag.getCompound(i);
+        int j = compoundTag.getByte("Slot") & 255;
+        if (j >= 0 && j < items.size()) {
+            items.set(j, (ItemStack)ItemStack.parse(levelRegistry, compoundTag).orElse(ItemStack.EMPTY));
+        }
+    }
+}*/
 fun ItemStack.setBagInventory(inventory: BagInventory) {
     val nbt = getOrCreateTag()
     Inventories.saveAllItems(nbt, inventory.items, true)
