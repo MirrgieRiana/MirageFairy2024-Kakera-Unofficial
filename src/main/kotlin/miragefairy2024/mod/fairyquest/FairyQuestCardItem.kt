@@ -1,6 +1,6 @@
 package miragefairy2024.mod.fairyquest
 
-import com.google.gson.JsonObject
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
@@ -32,8 +32,9 @@ import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Item
@@ -144,10 +145,8 @@ object FairyQuestCardIngredient : CustomIngredient {
     val ID = MirageFairy2024.identifier("fairy_quest_card")
     val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
         override fun getIdentifier() = ID
-        override fun read(json: JsonObject) = FairyQuestCardIngredient
-        override fun write(json: JsonObject, ingredient: FairyQuestCardIngredient) = Unit
-        override fun read(buf: FriendlyByteBuf) = FairyQuestCardIngredient
-        override fun write(buf: FriendlyByteBuf, ingredient: FairyQuestCardIngredient) = Unit
+        override fun getCodec(allowEmpty: Boolean): MapCodec<FairyQuestCardIngredient> = MapCodec.unit(FairyQuestCardIngredient)
+        override fun getPacketCodec(): StreamCodec<RegistryFriendlyByteBuf, FairyQuestCardIngredient> = StreamCodec.unit(FairyQuestCardIngredient)
     }
 
     override fun requiresTesting() = true

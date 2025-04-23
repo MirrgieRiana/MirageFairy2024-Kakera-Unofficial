@@ -7,22 +7,23 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
 import java.util.UUID
 import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
-    val FORMATTERS = mutableMapOf<EntityAttribute, (Double) -> String>()
+    val FORMATTERS = mutableMapOf<Holder<EntityAttribute>, (Double) -> String>()
 
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
     private val uuid: UUID = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
 
-    class Value(val map: Map<EntityAttribute, Double>)
+    class Value(val map: Map<Holder<EntityAttribute>, Double>)
 
     override fun getText(value: Value): Component {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
+            text { translate(attribute.value().descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 

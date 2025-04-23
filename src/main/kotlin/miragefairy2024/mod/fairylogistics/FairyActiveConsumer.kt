@@ -6,6 +6,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
@@ -171,7 +172,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
 
         // 視線判定
         val posD = pos.center
-        val entity = ArrowEntity(world, posD.x, posD.y, posD.z)
+        val entity = ArrowEntity(world, posD.x, posD.y, posD.z, Items.ARROW.createItemStack(), null)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
             val supplierPosD = supplier.blockPos.center
             val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.Block.COLLIDER, RaycastContext.Fluid.NONE, entity))
