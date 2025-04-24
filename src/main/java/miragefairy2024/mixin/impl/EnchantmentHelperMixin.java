@@ -2,6 +2,7 @@ package miragefairy2024.mixin.impl;
 
 import miragefairy2024.mixin.api.ItemFilteringEnchantment;
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -22,7 +23,7 @@ public class EnchantmentHelperMixin {
     }
 
     @Inject(method = "getItemEnchantmentLevel", at = @At("RETURN"), cancellable = true)
-    private static void getLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private static void getLevel(Holder<Enchantment> enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         int level = cir.getReturnValue();
         Item item = stack.getItem();
         if (item instanceof OverrideEnchantmentLevelCallback) {

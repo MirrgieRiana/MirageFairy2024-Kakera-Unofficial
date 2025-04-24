@@ -2,6 +2,8 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemType
+import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.breakBlockByMagic
@@ -31,7 +33,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, level: Int) {
         if (level <= 0) return
-        configuration.descriptions += text { TRANSLATION(level.toRomanText()) }
+        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(level.toRomanText()) })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
 

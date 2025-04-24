@@ -108,7 +108,7 @@ fun initEnchantmentModule() {
     }
 
     OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
-        if (enchantment != Enchantments.FORTUNE) return@register oldLevel
+        if (!enchantment.`is`(Enchantments.FORTUNE)) return@register oldLevel
         if (oldLevel == 0) return@register 0
         oldLevel + EnchantmentHelper.getItemEnchantmentLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
     }

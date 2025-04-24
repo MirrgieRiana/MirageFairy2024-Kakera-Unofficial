@@ -2,9 +2,9 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.BlockCallback
+import miragefairy2024.mod.Poem
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.PoemType
-import miragefairy2024.mod.text
+import miragefairy2024.mod.plus
 import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
 import miragefairy2024.mod.tool.effects.CollectionToolEffectType
 import miragefairy2024.mod.tool.effects.CutAllToolEffectType
@@ -18,7 +18,7 @@ import miragefairy2024.mod.tool.items.onKilled
 import miragefairy2024.util.registerItemTagGeneration
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
+import net.minecraft.core.Holder
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
@@ -96,14 +96,14 @@ abstract class ToolConfiguration {
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
     var miningDamage = 1.0
-    val descriptions = mutableListOf<Component>()
+    val descriptions = mutableListOf<Poem>()
     var hasGlint = false
 
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
     val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
     val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
-    val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Enchantment, old: Int) -> Int>()
+    val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Holder<Enchantment>, old: Int) -> Int>()
     val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 
     abstract fun createItem(): Item
@@ -117,7 +117,7 @@ abstract class ToolConfiguration {
     }
 
     fun appendPoems(poemList: PoemList): PoemList {
-        return descriptions.fold(poemList) { it, description -> it.text(PoemType.DESCRIPTION, description) }
+        return descriptions.fold(poemList) { it, description -> it + description }
     }
 
 }

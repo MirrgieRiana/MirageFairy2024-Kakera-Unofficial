@@ -2,6 +2,8 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemType
+import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.fairy.FairyDreamRecipes
 import miragefairy2024.mod.fairy.FairyHistoryContainerExtraPlayerDataCategory
 import miragefairy2024.mod.fairy.createFairyItemStack
@@ -32,7 +34,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, appearanceRateBonus: Double) {
         if (appearanceRateBonus <= 0.0) return
-        configuration.descriptions += text { TRANSLATION() }
+        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, state, _, _ ->
             if (player !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
 

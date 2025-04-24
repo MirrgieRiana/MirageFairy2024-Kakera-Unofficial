@@ -24,11 +24,10 @@ fun initLastFoodModule() {
     // 拡張プレイヤーデータ
     LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
 
-    EatFoodCallback.EVENT.register { entity, world, stack ->
+    EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
-        if (!stack.isEdible) return@register
         entity.lastFood.itemStack = stack.copy()
         entity.lastFood.time = Instant.now()
         LastFoodExtraPlayerDataCategory.sync(entity)

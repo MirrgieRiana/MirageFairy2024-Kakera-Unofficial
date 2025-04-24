@@ -2,6 +2,7 @@ package miragefairy2024.mixin.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -14,5 +15,5 @@ public interface OverrideEnchantmentLevelCallback {
         return level;
     });
 
-    int overrideEnchantmentLevel(Enchantment enchantment, ItemStack itemStack, int oldLevel);
+    int overrideEnchantmentLevel(Holder<Enchantment> enchantment, ItemStack itemStack, int oldLevel);
 }

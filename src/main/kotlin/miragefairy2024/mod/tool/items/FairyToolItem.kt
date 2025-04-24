@@ -2,6 +2,7 @@ package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.tool.ToolConfiguration
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
@@ -73,7 +74,7 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: Level, entity: Entity, slot
     }
 }
 
-fun <I> I.overrideEnchantmentLevelImpl(enchantment: Enchantment, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
+fun <I> I.overrideEnchantmentLevelImpl(enchantment: Holder<Enchantment>, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
     return configuration.onOverrideEnchantmentLevelListeners.fold(oldLevel) { level, listener -> listener(this, enchantment, level) }
 }
 

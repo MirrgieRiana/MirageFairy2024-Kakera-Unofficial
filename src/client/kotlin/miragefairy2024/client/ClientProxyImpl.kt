@@ -31,9 +31,9 @@ import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
 import net.minecraft.world.level.FoliageColor as FoliageColors
 
 class ClientProxyImpl : ClientProxy {
-    override fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Component>) -> Unit) {
-        ItemTooltipCallback.EVENT.register { stack, _, lines ->
-            block(stack, lines)
+    override fun registerItemTooltipCallback(block: (stack: ItemStack, context: Item.TooltipContext, lines: MutableList<Component>) -> Unit) {
+        ItemTooltipCallback.EVENT.register { stack, context, _, lines ->
+            block(stack, context, lines)
         }
     }
 
