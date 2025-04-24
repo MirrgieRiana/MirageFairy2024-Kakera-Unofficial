@@ -14,11 +14,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("RETURN"))
-    private static void getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentInstance>> info) {
+    private static void getPossibleEntries(int power, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> info) {
         info.getReturnValue().removeIf(entry -> entry.enchantment instanceof ItemFilteringEnchantment && !((ItemFilteringEnchantment) entry.enchantment).isAcceptableItemOnEnchanting(stack));
     }
 
