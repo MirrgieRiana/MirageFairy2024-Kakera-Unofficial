@@ -25,18 +25,18 @@ fun initFairyCondensationRecipe() {
         if (notEmptyItemStacks.size < 2) return@registerSpecialRecipe null
 
         // 壊れたアイテムだと失敗
-        val motifId = notEmptyItemStacks.first().getFairyMotifId() ?: return@registerSpecialRecipe null
+        val motif = notEmptyItemStacks.first().getFairyMotif() ?: return@registerSpecialRecipe null
 
         // すべてのモチーフが等しくなければ失敗
         (1 until notEmptyItemStacks.size).forEach { i ->
-            if (notEmptyItemStacks[i].getFairyMotifId() != motifId) return@registerSpecialRecipe null
+            if (notEmptyItemStacks[i].getFairyMotif() != motif) return@registerSpecialRecipe null
         }
 
         val condensation = notEmptyItemStacks.sumOf { it.getFairyCondensation().toLong() }
         if (condensation > Integer.MAX_VALUE.toLong()) return@registerSpecialRecipe null
 
         object : SpecialRecipeResult {
-            override fun craft() = createFairyItemStack(motifId, condensation = condensation.toInt())
+            override fun craft() = createFairyItemStack(motif, condensation = condensation.toInt())
         }
     }
     registerSpecialRecipe("fairy_decondensation", 1) { inventory ->
@@ -58,7 +58,7 @@ fun initFairyCondensationRecipe() {
         val division = if (index == 0) 10 else index + 1
 
         // 壊れた妖精アイテムは受け付けない
-        val motifId = itemStack.getFairyMotifId() ?: return@registerSpecialRecipe null
+        val motif = itemStack.getFairyMotif() ?: return@registerSpecialRecipe null
 
         // 入力アイテムの凝縮数は、割る数以上でなければならない
         val condensation = itemStack.getFairyCondensation()
@@ -68,11 +68,11 @@ fun initFairyCondensationRecipe() {
         val dividedCondensation = condensation / division
 
         object : SpecialRecipeResult {
-            override fun craft() = createFairyItemStack(motifId, condensation = dividedCondensation, count = division)
+            override fun craft() = createFairyItemStack(motif, condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
                     val list = DefaultedList.withSize(inventory.size, EMPTY_ITEM_STACK)
-                    list[index] = createFairyItemStack(motifId, condensation = remainingCondensation)
+                    list[index] = createFairyItemStack(motif, condensation = remainingCondensation)
                     list
                 } else {
                     null

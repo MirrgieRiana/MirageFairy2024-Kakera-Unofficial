@@ -28,11 +28,9 @@ import miragefairy2024.util.darkGray
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
-import miragefairy2024.util.get
 import miragefairy2024.util.gold
 import miragefairy2024.util.gray
 import miragefairy2024.util.green
-import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -46,14 +44,14 @@ import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.times
-import miragefairy2024.util.toIdentifier
-import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
-import mirrg.kotlin.hydrogen.or
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -138,6 +136,9 @@ fun initFairyItem() {
     CONDENSATION_RECIPE_TRANSLATION.enJa()
 
     fairiesItemGroupCard.init()
+
+    FAIRY_MOTIF_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif"))
+    FAIRY_CONDENSATION_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation"))
 }
 
 private fun createFairyModel() = Model {
@@ -299,22 +300,31 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
 }
 
 
-fun ItemStack.getFairyMotifId(): ResourceLocation? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyMotifId(identifier: ResourceLocation) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
+val FAIRY_MOTIF_DATA_COMPONENT_TYPE: DataComponentType<Motif> = DataComponentType.builder<Motif>()
+    .persistent(motifRegistry.byNameCodec())
+    .networkSynchronized(ByteBufCodecs.registry(motifRegistryKey))
+    .cacheEncoding()
+    .build()
 
-fun ItemStack.getFairyCondensation() = this.tag.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
-fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateTag().wrapper["FairyCondensation"].int.set(condensation)
+fun ItemStack.getFairyMotif(): Motif? = this.get(FAIRY_MOTIF_DATA_COMPONENT_TYPE)
+fun ItemStack.setFairyMotif(motif: Motif?) = this.set(FAIRY_MOTIF_DATA_COMPONENT_TYPE, motif)
 
+val FAIRY_CONDENSATION_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.builder<Int>()
+    .persistent(ExtraCodecs.POSITIVE_INT)
+    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    .build()
 
-fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
+fun ItemStack.getFairyCondensation() = this.get(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE) ?: 1
+fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
+
 
 fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    return createFairyItemStack(motifRegistry.getKey(this)!!, condensation = condensation, count = count)
+    return createFairyItemStack(this, condensation = condensation, count = count)
 }
 
-fun createFairyItemStack(motifId: ResourceLocation, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+fun createFairyItemStack(motif: Motif?, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
     val itemStack = FairyCard.item.createItemStack(count)
-    itemStack.setFairyMotifId(motifId)
+    itemStack.setFairyMotif(motif)
     itemStack.setFairyCondensation(condensation)
     return itemStack
 }
