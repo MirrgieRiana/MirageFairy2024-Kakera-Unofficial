@@ -7,6 +7,8 @@ import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.mod.fairy.getIdentifier
+import miragefairy2024.util.string
 
 @Suppress("unused")
 class MirageFairy2024ReiServerPlugin : REIServerPlugin {

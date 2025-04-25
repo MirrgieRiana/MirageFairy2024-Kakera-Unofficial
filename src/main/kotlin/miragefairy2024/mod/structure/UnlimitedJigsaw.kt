@@ -47,9 +47,9 @@ class UnlimitedJigsawStructure(
     private val useExpansionHack: Boolean,
     private val projectStartToHeightmap: Optional<Heightmap.Types> = Optional.empty(),
     private val maxDistanceFromCenter: Int = 80,
-    private val poolAliases: List<PoolAliasBinding>,
-    private val dimensionPadding: DimensionPadding,
-    private val liquidSettings: LiquidSettings,
+    private val poolAliases: List<PoolAliasBinding> = listOf(),
+    private val dimensionPadding: DimensionPadding = JigsawStructure.DEFAULT_DIMENSION_PADDING,
+    private val liquidSettings: LiquidSettings = JigsawStructure.DEFAULT_LIQUID_SETTINGS,
 ) : Structure(config) {
     companion object {
         val CODEC: MapCodec<UnlimitedJigsawStructure> = RecordCodecBuilder.mapCodec<UnlimitedJigsawStructure> { instance ->
