@@ -7,7 +7,7 @@ import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContex
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
-open class SimpleHorizontalFacingBlock(settings: Properties) : HorizontalFacingBlock(settings) {
+abstract class SimpleHorizontalFacingBlock(settings: Properties) : HorizontalFacingBlock(settings) {
     init {
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH))
     }

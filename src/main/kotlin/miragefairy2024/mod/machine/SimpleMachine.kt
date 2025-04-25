@@ -105,7 +105,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     }
 }
 
-open class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
+abstract class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 

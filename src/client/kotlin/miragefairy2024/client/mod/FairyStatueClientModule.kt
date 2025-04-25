@@ -4,7 +4,7 @@ import miragefairy2024.api.client.RenderItemHandler
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.fairy.FairyStatueBlockItem
 import miragefairy2024.mod.fairy.createFairyItemStack
-import miragefairy2024.mod.fairy.getFairyStatueMotif
+import miragefairy2024.mod.fairy.getFairyMotif
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 fun initFairyStatueClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
         if (stack.item !is FairyStatueBlockItem) return@RenderItemHandler
-        val motif = stack.getFairyStatueMotif()
+        val motif = stack.getFairyMotif()
         val itemStack = motif?.createFairyItemStack() ?: return@RenderItemHandler
         matrices.stack {
             model.transforms.getTransform(renderMode).apply(leftHanded, matrices)

@@ -1,5 +1,6 @@
 package miragefairy2024.mod.placeditem
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
@@ -62,6 +63,8 @@ object PlacedItemCard {
 
 context(ModContext)
 fun initPlacedItemBlock() {
+    PlacedItemBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item"))
+
     PlacedItemCard.let { card ->
         card.block.register(BuiltInRegistries.BLOCK, card.identifier)
         card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
@@ -86,6 +89,11 @@ fun initPlacedItemBlock() {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvider {
+    companion object {
+        val CODEC: MapCodec<PlacedItemBlock> = simpleCodec(::PlacedItemBlock)
+    }
+
+    override fun codec() = CODEC
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 

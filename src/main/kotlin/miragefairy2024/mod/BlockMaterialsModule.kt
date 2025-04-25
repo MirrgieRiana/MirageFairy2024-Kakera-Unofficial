@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EnJa
@@ -144,6 +145,9 @@ enum class BlockMaterialCard(
 
 context(ModContext)
 fun initBlockMaterialsModule() {
+    LocalVacuumDecayBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay"))
+    SemiOpaqueTransparentBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block"))
+
     BlockMaterialCard.entries.forEach { card ->
         card.block.register(BuiltInRegistries.BLOCK, card.identifier)
         card.item.register(BuiltInRegistries.ITEM, card.identifier)
@@ -233,6 +237,12 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { bloc
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
+    companion object {
+        val CODEC: MapCodec<LocalVacuumDecayBlock> = simpleCodec(::LocalVacuumDecayBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun isRandomlyTicking(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
@@ -257,6 +267,12 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
 }
 
 class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<SemiOpaqueTransparentBlock> = simpleCodec(::SemiOpaqueTransparentBlock)
+    }
+
+    override fun codec() = CODEC
+
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }

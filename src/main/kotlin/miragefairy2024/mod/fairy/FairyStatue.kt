@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairy
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
@@ -45,7 +47,6 @@ import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
-import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
@@ -81,7 +82,7 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.FAIRY_STATUE.item.createItemStack().setFairyStatueMotif(motifRegistry.entrySet().random().value)
+        FairyStatueCard.FAIRY_STATUE.item.createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.create("case")
@@ -149,6 +150,8 @@ fun initFairyStatue() {
 
     FairyStatue.descriptionTranslation.enJa()
 
+    FairyStatueBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue"))
+
     FairyStatueCard.entries.forEach { card ->
 
         // 登録
@@ -158,7 +161,7 @@ fun initFairyStatue() {
 
         // アイテムグループ
         card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
-            motifRegistry.sortedEntrySet.map { card.item.createItemStack().setFairyStatueMotif(it.value) }
+            motifRegistry.sortedEntrySet.map { card.item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
         }
 
         // レンダリング
@@ -182,7 +185,7 @@ fun initFairyStatue() {
             LootTable(
                 LootPool(ItemLootPoolEntry(card.item)) {
                     setRolls(ConstantLootNumberProvider.exactly(1.0F))
-                    apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(motifDataComponent))
+                    apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FAIRY_MOTIF_DATA_COMPONENT_TYPE))
                     provider.applyExplosionCondition(card.item, this)
                 },
             )
@@ -195,8 +198,19 @@ fun initFairyStatue() {
 
 class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
     companion object {
+        val CODEC: MapCodec<FairyStatueBlock> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                ResourceLocation.CODEC.xmap(
+                    { identifier -> FairyStatueCard.entries.first { it.identifier == identifier } },
+                    { card -> card.identifier },
+                ).fieldOf("type").forGetter { it.card },
+                propertiesCodec(),
+            ).apply(instance, ::FairyStatueBlock)
+        }
         private val SHAPE: VoxelShape = box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
     }
+
+    override fun codec() = CODEC
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = FairyStatueBlockEntity(card, pos, state)
 
@@ -211,7 +225,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
         super.setPlacedBy(world, pos, state, placer, itemStack)
         if (world.isClientSide) return
         val blockEntity = world.getBlockEntity(pos) as? FairyStatueBlockEntity ?: return
-        blockEntity.setMotif(itemStack.getFairyStatueMotif())
+        blockEntity.setMotif(itemStack.getFairyMotif())
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -221,7 +235,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
 
     override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
-        return asItem().createItemStack().setFairyStatueMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif())
+        return asItem().createItemStack().also { itemStack -> itemStack.setFairyMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif()) }
     }
 
     override fun getFairyDreamMotifs(world: Level, blockPos: BlockPos): List<Motif> {
@@ -275,23 +289,17 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
 
 class FairyStatueBlockItem(private val card: FairyStatueCard, block: Block, settings: Properties) : BlockItem(block, settings), FairyDreamProviderItem {
 
-    override fun getName(stack: ItemStack) = stack.getFairyStatueMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
+    override fun getName(stack: ItemStack) = stack.getFairyMotif()?.let { text { card.formatTranslation(it.displayName) } } ?: super.getName(stack).red
 
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
-        val motif = stack.getFairyStatueMotif() ?: return
+        val motif = stack.getFairyMotif() ?: return
         val fairyItemStack = motif.createFairyItemStack()
 
         tooltipComponents += text { empty() }
         fairyItemStack.item.appendHoverText(fairyItemStack, context, tooltipComponents, tooltipFlag)
     }
 
-    override fun getFairyDreamMotifs(itemStack: ItemStack) = itemStack.getFairyStatueMotif()?.let { listOf(it) } ?: listOf()
+    override fun getFairyDreamMotifs(itemStack: ItemStack) = itemStack.getFairyMotif()?.let { listOf(it) } ?: listOf()
 
 }
-
-fun ItemStack.getFairyStatueMotifId(): ResourceLocation? = this.tag.or { return null }.wrapper["Motif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyStatueMotifId(fairyStatueMotifId: ResourceLocation?) = this.also { this.getOrCreateTag().wrapper["Motif"].string.set(fairyStatueMotifId?.string) }
-
-fun ItemStack.getFairyStatueMotif() = this.getFairyStatueMotifId()?.toFairyMotif()
-fun ItemStack.setFairyStatueMotif(fairyStatueMotif: Motif?) = this.setFairyStatueMotifId(fairyStatueMotif?.getIdentifier())

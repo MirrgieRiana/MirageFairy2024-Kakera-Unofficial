@@ -20,7 +20,7 @@ import net.minecraft.world.entity.player.Inventory as PlayerInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
 
-open class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
+abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
     companion object {
         fun getActualSide(blockState: BlockState, side: Direction): Direction {
             return when (side) {

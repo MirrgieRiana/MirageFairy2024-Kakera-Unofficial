@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
@@ -8,8 +9,9 @@ import miragefairy2024.mod.fairy.FairyStatueCard
 import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
-import miragefairy2024.mod.fairy.setFairyStatueMotif
+import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
@@ -72,6 +74,8 @@ context(ModContext)
 fun initFairyFountainModule() {
     FairyStatueFountainBlock.USAGE_TRANSLATION.enJa()
 
+    FairyStatueFountainBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue_fountain"))
+    
     FairyStatueFountainCard.let { card ->
 
         card.block.register(BuiltInRegistries.BLOCK, card.identifier)
@@ -108,6 +112,7 @@ fun initFairyFountainModule() {
 
 class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
+        val CODEC: MapCodec<FairyStatueFountainBlock> = simpleCodec(::FairyStatueFountainBlock)
         val USAGE_TRANSLATION = Translation({ "block.${MirageFairy2024.identifier("fairy_statue_fountain").toLanguageKey()}.usage" }, "Please use it while holding %s", "%sを持って使用してください")
         private val SHAPE: VoxelShape = box(2.0, 0.0, 2.0, 14.0, 9.0, 14.0)
         val recipes = mutableListOf<Recipe>()
@@ -123,6 +128,8 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
     class Recipe(val motif: Motif, val rarity: Rarity)
 
+
+    override fun codec() = CODEC
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
@@ -154,7 +161,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val outputItemStack = run {
                 val chanceTable = getChanceTable()
                 val entry = chanceTable.weightedRandom(level.random)?.first
-                entry?.let { it.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(it.first) } ?: Items.IRON_INGOT.createItemStack()
+                entry?.let { it.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.first) } } ?: Items.IRON_INGOT.createItemStack()
             }
             player.obtain(outputItemStack)
         }
@@ -187,7 +194,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
-                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item.createItemStack().setFairyStatueMotif(entry.first) } ?: Items.IRON_INGOT.createItemStack(),
+                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
                     motif = it.item.first?.first ?: MotifCard.AIR,
                     rate = it.weight,
                     count = 1.0,

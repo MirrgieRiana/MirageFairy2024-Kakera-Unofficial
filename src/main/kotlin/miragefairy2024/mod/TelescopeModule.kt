@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
@@ -81,6 +82,8 @@ fun initTelescopeModule() {
 
     TelescopeMissionExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission"))
 
+    TelescopeBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope"))
+
     TelescopeCard.let { card ->
 
         card.block.register(BuiltInRegistries.BLOCK, card.identifier)
@@ -134,9 +137,9 @@ fun initTelescopeModule() {
 
 }
 
-
 class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
+        val CODEC: MapCodec<TelescopeBlock> = simpleCodec(::TelescopeBlock)
         val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
         val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
         private val FACING_TO_SHAPE: Map<Direction, VoxelShape> = mapOf(
@@ -159,6 +162,8 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val MINUTES_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.minutes" }, "%s minutes", "%s 分")
         val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
+
+    override fun codec() = CODEC
 
     override fun appendHoverText(stack: ItemStack, context: Item.TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
