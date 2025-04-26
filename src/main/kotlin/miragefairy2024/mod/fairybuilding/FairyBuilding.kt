@@ -158,7 +158,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
+abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
         private val SHAPE = VoxelShapes.or(
             box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),

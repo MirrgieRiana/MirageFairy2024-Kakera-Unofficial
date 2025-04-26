@@ -102,7 +102,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     }
 }
 
-open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
+abstract class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.create("vertical_facing", VerticalFacing::class.java)
     }
