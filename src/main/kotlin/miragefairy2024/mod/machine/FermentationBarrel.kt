@@ -1,5 +1,6 @@
 package miragefairy2024.mod.machine
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
@@ -7,11 +8,13 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.BlockState
@@ -49,6 +52,8 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override fun init() {
         super.init()
 
+        FermentationBarrelBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fermentation_barrel"))
+
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
         registerShapedRecipeGeneration(item) {
@@ -62,7 +67,13 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     }
 }
 
-class FermentationBarrelBlock(card: FermentationBarrelCard) : SimpleMachineBlock(card)
+class FermentationBarrelBlock(card: FermentationBarrelCard) : SimpleMachineBlock(card) {
+    companion object {
+        val CODEC: MapCodec<FermentationBarrelBlock> = simpleCodec { FermentationBarrelBlock(FermentationBarrelCard) }
+    }
+
+    override fun codec() = CODEC
+}
 
 class FermentationBarrelBlockEntity(card: FermentationBarrelCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<FermentationBarrelBlockEntity>(card, pos, state) {
     override fun getThis() = this

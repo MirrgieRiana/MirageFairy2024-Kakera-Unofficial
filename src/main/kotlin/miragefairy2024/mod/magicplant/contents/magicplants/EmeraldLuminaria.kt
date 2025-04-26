@@ -1,10 +1,12 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
@@ -14,12 +16,14 @@ import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -113,6 +117,8 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override fun init() {
         super.init()
 
+        EmeraldLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria"))
+
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
             val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
@@ -140,5 +146,11 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
 
 class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<EmeraldLuminariaBlock> = simpleCodec(::EmeraldLuminariaBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

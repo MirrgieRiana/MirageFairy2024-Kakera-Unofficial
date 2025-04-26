@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
@@ -13,11 +14,13 @@ import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -107,6 +110,8 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override fun init() {
         super.init()
 
+        VeropedaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda"))
+
         // 地形生成
         run {
 
@@ -145,5 +150,11 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
 class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<VeropedaBlock> = simpleCodec(::VeropedaBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

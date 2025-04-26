@@ -1,5 +1,6 @@
 package miragefairy2024.mod.haimeviska
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -264,6 +265,11 @@ val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
+    HaimeviskaLeavesBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_leaves"))
+    HaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log"))
+    IncisedHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log"))
+    DrippingHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log"))
+
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
@@ -355,8 +361,11 @@ fun initHaimeviskaBlocks() {
 
 class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     companion object {
+        val CODEC: MapCodec<HaimeviskaLeavesBlock> = simpleCodec(::HaimeviskaLeavesBlock)
         val CHARGED: BooleanProperty = BooleanProperty.create("charged")
     }
+
+    override fun codec() = CODEC
 
     init {
         registerDefaultState(defaultBlockState().setValue(CHARGED, true))
@@ -392,6 +401,12 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<HaimeviskaLogBlock> = simpleCodec(::HaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
         if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 縦方向でなければスルー
         if (!stack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 剣でなければスルー
@@ -412,6 +427,12 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<IncisedHaimeviskaLogBlock> = simpleCodec(::IncisedHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun isRandomlyTicking(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
@@ -422,6 +443,12 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<DrippingHaimeviskaLogBlock> = simpleCodec(::DrippingHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
         if (level.isClientSide) return ItemInteractionResult.SUCCESS
         val direction = state.getValue(FACING)

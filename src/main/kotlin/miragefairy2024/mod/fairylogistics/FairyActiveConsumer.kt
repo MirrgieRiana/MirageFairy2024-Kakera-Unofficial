@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairylogistics
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
@@ -10,12 +12,14 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.hasSameItemAndNbt
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.toSidedInventoryDelegate
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
@@ -72,6 +76,9 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun init() {
         super.init()
 
+        FairyActiveConsumerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_active_consumer"))
+
+
         inventorySlotConfigurations += SLOTS
         guiSlotConfigurations += SLOTS
 
@@ -90,6 +97,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
 
 class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBlock(card) {
     companion object {
+        val CODEC: MapCodec<FairyActiveConsumerBlock> = simpleCodec { FairyActiveConsumerBlock(FairyActiveConsumerCard) }
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
             box(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
@@ -110,6 +118,8 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
             box(8.0, 0.0, 2.0, 16.0, 12.0, 14.0), // EAST
         )
     }
+
+    override fun codec() = CODEC
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state.getValue(VERTICAL_FACING).id + state.getValue(FACING).get2DDataValue()]

@@ -1,5 +1,6 @@
 package miragefairy2024.mod.machine
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
@@ -13,6 +14,7 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -24,6 +26,7 @@ import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -75,6 +78,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun init() {
         super.init()
 
+        AuraReflectorFurnaceBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("aura_reflector_furnace"))
+
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
@@ -100,12 +105,15 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
 class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card) {
     companion object {
+        val CODEC: MapCodec<AuraReflectorFurnaceBlock> = simpleCodec { AuraReflectorFurnaceBlock(AuraReflectorFurnaceCard) }
         val LIT: BooleanProperty = BlockStateProperties.LIT
     }
 
     init {
         registerDefaultState(defaultBlockState().setValue(LIT, false))
     }
+
+    override fun codec() = CODEC
 
     override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)

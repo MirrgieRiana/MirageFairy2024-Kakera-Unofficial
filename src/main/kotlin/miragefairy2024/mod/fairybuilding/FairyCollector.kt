@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
@@ -11,6 +13,7 @@ import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
@@ -18,6 +21,7 @@ import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
@@ -82,6 +86,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     context(ModContext)
     override fun init() {
         super.init()
+        FairyCollectorBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector"))
         registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")
@@ -92,7 +97,13 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     }
 }
 
-class FairyCollectorBlock(card: FairyCollectorCard) : FairyFactoryBlock(card)
+class FairyCollectorBlock(card: FairyCollectorCard) : FairyFactoryBlock(card) {
+    companion object {
+        val CODEC: MapCodec<FairyCollectorBlock> = simpleCodec { FairyCollectorBlock(FairyCollectorCard) }
+    }
+
+    override fun codec() = CODEC
+}
 
 class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 

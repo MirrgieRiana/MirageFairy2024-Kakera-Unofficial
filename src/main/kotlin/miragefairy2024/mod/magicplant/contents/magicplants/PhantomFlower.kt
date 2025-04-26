@@ -1,10 +1,12 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -12,10 +14,12 @@ import miragefairy2024.util.flower
 import miragefairy2024.util.get
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -107,6 +111,8 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override fun init() {
         super.init()
 
+        PhantomFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower"))
+
         // 地形生成
         registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {
             val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
@@ -124,6 +130,12 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerConfiguration)
 
 class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<PhantomFlowerBlock> = simpleCodec(::PhantomFlowerBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 

@@ -1,9 +1,11 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
@@ -120,6 +122,8 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override fun init() {
         super.init()
 
+        MirageFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower"))
+
         // 地形生成
         run {
 
@@ -175,6 +179,12 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>(MirageFlowerConfiguration)
 
 class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlowerConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<MirageFlowerBlock> = simpleCodec(::MirageFlowerBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
