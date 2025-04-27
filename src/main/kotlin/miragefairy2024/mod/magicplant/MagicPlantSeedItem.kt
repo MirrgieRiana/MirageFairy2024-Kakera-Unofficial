@@ -1,20 +1,17 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.clientProxy
-import miragefairy2024.util.boolean
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.darkRed
-import miragefairy2024.util.get
 import miragefairy2024.util.green
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.style
 import miragefairy2024.util.text
-import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
-import mirrg.kotlin.hydrogen.or
+import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
@@ -146,14 +143,8 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
     }
 }
 
-fun ItemStack.getTraitStacks(): TraitStacks? {
-    val nbt = this.tag ?: return null
-    return TraitStacks.readFromNbt(nbt)
-}
+fun ItemStack.getTraitStacks() = this.get(TRAIT_STACKS_DATA_COMPONENT_TYPE)
+fun ItemStack.setTraitStacks(traitStacks: TraitStacks?) = unit { this.set(TRAIT_STACKS_DATA_COMPONENT_TYPE, traitStacks) }
 
-fun ItemStack.setTraitStacks(traitStacks: TraitStacks) {
-    getOrCreateTag().put("TraitStacks", traitStacks.toNbt())
-}
-
-fun ItemStack.isRare() = this.tag.or { return false }.wrapper["Rare"].boolean.get().or { false }
-fun ItemStack.setRare(isRare: Boolean) = this.getOrCreateTag().wrapper["Rare"].boolean.set(if (isRare) true else null)
+fun ItemStack.isRare() = (this.get(RARITY_DATA_COMPONENT_TYPE) ?: 0) >= 1
+fun ItemStack.setRare(isRare: Boolean) = unit { this.set(RARITY_DATA_COMPONENT_TYPE, if (isRare) 1 else 0) }
