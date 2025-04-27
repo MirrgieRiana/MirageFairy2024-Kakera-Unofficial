@@ -13,7 +13,6 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
-import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.on
 import miragefairy2024.util.red
@@ -25,15 +24,15 @@ import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
-import miragefairy2024.util.toIdentifier
-import miragefairy2024.util.wrapper
-import mirrg.kotlin.hydrogen.or
+import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -86,6 +85,8 @@ fun initFairyQuestCardItem() {
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
     FairyQuestCardIngredient.SERIALIZER.register()
+
+    FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_quest_recipe"))
 }
 
 class FairyQuestCardItem(settings: Properties) : Item(settings) {
@@ -96,14 +97,14 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
 
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
-        val recipeId = stack.getFairyQuestRecipeId()
-        if (recipeId == null) {
+        val recipe = stack.getFairyQuestRecipe()
+        if (recipe == null) {
             tooltipComponents += text { "null"() }
         } else {
-            if (fairyQuestRecipeRegistry.containsKey(recipeId)) {
+            if (fairyQuestRecipeRegistry.contains(recipe)) {
                 // nop
             } else {
-                tooltipComponents += text { recipeId.string() }
+                tooltipComponents += text { fairyQuestRecipeRegistry.getKey(recipe)!!.string() }
             }
         }
     }
@@ -125,11 +126,14 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): ResourceLocation? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
-fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
+val FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE: DataComponentType<FairyQuestRecipe> = DataComponentType.builder<FairyQuestRecipe>()
+    .persistent(fairyQuestRecipeRegistry.byNameCodec())
+    .networkSynchronized(ByteBufCodecs.registry(fairyQuestRecipeRegistryKey))
+    .cacheEncoding()
+    .build()
 
-fun ItemStack.setFairyQuestRecipeId(identifier: ResourceLocation) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
-fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
+fun ItemStack.getFairyQuestRecipe() = this.get(FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE)
+fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = unit { this.set(FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE, recipe) }
 
 private fun createFairyQuestCardModel() = Model {
     ModelData(
