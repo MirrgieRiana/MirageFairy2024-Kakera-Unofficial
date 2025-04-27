@@ -46,6 +46,7 @@ import miragefairy2024.util.registerRedirectColorProvider
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
@@ -54,6 +55,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.stats.Stats
 import net.minecraft.tags.BlockTags
@@ -74,10 +76,12 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
+import java.util.Optional
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
@@ -87,7 +91,6 @@ import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.grower.AbstractTreeGrower as SaplingGenerator
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
@@ -130,7 +133,7 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
         val SAPLING = Configuration(
             "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
             PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
-        ).let { HaimeviskaBlockCard(it, { SaplingBlock(HaimeviskaSaplingGenerator(), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
 
         val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SAPLING)
     }
@@ -148,6 +151,8 @@ private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColo
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
+
+private fun createTreeGrower(identifier: ResourceLocation) = TreeGrower(identifier.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty())
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -521,8 +526,4 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
             0.0,
         )
     }
-}
-
-class HaimeviskaSaplingGenerator : SaplingGenerator() {
-    override fun getConfiguredFeature(random: Random, bees: Boolean) = HAIMEVISKA_CONFIGURED_FEATURE_KEY
 }
