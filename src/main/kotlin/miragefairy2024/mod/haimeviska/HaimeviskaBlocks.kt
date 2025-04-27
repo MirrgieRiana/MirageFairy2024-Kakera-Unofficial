@@ -125,7 +125,7 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
         val HOLLOW_LOG = Configuration(
             "hollow_haimeviska_log", "Hollow Haimeviska Log", "ハイメヴィスカの樹洞",
             PoemList(1).poem("Auric conceptual attractor", "限界巡回アステリア。"),
-        ).let { HaimeviskaBlockCard(it, { SimpleHorizontalFacingBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
         val PLANKS = Configuration(
             "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
             PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
@@ -274,6 +274,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log"))
     IncisedHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log"))
     DrippingHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log"))
+    HollowHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log"))
+
 
     HaimeviskaBlockCard.entries.forEach { card ->
 
@@ -526,4 +528,12 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
             0.0,
         )
     }
+}
+
+class HollowHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<HollowHaimeviskaLogBlock> = simpleCodec(::HollowHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
 }
