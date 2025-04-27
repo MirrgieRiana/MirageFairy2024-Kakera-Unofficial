@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.en
@@ -12,8 +13,11 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
@@ -24,6 +28,11 @@ val traitRegistryKey: ResourceKey<Registry<Trait>> = ResourceKey.createRegistryK
 val traitRegistry: Registry<Trait> = FabricRegistryBuilder.createSimple(traitRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> {
+    companion object {
+        val CODEC: Codec<Trait> = traitRegistry.byNameCodec()
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Trait> = ByteBufCodecs.registry(traitRegistryKey)
+    }
+
     abstract val spawnSpecs: List<TraitSpawnSpec>
 
     abstract val conditions: List<TraitCondition>
