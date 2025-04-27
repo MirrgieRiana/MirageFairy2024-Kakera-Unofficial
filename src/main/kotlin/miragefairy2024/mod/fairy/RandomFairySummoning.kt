@@ -10,7 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
-import miragefairy2024.util.hasSameItemAndNbt
+import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
 import miragefairy2024.util.plus
@@ -144,7 +144,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                     (0 until player.inventory.size).forEach { index ->
                         val searchingItemStack = player.inventory[index]
                         if (searchingItemStack !== itemStack) { // 同一のアイテムスタックでなく、
-                            if (searchingItemStack hasSameItemAndNbt itemStack) { // 両者が同一種類のアイテムスタックならば、
+                            if (searchingItemStack hasSameItemAndComponents itemStack) { // 両者が同一種類のアイテムスタックならば、
                                 val count = searchingItemStack.count
                                 player.inventory[index] = EMPTY_ITEM_STACK // そのアイテムスタックを消して
                                 itemStack.count = count // 手に持っているアイテムスタックに移動する

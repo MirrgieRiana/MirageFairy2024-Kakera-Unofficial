@@ -3,14 +3,14 @@ package miragefairy2024.util
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
+import net.minecraft.core.Direction
+import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.ItemStack
+import kotlin.experimental.and
+import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.Container as Inventory
 import net.minecraft.world.WorldlyContainer as SidedInventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.Slot
-import net.minecraft.core.Direction
-import kotlin.experimental.and
 
 operator fun Inventory.get(slot: Int): ItemStack = this.getItem(slot)
 operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
@@ -53,7 +53,7 @@ fun mergeInventory(src: InventoryDelegate, dest: InventoryDelegate, srcSlotIndex
     if (!dest.canInsert(destSlotIndex, srcItemStack)) return MergeResult.FAILED // 宛先にこの種類のアイテムが入らない
 
     val destItemStack = dest.getItemStack(destSlotIndex)
-    if (destItemStack.isNotEmpty && !(srcItemStack hasSameItemAndNbt destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
+    if (destItemStack.isNotEmpty && !(srcItemStack hasSameItemAndComponents destItemStack)) return MergeResult.FAILED // 宛先に別のアイテムが入っているので何もできない
 
     // 先が空もしくは元と同じ種類のアイテムが入っているのでマージ
 
@@ -208,7 +208,7 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
         indices.forEach { i ->
             if (insertItemStack.isEmpty) return@run // 挿入完了
             val slotItemStack = this.getItemStack(i)
-            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && ItemStack.isSameItemSameComponents(insertItemStack, slotItemStack)) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
+            if (slotItemStack.isNotEmpty && this.canInsert(i, insertItemStack) && insertItemStack hasSameItemAndComponents slotItemStack) { // 宛先が空でなく、そのアイテムを挿入可能で、既存アイテムとスタック可能な場合
                 val moveCount = insertItemStack.count atMost (slotItemStack.maxStackSize - slotItemStack.count atLeast 0)
                 if (moveCount > 0) {
                     insertItemStack.count -= moveCount

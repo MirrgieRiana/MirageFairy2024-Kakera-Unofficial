@@ -9,7 +9,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.hasSameItemAndNbt
+import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -203,7 +203,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                     src.getIndices().forEach nextSrcIndex@{ srcIndex ->
                         val srcItemStack = src.getItemStack(srcIndex)
                         if (srcItemStack.isEmpty) return@nextSrcIndex
-                        if (!(srcItemStack hasSameItemAndNbt filterItemStack)) return@nextSrcIndex
+                        if (!(srcItemStack hasSameItemAndComponents filterItemStack)) return@nextSrcIndex
                         if (!src.canExtract(srcIndex, srcItemStack)) return@nextSrcIndex
                         val destIndex = availableDestIndices.removeFirst()
                         src.setItemStack(srcIndex, EMPTY_ITEM_STACK)

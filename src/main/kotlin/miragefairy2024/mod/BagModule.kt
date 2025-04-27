@@ -9,7 +9,7 @@ import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
-import miragefairy2024.util.hasSameItemAndNbtAndCount
+import miragefairy2024.util.hasSameItemAndComponentsAndCount
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
@@ -335,7 +335,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
 
         override fun stillValid(player: PlayerEntity): Boolean {
             val itemStack = if (slotIndex >= 0) playerInventory.items[slotIndex] else playerInventory.offhand[0]
-            return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
+            return itemStack === itemStackInstance && itemStack hasSameItemAndComponentsAndCount expectedItemStack
         }
 
         override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
