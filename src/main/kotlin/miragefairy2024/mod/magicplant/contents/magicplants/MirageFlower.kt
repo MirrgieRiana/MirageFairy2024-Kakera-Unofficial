@@ -5,7 +5,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape

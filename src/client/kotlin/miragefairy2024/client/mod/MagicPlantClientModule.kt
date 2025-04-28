@@ -32,10 +32,10 @@ import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
 import io.wispforest.owo.ui.core.Component as OwoComponent
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
-import net.minecraft.world.entity.player.Inventory
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }

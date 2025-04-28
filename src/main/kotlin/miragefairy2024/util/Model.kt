@@ -7,18 +7,18 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.data.models.model.ModelTemplate as Model
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.data.models.model.TextureMapping as TextureMap
-import net.minecraft.data.models.model.TexturedModel
-import net.minecraft.world.item.Item
-import net.minecraft.resources.ResourceLocation
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
+import net.minecraft.data.models.model.ModelTemplate as Model
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureMapping as TextureMap
+import net.minecraft.data.models.model.TextureSlot as TextureKey
 
 
 // Model Builder

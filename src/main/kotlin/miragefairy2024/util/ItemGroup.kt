@@ -3,13 +3,13 @@ package miragefairy2024.util
 import miragefairy2024.ModContext
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.CreativeModeTab as ItemGroup
-import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceKey
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.CreativeModeTab as ItemGroup
 
 context(ModContext)
 fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {

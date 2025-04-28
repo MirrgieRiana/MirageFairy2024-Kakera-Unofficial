@@ -54,13 +54,13 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffects as StatusEffects
 import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
 import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes

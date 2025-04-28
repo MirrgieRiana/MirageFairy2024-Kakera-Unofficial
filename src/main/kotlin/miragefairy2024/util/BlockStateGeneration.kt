@@ -8,12 +8,12 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
 import mirrg.kotlin.hydrogen.join
 import mirrg.kotlin.hydrogen.or
+import net.minecraft.core.Direction
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
 import net.minecraft.data.models.blockstates.BlockStateGenerator as BlockStateSupplier
-import net.minecraft.world.level.block.state.properties.Property
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.core.Direction
 
 
 // registerBlockStateGeneration

@@ -2,10 +2,10 @@ package miragefairy2024.lib
 
 import miragefairy2024.util.quickMove
 import net.minecraft.network.chat.Component
-import net.minecraft.world.inventory.Slot
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate

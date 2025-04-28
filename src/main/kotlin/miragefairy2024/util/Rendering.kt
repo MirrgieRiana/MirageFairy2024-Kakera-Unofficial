@@ -8,12 +8,12 @@ import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
 import miragefairy2024.clientProxy
 import mirrg.kotlin.hydrogen.castOrThrow
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
 
 context(ModContext)
 fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {

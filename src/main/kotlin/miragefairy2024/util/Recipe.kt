@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -38,13 +39,11 @@ import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFu
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
 import net.minecraft.advancements.critereon.MinMaxBounds as NumberRange
 import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
 import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
 import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
 import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
-import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry

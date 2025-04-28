@@ -21,6 +21,7 @@ import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.Container
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
@@ -34,7 +35,6 @@ import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
 import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
-import net.minecraft.world.Container
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 

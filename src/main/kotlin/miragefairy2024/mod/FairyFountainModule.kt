@@ -11,7 +11,6 @@ import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
-import miragefairy2024.mod.placeditem.PlacedItemBlock
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
@@ -46,6 +45,7 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -58,7 +58,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock

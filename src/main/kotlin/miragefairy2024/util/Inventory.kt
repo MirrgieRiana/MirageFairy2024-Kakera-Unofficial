@@ -4,11 +4,11 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
 import net.minecraft.core.Direction
+import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import kotlin.experimental.and
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.Container
 import net.minecraft.world.WorldlyContainer as SidedInventory
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 

@@ -16,9 +16,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.cutAll() = this.also {

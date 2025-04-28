@@ -33,7 +33,9 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -42,12 +44,10 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.ItemContainerContents
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
-import net.minecraft.world.Container
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.entity.SlotAccess as StackReference
-import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ClickAction as ClickType

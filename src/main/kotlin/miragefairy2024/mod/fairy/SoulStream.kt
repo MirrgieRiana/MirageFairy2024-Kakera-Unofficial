@@ -27,14 +27,14 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
+import net.minecraft.world.Container
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.Container
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 

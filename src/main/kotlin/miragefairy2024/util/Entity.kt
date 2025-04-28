@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
 import net.minecraft.world.entity.Entity
-import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
 import kotlin.reflect.KProperty
+import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
 
 context(E)
 operator fun <E : Entity, T> TrackedData<T>.getValue(entity: E, property: KProperty<*>): T = entity.entityData.get(this)
