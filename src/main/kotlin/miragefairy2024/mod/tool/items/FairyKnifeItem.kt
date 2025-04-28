@@ -8,13 +8,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
@@ -25,7 +26,7 @@ import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyKnifeItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyKnifeItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = 2.0F
@@ -41,10 +42,6 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
-
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
@@ -73,8 +70,7 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 
 open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, settings.attributes(createAttributes(material, attackDamage, attackSpeed))) {
     override fun useOn(context: ItemUsageContext?) = InteractionResult.PASS
-    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(1, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
-        return true
+    override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND)
     }
 }

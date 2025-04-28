@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.HoeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
@@ -26,7 +27,7 @@ class FairyHoeConfiguration(
     attackDamage: Int,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyHoeItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyHoeItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = attackDamage.toFloat()
@@ -41,10 +42,6 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
-
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)

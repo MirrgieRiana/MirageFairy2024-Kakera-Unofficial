@@ -17,6 +17,7 @@ import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
@@ -54,7 +55,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -63,9 +64,9 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
-                        val damage = world.random.randomInt(configuration.miningDamage)
+                        val damage = world.random.randomInt(configuration.magicMiningDamage)
                         if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
+                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                         }
                     }
                     logBlockPosList += blockPos
@@ -75,7 +76,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -85,9 +86,9 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
                         if (miner.random.nextFloat() < 0.1F) {
-                            val damage = world.random.randomInt(configuration.miningDamage)
+                            val damage = world.random.randomInt(configuration.magicMiningDamage)
                             if (damage > 0) {
-                                stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
+                                stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                             }
                         }
                     }

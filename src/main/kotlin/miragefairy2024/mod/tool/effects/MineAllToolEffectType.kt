@@ -15,6 +15,7 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
@@ -51,7 +52,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).block === state.block
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -60,9 +61,9 @@ object MineAllToolEffectType : BooleanToolEffectType() {
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
-                        val damage = world.random.randomInt(configuration.miningDamage)
+                        val damage = world.random.randomInt(configuration.magicMiningDamage)
                         if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
+                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                         }
                     }
                 }

@@ -10,9 +10,9 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.SwordItem
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
@@ -21,11 +21,12 @@ import net.minecraft.world.level.block.state.BlockState
 class FairySwordConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairySwordItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairySwordItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = 3.0F
         this.attackSpeed = -2.4F
+        this.miningDamage = 2
         this.miningSpeedMultiplierOverride = 1.5F
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
@@ -38,10 +39,6 @@ class FairySwordItem(override val configuration: FairyMiningToolConfiguration, s
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
-
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(stack: ItemStack, state: BlockState) = isSuitableForImpl(state)
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)

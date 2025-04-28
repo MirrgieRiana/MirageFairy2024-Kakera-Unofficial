@@ -14,6 +14,7 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
@@ -53,7 +54,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                             val targetBlockPos = pos.offset(x, y, z)
                             if (item.isCorrectToolForDrops(stack, world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                                 // 採掘を続行
 
@@ -62,9 +63,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                     if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(configuration.miningDamage)
+                                        val damage = world.random.randomInt(configuration.magicMiningDamage)
                                         if (damage > 0) {
-                                            stack.hurtAndBreak(damage, miner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND))
+                                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                                         }
                                     }
                                 }

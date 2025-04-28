@@ -40,6 +40,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.data.models.model.ModelTemplates as Models
 
@@ -477,7 +478,20 @@ class ToolCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = configuration.also { it.apply() }.createItem()
+    val item = configuration.also { it.apply() }.createItem(run {
+        val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.speed
+
+        val rules = mutableListOf<Tool.Rule>()
+
+        rules += Tool.Rule.deniesDrops(configuration.toolMaterialCard.toolMaterial.incorrectBlocksForDrops) // ツールレベル不足で掘れない
+        if (configuration.superEffectiveBlocks.isNotEmpty()) rules += Tool.Rule.minesAndDrops(configuration.superEffectiveBlocks, miningSpeedMultiplier * 10F) // 剣の蜘蛛の巣特効とか
+        if (configuration.effectiveBlocks.isNotEmpty()) rules += Tool.Rule.minesAndDrops(configuration.effectiveBlocks, miningSpeedMultiplier) // 特別に対応してるブロック
+        configuration.effectiveBlockTags.forEach { // タグによる適正
+            rules += Tool.Rule.minesAndDrops(it, miningSpeedMultiplier)
+        }
+
+        Tool(rules, 1F, configuration.miningDamage)
+    })
 
     context(ModContext)
     fun init() {

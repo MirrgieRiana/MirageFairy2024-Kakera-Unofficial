@@ -3,6 +3,8 @@ package miragefairy2024.mod.tool.items
 import miragefairy2024.mod.tool.ToolConfiguration
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.DataComponents
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
@@ -10,41 +12,27 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Tiers
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
+class FairyToolProperties(private val tool: Tool) : Item.Properties() {
+    override fun <T : Any> component(component: DataComponentType<T>, value: T): Item.Properties {
+        return if (component == DataComponents.TOOL) {
+            super.component(DataComponents.TOOL, tool)
+        } else {
+            super.component(component, value)
+        }
+    }
+}
+
 interface FairyToolItem {
     val configuration: ToolConfiguration
 }
 
-
-fun <I> I.getMiningSpeedMultiplierImpl(@Suppress("UNUSED_PARAMETER") stack: ItemStack, state: BlockState): Float where I : Item, I : FairyToolItem {
-    val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.speed
-    return when {
-        configuration.superEffectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier * 10F
-        configuration.effectiveBlocks.any { state.`is`(it) } -> miningSpeedMultiplier
-        configuration.effectiveBlockTags.any { state.`is`(it) } -> miningSpeedMultiplier
-        else -> 1.0F
-    }
-}
-
-fun <I> I.isSuitableForImpl(state: BlockState): Boolean where I : Item, I : FairyToolItem {
-    val itemMiningLevel = configuration.toolMaterialCard.toolMaterial.level
-    return when {
-        itemMiningLevel < Tiers.DIAMOND.level && state.`is`(BlockTags.NEEDS_DIAMOND_TOOL) -> false
-        itemMiningLevel < Tiers.IRON.level && state.`is`(BlockTags.NEEDS_IRON_TOOL) -> false
-        itemMiningLevel < Tiers.STONE.level && state.`is`(BlockTags.NEEDS_STONE_TOOL) -> false
-        else -> when {
-            configuration.superEffectiveBlocks.any { state.`is`(it) } -> true
-            configuration.effectiveBlocks.any { state.`is`(it) } -> true
-            configuration.effectiveBlockTags.any { state.`is`(it) } -> true
-            else -> false
-        }
-    }
-}
 
 fun <I> I.postMineImpl(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) where I : Item, I : FairyToolItem {
     configuration.onPostMineListeners.forEach {

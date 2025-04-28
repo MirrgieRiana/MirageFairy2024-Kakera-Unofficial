@@ -25,6 +25,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -95,7 +96,8 @@ abstract class ToolConfiguration {
     val superEffectiveBlocks = mutableListOf<Block>()
     val effectiveBlocks = mutableListOf<Block>()
     val effectiveBlockTags = mutableListOf<TagKey<Block>>()
-    var miningDamage = 1.0
+    var miningDamage = 1
+    var magicMiningDamage = 1.0
     val descriptions = mutableListOf<Poem>()
     var hasGlint = false
 
@@ -106,7 +108,7 @@ abstract class ToolConfiguration {
     val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Holder<Enchantment>, old: Int) -> Int>()
     val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 
-    abstract fun createItem(): Item
+    abstract fun createItem(tool: Tool): Item
 
     context(ModContext)
     fun init(card: ToolCard) {
