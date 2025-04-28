@@ -4,6 +4,7 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
@@ -242,28 +243,28 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
 
 fun MutableList<ItemStack>.reset() = this.replaceAll { EMPTY_ITEM_STACK }
 
-fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound) {
+fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound, registries: HolderLookup.Provider) {
     nbt.wrapper["Items"].list.get()?.let { items ->
         items.forEach { item ->
             item.wrapper.compound.get()?.let { itemCompound ->
                 val slotIndex = (itemCompound.wrapper["Slot"].byte.orDefault { 0 }.get() and 255.toByte()).toInt()
-                if (slotIndex in this.indices) this[slotIndex] = ItemStack.of(itemCompound)
+                if (slotIndex in this.indices) this[slotIndex] = itemCompound.toItemStack(registries) ?: EMPTY_ITEM_STACK
             }
         }
     }
 }
 
-fun List<ItemStack>.writeToNbt(nbt: NbtCompound) {
+fun List<ItemStack>.writeToNbt(nbt: NbtCompound, registries: HolderLookup.Provider) {
     val nbtList = NbtList()
     this.forEachIndexed { slotIndex, itemStack ->
         if (itemStack.isNotEmpty) {
             val itemCompound = NbtCompound()
             itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
-            itemStack.save(itemCompound)
+            itemStack.save(registries, itemCompound)
             nbtList.add(itemCompound)
         }
     }
     nbt.put("Items", nbtList)
 }
 
-fun List<ItemStack>.writeToNbt() = NbtCompound().also { this.writeToNbt(it) }
+fun List<ItemStack>.writeToNbt(registries: HolderLookup.Provider) = NbtCompound().also { this.writeToNbt(it, registries) }

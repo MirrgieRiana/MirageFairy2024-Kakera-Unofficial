@@ -20,6 +20,7 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
@@ -34,7 +35,6 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.protocol.Packet
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
@@ -143,7 +143,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
 
     override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
-        nbt.wrapper["ItemStack"].set(itemStack.toNbt())
+        nbt.wrapper["ItemStack"].set(itemStack.toNbt(registries))
         nbt.wrapper["ItemX"].double.set(itemX)
         nbt.wrapper["ItemY"].double.set(itemY)
         nbt.wrapper["ItemZ"].double.set(itemZ)
@@ -153,7 +153,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
 
     override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
-        itemStack = ItemStack.of(nbt.wrapper["ItemStack"].compound.get())
+        itemStack = nbt.wrapper["ItemStack"].compound.get()?.toItemStack(registries) ?: EMPTY_ITEM_STACK
         itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
         itemY = nbt.wrapper["ItemY"].double.get() ?: 0.0
         itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0

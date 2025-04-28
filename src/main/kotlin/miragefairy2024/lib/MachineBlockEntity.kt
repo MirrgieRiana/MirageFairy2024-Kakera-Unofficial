@@ -49,12 +49,12 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         inventory.reset()
-        inventory.readFromNbt(nbt)
+        inventory.readFromNbt(nbt, registries)
     }
 
     override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
-        inventory.writeToNbt(nbt)
+        inventory.writeToNbt(nbt, registries)
     }
 
     override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない

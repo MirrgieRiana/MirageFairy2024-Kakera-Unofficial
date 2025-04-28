@@ -113,17 +113,17 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         craftingInventory.reset()
-        nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it) }
+        nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it, registries) }
         waitingInventory.reset()
-        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))
         progressMax = nbt.wrapper["ProgressMax"].int.get() ?: 0
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
     override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
-        nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt())
-        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+        nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt(registries))
+        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))
         nbt.wrapper["ProgressMax"].int.set(progressMax)
         nbt.wrapper["Progress"].int.set(progress)
     }
