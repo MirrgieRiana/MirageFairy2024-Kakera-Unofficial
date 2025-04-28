@@ -6,8 +6,11 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.readFromNbt
 import miragefairy2024.util.reset
 import miragefairy2024.util.writeToNbt
+import mirrg.kotlin.hydrogen.unit
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.NonNullList
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.item.ItemStack
@@ -43,18 +46,18 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Data
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         inventory.reset()
         inventory.readFromNbt(nbt)
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         inventory.writeToNbt(nbt)
     }
 
-    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata() // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
@@ -72,13 +75,15 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         }
     }
 
-    private val inventory = MutableList(card.inventorySlotConfigurations.size) { EMPTY_ITEM_STACK }
+    private var inventory: NonNullList<ItemStack> = NonNullList.withSize(card.inventorySlotConfigurations.size, EMPTY_ITEM_STACK)
 
     override fun getContainerSize() = inventory.size
 
     override fun isEmpty() = inventory.all { it.isEmpty }
 
     override fun getItem(slot: Int): ItemStack = inventory.getOrElse(slot) { EMPTY_ITEM_STACK }
+
+    override fun getItems() = inventory
 
     override fun setItem(slot: Int, stack: ItemStack) {
         if (slot in inventory.indices) {
@@ -87,6 +92,8 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         onStackChange(slot)
         setChanged()
     }
+
+    override fun setItems(items: NonNullList<ItemStack>) = unit { inventory = items }
 
     override fun removeItem(slot: Int, amount: Int): ItemStack {
         onStackChange(slot)

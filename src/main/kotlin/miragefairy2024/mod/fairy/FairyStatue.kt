@@ -49,6 +49,7 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.network.chat.Component
@@ -262,17 +263,17 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     }
 
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["Motif"].string.set(getMotif()?.getIdentifier()?.string)
     }
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         setMotif(nbt.wrapper["Motif"].string.get()?.toIdentifier()?.toFairyMotif())
     }
 
-    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries)
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 

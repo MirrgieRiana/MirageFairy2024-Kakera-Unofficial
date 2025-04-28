@@ -33,6 +33,7 @@ import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
@@ -109,8 +110,8 @@ abstract class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : Horizon
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         craftingInventory.reset()
         nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it) }
         waitingInventory.reset()
@@ -119,8 +120,8 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt())
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
         nbt.wrapper["ProgressMax"].int.set(progressMax)

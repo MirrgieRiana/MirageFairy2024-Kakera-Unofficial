@@ -1,6 +1,7 @@
 package miragefairy2024.mod.magicplant
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
@@ -55,22 +56,22 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
         }
     }
 
-    public override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    public override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
     }
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
         isNatural = nbt.getBoolean("Natural")
     }
 
-    override fun getUpdateTag(): NbtCompound {
-        val nbt = super.getUpdateTag()
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound {
+        val nbt = super.getUpdateTag(registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)

@@ -29,6 +29,7 @@ import mirrg.kotlin.hydrogen.castOrNull
 import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.hydrogen.min
 import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.protocol.Packet
 import net.minecraft.resources.ResourceLocation
@@ -140,8 +141,8 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var shapeCache: VoxelShape? = null
 
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["ItemStack"].set(itemStack.toNbt())
         nbt.wrapper["ItemX"].double.set(itemX)
         nbt.wrapper["ItemY"].double.set(itemY)
@@ -150,8 +151,8 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         nbt.wrapper["ItemRotateY"].double.set(itemRotateY)
     }
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         itemStack = ItemStack.of(nbt.wrapper["ItemStack"].compound.get())
         itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
         itemY = nbt.wrapper["ItemY"].double.get() ?: 0.0
@@ -218,7 +219,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         }
     }
 
-    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries)
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 

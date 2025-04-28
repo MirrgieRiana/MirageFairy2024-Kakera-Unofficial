@@ -21,6 +21,7 @@ import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
@@ -110,15 +111,15 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     override fun getThis() = this
 
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         collectionProgress = nbt.wrapper["CollectionProgress"].int.get() ?: 0
         sortProgress = nbt.wrapper["SortProgress"].int.get() ?: 0
         updateCache()
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["CollectionProgress"].int.set(collectionProgress)
         nbt.wrapper["SortProgress"].int.set(sortProgress)
     }
