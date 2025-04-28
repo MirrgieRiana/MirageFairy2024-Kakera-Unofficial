@@ -40,7 +40,7 @@ import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.UseAnim as UseAction
 
@@ -80,7 +80,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
-                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = itemStack.hoverName
                 override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })

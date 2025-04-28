@@ -15,6 +15,7 @@ import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.Criterion
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
@@ -33,7 +34,7 @@ import net.minecraft.core.NonNullList as DefaultedList
 import net.minecraft.core.RegistryAccess as DynamicRegistryManager
 import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
 import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
@@ -67,12 +68,12 @@ open class SimpleMachineRecipe(
     val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
     val duration: Int,
-) : Recipe<Inventory> {
+) : Recipe<Container> {
 
     override fun getGroup() = group
 
     // TODO 順不同
-    override fun matches(inventory: Inventory, world: Level): Boolean {
+    override fun matches(inventory: Container, world: Level): Boolean {
         inputs.forEachIndexed { index, input ->
             if (!input.first.test(inventory.getItem(index))) return false
             if (inventory.getItem(index).count < input.second) return false
@@ -82,7 +83,7 @@ open class SimpleMachineRecipe(
 
     open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
-    override fun getRemainingItems(inventory: Inventory): DefaultedList<ItemStack> {
+    override fun getRemainingItems(inventory: Container): DefaultedList<ItemStack> {
         val list = DefaultedList.create<ItemStack>()
         inputs.forEachIndexed { index, input ->
             val remainder = getCustomizedRemainder(inventory.getItem(index))
@@ -98,7 +99,7 @@ open class SimpleMachineRecipe(
         return list
     }
 
-    override fun assemble(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack = output.copy()
+    override fun assemble(inventory: Container, registries: HolderLookup.Provider): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
     override fun getResultItem(registryManager: DynamicRegistryManager?) = output
     override fun getToastSymbol() = card.icon

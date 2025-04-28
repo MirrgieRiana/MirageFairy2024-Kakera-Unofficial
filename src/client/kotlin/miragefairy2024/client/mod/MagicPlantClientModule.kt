@@ -35,13 +35,13 @@ import net.minecraft.network.chat.Component
 import io.wispforest.owo.ui.core.Component as OwoComponent
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
-class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
+class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
     private lateinit var traitCardContainer: FlowLayout
 
     private fun setTraitCardContent(component: OwoComponent?) {

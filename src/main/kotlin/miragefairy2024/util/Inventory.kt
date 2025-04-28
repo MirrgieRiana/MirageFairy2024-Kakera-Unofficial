@@ -8,21 +8,21 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import kotlin.experimental.and
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.WorldlyContainer as SidedInventory
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
-operator fun Inventory.get(slot: Int): ItemStack = this.getItem(slot)
-operator fun Inventory.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
-val Inventory.size get() = this.getContainerSize()
-val Inventory.indices get() = 0 until this.size
-val Inventory.itemStacks get() = this.indices.map { this[it] }
+operator fun Container.get(slot: Int): ItemStack = this.getItem(slot)
+operator fun Container.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
+val Container.size get() = this.getContainerSize()
+val Container.indices get() = 0 until this.size
+val Container.itemStacks get() = this.indices.map { this[it] }
 
-class FilteringSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
+class FilteringSlot(inventory: Container, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
     override fun mayPlace(stack: ItemStack) = container.canPlaceItem(index, stack)
 }
 
-class OutputSlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
+class OutputSlot(inventory: Container, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
     override fun mayPlace(stack: ItemStack) = false
 }
 
@@ -135,7 +135,7 @@ class MutableListInventoryDelegate(private val inventory: MutableList<ItemStack>
 
 fun MutableList<ItemStack>.toInventoryDelegate() = MutableListInventoryDelegate(this)
 
-class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDelegate {
+class SimpleInventoryDelegate(private val inventory: Container) : InventoryDelegate {
     override fun getIndices() = inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
@@ -145,9 +145,9 @@ class SimpleInventoryDelegate(private val inventory: Inventory) : InventoryDeleg
     override fun markDirty() = inventory.setChanged()
 }
 
-fun Inventory.toInventoryDelegate() = SimpleInventoryDelegate(this)
+fun Container.toInventoryDelegate() = SimpleInventoryDelegate(this)
 
-class SidedInventoryDelegate(private val inventory: Inventory, private val side: Direction) : InventoryDelegate {
+class SidedInventoryDelegate(private val inventory: Container, private val side: Direction) : InventoryDelegate {
     override fun getIndices() = if (inventory is SidedInventory) inventory.getSlotsForFace(side).asIterable() else inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
@@ -157,7 +157,7 @@ class SidedInventoryDelegate(private val inventory: Inventory, private val side:
     override fun markDirty() = inventory.setChanged()
 }
 
-fun Inventory.toSidedInventoryDelegate(side: Direction) = SidedInventoryDelegate(this, side)
+fun Container.toSidedInventoryDelegate(side: Direction) = SidedInventoryDelegate(this, side)
 
 fun InventoryDelegate.mergeTo(other: InventoryDelegate) = mergeInventory(this, other)
 
@@ -165,7 +165,7 @@ fun InventoryDelegate.mergeTo(other: InventoryDelegate) = mergeInventory(this, o
  * インベントリのアイテムを別のインベントリに可能な限り移動させる
  * @return すべてのアイテムが完全に移動したかどうか
  */
-fun Inventory.mergeTo(other: Inventory) = mergeInventory(this.toInventoryDelegate(), other.toInventoryDelegate())
+fun Container.mergeTo(other: Container) = mergeInventory(this.toInventoryDelegate(), other.toInventoryDelegate())
 
 
 // Insert
@@ -189,7 +189,7 @@ val ScreenHandler.inventoryAccessor: InventoryAccessor
         override fun markDirty(index: Int) = this@inventoryAccessor.slots[index].setChanged()
     }
 
-val Inventory.inventoryAccessor: InventoryAccessor
+val Container.inventoryAccessor: InventoryAccessor
     get() = object : InventoryAccessor {
         override val size: Int get() = this@inventoryAccessor.size
         override fun getItemStack(index: Int) = this@inventoryAccessor[index]

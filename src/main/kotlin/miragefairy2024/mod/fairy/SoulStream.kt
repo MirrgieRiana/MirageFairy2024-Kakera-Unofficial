@@ -31,10 +31,10 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
@@ -53,7 +53,7 @@ fun initSoulStream() {
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
             player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
-                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
                 }
 
@@ -120,7 +120,7 @@ val soulStreamScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInve
     SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
 }, StreamCodec.unit(Unit))
 
-class SoulStreamScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val soulStream: Inventory) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
+class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
     init {
         repeat(3) { r ->
             repeat(9) { c ->

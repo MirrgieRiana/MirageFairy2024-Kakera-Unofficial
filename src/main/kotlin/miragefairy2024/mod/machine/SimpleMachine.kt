@@ -40,7 +40,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
@@ -77,7 +77,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: Level, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
+    fun match(world: Level, inventory: Container) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {

@@ -42,12 +42,12 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.ItemContainerContents
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.entity.SlotAccess as StackReference
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ClickAction as ClickType
@@ -183,13 +183,13 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {
             val selectedSlot = user.inventory.selected
-            if (!PlayerInventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
+            if (!Inventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
             selectedSlot
         } else {
             -1
         }
         user.openMenu(object : ExtendedScreenHandlerFactory<Int> {
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
@@ -291,12 +291,12 @@ fun ItemStack.setBagInventory(inventory: BagInventory) {
 }
 
 
-fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
+fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: Int): BagScreenHandler {
     val itemStackInstance = if (slotIndex == -1) playerInventory.offhand[0] else playerInventory.items[slotIndex]
     var expectedItemStack = itemStackInstance.copy()
     val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
-    val inventoryDelegate = object : Inventory {
+    val inventoryDelegate = object : Container {
         override fun clearContent() = bagInventory.clearContent()
         override fun getContainerSize() = bagInventory.getContainerSize()
         override fun isEmpty() = bagInventory.isEmpty()
@@ -315,7 +315,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
         override fun startOpen(player: PlayerEntity) = bagInventory.startOpen(player)
         override fun stopOpen(player: PlayerEntity) = bagInventory.stopOpen(player)
         override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)
-        override fun canTakeItem(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
+        override fun canTakeItem(hopperInventory: Container, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
     }
 
     return object : BagScreenHandler(syncId) {

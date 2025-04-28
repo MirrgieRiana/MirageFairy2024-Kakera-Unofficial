@@ -189,7 +189,7 @@ abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) 
 
 abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    // Inventory
+    // Container
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 

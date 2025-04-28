@@ -20,11 +20,11 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.world.WorldlyContainer as SidedInventory
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
@@ -62,7 +62,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
 
-    // Inventory
+    // Container
 
     /**
      * スロットの内容が変化する際に呼び出されます。
@@ -175,11 +175,11 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
     }
 
-    override fun stillValid(player: PlayerEntity) = Inventory.stillValidBlockEntity(this, player)
+    override fun stillValid(player: PlayerEntity) = Container.stillValidBlockEntity(this, player)
 
     override fun getDefaultName(): Component = card.block.name
 
-    override fun createMenu(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: Inventory): ScreenHandler {
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,

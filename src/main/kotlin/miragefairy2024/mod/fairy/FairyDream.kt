@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.entity.ChestBlockEntity
 import net.minecraft.world.phys.HitResult
 import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.WorldlyContainerHolder as InventoryProvider
 import net.minecraft.world.level.ClipContext as RaycastContext
 import net.minecraft.world.phys.AABB as Box
@@ -96,7 +96,7 @@ fun initFairyDream() {
                                 block.getContainer(blockState, world, blockPos)
                             } else if (blockState.hasBlockEntity()) {
                                 val blockEntity = world.getBlockEntity(blockPos)
-                                if (blockEntity is Inventory) {
+                                if (blockEntity is Container) {
                                     if (blockEntity is ChestBlockEntity && block is ChestBlock) {
                                         ChestBlock.getContainer(block, blockState, world, blockPos, true) ?: return@noInventory
                                     } else {

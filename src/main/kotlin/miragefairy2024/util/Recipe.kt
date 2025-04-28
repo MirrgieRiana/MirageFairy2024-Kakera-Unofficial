@@ -44,7 +44,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
 import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
 import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
-import net.minecraft.world.inventory.CraftingContainer as RecipeInputInventory
+import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry
@@ -170,15 +170,15 @@ fun registerBlastingRecipeGeneration(
 // Special Recipe
 
 context(ModContext)
-fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInventory) -> SpecialRecipeResult?) {
+fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingContainer) -> SpecialRecipeResult?) {
     val identifier = MirageFairy2024.identifier(path)
     lateinit var serializer: SpecialRecipeSerializer<*>
     serializer = SpecialRecipeSerializer { _, category ->
         object : SpecialCraftingRecipe(identifier, category) {
-            override fun matches(inventory: RecipeInputInventory, world: Level) = matcher(inventory) != null
-            override fun assemble(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
-            override fun getRemainingItems(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
-                override fun getRemainingItems(inventory: RecipeInputInventory) = super.getRemainingItems(inventory)
+            override fun matches(inventory: CraftingContainer, world: Level) = matcher(inventory) != null
+            override fun assemble(inventory: CraftingContainer, registries: HolderLookup.Provider) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
+            override fun getRemainingItems(inventory: CraftingContainer) = matcher(inventory)?.getRemainder() ?: object : Recipe<CraftingContainer> by this {
+                override fun getRemainingItems(inventory: CraftingContainer) = super.getRemainingItems(inventory)
             }.getRemainingItems(inventory)
 
             override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots

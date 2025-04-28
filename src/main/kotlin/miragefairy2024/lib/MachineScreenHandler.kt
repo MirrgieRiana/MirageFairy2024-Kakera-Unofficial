@@ -4,8 +4,8 @@ import miragefairy2024.util.quickMove
 import net.minecraft.network.chat.Component
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.Container
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
@@ -15,8 +15,8 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
 
     class Arguments(
         val syncId: Int,
-        val playerInventory: PlayerInventory,
-        val inventory: Inventory,
+        val playerInventory: Inventory,
+        val inventory: Container,
         val propertyDelegate: PropertyDelegate,
         val context: ScreenHandlerContext,
     )
@@ -35,7 +35,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         fun decode(data: Short): Int
     }
 
-    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
+    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Container, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
         override fun mayPlace(stack: ItemStack) = configuration.isValid(stack)
     }
 

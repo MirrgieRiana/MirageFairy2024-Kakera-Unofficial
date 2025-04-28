@@ -16,7 +16,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.nbt.ListTag as NbtList
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
@@ -33,7 +33,7 @@ fun initTraitListScreenHandler() {
     traitListScreenTranslation.enJa()
 }
 
-class TraitListScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks) : ScreenHandler(traitListScreenHandlerType, syncId) {
+class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks) : ScreenHandler(traitListScreenHandlerType, syncId) {
     companion object {
         val STREAM_CODEC = object : StreamCodec<FriendlyByteBuf, TraitStacks> {
             override fun encode(`object`: FriendlyByteBuf, object2: TraitStacks) {

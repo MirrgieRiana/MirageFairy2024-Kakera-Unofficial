@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.util.StringRepresentable as StringIdentifiable
-import net.minecraft.world.Container as Inventory
+import net.minecraft.world.Container
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
@@ -142,15 +142,15 @@ abstract class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : Horizont
 
 abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card: FairyLogisticsCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    // Inventory
+    // Container
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
-    fun getTarget(): Pair<Inventory, Direction>? {
-        fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
+    fun getTarget(): Pair<Container, Direction>? {
+        fun f(blockPos: BlockPos, side: Direction): Pair<Container, Direction>? {
             val world = level ?: return null
             val blockEntity = world.getBlockEntity(blockPos) ?: return null
-            if (blockEntity !is Inventory) return null
+            if (blockEntity !is Container) return null
             return Pair(blockEntity, side)
         }
         return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {

@@ -6,11 +6,11 @@ import net.minecraft.network.chat.Component
 import java.util.Optional
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 
 open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard<*, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
 
-    class Arguments<H>(val handler: H, val playerInventory: PlayerInventory, val title: Component)
+    class Arguments<H>(val handler: H, val playerInventory: Inventory, val title: Component)
 
     init {
         imageWidth = card.guiWidth
