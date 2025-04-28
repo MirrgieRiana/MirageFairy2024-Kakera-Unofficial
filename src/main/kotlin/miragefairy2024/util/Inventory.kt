@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 operator fun Container.get(slot: Int): ItemStack = this.getItem(slot)
 operator fun Container.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
-val Container.size get() = this.getContainerSize()
+val Container.size get() = this.containerSize
 val Container.indices get() = 0 until this.size
 val Container.itemStacks get() = this.indices.map { this[it] }
 

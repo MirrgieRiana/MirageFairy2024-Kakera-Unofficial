@@ -90,7 +90,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         maxDistance -= movingDistance
 
         // 衝突判定
-        val hitResult = ProjectileUtil.getHitResultOnMoveVector(this) { (owner == null || it.type != owner!!.type) && it.isPickable() }
+        val hitResult = ProjectileUtil.getHitResultOnMoveVector(this) { (owner == null || it.type != owner!!.type) && it.isPickable }
         if (hitResult.type != HitResult.Type.MISS) onHit(hitResult)
         if (isRemoved) return
 

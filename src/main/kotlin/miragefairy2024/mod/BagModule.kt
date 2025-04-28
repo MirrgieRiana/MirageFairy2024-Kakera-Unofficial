@@ -298,7 +298,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
     val inventoryDelegate = object : Container {
         override fun clearContent() = bagInventory.clearContent()
-        override fun getContainerSize() = bagInventory.getContainerSize()
+        override fun getContainerSize() = bagInventory.containerSize
         override fun isEmpty() = bagInventory.isEmpty()
         override fun getItem(slot: Int) = bagInventory.getItem(slot)
         override fun removeItem(slot: Int, amount: Int) = bagInventory.removeItem(slot, amount)

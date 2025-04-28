@@ -20,7 +20,7 @@ fun DrawContext.drawRightText(textRenderer: TextRenderer, text: String, rightX: 
 }
 
 fun DrawContext.drawRightText(textRenderer: TextRenderer, text: Component, rightX: Int, y: Int, color: Int, shadow: Boolean) {
-    val orderedText = text.getVisualOrderText()
+    val orderedText = text.visualOrderText
     this.drawString(textRenderer, orderedText, rightX - textRenderer.width(orderedText), y, color, shadow)
 }
 

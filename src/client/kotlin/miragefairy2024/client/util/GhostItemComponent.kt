@@ -57,7 +57,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
 
         val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
         val texts = itemStack.getTooltipLines(MinecraftClient.getInstance().player, tooltipContext)
-        tooltip += texts.map { TooltipComponent.create(it.getVisualOrderText()) }
+        tooltip += texts.map { TooltipComponent.create(it.visualOrderText) }
 
         val data = itemStack.tooltipImage.getOrNull()
         if (data != null) tooltip.add(1, TooltipComponentCallback.EVENT.invoker().getComponent(data) ?: TooltipComponent.create(data))
