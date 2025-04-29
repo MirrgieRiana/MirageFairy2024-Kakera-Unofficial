@@ -17,7 +17,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
-import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
@@ -29,7 +28,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -60,7 +58,7 @@ object DataGenerationEvents {
     val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
-    val onGenerateRecipe = InitializationEventRegistry<((location: ResourceLocation, recipe: Recipe<*>, advancement: AdvancementHolder?) -> Unit) -> Unit>()
+    val onGenerateRecipe = InitializationEventRegistry<(RecipeOutput) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateNinePatchTexture = InitializationEventRegistry<((ResourceLocation, NinePatchTextureCard) -> Unit) -> Unit>()
@@ -154,7 +152,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : FabricRecipeProvider(output, registriesFuture) {
-                override fun buildRecipes(recipeOutput: RecipeOutput) = DataGenerationEvents.onGenerateRecipe.fire { it { location, recipe, advancement -> recipeOutput.accept(location, recipe, advancement) } }
+                override fun buildRecipes(recipeOutput: RecipeOutput) = DataGenerationEvents.onGenerateRecipe.fire { it(recipeOutput) }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->

@@ -9,10 +9,11 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
 import miragefairy2024.util.register
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.JsonWrapper
 import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementRequirements
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.Criterion
 import net.minecraft.core.HolderLookup
@@ -29,11 +30,8 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
-import net.minecraft.advancements.RequirementsStrategy as CriterionMerger
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
 import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.core.RegistryAccess as DynamicRegistryManager
-import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
 import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
@@ -101,7 +99,7 @@ open class SimpleMachineRecipe(
 
     override fun assemble(inventory: Container, registries: HolderLookup.Provider): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
-    override fun getResultItem(registryManager: DynamicRegistryManager?) = output
+    override fun getResultItem(registries: HolderLookup.Provider) = output
     override fun getToastSymbol() = card.icon
     override fun getId() = recipeId
     override fun getSerializer() = card.serializer
@@ -219,35 +217,22 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     private val output: ItemStack,
     private val duration: Int,
 ) : CraftingRecipeJsonBuilder {
-    private val advancementBuilder: Advancement.Builder = Advancement.Builder.recipeAdvancement()
+    private val criteria = mutableMapOf<String, Criterion<*>>()
     private var group = ""
 
-    override fun unlockedBy(name: String, condition: Criterion<*>) = this.also { advancementBuilder.addCriterion(name, condition) }
+    override fun unlockedBy(name: String, condition: Criterion<*>) = this.also { criteria[name] = condition }
     override fun group(string: String?) = this.also { this.group = string ?: "" }
     override fun getResult(): Item = output.item
 
     override fun save(recipeOutput: RecipeOutput, recipeId: ResourceLocation) {
-        check(advancementBuilder.criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
-
-        advancementBuilder
-            .parent(CraftingRecipeJsonBuilder.ROOT_RECIPE_ADVANCEMENT)
+        check(criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
+        val advancementBuilder = recipeOutput.advancement()
             .addCriterion("has_the_recipe", RecipeUnlockedCriterion.unlocked(recipeId))
             .rewards(AdvancementRewards.Builder.recipe(recipeId))
-            .requirements(CriterionMerger.OR)
-
-        val advancementId: ResourceLocation = recipeId.withPrefix("recipes/${category.folderName}/")
-
-        val recipeJsonProvider = object : RecipeJsonProvider {
-            override fun serializeRecipeData(json: JsonObject) {
-                card.serializer.write(json, card.createRecipe(recipeId, group, inputs, output, duration))
-            }
-
-            override fun getType() = card.serializer
-            override fun getId() = recipeId
-            override fun serializeAdvancement() = advancementBuilder.serializeToJson()
-            override fun getAdvancementId() = advancementId
+            .requirements(AdvancementRequirements.Strategy.OR)
+        criteria.forEach {
+            advancementBuilder.addCriterion(it.key, it.value)
         }
-
-        recipeOutput.accept(recipeJsonProvider)
+        recipeOutput.accept(recipeId, card.createRecipe(recipeId, group, inputs, output, duration), advancementBuilder.build("recipes/${category.folderName}/" * recipeId))
     }
 }

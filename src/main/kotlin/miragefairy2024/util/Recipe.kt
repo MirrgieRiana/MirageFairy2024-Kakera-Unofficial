@@ -22,12 +22,12 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.inventory.CraftingContainer
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
@@ -149,7 +149,7 @@ fun registerBlastingRecipeGeneration(
     output: Item,
     experience: Double = 0.0,
     cookingTime: Int = 100,
-    block: CookingRecipeJsonBuilder.() -> Unit = {},
+    block: CookingRecipeJsonBuilder. () -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
@@ -169,24 +169,22 @@ fun registerBlastingRecipeGeneration(
 // Special Recipe
 
 context(ModContext)
-fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingContainer) -> SpecialRecipeResult?) {
+fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) -> SpecialRecipeResult?) {
     val identifier = MirageFairy2024.identifier(path)
     lateinit var serializer: SpecialRecipeSerializer<*>
-    serializer = SpecialRecipeSerializer { _, category ->
-        object : SpecialCraftingRecipe(identifier, category) {
-            override fun matches(inventory: CraftingContainer, world: Level) = matcher(inventory) != null
-            override fun assemble(inventory: CraftingContainer, registries: HolderLookup.Provider) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
-            override fun getRemainingItems(inventory: CraftingContainer) = matcher(inventory)?.getRemainder() ?: object : Recipe<CraftingContainer> by this {
-                override fun getRemainingItems(inventory: CraftingContainer) = super.getRemainingItems(inventory)
-            }.getRemainingItems(inventory)
 
-            override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
-            override fun getSerializer() = serializer
-        }
+    class SpecialCraftingRecipeImpl(category: CraftingBookCategory) : SpecialCraftingRecipe(category) {
+        override fun matches(input: CraftingInput, world: Level) = matcher(input) != null
+        override fun assemble(input: CraftingInput, registries: HolderLookup.Provider) = matcher(input)?.craft() ?: EMPTY_ITEM_STACK
+        override fun getRemainingItems(input: CraftingInput) = matcher(input)?.getRemainder() ?: super.getRemainingItems(input)
+        override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
+        override fun getSerializer() = serializer
     }
+
+    serializer = SpecialRecipeSerializer(::SpecialCraftingRecipeImpl)
     serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
     DataGenerationEvents.onGenerateRecipe {
-        ComplexRecipeJsonBuilder.special(serializer).save(it, identifier.string)
+        ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }
 }
 
