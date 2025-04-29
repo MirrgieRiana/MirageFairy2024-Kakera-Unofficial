@@ -21,7 +21,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
-import miragefairy2024.util.itemStacks
 import miragefairy2024.util.modId
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on

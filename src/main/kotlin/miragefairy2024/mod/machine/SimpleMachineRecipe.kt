@@ -22,11 +22,11 @@ import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.Container
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
@@ -59,6 +59,11 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
 }
 
+class SimpleMachineRecipeInput(private val itemStacks: List<ItemStack>) : RecipeInput {
+    override fun getItem(index: Int) = itemStacks[index]
+    override fun size() = itemStacks.size
+}
+
 open class SimpleMachineRecipe(
     private val card: SimpleMachineRecipeCard<*>,
     val recipeId: ResourceLocation,
@@ -66,12 +71,12 @@ open class SimpleMachineRecipe(
     val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
     val duration: Int,
-) : Recipe<Container> {
+) : Recipe<SimpleMachineRecipeInput> {
 
     override fun getGroup() = group
 
     // TODO 順不同
-    override fun matches(inventory: Container, world: Level): Boolean {
+    override fun matches(inventory: SimpleMachineRecipeInput, world: Level): Boolean {
         inputs.forEachIndexed { index, input ->
             if (!input.first.test(inventory.getItem(index))) return false
             if (inventory.getItem(index).count < input.second) return false
@@ -81,7 +86,7 @@ open class SimpleMachineRecipe(
 
     open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
-    override fun getRemainingItems(inventory: Container): DefaultedList<ItemStack> {
+    override fun getRemainingItems(inventory: SimpleMachineRecipeInput): DefaultedList<ItemStack> {
         val list = DefaultedList.create<ItemStack>()
         inputs.forEachIndexed { index, input ->
             val remainder = getCustomizedRemainder(inventory.getItem(index))
@@ -97,11 +102,10 @@ open class SimpleMachineRecipe(
         return list
     }
 
-    override fun assemble(inventory: Container, registries: HolderLookup.Provider): ItemStack = output.copy()
+    override fun assemble(inventory: SimpleMachineRecipeInput, registries: HolderLookup.Provider): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
     override fun getResultItem(registries: HolderLookup.Provider) = output
     override fun getToastSymbol() = card.icon
-    override fun getId() = recipeId
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
 

@@ -24,8 +24,6 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
-import miragefairy2024.util.set
-import miragefairy2024.util.size
 import miragefairy2024.util.times
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
@@ -34,7 +32,6 @@ import miragefairy2024.util.writeToNbt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
-import net.minecraft.world.Container
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
@@ -42,7 +39,6 @@ import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.Containers as ItemScatterer
-import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
@@ -77,7 +73,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: Level, inventory: Container) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
+    fun match(world: Level, inventory: SimpleMachineRecipeInput) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -162,17 +158,16 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         shouldUpdateRecipe = false
 
         // TODO 順不同
-        val inventory = SimpleInventory(card.inputSlots.size)
-        card.inputSlots.forEachIndexed { index, slot ->
-            inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
-        }
-        val recipe = card.match(world, inventory) ?: return null
-        if (recipe.inputs.size > inventory.size) return null
+        val inventory = SimpleMachineRecipeInput(card.inputSlots.map { this[card.inventorySlotIndexTable[it]!!] })
+
+        val recipeHolder = card.match(world, inventory) ?: return null
+        val recipe = recipeHolder.value()
+        if (recipe.inputs.size > inventory.size()) return null
 
         return {
             val remainder = recipe.getRemainingItems(inventory)
             (0 until recipe.inputs.size).forEach { index ->
-                craftingInventory += inventory[index].split(recipe.inputs[index].second)
+                craftingInventory += inventory.getItem(index).split(recipe.inputs[index].second)
             }
             waitingInventory += recipe.output.copy()
             waitingInventory += remainder
