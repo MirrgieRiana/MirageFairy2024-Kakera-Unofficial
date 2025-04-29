@@ -96,19 +96,19 @@ dependencies {
 
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}")
 
-    "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:12.1.725")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:12.1.725")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:12.1.725")
+    "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:16.0.799")
+    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799")
+    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.799")
     "modCompileOnly"("me.shedaniel.cloth:basic-math:0.6.1")
 
-    "modImplementation"("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.20.1:6.0.1")
+    "modImplementation"("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.21.1:13.0.1")
 
-    "modImplementation"("io.wispforest:owo-lib:0.11.2+1.20")
-    include("io.wispforest:owo-sentinel:0.11.2+1.20")
+    "modImplementation"("io.wispforest:owo-lib:0.12.15.4+1.21")
+    include("io.wispforest:owo-sentinel:0.12.15.4+1.21")
 
-    "modApi"("me.shedaniel.cloth:cloth-config:11.1.118")
+    "modApi"("me.shedaniel.cloth:cloth-config:15.0.140")
 
-    "modImplementation"("com.github.glitchfiend:TerraBlender-fabric:1.20.1-3.0.1.7")
+    "modImplementation"("com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8")
 }
 
 tasks.withType<JavaCompile>().configureEach {

@@ -24,7 +24,7 @@ class MirageFairy2024ReiServerPlugin : REIServerPlugin {
     override fun registerItemComparators(registry: ItemComparatorRegistry) {
         registry.register({ context, stack ->
             if (context.isExact) {
-                EntryComparator.itemNbt().hash(context, stack)
+                EntryComparator.itemComponents().hash(context, stack)
             } else {
                 stack.getFairyMotif()?.getIdentifier()?.string?.hashCode()?.toLong() ?: 1L
             }
