@@ -4,16 +4,14 @@ import miragefairy2024.ModContext
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.isNotEmpty
-import miragefairy2024.util.itemStacks
 import miragefairy2024.util.registerSpecialRecipe
-import miragefairy2024.util.size
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.NonNullList as DefaultedList
 
 context(ModContext)
 fun initFairyCondensationRecipe() {
     registerSpecialRecipe("fairy_condensation", 2) { inventory ->
-        val itemStacks = inventory.itemStacks
+        val itemStacks = inventory.items()
 
         // 空欄が入っていても無視
         val notEmptyItemStacks = itemStacks.filter { it.isNotEmpty }
@@ -40,7 +38,7 @@ fun initFairyCondensationRecipe() {
         }
     }
     registerSpecialRecipe("fairy_decondensation", 1) { inventory ->
-        val itemStacks = inventory.itemStacks
+        val itemStacks = inventory.items()
 
         // 空欄無視、インデックス付与
         val entries = itemStacks.mapIndexedNotNull { i, it ->
@@ -71,7 +69,7 @@ fun initFairyCondensationRecipe() {
             override fun craft() = createFairyItemStack(motif, condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
-                    val list = DefaultedList.withSize(inventory.size, EMPTY_ITEM_STACK)
+                    val list = DefaultedList.withSize(inventory.size(), EMPTY_ITEM_STACK)
                     list[index] = createFairyItemStack(motif, condensation = remainingCondensation)
                     list
                 } else {

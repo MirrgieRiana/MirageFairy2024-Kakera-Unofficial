@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.CraftingInput
+import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
@@ -44,7 +45,6 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
 import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
 import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
-import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
@@ -173,7 +173,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     val identifier = MirageFairy2024.identifier(path)
     lateinit var serializer: SpecialRecipeSerializer<*>
 
-    class SpecialCraftingRecipeImpl(category: CraftingBookCategory) : SpecialCraftingRecipe(category) {
+    class SpecialCraftingRecipeImpl(category: CraftingBookCategory) : CustomRecipe(category) {
         override fun matches(input: CraftingInput, world: Level) = matcher(input) != null
         override fun assemble(input: CraftingInput, registries: HolderLookup.Provider) = matcher(input)?.craft() ?: EMPTY_ITEM_STACK
         override fun getRemainingItems(input: CraftingInput) = matcher(input)?.getRemainder() ?: super.getRemainingItems(input)
