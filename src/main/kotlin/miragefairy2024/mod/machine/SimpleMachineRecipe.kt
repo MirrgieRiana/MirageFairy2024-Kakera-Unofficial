@@ -1,7 +1,8 @@
 package miragefairy2024.mod.machine
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.util.RecipeGenerationSettings
@@ -10,8 +11,6 @@ import miragefairy2024.util.group
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.times
-import mirrg.kotlin.gson.hydrogen.JsonWrapper
-import mirrg.kotlin.gson.hydrogen.toJsonWrapper
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.advancements.AdvancementRequirements
 import net.minecraft.advancements.AdvancementRewards
@@ -20,7 +19,9 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -49,7 +50,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     abstract val recipeClass: Class<R>
 
-    abstract fun createRecipe(recipeId: ResourceLocation, group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
+    abstract fun createRecipe(group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): R
 
     context(ModContext)
     fun init() {
@@ -66,7 +67,6 @@ class SimpleMachineRecipeInput(private val itemStacks: List<ItemStack>) : Recipe
 
 open class SimpleMachineRecipe(
     private val card: SimpleMachineRecipeCard<*>,
-    val recipeId: ResourceLocation,
     private val group: String,
     val inputs: List<Pair<Ingredient, Int>>,
     val output: ItemStack,
@@ -110,84 +110,42 @@ open class SimpleMachineRecipe(
     override fun getType() = card.type
 
     class Serializer<R : SimpleMachineRecipe>(private val card: SimpleMachineRecipeCard<R>) : RecipeSerializer<R> {
-        override fun fromJson(id: ResourceLocation, json: JsonObject): R {
-            val root = json.toJsonWrapper()
-            fun readInput(json: JsonWrapper): Pair<Ingredient, Int> {
-                return Pair(
-                    if (json["ingredient"].isArray) {
-                        Ingredient.fromJson(json["ingredient"].asJsonArray(), false)
-                    } else {
-                        Ingredient.fromJson(json["ingredient"].asJsonObject(), false)
-                    },
-                    json["count"].asInt(),
-                )
+        companion object {
+            private val INPUT_CODEC: MapCodec<Pair<Ingredient, Int>> = RecordCodecBuilder.mapCodec { instance ->
+                instance.group(
+                    Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter { it.first },
+                    Codec.INT.fieldOf("count").forGetter { it.second },
+                ).apply(instance, ::Pair)
             }
-            return card.createRecipe(
-                recipeId = id,
-                group = root["group"].asString(),
-                inputs = root["inputs"].asList().map { input ->
-                    readInput(input)
-                },
-                output = run {
-                    val itemId = root["output"]["item"].asString()
-                    val count = root["output"]["count"].asInt()
-                    ItemStack(BuiltInRegistries.ITEM[ResourceLocation.parse(itemId)], count)
-                },
-                duration = root["duration"].asInt(),
+            private val INPUT_STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Pair<Ingredient, Int>> = StreamCodec.composite(
+                Ingredient.CONTENTS_STREAM_CODEC,
+                { it.first },
+                ByteBufCodecs.VAR_INT,
+                { it.second },
+                ::Pair,
             )
         }
 
-        fun write(json: JsonObject, recipe: R) {
-            fun toJsonInput(input: Pair<Ingredient, Int>): JsonObject {
-                val inputJson = JsonObject()
-                inputJson.add("ingredient", input.first.toJson())
-                inputJson.addProperty("count", input.second)
-                return inputJson
-            }
-
-            fun toJsonOutput(output: ItemStack): JsonObject {
-                val outputJson = JsonObject()
-                outputJson.addProperty("item", output.item.getIdentifier().string)
-                outputJson.addProperty("count", output.count)
-                return outputJson
-            }
-            json.addProperty("group", recipe.group)
-            json.add("inputs", JsonArray().also { inputsJson ->
-                recipe.inputs.forEach { input ->
-                    inputsJson.add(toJsonInput(input))
-                }
-            })
-            json.add("output", toJsonOutput(recipe.output))
-            json.addProperty("duration", recipe.duration)
+        override fun codec(): MapCodec<R> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                Codec.STRING.fieldOf("group").forGetter { it.group },
+                INPUT_CODEC.codec().listOf().fieldOf("inputs").forGetter { it.inputs },
+                ItemStack.CODEC.fieldOf("output").forGetter { it.output },
+                Codec.INT.fieldOf("duration").forGetter { it.duration },
+            ).apply(instance, card::createRecipe)
         }
 
-        override fun fromNetwork(id: ResourceLocation, buf: FriendlyByteBuf): R {
-            val group = buf.readUtf()
-            val inputCount = buf.readInt()
-            val inputs = (0 until inputCount).map {
-                Pair(Ingredient.fromNetwork(buf), buf.readInt())
-            }
-            val output = buf.readItem()
-            val duration = buf.readInt()
-            return card.createRecipe(
-                recipeId = id,
-                group = group,
-                inputs = inputs,
-                output = output,
-                duration = duration,
-            )
-        }
-
-        override fun toNetwork(buf: FriendlyByteBuf, recipe: R) {
-            buf.writeUtf(recipe.group)
-            buf.writeInt(recipe.inputs.size)
-            recipe.inputs.forEach {
-                it.first.toNetwork(buf)
-                buf.writeInt(it.second)
-            }
-            buf.writeItem(recipe.output)
-            buf.writeInt(recipe.duration)
-        }
+        override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, R> = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8,
+            { it.group },
+            INPUT_STREAM_CODEC.apply(ByteBufCodecs.list()),
+            { it.inputs },
+            ItemStack.STREAM_CODEC,
+            { it.output },
+            ByteBufCodecs.VAR_INT,
+            { it.duration },
+            card::createRecipe,
+        )
     }
 
 }
@@ -237,6 +195,6 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
         criteria.forEach {
             advancementBuilder.addCriterion(it.key, it.value)
         }
-        recipeOutput.accept(recipeId, card.createRecipe(recipeId, group, inputs, output, duration), advancementBuilder.build("recipes/${category.folderName}/" * recipeId))
+        recipeOutput.accept(recipeId, card.createRecipe(group, inputs, output, duration), advancementBuilder.build("recipes/${category.folderName}/" * recipeId))
     }
 }
