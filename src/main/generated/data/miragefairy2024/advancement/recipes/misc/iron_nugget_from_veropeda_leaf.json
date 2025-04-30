@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:veropeda_leaf"
-            ]
+            "items": "miragefairy2024:veropeda_leaf"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_veropeda_leaf",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_veropeda_leaf"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:iron_nugget_from_veropeda_leaf"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

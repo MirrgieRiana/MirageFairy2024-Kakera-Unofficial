@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:pufferfish"
-            ]
+            "items": "minecraft:pufferfish"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_pufferfish",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_pufferfish"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:poison_from_pufferfish"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

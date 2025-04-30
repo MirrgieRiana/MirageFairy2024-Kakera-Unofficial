@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:poisonous_potato"
-            ]
+            "items": "minecraft:poisonous_potato"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_poisonous_potato",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_poisonous_potato"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:poison_from_poisonous_potato"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:aura_stone"
-            ]
+            "items": "miragefairy2024:aura_stone"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_aura_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_aura_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:fairy_active_consumer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

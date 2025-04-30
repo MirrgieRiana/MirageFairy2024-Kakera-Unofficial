@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:mirage_flour_of_time"
-            ]
+            "items": "miragefairy2024:mirage_flour_of_time"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_mirage_flour_of_time",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mirage_flour_of_time"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:mirage_flour_of_universe_from_mirage_flour_of_time"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

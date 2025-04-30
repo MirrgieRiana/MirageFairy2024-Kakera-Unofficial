@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:haimeviska_sap"
-            ]
+            "items": "miragefairy2024:haimeviska_sap"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_haimeviska_sap",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_haimeviska_sap"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:torch_from_haimeviska_sap"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

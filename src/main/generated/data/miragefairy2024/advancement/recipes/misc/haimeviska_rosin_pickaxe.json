@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:haimeviska_rosin"
-            ]
+            "items": "miragefairy2024:haimeviska_rosin"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_haimeviska_rosin",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_haimeviska_rosin"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:haimeviska_rosin_pickaxe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

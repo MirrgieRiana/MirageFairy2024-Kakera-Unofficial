@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:amethyst_shard"
-            ]
+            "items": "minecraft:amethyst_shard"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_amethyst_shard",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_amethyst_shard"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:amethyst_shovel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

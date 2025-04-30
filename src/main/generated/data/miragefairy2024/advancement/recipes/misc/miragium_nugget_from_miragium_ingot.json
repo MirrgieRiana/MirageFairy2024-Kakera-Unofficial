@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:miragium_ingot"
-            ]
+            "items": "miragefairy2024:miragium_ingot"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_miragium_ingot",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_miragium_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:miragium_nugget_from_miragium_ingot"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:miragidian_shard"
-            ]
+            "items": "miragefairy2024:miragidian_shard"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_miragidian_shard",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_miragidian_shard"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:miragidian_from_miragidian_shard"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

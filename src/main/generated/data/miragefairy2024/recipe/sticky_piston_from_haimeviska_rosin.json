@@ -15,7 +15,7 @@
     "P"
   ],
   "result": {
-    "item": "minecraft:sticky_piston"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "minecraft:sticky_piston"
+  }
 }

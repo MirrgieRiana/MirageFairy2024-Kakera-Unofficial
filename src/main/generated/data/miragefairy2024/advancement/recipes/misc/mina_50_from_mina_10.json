@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:mina_10"
-            ]
+            "items": "miragefairy2024:mina_10"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_mina_10",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mina_10"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:mina_50_from_mina_10"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

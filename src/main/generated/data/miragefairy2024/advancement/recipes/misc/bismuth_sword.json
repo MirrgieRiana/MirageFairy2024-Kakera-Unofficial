@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:bismuth_ingot"
-            ]
+            "items": "miragefairy2024:bismuth_ingot"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_bismuth_ingot",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_bismuth_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:bismuth_sword"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

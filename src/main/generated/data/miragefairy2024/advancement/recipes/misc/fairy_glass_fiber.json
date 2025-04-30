@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:mirage_stem"
-            ]
+            "items": "miragefairy2024:mirage_stem"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_mirage_stem",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mirage_stem"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:fairy_glass_fiber"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

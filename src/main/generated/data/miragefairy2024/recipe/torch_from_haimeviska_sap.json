@@ -15,7 +15,7 @@
     "S"
   ],
   "result": {
-    "item": "minecraft:torch"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "minecraft:torch"
+  }
 }

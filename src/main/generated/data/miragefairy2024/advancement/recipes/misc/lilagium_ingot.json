@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:lilac"
-            ]
+            "items": "minecraft:lilac"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_lilac",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lilac"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:lilagium_ingot"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

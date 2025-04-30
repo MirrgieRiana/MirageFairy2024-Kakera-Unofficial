@@ -7,5 +7,7 @@
   "ingredient": {
     "item": "miragefairy2024:bismuth_dust"
   },
-  "result": "miragefairy2024:bismuth_ingot"
+  "result": {
+    "id": "miragefairy2024:bismuth_ingot"
+  }
 }

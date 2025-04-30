@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:mirage_flour_of_earth"
-            ]
+            "items": "miragefairy2024:mirage_flour_of_earth"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_mirage_flour_of_earth",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mirage_flour_of_earth"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:mirage_flour_of_underworld_from_mirage_flour_of_earth"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

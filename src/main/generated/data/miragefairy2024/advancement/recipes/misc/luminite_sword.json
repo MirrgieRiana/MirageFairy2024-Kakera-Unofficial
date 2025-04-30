@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:luminite"
-            ]
+            "items": "miragefairy2024:luminite"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_luminite",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_luminite"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:luminite_sword"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

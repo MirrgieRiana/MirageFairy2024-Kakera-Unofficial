@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:lilagium_ingot"
-            ]
+            "items": "miragefairy2024:lilagium_ingot"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_lilagium_ingot",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lilagium_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:lilagium_scythe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

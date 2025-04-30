@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:xarpite_block"
-            ]
+            "items": "miragefairy2024:xarpite_block"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_xarpite_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_xarpite_block"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:xarpite_from_xarpite_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

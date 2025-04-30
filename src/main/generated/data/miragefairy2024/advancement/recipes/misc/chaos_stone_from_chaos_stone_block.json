@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:chaos_stone_block"
-            ]
+            "items": "miragefairy2024:chaos_stone_block"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_chaos_stone_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chaos_stone_block"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:chaos_stone_from_chaos_stone_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

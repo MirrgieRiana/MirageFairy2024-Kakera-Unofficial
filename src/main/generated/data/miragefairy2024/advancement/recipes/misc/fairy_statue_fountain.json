@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:fairy_scales"
-            ]
+            "items": "miragefairy2024:fairy_scales"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_fairy_scales",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_fairy_scales"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:fairy_statue_fountain"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

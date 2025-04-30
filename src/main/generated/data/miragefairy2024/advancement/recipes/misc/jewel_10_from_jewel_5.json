@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:jewel_5"
-            ]
+            "items": "miragefairy2024:jewel_5"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_jewel_5",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_jewel_5"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:jewel_10_from_jewel_5"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

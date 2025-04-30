@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:nether_star"
-            ]
+            "items": "minecraft:nether_star"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_nether_star",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_nether_star"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:nether_star_pickaxe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

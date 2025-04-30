@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:tiny_bismuth_dust"
-            ]
+            "items": "miragefairy2024:tiny_bismuth_dust"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_tiny_bismuth_dust",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_tiny_bismuth_dust"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:bismuth_dust_from_tiny_bismuth_dust"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

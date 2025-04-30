@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:fairy_quest_card"
-            ]
+            "items": "miragefairy2024:fairy_quest_card"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_fairy_quest_card",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_fairy_quest_card"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:fairy_quest_card_base_from_fairy_quest_card"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

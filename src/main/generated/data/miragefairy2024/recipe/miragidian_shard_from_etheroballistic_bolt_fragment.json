@@ -7,5 +7,7 @@
   "ingredient": {
     "item": "miragefairy2024:etheroballistic_bolt_fragment"
   },
-  "result": "miragefairy2024:miragidian_shard"
+  "result": {
+    "id": "miragefairy2024:miragidian_shard"
+  }
 }

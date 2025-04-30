@@ -12,7 +12,7 @@
     "##"
   ],
   "result": {
-    "item": "minecraft:string"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "minecraft:string"
+  }
 }

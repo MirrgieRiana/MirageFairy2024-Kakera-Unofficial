@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:veropeda_berries"
-            ]
+            "items": "miragefairy2024:veropeda_berries"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_veropeda_berries",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_veropeda_berries"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:veropedeliquora"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

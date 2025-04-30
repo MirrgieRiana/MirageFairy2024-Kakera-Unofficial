@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:miranagite"
-            ]
+            "items": "miragefairy2024:miranagite"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_miranagite",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_miranagite"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:miranagite_pickaxe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

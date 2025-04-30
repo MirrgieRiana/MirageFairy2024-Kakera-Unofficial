@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:xarpite"
-            ]
+            "items": "miragefairy2024:xarpite"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_xarpite",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_xarpite"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:aura_reflector_furnace"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

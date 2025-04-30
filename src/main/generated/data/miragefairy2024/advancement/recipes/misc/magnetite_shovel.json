@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:magnetite"
-            ]
+            "items": "miragefairy2024:magnetite"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_magnetite",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_magnetite"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:magnetite_shovel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

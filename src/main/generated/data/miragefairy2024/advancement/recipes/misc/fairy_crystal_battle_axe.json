@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:fairy_crystal"
-            ]
+            "items": "miragefairy2024:fairy_crystal"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_fairy_crystal",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_fairy_crystal"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:fairy_crystal_battle_axe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

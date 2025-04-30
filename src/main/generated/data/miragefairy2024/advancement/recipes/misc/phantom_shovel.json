@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:phantom_drop"
-            ]
+            "items": "miragefairy2024:phantom_drop"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_phantom_drop",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_phantom_drop"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:phantom_shovel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:luminite_block"
-            ]
+            "items": "miragefairy2024:luminite_block"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_luminite_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_luminite_block"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:luminite_from_luminite_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

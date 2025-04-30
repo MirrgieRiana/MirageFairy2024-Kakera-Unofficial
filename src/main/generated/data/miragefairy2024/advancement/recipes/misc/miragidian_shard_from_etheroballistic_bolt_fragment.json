@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "miragefairy2024:etheroballistic_bolt_fragment"
-            ]
+            "items": "miragefairy2024:etheroballistic_bolt_fragment"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_etheroballistic_bolt_fragment",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_etheroballistic_bolt_fragment"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:miragidian_shard_from_etheroballistic_bolt_fragment"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

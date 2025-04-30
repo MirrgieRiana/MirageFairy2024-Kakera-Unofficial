@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:emerald"
-            ]
+            "items": "minecraft:emerald"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_emerald",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_emerald"
     ]
   ],
   "rewards": {
     "recipes": [
       "miragefairy2024:emerald_pickaxe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
