@@ -9,14 +9,11 @@ jobs:
     steps:
 
       # セットアップ
-      - name: リポジトリのチェックアウト
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: コミットバージョン
         run: git log -n 1
-      - name: gradlewのためのセキュリティチェック
-        uses: gradle/wrapper-validation-action@v1
-      - name: Javaのセットアップ
-        uses: actions/setup-java@v3
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: 21
           distribution: 'microsoft'
