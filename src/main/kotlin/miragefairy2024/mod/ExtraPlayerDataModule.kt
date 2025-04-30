@@ -191,7 +191,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      */
     fun fromNbt(nbt: NbtCompound) {
         val registries: HolderLookup.Provider = player.level().registryAccess()
-        
+
         map.clear()
         extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
