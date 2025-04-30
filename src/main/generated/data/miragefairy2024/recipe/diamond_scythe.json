@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:diamond_scythe",
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " ##",
+    "# R",
+    "  R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:diamond_scythe"
+  }
+}

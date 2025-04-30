@@ -2,10 +2,10 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.item.Item
 import net.minecraft.core.BlockPos
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 
 open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicPlantConfiguration<*, B>) {
     val blockIdentifier = MirageFairy2024.identifier(configuration.blockPath)

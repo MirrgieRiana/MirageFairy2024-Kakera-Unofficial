@@ -2,6 +2,7 @@ package miragefairy2024.mixin.impl;
 
 import miragefairy2024.mixin.api.ItemFilteringEnchantment;
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -13,16 +14,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At("RETURN"))
-    private static void getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentInstance>> info) {
+    private static void getPossibleEntries(int power, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> info) {
         info.getReturnValue().removeIf(entry -> entry.enchantment instanceof ItemFilteringEnchantment && !((ItemFilteringEnchantment) entry.enchantment).isAcceptableItemOnEnchanting(stack));
     }
 
     @Inject(method = "getItemEnchantmentLevel", at = @At("RETURN"), cancellable = true)
-    private static void getLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private static void getLevel(Holder<Enchantment> enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         int level = cir.getReturnValue();
         Item item = stack.getItem();
         if (item instanceof OverrideEnchantmentLevelCallback) {

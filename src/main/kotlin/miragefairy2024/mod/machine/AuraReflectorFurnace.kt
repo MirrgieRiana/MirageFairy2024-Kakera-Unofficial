@@ -1,5 +1,6 @@
 package miragefairy2024.mod.machine
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
@@ -13,6 +14,7 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -22,22 +24,24 @@ import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
@@ -75,6 +79,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun init() {
         super.init()
 
+        AuraReflectorFurnaceBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("aura_reflector_furnace"))
+
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
@@ -100,12 +106,15 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
 class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineBlock(card) {
     companion object {
+        val CODEC: MapCodec<AuraReflectorFurnaceBlock> = simpleCodec { AuraReflectorFurnaceBlock(AuraReflectorFurnaceCard) }
         val LIT: BooleanProperty = BlockStateProperties.LIT
     }
 
     init {
         registerDefaultState(defaultBlockState().setValue(LIT, false))
     }
+
+    override fun codec() = CODEC
 
     override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
@@ -116,14 +125,14 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
 class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<AuraReflectorFurnaceBlockEntity>(card, pos, state) {
     override fun getThis() = this
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         fuelMax = nbt.wrapper["FuelMax"].int.get() ?: 0
         fuel = nbt.wrapper["Fuel"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["FuelMax"].int.set(fuelMax)
         nbt.wrapper["Fuel"].int.set(fuel)
     }
@@ -159,19 +168,19 @@ class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard
         }
     }
 
-    override fun onRecipeCheck(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    override fun onRecipeCheck(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         if (!super.onRecipeCheck(world, pos, state, listeners)) return false
         if (fuel == 0) listeners += checkFuelInsert() ?: return false
         return true
     }
 
-    override fun onCraftingTick(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    override fun onCraftingTick(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         if (!super.onCraftingTick(world, pos, state, listeners)) return false
         if (fuel == 0) listeners += checkFuelInsert() ?: return false
         return true
     }
 
-    override fun onPostServerTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun onPostServerTick(world: Level, pos: BlockPos, state: BlockState) {
         super.onPostServerTick(world, pos, state)
         val oldFuel = fuel
         if (fuel > 0) fuel--

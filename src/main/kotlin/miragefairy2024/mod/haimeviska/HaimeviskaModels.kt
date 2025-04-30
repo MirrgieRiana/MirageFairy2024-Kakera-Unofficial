@@ -11,14 +11,14 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.data.models.model.TexturedModel
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.data.models.model.TextureSlot as TextureKey
 
 val unchargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
-            parent = Identifier("minecraft", "block/block"),
+            parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
             textures = ModelTexturesData(
                 TextureKey.PARTICLE.id to TextureKey.BACK.string,
                 TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,
@@ -46,7 +46,7 @@ val unchargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Provider { blo
 val chargedHaimeviskaLeavesTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
-            parent = Identifier("minecraft", "block/block"),
+            parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
             textures = ModelTexturesData(
                 TextureKey.PARTICLE.id to TextureKey.BACK.string,
                 TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,

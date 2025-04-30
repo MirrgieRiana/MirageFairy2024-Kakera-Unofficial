@@ -2,6 +2,8 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemType
+import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.Translation
@@ -12,10 +14,10 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.tags.BlockTags
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.core.BlockPos
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun ToolConfiguration.cutAll() = this.also {
     this.merge(CutAllToolEffectType, true) { enabled ->
@@ -33,13 +35,13 @@ object CutAllToolEffectType : BooleanToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
-        configuration.descriptions += text { TRANSLATION() }
+        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
             if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
 
             // 発動
@@ -51,7 +53,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -60,11 +62,9 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
-                        val damage = world.random.randomInt(configuration.miningDamage)
+                        val damage = world.random.randomInt(configuration.magicMiningDamage)
                         if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner) {
-                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                            }
+                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                         }
                     }
                     logBlockPosList += blockPos
@@ -74,7 +74,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
             }.forEach skip@{ (_, blockPos) ->
                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                 // 採掘を続行
 
@@ -84,11 +84,9 @@ object CutAllToolEffectType : BooleanToolEffectType() {
                 if (breakBlockByMagic(stack, world, blockPos, miner)) {
                     if (targetHardness > 0) {
                         if (miner.random.nextFloat() < 0.1F) {
-                            val damage = world.random.randomInt(configuration.miningDamage)
+                            val damage = world.random.randomInt(configuration.magicMiningDamage)
                             if (damage > 0) {
-                                stack.hurtAndBreak(damage, miner) {
-                                    it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                                }
+                                stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                             }
                         }
                     }

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:resonite_scythe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:resonite_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " ##",
+    "# R",
+    "  R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:resonite_scythe"
+  }
+}

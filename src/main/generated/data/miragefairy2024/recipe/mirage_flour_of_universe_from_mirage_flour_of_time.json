@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:mirage_flour_of_time"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "miragefairy2024:mirage_flour_of_universe"
+  }
+}

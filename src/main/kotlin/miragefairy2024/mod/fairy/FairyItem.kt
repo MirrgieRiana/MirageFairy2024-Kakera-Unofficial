@@ -28,11 +28,9 @@ import miragefairy2024.util.darkGray
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
-import miragefairy2024.util.get
 import miragefairy2024.util.gold
 import miragefairy2024.util.gray
 import miragefairy2024.util.green
-import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -46,18 +44,17 @@ import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.times
-import miragefairy2024.util.toIdentifier
-import miragefairy2024.util.wrapper
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
-import mirrg.kotlin.hydrogen.or
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.item.TooltipFlag
 import kotlin.math.log
 import kotlin.math.roundToInt
 
@@ -82,7 +79,7 @@ val fairiesItemGroupCard = ItemGroupCard(
 context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
@@ -139,11 +136,14 @@ fun initFairyItem() {
     CONDENSATION_RECIPE_TRANSLATION.enJa()
 
     fairiesItemGroupCard.init()
+
+    FAIRY_MOTIF_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif"))
+    FAIRY_CONDENSATION_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation"))
 }
 
 private fun createFairyModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/fairy_skin").string,
             "layer1" to MirageFairy2024.identifier("item/fairy_front").string,
@@ -155,14 +155,14 @@ private fun createFairyModel() = Model {
 }
 
 class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()
         return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         val player = clientProxy?.getClientPlayer()
         val motif = stack.getFairyMotif() ?: return
 
@@ -198,7 +198,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         val mana = level * (1.0 + manaBoost)
 
         // 魔力・個数
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 MANA_TRANSLATION(),
                 ": "(),
@@ -210,7 +210,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
 
         // レベル・凝縮数
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 LEVEL_TRANSLATION(),
                 ": "(),
@@ -220,14 +220,14 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                 CONDENSATION_TRANSLATION(),
                 ": x${stack.getFairyCondensation()}"(),
                 if (stack.count != 1) " *${stack.count}"() else empty(),
-                *(if (context.isAdvanced) listOf(
+                *(if (tooltipFlag.isAdvanced) listOf(
                     "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.entries?.size ?: 0})"(), // TODO もっといい表示に
                 ) else listOf()).toTypedArray()
             ).join().green
         }
 
         // レア・ID
-        tooltip += text {
+        tooltipComponents += text {
             listOf(
                 RARE_TRANSLATION(),
                 ": ${motif.rare}"(),
@@ -237,23 +237,23 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
         }
 
         // 機能説明
-        tooltip += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
+        tooltipComponents += text { CONDENSATION_RECIPE_TRANSLATION().yellow }
 
         // パッシブスキル
         if (motif.passiveSkillSpecifications.isNotEmpty()) {
 
-            tooltip += text { empty() }
+            tooltipComponents += text { empty() }
 
             val isEffectiveItemStack = status == PassiveSkillStatus.EFFECTIVE || status == PassiveSkillStatus.SUPPORTING
-            tooltip += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
+            tooltipComponents += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
-                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Text {
+                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
                     return run {
-                        val texts = mutableListOf<Text>()
+                        val texts = mutableListOf<Component>()
                         texts += text { " "() }
                         texts += specification.effect.getText(specification.valueProvider(actualMana))
                         if (conditionValidityList.isNotEmpty()) {
@@ -267,7 +267,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                         texts.join()
                     }.let { if (isAvailableSpecification) if (isEffectiveItemStack) it.gold else it.gray else it.darkGray }
                 }
-                tooltip += getSpecificationText(specification)
+                tooltipComponents += getSpecificationText(specification)
             }
         }
     }
@@ -300,22 +300,27 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
 }
 
 
-fun ItemStack.getFairyMotifId(): Identifier? = this.tag.or { return null }.wrapper["FairyMotif"].string.get().or { return null }.toIdentifier()
-fun ItemStack.setFairyMotifId(identifier: Identifier) = getOrCreateTag().wrapper["FairyMotif"].string.set(identifier.string)
+val FAIRY_MOTIF_DATA_COMPONENT_TYPE: DataComponentType<Motif> = DataComponentType.builder<Motif>()
+    .persistent(motifRegistry.byNameCodec())
+    .networkSynchronized(ByteBufCodecs.registry(motifRegistryKey))
+    .cacheEncoding()
+    .build()
 
-fun ItemStack.getFairyCondensation() = this.tag.or { return 1 }.wrapper["FairyCondensation"].int.get() ?: 1
-fun ItemStack.setFairyCondensation(condensation: Int) = getOrCreateTag().wrapper["FairyCondensation"].int.set(condensation)
+fun ItemStack.getFairyMotif(): Motif? = this.get(FAIRY_MOTIF_DATA_COMPONENT_TYPE)
+fun ItemStack.setFairyMotif(motif: Motif?) = this.set(FAIRY_MOTIF_DATA_COMPONENT_TYPE, motif)
+
+val FAIRY_CONDENSATION_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.builder<Int>()
+    .persistent(ExtraCodecs.POSITIVE_INT)
+    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    .build()
+
+fun ItemStack.getFairyCondensation() = this.get(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE) ?: 1
+fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
 
 
-fun ItemStack.getFairyMotif() = this.getFairyMotifId()?.let { motifRegistry.get(it) }
-
-fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    return createFairyItemStack(motifRegistry.getKey(this)!!, condensation = condensation, count = count)
-}
-
-fun createFairyItemStack(motifId: Identifier, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
     val itemStack = FairyCard.item.createItemStack(count)
-    itemStack.setFairyMotifId(motifId)
+    itemStack.setFairyMotif(this)
     itemStack.setFairyCondensation(condensation)
     return itemStack
 }

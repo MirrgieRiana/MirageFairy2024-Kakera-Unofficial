@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
@@ -34,40 +35,41 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.item.TooltipFlag as TooltipContext
-import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.util.RandomSource as Random
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.world.level.BlockGetter as BlockView
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
@@ -81,10 +83,12 @@ fun initTelescopeModule() {
 
     TelescopeMissionExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission"))
 
+    TelescopeBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope"))
+
     TelescopeCard.let { card ->
 
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -134,9 +138,9 @@ fun initTelescopeModule() {
 
 }
 
-
 class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
     companion object {
+        val CODEC: MapCodec<TelescopeBlock> = simpleCodec(::TelescopeBlock)
         val ZONE_OFFSET: ZoneOffset = ZoneOffset.ofHours(0)
         val DAY_OF_WEEK_ORIGIN = DayOfWeek.SUNDAY
         private val FACING_TO_SHAPE: Map<Direction, VoxelShape> = mapOf(
@@ -160,50 +164,52 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val SECONDS_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.seconds" }, "%s seconds", "%s 秒")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun codec() = CODEC
+
+    override fun appendHoverText(stack: ItemStack, context: Item.TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         val player = clientProxy?.getClientPlayer() ?: return
 
         val now = Instant.now()
         val result = calculateTelescopeActions(now, player)
 
         if (result.texts.isNotEmpty()) {
-            tooltip += text { ""() }
-            tooltip += result.texts
+            tooltipComponents += text { ""() }
+            tooltipComponents += result.texts
         }
     }
 
     override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState = defaultBlockState().setValue(FACING, ctx.horizontalDirection)
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType?) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = FACING_TO_SHAPE[state.getValue(FACING)]
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClientSide) return ActionResult.SUCCESS
+    override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
+        if (level.isClientSide) return InteractionResult.SUCCESS
         player as ServerPlayerEntity
 
         val now = Instant.now()
         val result = calculateTelescopeActions(now, player)
         val actions = result.actions
-        if (actions.isEmpty()) return ActionResult.CONSUME
+        if (actions.isEmpty()) return InteractionResult.CONSUME
 
         actions.forEach {
             it()
         }
 
-        world.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+        level.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
         player.telescopeMission.lastUsedInstant = now
         TelescopeMissionExtraPlayerDataCategory.sync(player)
 
-        return ActionResult.CONSUME
+        return InteractionResult.CONSUME
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()
@@ -225,7 +231,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
     }
 
     private interface TelescopeActions {
-        val texts: List<Text>
+        val texts: List<Component>
         val actions: List<() -> Unit>
     }
 
@@ -241,7 +247,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         }
 
     private fun calculateTelescopeActions(now: Instant, player: PlayerEntity): TelescopeActions {
-        val texts = mutableListOf<Text>()
+        val texts = mutableListOf<Component>()
         val actions = mutableListOf<() -> Unit>()
 
         val lastUsedInstant = player.telescopeMission.lastUsedInstant
@@ -311,13 +317,13 @@ object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<Telesco
     override fun create() = TelescopeMission()
     override fun castOrThrow(value: Any) = value as TelescopeMission
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<TelescopeMission> {
-        override fun fromNbt(nbt: NbtCompound): TelescopeMission {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): TelescopeMission {
             val data = TelescopeMission()
             data.lastUsedTime = nbt.wrapper["LastUsedTime"].long.get()
             return data
         }
 
-        override fun toNbt(data: TelescopeMission): NbtCompound {
+        override fun toNbt(data: TelescopeMission, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["LastUsedTime"].long.set(data.lastUsedTime)
             return nbt

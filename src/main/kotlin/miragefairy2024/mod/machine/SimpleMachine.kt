@@ -24,25 +24,22 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.reset
-import miragefairy2024.util.set
-import miragefairy2024.util.size
 import miragefairy2024.util.times
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import miragefairy2024.util.writeToNbt
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.item.crafting.RecipeType
-import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.core.HolderLookup
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.Containers as ItemScatterer
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
 abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockEntity<E>, H : SimpleMachineScreenHandler, R : SimpleMachineRecipe> : MachineCard<B, E, H>() {
     companion object {
@@ -76,7 +73,7 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
     abstract val recipeType: RecipeType<R>
 
-    fun match(world: World, inventory: Inventory) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
+    fun match(world: Level, inventory: SimpleMachineRecipeInput) = world.recipeManager.getRecipeFor(recipeType, inventory, world).getOrNull()
 
     context(ModContext)
     override fun init() {
@@ -105,24 +102,24 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     }
 }
 
-open class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
+abstract class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : HorizontalFacingMachineBlock(card)
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         craftingInventory.reset()
-        nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it) }
+        nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it, registries) }
         waitingInventory.reset()
-        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))
         progressMax = nbt.wrapper["ProgressMax"].int.get() ?: 0
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
-        nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt())
-        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt())
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
+        nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt(registries))
+        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))
         nbt.wrapper["ProgressMax"].int.set(progressMax)
         nbt.wrapper["Progress"].int.set(progress)
     }
@@ -156,22 +153,21 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
     var progressMax = 0
     var progress = 0
 
-    fun checkRecipe(world: World): (() -> Unit)? {
+    fun checkRecipe(world: Level): (() -> Unit)? {
         if (!shouldUpdateRecipe) return null
         shouldUpdateRecipe = false
 
         // TODO 順不同
-        val inventory = SimpleInventory(card.inputSlots.size)
-        card.inputSlots.forEachIndexed { index, slot ->
-            inventory[index] = this[card.inventorySlotIndexTable[slot]!!]
-        }
-        val recipe = card.match(world, inventory) ?: return null
-        if (recipe.inputs.size > inventory.size) return null
+        val inventory = SimpleMachineRecipeInput(card.inputSlots.map { this[card.inventorySlotIndexTable[it]!!] })
+
+        val recipeHolder = card.match(world, inventory) ?: return null
+        val recipe = recipeHolder.value()
+        if (recipe.inputs.size > inventory.size()) return null
 
         return {
             val remainder = recipe.getRemainingItems(inventory)
             (0 until recipe.inputs.size).forEach { index ->
-                craftingInventory += inventory[index].split(recipe.inputs[index].second)
+                craftingInventory += inventory.getItem(index).split(recipe.inputs[index].second)
             }
             waitingInventory += recipe.output.copy()
             waitingInventory += remainder
@@ -180,20 +176,20 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         }
     }
 
-    open fun onRecipeCheck(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    open fun onRecipeCheck(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         listeners += checkRecipe(world) ?: return false
         return true
     }
 
-    open fun onCraftingTick(world: World, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
+    open fun onCraftingTick(world: Level, pos: BlockPos, state: BlockState, listeners: MutableList<() -> Unit>): Boolean {
         return true
     }
 
-    open fun onPostServerTick(world: World, pos: BlockPos, state: BlockState) {
+    open fun onPostServerTick(world: Level, pos: BlockPos, state: BlockState) {
 
     }
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // クラフトが開始されていなければ、開始を試みる

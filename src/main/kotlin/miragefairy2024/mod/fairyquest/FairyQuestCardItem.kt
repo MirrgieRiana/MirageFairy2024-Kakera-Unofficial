@@ -1,6 +1,6 @@
 package miragefairy2024.mod.fairyquest
 
-import com.google.gson.JsonObject
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
@@ -13,7 +13,6 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
-import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.on
 import miragefairy2024.util.red
@@ -25,27 +24,28 @@ import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
-import miragefairy2024.util.toIdentifier
-import miragefairy2024.util.wrapper
-import mirrg.kotlin.hydrogen.or
+import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.item.TooltipFlag as TooltipContext
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
@@ -59,7 +59,7 @@ private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCa
 context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.sortedEntrySet.map {
                 val itemStack = card.item.createItemStack()
@@ -85,56 +85,59 @@ fun initFairyQuestCardItem() {
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 
     FairyQuestCardIngredient.SERIALIZER.register()
+
+    FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_quest_recipe"))
 }
 
 class FairyQuestCardItem(settings: Properties) : Item(settings) {
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val recipe = stack.getFairyQuestRecipe() ?: return super.getName(stack).red
         return text { fairyQuestCardFairyQuestTranslation(recipe.title) }
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
-        val recipeId = stack.getFairyQuestRecipeId()
-        if (recipeId == null) {
-            tooltip += text { "null"() }
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
+        val recipe = stack.getFairyQuestRecipe()
+        if (recipe == null) {
+            tooltipComponents += text { "null"() }
         } else {
-            if (fairyQuestRecipeRegistry.containsKey(recipeId)) {
+            if (fairyQuestRecipeRegistry.contains(recipe)) {
                 // nop
             } else {
-                tooltip += text { recipeId.string() }
+                tooltipComponents += text { fairyQuestRecipeRegistry.getKey(recipe)!!.string() }
             }
         }
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
-        user.openMenu(object : ExtendedScreenHandlerFactory {
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+        user.openMenu(object : ExtendedScreenHandlerFactory<ResourceLocation> {
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
                 return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPosition()))
             }
 
             override fun getDisplayName() = recipe.title
 
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeUtf(fairyQuestRecipeRegistry.getKey(recipe)!!.string)
-            }
+            override fun getScreenOpeningData(player: ServerPlayer) = fairyQuestRecipeRegistry.getKey(recipe)!!
         })
         return TypedActionResult.consume(itemStack)
     }
 }
 
-fun ItemStack.getFairyQuestRecipeId(): Identifier? = tag.or { return null }.wrapper["FairyQuestRecipe"].string.get().or { return null }.toIdentifier()
-fun ItemStack.getFairyQuestRecipe() = this.getFairyQuestRecipeId()?.let { fairyQuestRecipeRegistry.get(it) }
+val FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE: DataComponentType<FairyQuestRecipe> = DataComponentType.builder<FairyQuestRecipe>()
+    .persistent(fairyQuestRecipeRegistry.byNameCodec())
+    .networkSynchronized(ByteBufCodecs.registry(fairyQuestRecipeRegistryKey))
+    .cacheEncoding()
+    .build()
 
-fun ItemStack.setFairyQuestRecipeId(identifier: Identifier) = getOrCreateTag().wrapper["FairyQuestRecipe"].string.set(identifier.string)
-fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = this.setFairyQuestRecipeId(fairyQuestRecipeRegistry.getKey(recipe)!!)
+fun ItemStack.getFairyQuestRecipe() = this.get(FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE)
+fun ItemStack.setFairyQuestRecipe(recipe: FairyQuestRecipe) = unit { this.set(FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE, recipe) }
 
 private fun createFairyQuestCardModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/fairy_quest_card_background").string,
             "layer1" to MirageFairy2024.identifier("item/fairy_quest_card_frame").string,
@@ -146,10 +149,8 @@ object FairyQuestCardIngredient : CustomIngredient {
     val ID = MirageFairy2024.identifier("fairy_quest_card")
     val SERIALIZER = object : CustomIngredientSerializer<FairyQuestCardIngredient> {
         override fun getIdentifier() = ID
-        override fun read(json: JsonObject) = FairyQuestCardIngredient
-        override fun write(json: JsonObject, ingredient: FairyQuestCardIngredient) = Unit
-        override fun read(buf: PacketByteBuf) = FairyQuestCardIngredient
-        override fun write(buf: PacketByteBuf, ingredient: FairyQuestCardIngredient) = Unit
+        override fun getCodec(allowEmpty: Boolean): MapCodec<FairyQuestCardIngredient> = MapCodec.unit(FairyQuestCardIngredient)
+        override fun getPacketCodec(): StreamCodec<RegistryFriendlyByteBuf, FairyQuestCardIngredient> = StreamCodec.unit(FairyQuestCardIngredient)
     }
 
     override fun requiresTesting() = true

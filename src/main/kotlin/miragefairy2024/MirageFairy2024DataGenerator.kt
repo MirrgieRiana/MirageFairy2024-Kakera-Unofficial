@@ -17,30 +17,30 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
-import net.minecraft.world.level.block.Block
-import net.minecraft.data.PackOutput as DataOutput
-import net.minecraft.data.DataProvider
-import net.minecraft.data.CachedOutput as DataWriter
-import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
-import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
-import net.minecraft.data.recipes.FinishedRecipe as RecipeJsonProvider
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.damagesource.DamageType
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
-import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.core.HolderLookup as RegistryWrapper
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.DataProvider
+import net.minecraft.data.recipes.RecipeOutput
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.damagesource.DamageType
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
-import java.util.function.Consumer
+import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
+import net.minecraft.data.CachedOutput as DataWriter
+import net.minecraft.data.PackOutput as DataOutput
+import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
+import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 
 object DataGenerationEvents {
     val onInitializeDataGenerator = InitializationEventRegistry<() -> Unit>()
@@ -53,23 +53,24 @@ object DataGenerationEvents {
     val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
     val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
-    val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider) -> Unit>()
-    val onGenerateChestLootTable = InitializationEventRegistry<((Identifier, LootTable.Builder) -> Unit) -> Unit>()
-    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((Identifier, LootTable.Builder) -> Unit) -> Unit>()
-    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit) -> Unit>()
-    val onGenerateRecipe = InitializationEventRegistry<((RecipeJsonProvider) -> Unit) -> Unit>()
+    val onGenerateEnchantmentTag = InitializationEventRegistry<((TagKey<Enchantment>) -> FabricTagProvider<Enchantment>.FabricTagBuilder) -> Unit>()
+    val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider, HolderLookup.Provider) -> Unit>()
+    val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateRecipe = InitializationEventRegistry<(RecipeOutput) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val onGenerateNinePatchTexture = InitializationEventRegistry<((Identifier, NinePatchTextureCard) -> Unit) -> Unit>()
-    val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<Identifier>) -> Unit) -> Unit>()
-    val onGenerateParticles = InitializationEventRegistry<((identifier: Identifier, jsonElement: JsonElement) -> Unit) -> Unit>()
+    val onGenerateNinePatchTexture = InitializationEventRegistry<((ResourceLocation, NinePatchTextureCard) -> Unit) -> Unit>()
+    val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<ResourceLocation>) -> Unit) -> Unit>()
+    val onGenerateParticles = InitializationEventRegistry<((identifier: ResourceLocation, jsonElement: JsonElement) -> Unit) -> Unit>()
 
     val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
 }
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
 
-    val dynamicGenerationRegistries = mutableSetOf<RegistryKey<out Registry<*>>>()
+    val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         Modules.init()
@@ -82,85 +83,96 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                 override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateBlockTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateBlockTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
-            object : FabricTagProvider<Biome>(output, RegistryKeys.BIOME, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateBiomeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider<Biome>(output, Registries.BIOME, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateBiomeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
-            object : FabricTagProvider<Structure>(output, RegistryKeys.STRUCTURE, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider<Structure>(output, Registries.STRUCTURE, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateStructureTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
-            object : FabricTagProvider<EntityType<*>>(output, RegistryKeys.ENTITY_TYPE, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider<EntityType<*>>(output, Registries.ENTITY_TYPE, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateEntityTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
-            object : FabricTagProvider<DamageType>(output, RegistryKeys.DAMAGE_TYPE, registriesFuture) {
-                override fun addTags(arg: RegistryWrapper.Provider) = DataGenerationEvents.onGenerateDamageTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider<DamageType>(output, Registries.DAMAGE_TYPE, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateDamageTypeTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : FabricBlockLootTableProvider(output) {
-                override fun generate() = DataGenerationEvents.onGenerateBlockLootTable.fire { it(this) }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider<Enchantment>(output, Registries.ENCHANTMENT, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateEnchantmentTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : SimpleFabricLootTableProvider(output, LootContextTypes.CHEST) {
-                override fun generate(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateChestLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
+            object : FabricBlockLootTableProvider(output, registriesFuture) {
+                override fun generate() {
+                    DataGenerationEvents.onGenerateBlockLootTable.fire { it(this, registries) }
                 }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : SimpleFabricLootTableProvider(output, LootContextTypes.ARCHAEOLOGY) {
-                override fun generate(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it { lootTableId, builder -> exporter.accept(lootTableId, builder) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.CHEST) {
+                override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateChestLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : SimpleFabricLootTableProvider(output, LootContextTypes.ENTITY) {
-                override fun generate(exporter: BiConsumer<Identifier, LootTable.Builder>) {
-                    DataGenerationEvents.onGenerateEntityLootTable.fire { it { entityType, builder -> exporter.accept(entityType.defaultLootTable, builder) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ARCHAEOLOGY) {
+                override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : FabricRecipeProvider(output) {
-                override fun buildRecipes(exporter: Consumer<RecipeJsonProvider>) = DataGenerationEvents.onGenerateRecipe.fire { it { recipe -> exporter.accept(recipe) } }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ENTITY) {
+                override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateEntityLootTable.fire { it({ entityType, builder -> exporter.accept(entityType.defaultLootTable, builder) }, registries) }
+                }
             }
         }
-        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<RegistryWrapper.Provider> ->
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricRecipeProvider(output, registriesFuture) {
+                override fun buildRecipes(recipeOutput: RecipeOutput) = DataGenerationEvents.onGenerateRecipe.fire { it(recipeOutput) }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : FabricDynamicRegistryProvider(output, registriesFuture) {
                 override fun getName() = "World Gen"
-                override fun configure(registries: RegistryWrapper.Provider, entries: Entries) {
+                override fun configure(registries: HolderLookup.Provider, entries: Entries) {
                     dynamicGenerationRegistries.forEach {
                         entries.addAll(registries.lookupOrThrow(it))
                     }
                 }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : FabricLanguageProvider(output, "en_us") {
-                override fun generateTranslations(translationBuilder: TranslationBuilder) = DataGenerationEvents.onGenerateEnglishTranslation.fire { it(translationBuilder) }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricLanguageProvider(output, "en_us", registriesFuture) {
+                override fun generateTranslations(holderLookupProvider: HolderLookup.Provider, translationBuilder: TranslationBuilder) = DataGenerationEvents.onGenerateEnglishTranslation.fire { it(translationBuilder) }
             }
         }
-        pack.addProvider { output: FabricDataOutput ->
-            object : FabricLanguageProvider(output, "ja_jp") {
-                override fun generateTranslations(translationBuilder: TranslationBuilder) = DataGenerationEvents.onGenerateJapaneseTranslation.fire { it(translationBuilder) }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricLanguageProvider(output, "ja_jp", registriesFuture) {
+                override fun generateTranslations(holderLookupProvider: HolderLookup.Provider, translationBuilder: TranslationBuilder) = DataGenerationEvents.onGenerateJapaneseTranslation.fire { it(translationBuilder) }
             }
         }
         pack.addProvider { output: FabricDataOutput ->
@@ -194,7 +206,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                 override fun getName() = "Sounds"
                 override fun run(writer: DataWriter): CompletableFuture<*> {
 
-                    val map = mutableMapOf<String, Pair<String?, List<Identifier>>>()
+                    val map = mutableMapOf<String, Pair<String?, List<ResourceLocation>>>()
                     DataGenerationEvents.onGenerateSound.fire {
                         it { path, subtitle, sounds ->
                             map[path] = Pair(subtitle, sounds)
@@ -221,7 +233,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
                 override fun getName() = "Particles"
                 override fun run(writer: DataWriter): CompletableFuture<*> {
 
-                    val map = mutableMapOf<Identifier, JsonElement>()
+                    val map = mutableMapOf<ResourceLocation, JsonElement>()
                     DataGenerationEvents.onGenerateParticles.fire {
                         it { identifier, jsonElement ->
                             if (identifier in map) throw Exception("Duplicate particle definition for $identifier")

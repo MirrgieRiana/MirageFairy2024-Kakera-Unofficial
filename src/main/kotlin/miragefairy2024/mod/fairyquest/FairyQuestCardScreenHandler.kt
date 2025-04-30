@@ -12,32 +12,32 @@ import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.world.inventory.ContainerData as PropertyDelegate
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.world.inventory.Slot
-import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.ItemStack
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(Identifier(buf.readUtf()))!!, ScreenHandlerContext.NULL)
-}
+val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
+}, ResourceLocation.STREAM_CODEC)
 
 val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toLanguageKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
-    fairyQuestCardScreenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("fairy_quest_card"))
+    fairyQuestCardScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("fairy_quest_card"))
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
-class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {
+class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {
     private val inputInventory = SimpleInventory(4)
     private var processingInventory = SimpleInventory(0)
     private var resultInventory = SimpleInventory(0)

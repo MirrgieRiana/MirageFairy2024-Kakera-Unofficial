@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairylogistics
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
@@ -8,23 +10,25 @@ import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 // TODO WIP
 object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, FairyPassiveSupplierBlockEntity, FairyPassiveSupplierScreenHandler>() {
@@ -62,6 +66,9 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun init() {
         super.init()
 
+        FairyPassiveSupplierBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier"))
+
+
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
 
@@ -83,6 +90,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
 
 class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogisticsBlock(card) {
     companion object {
+        val CODEC: MapCodec<FairyPassiveSupplierBlock> = simpleCodec { FairyPassiveSupplierBlock(FairyPassiveSupplierCard) }
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
             box(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
@@ -103,6 +111,8 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
             box(8.0, 0.0, 2.0, 16.0, 12.0, 14.0), // EAST
         )
     }
+
+    override fun codec() = CODEC
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state.getValue(VERTICAL_FACING).id + state.getValue(FACING).get2DDataValue()]
@@ -127,7 +137,7 @@ class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard
         return getLogisticsPower(fairyItemStack)
     }
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // 1分に1回発動する

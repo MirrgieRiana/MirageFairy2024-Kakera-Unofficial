@@ -28,49 +28,50 @@ import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.EntityTypeTags
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.entity.SpawnPlacements as SpawnRestriction
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal as ActiveTargetGoal
-import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal as GoToWalkTargetGoal
+import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.ai.goal.Goal
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal as RevengeGoal
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal as WanderAroundFarGoal
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.monster.Monster as HostileEntity
-import net.minecraft.world.entity.Mob as MobEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.SpawnEggItem
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition as RandomChanceWithLootingLootCondition
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction as LootingEnchantLootFunction
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.EntityTypeTags
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.phys.Vec3 as Vec3d
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.Level as World
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
 import org.joml.Quaternionf
 import java.util.EnumSet
 import kotlin.math.sqrt
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.Mth as MathHelper
+import net.minecraft.world.entity.Mob as MobEntity
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.entity.SpawnPlacements as SpawnRestriction
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal as GoToWalkTargetGoal
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal as WanderAroundFarGoal
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal as RevengeGoal
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal as ActiveTargetGoal
+import net.minecraft.world.entity.monster.Monster as HostileEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.level.biome.Biomes as BiomeKeys
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.world.phys.Vec3 as Vec3d
 
 object ChaosCubeCard {
     val spawnGroup = SpawnGroup.MONSTER
     val width = 0.8F
     val height = 1.5F
-    fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: World) = ChaosCubeEntity(entityType, world)
+    fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: Level) = ChaosCubeEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("chaos_cube")
     val name = EnJa("Chaos Cube", "混沌のキューブ")
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
@@ -80,7 +81,7 @@ object ChaosCubeCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(Registries.ENTITY_TYPE, identifier)
+        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
         val attributes = HostileEntity.createMonsterAttributes()
             .add(EntityAttributes.MAX_HEALTH, 100.0)
             .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
@@ -91,34 +92,34 @@ object ChaosCubeCard {
         FabricDefaultAttributeRegistry.register(entityType, attributes)
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
-        entityType.registerLootTableGeneration {
+        entityType.registerLootTableGeneration { registries ->
             LootTable(
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item)).configure {
                     apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(0.0F, 2.0F)))
-                    apply(LootingEnchantLootFunction.lootingMultiplier(UniformLootNumberProvider.between(0.0F, 1.0F)))
+                    apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformLootNumberProvider.between(0.0F, 1.0F)))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item)).configure {
                     `when`(KilledByPlayerLootCondition.killedByPlayer())
-                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.05F, 0.02F))
+                    `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.05F, 0.02F))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item)).configure {
                     `when`(KilledByPlayerLootCondition.killedByPlayer())
-                    `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(0.3F, 0.1F))
+                    `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.3F, 0.1F))
                 },
             )
         }
 
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
-        SpawnRestriction.register(entityType, SpawnRestriction.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
+        SpawnRestriction.register(entityType, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
-        spawnEggItem.register(Registries.ITEM, identifier * "_egg")
+        spawnEggItem.register(BuiltInRegistries.ITEM, identifier * "_egg")
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        spawnEggItem.registerModelGeneration(Model(Identifier("minecraft", "item/template_spawn_egg")))
+        spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
     }
 }
 
-class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World) : HostileEntity(entityType, world) {
+class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level) : HostileEntity(entityType, world) {
 
     class Segment(val partIndex: Int) {
         val prevRotation = Quaternionf()
@@ -418,8 +419,8 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: World)
             val world = mob.level()
             if (world.gameTime % 20L != 0L) return false
             if (world !is ServerWorld) return false
-            val structure = world.structureManager().registryAccess().registryOrThrow(RegistryKeys.STRUCTURE).get(RegistryKey.create(RegistryKeys.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
-            if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid()) return false
+            val structure = world.structureManager().registryAccess().registryOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
+            if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid) return false
             return super.canUse()
         }
     }

@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
@@ -7,14 +9,16 @@ import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.Items
-import net.minecraft.tags.ItemTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 
 object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity, FairyHouseScreenHandler>() {
     override fun getPath() = "fairy_house"
@@ -65,6 +69,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     context(ModContext)
     override fun init() {
         super.init()
+        FairyHouseBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_house"))
         registerShapedRecipeGeneration(item) {
             pattern("#U#")
             pattern("L*R")
@@ -79,11 +84,17 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     }
 }
 
-class FairyHouseBlock(card: FairyHouseCard) : FairyFactoryBlock(card)
+class FairyHouseBlock(card: FairyHouseCard) : FairyFactoryBlock(card) {
+    companion object {
+        val CODEC: MapCodec<FairyHouseBlock> = simpleCodec { FairyHouseBlock(FairyHouseCard) }
+    }
+
+    override fun codec() = CODEC
+}
 
 class FairyHouseBlockEntity(card: FairyHouseCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyHouseBlockEntity>(card, pos, state) {
     override fun getThis() = this
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         if (folia < 1_000) {

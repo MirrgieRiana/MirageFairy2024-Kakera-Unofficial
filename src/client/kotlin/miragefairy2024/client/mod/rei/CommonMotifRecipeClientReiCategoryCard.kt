@@ -24,7 +24,7 @@ import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.translate
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>(CommonMotifRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -41,7 +41,7 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
 
     override fun createCategory() = object : DisplayCategory<CommonMotifRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = CommonMotifRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { CommonMotifRecipeReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { CommonMotifRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.WATER.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: CommonMotifRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 3 + 2 + 18 + 2 + 3

@@ -15,15 +15,15 @@ import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.BagCard
 import miragefairy2024.mod.BagScreenHandler
 import mirrg.kotlin.hydrogen.atLeast
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
 
 fun initBagClientModule() {
     HandledScreens.register(BagCard.screenHandlerType) { gui, inventory, title -> BagScreen(gui, inventory, title) }
 }
 
-class BagScreen(handler: BagScreenHandler, private val playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
+class BagScreen(handler: BagScreenHandler, private val playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
         val card = menu.card ?: return

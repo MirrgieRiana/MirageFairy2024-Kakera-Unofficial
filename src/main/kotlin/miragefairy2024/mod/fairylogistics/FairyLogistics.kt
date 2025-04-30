@@ -28,18 +28,18 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.block.state.properties.EnumProperty
-import net.minecraft.util.StringRepresentable as StringIdentifiable
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.Container
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.util.StringRepresentable as StringIdentifiable
+import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlockEntity<E>, H : FairyLogisticsScreenHandler> : MachineCard<B, E, H>() {
 
@@ -102,7 +102,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     }
 }
 
-open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
+abstract class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.create("vertical_facing", VerticalFacing::class.java)
     }
@@ -142,15 +142,15 @@ open class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : HorizontalFa
 
 abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card: FairyLogisticsCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    // Inventory
+    // Container
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 
-    fun getTarget(): Pair<Inventory, Direction>? {
-        fun f(blockPos: BlockPos, side: Direction): Pair<Inventory, Direction>? {
+    fun getTarget(): Pair<Container, Direction>? {
+        fun f(blockPos: BlockPos, side: Direction): Pair<Container, Direction>? {
             val world = level ?: return null
             val blockEntity = world.getBlockEntity(blockPos) ?: return null
-            if (blockEntity !is Inventory) return null
+            if (blockEntity !is Container) return null
             return Pair(blockEntity, side)
         }
         return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {

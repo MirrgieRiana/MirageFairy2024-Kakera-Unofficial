@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fluorite_pickaxe",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:fluorite"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:fluorite_pickaxe"
+  }
+}

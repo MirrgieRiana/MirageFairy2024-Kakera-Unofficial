@@ -1,5 +1,6 @@
 package miragefairy2024.mod.haimeviska
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -22,6 +23,7 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
@@ -44,53 +46,57 @@ import miragefairy2024.util.registerRedirectColorProvider
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.LeavesBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
-import net.minecraft.world.level.block.SaplingBlock
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
-import net.minecraft.world.level.block.grower.AbstractTreeGrower as SaplingGenerator
-import net.minecraft.util.ParticleUtils as ParticleUtil
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.data.loot.BlockLootSubProvider as BlockLootTableGenerator
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.stats.Stats
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.grower.TreeGrower
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
+import java.util.Optional
+import net.minecraft.data.models.model.ModelTemplates as Models
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.server.level.ServerLevel as ServerWorld
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.util.ParticleUtils as ParticleUtil
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
 class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
@@ -119,7 +125,7 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
         val HOLLOW_LOG = Configuration(
             "hollow_haimeviska_log", "Hollow Haimeviska Log", "ハイメヴィスカの樹洞",
             PoemList(1).poem("Auric conceptual attractor", "限界巡回アステリア。"),
-        ).let { HaimeviskaBlockCard(it, { SimpleHorizontalFacingBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
         val PLANKS = Configuration(
             "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
             PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
@@ -127,7 +133,7 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
         val SAPLING = Configuration(
             "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
             PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
-        ).let { HaimeviskaBlockCard(it, { SaplingBlock(HaimeviskaSaplingGenerator(), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
+        ).let { HaimeviskaBlockCard(it, { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
 
         val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SAPLING)
     }
@@ -145,6 +151,8 @@ private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColo
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
+
+private fun createTreeGrower(identifier: ResourceLocation) = TreeGrower(identifier.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty())
 
 context(ModContext)
 private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
@@ -257,16 +265,23 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 
-val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(RegistryKeys.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
+val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
+    HaimeviskaLeavesBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_leaves"))
+    HaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log"))
+    IncisedHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log"))
+    DrippingHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log"))
+    HollowHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log"))
+
+
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         // カテゴリ
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -280,57 +295,57 @@ fun initHaimeviskaBlocks() {
     }
 
     // ドロップ
-    HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration {
-        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, *BlockLootTableGenerator.NORMAL_LEAVES_SAPLING_CHANCES)
+    HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration { it, _ ->
+        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, 0.05F, 0.0625F, 0.083333336F, 0.1F)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
-    HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
         }
     }
-    HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
                 `when`(RandomChanceLootCondition.randomChance(0.01F))
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
         }
     }
-    HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider ->
+    HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_SILK_TOUCH)
+                `when`(provider.hasSilkTouch())
             },
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
-                `when`(BlockLootTableGenerator.HAS_NO_SILK_TOUCH)
+                `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
@@ -353,8 +368,11 @@ fun initHaimeviskaBlocks() {
 
 class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     companion object {
+        val CODEC: MapCodec<HaimeviskaLeavesBlock> = simpleCodec(::HaimeviskaLeavesBlock)
         val CHARGED: BooleanProperty = BooleanProperty.create("charged")
     }
+
+    override fun codec() = CODEC
 
     init {
         registerDefaultState(defaultBlockState().setValue(CHARGED, true))
@@ -377,7 +395,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         }
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         super.animateTick(state, world, pos, random)
         if (random.nextInt(20) == 0) {
             val blockPos = pos.below()
@@ -390,27 +408,38 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 縦方向でなければスルー
-        val toolItemStack = player.getItemInHand(hand)
-        if (!toolItemStack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.use(state, world, pos, player, hand, hit) // 剣でなければスルー
-        if (world.isClientSide) return ActionResult.SUCCESS
-        val direction = if (hit.direction.axis === Direction.Axis.Y) player.direction.opposite else hit.direction
+    companion object {
+        val CODEC: MapCodec<HaimeviskaLogBlock> = simpleCodec(::HaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+        if (state.getValue(AXIS) != Direction.Axis.Y) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 縦方向でなければスルー
+        if (!stack.`is`(ItemTags.SWORDS)) @Suppress("DEPRECATION") return super.useItemOn(stack, state, level, pos, player, hand, hitResult) // 剣でなければスルー
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS
+        val direction = if (hitResult.direction.axis === Direction.Axis.Y) player.direction.opposite else hitResult.direction
 
         // 加工
-        toolItemStack.hurtAndBreak(1, player) { it.broadcastBreakEvent(hand) }
-        world.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
-        player.awardStat(Stats.ITEM_USED.get(toolItemStack.item))
+        stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand))
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
+        player.awardStat(Stats.ITEM_USED.get(stack.item))
 
         // エフェクト
-        world.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+        level.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
 
-        return ActionResult.CONSUME
+        return ItemInteractionResult.CONSUME
     }
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
 class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<IncisedHaimeviskaLogBlock> = simpleCodec(::IncisedHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun isRandomlyTicking(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
@@ -421,35 +450,40 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
-    override fun use(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        if (world.isClientSide) return ActionResult.SUCCESS
-        val toolItemStack = player.getItemInHand(hand)
+    companion object {
+        val CODEC: MapCodec<DrippingHaimeviskaLogBlock> = simpleCodec(::DrippingHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
+
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS
         val direction = state.getValue(FACING)
 
         // 消費
-        world.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
-            val actualCount = world.random.randomInt(count) atMost item.maxStackSize
+            val actualCount = level.random.randomInt(count) atMost item.defaultMaxStackSize
             if (actualCount <= 0) return
             val itemStack = item.createItemStack(actualCount)
-            val itemEntity = ItemEntity(world, pos.x + 0.5 + direction.stepX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.stepZ * 0.65, itemStack)
-            itemEntity.setDeltaMovement(0.05 * direction.stepX + world.random.nextDouble() * 0.02, 0.05, 0.05 * direction.stepZ + world.random.nextDouble() * 0.02)
-            world.addFreshEntity(itemEntity)
+            val itemEntity = ItemEntity(level, pos.x + 0.5 + direction.stepX * 0.65, pos.y + 0.1, pos.z + 0.5 + direction.stepZ * 0.65, itemStack)
+            itemEntity.setDeltaMovement(0.05 * direction.stepX + level.random.nextDouble() * 0.02, 0.05, 0.05 * direction.stepZ + level.random.nextDouble() * 0.02)
+            level.addFreshEntity(itemEntity)
         }
 
         // 生産
-        val fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, toolItemStack)
+        val fortune = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], stack)
         drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
         drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
-        world.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * world.random.nextFloat())
+        level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * level.random.nextFloat())
 
-        return ActionResult.CONSUME
+        return ItemInteractionResult.CONSUME
     }
 
-    override fun animateTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
         if (random.nextFloat() >= 0.2F) return
 
         val direction = state.getValue(FACING)
@@ -496,6 +530,10 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
     }
 }
 
-class HaimeviskaSaplingGenerator : SaplingGenerator() {
-    override fun getConfiguredFeature(random: Random, bees: Boolean) = HAIMEVISKA_CONFIGURED_FEATURE_KEY
+class HollowHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<HollowHaimeviskaLogBlock> = simpleCodec(::HollowHaimeviskaLogBlock)
+    }
+
+    override fun codec() = CODEC
 }

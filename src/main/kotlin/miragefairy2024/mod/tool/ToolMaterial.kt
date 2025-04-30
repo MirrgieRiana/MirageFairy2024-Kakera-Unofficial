@@ -7,14 +7,15 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
+import net.minecraft.core.registries.Registries
+import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.Tiers
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.Tiers as ToolMaterials
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Tiers
 
 enum class FairyToolMaterials(
     private val miningLevel: Tiers,
@@ -51,7 +52,7 @@ enum class FairyToolMaterials(
     override fun getUses() = durability
     override fun getSpeed() = miningSpeedMultiplier
     override fun getAttackDamageBonus() = attackDamage
-    override fun getLevel() = miningLevel.level
+    override fun getIncorrectBlocksForDrops(): TagKey<Block> = miningLevel.incorrectBlocksForDrops
     override fun getEnchantmentValue() = enchantability
     override fun getRepairIngredient() = repairIngredient
 }
@@ -89,7 +90,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, identifier)
+    val tag: TagKey<Item> = TagKey.create(Registries.ITEM, identifier)
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.tool_material.$path" }, enName, jaName)
 }
 

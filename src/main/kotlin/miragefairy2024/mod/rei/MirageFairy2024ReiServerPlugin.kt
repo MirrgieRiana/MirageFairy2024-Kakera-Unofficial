@@ -6,7 +6,8 @@ import me.shedaniel.rei.api.common.entry.comparison.EntryComparator
 import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin
 import miragefairy2024.mod.fairy.FairyCard
-import miragefairy2024.mod.fairy.getFairyMotifId
+import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.mod.fairy.getIdentifier
 import miragefairy2024.util.string
 
 @Suppress("unused")
@@ -23,9 +24,9 @@ class MirageFairy2024ReiServerPlugin : REIServerPlugin {
     override fun registerItemComparators(registry: ItemComparatorRegistry) {
         registry.register({ context, stack ->
             if (context.isExact) {
-                EntryComparator.itemNbt().hash(context, stack)
+                EntryComparator.itemComponents().hash(context, stack)
             } else {
-                stack.getFairyMotifId()?.string?.hashCode()?.toLong() ?: 1L
+                stack.getFairyMotif()?.getIdentifier()?.string?.hashCode()?.toLong() ?: 1L
             }
         }, FairyCard.item)
     }

@@ -26,18 +26,18 @@ import miragefairy2024.util.string
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.or
-import net.minecraft.world.item.TooltipFlag as TooltipContext
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.world.InteractionResult as ActionResult
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
 import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.resources.ResourceLocation as Identifier
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
@@ -52,7 +52,7 @@ context(ModContext)
 fun initCreativeGeneAmpoule() {
     creativeGeneAmpouleItemGroupCard.init()
     CreativeGeneAmpouleCard.let { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
             traitRegistry.sortedEntrySet.map { (_, trait) ->
                 card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
@@ -79,22 +79,22 @@ fun initCreativeGeneAmpoule() {
 }
 
 class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         stack.getTraitStacks().or { return }.traitStackList.forEach { traitStack ->
-            tooltip += text { traitStack.trait.getName().style(traitStack.trait.style) + " "() + traitStack.level.toString(2)() }
+            tooltipComponents += text { traitStack.trait.getName().style(traitStack.trait.style) + " "() + traitStack.level.toString(2)() }
         }
     }
 
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val traitStacks = stack.getTraitStacks() ?: return super.getName(stack)
         val traitStack = traitStacks.traitStackList.firstOrNull() ?: return super.getName(stack)
         return text { traitStack.trait.getName() + " "() + traitStack.level.toString(2)() }
     }
 
-    override fun useOn(context: ItemUsageContext): ActionResult {
-        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return ActionResult.PASS
-        if (context.level.isClientSide) return ActionResult.CONSUME
+    override fun useOn(context: ItemUsageContext): InteractionResult {
+        val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return InteractionResult.PASS
+        if (context.level.isClientSide) return InteractionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
         val b = context.itemInHand.getTraitStacks() ?: TraitStacks.EMPTY
         if (context.player?.isShiftKeyDown != true) {
@@ -102,10 +102,10 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         } else {
             blockEntity.setTraitStacks(a - b)
         }
-        return ActionResult.CONSUME
+        return InteractionResult.CONSUME
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
@@ -120,7 +120,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
 
 private fun createCreativeGeneAmpouleModel() = Model {
     ModelData(
-        parent = Identifier("item/generated"),
+        parent = ResourceLocation.withDefaultNamespace("item/generated"),
         textures = ModelTexturesData(
             "layer0" to MirageFairy2024.identifier("item/creative_gene_ampoule_casing").string,
             "layer1" to MirageFairy2024.identifier("item/creative_gene_ampoule_liquid").string,

@@ -4,18 +4,18 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.HoeItem
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
-import kotlin.math.roundToInt
+import net.minecraft.world.item.component.Tool
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 
 /**
  * @param attackDamage wood: 0, stone: -1, gold: 0, iron: -2, diamond: -3, netherite: -4
@@ -26,7 +26,7 @@ class FairyHoeConfiguration(
     attackDamage: Int,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyHoeItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyHoeItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = attackDamage.toFloat()
@@ -37,16 +37,12 @@ class FairyHoeConfiguration(
 }
 
 class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
-    HoeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage.roundToInt(), configuration.attackSpeed, settings),
+    HoeItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
-
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -58,12 +54,12 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 

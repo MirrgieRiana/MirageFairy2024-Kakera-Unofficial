@@ -16,9 +16,10 @@ import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyDreamContainer() {
@@ -29,7 +30,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
     override fun create() = FairyDreamContainer()
     override fun castOrThrow(value: Any) = value as FairyDreamContainer
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyDreamContainer> {
-        override fun fromNbt(nbt: NbtCompound): FairyDreamContainer {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): FairyDreamContainer {
             val data = FairyDreamContainer()
             nbt.allKeys.forEach { key ->
                 val motif = motifRegistry[key.toIdentifier()] ?: return@forEach
@@ -38,7 +39,7 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
             return data
         }
 
-        override fun toNbt(data: FairyDreamContainer): NbtCompound {
+        override fun toNbt(data: FairyDreamContainer, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             data.entries.forEach { motif ->
                 nbt.wrapper[motif.getIdentifier()!!.string].boolean.set(true)

@@ -1,33 +1,38 @@
 package miragefairy2024.mod.fairylogistics
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.hasSameItemAndNbt
+import miragefairy2024.util.createItemStack
+import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.toSidedInventoryDelegate
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.entity.projectile.Arrow as ArrowEntity
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.HitResult
-import net.minecraft.core.BlockPos
-import net.minecraft.core.SectionPos as ChunkSectionPos
-import net.minecraft.core.Direction
 import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.core.SectionPos as ChunkSectionPos
+import net.minecraft.world.entity.projectile.Arrow as ArrowEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 // TODO WIP
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
@@ -71,6 +76,9 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun init() {
         super.init()
 
+        FairyActiveConsumerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_active_consumer"))
+
+
         inventorySlotConfigurations += SLOTS
         guiSlotConfigurations += SLOTS
 
@@ -89,6 +97,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
 
 class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBlock(card) {
     companion object {
+        val CODEC: MapCodec<FairyActiveConsumerBlock> = simpleCodec { FairyActiveConsumerBlock(FairyActiveConsumerCard) }
         private val SHAPES: Array<VoxelShape> = arrayOf(
             // UP
             box(2.0, 4.0, 8.0, 14.0, 16.0, 16.0), // SOUTH
@@ -110,6 +119,8 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
         )
     }
 
+    override fun codec() = CODEC
+
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state.getValue(VERTICAL_FACING).id + state.getValue(FACING).get2DDataValue()]
 }
@@ -128,7 +139,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
 
     private var t = -1
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         // 1分に1回発動する
@@ -171,7 +182,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
 
         // 視線判定
         val posD = pos.center
-        val entity = ArrowEntity(world, posD.x, posD.y, posD.z)
+        val entity = ArrowEntity(world, posD.x, posD.y, posD.z, Items.ARROW.createItemStack(), null)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
             val supplierPosD = supplier.blockPos.center
             val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.Block.COLLIDER, RaycastContext.Fluid.NONE, entity))
@@ -192,7 +203,7 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
                     src.getIndices().forEach nextSrcIndex@{ srcIndex ->
                         val srcItemStack = src.getItemStack(srcIndex)
                         if (srcItemStack.isEmpty) return@nextSrcIndex
-                        if (!(srcItemStack hasSameItemAndNbt filterItemStack)) return@nextSrcIndex
+                        if (!(srcItemStack hasSameItemAndComponents filterItemStack)) return@nextSrcIndex
                         if (!src.canExtract(srcIndex, srcItemStack)) return@nextSrcIndex
                         val destIndex = availableDestIndices.removeFirst()
                         src.setItemStack(srcIndex, EMPTY_ITEM_STACK)

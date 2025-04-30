@@ -4,44 +4,54 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.EnchantmentCard
+import miragefairy2024.mod.MAGIC_WEAPON_ITEM_TAG
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.AntimatterBoltEntity
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
 import miragefairy2024.util.Translation
+import miragefairy2024.util.get
 import miragefairy2024.util.getLevel
 import miragefairy2024.util.getRate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import miragefairy2024.util.yellow
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.TooltipFlag as TooltipContext
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.stats.Stats
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TieredItem as ToolItem
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.world.item.Vanishable
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.Tool
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component as Text
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.Tier as ToolMaterial
+import net.minecraft.world.item.TieredItem as ToolItem
 
 class FairyShootingStaffConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     var basePower: Float,
     var baseMaxDistance: Float,
 ) : ToolConfiguration() {
-    override fun createItem() = FairyShootingStaffItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyShootingStaffItem(this, FairyToolProperties(tool))
+
+    init {
+        this.tags += MAGIC_WEAPON_ITEM_TAG
+        this.tags += ItemTags.DURABILITY_ENCHANTABLE
+        this.miningDamage = 2
+    }
 }
 
 class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfiguration, settings: Properties) :
@@ -50,11 +60,7 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
-
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -66,12 +72,12 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
@@ -79,27 +85,27 @@ class FairyShootingStaffItem(override val configuration: FairyShootingStaffConfi
 
 }
 
-open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Properties) : ToolItem(toolMaterial, settings), Vanishable {
+open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: Float, private val baseMaxDistance: Float, settings: Properties) : ToolItem(toolMaterial, settings) {
     companion object {
         val NOT_ENOUGH_EXPERIENCE_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_tool_item").toLanguageKey()}.not_enough_experience" }, "Not enough experience", "経験値が足りません")
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("shooting_staff").toLanguageKey()}.description" }, "Perform a ranged attack when used", "使用時、射撃攻撃")
         const val BASE_EXPERIENCE_COST = 2
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
-        tooltip += text { DESCRIPTION_TRANSLATION().yellow }
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
+        tooltipComponents += text { DESCRIPTION_TRANSLATION().yellow }
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
 
-        val damage = basePower + 0.5F * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack).toFloat()
-        val maxDistance = baseMaxDistance + 3F * EnchantmentCard.MAGIC_REACH.enchantment.getLevel(itemStack)
-        val speed = 2.0F + 2.0F * EnchantmentCard.MAGIC_REACH.enchantment.getRate(itemStack).toFloat()
-        val frequency = 0.5 + 0.5 * EnchantmentCard.MAGIC_ACCELERATION.enchantment.getRate(itemStack)
-        val experienceCost = BASE_EXPERIENCE_COST + 1 * EnchantmentCard.MAGIC_POWER.enchantment.getLevel(itemStack)
+        val damage = basePower + 0.5F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_POWER.key].getLevel(itemStack).toFloat()
+        val maxDistance = baseMaxDistance + 3F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_REACH.key].getLevel(itemStack)
+        val speed = 2.0F + 2.0F * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_REACH.key].getRate(itemStack).toFloat()
+        val frequency = 0.5 + 0.5 * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_ACCELERATION.key].getRate(itemStack)
+        val experienceCost = BASE_EXPERIENCE_COST + 1 * world.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.MAGIC_POWER.key].getLevel(itemStack)
 
         if (!user.isCreative) {
             if (user.totalExperience < experienceCost) {
@@ -118,9 +124,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         world.addFreshEntity(entity)
 
         // 消費
-        itemStack.hurtAndBreak(1, user) {
-            it.broadcastBreakEvent(hand)
-        }
+        itemStack.hurtAndBreak(1, user, LivingEntity.getSlotForHand(hand))
         if (!user.isCreative) user.giveExperiencePoints(-experienceCost)
 
         user.cooldowns.addCooldown(this, world.random.randomInt(10.0 / frequency))
@@ -135,18 +139,10 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
     }
 
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(2, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
         return true
     }
 
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getDestroySpeed(world, pos) != 0.0F) {
-            stack.hurtAndBreak(2, miner) { e ->
-                e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-            }
-        }
-        return true
+    override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
+        stack.hurtAndBreak(2, attacker, EquipmentSlot.MAINHAND)
     }
 }

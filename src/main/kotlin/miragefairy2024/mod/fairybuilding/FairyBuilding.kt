@@ -27,23 +27,23 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.pathfinder.PathComputationType as NavigationType
-import net.minecraft.world.item.ItemStack
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.network.chat.Component as Text
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.util.Mth as MathHelper
+import net.minecraft.network.chat.Component
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
+import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
@@ -99,7 +99,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         val insertDirections: Set<Direction> = setOf(),
         val extractDirections: Set<Direction> = setOf(),
         val animation: FairyAnimation.Configuration? = null,
-        val tooltipGetter: (() -> List<Text>)? = null,
+        val tooltipGetter: (() -> List<Component>)? = null,
         val filter: (ItemStack) -> Boolean = { true },
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
         override fun isValid(itemStack: ItemStack) = filter(itemStack)
@@ -158,7 +158,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
     }
 }
 
-open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
+abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
         private val SHAPE = VoxelShapes.or(
             box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
@@ -177,10 +177,10 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
     override fun hasAnalogOutputSignal(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getAnalogOutputSignal(state: BlockState, world: World, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
+    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos) = card.blockEntityAccessor.castOrNull(world.getBlockEntity(pos))?.getComparatorOutput() ?: 0
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun isPathfindable(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType) = false
+    override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
@@ -189,7 +189,7 @@ open class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : Ho
 
 abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private val card: FairyBuildingCard<*, E, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    // Inventory
+    // Container
 
     override fun getActualSide(side: Direction) = HorizontalFacingMachineBlock.getActualSide(blockState, side)
 

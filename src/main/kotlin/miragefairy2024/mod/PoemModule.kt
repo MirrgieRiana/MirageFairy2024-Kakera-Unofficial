@@ -12,8 +12,8 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.Item
-import net.minecraft.network.chat.Component as Text
 import net.minecraft.ChatFormatting as Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
@@ -21,12 +21,12 @@ val itemPoemListTable = mutableMapOf<Item, PoemList>()
 context(ModContext)
 fun initPoemModule() {
     ModEvents.onClientInit {
-        clientProxy!!.registerItemTooltipCallback { stack, lines ->
+        clientProxy!!.registerItemTooltipCallback { stack, context, lines ->
             val poemList = itemPoemListTable[stack.item] ?: return@registerItemTooltipCallback
-            val texts = mutableListOf<Text>()
+            val texts = mutableListOf<Component>()
 
             poemList.poems.filter { it.type == PoemType.POEM }.forEach {
-                texts += it.getText(stack.item)
+                texts += it.getText(stack.item, context)
             }
 
             if (poemList.tier != null) {
@@ -34,7 +34,7 @@ fun initPoemModule() {
             }
 
             poemList.poems.filter { it.type == PoemType.DESCRIPTION }.forEach {
-                texts += it.getText(stack.item)
+                texts += it.getText(stack.item, context)
             }
 
             texts.forEachIndexed { index, it ->
@@ -54,13 +54,13 @@ enum class PoemType(val color: Formatting) {
 
 interface Poem {
     val type: PoemType
-    fun getText(item: Item): Text
+    fun getText(item: Item, context: Item.TooltipContext): Component
     context(ModContext)
     fun init(item: Item) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
-    override fun getText(item: Item) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
+    override fun getText(item: Item, context: Item.TooltipContext) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
     context(ModContext)
     override fun init(item: Item) {
         en { "${item.descriptionId}.$key" to en }
@@ -69,11 +69,15 @@ class InternalPoem(override val type: PoemType, private val key: String, private
 }
 
 class ExternalPoem(override val type: PoemType, private val keyGetter: () -> String) : Poem {
-    override fun getText(item: Item) = text { translate(keyGetter()).formatted(type.color) }
+    override fun getText(item: Item, context: Item.TooltipContext) = text { translate(keyGetter()).formatted(type.color) }
 }
 
-class TextPoem(override val type: PoemType, private val text: Text) : Poem {
-    override fun getText(item: Item) = text.formatted(type.color)
+class TextPoem(override val type: PoemType, private val text: Component) : Poem {
+    override fun getText(item: Item, context: Item.TooltipContext) = text.formatted(type.color)
+}
+
+class DynamicPoem(override val type: PoemType, private val text: (Item.TooltipContext) -> Component) : Poem {
+    override fun getText(item: Item, context: Item.TooltipContext) = text(context).formatted(type.color)
 }
 
 
@@ -92,7 +96,7 @@ fun PoemList.description(key: String, enJa: EnJa) = this.description(key, enJa.e
 fun PoemList.description(en: String, ja: String) = this + InternalPoem(PoemType.DESCRIPTION, "description", en, ja)
 fun PoemList.description(enJa: EnJa) = this.description(enJa.en, enJa.ja)
 fun PoemList.translation(type: PoemType, translation: Translation) = this + ExternalPoem(type) { translation.keyGetter() }
-fun PoemList.text(type: PoemType, text: Text) = this + TextPoem(type, text)
+fun PoemList.text(type: PoemType, text: Component) = this + TextPoem(type, text)
 
 
 // Util

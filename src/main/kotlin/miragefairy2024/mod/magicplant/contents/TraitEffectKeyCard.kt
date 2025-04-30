@@ -12,7 +12,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import kotlin.math.pow
 
 enum class TraitEffectKeyCard(
@@ -51,7 +51,7 @@ enum class TraitEffectKeyCard(
             override val sortValue = sortValue
             override val color = color
             override fun getValue(level: Double) = 1 - 0.5.pow(level)
-            override fun renderValue(value: Double): Text {
+            override fun renderValue(value: Double): Component {
                 return when {
                     value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
                     else -> text { (value * 100.0 formatAs "%.0f%%")() }
@@ -68,7 +68,7 @@ enum class TraitEffectKeyCard(
             override val sortValue = sortValue
             override val color = color
             override fun getValue(level: Double) = level
-            override fun renderValue(value: Double): Text {
+            override fun renderValue(value: Double): Component {
                 return when {
                     value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
                     else -> text { (value * 100.0 formatAs "%.0f%%")() }

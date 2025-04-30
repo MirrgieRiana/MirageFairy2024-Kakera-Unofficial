@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:aura_stone",
+  "key": {
+    "C": {
+      "item": "miragefairy2024:fairy_crystal"
+    },
+    "M": {
+      "item": "miragefairy2024:miranagite"
+    },
+    "X": {
+      "item": "miragefairy2024:xarpite"
+    }
+  },
+  "pattern": [
+    "XMX",
+    "MCM",
+    "XMX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:aura_stone"
+  }
+}

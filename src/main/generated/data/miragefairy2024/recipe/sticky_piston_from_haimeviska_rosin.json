@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "minecraft:sticky_piston",
+  "key": {
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "S": {
+      "item": "miragefairy2024:haimeviska_rosin"
+    }
+  },
+  "pattern": [
+    "S",
+    "P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:sticky_piston"
+  }
+}

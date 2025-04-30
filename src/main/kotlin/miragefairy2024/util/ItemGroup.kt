@@ -3,16 +3,16 @@ package miragefairy2024.util
 import miragefairy2024.ModContext
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.CreativeModeTab as ItemGroup
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.item.CreativeModeTab as ItemGroup
 
 context(ModContext)
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
+fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         it.accept(this)
     }
@@ -20,7 +20,7 @@ fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>) {
 
 context(ModContext)
 @Suppress("UnusedReceiverParameter")
-fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> List<ItemStack>) {
+fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.accept(itemStack)
@@ -30,13 +30,13 @@ fun Item.registerItemGroup(itemGroup: RegistryKey<ItemGroup>, supplier: () -> Li
 
 
 class ItemGroupCard(
-    val identifier: Identifier,
+    val identifier: ResourceLocation,
     val enName: String,
     val jaName: String,
     icon: () -> ItemStack,
 ) {
     val translation = Translation({ "itemGroup.${identifier.toLanguageKey()}" }, enName, jaName)
-    val itemGroupKey = RegistryKeys.CREATIVE_MODE_TAB with identifier
+    val itemGroupKey = Registries.CREATIVE_MODE_TAB with identifier
     val itemGroup: ItemGroup = FabricItemGroup.builder()
         .icon(icon)
         .title(text { translation() })
@@ -44,7 +44,7 @@ class ItemGroupCard(
 
     context(ModContext)
     fun init() {
-        itemGroup.register(Registries.CREATIVE_MODE_TAB, identifier)
+        itemGroup.register(BuiltInRegistries.CREATIVE_MODE_TAB, identifier)
         translation.enJa()
     }
 }

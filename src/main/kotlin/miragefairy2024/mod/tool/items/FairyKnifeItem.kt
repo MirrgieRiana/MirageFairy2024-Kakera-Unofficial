@@ -4,27 +4,28 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
+import net.minecraft.world.item.component.Tool
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.world.InteractionResult as ActionResult
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyKnifeItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyKnifeItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = 2.0F
@@ -41,11 +42,7 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
-
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -57,12 +54,12 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
@@ -70,12 +67,9 @@ class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, s
 
 }
 
-open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, attackDamage, attackSpeed, settings) {
-    override fun useOn(context: ItemUsageContext?) = ActionResult.PASS
-    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(1, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
-        return true
+open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, settings.attributes(createAttributes(material, attackDamage, attackSpeed))) {
+    override fun useOn(context: ItemUsageContext?) = InteractionResult.PASS
+    override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND)
     }
 }

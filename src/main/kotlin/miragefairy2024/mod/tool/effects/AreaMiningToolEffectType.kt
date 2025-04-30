@@ -2,6 +2,8 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemType
+import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.breakBlockByMagic
@@ -30,13 +32,13 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
 
     fun apply(configuration: ToolConfiguration, level: Int) {
         if (level <= 0) return
-        configuration.descriptions += text { TRANSLATION(level.toRomanText()) }
+        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(level.toRomanText()) })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
 
             if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
             if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(state)) return@fail // 掘ったブロックに対して特効でない
+            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
 
             // 発動
 
@@ -48,9 +50,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                     (-level..level).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.offset(x, y, z)
-                            if (item.isCorrectToolForDrops(world.getBlockState(targetBlockPos))) run skip@{
+                            if (item.isCorrectToolForDrops(stack, world.getBlockState(targetBlockPos))) run skip@{
                                 if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damageValue <= configuration.miningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+                                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
                                 // 採掘を続行
 
@@ -59,11 +61,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
                                 if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
                                 if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
                                     if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(configuration.miningDamage)
+                                        val damage = world.random.randomInt(configuration.magicMiningDamage)
                                         if (damage > 0) {
-                                            stack.hurtAndBreak(damage, miner) {
-                                                it.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-                                            }
+                                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                                         }
                                     }
                                 }

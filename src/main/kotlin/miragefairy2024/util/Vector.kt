@@ -1,10 +1,10 @@
 package miragefairy2024.util
 
-import net.minecraft.world.level.block.Block
 import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.phys.AABB as Box
 import net.minecraft.world.phys.Vec3 as Vec3d
-import net.minecraft.world.phys.shapes.VoxelShape
 
 fun Vec3d.toBlockPos(): BlockPos = BlockPos.containing(this)
 

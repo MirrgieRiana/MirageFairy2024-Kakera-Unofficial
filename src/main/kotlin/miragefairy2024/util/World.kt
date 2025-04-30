@@ -1,23 +1,23 @@
 package miragefairy2024.util
 
 import miragefairy2024.mod.SoundEventCard
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
-import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
-import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.AABB as Box
-import net.minecraft.core.Direction
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
+import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.world.phys.AABB as Box
 
-val World.isServer get() = !this.isClientSide
+val Level.isServer get() = !this.isClientSide
 
 fun BlockView.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
@@ -135,7 +135,7 @@ fun blockVisitor(
  * [ServerPlayerInteractionManager.tryBreakBlock]とは以下の点で異なります。
  * - ブロックの硬度が無限の場合、無効になる。
  */
-fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
+fun breakBlock(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
     if (!itemStack.item.canAttackBlock(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
     val blockEntity = world.getBlockEntity(blockPos)
@@ -167,7 +167,7 @@ fun breakBlock(itemStack: ItemStack, world: World, blockPos: BlockPos, player: S
  * - 専用のツールが必要なブロックを、ツールの種類にかかわらず回収可能です。
  * - [Item.mineBlock]を起動せず、アイテムの耐久値の減少などが発生しません。
  */
-fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
+fun breakBlockByMagic(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
     val blockState = world.getBlockState(blockPos)
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
@@ -189,7 +189,7 @@ fun breakBlockByMagic(itemStack: ItemStack, world: World, blockPos: BlockPos, pl
 }
 
 fun collectItem(
-    world: World,
+    world: Level,
     originalBlockPos: BlockPos,
     reach: Int = Int.MAX_VALUE,
     region: BlockBox? = null,

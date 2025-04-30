@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
@@ -13,23 +14,25 @@ import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, VeropedaBlock>() {
     override val card get() = VeropedaCard
@@ -98,14 +101,16 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
         //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
-    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
-    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
-    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
-    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
+    val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
+    val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
+    val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
 
     context(ModContext)
     override fun init() {
         super.init()
+
+        VeropedaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda"))
 
         // 地形生成
         run {
@@ -125,16 +130,16 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
             // 地上
             registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(16) + flower }
-                RegistryKeys.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+                Registries.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
             // ネザー
             registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
                 val placementModifiers = placementModifiers { per(8) + netherFlower }
-                RegistryKeys.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+                Registries.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
-            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.CLIMATE_DRY } // 地上用クラスタ
+            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_DRY } // 地上用クラスタ
             NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
 
         }
@@ -145,5 +150,11 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
 
 class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<VeropedaBlock> = simpleCodec(::VeropedaBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }

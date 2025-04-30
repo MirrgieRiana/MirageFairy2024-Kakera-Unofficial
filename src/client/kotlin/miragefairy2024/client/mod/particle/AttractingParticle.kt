@@ -1,11 +1,11 @@
 package miragefairy2024.client.mod.particle
 
 import net.minecraft.client.particle.Particle
+import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
 import net.minecraft.client.particle.ParticleProvider as ParticleFactory
 import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
 import net.minecraft.client.particle.SpriteSet as SpriteProvider
-import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
 import net.minecraft.core.particles.SimpleParticleType as DefaultParticleType
 
 class AttractingParticle internal constructor(

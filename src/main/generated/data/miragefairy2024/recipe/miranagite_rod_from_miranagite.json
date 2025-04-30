@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:miranagite_rod",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:miranagite"
+    }
+  },
+  "pattern": [
+    "  #",
+    " # ",
+    "#  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:miranagite_rod"
+  }
+}

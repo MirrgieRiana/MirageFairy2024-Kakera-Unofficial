@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIAdapter
@@ -32,19 +31,20 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
+import io.wispforest.owo.ui.core.Component as OwoComponent
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
 
 fun initMagicPlantClientModule() {
     HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
-class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
+class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {
     private lateinit var traitCardContainer: FlowLayout
 
-    private fun setTraitCardContent(component: Component?) {
+    private fun setTraitCardContent(component: OwoComponent?) {
         traitCardContainer.clearChildren()
         if (component != null) traitCardContainer.child(component)
         uiAdapter.inflateAndMount()
@@ -84,7 +84,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
                                         true
                                     }) {
                                         Components.label(text {
-                                            val texts = mutableListOf<Text>()
+                                            val texts = mutableListOf<Component>()
                                             texts += traitStack.trait.getName().style(traitStack.trait.style)
                                             texts += traitStack.level.toString(2)().style(traitStack.trait.style)
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()
@@ -104,7 +104,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: PlayerIn
         if (traitStack != null) setTraitCardContent(createTraitCardContent(traitStack))
     }
 
-    private fun createTraitCardContent(traitStack: TraitStack): Component {
+    private fun createTraitCardContent(traitStack: TraitStack): OwoComponent {
         return topBorderLayout(Sizing.fill(100), Sizing.fill(100)).apply {
             gap = 5
 

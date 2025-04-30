@@ -8,32 +8,32 @@ import miragefairy2024.RenderingProxyBlockEntity
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.minecraft.client.renderer.BiomeColors
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.renderer.BiomeColors
-import net.minecraft.world.level.FoliageColor as FoliageColors
-import net.minecraft.client.renderer.RenderType as RenderLayer
-import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers as BlockEntityRendererFactories
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider as BlockEntityRendererFactory
-import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
-import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
 import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.resources.ResourceLocation as Identifier
 import com.mojang.math.Axis as RotationAxis
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
+import net.minecraft.client.renderer.RenderType as RenderLayer
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider as BlockEntityRendererFactory
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers as BlockEntityRendererFactories
+import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
+import net.minecraft.world.level.FoliageColor as FoliageColors
 
 class ClientProxyImpl : ClientProxy {
-    override fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit) {
-        ItemTooltipCallback.EVENT.register { stack, _, lines ->
-            block(stack, lines)
+    override fun registerItemTooltipCallback(block: (stack: ItemStack, context: Item.TooltipContext, lines: MutableList<Component>) -> Unit) {
+        ItemTooltipCallback.EVENT.register { stack, context, _, lines ->
+            block(stack, context, lines)
         }
     }
 
@@ -110,7 +110,7 @@ class RenderingProxyBlockEntityRenderer<T>(
                 MinecraftClient.getInstance().itemRenderer.renderStatic(itemStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, blockEntity.level, 0)
             }
 
-            override fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
+            override fun renderCutoutBlock(identifier: ResourceLocation, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int) {
                 val vertexConsumer = vertexConsumers.getBuffer(RenderLayer.cutout())
                 val bakedModel = if (variant != null) {
                     MinecraftClient.getInstance().modelManager.getModel(ModelIdentifier(identifier, variant))

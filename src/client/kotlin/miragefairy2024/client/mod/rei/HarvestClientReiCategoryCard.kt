@@ -16,7 +16,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryStack
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCard.Display>(HarvestReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -27,7 +27,7 @@ object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCa
 
     override fun createCategory() = object : DisplayCategory<HarvestReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = HarvestReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { HarvestReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { HarvestReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: HarvestReiCategoryCard.Display) = 136
         override fun getDisplayHeight() = 36

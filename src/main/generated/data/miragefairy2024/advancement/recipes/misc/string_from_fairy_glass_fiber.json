@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fairy_glass_fiber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:fairy_glass_fiber"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:string_from_fairy_glass_fiber"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fairy_glass_fiber"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:string_from_fairy_glass_fiber"
+    ]
+  }
+}

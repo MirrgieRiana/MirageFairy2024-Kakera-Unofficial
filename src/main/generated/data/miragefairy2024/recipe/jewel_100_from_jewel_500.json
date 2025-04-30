@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:jewel_100",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:jewel_500"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "id": "miragefairy2024:jewel_100"
+  }
+}

@@ -9,7 +9,7 @@ import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
-import miragefairy2024.util.hasSameItemAndNbtAndCount
+import miragefairy2024.util.hasSameItemAndComponentsAndCount
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.itemStacks
@@ -26,30 +26,31 @@ import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.ContainerHelper as Inventories
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.SlotAccess as StackReference
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.Slot
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.world.inventory.ClickAction as ClickType
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.ItemContainerContents
+import net.minecraft.world.level.Level
+import kotlin.math.roundToInt
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.level.Level as World
-import kotlin.math.roundToInt
+import net.minecraft.world.SimpleContainer as SimpleInventory
+import net.minecraft.world.entity.SlotAccess as StackReference
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ClickAction as ClickType
 
 enum class BagCard(
     path: String,
@@ -75,10 +76,9 @@ enum class BagCard(
     ;
 
     companion object {
-        val screenHandlerType = ExtendedScreenHandlerType { syncId, playerInventory, buf ->
-            val slotIndex = buf.readInt()
-            createBagScreenHandler(syncId, playerInventory, slotIndex)
-        }
+        val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+            createBagScreenHandler(syncId, playerInventory, buf)
+        }, ByteBufCodecs.INT)
 
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
@@ -94,7 +94,7 @@ enum class BagCard(
 context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.itemName)
@@ -107,7 +107,7 @@ fun initBagModule() {
     }
 
 
-    BagCard.screenHandlerType.register(Registries.MENU, MirageFairy2024.identifier("bag"))
+    BagCard.screenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag"))
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
@@ -133,14 +133,14 @@ fun initBagModule() {
 
 class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         val bagInventory = stack.getBagInventory() ?: return super.getName(stack)
         val count = bagInventory.itemStacks.count { it.isNotEmpty }
         return text { super.getName(stack) + (if (count > 0) " ($count / ${card.inventorySize})"() else ""()) }
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
 
         val inventory = stack.getBagInventory() ?: return
         var first = true
@@ -151,13 +151,13 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
                 if (itemCount <= 10) {
                     if (first) {
                         first = false
-                        tooltip += text { ""() }
+                        tooltipComponents += text { ""() }
                     }
-                    tooltip += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
+                    tooltipComponents += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
                 }
             }
         }
-        if (itemCount > 10) tooltip += text { "... ${itemCount - 10}"() }
+        if (itemCount > 10) tooltipComponents += text { "... ${itemCount - 10}"() }
     }
 
     override fun isBarVisible(stack: ItemStack): Boolean {
@@ -178,26 +178,24 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {
             val selectedSlot = user.inventory.selected
-            if (!PlayerInventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
+            if (!Inventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
             selectedSlot
         } else {
             -1
         }
-        user.openMenu(object : ExtendedScreenHandlerFactory {
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+        user.openMenu(object : ExtendedScreenHandlerFactory<Int> {
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
             override fun getDisplayName() = itemStack.hoverName
 
-            override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                buf.writeInt(slotIndex)
-            }
+            override fun getScreenOpeningData(player: ServerPlayer) = slotIndex
         })
         return TypedActionResult.consume(itemStack)
     }
@@ -282,25 +280,25 @@ class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySi
 fun ItemStack.getBagInventory(): BagInventory? {
     val item = this.item as? BagItem ?: return null
     val inventory = BagInventory(item.card)
-    val nbt = this.tag
-    if (nbt != null) Inventories.loadAllItems(nbt, inventory.items)
+    val itemContainerContents = this.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY)
+    itemContainerContents.copyInto(inventory.items)
     return inventory
 }
 
 fun ItemStack.setBagInventory(inventory: BagInventory) {
-    val nbt = getOrCreateTag()
-    Inventories.saveAllItems(nbt, inventory.items, true)
+    val itemContainerContents = ItemContainerContents.fromItems(inventory.items)
+    this.set(DataComponents.CONTAINER, itemContainerContents)
 }
 
 
-fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIndex: Int): BagScreenHandler {
+fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: Int): BagScreenHandler {
     val itemStackInstance = if (slotIndex == -1) playerInventory.offhand[0] else playerInventory.items[slotIndex]
     var expectedItemStack = itemStackInstance.copy()
     val item = itemStackInstance.item as? BagItem ?: return BagScreenHandler(syncId)
     val bagInventory = itemStackInstance.getBagInventory() ?: return BagScreenHandler(syncId)
-    val inventoryDelegate = object : Inventory {
+    val inventoryDelegate = object : Container {
         override fun clearContent() = bagInventory.clearContent()
-        override fun getContainerSize() = bagInventory.getContainerSize()
+        override fun getContainerSize() = bagInventory.containerSize
         override fun isEmpty() = bagInventory.isEmpty()
         override fun getItem(slot: Int) = bagInventory.getItem(slot)
         override fun removeItem(slot: Int, amount: Int) = bagInventory.removeItem(slot, amount)
@@ -317,7 +315,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
         override fun startOpen(player: PlayerEntity) = bagInventory.startOpen(player)
         override fun stopOpen(player: PlayerEntity) = bagInventory.stopOpen(player)
         override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)
-        override fun canTakeItem(hopperInventory: Inventory, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
+        override fun canTakeItem(hopperInventory: Container, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
     }
 
     return object : BagScreenHandler(syncId) {
@@ -337,7 +335,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: PlayerInventory, slotIn
 
         override fun stillValid(player: PlayerEntity): Boolean {
             val itemStack = if (slotIndex >= 0) playerInventory.items[slotIndex] else playerInventory.offhand[0]
-            return itemStack === itemStackInstance && itemStack hasSameItemAndNbtAndCount expectedItemStack
+            return itemStack === itemStackInstance && itemStack hasSameItemAndComponentsAndCount expectedItemStack
         }
 
         override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {

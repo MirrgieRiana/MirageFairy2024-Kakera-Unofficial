@@ -26,11 +26,11 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
-import net.minecraft.world.level.block.Block
-import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.level.block.Block
+import net.minecraft.client.Minecraft as MinecraftClient
 
 abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
 
@@ -43,7 +43,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
 
     override fun createCategory() = object : DisplayCategory<ItemFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = ItemFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { ItemFairyDreamRecipeReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { ItemFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.CARROT.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: ItemFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
@@ -78,7 +78,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
 
     override fun createCategory() = object : DisplayCategory<BlockFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = BlockFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { BlockFairyDreamRecipeReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { BlockFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: BlockFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28
@@ -113,7 +113,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
 
     override fun createCategory() = object : DisplayCategory<EntityTypeFairyDreamRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = EntityTypeFairyDreamRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { EntityTypeFairyDreamRecipeReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { EntityTypeFairyDreamRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.ENDERMAN.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display) = 160
         override fun getDisplayHeight() = 28

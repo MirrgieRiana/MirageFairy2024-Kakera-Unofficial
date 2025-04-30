@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "minecraft:torch",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:haimeviska_sap"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:torch"
+  }
+}

@@ -1,14 +1,14 @@
 package miragefairy2024.util
 
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 
-val Identifier.string get() = this.toString()
+val ResourceLocation.string get() = this.toString()
 
-fun String.toIdentifier() = Identifier(this)
+fun String.toIdentifier() = ResourceLocation.parse(this)
 
-operator fun String.times(identifier: Identifier) = Identifier(identifier.namespace, this + identifier.path)
-operator fun Identifier.times(string: String) = Identifier(this.namespace, this.path + string)
+operator fun String.times(identifier: ResourceLocation) = ResourceLocation.fromNamespaceAndPath(identifier.namespace, this + identifier.path)
+operator fun ResourceLocation.times(string: String) = ResourceLocation.fromNamespaceAndPath(this.namespace, this.path + string)
 
-infix fun <T> RegistryKey<out Registry<T>>.with(value: Identifier): RegistryKey<T> = RegistryKey.create(this, value)
+infix fun <T> ResourceKey<out Registry<T>>.with(value: ResourceLocation): ResourceKey<T> = ResourceKey.create(this, value)

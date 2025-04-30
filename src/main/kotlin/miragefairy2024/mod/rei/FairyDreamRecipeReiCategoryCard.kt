@@ -20,9 +20,9 @@ import miragefairy2024.util.toNbtList
 import miragefairy2024.util.toNbtString
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 
 object ItemFairyDreamRecipeReiCategoryCard : ReiCategoryCard<ItemFairyDreamRecipeReiCategoryCard.Display>("item_fairy_dream_recipe", "Fairy Dream: Item", "妖精の夢：アイテム") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {

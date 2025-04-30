@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,9 +22,9 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "eat", at = @At("HEAD"))
-    private void eatFood(Level world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        EatFoodCallback.EVENT.invoker().eatFood((LivingEntity) (Object) this, world, stack);
+    @Inject(method = "eat(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/food/FoodProperties;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"))
+    private void eatFood(Level world, ItemStack stack, FoodProperties foodProperties, CallbackInfoReturnable<ItemStack> info) {
+        EatFoodCallback.EVENT.invoker().eatFood((LivingEntity) (Object) this, world, stack, foodProperties);
     }
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)

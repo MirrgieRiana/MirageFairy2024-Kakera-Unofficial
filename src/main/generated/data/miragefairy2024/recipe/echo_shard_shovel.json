@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:echo_shard_shovel",
+  "key": {
+    "#": {
+      "item": "minecraft:echo_shard"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "R",
+    "R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:echo_shard_shovel"
+  }
+}

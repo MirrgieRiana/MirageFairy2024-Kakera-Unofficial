@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.container.StackLayout
 import io.wispforest.owo.ui.core.Color
-import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Sizing
@@ -47,7 +46,8 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
+import io.wispforest.owo.ui.core.Component as OwoComponent
 
 object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -70,14 +70,14 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
 
     override fun createCategory() = object : DisplayCategory<TraitEncyclopediaReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = TraitEncyclopediaReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { TraitEncyclopediaReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { TraitEncyclopediaReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
         override fun getDisplayWidth(display: TraitEncyclopediaReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
         override fun getDisplayHeight() = 140
         override fun setupDisplay(display: TraitEncyclopediaReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             lateinit var container: StackLayout
-            lateinit var separatedView: Component
-            lateinit var cardView: Component
+            lateinit var separatedView: OwoComponent
+            lateinit var cardView: OwoComponent
             return listOf(
                 Widgets.createRecipeBase(bounds), // 外枠
                 ReiUIAdapter(bounds, Containers::verticalFlow).also { adapter ->

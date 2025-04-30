@@ -8,16 +8,16 @@ import miragefairy2024.util.ja
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
-import net.minecraft.world.damagesource.DamageType
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.damagesource.DamageType
 
 @Suppress("LeakingThis")
 abstract class DamageTypeCard {
     abstract fun getPath(): String
     val identifier = MirageFairy2024.identifier(getPath())
-    val registryKey = RegistryKeys.DAMAGE_TYPE with identifier
+    val registryKey = Registries.DAMAGE_TYPE with identifier
 
     open val exhaustion = 0.1F
     val damageType = DamageType(identifier.toLanguageKey(), exhaustion)

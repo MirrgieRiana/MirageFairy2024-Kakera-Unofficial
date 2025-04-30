@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:fairy_statue_fountain",
+  "key": {
+    "F": {
+      "item": "miragefairy2024:fairy_scales"
+    },
+    "Q": {
+      "item": "miragefairy2024:fairy_quest_card_base"
+    },
+    "S": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "pattern": [
+    " F ",
+    "SQS",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:fairy_statue_fountain"
+  }
+}

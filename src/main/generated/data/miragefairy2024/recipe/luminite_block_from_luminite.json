@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:luminite_block",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    },
+    {
+      "item": "miragefairy2024:luminite"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:luminite_block"
+  }
+}

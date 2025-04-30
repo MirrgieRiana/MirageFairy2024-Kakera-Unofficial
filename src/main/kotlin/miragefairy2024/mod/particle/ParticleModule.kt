@@ -9,10 +9,10 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
-import net.minecraft.core.particles.ParticleOptions as ParticleEffect
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.core.particles.ParticleOptions as ParticleEffect
 
 class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
     path: String,
@@ -38,14 +38,14 @@ class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val textures = textureNames.map { if (":" in it) Identifier(it) else MirageFairy2024.identifier(it) }
+    val textures = textureNames.map { if (":" in it) ResourceLocation.parse(it) else MirageFairy2024.identifier(it) }
     val particleType = creator()
 }
 
 context(ModContext)
 fun initParticleModule() {
     ParticleTypeCard.entries.forEach { card ->
-        card.particleType.register(Registries.PARTICLE_TYPE, card.identifier)
+        card.particleType.register(BuiltInRegistries.PARTICLE_TYPE, card.identifier)
         DataGenerationEvents.onGenerateParticles {
             val data = jsonObject(
                 "textures" to card.textures.map { it.string.jsonElement }.jsonArray,

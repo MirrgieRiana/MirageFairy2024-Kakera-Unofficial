@@ -4,30 +4,32 @@ import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
 import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.Tool
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
 
 class FairyBattleAxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     attackDamage: Float,
     attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem() = FairyBattleAxeItem(this, Item.Properties())
+    override fun createItem(tool: Tool) = FairyBattleAxeItem(this, FairyToolProperties(tool))
 
     init {
         this.attackDamage = attackDamage
         this.attackSpeed = attackSpeed
+        this.miningDamage = 2
         this.tags += ItemTags.AXES
         this.effectiveBlockTags += BlockTags.MINEABLE_WITH_AXE
     }
@@ -39,11 +41,7 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
     OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
-    override fun getDestroySpeed(stack: ItemStack, state: BlockState) = getMiningSpeedMultiplierImpl(stack, state)
-
-    override fun isCorrectToolForDrops(state: BlockState) = isSuitableForImpl(state)
-
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
+    override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
         postMineImpl(stack, world, state, pos, miner)
         return true
@@ -55,12 +53,12 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
         return true
     }
 
-    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Enchantment, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
@@ -68,20 +66,8 @@ class FairyBattleAxeItem(override val configuration: FairyMiningToolConfiguratio
 
 }
 
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, attackDamage, attackSpeed, settings) {
-    override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        stack.hurtAndBreak(1, attacker) { e ->
-            e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-        }
-        return true
-    }
-
-    override fun mineBlock(stack: ItemStack, world: World, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
-        if (state.getDestroySpeed(world, pos) != 0.0F) {
-            stack.hurtAndBreak(2, miner) { e ->
-                e.broadcastBreakEvent(EquipmentSlot.MAINHAND)
-            }
-        }
-        return true
+open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, settings.attributes(createAttributes(toolMaterial, attackDamage, attackSpeed))) {
+    override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND)
     }
 }

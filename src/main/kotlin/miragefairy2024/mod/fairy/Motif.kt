@@ -45,34 +45,35 @@ import miragefairy2024.util.writeAction
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.effect.MobEffect as StatusEffect
-import net.minecraft.world.effect.MobEffects as StatusEffects
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.Items
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.Holder
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.effect.MobEffects as StatusEffects
+import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
+import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
-val motifRegistryKey: RegistryKey<Registry<Motif>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("motif"))
+val motifRegistryKey: ResourceKey<Registry<Motif>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 fun Motif.getIdentifier() = motifRegistry.getKey(this)
-fun Identifier.toFairyMotif() = motifRegistry.get(this)
+fun ResourceLocation.toFairyMotif() = motifRegistry.get(this)
 
 interface Motif {
-    val displayName: Text
+    val displayName: Component
     val skinColor: Int
     val frontColor: Int
     val backColor: Int
@@ -231,7 +232,7 @@ enum class MotifCard(
             + magic.attack(0.3) * light.atMost(12)
             + miningSpeed(0.3) * light.atMost(12)
             + mana(2.0) { MUSHROOM },
-        MotifCardRecipes().R.common(ConventionalBiomeTags.MUSHROOM) + Blocks.MYCELIUM,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_MUSHROOM) + Blocks.MYCELIUM,
     ),
     SCULK(
         "sculk", 8, "Sculkia", "幽匿塊精スツルキャ", 0x19222C, 0x023F3D, 0x023F3D, 0x19C0C0,
@@ -478,7 +479,7 @@ enum class MotifCard(
             + melee.attack(0.4) * food(Items.MUTTON) // TODO 肉全般条件
             + melee.attack(0.4) * food.atLeast(12)
             + speed(0.4) * food.atLeast(12),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.TAIGA) + EntityType.WOLF,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + EntityType.WOLF,
     ),
     HUMAN(
         "human", 5, "Humania", "人類精フマーニャ", 0xFFCB4C, 0x00AAAA, 0x322976, 0x9E7F2F,
@@ -560,7 +561,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + miningSpeed(0.6) * food.atLeast(12)
             + miningSpeed(0.6) * indoor,
-        MotifCardRecipes().R.common(ConventionalBiomeTags.MOUNTAIN) + EntityType.SILVERFISH,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_MOUNTAIN) + EntityType.SILVERFISH,
     ),
     WARDEN(
         "warden", 9, "Wardenia", "監守者精ワルデーニャ", 0x0A3135, 0xCFCFA4, 0xA0AA7A, 0x2CD0CA,
@@ -746,7 +747,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.4) * outdoor
             + luck(0.8) * food(Items.MELON_SLICE),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.JUNGLE) + Blocks.MELON + Items.MELON_SLICE,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_JUNGLE) + Blocks.MELON + Items.MELON_SLICE,
     ),
     APPLE(
         "apple", 4, "Applia", "林檎精アップーリャ", 0xFF755D, 0xFF564E, 0xFF0000, 0x01A900,
@@ -763,7 +764,7 @@ enum class MotifCard(
             + shooting.attack(0.4) * outdoor
             + shooting.attack(0.8) * food(Items.SWEET_BERRIES)
             + spine.defence(2.0),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.TAIGA) + Items.SWEET_BERRIES + Blocks.SWEET_BERRY_BUSH,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + Items.SWEET_BERRIES + Blocks.SWEET_BERRY_BUSH,
     ),
     GLOW_BERRY(
         "glow_berry", 6, "Glowe Berria", "蛍光液果精グローウェベッリャ", 0xFFB73A, 0x8F650C, 0x8F650C, 0x00841A,
@@ -809,7 +810,7 @@ enum class MotifCard(
             + regeneration(0.2) * outdoor
             + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item)
             + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.CLIMATE_DRY).nether + VeropedaCard.block,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DRY).nether + VeropedaCard.block,
     ),
     LUMINITE(
         "luminite", 7, "Luminitia", "輝石精ルミニーチャ", 0x9BE8E8, 0x75C7C7, 0x75C7C7, 0x5EE6E6,
@@ -834,14 +835,14 @@ enum class MotifCard(
             + shooting.attack(1.2) * outdoor
             + regeneration(0.1) * outdoor
             + spine.defence(3.0),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.DESERT) + Blocks.CACTUS,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT) + Blocks.CACTUS,
     ),
     DEAD_BUSH(
         "dead_bush", 3, "Deade Bushia", "枯木精デアデブーシャ", 0xB38247, 0xA17743, 0xA17743, 0x6E583F,
         ParentMotifs() + { WOOD },
         PassiveSkillBuilder()
             + shooting.attack(1.4) * outdoor,
-        MotifCardRecipes().R.common(ConventionalBiomeTags.DESERT).common(ConventionalBiomeTags.BADLANDS) + Blocks.DEAD_BUSH,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT).common(ConventionalBiomeTags.IS_BADLANDS) + Blocks.DEAD_BUSH,
     ),
 
     // 樹木
@@ -861,7 +862,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + health(0.6),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.TAIGA) + Blocks.SPRUCE_SAPLING + Blocks.SPRUCE_LOG,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + Blocks.SPRUCE_SAPLING + Blocks.SPRUCE_LOG,
     ),
     DARK_OAK(
         "dark_oak", 5, "Darke Oakia", "濃樫精ダルケオアキャ", 0x4A361A, 0x478F1B, 0x2A5410, 0x326313,
@@ -1267,12 +1268,12 @@ private val MotifCardRecipes.SSR get() = this.fairyStatueFountainRecipe(FairySta
 private val MotifCardRecipes.PICKUP_SSR get() = this.fairyStatueFountainRecipe(FairyStatueFountainBlock.Rarity.PICKUP_SSR).SSR
 
 private fun MotifCardRecipes.common() = this.onInit { COMMON_MOTIF_RECIPES += AlwaysCommonMotifRecipe(it) }
-private fun MotifCardRecipes.common(biome: RegistryKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
+private fun MotifCardRecipes.common(biome: ResourceKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeCommonMotifRecipe(it, biome) }
 private fun MotifCardRecipes.common(biomeTag: TagKey<Biome>) = this.onInit { COMMON_MOTIF_RECIPES += BiomeTagCommonMotifRecipe(it, biomeTag) }
 private val MotifCardRecipes.always get() = this.common()
-private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags.IN_OVERWORLD)
-private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IN_NETHER)
-private val MotifCardRecipes.end get() = this.common(ConventionalBiomeTags.IN_THE_END)
+private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags.IS_OVERWORLD)
+private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IS_NETHER)
+private val MotifCardRecipes.end get() = this.common(ConventionalBiomeTags.IS_END)
 
 private operator fun MotifCardRecipes.plus(item: Item) = this.onInit { FairyDreamRecipes.ITEM.register(item, it) }
 private operator fun MotifCardRecipes.plus(block: Block) = this.onInit { FairyDreamRecipes.BLOCK.register(block, it) }
@@ -1328,14 +1329,14 @@ private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
 
-private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: StatusEffect) = this * StatusEffectPassiveSkillCondition(statusEffect)
+private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
-private fun attribute(attribute: EntityAttribute, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
+private fun attribute(attribute: Holder<EntityAttribute>, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
 private fun speed(factor: Double) = attribute(EntityAttributes.MOVEMENT_SPEED, factor * 0.002)
 private fun health(factor: Double) = attribute(EntityAttributes.MAX_HEALTH, factor * 0.4)
 private fun luck(factor: Double) = attribute(EntityAttributes.LUCK, factor * 0.1)
-private operator fun StatusEffect.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
+private operator fun Holder<MobEffect>.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
     return StatusEffectPassiveSkillEffect { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
 }
 

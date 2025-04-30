@@ -13,19 +13,19 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.tags.DamageTypeTags
+import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.DamageTypeTags
-import net.minecraft.tags.TagKey
-import net.minecraft.network.chat.Component as Text
 
 object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
     class Value(val attackMap: Map<Element, Double>, val defenceMap: Map<Element, Double>)
 
     interface Element {
-        val text: Text
+        val text: Component
         fun test(damageSource: DamageSource): Boolean
     }
 
@@ -44,11 +44,11 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
 
-    private val SPINE_DAMAGE_TYPE_TAG = TagKey.create(RegistryKeys.DAMAGE_TYPE, MirageFairy2024.identifier("spine"))
+    private val SPINE_DAMAGE_TYPE_TAG = TagKey.create(Registries.DAMAGE_TYPE, MirageFairy2024.identifier("spine"))
 
     private val attackTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.attack" }, "%s Attack", "%s攻撃力")
     private val defenceTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.defence" }, "%s Defence", "%s防御力")
-    override fun getText(value: Value): Text {
+    override fun getText(value: Value): Component {
         return listOf(
             value.attackMap.map { (element, value) ->
                 text { attackTranslation(element.text) + ": ${value * 100 formatAs "%+.0f%%"}"() }

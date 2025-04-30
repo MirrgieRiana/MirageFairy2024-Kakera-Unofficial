@@ -1,21 +1,21 @@
 package miragefairy2024.client.mod.entity
 
+import com.mojang.blaze3d.vertex.VertexConsumer
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.ChaosCubeEntity
 import miragefairy2024.util.times
-import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
-import net.minecraft.client.model.geom.PartPose as ModelTransform
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
-import net.minecraft.client.renderer.entity.MobRenderer as MobEntityRenderer
 import net.minecraft.client.model.EntityModel
-import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
-import net.minecraft.util.Mth as MathHelper
+import net.minecraft.client.model.geom.ModelPart
 import org.joml.Quaternionf
 import kotlin.math.atan
 import kotlin.math.sqrt
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
+import net.minecraft.client.model.geom.PartPose as ModelTransform
+import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
+import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
+import net.minecraft.client.renderer.entity.MobRenderer as MobEntityRenderer
+import net.minecraft.util.Mth as MathHelper
 
 class ChaosCubeEntityRenderer(context: EntityRendererFactory.Context) : MobEntityRenderer<ChaosCubeEntity, ChaosCubeEntityModel>(context, ChaosCubeEntityModel(context.bakeLayer(ROOT.entityModelLayer)), 0.5F) {
     companion object {
@@ -64,7 +64,7 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
         }
     }
 
-    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
+    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, color: Int) {
         if (!root.visible) return
         matrices.stack {
             matrices.translate(0F, 0.5F, 0F)
@@ -75,7 +75,7 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
                 val segment = segments!![i]
                 matrices.stack {
                     matrices.mulPose(rotations[i])
-                    parts[segment.partIndex].render(matrices, vertices, light, overlay, red, green, blue, alpha)
+                    parts[segment.partIndex].render(matrices, vertices, light, overlay, color)
                 }
             }
         }

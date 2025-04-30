@@ -4,8 +4,8 @@ import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.client.particle.ParticleProvider as ParticleFactory
 import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
 import net.minecraft.client.particle.SpriteSet as SpriteProvider
+import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
 import net.minecraft.core.particles.SimpleParticleType as DefaultParticleType
 import net.minecraft.util.Mth as MathHelper
 

@@ -23,11 +23,12 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.HolderLookup
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.resources.ResourceLocation as Identifier
 import kotlin.math.log
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
 val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}" }, "Passive Skills", "パッシブスキル")
@@ -104,7 +105,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     val passiveSkillCount = this.getPassiveSkillCount()
 
     val providers = mutableListOf<Triple<ItemStack, PassiveSkillStatus, Slot<PassiveSkill>>>()
-    val passiveSkillSlotListTable = mutableMapOf<Identifier, MutableList<Slot<PassiveSkill>>>()
+    val passiveSkillSlotListTable = mutableMapOf<ResourceLocation, MutableList<Slot<PassiveSkill>>>()
 
     fun addItemStack(itemStack: ItemStack, enabled: Boolean) {
         val item = itemStack.item
@@ -208,7 +209,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
     override fun castOrThrow(value: Any) = value as PassiveSkillResult
 
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
-        override fun fromNbt(nbt: NbtCompound): PassiveSkillResult {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
             val result = PassiveSkillResult()
             nbt.allKeys.forEach { key ->
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
@@ -221,7 +222,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
             return result
         }
 
-        override fun toNbt(data: PassiveSkillResult): NbtCompound {
+        override fun toNbt(data: PassiveSkillResult, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             data.map.entries.forEach {
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {

@@ -1,22 +1,22 @@
 package miragefairy2024
 
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 
 var clientProxy: ClientProxy? = null
 
 
 interface ClientProxy {
-    fun registerItemTooltipCallback(block: (stack: ItemStack, lines: MutableList<Text>) -> Unit)
+    fun registerItemTooltipCallback(block: (stack: ItemStack, context: Item.TooltipContext, lines: MutableList<Component>) -> Unit)
     fun registerCutoutRenderLayer(block: Block)
     fun registerTranslucentRenderLayer(block: Block)
     fun getClientPlayer(): PlayerEntity?
@@ -47,7 +47,7 @@ interface RenderingProxy {
 
     fun renderItemStack(itemStack: ItemStack)
     fun renderFixedItemStack(itemStack: ItemStack)
-    fun renderCutoutBlock(identifier: Identifier, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
+    fun renderCutoutBlock(identifier: ResourceLocation, variant: String?, red: Float, green: Float, blue: Float, light: Int, overlay: Int)
 }
 
 interface RenderingProxyBlockEntity {

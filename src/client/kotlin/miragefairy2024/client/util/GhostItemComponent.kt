@@ -5,13 +5,15 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
-import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
-import net.minecraft.world.item.TooltipFlag as TooltipContext
-import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import kotlin.jvm.optionals.getOrNull
+import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
 
 class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseComponent() {
     var showItemStack = true
@@ -55,9 +57,9 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
 
         val tooltip = mutableListOf<TooltipComponent>()
 
-        val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipContext.ADVANCED else TooltipContext.NORMAL
-        val texts = itemStack.getTooltipLines(MinecraftClient.getInstance().player, tooltipContext)
-        tooltip += texts.map { TooltipComponent.create(it.getVisualOrderText()) }
+        val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
+        val texts = itemStack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), MinecraftClient.getInstance().player, tooltipContext)
+        tooltip += texts.map { TooltipComponent.create(it.visualOrderText) }
 
         val data = itemStack.tooltipImage.getOrNull()
         if (data != null) tooltip.add(1, TooltipComponentCallback.EVENT.invoker().getComponent(data) ?: TooltipComponent.create(data))

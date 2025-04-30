@@ -1,17 +1,18 @@
 package miragefairy2024.mod.magicplant
 
-import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
+import net.minecraft.network.protocol.Packet
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.core.Holder as RegistryEntry
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
-import net.minecraft.world.level.biome.Biome
 
 class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*, *>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType, pos, state) {
 
@@ -45,7 +46,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
     }
 
 
-    override fun setLevel(world: World) {
+    override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
             val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(worldPosition), world.random)
@@ -55,22 +56,22 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantConfiguration<*
         }
     }
 
-    public override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    public override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
     }
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
         isNatural = nbt.getBoolean("Natural")
     }
 
-    override fun getUpdateTag(): NbtCompound {
-        val nbt = super.getUpdateTag()
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound {
+        val nbt = super.getUpdateTag(registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)

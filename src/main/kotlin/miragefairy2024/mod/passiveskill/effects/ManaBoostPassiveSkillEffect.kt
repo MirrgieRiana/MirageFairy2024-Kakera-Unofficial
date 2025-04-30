@@ -14,7 +14,7 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object ManaBoostPassiveSkillEffect : AbstractPassiveSkillEffect<ManaBoostPassiveSkillEffect.Value>("mana_boost") {
     class Value(val map: Map<Motif?, Double>)
@@ -22,7 +22,7 @@ object ManaBoostPassiveSkillEffect : AbstractPassiveSkillEffect<ManaBoostPassive
     override val isPreprocessor = true
     private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Mana", "魔力")
     private val familyTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.family" }, "%s Family", "%s系統")
-    override fun getText(value: Value): Text {
+    override fun getText(value: Value): Component {
         return value.map.map { (motif, value) ->
             text { translation() + ": "() + Emoji.MANA() + (value * 100 formatAs "%+.0f%%")() + if (motif != null) " ("() + familyTranslation(motif.displayName) + ")"() else empty() }
         }.join(text { ","() })

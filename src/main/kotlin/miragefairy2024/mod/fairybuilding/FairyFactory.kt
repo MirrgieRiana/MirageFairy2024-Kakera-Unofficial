@@ -15,16 +15,17 @@ import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.EnumProperty
-import net.minecraft.util.StringRepresentable as StringIdentifiable
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.Level as World
 import kotlin.math.log
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.util.StringRepresentable as StringIdentifiable
+import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
 abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {
     companion object {
@@ -45,7 +46,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
     abstract val maxFolia: Int
 }
 
-open class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlock(card) {
+abstract class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildingBlock(card) {
     companion object {
         val STATUS: EnumProperty<Status> = EnumProperty.create("status", Status::class.java)
     }
@@ -88,14 +89,14 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         folia = nbt.wrapper["Folia"].int.get() ?: 0
         foliaCollectionCooldown = nbt.wrapper["FoliaCollectionCooldown"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["Folia"].int.set(folia)
         nbt.wrapper["FoliaCollectionCooldown"].int.set(foliaCollectionCooldown)
     }
@@ -104,7 +105,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     var folia = 0
     private var foliaCollectionCooldown = 0
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
         if (foliaCollectionCooldown > 0) {
             foliaCollectionCooldown--

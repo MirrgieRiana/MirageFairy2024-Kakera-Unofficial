@@ -11,30 +11,31 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.world.entity.EntityEvent as EntityStatuses
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.network.syncher.SynchedEntityData as DataTracker
-import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
-import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
-import net.minecraft.world.entity.projectile.Projectile as ProjectileEntity
 import net.minecraft.world.entity.projectile.ProjectileUtil
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.EntityTypeTags
-import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
+import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
+import net.minecraft.network.syncher.SynchedEntityData as DataTracker
+import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.world.entity.EntityEvent as EntityStatuses
+import net.minecraft.world.entity.MobCategory as SpawnGroup
+import net.minecraft.world.entity.projectile.Projectile as ProjectileEntity
 import net.minecraft.world.phys.Vec3 as Vec3d
-import net.minecraft.world.level.Level as World
 
 object AntimatterBoltCard {
     val spawnGroup = SpawnGroup.MISC
     val width = 0.5F
     val height = 0.5F
-    fun createEntity(entityType: EntityType<AntimatterBoltEntity>, world: World) = AntimatterBoltEntity(entityType, world)
+    fun createEntity(entityType: EntityType<AntimatterBoltEntity>, world: Level) = AntimatterBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("antimatter_bolt")
     val entityType: EntityType<AntimatterBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
@@ -42,12 +43,12 @@ object AntimatterBoltCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(Registries.ENTITY_TYPE, identifier)
+        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }
 
-class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: World) : ProjectileEntity(entityType, world) {
+class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, world: Level) : ProjectileEntity(entityType, world) {
     companion object {
         val DAMAGE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
         val MAX_DISTANCE: TrackedData<Float> = DataTracker.defineId(AntimatterBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
@@ -57,9 +58,9 @@ class AntimatterBoltEntity(entityType: EntityType<out AntimatterBoltEntity>, wor
     var damage by DAMAGE
     var maxDistance by MAX_DISTANCE
 
-    override fun defineSynchedData() {
-        entityData.define(DAMAGE, 0F)
-        entityData.define(MAX_DISTANCE, 0F)
+    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
+        builder.define(DAMAGE, 0F)
+        builder.define(MAX_DISTANCE, 0F)
     }
 
     override fun addAdditionalSaveData(nbt: NbtCompound) {

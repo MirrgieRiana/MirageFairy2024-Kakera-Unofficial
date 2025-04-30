@@ -17,18 +17,19 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey as RegistryKey
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.resources.ResourceLocation as Identifier
+import net.minecraft.world.entity.player.Player as PlayerEntity
 
 
 // Api
 
-val extraPlayerDataCategoryRegistryKey: RegistryKey<Registry<ExtraPlayerDataCategory<*>>> = RegistryKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
+val extraPlayerDataCategoryRegistryKey: ResourceKey<Registry<ExtraPlayerDataCategory<*>>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("extra_player_data_loader"))
 val extraPlayerDataCategoryRegistry: Registry<ExtraPlayerDataCategory<*>> = FabricRegistryBuilder.createSimple(extraPlayerDataCategoryRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
 
 interface ExtraPlayerDataCategory<T : Any> {
@@ -37,8 +38,8 @@ interface ExtraPlayerDataCategory<T : Any> {
     val ioHandler: IoHandler<T>? get() = null
 
     interface IoHandler<T> {
-        fun toNbt(data: T): NbtCompound
-        fun fromNbt(nbt: NbtCompound): T
+        fun toNbt(data: T, registry: HolderLookup.Provider): NbtCompound
+        fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): T
     }
 }
 
@@ -96,21 +97,21 @@ fun <T : Any> ExtraPlayerDataCategory<T>.sync(player: ServerPlayerEntity) {
 }
 
 object ExtraPlayerDataSynchronizationChannel : Channel<ExtraPlayerDataSynchronizationPacket<*>>(MirageFairy2024.identifier("extra_player_data_synchronization")) {
-    override fun writeToBuf(buf: PacketByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
+    override fun writeToBuf(buf: RegistryFriendlyByteBuf, packet: ExtraPlayerDataSynchronizationPacket<*>) {
         buf.writeUtf(extraPlayerDataCategoryRegistry.getKey(packet.category)!!.string)
         fun <T : Any> f(packet: ExtraPlayerDataSynchronizationPacket<T>) {
             buf.writeBoolean(packet.value != null)
-            if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(packet.value))
+            if (packet.value != null) buf.writeNbt(packet.category.ioHandler!!.toNbt(packet.value, buf.registryAccess()))
         }
         f(packet)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
+    override fun readFromBuf(buf: RegistryFriendlyByteBuf): ExtraPlayerDataSynchronizationPacket<*> {
         val identifier = buf.readUtf().toIdentifier()
         val category = extraPlayerDataCategoryRegistry[identifier]!!
         fun <T : Any> f(category: ExtraPlayerDataCategory<T>): ExtraPlayerDataSynchronizationPacket<T> {
             val hasValue = buf.readBoolean()
-            val value = if (hasValue) category.ioHandler!!.fromNbt(buf.readNbt()!!) else null
+            val value = if (hasValue) category.ioHandler!!.fromNbt(buf.readNbt()!!, buf.registryAccess()) else null
             return ExtraPlayerDataSynchronizationPacket(category, value)
         }
         return f(category)
@@ -123,7 +124,7 @@ class ExtraPlayerDataSynchronizationPacket<T : Any>(val category: ExtraPlayerDat
 // Mixin Impl
 
 class ExtraPlayerDataContainer(private val player: PlayerEntity) {
-    private val map = mutableMapOf<Identifier, Any>()
+    private val map = mutableMapOf<ResourceLocation, Any>()
 
     /**
      * このコンテナに格納されているオブジェクトを取得します。
@@ -145,7 +146,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
         }
     }
 
-    val entries: Set<Map.Entry<Identifier, Any>> get() = map.entries
+    val entries: Set<Map.Entry<ResourceLocation, Any>> get() = map.entries
 
     /**
      * このコンテナにオブジェクトを代入します。
@@ -164,6 +165,8 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      * このコンテナにオブジェクトが格納されていない場合、データの書き込みはキャンセルされます。
      */
     fun toNbt(): NbtCompound {
+        val registries: HolderLookup.Provider = player.level().registryAccess()
+
         val nbt = NbtCompound()
         extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
@@ -175,7 +178,7 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
                     getLogger(ExtraPlayerDataContainer::class.java).error("Failed to load: ${value.javaClass} as ${key.location()} for ${player.name}(${player.uuid})", e)
                     return
                 }
-                nbt.wrapper[key.location().string].compound.set(ioHandler.toNbt(data))
+                nbt.wrapper[key.location().string].compound.set(ioHandler.toNbt(data, registries))
             }
             f(loader)
         }
@@ -187,12 +190,14 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
      * [nbt]にデータが保存されていない場合、オブジェクトの読み取りはキャンセルされます。
      */
     fun fromNbt(nbt: NbtCompound) {
+        val registries: HolderLookup.Provider = player.level().registryAccess()
+
         map.clear()
         extraPlayerDataCategoryRegistry.entrySet().forEach { (key, loader) ->
             fun <T : Any> f(loader: ExtraPlayerDataCategory<T>) {
                 val ioHandler = loader.ioHandler ?: return
                 val data = nbt.wrapper[key.location().string].compound.get() ?: return
-                map[key.location()] = ioHandler.fromNbt(data)
+                map[key.location()] = ioHandler.fromNbt(data, registries)
             }
             f(loader)
         }

@@ -10,14 +10,13 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
-import miragefairy2024.util.hasSameItemAndNbt
+import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.set
 import miragefairy2024.util.size
-import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
@@ -27,23 +26,23 @@ import mirrg.kotlin.hydrogen.cmp
 import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
+import kotlin.math.pow
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
+import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.UseAnim as UseAction
-import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.Level as World
-import kotlin.math.pow
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
 val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
@@ -56,17 +55,17 @@ fun initRandomFairySummoning() {
 }
 
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
-        tooltip += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
-        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
-        tooltip += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
+        tooltipComponents += text { (APPEARANCE_RATE_BONUS_TRANSLATION() + ": x"() + (appearanceRateBonus formatAs "%.3f").replace("""\.?0+$""".toRegex(), "")()).blue }
+        tooltipComponents += text { MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION().yellow }
+        tooltipComponents += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
     override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
-    override fun getUseDuration(stack: ItemStack) = 72000 // 1時間
+    override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 72000 // 1時間
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (!user.isShiftKeyDown) {
 
@@ -80,24 +79,16 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
-            user.openMenu(object : ExtendedScreenHandlerFactory {
-                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
+            user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = itemStack.hoverName
-                override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
-                    buf.writeInt(chanceTable.size)
-                    chanceTable.forEach {
-                        buf.writeItem(it.showingItemStack)
-                        buf.writeUtf(it.motif.getIdentifier()!!.string)
-                        buf.writeDouble(it.rate)
-                        buf.writeDouble(it.count)
-                    }
-                }
+                override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
             return TypedActionResult.consume(itemStack)
         }
     }
 
-    override fun onUseTick(world: World, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
+    override fun onUseTick(world: Level, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
         if (world.isClientSide) return
         if (user !is ServerPlayerEntity) return
 
@@ -153,7 +144,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                     (0 until player.inventory.size).forEach { index ->
                         val searchingItemStack = player.inventory[index]
                         if (searchingItemStack !== itemStack) { // 同一のアイテムスタックでなく、
-                            if (searchingItemStack hasSameItemAndNbt itemStack) { // 両者が同一種類のアイテムスタックならば、
+                            if (searchingItemStack hasSameItemAndComponents itemStack) { // 両者が同一種類のアイテムスタックならば、
                                 val count = searchingItemStack.count
                                 player.inventory[index] = EMPTY_ITEM_STACK // そのアイテムスタックを消して
                                 itemStack.count = count // 手に持っているアイテムスタックに移動する

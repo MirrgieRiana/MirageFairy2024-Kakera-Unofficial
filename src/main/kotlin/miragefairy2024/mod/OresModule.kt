@@ -29,24 +29,24 @@ import miragefairy2024.util.times
 import miragefairy2024.util.uniformOre
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
-import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.BlockTags
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration as OreFeatureConfig
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
 
 enum class BaseStoneType {
     STONE,
@@ -111,13 +111,13 @@ enum class OreCard(
                 .strength(4.5F, 3.0F)
                 .sound(BlockSoundGroup.DEEPSLATE)
         }
-        ExperienceDroppingBlock(settings, UniformIntProvider.of(experience.first, experience.second))
+        ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }
     val item = BlockItem(block, Item.Properties())
     val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
-            BaseStoneType.STONE -> Identifier("minecraft", "block/stone")
-            BaseStoneType.DEEPSLATE -> Identifier("minecraft", "block/deepslate")
+            BaseStoneType.STONE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/stone")
+            BaseStoneType.DEEPSLATE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/deepslate")
         }
         OreModelCard.model.with(
             TextureKey.BACK to baseStoneTexture,
@@ -139,8 +139,8 @@ fun initOresModule() {
 
     OreCard.entries.forEach { card ->
 
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -164,7 +164,7 @@ fun initOresModule() {
 
     fun worldGen(range: IntRange, countPerCube: Double, size: Int, card: OreCard) {
 
-        val configuredKey = registerDynamicGeneration(RegistryKeys.CONFIGURED_FEATURE, card.identifier) {
+        val configuredKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
                 BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
                 BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
@@ -172,9 +172,9 @@ fun initOresModule() {
             Feature.ORE with OreFeatureConfig(targets, size)
         }
 
-        registerDynamicGeneration(RegistryKeys.PLACED_FEATURE, card.identifier) {
+        registerDynamicGeneration(Registries.PLACED_FEATURE, card.identifier) {
             val placementModifiers = placementModifiers { randomIntCount(countPerCube * (range.last - range.first + 1).toDouble() / 16.0) + uniformOre(range.first, range.last) }
-            RegistryKeys.CONFIGURED_FEATURE[configuredKey] with placementModifiers
+            Registries.CONFIGURED_FEATURE[configuredKey] with placementModifiers
         }.also {
             it.registerFeature(GenerationStep.Decoration.UNDERGROUND_ORES) { overworld }
         }
@@ -191,7 +191,7 @@ fun initOresModule() {
 
 fun createOreModel() = Model {
     ModelData(
-        parent = Identifier("minecraft", "block/block"),
+        parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
         textures = ModelTexturesData(
             TextureKey.PARTICLE.id to TextureKey.BACK.string,
         ),

@@ -18,7 +18,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryStack
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object FairyQuestRecipeClientReiCategoryCard : ClientReiCategoryCard<FairyQuestRecipeReiCategoryCard.Display>(FairyQuestRecipeReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -29,7 +29,7 @@ object FairyQuestRecipeClientReiCategoryCard : ClientReiCategoryCard<FairyQuestR
 
     override fun createCategory() = object : DisplayCategory<FairyQuestRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = FairyQuestRecipeReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { FairyQuestRecipeReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { FairyQuestRecipeReiCategoryCard.translation() }
         override fun getIcon(): Renderer = FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(FairyQuestRecipeCard.NEW_PRODUCT_FROM_FRI) }.toEntryStack()
         override fun getDisplayWidth(display: FairyQuestRecipeReiCategoryCard.Display) = 18 * 9 + 10
         override fun getDisplayHeight() = 18 * 2 + 10

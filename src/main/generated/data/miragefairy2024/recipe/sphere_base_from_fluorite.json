@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:sphere_base",
+  "key": {
+    "F": {
+      "item": "miragefairy2024:fluorite"
+    },
+    "S": {
+      "item": "miragefairy2024:fairy_scales"
+    }
+  },
+  "pattern": [
+    " S ",
+    "SFS",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:sphere_base"
+  }
+}

@@ -12,6 +12,11 @@ import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.register
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.util.ExtraCodecs
 
 val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     MirageFlowerCard,
@@ -27,8 +32,22 @@ val CREATIVE_ONLY_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()
 val GUI_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.gui" }, "Use while sneaking to show traits", "スニーク中に使用時、特性GUIを表示")
 val INVALID_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.invalid" }, "Invalid", "無効")
 
+val TRAIT_STACKS_DATA_COMPONENT_TYPE: DataComponentType<TraitStacks> = DataComponentType.builder<TraitStacks>()
+    .persistent(TraitStacks.CODEC)
+    .networkSynchronized(TraitStacks.STREAM_CODEC)
+    .cacheEncoding()
+    .build()
+
+val RARITY_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.builder<Int>()
+    .persistent(ExtraCodecs.intRange(0, 1))
+    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    .build()
+
 context(ModContext)
 fun initMagicPlantModule() {
+
+    TRAIT_STACKS_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("trait_stacks"))
+    RARITY_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("rarity"))
 
     TRAIT_TRANSLATION.enJa()
     CREATIVE_ONLY_TRANSLATION.enJa()

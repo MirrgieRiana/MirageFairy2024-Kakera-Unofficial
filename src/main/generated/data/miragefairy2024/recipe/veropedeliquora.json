@@ -1,0 +1,29 @@
+{
+  "type": "miragefairy2024:fermentation_barrel",
+  "duration": 6000,
+  "group": "miragefairy2024:veropedeliquora",
+  "inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:glass_bottle"
+      }
+    },
+    {
+      "count": 8,
+      "ingredient": {
+        "item": "miragefairy2024:veropeda_berries"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "fabric:type": "miragefairy2024:water_bottle"
+      }
+    }
+  ],
+  "output": {
+    "count": 1,
+    "id": "miragefairy2024:veropedeliquora"
+  }
+}

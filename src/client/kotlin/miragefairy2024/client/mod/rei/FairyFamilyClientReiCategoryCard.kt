@@ -17,7 +17,7 @@ import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 
 object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCategoryCard.Display>(FairyFamilyReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -40,7 +40,7 @@ object FairyFamilyClientReiCategoryCard : ClientReiCategoryCard<FairyFamilyReiCa
 
     override fun createCategory() = object : DisplayCategory<FairyFamilyReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = FairyFamilyReiCategoryCard.identifier.first
-        override fun getTitle(): Text = text { FairyFamilyReiCategoryCard.translation() }
+        override fun getTitle(): Component = text { FairyFamilyReiCategoryCard.translation() }
         override fun getIcon(): Renderer = MotifCard.IRON.createFairyItemStack().toEntryStack()
         override fun getDisplayWidth(display: FairyFamilyReiCategoryCard.Display) = 18 * 9 + 10
         override fun getDisplayHeight() = 18 * 7 + 10

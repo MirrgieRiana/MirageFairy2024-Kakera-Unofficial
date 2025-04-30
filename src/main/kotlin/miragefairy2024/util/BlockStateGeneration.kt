@@ -8,12 +8,12 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
 import mirrg.kotlin.hydrogen.join
 import mirrg.kotlin.hydrogen.or
+import net.minecraft.core.Direction
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
 import net.minecraft.data.models.blockstates.BlockStateGenerator as BlockStateSupplier
-import net.minecraft.world.level.block.state.properties.Property
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.core.Direction
 
 
 // registerBlockStateGeneration
@@ -69,7 +69,7 @@ enum class BlockStateVariantRotation(val degrees: Int) {
 
 class BlockStateVariant(
     private val parent: BlockStateVariant? = null,
-    private val model: Identifier? = null,
+    private val model: ResourceLocation? = null,
     private val x: BlockStateVariantRotation? = null,
     private val y: BlockStateVariantRotation? = null,
     private val uvlock: Boolean? = null,
@@ -83,7 +83,7 @@ class BlockStateVariant(
 }
 
 fun BlockStateVariant.with(
-    model: Identifier? = null,
+    model: ResourceLocation? = null,
     x: BlockStateVariantRotation? = null,
     y: BlockStateVariantRotation? = null,
     uvlock: Boolean? = null,
@@ -123,10 +123,10 @@ fun propertiesOf(vararg properties: PropertyEntry<*>) = listOf(*properties)
 object VariantsBlockStateGenerationRegistrationScope
 
 context(VariantsBlockStateGenerationRegistrationScope)
-fun normal(model: Identifier) = listOf(propertiesOf() with BlockStateVariant(model = model))
+fun normal(model: ResourceLocation) = listOf(propertiesOf() with BlockStateVariant(model = model))
 
 context(VariantsBlockStateGenerationRegistrationScope)
-fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>, modelFunction: (Identifier, PropertyEntry<T>) -> Identifier): List<BlockStateVariantEntry> {
+fun <T : Comparable<T>> List<BlockStateVariantEntry>.with(property: Property<T>, modelFunction: (ResourceLocation, PropertyEntry<T>) -> ResourceLocation): List<BlockStateVariantEntry> {
     return property.possibleValues.flatMap { value ->
         this.map { (properties, variant) ->
             val entry = property with value

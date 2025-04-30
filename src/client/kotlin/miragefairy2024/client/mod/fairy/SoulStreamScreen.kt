@@ -17,12 +17,12 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
 import miragefairy2024.util.size
-import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
 import com.mojang.blaze3d.platform.InputConstants as InputUtil
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.client.gui.GuiGraphics as DrawContext
 
-class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
+class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
 
     // カーソルをインベントリ画面での位置に戻す
     private var isFirst = true

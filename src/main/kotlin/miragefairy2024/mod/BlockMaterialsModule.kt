@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EnJa
@@ -26,27 +27,27 @@ import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.HalfTransparentBlock as TransparentBlock
-import net.minecraft.data.models.model.TextureSlot as TextureKey
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.TagKey
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.HalfTransparentBlock as TransparentBlock
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
 enum class BlockMaterialCard(
     path: String,
@@ -144,9 +145,12 @@ enum class BlockMaterialCard(
 
 context(ModContext)
 fun initBlockMaterialsModule() {
+    LocalVacuumDecayBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay"))
+    SemiOpaqueTransparentBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block"))
+
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.item.register(Registries.ITEM, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -192,7 +196,7 @@ fun initBlockMaterialsModule() {
 private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { block ->
     Model { textureMap ->
         ModelData(
-            parent = Identifier("minecraft", "block/block"),
+            parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
             textures = ModelTexturesData(
                 TextureKey.PARTICLE.id to textureMap.get(TextureKey.BACK).string,
                 TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,
@@ -233,6 +237,12 @@ private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { bloc
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
+    companion object {
+        val CODEC: MapCodec<LocalVacuumDecayBlock> = simpleCodec(::LocalVacuumDecayBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun isRandomlyTicking(state: BlockState) = true
 
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
@@ -248,8 +258,8 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
         world.setBlockAndUpdate(targetBlockPos, state)
     }
 
-    override fun stepOn(world: World, pos: BlockPos, state: BlockState, entity: Entity) {
-        if (!entity.isSteppingCarefully()) {
+    override fun stepOn(world: Level, pos: BlockPos, state: BlockState, entity: Entity) {
+        if (!entity.isSteppingCarefully) {
             entity.hurt(world.damageSources().magic(), 1.0f)
         }
         super.stepOn(world, pos, state, entity)
@@ -257,6 +267,12 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
 }
 
 class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
+    companion object {
+        val CODEC: MapCodec<SemiOpaqueTransparentBlock> = simpleCodec(::SemiOpaqueTransparentBlock)
+    }
+
+    override fun codec() = CODEC
+
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
 }

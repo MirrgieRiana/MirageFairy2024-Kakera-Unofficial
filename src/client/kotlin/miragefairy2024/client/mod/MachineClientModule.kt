@@ -11,11 +11,11 @@ import miragefairy2024.mod.machine.SimpleMachineScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import net.minecraft.client.renderer.Rect2i
 import java.util.Optional
 import kotlin.math.roundToInt
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initMachineClientModule() {
     HandledScreens.register(FermentationBarrelCard.screenHandlerType) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }

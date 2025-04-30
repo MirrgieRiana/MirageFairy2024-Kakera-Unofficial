@@ -7,11 +7,11 @@ import miragefairy2024.util.Channel
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
-import net.minecraft.network.FriendlyByteBuf as PacketByteBuf
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource as SoundCategory
 
 enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: List<String>) {
     MAGIC1("magic1", "Magic fired", "魔法が発射される", listOf("magic1")),
@@ -35,8 +35,8 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
 }
 
 object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier("sound")) {
-    override fun writeToBuf(buf: PacketByteBuf, packet: SoundEventPacket) {
-        buf.writeResourceLocation(Registries.SOUND_EVENT.getKey(packet.soundEvent))
+    override fun writeToBuf(buf: RegistryFriendlyByteBuf, packet: SoundEventPacket) {
+        buf.writeResourceLocation(BuiltInRegistries.SOUND_EVENT.getKey(packet.soundEvent))
         buf.writeBlockPos(packet.pos)
         buf.writeUtf(packet.category.name)
         buf.writeFloat(packet.volume)
@@ -44,8 +44,8 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
         buf.writeBoolean(packet.useDistance)
     }
 
-    override fun readFromBuf(buf: PacketByteBuf): SoundEventPacket {
-        val soundEvent = Registries.SOUND_EVENT.get(buf.readResourceLocation())!!
+    override fun readFromBuf(buf: RegistryFriendlyByteBuf): SoundEventPacket {
+        val soundEvent = BuiltInRegistries.SOUND_EVENT.get(buf.readResourceLocation())!!
         val pos = buf.readBlockPos()
         val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }
         val volume = buf.readFloat()
@@ -67,7 +67,7 @@ class SoundEventPacket(
 context(ModContext)
 fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
-        card.soundEvent.register(Registries.SOUND_EVENT, card.identifier)
+        card.soundEvent.register(BuiltInRegistries.SOUND_EVENT, card.identifier)
         DataGenerationEvents.onGenerateSound { it(card.path, card.translation.keyGetter(), card.sounds) }
         card.translation.enJa()
     }

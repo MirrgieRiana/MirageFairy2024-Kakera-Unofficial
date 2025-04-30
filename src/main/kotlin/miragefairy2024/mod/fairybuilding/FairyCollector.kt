@@ -1,5 +1,7 @@
 package miragefairy2024.mod.fairybuilding
 
+import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
@@ -11,18 +13,21 @@ import miragefairy2024.util.int
 import miragefairy2024.util.invoke
 import miragefairy2024.util.mergeInventory
 import miragefairy2024.util.on
+import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.toInventoryDelegate
 import miragefairy2024.util.wrapper
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.Items
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.Level as World
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"
@@ -82,6 +87,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     context(ModContext)
     override fun init() {
         super.init()
+        FairyCollectorBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector"))
         registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")
@@ -92,22 +98,28 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     }
 }
 
-class FairyCollectorBlock(card: FairyCollectorCard) : FairyFactoryBlock(card)
+class FairyCollectorBlock(card: FairyCollectorCard) : FairyFactoryBlock(card) {
+    companion object {
+        val CODEC: MapCodec<FairyCollectorBlock> = simpleCodec { FairyCollectorBlock(FairyCollectorCard) }
+    }
+
+    override fun codec() = CODEC
+}
 
 class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: BlockState) : FairyFactoryBlockEntity<FairyCollectorBlockEntity>(card, pos, state) {
 
     override fun getThis() = this
 
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
         collectionProgress = nbt.wrapper["CollectionProgress"].int.get() ?: 0
         sortProgress = nbt.wrapper["SortProgress"].int.get() ?: 0
         updateCache()
     }
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
         nbt.wrapper["CollectionProgress"].int.set(collectionProgress)
         nbt.wrapper["SortProgress"].int.set(sortProgress)
     }
@@ -130,7 +142,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     }
 
 
-    override fun serverTick(world: World, pos: BlockPos, state: BlockState) {
+    override fun serverTick(world: Level, pos: BlockPos, state: BlockState) {
         super.serverTick(world, pos, state)
 
         if (folia < 3_000) {

@@ -11,11 +11,11 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.temperatureCategory
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.core.Holder as RegistryEntry
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.core.Holder as RegistryEntry
 
 // module
 
@@ -57,23 +57,23 @@ private val END_TRANSLATION = Translation({ "${MirageFairy2024.MOD_ID}.trait_spa
 context(TraitSpawnConditionScope) val overworld
     get() = object : TraitSpawnCondition {
         override val description = text { OVERWORLD_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_OVERWORLD)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IS_OVERWORLD)
     }
 context(TraitSpawnConditionScope) val nether
     get() = object : TraitSpawnCondition {
         override val description = text { NETHER_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_NETHER)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IS_NETHER)
     }
 context(TraitSpawnConditionScope) val end
     get() = object : TraitSpawnCondition {
         override val description = text { END_TRANSLATION() }
-        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IN_THE_END)
+        override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(ConventionalBiomeTags.IS_END)
     }
 
 
 // バイオーム・タグ
 
-context(TraitSpawnConditionScope) operator fun RegistryKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
+context(TraitSpawnConditionScope) operator fun ResourceKey<Biome>.unaryPlus() = object : TraitSpawnCondition {
     override val description = text { translate(this@unaryPlus.location().toLanguageKey("biome")) }
     override fun canSpawn(biome: RegistryEntry<Biome>) = biome.`is`(this@unaryPlus)
 }

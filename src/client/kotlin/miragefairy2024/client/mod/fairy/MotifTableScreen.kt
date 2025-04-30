@@ -20,12 +20,14 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.item.Item
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.network.chat.Component as Text
 
-class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: PlayerInventory, title: Text) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
+class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {
@@ -54,7 +56,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Player
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    tooltip(ItemComponent.tooltipFromItem(chance.showingItemStack, MinecraftClient.getInstance().player, null))
+                                    tooltip(ItemComponent.tooltipFromItem(chance.showingItemStack, Item.TooltipContext.of(Minecraft.getInstance().level), MinecraftClient.getInstance().player, null))
 
                                     child(Components.item(chance.showingItemStack))
                                     child(horizontalSpace(3))

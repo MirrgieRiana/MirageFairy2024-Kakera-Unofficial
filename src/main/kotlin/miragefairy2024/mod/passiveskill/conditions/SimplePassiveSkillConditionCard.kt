@@ -9,11 +9,11 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.Heightmap
 
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, context.blockPos).y
 private fun biomeHasNoPrecipitation(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitationAt(context.blockPos) == Biome.Precipitation.NONE
@@ -36,8 +36,8 @@ enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName:
     UNDERWATER("underwater", "Underwater", "水中", { it.player.level().getBlockState(it.player.eyeBlockPos).fluidState.`is`(FluidTags.WATER) }),
     IN_THE_AIR("in_the_air", "In the Air", "空中", { !it.player.onGround() }),
     ON_FIRE("on_fire", "On Fire", "炎上", { it.player.isOnFire }),
-    IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),
-    NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IN_NETHER) }),
+    IN_NETHER("in_nether", "In Nether", "ネザー", { it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IS_NETHER) }),
+    NOT_IN_NETHER("not_in_nether", "Not In Nether", "ネザー外", { !it.world.getBiome(it.blockPos).`is`(ConventionalBiomeTags.IS_NETHER) }),
 
     PICKAXE("pickaxe", "Pickaxe", "つるはし", { it.player.mainHandItem.`is`(ItemTags.PICKAXES) }),
     AXE("axe", "Axe", "斧", { it.player.mainHandItem.`is`(ItemTags.AXES) }),

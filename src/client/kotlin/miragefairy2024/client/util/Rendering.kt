@@ -1,10 +1,10 @@
 package miragefairy2024.client.util
 
+import net.minecraft.network.chat.Component
+import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
 import net.minecraft.client.gui.Font as TextRenderer
 import net.minecraft.client.gui.GuiGraphics as DrawContext
-import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
 import net.minecraft.util.FormattedCharSequence as OrderedText
-import net.minecraft.network.chat.Component as Text
 
 inline fun <T> MatrixStack.stack(block: () -> T): T {
     this.pushPose()
@@ -19,8 +19,8 @@ fun DrawContext.drawRightText(textRenderer: TextRenderer, text: String, rightX: 
     this.drawString(textRenderer, text, rightX - textRenderer.width(text), y, color, shadow)
 }
 
-fun DrawContext.drawRightText(textRenderer: TextRenderer, text: Text, rightX: Int, y: Int, color: Int, shadow: Boolean) {
-    val orderedText = text.getVisualOrderText()
+fun DrawContext.drawRightText(textRenderer: TextRenderer, text: Component, rightX: Int, y: Int, color: Int, shadow: Boolean) {
+    val orderedText = text.visualOrderText
     this.drawString(textRenderer, orderedText, rightX - textRenderer.width(orderedText), y, color, shadow)
 }
 

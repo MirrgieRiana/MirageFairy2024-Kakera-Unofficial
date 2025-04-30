@@ -18,17 +18,17 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BiomeTags
 import net.minecraft.util.valueproviders.IntProvider
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 import java.util.function.Predicate
+import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
 
 val DEBRIS_FEATURE = DebrisFeature(DebrisFeature.Config.CODEC)
 
@@ -54,15 +54,15 @@ enum class DebrisCard(
     ;
 
     val identifier = MirageFairy2024.identifier("${path}_debris")
-    val configuredFeatureKey = RegistryKeys.CONFIGURED_FEATURE with identifier
-    val placedFeatureKey = RegistryKeys.PLACED_FEATURE with identifier
+    val configuredFeatureKey = Registries.CONFIGURED_FEATURE with identifier
+    val placedFeatureKey = Registries.PLACED_FEATURE with identifier
 }
 
 // TODO rei
 context(ModContext)
 fun initDebrisModule() {
 
-    DEBRIS_FEATURE.register(Registries.FEATURE, MirageFairy2024.identifier("debris"))
+    DEBRIS_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("debris"))
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {
@@ -70,7 +70,7 @@ fun initDebrisModule() {
         }
         registerDynamicGeneration(card.placedFeatureKey) {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower }
-            RegistryKeys.CONFIGURED_FEATURE[card.configuredFeatureKey] with placementModifiers
+            Registries.CONFIGURED_FEATURE[card.configuredFeatureKey] with placementModifiers
         }
         card.placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION, card.biomeSelectorCreator)
     }

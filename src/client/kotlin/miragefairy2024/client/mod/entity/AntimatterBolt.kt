@@ -5,16 +5,16 @@ import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.AntimatterBoltEntity
 import miragefairy2024.util.times
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
-import net.minecraft.client.model.geom.PartPose as ModelTransform
-import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
 import net.minecraft.client.renderer.entity.EntityRenderer
-import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
-import net.minecraft.client.model.HierarchicalModel as SinglePartEntityModel
+import net.minecraft.client.renderer.texture.OverlayTexture
 import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
-import net.minecraft.util.Mth as MathHelper
 import com.mojang.math.Axis as RotationAxis
+import net.minecraft.client.model.HierarchicalModel as SinglePartEntityModel
+import net.minecraft.client.model.geom.PartPose as ModelTransform
+import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
+import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
+import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
+import net.minecraft.util.Mth as MathHelper
 
 class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<AntimatterBoltEntity>(context) {
     companion object {
@@ -40,7 +40,7 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
 
             model.setupAnim(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.renderType(texture))
-            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F)
+            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF.toInt())
         }
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
     }

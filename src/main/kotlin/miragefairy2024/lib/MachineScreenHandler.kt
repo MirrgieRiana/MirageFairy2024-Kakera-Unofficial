@@ -1,22 +1,22 @@
 package miragefairy2024.lib
 
 import miragefairy2024.util.quickMove
-import net.minecraft.world.entity.player.Player as PlayerEntity
-import net.minecraft.world.entity.player.Inventory as PlayerInventory
-import net.minecraft.world.Container as Inventory
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.inventory.ContainerData as PropertyDelegate
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
+import net.minecraft.network.chat.Component
+import net.minecraft.world.Container
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
+import net.minecraft.world.inventory.ContainerData as PropertyDelegate
+import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
-        val playerInventory: PlayerInventory,
-        val inventory: Inventory,
+        val playerInventory: Inventory,
+        val inventory: Container,
         val propertyDelegate: PropertyDelegate,
         val context: ScreenHandlerContext,
     )
@@ -25,7 +25,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         val x: Int
         val y: Int
         fun isValid(itemStack: ItemStack): Boolean
-        fun getTooltip(): List<Text>?
+        fun getTooltip(): List<Component>?
     }
 
     interface PropertyConfiguration<in E> {
@@ -35,7 +35,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         fun decode(data: Short): Int
     }
 
-    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Inventory, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
+    class MachineSlot(val configuration: GuiSlotConfiguration, inventory: Container, index: Int) : Slot(inventory, index, configuration.x, configuration.y) {
         override fun mayPlace(stack: ItemStack) = configuration.isValid(stack)
     }
 
@@ -61,7 +61,7 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         addDataSlots(arguments.propertyDelegate)
     }
 
-    fun getTooltip(slot: Slot): List<Text>? {
+    fun getTooltip(slot: Slot): List<Component>? {
         if (slot.hasItem()) return null // アイテムのツールチップを優先
         if (slot !is MachineSlot) return null
         return slot.configuration.getTooltip()

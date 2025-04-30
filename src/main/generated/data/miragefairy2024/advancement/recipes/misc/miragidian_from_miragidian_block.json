@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_miragidian_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:miragidian_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:miragidian_from_miragidian_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_miragidian_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:miragidian_from_miragidian_block"
+    ]
+  }
+}

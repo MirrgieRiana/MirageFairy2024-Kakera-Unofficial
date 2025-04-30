@@ -5,53 +5,57 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.ComposterBlock
-import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
-import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
+import net.minecraft.advancements.critereon.EnchantmentPredicate
+import net.minecraft.advancements.critereon.ItemEnchantmentsPredicate
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.critereon.ItemSubPredicates
+import net.minecraft.advancements.critereon.LocationPredicate
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.HolderSet
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeProvider
-import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
-import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
-import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.inventory.CraftingContainer as RecipeInputInventory
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CraftingInput
+import net.minecraft.world.item.crafting.CustomRecipe
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
-import net.minecraft.world.level.storage.loot.predicates.LocationCheck as LocationCheckLootCondition
-import net.minecraft.world.level.storage.loot.predicates.MatchTool as MatchToolLootCondition
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition as RandomChanceWithLootingLootCondition
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
+import net.minecraft.advancements.critereon.MinMaxBounds as NumberRange
+import net.minecraft.core.NonNullList as DefaultedList
+import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
+import net.minecraft.data.recipes.ShapedRecipeBuilder as ShapedRecipeJsonBuilder
+import net.minecraft.data.recipes.ShapelessRecipeBuilder as ShapelessRecipeJsonBuilder
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder as CookingRecipeJsonBuilder
+import net.minecraft.data.recipes.SpecialRecipeBuilder as ComplexRecipeJsonBuilder
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer as LeafEntry
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay as ExplosionDecayLootFunction
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction as LootingEnchantLootFunction
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck as LocationCheckLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
+import net.minecraft.world.level.storage.loot.predicates.MatchTool as MatchToolLootCondition
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider as LootNumberProvider
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.advancements.critereon.MinMaxBounds as NumberRange
-import net.minecraft.advancements.critereon.LocationPredicate
-import net.minecraft.advancements.critereon.EnchantmentPredicate
-import net.minecraft.advancements.critereon.ItemPredicate
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.item.crafting.CustomRecipe as SpecialCraftingRecipe
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer as SpecialRecipeSerializer
-import net.minecraft.data.recipes.RecipeCategory
-import net.minecraft.core.RegistryAccess as DynamicRegistryManager
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.resources.ResourceKey as RegistryKey
-import net.minecraft.tags.TagKey
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.world.level.Level as World
-import net.minecraft.world.level.biome.Biome
 
 // Crafting
 
@@ -61,7 +65,7 @@ fun <T : CraftingRecipeJsonBuilder> T.group(item: Item) = this.also { it.group(r
 
 class RecipeGenerationSettings<T> {
     val listeners = mutableListOf<(T) -> Unit>()
-    val idModifiers = mutableListOf<(Identifier) -> Identifier>()
+    val idModifiers = mutableListOf<(ResourceLocation) -> ResourceLocation>()
     var recipeCategory = RecipeCategory.MISC
     var noGroup = false
 }
@@ -71,7 +75,7 @@ infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: I
 }
 
 infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
-    this.idModifiers += { Identifier(modId, it.path) }
+    this.idModifiers += { ResourceLocation.fromNamespaceAndPath(modId, it.path) }
 }
 
 infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
@@ -145,7 +149,7 @@ fun registerBlastingRecipeGeneration(
     output: Item,
     experience: Double = 0.0,
     cookingTime: Int = 100,
-    block: CookingRecipeJsonBuilder.() -> Unit = {},
+    block: CookingRecipeJsonBuilder. () -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
@@ -165,24 +169,22 @@ fun registerBlastingRecipeGeneration(
 // Special Recipe
 
 context(ModContext)
-fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (RecipeInputInventory) -> SpecialRecipeResult?) {
+fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) -> SpecialRecipeResult?) {
     val identifier = MirageFairy2024.identifier(path)
     lateinit var serializer: SpecialRecipeSerializer<*>
-    serializer = SpecialRecipeSerializer { _, category ->
-        object : SpecialCraftingRecipe(identifier, category) {
-            override fun matches(inventory: RecipeInputInventory, world: World) = matcher(inventory) != null
-            override fun assemble(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager) = matcher(inventory)?.craft() ?: EMPTY_ITEM_STACK
-            override fun getRemainingItems(inventory: RecipeInputInventory) = matcher(inventory)?.getRemainder() ?: object : Recipe<RecipeInputInventory> by this {
-                override fun getRemainingItems(inventory: RecipeInputInventory) = super.getRemainingItems(inventory)
-            }.getRemainingItems(inventory)
 
-            override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
-            override fun getSerializer() = serializer
-        }
+    class SpecialCraftingRecipeImpl(category: CraftingBookCategory) : CustomRecipe(category) {
+        override fun matches(input: CraftingInput, world: Level) = matcher(input) != null
+        override fun assemble(input: CraftingInput, registries: HolderLookup.Provider) = matcher(input)?.craft() ?: EMPTY_ITEM_STACK
+        override fun getRemainingItems(input: CraftingInput) = matcher(input)?.getRemainder() ?: super.getRemainingItems(input)
+        override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
+        override fun getSerializer() = serializer
     }
-    serializer.register(Registries.RECIPE_SERIALIZER, identifier)
+
+    serializer = SpecialRecipeSerializer(::SpecialCraftingRecipeImpl)
+    serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
     DataGenerationEvents.onGenerateRecipe {
-        ComplexRecipeJsonBuilder.special(serializer).save(it, identifier.string)
+        ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }
 }
 
@@ -213,12 +215,12 @@ fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count
 }
 
 context(ModContext)
-fun Item.registerLootTableModification(lootTableIdGetter: () -> Identifier, block: (LootTable.Builder) -> Unit) = ModEvents.onInitialize {
+fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
-    LootTableEvents.MODIFY.register { _, _, id, tableBuilder, source ->
+    LootTableEvents.MODIFY.register { id, tableBuilder, source, registries ->
         if (source.isBuiltin) {
             if (id == lootTableId) {
-                block(tableBuilder)
+                block(tableBuilder, registries)
             }
         }
     }
@@ -228,8 +230,8 @@ context(ModContext)
 fun Item.registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
-    biome: (() -> RegistryKey<Biome>)? = null,
-) = this.registerLootTableModification({ Blocks.GRASS.lootTable }) { tableBuilder ->
+    biome: (() -> ResourceKey<Biome>)? = null,
+) = this.registerLootTableModification({ Blocks.SHORT_GRASS.lootTable }) { tableBuilder, registries ->
     tableBuilder.configure {
         withPool(LootPool(AlternativeLootPoolEntry {
             otherwise(EmptyLootPoolEntry {
@@ -237,8 +239,8 @@ fun Item.registerGrassDrop(
             })
             otherwise(ItemLootPoolEntry(this@registerGrassDrop) {
                 `when`(RandomChanceLootCondition.randomChance(0.125F * amount))
-                if (biome != null) `when`(LocationCheckLootCondition.checkLocation(LocationPredicate.Builder.location().setBiome(biome())))
-                apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
+                if (biome != null) `when`(LocationCheckLootCondition.checkLocation(LocationPredicate.Builder.location().setBiomes(HolderSet.direct(registries[Registries.BIOME, biome()]))))
+                apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.explosionDecay())
             })
         }))
@@ -250,15 +252,15 @@ fun Item.registerExtraOreDrop(
     oreBlock: Block,
     chance: Float = 1.0F,
     fortuneMultiplier: Int = 0,
-) = this.registerLootTableModification({ oreBlock.lootTable }) { tableBuilder ->
+) = this.registerLootTableModification({ oreBlock.lootTable }) { tableBuilder, registries ->
     tableBuilder.configure {
         withPool(LootPool(AlternativeLootPoolEntry {
             otherwise(EmptyLootPoolEntry {
-                `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().hasEnchantment(EnchantmentPredicate(Enchantments.SILK_TOUCH, NumberRange.Ints.atLeast(1)))))
+                `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(listOf(EnchantmentPredicate(registries[Registries.ENCHANTMENT, Enchantments.SILK_TOUCH], NumberRange.Ints.atLeast(1)))))))
             })
             otherwise(ItemLootPoolEntry(this@registerExtraOreDrop) {
                 if (chance < 1.0F) `when`(RandomChanceLootCondition.randomChance(chance))
-                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, fortuneMultiplier))
+                if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.explosionDecay())
             })
         }))
@@ -272,25 +274,25 @@ fun Item.registerMobDrop(
     dropRate: Pair<Float, Float>? = null,
     amount: LootNumberProvider? = null,
     fortuneFactor: LootNumberProvider? = null,
-) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder ->
+) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder, registries ->
     tableBuilder.configure {
         withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
             if (amount != null) apply(SetCountLootFunction.setCount(amount, false))
-            if (fortuneFactor != null) apply(LootingEnchantLootFunction.lootingMultiplier(fortuneFactor))
+            if (fortuneFactor != null) apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, fortuneFactor))
         }) {
             if (onlyKilledByPlayer) `when`(KilledByPlayerLootCondition.killedByPlayer())
-            if (dropRate != null) `when`(RandomChanceWithLootingLootCondition.randomChanceAndLootingBoost(dropRate.first, dropRate.second))
+            if (dropRate != null) `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, dropRate.first, dropRate.second))
         })
     }
 }
 
 context(ModContext)
 fun Item.registerChestLoot(
-    lootTableIdGetter: () -> Identifier,
+    lootTableIdGetter: () -> ResourceKey<LootTable>,
     weight: Int = 10,
     count: IntRange? = null,
     block: LeafEntry.Builder<*>.() -> Unit = {},
-) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder ->
+) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder, registries ->
     tableBuilder.modifyPools { lootPool ->
         lootPool.configure {
             add(ItemLootPoolEntry(this@registerChestLoot) {

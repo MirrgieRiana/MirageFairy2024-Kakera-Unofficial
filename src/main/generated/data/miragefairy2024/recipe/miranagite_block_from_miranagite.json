@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "miragefairy2024:miranagite_block",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    },
+    {
+      "item": "miragefairy2024:miranagite"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:miranagite_block"
+  }
+}

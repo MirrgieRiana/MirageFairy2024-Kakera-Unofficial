@@ -1,5 +1,6 @@
 package miragefairy2024.mod.passiveskill.effects
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -7,22 +8,22 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.core.Holder
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
-import net.minecraft.network.chat.Component as Text
-import java.util.UUID
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
-    val FORMATTERS = mutableMapOf<EntityAttribute, (Double) -> String>()
+    val FORMATTERS = mutableMapOf<Holder<EntityAttribute>, (Double) -> String>()
 
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
-    private val uuid: UUID = UUID.fromString("AEC6063C-2320-4FAC-820D-0562438ECAAC")
+    private val ATTRIBUTE_MODIFIER_IDENTIFIER = MirageFairy2024.identifier("passive_skill")
 
-    class Value(val map: Map<EntityAttribute, Double>)
+    class Value(val map: Map<Holder<EntityAttribute>, Double>)
 
-    override fun getText(value: Value): Text {
+    override fun getText(value: Value): Component {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
+            text { translate(attribute.value().descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 
@@ -42,20 +43,20 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
         oldValue.map.forEach { (attribute, _) ->
             val customInstance = context.player.attributes.getInstance(attribute) ?: return@forEach
             if (attribute !in newValue.map) {
-                customInstance.removeModifier(uuid)
+                customInstance.removeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER)
             }
         }
 
         // 追加および変更
         newValue.map.forEach { (attribute, value) ->
             val customInstance = context.player.attributes.getInstance(attribute) ?: return@forEach
-            val oldModifier = customInstance.getModifier(uuid)
+            val oldModifier = customInstance.getModifier(ATTRIBUTE_MODIFIER_IDENTIFIER)
             if (oldModifier == null) {
-                val modifier = EntityAttributeModifier(uuid, "Fairy Bonus", value, EntityAttributeModifier.Operation.ADDITION)
+                val modifier = EntityAttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, EntityAttributeModifier.Operation.ADD_VALUE)
                 customInstance.addTransientModifier(modifier)
             } else if (oldModifier.amount != value) {
-                customInstance.removeModifier(uuid)
-                val modifier = EntityAttributeModifier(uuid, "Fairy Bonus", value, EntityAttributeModifier.Operation.ADDITION)
+                customInstance.removeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER)
+                val modifier = EntityAttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, EntityAttributeModifier.Operation.ADD_VALUE)
                 customInstance.addTransientModifier(modifier)
             }
         }

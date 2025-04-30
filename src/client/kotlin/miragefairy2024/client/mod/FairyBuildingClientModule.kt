@@ -16,10 +16,10 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
-import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import java.util.Optional
 import kotlin.math.roundToInt
+import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initFairyBuildingClientModule() {
     ModelLoadingPlugin.register {

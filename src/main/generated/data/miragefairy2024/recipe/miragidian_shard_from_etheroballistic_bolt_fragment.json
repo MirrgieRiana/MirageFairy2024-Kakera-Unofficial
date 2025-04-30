@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.0,
+  "group": "miragefairy2024:miragidian_shard",
+  "ingredient": {
+    "item": "miragefairy2024:etheroballistic_bolt_fragment"
+  },
+  "result": {
+    "id": "miragefairy2024:miragidian_shard"
+  }
+}

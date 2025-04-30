@@ -31,13 +31,14 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
-import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
+import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
-import net.minecraft.client.KeyMapping as KeyBinding
-import net.minecraft.network.chat.Component as Text
+import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
+import net.minecraft.client.KeyMapping as KeyBinding
+import net.minecraft.client.Minecraft as MinecraftClient
+import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
+import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 lateinit var soulStreamKey: KeyBinding
 
@@ -106,13 +107,13 @@ fun initFairyClientModule() {
                     }
 
                     // ボタン
-                    val buttonTexture = MirageFairy2024.identifier("textures/gui/sprites/soul_stream_button.png")
-                    child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, 0, 0, 20, buttonTexture, 20, 40) {
+                    val buttonWidgetSprites = WidgetSprites(MirageFairy2024.identifier("soul_stream_button"), MirageFairy2024.identifier("soul_stream_button_highlighted"))
+                    child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, buttonWidgetSprites) {
                         lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouseHandler.xpos(), MinecraftClient.getInstance().mouseHandler.ypos())
                         screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {
-                        tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Text.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })
+                        tooltip(text { OPEN_SOUL_STREAM_KEY_TRANSLATION() + "("() + Component.keybind(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter()) + ")"() })
                     })
 
                 })

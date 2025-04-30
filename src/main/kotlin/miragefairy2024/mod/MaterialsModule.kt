@@ -21,7 +21,6 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.from
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
-import miragefairy2024.util.itemStacks
 import miragefairy2024.util.modId
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
@@ -47,34 +46,35 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancements.CriteriaTriggers as Criteria
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.item.TooltipFlag as TooltipContext
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.stats.Stats
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.gameevent.GameEvent
+import kotlin.math.pow
+import net.minecraft.advancements.CriteriaTriggers as Criteria
+import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.util.StringUtil as StringHelper
+import net.minecraft.world.InteractionHand as Hand
+import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
 import net.minecraft.world.effect.MobEffects as StatusEffects
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.food.FoodProperties as FoodComponent
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils as ItemUsage
-import net.minecraft.world.item.Items
-import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.tags.TagKey
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.stats.Stats
-import net.minecraft.network.chat.Component as Text
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.util.StringUtil as StringHelper
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
-import net.minecraft.world.level.Level as World
-import net.minecraft.world.level.gameevent.GameEvent
-import kotlin.math.pow
+import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
 
 class MaterialCard(
     path: String,
@@ -185,9 +185,9 @@ class MaterialCard(
             soulStreamContainable = true,
             foodComponent = FoodComponent.Builder()
                 .nutrition(2)
-                .saturationMod(0.3F)
+                .saturationModifier(0.3F)
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .alwaysEat()
+                .alwaysEdible()
                 .build(),
         )
         val MIRAGIUM_NUGGET = !MaterialCard(
@@ -267,7 +267,7 @@ class MaterialCard(
                 .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .fast()
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
@@ -303,8 +303,8 @@ class MaterialCard(
             fuelValue = 200,
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffect, 20), 1.0F)
+                .saturationModifier(0.1F)
+                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20), 1.0F)
                 .build(),
         ) {
             // →松明
@@ -636,7 +636,7 @@ class MaterialCard(
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
                 .build(),
@@ -661,7 +661,7 @@ class MaterialCard(
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
                 .build(),
             creator = { DrinkItem(it) },
@@ -684,8 +684,8 @@ class MaterialCard(
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffect, 20 * 8, 1), 1.0F)
+                .saturationModifier(0.1F)
+                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20 * 8, 1), 1.0F)
                 .build(),
             creator = { DrinkItem(it, flaming = 5) },
         ) {
@@ -708,7 +708,7 @@ class MaterialCard(
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
                 .build(),
@@ -732,7 +732,7 @@ class MaterialCard(
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
-                .saturationMod(0.1F)
+                .saturationModifier(0.1F)
                 .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
                 .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
                 .build(),
@@ -778,7 +778,7 @@ class MaterialCard(
         .let { creator(it) }
 }
 
-val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(RegistryKeys.ITEM, MirageFairy2024.identifier("mirage_flour"))
+val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toLanguageKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toLanguageKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
@@ -786,7 +786,7 @@ val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identif
 context(ModContext)
 fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
-        card.item.register(Registries.ITEM, card.identifier)
+        card.item.register(BuiltInRegistries.ITEM, card.identifier)
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(EnJa(card.enName, card.jaName))
@@ -830,7 +830,7 @@ fun initMaterialsModule() {
 
     // ミーニャ⇔ミナ両替
     registerSpecialRecipe("minia_from_mina", 1) { inventory ->
-        val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
+        val itemStacks = inventory.items().filter { it.isNotEmpty }.toMutableList()
         if (itemStacks.pull { it.`is`(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
         val itemStack = itemStacks.pull { true } ?: return@registerSpecialRecipe null // アイテム取得
         if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
@@ -840,7 +840,7 @@ fun initMaterialsModule() {
         }
     }
     registerSpecialRecipe("mina_from_minia", 1) { inventory ->
-        val itemStacks = inventory.itemStacks.filter { it.isNotEmpty }.toMutableList()
+        val itemStacks = inventory.items().filter { it.isNotEmpty }.toMutableList()
         if (itemStacks.pull { it.`is`(MaterialCard.APOSTLE_WAND.item) } == null) return@registerSpecialRecipe null // 使徒のステッキ取得
         val fairyItemStack = itemStacks.pull { it.`is`(FairyCard.item) && it.getFairyMotif() == MotifCard.MINA } ?: return@registerSpecialRecipe null // ミーニャ取得
         if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
@@ -885,31 +885,31 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         val FLAMING_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("drink").toLanguageKey()}.burning" }, "Flaming", "炎上")
     }
 
-    override fun appendHoverText(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        super.appendHoverText(stack, world, tooltip, context)
+    override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
 
         run {
-            val foodComponent = foodProperties ?: return@run
+            val foodComponent = stack[DataComponents.FOOD] ?: return@run
             foodComponent.effects.forEach { entry ->
-                var text = entry.first.effect.displayName
-                if (entry.first.amplifier > 0) text = text { text + " "() + (entry.first.amplifier + 1).toRomanText() }
-                if (!entry.first.effect.isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.first.duration)}"() + ")"() }
-                if (entry.second != 1.0F) text = text { text + " (${entry.second * 100 formatAs "%.0f"}%)"() }
-                text = if (entry.first.effect.isBeneficial) text.blue else text.red
-                tooltip += text
+                var text = entry.effect.effect.value().displayName
+                if (entry.effect.amplifier > 0) text = text { text + " "() + (entry.effect.amplifier + 1).toRomanText() }
+                if (!entry.effect.effect.value().isInstantenous) text = text { text + " (${StringHelper.formatTickDuration(entry.effect.duration, context.tickRate())}"() + ")"() }
+                if (entry.probability != 1.0F) text = text { text + " (${entry.probability * 100 formatAs "%.0f"}%)"() }
+                text = if (entry.effect.effect.value().isBeneficial) text.blue else text.red
+                tooltipComponents += text
             }
         }
 
-        if (flaming != null) tooltip += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20)}"() + ")"()).red }
+        if (flaming != null) tooltipComponents += text { (FLAMING_TRANSLATION() + " (${StringHelper.formatTickDuration(flaming * 20, context.tickRate())}"() + ")"()).red }
     }
 
-    override fun finishUsingItem(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
+    override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         super.finishUsingItem(stack, world, user)
         if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
         if (user is PlayerEntity) user.awardStat(Stats.ITEM_USED.get(this))
         user.gameEvent(GameEvent.DRINK)
         if (!world.isClientSide) {
-            if (flaming != null) user.setSecondsOnFire(flaming)
+            if (flaming != null) user.igniteForSeconds(flaming.toFloat())
         }
         return if (stack.isEmpty) {
             Items.GLASS_BOTTLE.createItemStack()
@@ -919,7 +919,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         }
     }
 
-    override fun getUseDuration(stack: ItemStack) = 32
+    override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 32
     override fun getUseAnimation(stack: ItemStack) = UseAction.DRINK
-    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
+    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
 }

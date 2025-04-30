@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
@@ -13,24 +14,26 @@ import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
-import net.minecraft.world.level.material.MapColor
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.Items
-import net.minecraft.core.registries.Registries as RegistryKeys
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
+import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.block.SoundType as BlockSoundGroup
+import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLuminariaCard, DiamondLuminariaBlock>() {
     override val card get() = DiamondLuminariaCard
@@ -102,12 +105,14 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
         //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
-    val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = RegistryKeys.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
-    val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = RegistryKeys.PLACED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
+    val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
+    val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
 
     context(ModContext)
     override fun init() {
         super.init()
+
+        DiamondLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria"))
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
@@ -116,10 +121,10 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
         }
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(32) + flower }
-            RegistryKeys.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+            Registries.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.SNOWY }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.ICY }
+        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY }
+        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_ICY }
         DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
 
     }
@@ -128,6 +133,12 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
 object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>(DiamondLuminariaConfiguration)
 
 class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(DiamondLuminariaConfiguration, settings) {
+    companion object {
+        val CODEC: MapCodec<DiamondLuminariaBlock> = simpleCodec(::DiamondLuminariaBlock)
+    }
+
+    override fun codec() = CODEC
+
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 

@@ -1,5 +1,6 @@
 package miragefairy2024.mod.placeditem
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
@@ -19,6 +20,7 @@ import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRenderingProxyBlockEntityRendererFactory
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
+import miragefairy2024.util.toItemStack
 import miragefairy2024.util.toNbt
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
@@ -27,31 +29,32 @@ import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.castOrNull
 import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.hydrogen.min
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.protocol.Packet
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.RenderShape as BlockRenderType
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.core.registries.BuiltInRegistries as Registries
-import net.minecraft.tags.BlockTags
-import net.minecraft.resources.ResourceLocation as Identifier
-import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.Level as World
+import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
+import net.minecraft.world.level.block.RenderShape as BlockRenderType
+import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
+import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
+import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
@@ -61,17 +64,19 @@ object PlacedItemCard {
 
 context(ModContext)
 fun initPlacedItemBlock() {
+    PlacedItemBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item"))
+
     PlacedItemCard.let { card ->
-        card.block.register(Registries.BLOCK, card.identifier)
-        card.blockEntityType.register(Registries.BLOCK_ENTITY_TYPE, card.identifier)
+        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
+        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {
             Model {
                 ModelData(
-                    parent = Identifier("minecraft", "block/block"),
+                    parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
                     textures = ModelTexturesData(
-                        TextureKey.PARTICLE.id to Identifier("minecraft", "block/glass").string,
+                        TextureKey.PARTICLE.id to ResourceLocation.fromNamespaceAndPath("minecraft", "block/glass").string,
                     ),
                     elements = ModelElementsData(),
                 )
@@ -85,11 +90,16 @@ fun initPlacedItemBlock() {
 
 @Suppress("OVERRIDE_DEPRECATION")
 class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvider {
+    companion object {
+        val CODEC: MapCodec<PlacedItemBlock> = simpleCodec(::PlacedItemBlock)
+    }
+
+    override fun codec() = CODEC
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = PlacedItemBlockEntity(pos, state)
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun triggerEvent(state: BlockState, world: World, pos: BlockPos, type: Int, data: Int): Boolean {
+    override fun triggerEvent(state: BlockState, world: Level, pos: BlockPos, type: Int, data: Int): Boolean {
         super.triggerEvent(state, world, pos, type, data)
         val blockEntity = world.getBlockEntity(pos) ?: return false
         return blockEntity.triggerEvent(type, data)
@@ -103,8 +113,8 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
     }
 
     // 格納されているアイテムをドロップする
-    override fun getCloneItemStack(world: BlockView, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
-    override fun onRemove(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState) = world.getBlockEntity(pos).castOrNull<PlacedItemBlockEntity>()?.itemStack ?: EMPTY_ITEM_STACK
+    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
             val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return@run
             popResource(world, pos, blockEntity.itemStack)
@@ -131,9 +141,9 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var shapeCache: VoxelShape? = null
 
 
-    override fun saveAdditional(nbt: NbtCompound) {
-        super.saveAdditional(nbt)
-        nbt.wrapper["ItemStack"].set(itemStack.toNbt())
+    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.saveAdditional(nbt, registries)
+        nbt.wrapper["ItemStack"].set(itemStack.toNbt(registries))
         nbt.wrapper["ItemX"].double.set(itemX)
         nbt.wrapper["ItemY"].double.set(itemY)
         nbt.wrapper["ItemZ"].double.set(itemZ)
@@ -141,9 +151,9 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         nbt.wrapper["ItemRotateY"].double.set(itemRotateY)
     }
 
-    override fun load(nbt: NbtCompound) {
-        super.load(nbt)
-        itemStack = ItemStack.of(nbt.wrapper["ItemStack"].compound.get())
+    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+        super.loadAdditional(nbt, registries)
+        itemStack = nbt.wrapper["ItemStack"].compound.get()?.toItemStack(registries) ?: EMPTY_ITEM_STACK
         itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
         itemY = nbt.wrapper["ItemY"].double.get() ?: 0.0
         itemZ = nbt.wrapper["ItemZ"].double.get() ?: 0.0
@@ -209,7 +219,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         }
     }
 
-    override fun getUpdateTag(): NbtCompound = saveWithoutMetadata()
+    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries)
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 
