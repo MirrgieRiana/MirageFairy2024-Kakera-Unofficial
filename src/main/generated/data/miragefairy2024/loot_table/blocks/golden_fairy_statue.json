@@ -16,13 +16,9 @@
       ],
       "functions": [
         {
-          "function": "minecraft:copy_nbt",
-          "ops": [
-            {
-              "op": "replace",
-              "source": "Motif",
-              "target": "Motif"
-            }
+          "function": "minecraft:copy_components",
+          "include": [
+            "miragefairy2024:fairy_motif"
           ],
           "source": "block_entity"
         }

@@ -33,7 +33,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "miragefairy2024:amethyst_pickaxe"
@@ -42,7 +43,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "miragefairy2024:amethyst_axe"
@@ -51,7 +53,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "miragefairy2024:amethyst_shovel"
@@ -60,7 +63,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "miragefairy2024:amethyst_hoe"
@@ -69,7 +73,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "miragefairy2024:amethyst_sword"
@@ -88,7 +93,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "minecraft:book",
@@ -103,7 +109,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "decoration": "banner_brown",
+              "decoration": "minecraft:banner_brown",
               "destination": "miragefairy2024:on_weathered_ancient_remnants_archaeology_maps",
               "function": "minecraft:exploration_map",
               "skip_existing_chunks": false,
@@ -118,7 +124,8 @@
                     "translate": "structure.miragefairy2024.dripstone_caves_ruin"
                   }
                 ]
-              }
+              },
+              "target": "item_name"
             }
           ],
           "name": "minecraft:map",
