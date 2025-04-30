@@ -304,7 +304,7 @@ class MaterialCard(
             foodComponent = FoodComponent.Builder()
                 .nutrition(1)
                 .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffectHolder(), 20), 1.0F)
+                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20), 1.0F)
                 .build(),
         ) {
             // →松明
@@ -685,7 +685,7 @@ class MaterialCard(
             foodComponent = FoodComponent.Builder()
                 .nutrition(6)
                 .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffectHolder(), 20 * 8, 1), 1.0F)
+                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20 * 8, 1), 1.0F)
                 .build(),
             creator = { DrinkItem(it, flaming = 5) },
         ) {

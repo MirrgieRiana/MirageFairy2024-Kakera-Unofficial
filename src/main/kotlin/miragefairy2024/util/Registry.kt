@@ -17,6 +17,10 @@ fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation): (
     return { holder }
 }
 
+fun <T : Any> T.registerStatic(registry: Registry<T>, identifier: ResourceLocation): Holder<T> {
+    return Registry.registerForHolder(registry, identifier, this)
+}
+
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }
 
 operator fun <T> HolderLookup.Provider.get(registry: ResourceKey<Registry<T>>, key: ResourceKey<T>): Holder.Reference<T> = this.lookupOrThrow(registry).getOrThrow(key)
