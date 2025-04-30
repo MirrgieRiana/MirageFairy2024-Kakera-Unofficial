@@ -25,7 +25,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.text
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
@@ -62,8 +62,8 @@ class TraitCard(
             "脱フロギストン反応により、水と二酸化炭素から酸素と有機物が生産される。光合成はエーテル呼吸と並ぶ植物の生命活動の根幹であり、草食動物、肉食動物、人間など、多くの生物の存在を成り立たせている。",
             listOf(TraitConditionCard.LIGHT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
-            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.SNOWY }
-            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.DESERT }
+            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_SNOWY }
+            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_DESERT }
             register("0010", TraitSpawnRarity.COMMON) { overworld }
             register("0001", TraitSpawnRarity.RARE) { overworld }
         }
@@ -85,7 +85,7 @@ class TraitCard(
             listOf(TraitConditionCard.FLOOR_MOISTURE), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.COMMON) { +BiomeKeys.SOUL_SAND_VALLEY }
-            register("0100", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.PLAINS }
+            register("0100", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_PLAINS }
             register("0010", TraitSpawnRarity.COMMON) { overworld }
             register("0001", TraitSpawnRarity.RARE) { overworld }
         }
@@ -97,7 +97,7 @@ class TraitCard(
         ) {
             register("1000", TraitSpawnRarity.RARE)
             register("0100", TraitSpawnRarity.S_RARE)
-            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.BEACH }
+            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_BEACH }
             register("0001", TraitSpawnRarity.NORMAL) { nether }
         }
 
@@ -254,9 +254,9 @@ class TraitCard(
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
             register("1000", TraitSpawnRarity.NORMAL) { +BiomeKeys.WARPED_FOREST }
-            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.FLORAL }
+            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_FLORAL }
             register("0010", TraitSpawnRarity.S_RARE)
-            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.PLAINS }
+            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_PLAINS }
         }
         val NODED_STEM = !TraitCard(
             "noded_stem", "Noded Stem", "節状の茎",
@@ -266,8 +266,8 @@ class TraitCard(
         ) {
             //r("1000", )
             register("0100", TraitSpawnRarity.COMMON) { +BiomeKeys.BAMBOO_JUNGLE }
-            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.BEACH }
-            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.JUNGLE }
+            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_BEACH }
+            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_JUNGLE }
         }
         val FRUIT_OF_KNOWLEDGE = !TraitCard(
             "fruit_of_knowledge", "Forbidden Fruit", "禁断の果実",
@@ -276,9 +276,9 @@ class TraitCard(
             listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
-            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.JUNGLE }
+            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.IS_JUNGLE }
             register("0010", TraitSpawnRarity.RARE) { +BiomeKeys.WARPED_FOREST }
-            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.FOREST }
+            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_FOREST }
         }
         val GOLDEN_APPLE = !TraitCard(
             "golden_apple", "Golden Apple", "金のリンゴ",
@@ -286,10 +286,10 @@ class TraitCard(
             "ヒツジをラピスラズリの粉末で着色して毛を刈り取ると、そのヒツジは以後、青色の毛を生やすようになる。このような現象を外因性色素誘導と呼ぶ。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         ) {
-            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.FOREST }
-            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.FOREST }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.JUNGLE }
-            register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.FOREST }
+            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_FOREST }
+            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_FOREST }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_JUNGLE }
+            register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_FOREST }
         }
         val SPINY_LEAVES = !TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘のある葉",
@@ -298,9 +298,9 @@ class TraitCard(
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1), // TODO 接触ダメージ
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
-            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.MESA }
+            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_BADLANDS }
             register("0010", TraitSpawnRarity.NORMAL) { nether }
-            register("0001", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.DESERT }
+            register("0001", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_DESERT }
         }
         val DESERT_GEM = !TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
@@ -309,9 +309,9 @@ class TraitCard(
             listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
-            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.DESERT }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MESA }
-            register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.DESERT }
+            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_DESERT }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_BADLANDS }
+            register("0001", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_DESERT }
         }
         val HEATING_MECHANISM = !TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
@@ -320,9 +320,9 @@ class TraitCard(
             listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +TemperatureCategory.LOW }
-            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.SNOWY }
-            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.ICY }
-            register("0001", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.TAIGA }
+            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.IS_SNOWY }
+            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_ICY }
+            register("0001", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_TAIGA }
         }
         val WATERLOGGING_TOLERANCE = !TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
@@ -331,8 +331,8 @@ class TraitCard(
             listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.HIGH }
-            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.RIVER }
-            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.SWAMP }
+            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_RIVER }
+            register("0010", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_SWAMP }
             register("0001", TraitSpawnRarity.NORMAL) { +BiomeKeys.LUSH_CAVES }
         }
         val ADVERSITY_FLOWER = !TraitCard(
@@ -341,10 +341,10 @@ class TraitCard(
             "逆境に咲く花は、どんな花よりも希少で美しい。たとえそれが一瞬の輝きであったとしても、手に入れることのできない、あこがれの存在として人々の胸に刻まれる。",
             listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
         ) {
-            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.MOUNTAIN }
-            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
-            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.EXTREME_HILLS }
+            register("1000", TraitSpawnRarity.S_RARE) { +ConventionalBiomeTags.IS_MOUNTAIN }
+            register("0100", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_MOUNTAIN }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_MOUNTAIN }
+            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_HILL }
         }
         val FLESHY_LEAVES = !TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
@@ -353,8 +353,8 @@ class TraitCard(
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.LEAVES_PRODUCTION to 0.05),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.LOW }
-            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.SAVANNA }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.DESERT }
+            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_SAVANNA }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_DESERT }
             register("0001", TraitSpawnRarity.RARE) { nether }
         }
         val NATURAL_ABSCISSION = !TraitCard(
@@ -375,9 +375,9 @@ class TraitCard(
             listOf(TraitConditionCard.OUTDOOR), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { nether }
-            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.SWAMP }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.MOUNTAIN }
-            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.JUNGLE }
+            register("0100", TraitSpawnRarity.NORMAL) { +ConventionalBiomeTags.IS_SWAMP }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_MOUNTAIN }
+            register("0001", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_JUNGLE }
         }
         val ETHER_PREDATION = !TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
@@ -398,7 +398,7 @@ class TraitCard(
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { nether }
             register("0100", TraitSpawnRarity.COMMON) { nether }
-            register("0010", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.CAVES }
+            register("0010", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.IS_CAVE }
             register("0001", TraitSpawnRarity.RARE) { +BiomeKeys.BASALT_DELTAS }
         }
         val PROSPERITY_OF_SPECIES = !TraitCard(
@@ -408,8 +408,8 @@ class TraitCard(
             listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
         ) {
             register("1000", TraitSpawnRarity.S_RARE) { +HumidityCategory.MEDIUM }
-            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.PLAINS }
-            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.FOREST }
+            register("0100", TraitSpawnRarity.COMMON) { +ConventionalBiomeTags.IS_PLAINS }
+            register("0010", TraitSpawnRarity.RARE) { +ConventionalBiomeTags.IS_FOREST }
             register("0001", TraitSpawnRarity.S_RARE) { +TemperatureCategory.MEDIUM }
         }
         val PHANTOM_FLOWER = !TraitCard(

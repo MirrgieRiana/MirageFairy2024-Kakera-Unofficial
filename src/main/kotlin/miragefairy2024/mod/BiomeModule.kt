@@ -12,7 +12,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -120,7 +120,7 @@ object FairyForestBiomeCard : BiomeCard(
     ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING),
     ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.SURFACE),
     0.95F,
-    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.FLORAL, FAIRY_BIOME_TAG,
+    BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.IS_FLORAL, FAIRY_BIOME_TAG,
 ) {
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.BiomeBuilder()

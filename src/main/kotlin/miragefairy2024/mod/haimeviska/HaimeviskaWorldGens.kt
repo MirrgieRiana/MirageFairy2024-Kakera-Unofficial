@@ -14,7 +14,7 @@ import miragefairy2024.util.registerFeature
 import miragefairy2024.util.tree
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -80,7 +80,7 @@ fun initHaimeviskaWorldGens() {
     }
 
     // 平原・森林バイオームに配置
-    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.PLAINS + +ConventionalBiomeTags.FOREST }
+    HAIMEVISKA_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_PLAINS + +ConventionalBiomeTags.IS_FOREST }
 
 }
 

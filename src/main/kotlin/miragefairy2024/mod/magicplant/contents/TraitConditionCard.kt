@@ -18,7 +18,7 @@ import miragefairy2024.util.temperatureCategory
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.Level
@@ -68,8 +68,8 @@ private fun getFloorHardness(world: Level, blockPos: BlockPos): Double {
 private fun Level.getHighAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimensionType().natural -> (blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
-        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 0.0
-        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 1.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IS_NETHER) -> 0.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IS_END) -> 1.0
         else -> 0.0
     }
 }
@@ -77,8 +77,8 @@ private fun Level.getHighAltitudeFactor(blockPos: BlockPos): Double {
 private fun Level.getLowAltitudeFactor(blockPos: BlockPos): Double {
     return when {
         this.dimensionType().natural -> -(blockPos.y.toDouble() - 64.0) / 128.0 atLeast 0.0 atMost 1.0
-        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_NETHER) -> 1.0
-        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IN_THE_END) -> 0.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IS_NETHER) -> 1.0
+        this.getBiome(blockPos).`is`(ConventionalBiomeTags.IS_END) -> 0.0
         else -> 0.0
     }
 }

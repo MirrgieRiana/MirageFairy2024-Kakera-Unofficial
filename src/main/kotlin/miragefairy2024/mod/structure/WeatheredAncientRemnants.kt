@@ -21,7 +21,7 @@ import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Items
@@ -132,7 +132,7 @@ object WeatheredAncientRemnantsCard {
         val structureKey = registerDynamicGeneration(Registries.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
                 config = Structure.StructureSettings(
-                    Registries.BIOME[ConventionalBiomeTags.IN_OVERWORLD],
+                    Registries.BIOME[ConventionalBiomeTags.IS_OVERWORLD],
                     mapOf(),
                     GenerationStep.Decoration.SURFACE_STRUCTURES,
                     StructureTerrainAdaptation.NONE,

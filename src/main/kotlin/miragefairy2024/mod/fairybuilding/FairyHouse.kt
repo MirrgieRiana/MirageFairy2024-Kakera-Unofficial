@@ -11,7 +11,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries

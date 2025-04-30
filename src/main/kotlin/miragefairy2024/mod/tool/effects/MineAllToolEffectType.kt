@@ -13,7 +13,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
