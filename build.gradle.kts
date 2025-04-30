@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.js.parser.sourcemaps.JsonObject
-import org.jetbrains.kotlin.js.parser.sourcemaps.JsonString
-import org.jetbrains.kotlin.js.parser.sourcemaps.parseJson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
 import java.net.URL
 
 plugins {
@@ -213,9 +213,9 @@ tasks.register("buildPages") {
     dependsOn("runDatagen")
     doLast {
         println("Building pages...")
-        val en = parseJson(File("src/main/generated/assets/miragefairy2024/lang/en_us.json").readText()) as JsonObject
-        val ja = parseJson(File("src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText()) as JsonObject
-        val keys = (en.properties.keys + ja.properties.keys).sorted()
+        val en = GsonBuilder().create().fromJson(File("src/main/generated/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
+        val ja = GsonBuilder().create().fromJson(File("src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText(), JsonElement::class.java).asJsonObject
+        val keys = (en.keySet() + en.keySet()).sorted()
 
         mkdir("build/pages")
         """
@@ -273,8 +273,8 @@ tasks.register("buildPages") {
                 """
 <tr>
     <td class="key">$key</td>
-    <td class="value">${(en.properties[key] as JsonString?)?.value ?: "-"}</td>
-    <td class="value">${(ja.properties[key] as JsonString?)?.value ?: "-"}</td>
+    <td class="value">${(en.get(key) as JsonPrimitive?)?.asString ?: "-"}</td>
+    <td class="value">${(ja.get(key) as JsonPrimitive?)?.asString ?: "-"}</td>
 </tr>
                 """.trimIndent()
             }
