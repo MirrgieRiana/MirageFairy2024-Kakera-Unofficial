@@ -23,7 +23,7 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
         }
     }
 
-    private val texture = "textures/entity/" * AntimatterBoltCard.identifier
+    private val texture = "textures/entity/" * AntimatterBoltCard.identifier * ".png"
 
     private val model = object : SinglePartEntityModel<AntimatterBoltEntity>() {
         private val modelPart: ModelPart = context.bakeLayer(MAIN.entityModelLayer)
