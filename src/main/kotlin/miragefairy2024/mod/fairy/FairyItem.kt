@@ -90,36 +90,36 @@ fun initFairyItem() {
             if (tintIndex == 4) {
                 val condensation = itemStack.getFairyCondensation()
                 when (getNiceCondensation(condensation).first) {
-                    0 -> 0xFF8E8E // 赤
-                    1 -> 0xB90000
-                    2 -> 0xAAAAFF // 青
-                    3 -> 0x0000FF
-                    4 -> 0x00D100 // 緑
-                    5 -> 0x007A00
-                    6 -> 0xFFFF60 // 黄色
-                    7 -> 0x919100
-                    8 -> 0x00D1D1 // 水色
-                    9 -> 0x009E9E
-                    10 -> 0xFF87FF // マゼンタ
-                    11 -> 0xDB00DB
-                    12 -> 0xFFBB77 // オレンジ
-                    13 -> 0xCE6700
-                    14 -> 0x66FFB2 // 草
-                    15 -> 0x00B758
-                    16 -> 0xD1A3FF // 紫
-                    17 -> 0xA347FF
-                    18 -> 0xCECECE // 灰色
-                    19 -> 0x919191
-                    else -> 0x333333
+                    0 -> 0xFFFF8E8E.toInt() // 赤
+                    1 -> 0xFFB90000.toInt()
+                    2 -> 0xFFAAAAFF.toInt() // 青
+                    3 -> 0xFF0000FF.toInt()
+                    4 -> 0xFF00D100.toInt() // 緑
+                    5 -> 0xFF007A00.toInt()
+                    6 -> 0xFFFFFF60.toInt() // 黄色
+                    7 -> 0xFF919100.toInt()
+                    8 -> 0xFF00D1D1.toInt() // 水色
+                    9 -> 0xFF009E9E.toInt()
+                    10 -> 0xFFFF87FF.toInt() // マゼンタ
+                    11 -> 0xFFDB00DB.toInt()
+                    12 -> 0xFFFFBB77.toInt() // オレンジ
+                    13 -> 0xFFCE6700.toInt()
+                    14 -> 0xFF66FFB2.toInt() // 草
+                    15 -> 0xFF00B758.toInt()
+                    16 -> 0xFFD1A3FF.toInt() // 紫
+                    17 -> 0xFFA347FF.toInt()
+                    18 -> 0xFFCECECE.toInt() // 灰色
+                    19 -> 0xFF919191.toInt()
+                    else -> 0xFF333333.toInt()
                 }
             } else {
-                val motif = itemStack.getFairyMotif() ?: return@registerColorProvider 0xFF00FF
+                val motif = itemStack.getFairyMotif() ?: return@registerColorProvider 0xFFFF00FF.toInt()
                 when (tintIndex) {
-                    0 -> motif.skinColor
-                    1 -> motif.frontColor
-                    2 -> motif.backColor
-                    3 -> motif.hairColor
-                    else -> 0xFF00FF
+                    0 -> motif.skinColor or 0xFF000000.toInt()
+                    1 -> motif.frontColor or 0xFF000000.toInt()
+                    2 -> motif.backColor or 0xFF000000.toInt()
+                    3 -> motif.hairColor or 0xFF000000.toInt()
+                    else -> 0xFFFF00FF.toInt()
                 }
             }
         }

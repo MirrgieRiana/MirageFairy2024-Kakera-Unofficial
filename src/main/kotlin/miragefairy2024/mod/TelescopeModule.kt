@@ -130,7 +130,7 @@ fun initTelescopeModule() {
     TelescopeBlock.MINUTES_TRANSLATION.enJa()
     TelescopeBlock.SECONDS_TRANSLATION.enJa()
 
-    registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xDDC442) { world, player, _, _ ->
+    registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xFFDDC442.toInt()) { world, player, _, _ ->
         player.telescopeMission.lastUsedInstant = null
         TelescopeMissionExtraPlayerDataCategory.sync(player)
         player.displayClientMessage(text { "The last time the telescope was used has been reset"() }, true)

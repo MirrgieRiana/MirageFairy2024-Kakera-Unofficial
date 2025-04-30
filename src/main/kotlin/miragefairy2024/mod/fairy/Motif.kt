@@ -1376,7 +1376,7 @@ fun initMotif() {
         }
     }
 
-    registerClientDebugItem("dump_fairy_motifs", Items.STRING, 0xF200FF) { world, player, _, _ ->
+    registerClientDebugItem("dump_fairy_motifs", Items.STRING, 0xFFF200FF.toInt()) { world, player, _, _ ->
         val sb = StringBuilder()
         motifRegistry.sortedBy { if (it is MotifCard) it.ordinal else 99999999 }.forEach { motif ->
             sb.append("|${motif.displayName.string}|${motif.rare}|")
