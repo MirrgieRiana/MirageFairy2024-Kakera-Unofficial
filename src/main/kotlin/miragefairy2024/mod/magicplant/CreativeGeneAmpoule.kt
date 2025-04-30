@@ -61,9 +61,9 @@ fun initCreativeGeneAmpoule() {
         card.item.registerModelGeneration(createCreativeGeneAmpouleModel())
         card.item.registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 1) {
-                itemStack.getTraitStacks().or { return@registerColorProvider 0xFFFFFF }.traitStackList.firstOrNull().or { return@registerColorProvider 0xFFFFFF }.trait.primaryEffect.color
+                itemStack.getTraitStacks().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.traitStackList.firstOrNull().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.trait.primaryEffect.color or 0xFF000000.toInt()
             } else {
-                0xFFFFFF
+                0xFFFFFFFF.toInt()
             }
         }
         card.item.enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命創造の針"))

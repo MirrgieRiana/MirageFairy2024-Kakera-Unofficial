@@ -41,7 +41,7 @@ fun initVanillaModule() {
     Blocks.BLACK_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
-    registerClientDebugItem("dump_biome_tags", Items.STRING, 0x00FF00) { world, player, _, _ ->
+    registerClientDebugItem("dump_biome_tags", Items.STRING, 0xFF00FF00.toInt()) { world, player, _, _ ->
         val tags = world.registryAccess().registryOrThrow(Registries.BIOME).tagNames.toList()
         val sb = StringBuilder()
         tags.sortedBy { it.location() }.forEach { tag ->

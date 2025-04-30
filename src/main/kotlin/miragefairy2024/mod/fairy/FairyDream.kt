@@ -38,11 +38,11 @@ context(ModContext)
 fun initFairyDream() {
 
     // デバッグアイテム
-    registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0x0000DD) { world, player, _, _ ->
+    registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0xFF0000DD.toInt()) { world, player, _, _ ->
         player.fairyDreamContainer.clear()
         player.displayClientMessage(text { "Cleared fairy dream"() }, true)
     }
-    registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0x0000BB) { world, player, hand, _ ->
+    registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0xFF0000BB.toInt()) { world, player, hand, _ ->
         val fairyItemStack = player.getItemInHand(hand.opposite)
         if (!fairyItemStack.`is`(FairyCard.item)) return@registerServerDebugItem
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem

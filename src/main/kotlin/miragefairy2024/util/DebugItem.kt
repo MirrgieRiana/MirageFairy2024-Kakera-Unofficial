@@ -20,7 +20,7 @@ import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
-fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF888888.toInt(), action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
     val item = object : Item(Properties()) {
         override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
         override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
@@ -35,7 +35,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x8888
 }
 
 context(ModContext)
-fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF888888.toInt(), action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
         if (world.isServer) return@registerDebugItem
         action(world, player, hand, itemStack)
@@ -43,7 +43,7 @@ fun registerClientDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 
 }
 
 context(ModContext)
-fun registerServerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0x888888, action: (ServerWorld, ServerPlayerEntity, Hand, ItemStack) -> Unit) {
+fun registerServerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF888888.toInt(), action: (ServerWorld, ServerPlayerEntity, Hand, ItemStack) -> Unit) {
     registerDebugItem(path, icon, color) { world, player, hand, itemStack ->
         if (world.isClientSide) return@registerDebugItem
         action(world as ServerWorld, player as ServerPlayerEntity, hand, itemStack)
