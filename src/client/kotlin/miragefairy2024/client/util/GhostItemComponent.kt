@@ -5,7 +5,9 @@ import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Sizing
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import kotlin.jvm.optionals.getOrNull
@@ -56,7 +58,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
         val tooltip = mutableListOf<TooltipComponent>()
 
         val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
-        val texts = itemStack.getTooltipLines(MinecraftClient.getInstance().player, tooltipContext)
+        val texts = itemStack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), MinecraftClient.getInstance().player, tooltipContext)
         tooltip += texts.map { TooltipComponent.create(it.visualOrderText) }
 
         val data = itemStack.tooltipImage.getOrNull()

@@ -318,13 +318,9 @@ fun ItemStack.getFairyCondensation() = this.get(FAIRY_CONDENSATION_DATA_COMPONEN
 fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
 
 
-fun Motif.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    return createFairyItemStack(this, condensation = condensation, count = count)
-}
-
-fun createFairyItemStack(motif: Motif?, @Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
     val itemStack = FairyCard.item.createItemStack(count)
-    itemStack.setFairyMotif(motif)
+    itemStack.setFairyMotif(this)
     itemStack.setFairyCondensation(condensation)
     return itemStack
 }

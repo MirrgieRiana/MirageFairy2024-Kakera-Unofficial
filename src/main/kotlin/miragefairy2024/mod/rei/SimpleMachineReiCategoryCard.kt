@@ -1,6 +1,7 @@
 package miragefairy2024.mod.rei
 
 import com.google.gson.JsonObject
+import com.mojang.serialization.JsonOps
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
@@ -16,7 +17,6 @@ import miragefairy2024.util.get
 import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
-import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.hydrogen.Single
@@ -25,13 +25,10 @@ import net.minecraft.world.item.ItemStack
 abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: String, enName: String, jaName: String) : ReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(path, enName, jaName) {
     override val serializer: Single<BasicDisplay.Serializer<Display<R>>> by lazy {
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
-            val id = tag.wrapper["id"].string.get()!!
             val json = tag.wrapper["json"].string.get()!!
-            Display(this, recipeCard.serializer.fromJson(id.toIdentifier(), json.toJsonElement() as JsonObject))
+            Display(this, recipeCard.serializer.codec().codec().parse(JsonOps.INSTANCE, json.toJsonElement() as JsonObject).orThrow)
         }, { display, tag ->
-            val jsonObject = JsonObject()
-            recipeCard.serializer.write(jsonObject, display.recipe)
-            tag.wrapper["id"].string.set(display.recipe.recipeId.string)
+            val jsonObject = recipeCard.serializer.codec().codec().encodeStart(JsonOps.INSTANCE, display.recipe)
             tag.wrapper["json"].string.set(jsonObject.toString())
         }))
     }

@@ -154,7 +154,7 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
     }
 
     private fun vertex(vertexConsumer: VertexConsumer, pos: Vector3f, u: Float, v: Float, light: Int) {
-        vertexConsumer.vertex(pos.x().toDouble(), pos.y().toDouble(), pos.z().toDouble()).uv(u, v).color(rCol, gCol, bCol, alpha).uv2(light).endVertex()
+        vertexConsumer.addVertex(pos.x(), pos.y(), pos.z()).setUv(u, v).setColor(rCol, gCol, bCol, alpha).setLight(light)
     }
 
     override fun tick() {

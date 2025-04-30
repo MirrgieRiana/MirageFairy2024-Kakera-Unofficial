@@ -37,6 +37,7 @@ import mirrg.kotlin.java.hydrogen.floorMod
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
@@ -316,13 +317,13 @@ object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<Telesco
     override fun create() = TelescopeMission()
     override fun castOrThrow(value: Any) = value as TelescopeMission
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<TelescopeMission> {
-        override fun fromNbt(nbt: NbtCompound): TelescopeMission {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): TelescopeMission {
             val data = TelescopeMission()
             data.lastUsedTime = nbt.wrapper["LastUsedTime"].long.get()
             return data
         }
 
-        override fun toNbt(data: TelescopeMission): NbtCompound {
+        override fun toNbt(data: TelescopeMission, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["LastUsedTime"].long.set(data.lastUsedTime)
             return nbt

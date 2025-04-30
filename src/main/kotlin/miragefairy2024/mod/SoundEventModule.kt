@@ -9,7 +9,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource as SoundCategory
 
@@ -35,7 +35,7 @@ enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: 
 }
 
 object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier("sound")) {
-    override fun writeToBuf(buf: FriendlyByteBuf, packet: SoundEventPacket) {
+    override fun writeToBuf(buf: RegistryFriendlyByteBuf, packet: SoundEventPacket) {
         buf.writeResourceLocation(BuiltInRegistries.SOUND_EVENT.getKey(packet.soundEvent))
         buf.writeBlockPos(packet.pos)
         buf.writeUtf(packet.category.name)
@@ -44,7 +44,7 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
         buf.writeBoolean(packet.useDistance)
     }
 
-    override fun readFromBuf(buf: FriendlyByteBuf): SoundEventPacket {
+    override fun readFromBuf(buf: RegistryFriendlyByteBuf): SoundEventPacket {
         val soundEvent = BuiltInRegistries.SOUND_EVENT.get(buf.readResourceLocation())!!
         val pos = buf.readBlockPos()
         val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }

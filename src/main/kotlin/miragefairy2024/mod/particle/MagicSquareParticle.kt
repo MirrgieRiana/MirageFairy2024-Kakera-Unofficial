@@ -7,7 +7,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Channel
 import mirrg.kotlin.hydrogen.unit
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -49,7 +48,7 @@ class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val d
 }
 
 object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFairy2024.identifier("magic_square_particle")) {
-    override fun writeToBuf(buf: FriendlyByteBuf, packet: MagicSquareParticlePacket) {
+    override fun writeToBuf(buf: RegistryFriendlyByteBuf, packet: MagicSquareParticlePacket) {
         buf.writeDouble(packet.position.x)
         buf.writeDouble(packet.position.y)
         buf.writeDouble(packet.position.z)
@@ -58,7 +57,7 @@ object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFai
         buf.writeDouble(packet.targetPosition.z)
     }
 
-    override fun readFromBuf(buf: FriendlyByteBuf): MagicSquareParticlePacket {
+    override fun readFromBuf(buf: RegistryFriendlyByteBuf): MagicSquareParticlePacket {
         val positionX = buf.readDouble()
         val positionY = buf.readDouble()
         val positionZ = buf.readDouble()

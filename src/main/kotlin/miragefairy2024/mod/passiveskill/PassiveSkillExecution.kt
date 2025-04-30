@@ -23,6 +23,7 @@ import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import kotlin.math.log
@@ -208,7 +209,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
     override fun castOrThrow(value: Any) = value as PassiveSkillResult
 
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
-        override fun fromNbt(nbt: NbtCompound): PassiveSkillResult {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
             val result = PassiveSkillResult()
             nbt.allKeys.forEach { key ->
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
@@ -221,7 +222,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
             return result
         }
 
-        override fun toNbt(data: PassiveSkillResult): NbtCompound {
+        override fun toNbt(data: PassiveSkillResult, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             data.map.entries.forEach {
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {

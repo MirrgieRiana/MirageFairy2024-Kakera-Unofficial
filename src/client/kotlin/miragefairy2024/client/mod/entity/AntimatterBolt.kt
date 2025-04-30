@@ -40,7 +40,7 @@ class AntimatterBoltEntityRenderer(context: EntityRendererFactory.Context) : Ent
 
             model.setupAnim(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.renderType(texture))
-            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F)
+            model.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF.toInt())
         }
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
     }

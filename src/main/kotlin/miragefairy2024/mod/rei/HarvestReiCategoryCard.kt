@@ -20,13 +20,13 @@ object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>(
         Single(BasicDisplay.Serializer.ofRecipeLess({ _, _, tag ->
             Display(
                 HarvestNotation(
-                    tag.wrapper["Seed"].compound.get()!!.toItemStack(),
-                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack() },
+                    tag.wrapper["Seed"].compound.get()!!.toItemStack(BasicDisplay.registryAccess())!!,
+                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack(BasicDisplay.registryAccess())!! },
                 )
             )
         }, { display, tag ->
-            tag.wrapper["Seed"].set(display.recipe.seed.toNbt())
-            tag.wrapper["Crops"].set(display.recipe.crops.mapTo(NbtList()) { it.toNbt() })
+            tag.wrapper["Seed"].set(display.recipe.seed.toNbt(BasicDisplay.registryAccess()))
+            tag.wrapper["Crops"].set(display.recipe.crops.mapTo(NbtList()) { it.toNbt(BasicDisplay.registryAccess()) })
         }))
     }
 

@@ -64,7 +64,7 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
         }
     }
 
-    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, red: Float, green: Float, blue: Float, alpha: Float) {
+    override fun renderToBuffer(matrices: MatrixStack, vertices: VertexConsumer, light: Int, overlay: Int, color: Int) {
         if (!root.visible) return
         matrices.stack {
             matrices.translate(0F, 0.5F, 0F)
@@ -75,7 +75,7 @@ class ChaosCubeEntityModel(private val root: ModelPart) : EntityModel<ChaosCubeE
                 val segment = segments!![i]
                 matrices.stack {
                     matrices.mulPose(rotations[i])
-                    parts[segment.partIndex].render(matrices, vertices, light, overlay, red, green, blue, alpha)
+                    parts[segment.partIndex].render(matrices, vertices, light, overlay, color)
                 }
             }
         }

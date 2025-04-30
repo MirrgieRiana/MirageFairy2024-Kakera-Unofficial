@@ -34,7 +34,7 @@ fun initFairyCondensationRecipe() {
         if (condensation > Integer.MAX_VALUE.toLong()) return@registerSpecialRecipe null
 
         object : SpecialRecipeResult {
-            override fun craft() = createFairyItemStack(motif, condensation = condensation.toInt())
+            override fun craft() = motif.createFairyItemStack(condensation = condensation.toInt())
         }
     }
     registerSpecialRecipe("fairy_decondensation", 1) { inventory ->
@@ -66,11 +66,11 @@ fun initFairyCondensationRecipe() {
         val dividedCondensation = condensation / division
 
         object : SpecialRecipeResult {
-            override fun craft() = createFairyItemStack(motif, condensation = dividedCondensation, count = division)
+            override fun craft() = motif.createFairyItemStack(condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
                 return if (remainingCondensation > 0) {
                     val list = DefaultedList.withSize(inventory.size(), EMPTY_ITEM_STACK)
-                    list[index] = createFairyItemStack(motif, condensation = remainingCondensation)
+                    list[index] = motif.createFairyItemStack(condensation = remainingCondensation)
                     list
                 } else {
                     null

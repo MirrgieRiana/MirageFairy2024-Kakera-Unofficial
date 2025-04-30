@@ -120,7 +120,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                         }
                                     }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().deltaFrameTime)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
                             }))
@@ -143,7 +143,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                     overlayColor = 0x2000FF00
                                     onScreenUpdate += { showOverlay = outputItemStack.orEmpty.isNotEmpty && menu.getSlot(index).item.isEmpty }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().deltaFrameTime)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
                             }))

@@ -21,9 +21,10 @@ import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
@@ -80,16 +81,16 @@ object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
     override fun create() = SoulStream()
     override fun castOrThrow(value: Any) = value as SoulStream
     override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
-        override fun fromNbt(nbt: NbtCompound): SoulStream {
+        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): SoulStream {
             val data = SoulStream()
-            Inventories.loadAllItems(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.items)
+            Inventories.loadAllItems(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.items, registry)
             return data
         }
 
-        override fun toNbt(data: SoulStream): NbtCompound {
+        override fun toNbt(data: SoulStream, registry: HolderLookup.Provider): NbtCompound {
             val nbt = NbtCompound()
             nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
-                Inventories.saveAllItems(it, data.items)
+                Inventories.saveAllItems(it, data.items, registry)
             })
             return nbt
         }
@@ -109,8 +110,8 @@ class SoulStream : SimpleInventory(SLOT_COUNT) {
 // ソウルストリームを開く要求パケット
 
 object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_soul_stream")) {
-    override fun writeToBuf(buf: FriendlyByteBuf, packet: Unit) = Unit
-    override fun readFromBuf(buf: FriendlyByteBuf) = Unit
+    override fun writeToBuf(buf: RegistryFriendlyByteBuf, packet: Unit) = Unit
+    override fun readFromBuf(buf: RegistryFriendlyByteBuf) = Unit
 }
 
 

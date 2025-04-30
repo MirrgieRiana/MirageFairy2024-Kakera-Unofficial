@@ -8,6 +8,7 @@ import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerEnchantmentTagGeneration
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.EnchantmentTags
@@ -15,8 +16,8 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantment
-import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.item.enchantment.ItemEnchantments
 
 val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("magic_weapon"))
 val SCYTHE_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("scythe"))
@@ -110,6 +111,10 @@ fun initEnchantmentModule() {
     OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
         if (!enchantment.`is`(Enchantments.FORTUNE)) return@register oldLevel
         if (oldLevel == 0) return@register 0
-        oldLevel + EnchantmentHelper.getItemEnchantmentLevel(EnchantmentCard.FORTUNE_UP.enchantment, itemStack)
+
+        val itemEnchantments = itemStack.get(DataComponents.ENCHANTMENTS) ?: ItemEnchantments.EMPTY
+        val entry = itemEnchantments.entrySet().firstOrNull { it.key.`is`(EnchantmentCard.FORTUNE_UP.key) } ?: return@register oldLevel
+
+        oldLevel + entry.intValue
     }
 }

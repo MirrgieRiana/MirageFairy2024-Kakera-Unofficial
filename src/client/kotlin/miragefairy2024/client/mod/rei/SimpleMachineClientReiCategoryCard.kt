@@ -37,7 +37,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
     override fun registerDisplays(registry: DisplayRegistry) {
         registry.registerRecipeFiller(card.recipeCard.recipeClass, card.recipeCard.type) {
-            SimpleMachineReiCategoryCard.Display(card, it)
+            SimpleMachineReiCategoryCard.Display(card, it.value)
         }
     }
 
