@@ -1,0 +1,21 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.miragefairy2024.magic_reach"
+  },
+  "max_cost": {
+    "base": 31,
+    "per_level_above_first": 10
+  },
+  "max_level": 5,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 10
+  },
+  "primary_items": "#miragefairy2024:magic_weapon",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#miragefairy2024:magic_weapon",
+  "weight": 10
+}
