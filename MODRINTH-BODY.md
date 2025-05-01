@@ -1,4 +1,4 @@
-# MirageFairy2024-Kakera-Unofficial
+# MF24KU
 
 An unofficial fork of "MirageFairy2024," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
 
@@ -9,7 +9,7 @@ Therefore, it cannot be installed simultaneously due to conflicts.
 ## Current Status(November 2024)
 
 - The original MirageFairy2024 began development in Japan in November 2023.
-- MirageFairy2024-Kakera-Unofficial is a MOD derived from MirageFairy2024 in November 2024.
+- MF24KU is a MOD derived from MirageFairy2024 in November 2024.
 - With 14 releases, the MOD's content is moderately rich.
 - But, there are still many planned contents yet to be developed.
 - This MOD is still in beta, with a full release planned for 2025 or later.
