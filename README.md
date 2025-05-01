@@ -1,50 +1,38 @@
-# MirageFairy2024-Kakera-Unofficial
+# MF24KU - MirageFairy2024-Kakera-Unofficial
 
 This is an unofficial fork of MirageFairy2024, a Minecraft mod originally developed by The Developer of MirageFairy, Generation 7, and is now independently developed by Yoruno Kakera.
 
 Since this mod is compatible with the original MirageFairy2024 save data, it cannot be installed simultaneously due to conflicts.
 
-Original MirageFairy2024 Repository: https://github.com/MirageFairy/MirageFairy2024
+---
 
-# Links
+Links related to the original MirageFairy:
 
-Japanese MirageFairy-Kakera-Unofficial Website: https://miragefairy-kakera-unofficial.notion.site/
-
-Japanese Unofficial Wiki: https://wikiwiki.jp/mifai2024/
-
-MF24KU Lang Table: https://mirrgieriana.github.io/MirageFairy2024-Kakera-Unofficial/lang_table.html
-
-Modrinth: https://modrinth.com/mod/miragefairy2024-kakera-unofficial
+- [Original MirageFairy2024 Repository](https://github.com/MirageFairy/MirageFairy2024)
 
 # Documentation
 
-The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
+## Official Documents
 
-There is currently no comprehensive official documentation explaining the specifications of this MOD, and the only available resources are unofficial wikis.
+The specifications of this mod are officially documented only in Japanese in [CHANGELOG.md](CHANGELOG.md).
+
+There is currently no comprehensive official documentation explaining the specifications of this mod, and the only available resources are unofficial wikis.
+
+---
+
+Other official links:
+
+- [Japanese Official Website of MirageFairy-Kakera-Unofficial](https://miragefairy-kakera-unofficial.notion.site/)
+- [MF24KU Lang Table](https://mirrgieriana.github.io/MirageFairy2024-Kakera-Unofficial/lang_table.html)
+- [Modrinth (Mod Distribution Page)](https://modrinth.com/mod/miragefairy2024-kakera-unofficial)
+
+## Unofficial Documents
+
+Currently known unofficial documentation:
+
+- [MirageFairy2024-KU非公式Wiki Wiki*](https://wikiwiki.jp/mifai2024/)
 
 # Licensing and Attribution
-
-## Codes (Programs, Data Packs)
-
-### Copyright
-
-Contributions for version ≤ v0.14.1: Copyright 2024 The Developer of MirageFairy, Generation 7
-
-Contributions for version > v0.14.1: Copyright 2025 The Developer of MirageFairy, Generation 7, Yoruno Kakera
-
-### License
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 
 ## Minecraft Resources
 
@@ -64,9 +52,21 @@ The following files are part of MirageFairy2019 and are licensed under the **[CC
 - `src/main/resources/assets/miragefairy2024/textures/item/bottle3.pdn`
 - `src/main/resources/assets/miragefairy2024/textures/item/bottle4.pdn`
 
-For further details, please refer to the original repository: https://github.com/MirageFairy/MirageFairy2019
+For further details, please refer to [the original repository](https://github.com/MirageFairy/MirageFairy2019).
 
-## Resources (excluding those specified above)
+## Codes (Programs, Data Packs)
+
+### Copyright
+
+Contributions for version ≤ v0.14.1: Copyright 2024 The Developer of MirageFairy, Generation 7
+
+Contributions for version > v0.14.1: Copyright 2025 The Developer of MirageFairy, Generation 7, Yoruno Kakera
+
+### License
+
+These files are provided under the **[Apache License 2.0](LICENSE)**.
+
+## Other Resources (excluding those specified above)
 
 ### Copyright
 
@@ -78,6 +78,6 @@ Contributions for version > v0.14.1: Copyright 2025 The Developer of MirageFairy
 
 These files are provided under any of the following licenses:
 
-- **Apache License 2.0**
+- **[Apache License 2.0](LICENSE)**
 - **[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)**
 - **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**
