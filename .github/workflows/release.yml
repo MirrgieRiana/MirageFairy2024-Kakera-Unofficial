@@ -5,21 +5,23 @@ on:
       - 'v*'
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
 
       # セットアップ
       - uses: actions/checkout@v4
-      - name: コミットバージョン
+        with:
+          fetch-depth: 0
+      - name: 現在のリビジョン
         run: git log -n 1
       - uses: gradle/actions/wrapper-validation@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: '21'
           distribution: 'microsoft'
 
       # ビルド
-      - name: プロジェクトのビルド
+      - name: ビルド
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
