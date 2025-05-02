@@ -11,8 +11,8 @@ plugins {
 
 //
 
-version = rootProject.properties["mod_version"] as String
 group = rootProject.properties["maven_group"] as String
+version = rootProject.properties["mod_version"] as String
 
 run {
 
