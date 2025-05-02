@@ -10,6 +10,19 @@ architectury {
     neoForge()
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir("../common/src/client/java")
+            srcDir("../common/src/main/java")
+        }
+        kotlin {
+            srcDir("../common/src/client/kotlin")
+            srcDir("../common/src/main/kotlin")
+        }
+    }
+}
+
 configurations {
     val common by creating {
         isCanBeResolved = true
@@ -40,7 +53,7 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.findProperty("architectury_api_version") as String}")
 
-    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
+    //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))
 }
 
