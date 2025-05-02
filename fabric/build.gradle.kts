@@ -132,6 +132,10 @@ tasks.named<ProcessResources>("processResources") {
     }
 }
 
+tasks.named<Jar>("jar") {
+    from(sourceSets["client"].output)
+}
+
 tasks.named<ShadowJar>("shadowJar") {
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
