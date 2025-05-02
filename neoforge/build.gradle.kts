@@ -51,10 +51,10 @@ repositories {
 }
 
 dependencies {
-    neoForge("net.neoforged:neoforge:${rootProject.findProperty("neoforge_version") as String}")
+    neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}")
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
-    modImplementation("dev.architectury:architectury-neoforge:${rootProject.findProperty("architectury_api_version") as String}")
+    modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
 
     //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))

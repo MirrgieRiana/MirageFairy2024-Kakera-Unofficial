@@ -11,15 +11,15 @@ plugins {
 
 //
 
-version = project.properties["mod_version"] as String
-group = project.properties["maven_group"] as String
+version = rootProject.properties["mod_version"] as String
+group = rootProject.properties["maven_group"] as String
 
 run {
 
     run {
 
         base {
-            archivesName = project.properties["archives_name"] as String
+            archivesName = rootProject.properties["archives_name"] as String
         }
 
         repositories {
@@ -59,10 +59,10 @@ run {
 
         dependencies {
             // バージョンを変更するには、gradle.properties ファイルを参照してください。
-            "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
+            "minecraft"("com.mojang:minecraft:${rootProject.properties["minecraft_version"] as String}")
             "mappings"(loom.layered {
                 officialMojangMappings()
-                parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
+                parchment("org.parchmentmc.data:parchment-${rootProject.properties["minecraft_version"] as String}:${rootProject.properties["parchment_mappings"] as String}@zip")
             })
         }
 

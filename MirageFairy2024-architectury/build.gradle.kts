@@ -10,12 +10,12 @@ plugins {
 }
 
 architectury {
-    minecraft = project.findProperty("minecraft_version") as String
+    minecraft = rootProject.properties["minecraft_version"] as String
 }
 
 allprojects {
-    group = rootProject.findProperty("maven_group") as String
-    version = rootProject.findProperty("mod_version") as String
+    group = rootProject.properties["maven_group"] as String
+    version = rootProject.properties["mod_version"] as String
 }
 
 subprojects {
@@ -29,7 +29,7 @@ subprojects {
 
         base {
             // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
-            archivesName.set("${rootProject.findProperty("archives_name") as String}-${project.name}")
+            archivesName.set("${rootProject.properties["archives_name"] as String}-${project.name}")
         }
 
         repositories {
@@ -45,7 +45,7 @@ subprojects {
         }
 
         dependencies {
-            "minecraft"("net.minecraft:minecraft:${rootProject.findProperty("minecraft_version") as String}")
+            "minecraft"("net.minecraft:minecraft:${rootProject.properties["minecraft_version"] as String}")
             "mappings"(loom.officialMojangMappings())
         }
 

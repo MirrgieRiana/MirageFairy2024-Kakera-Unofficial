@@ -70,18 +70,18 @@ repositories {
 }
 
 dependencies {
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.findProperty("fabric_loader_version") as String}")
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}")
 
     // ファブリック API。 これは技術的にはオプションですが、おそらくそれでも必要になるでしょう。
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.findProperty("fabric_api_version") as String}")
-    "modImplementation"("net.fabricmc:fabric-language-kotlin:${project.properties["fabric_kotlin_version"] as String}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}")
+    "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}")
     // 次の行のコメントを解除して、非推奨のファブリック API モジュールを有効にします。
     // これらは Fabric API の製品版ディストリビューションに含まれており、後で都合の良いときに MOD を最新のモジュールに更新できるようになります。
 
-    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_api_version}")
+    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}")
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
-    modImplementation("dev.architectury:architectury-fabric:${rootProject.findProperty("architectury_api_version") as String}")
+    modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}")
 
     //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric"))
