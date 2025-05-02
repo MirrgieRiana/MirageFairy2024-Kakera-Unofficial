@@ -138,6 +138,8 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
 tasks.register("uploadModrinth")
 
 modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "miragefairy2024-kakera-unofficial"
     syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
 }
 tasks["uploadModrinth"].dependsOn(tasks["modrinthSyncBody"])
