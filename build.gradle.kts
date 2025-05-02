@@ -9,14 +9,12 @@ plugins {
     id("com.modrinth.minotaur") version "2.+"
 }
 
-java {
-    // Loomは自動的にsourcesJarをRemapSourcesJarタスクおよび "build" タスク(存在する場合)に添付します。
-    // この行を削除すると、ソースが生成されません。
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+base {
+    archivesName = project.properties["archives_name"] as String
 }
+
+version = project.properties["mod_version"] as String
+group = project.properties["maven_group"] as String
 
 // 生成されたリソースをメイン ソース セットに追加します。
 sourceSets {
@@ -30,6 +28,10 @@ sourceSets {
             )
         }
     }
+}
+
+repositories {
+    maven("https://maven.parchmentmc.org") // mapping
 }
 
 // configurationの追加のためにdependenciesより上にある必要がある
@@ -63,10 +65,6 @@ loom {
     }
 }
 
-repositories {
-    maven("https://maven.parchmentmc.org") // mapping
-}
-
 dependencies {
     // バージョンを変更するには、gradle.properties ファイルを参照してください。
     "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
@@ -74,6 +72,15 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
     })
+}
+
+java {
+    // Loomは自動的にsourcesJarをRemapSourcesJarタスクおよび "build" タスク(存在する場合)に添付します。
+    // この行を削除すると、ソースが生成されません。
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -84,27 +91,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         jvmTarget = "21"
         freeCompilerArgs = listOf("-Xcontext-receivers")
-    }
-}
-
-tasks.register("fetchMirrgKotlin") {
-    doFirst {
-        fun fetch(fileName: String) {
-            val file = project.rootDir.resolve("lib/mirrg.kotlin").resolve(fileName)
-            when {
-                file.parentFile.isDirectory -> Unit
-                file.parentFile.exists() -> throw RuntimeException("Already exists: ${file.parentFile}")
-                !file.parentFile.mkdirs() -> throw RuntimeException("Could not create the directory: ${file.parentFile}")
-            }
-            file.writeBytes(uri("https://raw.githubusercontent.com/MirrgieRiana/mirrg.kotlin/main/src/main/java/$fileName").toURL().readBytes())
-        }
-        fetch("mirrg/kotlin/gson/hydrogen/Gson.kt")
-        fetch("mirrg/kotlin/gson/hydrogen/JsonWrapper.kt")
-        fetch("mirrg/kotlin/hydrogen/Lang.kt")
-        fetch("mirrg/kotlin/hydrogen/Number.kt")
-        fetch("mirrg/kotlin/hydrogen/String.kt")
-        fetch("mirrg/kotlin/java/hydrogen/Number.kt")
-        fetch("mirrg/kotlin/slf4j/hydrogen/Logging.kt")
     }
 }
 
@@ -124,13 +110,6 @@ tasks.named<Jar>("jar") {
     from("LICENSE") {
         rename { "${it}_${project.base.archivesName.get()}" }
     }
-}
-
-version = project.properties["mod_version"] as String
-group = project.properties["maven_group"] as String
-
-base {
-    archivesName = project.properties["archives_name"] as String
 }
 
 tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
@@ -168,6 +147,27 @@ publishing {
         // ここに公開するリポジトリを追加します。
         // 注意: このブロックには、最上位のブロックと同じ機能はありません。
         // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
+    }
+}
+
+tasks.register("fetchMirrgKotlin") {
+    doFirst {
+        fun fetch(fileName: String) {
+            val file = project.rootDir.resolve("lib/mirrg.kotlin").resolve(fileName)
+            when {
+                file.parentFile.isDirectory -> Unit
+                file.parentFile.exists() -> throw RuntimeException("Already exists: ${file.parentFile}")
+                !file.parentFile.mkdirs() -> throw RuntimeException("Could not create the directory: ${file.parentFile}")
+            }
+            file.writeBytes(uri("https://raw.githubusercontent.com/MirrgieRiana/mirrg.kotlin/main/src/main/java/$fileName").toURL().readBytes())
+        }
+        fetch("mirrg/kotlin/gson/hydrogen/Gson.kt")
+        fetch("mirrg/kotlin/gson/hydrogen/JsonWrapper.kt")
+        fetch("mirrg/kotlin/hydrogen/Lang.kt")
+        fetch("mirrg/kotlin/hydrogen/Number.kt")
+        fetch("mirrg/kotlin/hydrogen/String.kt")
+        fetch("mirrg/kotlin/java/hydrogen/Number.kt")
+        fetch("mirrg/kotlin/slf4j/hydrogen/Logging.kt")
     }
 }
 
