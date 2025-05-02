@@ -30,6 +30,9 @@ sourceSets {
         kotlin {
             srcDir(rootProject.file("common/src/main/kotlin"))
         }
+        resources {
+            srcDir(rootProject.file("fabric/src/main/generated"))
+        }
     }
 }
 
