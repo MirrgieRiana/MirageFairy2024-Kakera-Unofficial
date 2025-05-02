@@ -26,6 +26,7 @@ subprojects {
 
     pluginManager.withPlugin("dev.architectury.loom") {
         val loom = extensions.getByType<LoomGradleExtensionAPI>()
+
         base {
             // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
             archivesName.set("${rootProject.findProperty("archives_name") as String}-${project.name}")
