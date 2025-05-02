@@ -4,6 +4,7 @@ plugins {
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    kotlin("jvm") version "2.0.0" apply false
     `maven-publish`
     application
 }
@@ -18,6 +19,7 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "kotlin")
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")
