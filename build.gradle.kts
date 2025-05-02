@@ -9,15 +9,18 @@ plugins {
     id("com.modrinth.minotaur") version "2.+"
 }
 
+//
+
+version = project.properties["mod_version"] as String
+group = project.properties["maven_group"] as String
+
 run {
+
     run {
 
         base {
             archivesName = project.properties["archives_name"] as String
         }
-
-        version = project.properties["mod_version"] as String
-        group = project.properties["maven_group"] as String
 
         // 生成されたリソースをメイン ソース セットに追加します。
         sourceSets {
