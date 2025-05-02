@@ -17,18 +17,18 @@ loom {
 sourceSets {
     named("client") {
         java {
-            srcDir("../common/src/client/java")
+            srcDir(rootProject.file("common/src/client/java"))
         }
         kotlin {
-            srcDir("../common/src/client/kotlin")
+            srcDir(rootProject.file("common/src/client/kotlin"))
         }
     }
     main {
         java {
-            srcDir("../common/src/main/java")
+            srcDir(rootProject.file("common/src/main/java"))
         }
         kotlin {
-            srcDir("../common/src/main/kotlin")
+            srcDir(rootProject.file("common/src/main/kotlin"))
         }
     }
 }
