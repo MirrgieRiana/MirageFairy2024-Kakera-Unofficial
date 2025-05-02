@@ -22,12 +22,6 @@ allprojects {
     version = rootProject.properties["mod_version"] as String
 }
 
-tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
-
-modrinth {
-    syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
-}
-
 fun Iterable<Project>.f(block: Project.() -> Unit) = forEach { it.block() }
 subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
     apply(plugin = "kotlin")
@@ -139,6 +133,17 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
 
     }
 }
+
+
+tasks.register("uploadModrinth")
+
+modrinth {
+    syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
+}
+tasks["uploadModrinth"].dependsOn(tasks["modrinthSyncBody"])
+
+tasks["uploadModrinth"].dependsOn(tasks["fabric:modrinth"])
+
 
 tasks.register("fetchMirrgKotlin") {
     doFirst {
