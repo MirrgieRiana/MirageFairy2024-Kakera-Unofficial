@@ -47,3 +47,4 @@ replay_*.log
 /.kotlin
 /logs/
 desktop.ini
+/.architectury-transformer
