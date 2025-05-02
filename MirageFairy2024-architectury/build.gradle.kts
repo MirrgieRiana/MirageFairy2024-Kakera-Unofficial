@@ -82,20 +82,3 @@ subprojects {
         }
     }
 }
-
-tasks.register("showSourceSets") {
-    doLast {
-        allprojects.forEach { project ->
-            println("# Project: '${project.name}'")
-            project.sourceSets.asMap.forEach { (sourceSetName, sourceSet) ->
-                println("## Source Set: '$sourceSetName'")
-                sourceSet.allSource.srcDirs.forEach { file ->
-                    println("Src: $file")
-                }
-                sourceSet.compileClasspath.forEach { file ->
-                    if (file.isDirectory) println("Classpath: $file")
-                }
-            }
-        }
-    }
-}
