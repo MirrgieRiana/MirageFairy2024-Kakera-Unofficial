@@ -142,8 +142,6 @@ modrinth {
 }
 tasks["uploadModrinth"].dependsOn(tasks["modrinthSyncBody"])
 
-tasks["uploadModrinth"].dependsOn(tasks["fabric:modrinth"])
-
 
 tasks.register("fetchMirrgKotlin") {
     doFirst {

@@ -122,6 +122,7 @@ modrinth {
         required.project("terrablender")
     }
 }
+rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
 
 tasks.named<ProcessResources>("processResources") {
     inputs.property("version", project.version)
