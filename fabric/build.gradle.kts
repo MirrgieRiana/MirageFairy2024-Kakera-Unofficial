@@ -120,6 +120,7 @@ modrinth {
         required.project("owo-lib")
         required.project("cloth-config")
         required.project("terrablender")
+        required.project("architectury-api")
     }
 }
 rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
