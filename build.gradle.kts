@@ -9,144 +9,150 @@ plugins {
     id("com.modrinth.minotaur") version "2.+"
 }
 
-base {
-    archivesName = project.properties["archives_name"] as String
-}
+run {
+    run {
 
-version = project.properties["mod_version"] as String
-group = project.properties["maven_group"] as String
+        base {
+            archivesName = project.properties["archives_name"] as String
+        }
 
-// 生成されたリソースをメイン ソース セットに追加します。
-sourceSets {
-    main {
+        version = project.properties["mod_version"] as String
+        group = project.properties["maven_group"] as String
+
+        // 生成されたリソースをメイン ソース セットに追加します。
+        sourceSets {
+            main {
+                java {
+                    srcDir("lib/mirrg.kotlin")
+                }
+                resources {
+                    srcDir(
+                        "src/main/generated"
+                    )
+                }
+            }
+        }
+
+        repositories {
+            maven("https://maven.parchmentmc.org") // mapping
+        }
+
+        // configurationの追加のためにdependenciesより上にある必要がある
+        loom {
+            splitEnvironmentSourceSets()
+
+            mods {
+                register("miragefairy2024") {
+                    sourceSet(sourceSets.main.get())
+                    sourceSet(sourceSets["client"])
+                }
+            }
+            runs {
+                // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
+                register("datagen") {
+                    inherit(runs["server"])
+                    name("Data Generation")
+                    vmArg("-Dfabric-api.datagen")
+                    vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
+                    vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
+
+                    runDir("build/datagen")
+                }
+                named("client") {
+                    vmArgs += listOf("-Xmx4G")
+                    programArgs += listOf("--username", "Player1")
+                }
+                named("server") {
+                    runDir = "run_server" // ファイルロックを回避しクライアントと同時に起動可能にする
+                }
+            }
+        }
+
+        dependencies {
+            // バージョンを変更するには、gradle.properties ファイルを参照してください。
+            "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
+            "mappings"(loom.layered {
+                officialMojangMappings()
+                parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
+            })
+        }
+
         java {
-            srcDir("lib/mirrg.kotlin")
+            // Loomは自動的にsourcesJarをRemapSourcesJarタスクおよび "build" タスク(存在する場合)に添付します。
+            // この行を削除すると、ソースが生成されません。
+            withSourcesJar()
+
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
-        resources {
-            srcDir(
-                "src/main/generated"
-            )
+
+        tasks.withType<JavaCompile>().configureEach {
+            options.release.set(21)
         }
-    }
-}
 
-repositories {
-    maven("https://maven.parchmentmc.org") // mapping
-}
-
-// configurationの追加のためにdependenciesより上にある必要がある
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        register("miragefairy2024") {
-            sourceSet(sourceSets.main.get())
-            sourceSet(sourceSets["client"])
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+            kotlinOptions {
+                jvmTarget = "21"
+                freeCompilerArgs = listOf("-Xcontext-receivers")
+            }
         }
-    }
-    runs {
-        // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
-        register("datagen") {
-            inherit(runs["server"])
-            name("Data Generation")
-            vmArg("-Dfabric-api.datagen")
-            vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
-            vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
 
-            runDir("build/datagen")
+        tasks.named<Copy>("processResources") {
+            inputs.property("version", project.version)
+            exclude("**/*.pdn")
+            exclude("**/*.scr.png")
+            exclude("**/*.sc2.png")
+            exclude("**/*.wav")
+
+            filesMatching("fabric.mod.json") {
+                expand("version" to project.version)
+            }
         }
-        named("client") {
-            vmArgs += listOf("-Xmx4G")
-            programArgs += listOf("--username", "Player1")
+
+        tasks.named<Jar>("jar") {
+            from("LICENSE") {
+                rename { "${it}_${project.base.archivesName.get()}" }
+            }
         }
-        named("server") {
-            runDir = "run_server" // ファイルロックを回避しクライアントと同時に起動可能にする
+
+        tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
+
+        // https://github.com/modrinth/minotaur
+        modrinth {
+            token = System.getenv("MODRINTH_TOKEN")
+            projectId = "miragefairy2024-kakera-unofficial"
+            //versionNumber = project.mod_version
+            versionType = "beta"
+            uploadFile = tasks["remapJar"]
+            //gameVersions = ["1.20.2"]
+            //loaders = ["fabric"]
+            syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
+            dependencies {
+                required.project("fabric-api")
+                required.project("fabric-language-kotlin")
+                required.project("faux-custom-entity-data")
+                required.project("owo-lib")
+                required.project("cloth-config")
+                required.project("terrablender")
+            }
         }
-    }
-}
 
-dependencies {
-    // バージョンを変更するには、gradle.properties ファイルを参照してください。
-    "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"] as String}")
-    "mappings"(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
-    })
-}
+        // Mavenパブリケーションの構成
+        publishing {
+            publications {
+                register<MavenPublication>("mavenJava") {
+                    from(components["java"])
+                }
+            }
 
-java {
-    // Loomは自動的にsourcesJarをRemapSourcesJarタスクおよび "build" タスク(存在する場合)に添付します。
-    // この行を削除すると、ソースが生成されません。
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.release.set(21)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
-    kotlinOptions {
-        jvmTarget = "21"
-        freeCompilerArgs = listOf("-Xcontext-receivers")
-    }
-}
-
-tasks.named<Copy>("processResources") {
-    inputs.property("version", project.version)
-    exclude("**/*.pdn")
-    exclude("**/*.scr.png")
-    exclude("**/*.sc2.png")
-    exclude("**/*.wav")
-
-    filesMatching("fabric.mod.json") {
-        expand("version" to project.version)
-    }
-}
-
-tasks.named<Jar>("jar") {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
-    }
-}
-
-tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
-
-// https://github.com/modrinth/minotaur
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "miragefairy2024-kakera-unofficial"
-    //versionNumber = project.mod_version
-    versionType = "beta"
-    uploadFile = tasks["remapJar"]
-    //gameVersions = ["1.20.2"]
-    //loaders = ["fabric"]
-    syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
-    dependencies {
-        required.project("fabric-api")
-        required.project("fabric-language-kotlin")
-        required.project("faux-custom-entity-data")
-        required.project("owo-lib")
-        required.project("cloth-config")
-        required.project("terrablender")
-    }
-}
-
-// Mavenパブリケーションの構成
-publishing {
-    publications {
-        register<MavenPublication>("mavenJava") {
-            from(components["java"])
+            // 公開の設定方法については、https://docs.gradle.org/current/userguide/publishing_maven.html を参照してください。
+            repositories {
+                // ここに公開するリポジトリを追加します。
+                // 注意: このブロックには、最上位のブロックと同じ機能はありません。
+                // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
+            }
         }
-    }
 
-    // 公開の設定方法については、https://docs.gradle.org/current/userguide/publishing_maven.html を参照してください。
-    repositories {
-        // ここに公開するリポジトリを追加します。
-        // 注意: このブロックには、最上位のブロックと同じ機能はありません。
-        // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
     }
 }
 
