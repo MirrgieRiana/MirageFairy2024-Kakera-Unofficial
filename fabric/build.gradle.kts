@@ -137,6 +137,7 @@ tasks.named<Jar>("jar") {
 }
 
 tasks.named<ShadowJar>("shadowJar") {
+    from(sourceSets["client"].output)
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
     relocate("mirrg.kotlin", "miragefairy2024.shadow.mirrg.kotlin")
