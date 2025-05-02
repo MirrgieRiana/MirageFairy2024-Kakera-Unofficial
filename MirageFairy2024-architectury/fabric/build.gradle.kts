@@ -10,6 +10,29 @@ architectury {
     fabric()
 }
 
+loom {
+    splitEnvironmentSourceSets()
+}
+
+sourceSets {
+    named("client") {
+        java {
+            srcDir("../common/src/client/java")
+        }
+        kotlin {
+            srcDir("../common/src/client/kotlin")
+        }
+    }
+    main {
+        java {
+            srcDir("../common/src/main/java")
+        }
+        kotlin {
+            srcDir("../common/src/main/kotlin")
+        }
+    }
+}
+
 configurations {
     val common by creating {
         isCanBeResolved = true
@@ -36,7 +59,7 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:${rootProject.findProperty("architectury_api_version") as String}")
 
-    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
+    //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric"))
 }
 

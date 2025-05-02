@@ -2,6 +2,17 @@ architectury {
     common((rootProject.findProperty("enabled_platforms") as String).split(","))
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir("src/client/java")
+        }
+        kotlin {
+            srcDir("src/client/kotlin")
+        }
+    }
+}
+
 dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
