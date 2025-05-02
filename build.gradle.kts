@@ -88,15 +88,15 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${project.properties["minecraft_version"] as String}:${project.properties["parchment_mappings"] as String}@zip")
     })
-    "modImplementation"("net.fabricmc:fabric-loader:${project.properties["loader_version"] as String}")
+    "modImplementation"("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"] as String}")
 
     // ファブリック API。 これは技術的にはオプションですが、おそらくそれでも必要になるでしょう。
-    "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_version"] as String}")
+    "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"] as String}")
     "modImplementation"("net.fabricmc:fabric-language-kotlin:${project.properties["fabric_kotlin_version"] as String}")
     // 次の行のコメントを解除して、非推奨のファブリック API モジュールを有効にします。
     // これらは Fabric API の製品版ディストリビューションに含まれており、後で都合の良いときに MOD を最新のモジュールに更新できるようになります。
 
-    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}")
+    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_api_version}")
 
     "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:16.0.799")
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799")
@@ -167,7 +167,7 @@ version = project.properties["mod_version"] as String
 group = project.properties["maven_group"] as String
 
 base {
-    archivesName = project.properties["archives_base_name"] as String
+    archivesName = project.properties["archives_name"] as String
 }
 
 tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
