@@ -1,7 +1,6 @@
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import java.net.URL
 
 plugins {
     id("fabric-loom") version "1.10-SNAPSHOT"
@@ -134,7 +133,7 @@ tasks.register("fetchMirrgKotlin") {
                 file.parentFile.exists() -> throw RuntimeException("Already exists: ${file.parentFile}")
                 !file.parentFile.mkdirs() -> throw RuntimeException("Could not create the directory: ${file.parentFile}")
             }
-            file.writeBytes(URL("https://raw.githubusercontent.com/MirrgieRiana/mirrg.kotlin/main/src/main/java/$fileName").readBytes())
+            file.writeBytes(uri("https://raw.githubusercontent.com/MirrgieRiana/mirrg.kotlin/main/src/main/java/$fileName").toURL().readBytes())
         }
         fetch("mirrg/kotlin/gson/hydrogen/Gson.kt")
         fetch("mirrg/kotlin/gson/hydrogen/JsonWrapper.kt")
