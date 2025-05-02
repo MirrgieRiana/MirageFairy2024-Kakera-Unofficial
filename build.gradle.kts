@@ -184,7 +184,7 @@ tasks.register("showSourceSets") {
 }
 
 tasks.register("buildPages") {
-    dependsOn("runDatagen")
+    dependsOn(project("fabric").tasks["runDatagen"])
     doLast {
         println("Building pages...")
         val en = GsonBuilder().create().fromJson(File("fabric/src/main/generated/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
