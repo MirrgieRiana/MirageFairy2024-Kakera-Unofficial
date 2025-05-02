@@ -43,7 +43,8 @@ replay_*.log
 # custom
 
 /backup
-/src/main/generated/.cache
+/**/generated/.cache
 /.kotlin
 /logs/
 desktop.ini
+/.architectury-transformer
