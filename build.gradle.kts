@@ -6,7 +6,7 @@ import java.net.URL
 plugins {
     id("fabric-loom") version "1.10-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "2.1.20"
+    kotlin("jvm") version "2.0.0"
     id("com.modrinth.minotaur") version "2.+"
 }
 
