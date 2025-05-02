@@ -58,6 +58,8 @@ dependencies {
 
     //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))
+    implementation(project(path = ":mirrg.kotlin"))
+    "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -71,6 +73,7 @@ tasks.named<ProcessResources>("processResources") {
 tasks.named<ShadowJar>("shadowJar") {
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
+    relocate("mirrg.kotlin", "miragefairy2024.shadow.mirrg.kotlin")
 }
 
 tasks.named<RemapJarTask>("remapJar") {

@@ -21,4 +21,5 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury:${rootProject.findProperty("architectury_api_version") as String}")
+    implementation(project(path = ":mirrg.kotlin"))
 }
