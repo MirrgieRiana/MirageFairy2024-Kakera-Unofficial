@@ -212,8 +212,8 @@ tasks.register("buildPages") {
     dependsOn("runDatagen")
     doLast {
         println("Building pages...")
-        val en = GsonBuilder().create().fromJson(File("src/main/generated/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
-        val ja = GsonBuilder().create().fromJson(File("src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText(), JsonElement::class.java).asJsonObject
+        val en = GsonBuilder().create().fromJson(File("fabric/src/main/generated/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
+        val ja = GsonBuilder().create().fromJson(File("fabric/src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText(), JsonElement::class.java).asJsonObject
         val keys = (en.keySet() + en.keySet()).sorted()
 
         mkdir("build/pages")
