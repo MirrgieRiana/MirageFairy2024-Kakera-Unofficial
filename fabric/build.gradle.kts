@@ -3,6 +3,7 @@ import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     id("com.github.johnrengelman.shadow")
+    id("com.modrinth.minotaur")
 }
 
 architectury {
@@ -101,6 +102,25 @@ dependencies {
     "modApi"("me.shedaniel.cloth:cloth-config:15.0.140")
 
     "modImplementation"("com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8")
+}
+
+// https://github.com/modrinth/minotaur
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "miragefairy2024-kakera-unofficial"
+    //versionNumber = project.mod_version
+    versionType = "beta"
+    uploadFile = tasks["remapJar"]
+    //gameVersions = ["1.20.2"]
+    //loaders = ["fabric"]
+    dependencies {
+        required.project("fabric-api")
+        required.project("fabric-language-kotlin")
+        required.project("faux-custom-entity-data")
+        required.project("owo-lib")
+        required.project("cloth-config")
+        required.project("terrablender")
+    }
 }
 
 tasks.named<ProcessResources>("processResources") {

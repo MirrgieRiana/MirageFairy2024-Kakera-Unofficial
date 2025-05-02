@@ -22,6 +22,12 @@ allprojects {
     version = rootProject.properties["mod_version"] as String
 }
 
+tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
+
+modrinth {
+    syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
+}
+
 fun Iterable<Project>.f(block: Project.() -> Unit) = forEach { it.block() }
 subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
     apply(plugin = "kotlin")
@@ -114,28 +120,6 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
             }
         }
 
-        tasks["modrinth"].dependsOn(tasks["modrinthSyncBody"])
-
-        // https://github.com/modrinth/minotaur
-        modrinth {
-            token = System.getenv("MODRINTH_TOKEN")
-            projectId = "miragefairy2024-kakera-unofficial"
-            //versionNumber = project.mod_version
-            versionType = "beta"
-            uploadFile = tasks["remapJar"]
-            //gameVersions = ["1.20.2"]
-            //loaders = ["fabric"]
-            syncBodyFrom = rootProject.file("MODRINTH-BODY.md").readText()
-            dependencies {
-                required.project("fabric-api")
-                required.project("fabric-language-kotlin")
-                required.project("faux-custom-entity-data")
-                required.project("owo-lib")
-                required.project("cloth-config")
-                required.project("terrablender")
-            }
-        }
-
         // Mavenパブリケーションの構成
         publishing {
             publications {
@@ -159,7 +143,7 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
 tasks.register("fetchMirrgKotlin") {
     doFirst {
         fun fetch(fileName: String) {
-            val file = project.rootDir.resolve("lib/mirrg.kotlin").resolve(fileName)
+            val file = project.rootDir.resolve("mirrg.kotlin/src/main/kotlin").resolve(fileName)
             when {
                 file.parentFile.isDirectory -> Unit
                 file.parentFile.exists() -> throw RuntimeException("Already exists: ${file.parentFile}")
