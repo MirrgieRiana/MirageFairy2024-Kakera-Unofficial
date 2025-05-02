@@ -1,41 +1,56 @@
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
+import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
-    id("fabric-loom") version "1.10-SNAPSHOT"
+    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("maven-publish")
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.0" apply false
+    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     id("com.modrinth.minotaur") version "2.+"
+    application
 }
 
-//
+architectury {
+    minecraft = rootProject.properties["minecraft_version"] as String
+}
 
-group = rootProject.properties["maven_group"] as String
-version = rootProject.properties["mod_version"] as String
+allprojects {
+    group = rootProject.properties["maven_group"] as String
+    version = rootProject.properties["mod_version"] as String
+}
 
-run {
+fun Iterable<Project>.f(block: Project.() -> Unit) = forEach { it.block() }
+subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
+    apply(plugin = "kotlin")
+    apply(plugin = "dev.architectury.loom")
+    apply(plugin = "architectury-plugin")
+    apply(plugin = "maven-publish")
 
-    run {
+    pluginManager.withPlugin("dev.architectury.loom") {
+        val loom = extensions.getByType<LoomGradleExtensionAPI>()
 
         base {
-            archivesName = rootProject.properties["archives_name"] as String
+            // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+            archivesName = "${rootProject.properties["archives_name"] as String}-${project.name}"
         }
 
         repositories {
+            // Add repositories to retrieve artifacts from in here.
+            // You should only use this when depending on other mods because
+            // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+            // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+            // for more information about repositories.
+
             maven("https://maven.parchmentmc.org") // mapping
         }
 
         // configurationの追加のためにdependenciesより上にある必要がある
-        loom {
-            splitEnvironmentSourceSets()
+        extensions.configure<LoomGradleExtensionAPI> {
+            silentMojangMappingsLicense()
 
-            mods {
-                register("miragefairy2024") {
-                    sourceSet(sourceSets.main.get())
-                    sourceSet(sourceSets["client"])
-                }
-            }
             runs {
                 // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
                 register("datagen") {
@@ -59,7 +74,7 @@ run {
 
         dependencies {
             // バージョンを変更するには、gradle.properties ファイルを参照してください。
-            "minecraft"("com.mojang:minecraft:${rootProject.properties["minecraft_version"] as String}")
+            "minecraft"("net.minecraft:minecraft:${rootProject.properties["minecraft_version"] as String}")
             "mappings"(loom.layered {
                 officialMojangMappings()
                 parchment("org.parchmentmc.data:parchment-${rootProject.properties["minecraft_version"] as String}:${rootProject.properties["parchment_mappings"] as String}@zip")
@@ -87,15 +102,10 @@ run {
         }
 
         tasks.named<Copy>("processResources") {
-            inputs.property("version", project.version)
             exclude("**/*.pdn")
             exclude("**/*.scr.png")
             exclude("**/*.sc2.png")
             exclude("**/*.wav")
-
-            filesMatching("fabric.mod.json") {
-                expand("version" to project.version)
-            }
         }
 
         tasks.named<Jar>("jar") {
@@ -130,6 +140,7 @@ run {
         publishing {
             publications {
                 register<MavenPublication>("mavenJava") {
+                    //artifactId = project.base.archivesName.get()
                     from(components["java"])
                 }
             }
