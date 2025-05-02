@@ -22,20 +22,6 @@ run {
             archivesName = project.properties["archives_name"] as String
         }
 
-        // 生成されたリソースをメイン ソース セットに追加します。
-        sourceSets {
-            main {
-                java {
-                    srcDir("lib/mirrg.kotlin")
-                }
-                resources {
-                    srcDir(
-                        "src/main/generated"
-                    )
-                }
-            }
-        }
-
         repositories {
             maven("https://maven.parchmentmc.org") // mapping
         }
