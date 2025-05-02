@@ -30,7 +30,7 @@ jobs:
       # ビルド
       - name: ビルド
         working-directory: src
-        run: bash gradlew buildPages
+        run: timeout --preserve-status -k 10s 300s bash gradlew buildPages
 
       # 成果物の配置
       - name: ビルドしたものをコピー
