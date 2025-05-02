@@ -7,3 +7,9 @@ pluginManagement {
 }
 
 rootProject.name = "MF24KU"
+
+include("mirrg.kotlin")
+
+include("common")
+include("fabric")
+include("neoforge")
