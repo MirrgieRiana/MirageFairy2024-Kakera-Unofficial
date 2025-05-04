@@ -3,6 +3,7 @@ import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     id("com.github.johnrengelman.shadow")
+    id("com.modrinth.minotaur")
 }
 
 architectury {
@@ -46,6 +47,18 @@ dependencies {
     implementation(project(path = ":mirrg.kotlin"))
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
 }
+
+// https://github.com/modrinth/minotaur
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "miragefairy2024-kakera-unofficial"
+    //versionNumber = project.mod_version
+    versionType = "beta"
+    uploadFile = tasks["remapJar"]
+    //gameVersions = ["1.20.2"]
+    //loaders = ["neoforge"]
+}
+//rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
 
 tasks.named<ProcessResources>("processResources") {
     inputs.property("version", project.version)
