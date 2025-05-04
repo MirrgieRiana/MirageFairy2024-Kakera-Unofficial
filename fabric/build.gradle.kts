@@ -15,29 +15,6 @@ loom {
     splitEnvironmentSourceSets()
 }
 
-sourceSets {
-    named("client") {
-        java {
-            srcDir(rootProject.file("common/src/client/java"))
-        }
-        kotlin {
-            srcDir(rootProject.file("common/src/client/kotlin"))
-        }
-    }
-    main {
-        java {
-            srcDir(rootProject.file("common/src/main/java"))
-        }
-        kotlin {
-            srcDir(rootProject.file("common/src/main/kotlin"))
-        }
-        resources {
-            srcDir(rootProject.file("common/src/main/resources"))
-            srcDir(rootProject.file("common/src/generated/resources"))
-        }
-    }
-}
-
 configurations {
     val common by creating {
         isCanBeResolved = true
@@ -85,7 +62,8 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}")
 
-    //"common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
+    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
+    "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output)
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric"))
     implementation(project(path = ":mirrg.kotlin"))
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }

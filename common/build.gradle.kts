@@ -2,13 +2,14 @@ architectury {
     common((rootProject.properties["enabled_platforms"] as String).split(","))
 }
 
+loom {
+    splitEnvironmentSourceSets()
+}
+
 sourceSets {
     main {
-        java {
-            srcDir("src/client/java")
-        }
-        kotlin {
-            srcDir("src/client/kotlin")
+        resources {
+            srcDir(file("src/generated/resources"))
         }
     }
 }
