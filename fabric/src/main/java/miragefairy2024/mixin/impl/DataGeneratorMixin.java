@@ -15,6 +15,6 @@ public class DataGeneratorMixin {
         } catch (InterruptedException e) {
 
         }
-        System.exit(0);
+        System.exit(0); // なぜかArchitecturyに移行したらrunDatagenが終わった後プロセスが地縛霊になるようになったので強制終了させる
     }
 }
