@@ -43,7 +43,7 @@ replay_*.log
 # custom
 
 /backup
-/**/generated/.cache
+/**/generated/resources/.cache
 /.kotlin
 /logs/
 desktop.ini
