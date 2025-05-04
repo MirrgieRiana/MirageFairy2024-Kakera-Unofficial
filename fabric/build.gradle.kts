@@ -48,6 +48,21 @@ repositories {
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
 
+loom {
+    runs {
+        // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
+        register("datagen") {
+            inherit(runs["server"])
+            name("Data Generation")
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${rootProject.file("common/src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
+
+            runDir("build/datagen")
+        }
+    }
+}
+
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}")
 

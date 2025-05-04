@@ -52,16 +52,6 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
             silentMojangMappingsLicense()
 
             runs {
-                // これにより、datagen API を実行する新しい gradle タスク "gradlew runDatagen" が追加されます。
-                register("datagen") {
-                    inherit(runs["server"])
-                    name("Data Generation")
-                    vmArg("-Dfabric-api.datagen")
-                    vmArg("-Dfabric-api.datagen.output-dir=${rootProject.file("common/src/generated/resources")}")
-                    vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
-
-                    runDir("build/datagen")
-                }
                 named("client") {
                     vmArgs += listOf("-Xmx4G")
                     programArgs += listOf("--username", "Player1")
