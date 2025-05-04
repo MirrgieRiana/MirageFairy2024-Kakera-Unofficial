@@ -5,7 +5,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
-    id("maven-publish")
+    //id("maven-publish")
     kotlin("jvm") version "2.0.0" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
@@ -27,7 +27,7 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
     apply(plugin = "kotlin")
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
-    apply(plugin = "maven-publish")
+    //apply(plugin = "maven-publish")
 
     pluginManager.withPlugin("dev.architectury.loom") {
         val loom = extensions.getByType<LoomGradleExtensionAPI>()
@@ -105,6 +105,7 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
         }
 
         // Mavenパブリケーションの構成
+        /*
         publishing {
             publications {
                 register<MavenPublication>("mavenJava") {
@@ -120,6 +121,7 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
                 // ここのリポジトリは、依存関係を取得するためではなく、アーティファクトを公開するために使用されます。
             }
         }
+        */
 
     }
 }
