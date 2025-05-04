@@ -57,7 +57,7 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
                     inherit(runs["server"])
                     name("Data Generation")
                     vmArg("-Dfabric-api.datagen")
-                    vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
+                    vmArg("-Dfabric-api.datagen.output-dir=${rootProject.file("common/src/generated/resources")}")
                     vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
 
                     runDir("build/datagen")
@@ -187,8 +187,8 @@ tasks.register("buildPages") {
     dependsOn(project("fabric").tasks["runDatagen"])
     doLast {
         println("Building pages...")
-        val en = GsonBuilder().create().fromJson(File("fabric/src/main/generated/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
-        val ja = GsonBuilder().create().fromJson(File("fabric/src/main/generated/assets/miragefairy2024/lang/ja_jp.json").readText(), JsonElement::class.java).asJsonObject
+        val en = GsonBuilder().create().fromJson(File("common/src/generated/resources/assets/miragefairy2024/lang/en_us.json").readText(), JsonElement::class.java).asJsonObject
+        val ja = GsonBuilder().create().fromJson(File("common/src/generated/resources/assets/miragefairy2024/lang/ja_jp.json").readText(), JsonElement::class.java).asJsonObject
         val keys = (en.keySet() + en.keySet()).sorted()
 
         mkdir("build/pages")

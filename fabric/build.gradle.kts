@@ -32,7 +32,7 @@ sourceSets {
             srcDir(rootProject.file("common/src/main/kotlin"))
         }
         resources {
-            srcDir(rootProject.file("fabric/src/main/generated"))
+            srcDir(rootProject.file("common/src/generated/resources"))
         }
     }
 }
