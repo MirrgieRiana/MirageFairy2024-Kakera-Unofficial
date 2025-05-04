@@ -32,6 +32,7 @@ sourceSets {
             srcDir(rootProject.file("common/src/main/kotlin"))
         }
         resources {
+            srcDir(rootProject.file("common/src/main/resources"))
             srcDir(rootProject.file("common/src/generated/resources"))
         }
     }
