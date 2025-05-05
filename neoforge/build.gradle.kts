@@ -37,17 +37,20 @@ repositories {
 }
 
 dependencies {
+
+    // Loader
     neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}")
 
+    // Platform
     implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}")
-
-    // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
 
+    // Module
     "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))
     "common"(project(path = ":mirrg.kotlin"))
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
+
 }
 
 // https://github.com/modrinth/minotaur

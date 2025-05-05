@@ -64,19 +64,17 @@ loom {
 }
 
 dependencies {
+
+    // Loader
     modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}")
 
-    // ファブリック API。 これは技術的にはオプションですが、おそらくそれでも必要になるでしょう。
+    // Platform
     modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}")
     "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}")
-    // 次の行のコメントを解除して、非推奨のファブリック API モジュールを有効にします。
-    // これらは Fabric API の製品版ディストリビューションに含まれており、後で都合の良いときに MOD を最新のモジュールに更新できるようになります。
-
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}")
-
-    // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}")
 
+    // Module
     "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
     "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output)
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric"))
@@ -96,6 +94,7 @@ dependencies {
     "modApi"("me.shedaniel.cloth:cloth-config:15.0.140")
 
     "modImplementation"("com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8")
+
 }
 
 // https://github.com/modrinth/minotaur
