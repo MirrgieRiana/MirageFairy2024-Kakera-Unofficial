@@ -42,7 +42,7 @@ dependencies {
     neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}") // NeoForge
 
     // Platform
-    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}") // Forgified Fabric API
+    modImplementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}") // Forgified Fabric API
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
