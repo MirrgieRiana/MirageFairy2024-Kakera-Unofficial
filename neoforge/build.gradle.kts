@@ -34,6 +34,7 @@ repositories {
         url = uri("https://maven.neoforged.net/releases")
     }
     maven("https://maven.su5ed.dev/releases") // forgified-fabric-api
+    maven("https://thedarkcolour.github.io/KotlinForForge/") // kotlin-for-forge
 }
 
 dependencies {
@@ -43,6 +44,7 @@ dependencies {
 
     // Platform
     modImplementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}") // Forgified Fabric API
+    modImplementation("thedarkcolour:kotlinforforge:${rootProject.properties["kotlin_for_forge_version"] as String}") // Kotlin
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
