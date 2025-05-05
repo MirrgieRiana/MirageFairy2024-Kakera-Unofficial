@@ -20,7 +20,10 @@ dependencies {
     // Do NOT use other classes from Fabric Loader.
     modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}")
 
+    compileOnly("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}")
+
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury:${rootProject.properties["architectury_api_version"] as String}")
+
     implementation(project(path = ":mirrg.kotlin"))
 }

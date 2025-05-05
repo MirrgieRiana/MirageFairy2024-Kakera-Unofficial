@@ -34,6 +34,13 @@ versionRange = "[13.0.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.miragefairy2024]]
+modId = "fabric_api_base"
+type = "required"
+versionRange = "[,)"
+ordering = "NONE"
+side = "BOTH"
+
 #[[mixins]]
 #config = "miragefairy2024.mixins.json"
 #

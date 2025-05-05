@@ -33,10 +33,13 @@ repositories {
         name = "NeoForged"
         url = uri("https://maven.neoforged.net/releases")
     }
+    maven("https://maven.su5ed.dev/releases") // forgified-fabric-api
 }
 
 dependencies {
     neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}")
+
+    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:0.107.0+2.0.26+1.21.1")
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
@@ -56,6 +59,9 @@ modrinth {
     uploadFile = tasks["remapJar"]
     //gameVersions = ["1.20.2"]
     //loaders = ["neoforge"]
+    dependencies {
+        required.project("forgified-fabric-api")
+    }
 }
 //rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
 
