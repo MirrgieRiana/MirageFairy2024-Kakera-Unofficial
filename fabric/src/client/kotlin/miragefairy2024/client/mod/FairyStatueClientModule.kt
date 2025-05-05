@@ -1,7 +1,7 @@
 package miragefairy2024.client.mod
 
-import miragefairy2024.api.client.RenderItemHandler
 import miragefairy2024.client.util.stack
+import miragefairy2024.mixin.client.api.RenderItemHandler
 import miragefairy2024.mod.fairy.FairyStatueBlockItem
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyMotif

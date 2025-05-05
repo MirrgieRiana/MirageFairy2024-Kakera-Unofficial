@@ -1,7 +1,7 @@
 package miragefairy2024.client.mod.fairyquest
 
-import miragefairy2024.api.client.RenderItemHandler
 import miragefairy2024.client.util.stack
+import miragefairy2024.mixin.client.api.RenderItemHandler
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.fairyquest.fairyQuestCardScreenHandlerType
 import miragefairy2024.mod.fairyquest.getFairyQuestRecipe

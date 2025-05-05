@@ -1,7 +1,7 @@
 package miragefairy2024.client.mod
 
-import miragefairy2024.api.client.inputEventsHandlers
 import miragefairy2024.client.util.sendToServer
+import miragefairy2024.mixin.client.api.inputEventsHandlers
 import miragefairy2024.mod.placeditem.PLACE_ITEM_KEY_TRANSLATION
 import miragefairy2024.mod.placeditem.PlaceItemChannel
 import miragefairy2024.mod.placeditem.PlacedItemCard

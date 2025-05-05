@@ -9,13 +9,13 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.api.client.inputEventsHandlers
 import miragefairy2024.client.util.LimitedLabelComponent
 import miragefairy2024.client.util.createOwoToast
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.client.util.sendToServer
 import miragefairy2024.client.util.verticalSpace
+import miragefairy2024.mixin.client.api.inputEventsHandlers
 import miragefairy2024.mod.fairy.GAIN_FAIRY_DREAM_TRANSLATION
 import miragefairy2024.mod.fairy.GainFairyDreamChannel
 import miragefairy2024.mod.fairy.OPEN_SOUL_STREAM_KEY_TRANSLATION

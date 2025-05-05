@@ -1,7 +1,7 @@
-package miragefairy2024.mixin.client;
+package miragefairy2024.mixin.client.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import miragefairy2024.api.client.RenderItemHandler;
+import miragefairy2024.mixin.client.api.RenderItemHandler;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;

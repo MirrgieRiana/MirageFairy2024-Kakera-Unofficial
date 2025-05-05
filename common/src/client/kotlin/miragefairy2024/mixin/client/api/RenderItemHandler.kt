@@ -1,4 +1,4 @@
-package miragefairy2024.api.client
+package miragefairy2024.mixin.client.api
 
 import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.world.item.ItemStack
