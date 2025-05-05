@@ -42,9 +42,9 @@ dependencies {
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
 
     "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    "common"(rootProject.project("common").sourceSets.named("client").get().output)
+    //"common"(rootProject.project("common").sourceSets.named("client").get().output)
     "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))
-    implementation(project(path = ":mirrg.kotlin"))
+    "common"(project(path = ":mirrg.kotlin"))
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
 }
 
