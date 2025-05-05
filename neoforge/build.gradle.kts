@@ -61,6 +61,7 @@ modrinth {
     //loaders = ["neoforge"]
     dependencies {
         required.project("forgified-fabric-api")
+        required.project("kotlin-for-forge")
     }
 }
 //rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
@@ -69,7 +70,11 @@ tasks.named<ProcessResources>("processResources") {
     inputs.property("version", project.version)
 
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand("version" to project.version)
+        expand(
+            "version" to project.version,
+            "forgified_fabric_api_version" to rootProject.properties["forgified_fabric_api_version"] as String,
+            "kotlin_for_forge_version" to rootProject.properties["kotlin_for_forge_version"] as String,
+        )
     }
 }
 
