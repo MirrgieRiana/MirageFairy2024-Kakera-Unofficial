@@ -39,7 +39,7 @@ repositories {
 dependencies {
     neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}")
 
-    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:0.107.0+2.0.26+1.21.1")
+    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}")
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
