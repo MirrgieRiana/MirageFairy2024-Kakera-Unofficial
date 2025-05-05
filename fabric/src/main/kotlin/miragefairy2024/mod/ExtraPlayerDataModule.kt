@@ -4,6 +4,7 @@ import com.faux.customentitydata.api.playersaves.CustomPlayerSave
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.mixin.api.ExtraPlayerDataContainerGetter
 import miragefairy2024.util.Channel
 import miragefairy2024.util.compound
 import miragefairy2024.util.get
@@ -46,7 +47,7 @@ interface ExtraPlayerDataCategory<T : Any> {
 
 // Util
 
-val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (this as ExtraPlayerDataContainerGetter).`mirageFairy2024$getExtraPlayerDataContainer`()
+val PlayerEntity.extraPlayerDataContainer: ExtraPlayerDataContainer get() = (this as ExtraPlayerDataContainerGetter).`mirageFairy2024$getExtraPlayerDataContainer` { ExtraPlayerDataContainer(it) } as ExtraPlayerDataContainer
 
 
 // Init
@@ -204,9 +205,4 @@ class ExtraPlayerDataContainer(private val player: PlayerEntity) {
     }
 
     var isDirty = true
-}
-
-interface ExtraPlayerDataContainerGetter {
-    @Suppress("FunctionName")
-    fun `mirageFairy2024$getExtraPlayerDataContainer`(): ExtraPlayerDataContainer
 }
