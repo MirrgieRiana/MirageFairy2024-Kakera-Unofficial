@@ -11,6 +11,7 @@
 *.pdn          -text
 *.png          -text
 *.properties    text eol=lf
+*.toml          text eol=lf
 *.wav          -text
 *.xml           text eol=lf
 *.yml           text eol=lf
