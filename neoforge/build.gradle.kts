@@ -39,17 +39,17 @@ repositories {
 dependencies {
 
     // Loader
-    neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}")
+    neoForge("net.neoforged:neoforge:${rootProject.properties["neoforge_version"] as String}") // NeoForge
 
     // Platform
-    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}")
-    modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}")
+    implementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}") // Forgified Fabric API
+    modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
-    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge"))
-    "common"(project(path = ":mirrg.kotlin"))
-    "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
+    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
+    "shadowBundle"(project(path = ":common", configuration = "transformProductionNeoForge")) // common shadow
+    "common"(project(path = ":mirrg.kotlin")) // mirrg.kotlin
+    "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false } // mirrg.kotlin shadow
 
 }
 

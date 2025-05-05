@@ -66,20 +66,20 @@ loom {
 dependencies {
 
     // Loader
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}")
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.properties["fabric_loader_version"] as String}") // Fabric Loader
 
     // Platform
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}")
-    "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}")
-    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}")
-    modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}") // Fabric API
+    "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}") // Kotlin
+    // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}") // Deprecated Fabric API
+    modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
-    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output)
-    "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric"))
-    implementation(project(path = ":mirrg.kotlin"))
-    "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false }
+    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
+    "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output) // common client
+    "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric")) // common shadow
+    implementation(project(path = ":mirrg.kotlin")) // mirrg.kotlin
+    "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false } // mirrg.kotlin shadow
 
     "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-fabric:16.0.799")
     "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799")
