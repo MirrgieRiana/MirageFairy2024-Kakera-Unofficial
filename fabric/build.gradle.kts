@@ -70,8 +70,8 @@ dependencies {
 
     // Platform
     modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}") // Fabric API
-    "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}") // Kotlin
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}") // Deprecated Fabric API
+    "modImplementation"("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}") // Kotlin
     modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
