@@ -29,10 +29,7 @@ configurations {
 }
 
 repositories {
-    maven {
-        name = "NeoForged"
-        url = uri("https://maven.neoforged.net/releases")
-    }
+    maven("https://maven.neoforged.net/releases") // NeoForged
     maven("https://maven.su5ed.dev/releases") // forgified-fabric-api
     maven("https://thedarkcolour.github.io/KotlinForForge/") // kotlin-for-forge
 }
