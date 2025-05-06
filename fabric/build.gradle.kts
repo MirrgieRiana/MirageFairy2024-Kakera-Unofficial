@@ -33,18 +33,9 @@ configurations {
 }
 
 repositories {
-    // ここからアーティファクトを取得するリポジトリを追加します。
-    // Loom は Minecraft とライブラリを自動的にダウンロードするために必須の Maven リポジトリを追加するため、
-    // 他の MOD に依存する場合にのみこれを使用してください。
-    // リポジトリの詳細については、↓を参照してください。
-    // https://docs.gradle.org/current/userguide/declaring_repositories.html
-
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
-
     maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
-
     maven("https://maven.wispforest.io") // owo-lib
-
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
 
