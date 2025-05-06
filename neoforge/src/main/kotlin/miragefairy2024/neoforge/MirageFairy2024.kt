@@ -1,4 +1,4 @@
-package miragefairy2024
+package miragefairy2024.neoforge
 
 import mirrg.kotlin.slf4j.hydrogen.getLogger
 import net.neoforged.fml.common.Mod
