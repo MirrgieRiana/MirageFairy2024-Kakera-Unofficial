@@ -35,7 +35,7 @@ configurations {
 repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
     maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
-    maven("https://maven.wispforest.io") // owo-lib
+    maven("https://maven.wispforest.io/releases/") // owo-lib
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
 
