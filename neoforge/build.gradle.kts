@@ -56,10 +56,10 @@ dependencies {
     "common"(project(path = ":mirrg.kotlin")) // mirrg.kotlin
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false } // mirrg.kotlin shadow
 
-    "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-neoforge:16.0.799")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.799")
-    "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.799")
-    "modCompileOnly"("me.shedaniel.cloth:basic-math:0.6.1")
+    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-neoforge:16.0.799")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.799")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.799")
+    modCompileOnly("me.shedaniel.cloth:basic-math:0.6.1")
 
     modImplementation("io.wispforest:owo-lib-neoforge:0.12.15.1-beta.3+1.21")// { isTransitive = true }
     forgeRuntimeLibrary(include(api("io.wispforest:endec:0.1.5.1")!!)!!)
