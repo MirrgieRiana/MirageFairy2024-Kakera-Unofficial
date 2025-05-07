@@ -1,5 +1,6 @@
 package miragefairy2024.neoforge
 
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
@@ -21,12 +22,8 @@ import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.loading.FMLEnvironment
 
-@Mod(MirageFairy2024Mod.MOD_ID)
+@Mod(MirageFairy2024.MOD_ID)
 class MirageFairy2024Mod {
-    companion object {
-        const val MOD_ID = "miragefairy2024"
-    }
-
     init {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             Modules.init()
