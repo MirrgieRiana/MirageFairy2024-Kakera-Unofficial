@@ -1,7 +1,8 @@
-package miragefairy2024.client
+package miragefairy2024.client.fabric
 
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
+import miragefairy2024.client.ClientProxyImpl
 import miragefairy2024.client.mod.entity.initEntityClientModule
 import miragefairy2024.client.mod.fairy.initFairyClientModule
 import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
@@ -18,7 +19,7 @@ import miragefairy2024.client.mod.particle.initParticleClientModule
 import miragefairy2024.clientProxy
 import net.fabricmc.api.ClientModInitializer
 
-object MirageFairy2024Client : ClientModInitializer {
+object MirageFairy2024ClientMod : ClientModInitializer {
     override fun onInitializeClient() {
         Modules.init()
         clientProxy = ClientProxyImpl()

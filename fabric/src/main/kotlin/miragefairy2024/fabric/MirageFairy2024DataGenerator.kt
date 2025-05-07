@@ -1,7 +1,9 @@
-package miragefairy2024
+package miragefairy2024.fabric
 
 import com.google.gson.JsonElement
-import miragefairy2024.mod.NinePatchTextureCard
+import miragefairy2024.DataGenerationEvents
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.Modules
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
@@ -18,19 +20,15 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.core.HolderLookup
-import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
@@ -42,36 +40,7 @@ import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerato
 import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 
-object DataGenerationEvents {
-    val onInitializeDataGenerator = InitializationEventRegistry<() -> Unit>()
-
-    val onGenerateBlockStateModel = InitializationEventRegistry<(BlockStateModelGenerator) -> Unit>()
-    val onGenerateItemModel = InitializationEventRegistry<(ItemModelGenerator) -> Unit>()
-    val onGenerateBlockTag = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
-    val onGenerateItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
-    val onGenerateBiomeTag = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
-    val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
-    val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
-    val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
-    val onGenerateEnchantmentTag = InitializationEventRegistry<((TagKey<Enchantment>) -> FabricTagProvider<Enchantment>.FabricTagBuilder) -> Unit>()
-    val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider, HolderLookup.Provider) -> Unit>()
-    val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
-    val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
-    val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
-    val onGenerateRecipe = InitializationEventRegistry<(RecipeOutput) -> Unit>()
-    val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
-    val onGenerateNinePatchTexture = InitializationEventRegistry<((ResourceLocation, NinePatchTextureCard) -> Unit) -> Unit>()
-    val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<ResourceLocation>) -> Unit) -> Unit>()
-    val onGenerateParticles = InitializationEventRegistry<((identifier: ResourceLocation, jsonElement: JsonElement) -> Unit) -> Unit>()
-
-    val onBuildRegistry = InitializationEventRegistry<(RegistryBuilder) -> Unit>()
-}
-
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
-
-    val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
-
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         Modules.init()
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }
@@ -159,7 +128,7 @@ object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
             object : FabricDynamicRegistryProvider(output, registriesFuture) {
                 override fun getName() = "World Gen"
                 override fun configure(registries: HolderLookup.Provider, entries: Entries) {
-                    dynamicGenerationRegistries.forEach {
+                    DataGenerationEvents.dynamicGenerationRegistries.forEach {
                         entries.addAll(registries.lookupOrThrow(it))
                     }
                 }

@@ -18,19 +18,19 @@
   "entrypoints": {
     "main": [
       {
-        "value": "miragefairy2024.MirageFairy2024",
+        "value": "miragefairy2024.fabric.MirageFairy2024Mod",
         "adapter": "kotlin"
       }
     ],
     "client": [
       {
-        "value": "miragefairy2024.client.MirageFairy2024Client",
+        "value": "miragefairy2024.client.fabric.MirageFairy2024ClientMod",
         "adapter": "kotlin"
       }
     ],
     "fabric-datagen": [
       {
-        "value": "miragefairy2024.MirageFairy2024DataGenerator",
+        "value": "miragefairy2024.fabric.MirageFairy2024DataGenerator",
         "adapter": "kotlin"
       }
     ],

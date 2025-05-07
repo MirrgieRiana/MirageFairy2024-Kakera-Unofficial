@@ -1,7 +1,6 @@
 package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
-import miragefairy2024.MirageFairy2024DataGenerator
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import mirrg.kotlin.hydrogen.floorToInt
@@ -84,7 +83,7 @@ fun <T : Any> registerDynamicGeneration(key: ResourceKey<T>, creator: context(Bo
         }
     }
     DataGenerationEvents.onInitializeDataGenerator {
-        MirageFairy2024DataGenerator.dynamicGenerationRegistries += registryKey
+        DataGenerationEvents.dynamicGenerationRegistries += registryKey
     }
 }
 
