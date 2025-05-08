@@ -13,6 +13,7 @@ import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
@@ -83,7 +84,7 @@ class MaterialCard(
     val poemList: PoemList?,
     val fuelValue: Int? = null,
     val soulStreamContainable: Boolean = false,
-    val foodComponent: FoodComponent? = null,
+    val foodComponentCreator: (() -> FoodComponent)? = null,
     val recipeRemainder: Item? = null,
     val creator: (Item.Properties) -> Item = ::Item,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
@@ -183,12 +184,14 @@ class MaterialCard(
             "phantom_drop", "Phantom Drop", "幻想の雫",
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
             soulStreamContainable = true,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(2)
-                .saturationModifier(0.3F)
-                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .alwaysEdible()
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0.3F)
+                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                    .alwaysEdible()
+                    .build()
+            },
         )
         val MIRAGIUM_NUGGET = !MaterialCard(
             "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
@@ -265,13 +268,15 @@ class MaterialCard(
             PoemList(1)
                 .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
                 .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
-            foodComponent = FoodComponent.Builder()
-                .nutrition(1)
-                .saturationModifier(0.1F)
-                .fast()
-                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
-                .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
+                    .build()
+            },
         ) {
             item.registerComposterInput(0.3F)
         }
@@ -301,11 +306,13 @@ class MaterialCard(
                 .poem("Smooth and mellow on the palate", "口福のアナムネシス。")
                 .description("Gain experience by eating", "食べると経験値を獲得"),
             fuelValue = 200,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(1)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20), 1.0F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(experienceStatusEffect.holder, 20), 1.0F)
+                    .build()
+            },
         ) {
             // →松明
             registerShapedRecipeGeneration(Items.TORCH) {
@@ -634,12 +641,14 @@ class MaterialCard(
             "rum", "Rum", "ラム酒",
             null,
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(6)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
-                .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
+                    .build()
+            },
             creator = { DrinkItem(it) },
         ) {
             // TODO 蒸留装置
@@ -659,11 +668,13 @@ class MaterialCard(
             "cidre", "Cidre", "シードル",
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(6)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
+                    .build()
+            },
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
@@ -682,11 +693,13 @@ class MaterialCard(
             "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
             PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(6)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(experienceStatusEffectHolder, 20 * 8, 1), 1.0F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(experienceStatusEffect.holder, 20 * 8, 1), 1.0F)
+                    .build()
+            },
             creator = { DrinkItem(it, flaming = 5) },
         ) {
             // TODO 醸造樽で作れるのは原酒で、リキュールはマンドレイクを使ってクラフト
@@ -706,12 +719,14 @@ class MaterialCard(
             "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
             PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(6)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
+                    .build()
+            },
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
@@ -730,12 +745,14 @@ class MaterialCard(
             "poison", "Poison", "毒薬",
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
-            foodComponent = FoodComponent.Builder()
-                .nutrition(1)
-                .saturationModifier(0.1F)
-                .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
-                .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
-                .build(),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
+                    .build()
+            },
             creator = { DrinkItem(it) },
         ) {
             registerSimpleMachineRecipeGeneration(
@@ -772,10 +789,13 @@ class MaterialCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = Item.Properties()
-        .let { if (foodComponent != null) it.food(foodComponent) else it }
-        .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
-        .let { creator(it) }
+    val itemRegistration = Registration(BuiltInRegistries.ITEM, identifier) {
+        Item.Properties()
+            .let { if (foodComponentCreator != null) it.food(foodComponentCreator()) else it }
+            .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
+            .let { creator(it) }
+    }
+    val item get() = itemRegistration.holder.value()
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))

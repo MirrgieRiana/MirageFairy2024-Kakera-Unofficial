@@ -1,24 +1,33 @@
 package miragefairy2024.util
 
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
-context(ModContext)
-fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation): () -> Holder<T> {
-    lateinit var holder: Holder<T>
-    ModEvents.onRegistration {
-        holder = Registry.registerForHolder(registry, identifier, this@register)
-    }
-    return { holder }
+object RegistryEvents {
+    val registrations = mutableListOf<Registration<*>>()
 }
 
-fun <T : Any> T.registerStatic(registry: Registry<T>, identifier: ResourceLocation): Holder<T> {
-    return Registry.registerForHolder(registry, identifier, this)
+class Registration<T : Any>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> T) {
+    lateinit var holder: Holder<T>
+}
+
+context(ModContext)
+fun <T : Any> Registration<T>.register() {
+    RegistryEvents.registrations += this
+}
+
+context(ModContext)
+fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation) = registry.register(identifier) { this }
+
+context(ModContext)
+fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T): Registration<T> {
+    val registration = Registration(this, identifier, creator)
+    RegistryEvents.registrations += registration
+    return registration
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

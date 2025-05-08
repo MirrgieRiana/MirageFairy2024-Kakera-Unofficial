@@ -1,7 +1,6 @@
 package miragefairy2024.neoforge
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
@@ -19,12 +18,9 @@ import miragefairy2024.client.mod.initPlacedItemClientModule
 import miragefairy2024.client.mod.initSoundEventClientModule
 import miragefairy2024.client.mod.particle.initParticleClientModule
 import miragefairy2024.clientProxy
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.DyeColor
-import net.minecraft.world.level.block.BedBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockBehaviour
+import miragefairy2024.util.Registration
+import miragefairy2024.util.RegistryEvents
+import net.minecraft.core.Registry
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
@@ -55,35 +51,18 @@ class MirageFairy2024NeoForgeMod {
         }
 
         Modules.init()
-        ModEvents.onRegistration.fire { it() }
         ModEvents.onInitialize.fire { it() }
-    }
-
-    companion object {
-        class Promise<T : Any> : () -> T {
-            lateinit var value: T
-            override fun invoke() = value
-        }
-
-        val block1 = Promise<Block>()
     }
 
     @SubscribeEvent
     fun register(event: RegisterEvent) {
-
-        event.register(Registries.BLOCK) { registry ->
-            val identifier = ResourceLocation.fromNamespaceAndPath(MirageFairy2024.MOD_ID, "block1")
-            block1.value = BedBlock(DyeColor.RED, BlockBehaviour.Properties.of())
-            registry.register(identifier, block1.value)
-        }
-
-        with(ModContext()) {
-            ModEvents.onInitialize {
-
-                val block = block1()
-
+        RegistryEvents.registrations.forEach { registration ->
+            fun <T : Any> f(registration: Registration<T>) {
+                if (event.registry == registration.registry) {
+                    registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.creator())
+                }
             }
+            f(registration)
         }
-
     }
 }
