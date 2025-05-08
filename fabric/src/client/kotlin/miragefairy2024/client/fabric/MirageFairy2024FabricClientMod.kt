@@ -19,7 +19,7 @@ import miragefairy2024.client.mod.particle.initParticleClientModule
 import miragefairy2024.clientProxy
 import net.fabricmc.api.ClientModInitializer
 
-object MirageFairy2024ClientMod : ClientModInitializer {
+object MirageFairy2024FabricClientMod : ClientModInitializer {
     override fun onInitializeClient() {
         Modules.init()
         clientProxy = ClientProxyImpl()

@@ -32,7 +32,7 @@ import net.neoforged.fml.loading.FMLEnvironment
 import net.neoforged.neoforge.registries.RegisterEvent
 
 @Mod(MirageFairy2024.MOD_ID)
-class MirageFairy2024Mod {
+class MirageFairy2024NeoForgeMod {
     init {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             Modules.init()

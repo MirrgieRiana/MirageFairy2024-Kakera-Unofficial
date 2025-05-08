@@ -18,13 +18,13 @@
   "entrypoints": {
     "main": [
       {
-        "value": "miragefairy2024.fabric.MirageFairy2024Mod",
+        "value": "miragefairy2024.fabric.MirageFairy2024FabricMod",
         "adapter": "kotlin"
       }
     ],
     "client": [
       {
-        "value": "miragefairy2024.client.fabric.MirageFairy2024ClientMod",
+        "value": "miragefairy2024.client.fabric.MirageFairy2024FabricClientMod",
         "adapter": "kotlin"
       }
     ],
