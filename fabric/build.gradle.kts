@@ -88,7 +88,6 @@ dependencies {
     modImplementation("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.21.1:13.0.1")
 
     modImplementation("io.wispforest:owo-lib:0.12.15.4+1.21")
-    include("io.wispforest:owo-sentinel:0.12.15.4+1.21")
 
     modApi("me.shedaniel.cloth:cloth-config:15.0.140")
 
