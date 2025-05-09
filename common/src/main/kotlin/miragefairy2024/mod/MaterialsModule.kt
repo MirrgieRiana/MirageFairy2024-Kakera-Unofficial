@@ -791,7 +791,7 @@ class MaterialCard(
     val identifier = MirageFairy2024.identifier(path)
     val itemRegistration = Registration(BuiltInRegistries.ITEM, identifier) {
         Item.Properties()
-            .let { if (foodComponentCreator != null) it.food(foodComponentCreator()) else it }
+            .let { foodComponentCreator?.let { c -> it.food(c()) } ?: it }
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
             .let { creator(it) }
     }
@@ -806,7 +806,7 @@ val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identif
 context(ModContext)
 fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(EnJa(card.enName, card.jaName))
