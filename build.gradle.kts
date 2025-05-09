@@ -255,3 +255,16 @@ tasks.register("buildPages") {
         """.let { File("build/pages/index.md").writeText(it) }
     }
 }
+
+tasks.register("configurations") {
+    group = "help"
+    doLast {
+        rootProject.allprojects.forEach { project ->
+            println("=== Project: ${project.path} ===")
+            project.configurations.forEach { configuration ->
+                println("- ${if (configuration.isCanBeConsumed) "C" else "-"}${if (configuration.isCanBeResolved) "R" else "-"} ${configuration.name}")
+            }
+            println()
+        }
+    }
+}
