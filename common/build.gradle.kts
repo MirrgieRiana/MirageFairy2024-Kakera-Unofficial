@@ -14,6 +14,20 @@ sourceSets {
     }
 }
 
+// runServer runDatagenでArchitectury Transformerがクライアント用のクラスを変換しようとして落ちる対策のために成果物を分ける
+configurations.create("mainNamedElements") {
+    isCanBeResolved = false
+    isCanBeConsumed = true
+}
+tasks.register<Jar>("mainJar") {
+    destinationDirectory.set(layout.buildDirectory.dir("devlibs"))
+    archiveClassifier.set("dev-main")
+    from(sourceSets.named("main").get().output)
+}
+configurations.named("mainNamedElements") {
+    outgoing.artifact(tasks.named("mainJar"))
+}
+
 repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
     maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
@@ -48,4 +62,8 @@ dependencies {
 
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8")
 
+}
+
+tasks.named<Jar>("jar") {
+    duplicatesStrategy = DuplicatesStrategy.WARN // clientとmainのclassの出力先を分けた関係で MF24KU-common.kotlin_module がclientとmainで重複するため
 }

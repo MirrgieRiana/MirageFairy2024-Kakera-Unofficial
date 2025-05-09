@@ -2,6 +2,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 plugins {
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
@@ -45,6 +46,16 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
             // for more information about repositories.
 
             maven("https://maven.parchmentmc.org") // mapping
+        }
+
+        // runServer runDatagenでArchitectury Transformerがクライアント用のクラスを変換しようとして落ちる対策のためにclassの出力先を分ける
+        sourceSets.all {
+            java.destinationDirectory.set(layout.buildDirectory.dir("classes/${this.name}/java"))
+        }
+        extensions.configure<KotlinProjectExtension>("kotlin") {
+            sourceSets.all {
+                kotlin.destinationDirectory.set(layout.buildDirectory.dir("classes/${this.name}/kotlin"))
+            }
         }
 
         // configurationの追加のためにdependenciesより上にある必要がある

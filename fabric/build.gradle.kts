@@ -24,6 +24,13 @@ configurations {
     getByName("runtimeClasspath").extendsFrom(commonMain)
     getByName("developmentFabric").extendsFrom(commonMain)
 
+    val commonClient by creating {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+    }
+    getByName("clientCompileClasspath").extendsFrom(commonClient)
+    getByName("clientRuntimeClasspath").extendsFrom(commonClient)
+
     // Files in this configuration will be bundled into your mod using the Shadow plugin.
     // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
     val shadowBundle by creating {
@@ -66,8 +73,9 @@ dependencies {
     modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
-    "commonMain"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
-    "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output) // common client
+    "commonMain"(project(path = ":common", configuration = "mainNamedElements")) { isTransitive = false } // common
+    "commonClient"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
+    //"clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output) // common client
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric")) // common shadow
     implementation(project(path = ":mirrg.kotlin")) // mirrg.kotlin
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false } // mirrg.kotlin shadow
