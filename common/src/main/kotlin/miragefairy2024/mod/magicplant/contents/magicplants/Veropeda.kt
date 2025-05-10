@@ -110,7 +110,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override fun init() {
         super.init()
 
-        VeropedaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("veropeda")) { VeropedaBlock.CODEC }
 
         // 地形生成
         run {

@@ -45,7 +45,7 @@ class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
 context(ModContext)
 fun initParticleModule() {
     ParticleTypeCard.entries.forEach { card ->
-        card.particleType.register(BuiltInRegistries.PARTICLE_TYPE, card.identifier)
+        BuiltInRegistries.PARTICLE_TYPE.register(card.identifier) { card.particleType }
         DataGenerationEvents.onGenerateParticles {
             val data = jsonObject(
                 "textures" to card.textures.map { it.string.jsonElement }.jsonArray,

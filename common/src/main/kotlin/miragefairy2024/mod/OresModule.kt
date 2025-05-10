@@ -139,8 +139,8 @@ fun initOresModule() {
 
     OreCard.entries.forEach { card ->
 
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

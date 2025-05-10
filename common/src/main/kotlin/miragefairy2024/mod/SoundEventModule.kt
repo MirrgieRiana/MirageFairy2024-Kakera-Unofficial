@@ -67,7 +67,7 @@ class SoundEventPacket(
 context(ModContext)
 fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
-        card.soundEvent.register(BuiltInRegistries.SOUND_EVENT, card.identifier)
+        BuiltInRegistries.SOUND_EVENT.register(card.identifier) { card.soundEvent }
         DataGenerationEvents.onGenerateSound { it(card.path, card.translation.keyGetter(), card.sounds) }
         card.translation.enJa()
     }

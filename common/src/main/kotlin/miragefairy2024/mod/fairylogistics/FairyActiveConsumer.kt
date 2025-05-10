@@ -76,7 +76,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun init() {
         super.init()
 
-        FairyActiveConsumerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_active_consumer"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_active_consumer")) { FairyActiveConsumerBlock.CODEC }
 
 
         inventorySlotConfigurations += SLOTS

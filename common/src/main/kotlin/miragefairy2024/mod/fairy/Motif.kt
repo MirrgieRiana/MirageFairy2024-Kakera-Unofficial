@@ -1369,7 +1369,7 @@ operator fun Motif?.contains(child: Motif?) = this == null || child != null && c
 context(ModContext)
 fun initMotif() {
     MotifCard.entries.forEach { card ->
-        card.register(motifRegistry, card.identifier)
+        motifRegistry.register(card.identifier) { card }
         card.translation.enJa()
         card.recipes.recipes.forEach {
             it(this@ModContext, card)

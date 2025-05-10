@@ -151,14 +151,14 @@ fun initFairyStatue() {
 
     FairyStatue.descriptionTranslation.enJa()
 
-    FairyStatueBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue"))
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_statue")) { FairyStatueBlock.CODEC }
 
     FairyStatueCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         // アイテムグループ
         card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {

@@ -64,11 +64,11 @@ object PlacedItemCard {
 
 context(ModContext)
 fun initPlacedItemBlock() {
-    PlacedItemBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item"))
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("placed_item")) { PlacedItemBlock.CODEC }
 
     PlacedItemCard.let { card ->
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {

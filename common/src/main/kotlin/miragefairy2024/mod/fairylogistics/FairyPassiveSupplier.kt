@@ -66,7 +66,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun init() {
         super.init()
 
-        FairyPassiveSupplierBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_passive_supplier")) { FairyPassiveSupplierBlock.CODEC }
 
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }

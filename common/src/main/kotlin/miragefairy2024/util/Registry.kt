@@ -21,9 +21,6 @@ fun <T : Any> Registration<T>.register() {
 }
 
 context(ModContext)
-fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation) = registry.register(identifier) { this }
-
-context(ModContext)
 fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T) {
     RegistryEvents.registrations += Registration(this, identifier, creator)
 }

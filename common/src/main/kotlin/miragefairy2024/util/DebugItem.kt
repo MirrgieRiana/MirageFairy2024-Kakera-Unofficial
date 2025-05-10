@@ -28,7 +28,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF88
             return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
         }
     }
-    item.register(BuiltInRegistries.ITEM, MirageFairy2024.identifier(path))
+    BuiltInRegistries.ITEM.register(MirageFairy2024.identifier(path)) { item }
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
     item.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
     item.registerColorProvider { _, _ -> color }

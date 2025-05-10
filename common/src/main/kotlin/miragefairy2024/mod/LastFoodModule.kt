@@ -22,7 +22,7 @@ context(ModContext)
 fun initLastFoodModule() {
 
     // 拡張プレイヤーデータ
-    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
+    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("last_food")) { LastFoodExtraPlayerDataCategory }
 
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register

@@ -84,7 +84,7 @@ enum class TraitEffectKeyCard(
 context(ModContext)
 fun initTraitEffectKeyCard() {
     TraitEffectKeyCard.entries.forEach { card ->
-        card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
+        traitEffectKeyRegistry.register(card.identifier) { card.traitEffectKey }
         card.translation.enJa()
     }
 }

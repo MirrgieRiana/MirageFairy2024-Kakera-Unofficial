@@ -117,9 +117,9 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     context(ModContext)
     open fun init() {
-        block.register(BuiltInRegistries.BLOCK, identifier)
-        blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier)
-        item.register(BuiltInRegistries.ITEM, identifier)
-        screenHandlerType.register(BuiltInRegistries.MENU, identifier)
+        BuiltInRegistries.BLOCK.register(identifier) { block }
+        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(identifier) { blockEntityType }
+        BuiltInRegistries.ITEM.register(identifier) { item }
+        BuiltInRegistries.MENU.register(identifier) { screenHandlerType }
     }
 }

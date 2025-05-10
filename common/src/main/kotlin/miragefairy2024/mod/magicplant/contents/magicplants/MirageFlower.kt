@@ -121,13 +121,13 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override fun init() {
         super.init()
 
-        MirageFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("mirage_flower")) { MirageFlowerBlock.CODEC }
 
         // 地形生成
         run {
 
             // Fairy Ring Feature
-            FAIRY_RING_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring"))
+            BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {

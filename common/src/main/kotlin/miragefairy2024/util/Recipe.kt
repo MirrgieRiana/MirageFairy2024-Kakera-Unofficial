@@ -182,7 +182,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     }
 
     serializer = SpecialRecipeSerializer(::SpecialCraftingRecipeImpl)
-    serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
+    BuiltInRegistries.RECIPE_SERIALIZER.register(identifier) { serializer }
     DataGenerationEvents.onGenerateRecipe {
         ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }

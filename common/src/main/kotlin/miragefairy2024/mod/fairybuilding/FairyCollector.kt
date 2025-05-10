@@ -87,7 +87,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     context(ModContext)
     override fun init() {
         super.init()
-        FairyCollectorBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_collector")) { FairyCollectorBlock.CODEC }
         registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")

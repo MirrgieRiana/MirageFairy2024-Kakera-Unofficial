@@ -43,7 +43,7 @@ object AntimatterBoltCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
+        BuiltInRegistries.ENTITY_TYPE.register(identifier) { entityType }
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }

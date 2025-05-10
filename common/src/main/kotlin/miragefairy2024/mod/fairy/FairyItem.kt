@@ -79,7 +79,7 @@ val fairiesItemGroupCard = ItemGroupCard(
 context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
@@ -137,8 +137,8 @@ fun initFairyItem() {
 
     fairiesItemGroupCard.init()
 
-    FAIRY_MOTIF_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif"))
-    FAIRY_CONDENSATION_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation"))
+    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_motif")) { FAIRY_MOTIF_DATA_COMPONENT_TYPE }
+    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_condensation")) { FAIRY_CONDENSATION_DATA_COMPONENT_TYPE }
 }
 
 private fun createFairyModel() = Model {

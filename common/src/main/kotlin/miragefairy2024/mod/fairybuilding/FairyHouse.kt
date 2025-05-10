@@ -69,7 +69,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     context(ModContext)
     override fun init() {
         super.init()
-        FairyHouseBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_house"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_house")) { FairyHouseBlock.CODEC }
         registerShapedRecipeGeneration(item) {
             pattern("#U#")
             pattern("L*R")

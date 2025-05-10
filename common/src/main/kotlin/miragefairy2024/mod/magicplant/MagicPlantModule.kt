@@ -46,8 +46,8 @@ val RARITY_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.build
 context(ModContext)
 fun initMagicPlantModule() {
 
-    TRAIT_STACKS_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("trait_stacks"))
-    RARITY_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("rarity"))
+    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("trait_stacks")) { TRAIT_STACKS_DATA_COMPONENT_TYPE }
+    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("rarity")) { RARITY_DATA_COMPONENT_TYPE }
 
     TRAIT_TRANSLATION.enJa()
     CREATIVE_ONLY_TRANSLATION.enJa()

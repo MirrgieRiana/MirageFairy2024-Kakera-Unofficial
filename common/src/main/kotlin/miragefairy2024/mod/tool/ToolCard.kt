@@ -495,7 +495,7 @@ class ToolCard(
 
     context(ModContext)
     fun init() {
-        item.register(BuiltInRegistries.ITEM, identifier)
+        BuiltInRegistries.ITEM.register(identifier) { item }
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

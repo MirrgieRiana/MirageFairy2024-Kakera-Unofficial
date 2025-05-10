@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyHistoryContainer() {
-    FairyHistoryContainerExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_history_container"))
+    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("fairy_history_container")) { FairyHistoryContainerExtraPlayerDataCategory }
 }
 
 object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyHistoryContainer> {

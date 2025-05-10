@@ -52,7 +52,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override fun init() {
         super.init()
 
-        FermentationBarrelBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fermentation_barrel"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fermentation_barrel")) { FermentationBarrelBlock.CODEC }
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 

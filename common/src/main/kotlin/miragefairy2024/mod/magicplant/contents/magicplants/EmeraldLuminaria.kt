@@ -116,7 +116,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override fun init() {
         super.init()
 
-        EmeraldLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }
 
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {

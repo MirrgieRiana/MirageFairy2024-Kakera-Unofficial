@@ -59,7 +59,7 @@ private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCa
 context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.sortedEntrySet.map {
                 val itemStack = card.item.createItemStack()
@@ -86,7 +86,7 @@ fun initFairyQuestCardItem() {
 
     FairyQuestCardIngredient.SERIALIZER.register()
 
-    FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_quest_recipe"))
+    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_quest_recipe")) { FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE }
 }
 
 class FairyQuestCardItem(settings: Properties) : Item(settings) {

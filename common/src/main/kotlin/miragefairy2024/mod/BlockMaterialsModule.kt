@@ -145,12 +145,12 @@ enum class BlockMaterialCard(
 
 context(ModContext)
 fun initBlockMaterialsModule() {
-    LocalVacuumDecayBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay"))
-    SemiOpaqueTransparentBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block"))
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("local_vacuum_decay")) { LocalVacuumDecayBlock.CODEC }
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("semi_opaque_transparent_block")) { SemiOpaqueTransparentBlock.CODEC }
 
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 

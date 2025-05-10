@@ -62,7 +62,7 @@ enum class DebrisCard(
 context(ModContext)
 fun initDebrisModule() {
 
-    DEBRIS_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("debris"))
+    BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("debris")) { DEBRIS_FEATURE }
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {

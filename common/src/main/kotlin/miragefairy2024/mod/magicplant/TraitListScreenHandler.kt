@@ -29,7 +29,7 @@ val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    traitListScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("trait_list"))
+    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("trait_list")) { traitListScreenHandlerType }
     traitListScreenTranslation.enJa()
 }
 

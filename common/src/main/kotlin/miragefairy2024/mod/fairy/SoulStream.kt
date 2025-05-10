@@ -48,7 +48,7 @@ context(ModContext)
 fun initSoulStream() {
 
     // 拡張プレイヤーデータ
-    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("soul_stream"))
+    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("soul_stream")) { SoulStreamExtraPlayerDataCategory }
 
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
@@ -66,7 +66,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream"))
+    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("soul_stream")) { soulStreamScreenHandlerType }
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()

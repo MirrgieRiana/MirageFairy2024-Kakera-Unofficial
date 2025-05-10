@@ -110,7 +110,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override fun init() {
         super.init()
 
-        PhantomFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("phantom_flower")) { PhantomFlowerBlock.CODEC }
 
         // 地形生成
         registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {

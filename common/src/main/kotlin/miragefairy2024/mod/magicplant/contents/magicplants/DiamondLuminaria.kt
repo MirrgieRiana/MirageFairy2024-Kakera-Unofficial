@@ -112,7 +112,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override fun init() {
         super.init()
 
-        DiamondLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {

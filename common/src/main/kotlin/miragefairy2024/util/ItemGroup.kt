@@ -44,7 +44,7 @@ class ItemGroupCard(
 
     context(ModContext)
     fun init() {
-        itemGroup.register(BuiltInRegistries.CREATIVE_MODE_TAB, identifier)
+        BuiltInRegistries.CREATIVE_MODE_TAB.register(identifier) { itemGroup }
         translation.enJa()
     }
 }

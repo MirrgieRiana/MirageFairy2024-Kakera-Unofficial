@@ -222,7 +222,7 @@ val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 context(ModContext)
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
-        card.register(fairyQuestRecipeRegistry, card.identifier)
+        fairyQuestRecipeRegistry.register(card.identifier) { card }
 
         card.titleTranslation.enJa()
         card.messageTranslation.enJa()
@@ -285,9 +285,9 @@ fun initFairyQuestRecipe() {
     }
     placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
-    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
+    BuiltInRegistries.LOOT_FUNCTION_TYPE.register(MirageFairy2024.identifier("set_fairy_quest_recipe")) { SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE }
 
-    FAIRY_QUEST_CARD_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card"))
+    BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("fairy_quest_card")) { FAIRY_QUEST_CARD_FEATURE }
 
 }
 

@@ -29,7 +29,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool 
 context(ModContext)
 fun initUnlimitedJigsaw() {
     UnlimitedJigsawCard.let { card ->
-        card.structureType.register(BuiltInRegistries.STRUCTURE_TYPE, card.identifier)
+        BuiltInRegistries.STRUCTURE_TYPE.register(card.identifier) { card.structureType }
     }
 }
 

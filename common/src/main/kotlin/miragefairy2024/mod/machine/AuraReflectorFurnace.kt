@@ -79,7 +79,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun init() {
         super.init()
 
-        AuraReflectorFurnaceBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("aura_reflector_furnace"))
+        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("aura_reflector_furnace")) { AuraReflectorFurnaceBlock.CODEC }
 
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 

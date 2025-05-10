@@ -52,7 +52,7 @@ context(ModContext)
 fun initCreativeGeneAmpoule() {
     creativeGeneAmpouleItemGroupCard.init()
     CreativeGeneAmpouleCard.let { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
         card.item.registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
             traitRegistry.sortedEntrySet.map { (_, trait) ->
                 card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }

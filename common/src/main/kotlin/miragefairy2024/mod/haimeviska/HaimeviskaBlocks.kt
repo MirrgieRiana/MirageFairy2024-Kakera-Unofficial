@@ -270,18 +270,18 @@ val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
-    HaimeviskaLeavesBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_leaves"))
-    HaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log"))
-    IncisedHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log"))
-    DrippingHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log"))
-    HollowHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log"))
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("haimeviska_leaves")) { HaimeviskaLeavesBlock.CODEC }
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("haimeviska_log")) { HaimeviskaLogBlock.CODEC }
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("incised_haimeviska_log")) { IncisedHaimeviskaLogBlock.CODEC }
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("dripping_haimeviska_log")) { DrippingHaimeviskaLogBlock.CODEC }
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("hollow_haimeviska_log")) { HollowHaimeviskaLogBlock.CODEC }
 
 
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         // カテゴリ
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

@@ -48,7 +48,7 @@ context(ModContext)
 fun initHaimeviskaWorldGens() {
 
     // TreeDecoratorの登録
-    HaimeviskaTreeDecoratorCard.type.register(BuiltInRegistries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
+    BuiltInRegistries.TREE_DECORATOR_TYPE.register(HaimeviskaTreeDecoratorCard.identifier) { HaimeviskaTreeDecoratorCard.type }
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {

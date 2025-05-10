@@ -94,7 +94,7 @@ enum class BagCard(
 context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.itemName)
@@ -107,7 +107,7 @@ fun initBagModule() {
     }
 
 
-    BagCard.screenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag"))
+    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("bag")) { BagCard.screenHandlerType }
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()

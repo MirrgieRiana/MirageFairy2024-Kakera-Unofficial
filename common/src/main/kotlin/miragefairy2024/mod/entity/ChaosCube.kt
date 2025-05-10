@@ -81,7 +81,7 @@ object ChaosCubeCard {
 
     context(ModContext)
     fun init() {
-        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
+        BuiltInRegistries.ENTITY_TYPE.register(identifier) { entityType }
         val attributes = HostileEntity.createMonsterAttributes()
             .add(EntityAttributes.MAX_HEALTH, 100.0)
             .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
@@ -112,7 +112,7 @@ object ChaosCubeCard {
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
         SpawnRestriction.register(entityType, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
-        spawnEggItem.register(BuiltInRegistries.ITEM, identifier * "_egg")
+        BuiltInRegistries.ITEM.register(identifier * "_egg") { spawnEggItem }
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))

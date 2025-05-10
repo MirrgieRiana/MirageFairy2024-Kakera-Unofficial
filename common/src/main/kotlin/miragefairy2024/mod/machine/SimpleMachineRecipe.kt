@@ -54,8 +54,8 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     context(ModContext)
     fun init() {
-        type.register(BuiltInRegistries.RECIPE_TYPE, identifier)
-        serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
+        BuiltInRegistries.RECIPE_TYPE.register(identifier) { type }
+        BuiltInRegistries.RECIPE_SERIALIZER.register(identifier) { serializer }
     }
 
 }

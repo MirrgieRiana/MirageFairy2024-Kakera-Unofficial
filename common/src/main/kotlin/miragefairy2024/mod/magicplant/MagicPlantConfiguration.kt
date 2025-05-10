@@ -49,9 +49,9 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     open fun init() {
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.blockIdentifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.blockIdentifier)
-        card.item.register(BuiltInRegistries.ITEM, card.itemIdentifier)
+        BuiltInRegistries.BLOCK.register(card.blockIdentifier) { card.block }
+        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.blockIdentifier) { card.blockEntityType }
+        BuiltInRegistries.ITEM.register(card.itemIdentifier) { card.item }
 
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

@@ -527,7 +527,7 @@ context(ModContext)
 fun initTraitCard() {
     TraitCard.entries.forEach { card ->
         card.poemTranslation.enJa()
-        card.trait.register(traitRegistry, card.identifier)
+        traitRegistry.register(card.identifier) { card.trait }
         card.trait.enJa(card.enName, card.jaName)
     }
 }

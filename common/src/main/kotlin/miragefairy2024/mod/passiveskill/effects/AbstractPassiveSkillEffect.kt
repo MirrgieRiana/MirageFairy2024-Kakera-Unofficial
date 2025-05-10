@@ -16,7 +16,7 @@ abstract class AbstractPassiveSkillEffect<T>(path: String) : PassiveSkillEffect<
 
     context(ModContext)
     open fun init() {
-        this.register(passiveSkillEffectRegistry, identifier)
+        passiveSkillEffectRegistry.register(identifier) { this }
     }
 
     override val isPreprocessor = false

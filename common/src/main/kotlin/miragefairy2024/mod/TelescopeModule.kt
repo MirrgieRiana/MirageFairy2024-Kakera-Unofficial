@@ -81,14 +81,14 @@ object TelescopeCard {
 context(ModContext)
 fun initTelescopeModule() {
 
-    TelescopeMissionExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission"))
+    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("telescope_mission")) { TelescopeMissionExtraPlayerDataCategory }
 
-    TelescopeBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope"))
+    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }
 
     TelescopeCard.let { card ->
 
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
