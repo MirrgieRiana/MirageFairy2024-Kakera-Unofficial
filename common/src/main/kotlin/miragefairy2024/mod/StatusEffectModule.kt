@@ -20,8 +20,8 @@ val experienceStatusEffect = Registration(BuiltInRegistries.MOB_EFFECT, MirageFa
 context(ModContext)
 fun initStatusEffectModule() {
     experienceStatusEffect.register()
-    en { experienceStatusEffect.holder.value().descriptionId to "Experience" }
-    ja { experienceStatusEffect.holder.value().descriptionId to "経験値獲得" }
+    en { experienceStatusEffect().descriptionId to "Experience" }
+    ja { experienceStatusEffect().descriptionId to "経験値獲得" }
 }
 
 class ExperienceStatusEffect : MobEffect(MobEffectCategory.BENEFICIAL, 0x2FFF00) {

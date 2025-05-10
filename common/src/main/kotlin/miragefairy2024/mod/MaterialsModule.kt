@@ -795,7 +795,7 @@ class MaterialCard(
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
             .let { creator(it) }
     }
-    val item get() = itemRegistration.holder.value()
+    val item get() = itemRegistration()
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))

@@ -11,8 +11,9 @@ object RegistryEvents {
     val registrations = mutableListOf<Registration<*>>()
 }
 
-class Registration<T : Any>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> T) {
+class Registration<T : Any>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> T) : () -> T {
     lateinit var holder: Holder<T>
+    override fun invoke(): T = holder.value()
 }
 
 context(ModContext)
