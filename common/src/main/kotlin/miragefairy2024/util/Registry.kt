@@ -24,10 +24,8 @@ context(ModContext)
 fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation) = registry.register(identifier) { this }
 
 context(ModContext)
-fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T): Registration<T> {
-    val registration = Registration(this, identifier, creator)
-    RegistryEvents.registrations += registration
-    return registration
+fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T) {
+    RegistryEvents.registrations += Registration(this, identifier, creator)
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }
