@@ -51,23 +51,23 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         // 登録
         BuiltInRegistries.BLOCK.register(card.blockIdentifier) { card.block }
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.blockIdentifier) { card.blockEntityType }
-        BuiltInRegistries.ITEM.register(card.itemIdentifier) { card.item }
+        card.item.register()
 
         // 分類
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // 見た目
         card.block.registerCutoutRenderLayer()
-        card.item.registerGeneratedModelGeneration()
+        card.item().registerGeneratedModelGeneration()
 
         // 翻訳
         card.block.enJa(blockName)
-        card.item.enJa(itemName)
+        card.item().enJa(itemName)
         val seedPoemList = PoemList(tier)
             .poem(poem)
             .poem("classification", classification)
-        card.item.registerPoem(seedPoemList)
-        card.item.registerPoemGeneration(seedPoemList)
+        card.item().registerPoem(seedPoemList)
+        card.item().registerPoemGeneration(seedPoemList)
 
         // 性質
         //card.block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
@@ -75,8 +75,8 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         card.block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
 
         // レシピ
-        card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-        card.item.registerHarvestNotation(drops)
+        card.item().registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        card.item().registerHarvestNotation(drops)
 
     }
 }

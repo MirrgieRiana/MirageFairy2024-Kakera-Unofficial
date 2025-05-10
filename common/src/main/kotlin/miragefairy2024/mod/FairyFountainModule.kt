@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -66,7 +67,7 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
     val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque())
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 }
 
 context(ModContext)
@@ -78,9 +79,9 @@ fun initFairyFountainModule() {
     FairyStatueFountainCard.let { card ->
 
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
@@ -90,8 +91,8 @@ fun initFairyFountainModule() {
             .poem("Where does this water spring from...?", "この水は一体どこから湧いてくるのだろう…")
             .description("description1", "Can draw lottery with 100 Fairy Jewels", "100フェアリージュエルで抽選ができる")
             .description("description2", "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        card.item().registerPoem(poemList)
+        card.item().registerPoemGeneration(poemList)
 
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
@@ -99,7 +100,7 @@ fun initFairyFountainModule() {
 
     }
 
-    registerShapedRecipeGeneration(FairyStatueFountainCard.item) {
+    registerShapedRecipeGeneration(FairyStatueFountainCard.item()) {
         pattern(" F ")
         pattern("SQS")
         pattern("SSS")

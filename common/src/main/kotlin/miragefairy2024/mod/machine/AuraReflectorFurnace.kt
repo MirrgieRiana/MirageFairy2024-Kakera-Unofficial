@@ -85,7 +85,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
-        registerShapedRecipeGeneration(item) {
+        registerShapedRecipeGeneration(item()) {
             pattern("XXX")
             pattern("XFX")
             pattern("XXX")

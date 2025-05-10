@@ -21,17 +21,19 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF888888.toInt(), action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
-    val item = object : Item(Properties()) {
-        override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
-        override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-            action(world, user, hand, user.getItemInHand(hand))
-            return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
+    val item = Registration(BuiltInRegistries.ITEM, MirageFairy2024.identifier(path)) {
+        object : Item(Properties()) {
+            override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
+            override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+                action(world, user, hand, user.getItemInHand(hand))
+                return TypedActionResult.sidedSuccess(user.getItemInHand(hand), world.isClientSide)
+            }
         }
     }
-    BuiltInRegistries.ITEM.register(MirageFairy2024.identifier(path)) { item }
-    item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-    item.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
-    item.registerColorProvider { _, _ -> color }
+    item.register()
+    item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+    item().registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
+    item().registerColorProvider { _, _ -> color }
 }
 
 context(ModContext)

@@ -88,13 +88,13 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     override fun init() {
         super.init()
         BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_collector")) { FairyCollectorBlock.CODEC }
-        registerShapedRecipeGeneration(item) {
+        registerShapedRecipeGeneration(item()) {
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
-            define('#', FairyHouseCard.item)
+            define('#', FairyHouseCard.item())
             define('C', Items.CHEST)
-        } on FairyHouseCard.item
+        } on FairyHouseCard.item()
     }
 }
 

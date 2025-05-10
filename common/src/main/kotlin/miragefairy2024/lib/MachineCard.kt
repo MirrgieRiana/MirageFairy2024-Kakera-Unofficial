@@ -1,6 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -77,7 +78,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // Item
 
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 
 
     // ScreenHandler
@@ -119,7 +120,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     open fun init() {
         BuiltInRegistries.BLOCK.register(identifier) { block }
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(identifier) { blockEntityType }
-        BuiltInRegistries.ITEM.register(identifier) { item }
+        item.register()
         BuiltInRegistries.MENU.register(identifier) { screenHandlerType }
     }
 }

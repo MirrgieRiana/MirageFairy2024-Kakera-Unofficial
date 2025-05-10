@@ -53,7 +53,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
     override fun registerDisplays(registry: DisplayRegistry) {
         traitRegistry.sortedEntrySet.forEach { (_, trait) ->
             val seedItemStacks = magicPlantCards.filter { trait in it.possibleTraits }.map { card ->
-                card.item.createItemStack().also {
+                card.item().createItemStack().also {
                     it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1)))
                 }
             }
@@ -71,7 +71,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
     override fun createCategory() = object : DisplayCategory<TraitEncyclopediaReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = TraitEncyclopediaReiCategoryCard.identifier.first
         override fun getTitle(): Component = text { TraitEncyclopediaReiCategoryCard.translation() }
-        override fun getIcon(): Renderer = MirageFlowerCard.item.createItemStack().toEntryStack()
+        override fun getIcon(): Renderer = MirageFlowerCard.item().createItemStack().toEntryStack()
         override fun getDisplayWidth(display: TraitEncyclopediaReiCategoryCard.Display) = 5 + 18 * 9 + 5 + 5
         override fun getDisplayHeight() = 140
         override fun setupDisplay(display: TraitEncyclopediaReiCategoryCard.Display, bounds: Rectangle): List<Widget> {

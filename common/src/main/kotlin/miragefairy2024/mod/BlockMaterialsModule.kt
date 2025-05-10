@@ -11,6 +11,7 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
@@ -140,7 +141,7 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 }
 
 context(ModContext)
@@ -150,9 +151,9 @@ fun initBlockMaterialsModule() {
 
     BlockMaterialCard.entries.forEach { card ->
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerSingletonBlockStateGeneration()
         if (card.texturedModelFactory != null) {
@@ -164,8 +165,8 @@ fun initBlockMaterialsModule() {
         if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
 
         card.block.enJa(EnJa(card.enName, card.jaName))
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        card.item().registerPoem(card.poemList)
+        card.item().registerPoemGeneration(card.poemList)
 
         card.block.registerDefaultLootTableGeneration()
 
@@ -175,14 +176,14 @@ fun initBlockMaterialsModule() {
     }
 
     // 圧縮
-    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item(), BlockMaterialCard.XARPITE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item(), BlockMaterialCard.MIRANAGITE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item(), BlockMaterialCard.CHAOS_STONE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item(), BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item(), BlockMaterialCard.LUMINITE_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item(), BlockMaterialCard.XARPITE_BLOCK.item())
+    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item(), BlockMaterialCard.MIRANAGITE_BLOCK.item())
+    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item(), BlockMaterialCard.CHAOS_STONE_BLOCK.item())
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item(), BlockMaterialCard.MIRAGIDIAN_BLOCK.item())
+    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item(), BlockMaterialCard.LUMINITE_BLOCK.item())
 
     // 霊氣石
-    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
+    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item()) {
         pattern("XMX")
         pattern("MCM")
         pattern("XMX")

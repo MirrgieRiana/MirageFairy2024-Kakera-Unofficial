@@ -20,6 +20,7 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -142,7 +143,7 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
 
     val identifier = MirageFairy2024.identifier(configuration.path)
     val block = blockCreator()
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 }
 
 private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
@@ -167,17 +168,17 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     }
     registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
     registerModelGeneration({ "block/uncharged_" * card.block.getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
-    card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
+    card.item().registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
-    card.item.registerRedirectColorProvider()
+    card.item().registerRedirectColorProvider()
 
     // 性質
     card.block.registerFlammable(30, 30)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.LEAVES }
-    card.item.registerItemTagGeneration { ItemTags.LEAVES }
+    card.item().registerItemTagGeneration { ItemTags.LEAVES }
     card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
 
 }
@@ -197,7 +198,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.item().registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -221,7 +222,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.item().registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -241,7 +242,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.PLANKS }
-    card.item.registerItemTagGeneration { ItemTags.PLANKS }
+    card.item().registerItemTagGeneration { ItemTags.PLANKS }
 
 }
 
@@ -255,12 +256,12 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
             TextureKey.CROSS to "block/" * it.getIdentifier(),
         )
     }
-    card.item.registerBlockGeneratedModelGeneration(card.block)
+    card.item().registerBlockGeneratedModelGeneration(card.block)
     card.block.registerCutoutRenderLayer()
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.SAPLINGS }
-    card.item.registerItemTagGeneration { ItemTags.SAPLINGS }
+    card.item().registerItemTagGeneration { ItemTags.SAPLINGS }
 
 }
 
@@ -281,15 +282,15 @@ fun initHaimeviskaBlocks() {
 
         // 登録
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
         // カテゴリ
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
         card.block.enJa(EnJa(card.configuration.enName, card.configuration.jaName))
-        card.item.registerPoem(card.configuration.poemList)
-        card.item.registerPoemGeneration(card.configuration.poemList)
+        card.item().registerPoem(card.configuration.poemList)
+        card.item().registerPoemGeneration(card.configuration.poemList)
 
         card.initializer(this@ModContext, card)
     }
@@ -301,10 +302,10 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
@@ -313,10 +314,10 @@ fun initHaimeviskaBlocks() {
     }
     HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
@@ -336,10 +337,10 @@ fun initHaimeviskaBlocks() {
     }
     HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
             LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item()) {
@@ -355,13 +356,13 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ
-    HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
-    HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
-    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-        requires(HaimeviskaBlockCard.LOG.item)
-    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item(), MaterialCard.HAIMEVISKA_ROSIN.item())
-    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item())
+    HaimeviskaBlockCard.LEAVES.item().registerComposterInput(0.3F)
+    HaimeviskaBlockCard.SAPLING.item().registerComposterInput(0.3F)
+    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item(), 4) {
+        requires(HaimeviskaBlockCard.LOG.item())
+    } on HaimeviskaBlockCard.LOG.item() from HaimeviskaBlockCard.LOG.item()
+    HaimeviskaBlockCard.DRIPPING_LOG.item().registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item(), MaterialCard.HAIMEVISKA_ROSIN.item())
+    HaimeviskaBlockCard.HOLLOW_LOG.item().registerHarvestNotation(MaterialCard.FRACTAL_WISP.item())
 
 }
 

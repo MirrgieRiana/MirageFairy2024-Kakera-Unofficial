@@ -79,14 +79,14 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
     override fun init() {
         super.init()
 
-        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         registerBlockStateGeneration()
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
-        item.registerPoem(poemList)
-        item.registerPoemGeneration(poemList)
+        item().registerPoem(poemList)
+        item().registerPoemGeneration(poemList)
 
         block.registerDefaultLootTableGeneration()
 

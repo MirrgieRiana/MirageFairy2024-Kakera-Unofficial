@@ -15,6 +15,7 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.configure
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -77,7 +78,7 @@ object ChaosCubeCard {
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
         .build()
-    val spawnEggItem = SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties())
+    val spawnEggItem = Registration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties()) }
 
     context(ModContext)
     fun init() {
@@ -112,10 +113,10 @@ object ChaosCubeCard {
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
         SpawnRestriction.register(entityType, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
-        BuiltInRegistries.ITEM.register(identifier * "_egg") { spawnEggItem }
-        spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
-        spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
+        spawnEggItem.register()
+        spawnEggItem().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        spawnEggItem().registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
+        spawnEggItem().enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
     }
 }
 

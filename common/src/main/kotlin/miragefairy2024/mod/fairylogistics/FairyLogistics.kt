@@ -63,7 +63,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     override fun init() {
         super.init()
 
-        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         block.registerVariantsBlockStateGeneration {
             fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
@@ -92,8 +92,8 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem).description(description)
-        item.registerPoem(poemList)
-        item.registerPoemGeneration(poemList)
+        item().registerPoem(poemList)
+        item().registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 

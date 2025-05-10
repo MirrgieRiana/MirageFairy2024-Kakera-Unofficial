@@ -10,6 +10,7 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.overworld
@@ -113,7 +114,7 @@ enum class OreCard(
         }
         ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
     val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
             BaseStoneType.STONE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/stone")
@@ -140,9 +141,9 @@ fun initOresModule() {
     OreCard.entries.forEach { card ->
 
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration(card.texturedModelFactory)
@@ -150,8 +151,8 @@ fun initOresModule() {
 
         card.block.enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
-            card.item.registerPoem(card.poemList)
-            card.item.registerPoemGeneration(card.poemList)
+            card.item().registerPoem(card.poemList)
+            card.item().registerPoemGeneration(card.poemList)
         }
 
         card.block.registerOreLootTableGeneration(card.dropItem)

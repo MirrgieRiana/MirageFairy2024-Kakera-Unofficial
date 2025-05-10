@@ -70,11 +70,11 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     override fun init() {
         super.init()
         BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_house")) { FairyHouseBlock.CODEC }
-        registerShapedRecipeGeneration(item) {
+        registerShapedRecipeGeneration(item()) {
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")
-            define('#', HaimeviskaBlockCard.LOG.item)
+            define('#', HaimeviskaBlockCard.LOG.item())
             define('U', Items.LANTERN)
             define('D', ItemTags.WOOL_CARPETS)
             define('L', ConventionalItemTags.GLASS_PANES)

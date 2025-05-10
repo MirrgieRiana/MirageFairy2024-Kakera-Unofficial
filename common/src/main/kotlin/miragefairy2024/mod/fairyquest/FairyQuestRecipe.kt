@@ -96,7 +96,7 @@ enum class FairyQuestRecipeCard(
         "真空崩壊炉改修工事に向けてセラミックレンガの寄付を広く募集しております。必要な場合は、リユース可能な建築資材を選別してご提供いたします。",
         "The Institute of Fairy Research\nCordelia Branch", "妖精研究所\nコーディリア支部",
         listOf(Items.BRICKS.toIngredient() to 1),
-        listOf(BlockMaterialCard.DRYWALL.item.createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
+        listOf(BlockMaterialCard.DRYWALL.item().createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
     ),
     IMPROMPTU_FANTASTIC_CARNIVAL(
         "impromptu_fantastic_carnival", 0xFCF5DF, LootCategory.RARE,
@@ -142,7 +142,7 @@ enum class FairyQuestRecipeCard(
         "The fairy trees...? We should be over a million light-years away from the Habitabilis Zona. I'm curious to divine the past of this star, so would you consider sending me samples of the vegetation?",
         "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
         "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
-        listOf(HaimeviskaBlockCard.LOG.item.toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item.toIngredient() to 16),
+        listOf(HaimeviskaBlockCard.LOG.item().toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item().toIngredient() to 16),
         listOf(MaterialCard.MIRANAGITE.item().createItemStack(1)),
     ),
     FATAL_ACCIDENT(
@@ -190,10 +190,10 @@ enum class FairyQuestRecipeCard(
             Items.BEDROCK.toIngredient() to 64,
         ),
         listOf(
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.MIRANAGITE_BLOCK.item.createItemStack(64),
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64),
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64),
+            BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64),
+            BlockMaterialCard.MIRANAGITE_BLOCK.item().createItemStack(64),
         ),
     ),
     ;

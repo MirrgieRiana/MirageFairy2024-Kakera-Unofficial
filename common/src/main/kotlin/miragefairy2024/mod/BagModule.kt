@@ -6,6 +6,7 @@ import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -85,7 +86,7 @@ enum class BagCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(this, Item.Properties().stacksTo(1))
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BagItem(this, Item.Properties().stacksTo(1)) }
     val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
@@ -94,16 +95,16 @@ enum class BagCard(
 context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        card.item.registerGeneratedModelGeneration()
-        card.item.enJa(card.itemName)
+        card.item.register()
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerGeneratedModelGeneration()
+        card.item().enJa(card.itemName)
         val poemList = PoemList(card.tier)
             .poem(card.poem)
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION1_TRANSLATION)
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION2_TRANSLATION)
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        card.item().registerPoem(poemList)
+        card.item().registerPoemGeneration(poemList)
     }
 
 
@@ -113,7 +114,7 @@ fun initBagModule() {
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
 
 
-    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {
+    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item()) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
@@ -121,7 +122,7 @@ fun initBagModule() {
         define('L', MaterialCard.MIRAGE_LEAVES.item())
     } on MaterialCard.MIRAGE_LEAVES.item()
 
-    registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
+    registerShapedRecipeGeneration(BagCard.SEED_BAG.item()) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")

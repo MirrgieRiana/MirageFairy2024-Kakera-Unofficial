@@ -56,12 +56,12 @@ abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: Strin
 
 object FermentationBarrelReiCategoryCard : SimpleMachineReiCategoryCard<FermentationBarrelRecipe>("fermentation_barrel", "Fermentation Barrel", "醸造樽") {
     override val recipeCard = FermentationBarrelRecipeCard
-    override val machine = FermentationBarrelCard.item.createItemStack()
+    override val machine = FermentationBarrelCard.item().createItemStack()
 }
 
 object AuraReflectorFurnaceReiCategoryCard : SimpleMachineReiCategoryCard<AuraReflectorFurnaceRecipe>("aura_reflector_furnace", "Aura Reflector Furnace", "オーラ反射炉") {
     override val recipeCard = AuraReflectorFurnaceRecipeCard
-    override val machine = AuraReflectorFurnaceCard.item.createItemStack()
+    override val machine = AuraReflectorFurnaceCard.item().createItemStack()
 
     fun getFuelInputIndices(recipe: AuraReflectorFurnaceRecipe) = listOf(recipe.inputs.size)
 

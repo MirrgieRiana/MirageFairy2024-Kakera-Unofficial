@@ -7,6 +7,7 @@ import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -74,7 +75,7 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
     val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 }
 
 
@@ -88,9 +89,9 @@ fun initTelescopeModule() {
     TelescopeCard.let { card ->
 
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
@@ -99,8 +100,8 @@ fun initTelescopeModule() {
         val poemList = PoemList(2)
             .poem("Tell me more about the human world!", "きみは妖精には見えないものが見えるんだね。")
             .description("Use once a day to obtain Fairy Jewels", "1日1回使用時にフェアリージュエルを獲得")
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        card.item().registerPoem(poemList)
+        card.item().registerPoemGeneration(poemList)
 
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
@@ -108,7 +109,7 @@ fun initTelescopeModule() {
 
     }
 
-    registerShapedRecipeGeneration(TelescopeCard.item) {
+    registerShapedRecipeGeneration(TelescopeCard.item()) {
         pattern("IIG")
         pattern(" S ")
         pattern("S S")
