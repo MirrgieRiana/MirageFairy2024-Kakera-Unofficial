@@ -62,6 +62,9 @@ dependencies {
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8")
 
 }
+configurations.named("architecturyTransformerClasspath") {
+    extendsFrom(configurations.named("clientCompileClasspath").get()) // transformProductionFabric でバニラのclient用クラスが見れなくて死ぬ対策
+}
 
 tasks.named<Jar>("jar") {
     duplicatesStrategy = DuplicatesStrategy.WARN // clientとmainのclassの出力先を分けた関係で MF24KU-common.kotlin_module がclientとmainで重複するため
