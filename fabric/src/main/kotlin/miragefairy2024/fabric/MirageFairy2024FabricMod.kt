@@ -12,8 +12,9 @@ object MirageFairy2024FabricMod : ModInitializer {
         Modules.init()
 
         RegistryEvents.registrations.forEach { registration ->
-            fun <T : Any> f(registration: Registration<T>) {
-                registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.creator())
+            fun <T : Any, U : T> f(registration: Registration<T, U>) {
+                registration.value = registration.creator()
+                registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.value)
             }
             f(registration)
         }

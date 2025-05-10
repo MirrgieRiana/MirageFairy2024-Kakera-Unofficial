@@ -8,16 +8,17 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
 object RegistryEvents {
-    val registrations = mutableListOf<Registration<*>>()
+    val registrations = mutableListOf<Registration<*, *>>()
 }
 
-class Registration<T : Any>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> T) : () -> T {
+class Registration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> U) : () -> T {
+    lateinit var value: U
     lateinit var holder: Holder<T>
-    override fun invoke(): T = holder.value()
+    override fun invoke(): U = value
 }
 
 context(ModContext)
-fun <T : Any> Registration<T>.register() {
+fun Registration<*, *>.register() {
     RegistryEvents.registrations += this
 }
 

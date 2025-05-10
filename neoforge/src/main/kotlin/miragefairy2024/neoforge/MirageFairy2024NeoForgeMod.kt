@@ -57,9 +57,10 @@ class MirageFairy2024NeoForgeMod {
     @SubscribeEvent
     fun register(event: RegisterEvent) {
         RegistryEvents.registrations.forEach { registration ->
-            fun <T : Any> f(registration: Registration<T>) {
+            fun <T : Any, U : T> f(registration: Registration<T, U>) {
                 if (event.registry == registration.registry) {
-                    registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.creator())
+                    registration.value = registration.creator()
+                    registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.value)
                 }
             }
             f(registration)
