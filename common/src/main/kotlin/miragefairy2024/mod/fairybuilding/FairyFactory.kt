@@ -32,7 +32,7 @@ abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEnti
         val FOLIA_PROPERTY = PropertyConfiguration<FairyFactoryBlockEntity<*>>({ folia }, { folia = it }, { (it / 10).toShort() }, { it.toInt() * 10 })
 
         fun isFairy(itemStack: ItemStack, motif: Motif): Boolean {
-            if (!itemStack.`is`(FairyCard.item)) return false
+            if (!itemStack.`is`(FairyCard.item())) return false
             val childMotif = itemStack.getFairyMotif() ?: return false
             return childMotif in motif
         }
@@ -73,7 +73,7 @@ abstract class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildin
 abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private val card: FairyFactoryCard<*, E, *>, pos: BlockPos, state: BlockState) : FairyBuildingBlockEntity<E>(card, pos, state) {
     companion object {
         fun getFairyLevel(itemStack: ItemStack): Double {
-            if (!itemStack.`is`(FairyCard.item)) return 0.0
+            if (!itemStack.`is`(FairyCard.item())) return 0.0
             val motif = itemStack.getFairyMotif() ?: return 0.0
             val count = itemStack.getFairyCondensation() * itemStack.count
             val level = motif.rare.toDouble() + log(count.toDouble(), 3.0)

@@ -21,6 +21,7 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
@@ -62,7 +63,7 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = FairyItem(Item.Properties().fireResistant())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyItem(Item.Properties().fireResistant()) }
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")
@@ -79,14 +80,14 @@ val fairiesItemGroupCard = ItemGroupCard(
 context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
-        card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
+        card.item().registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
         }
 
-        card.item.registerModelGeneration(createFairyModel())
-        card.item.registerColorProvider { itemStack, tintIndex ->
+        card.item().registerModelGeneration(createFairyModel())
+        card.item().registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 4) {
                 val condensation = itemStack.getFairyCondensation()
                 when (getNiceCondensation(condensation).first) {
@@ -124,9 +125,9 @@ fun initFairyItem() {
             }
         }
 
-        card.item.enJa(EnJa(card.enName, card.jaName))
+        card.item().enJa(EnJa(card.enName, card.jaName))
 
-        card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+        card.item().registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
     }
 
     RARE_TRANSLATION.enJa()
@@ -319,7 +320,7 @@ fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSAT
 
 
 fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    val itemStack = FairyCard.item.createItemStack(count)
+    val itemStack = FairyCard.item().createItemStack(count)
     itemStack.setFairyMotif(this)
     itemStack.setFairyCondensation(condensation)
     return itemStack

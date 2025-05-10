@@ -44,7 +44,7 @@ fun initFairyDream() {
     }
     registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0xFF0000BB.toInt()) { world, player, hand, _ ->
         val fairyItemStack = player.getItemInHand(hand.opposite)
-        if (!fairyItemStack.`is`(FairyCard.item)) return@registerServerDebugItem
+        if (!fairyItemStack.`is`(FairyCard.item())) return@registerServerDebugItem
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
         if (!player.isShiftKeyDown) {
