@@ -28,7 +28,7 @@ object HarvestClientReiCategoryCard : ClientReiCategoryCard<HarvestReiCategoryCa
     override fun createCategory() = object : DisplayCategory<HarvestReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = HarvestReiCategoryCard.identifier.first
         override fun getTitle(): Component = text { HarvestReiCategoryCard.translation() }
-        override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item.createItemStack().toEntryStack()
+        override fun getIcon(): Renderer = MaterialCard.VEROPEDA_BERRIES.item().createItemStack().toEntryStack()
         override fun getDisplayWidth(display: HarvestReiCategoryCard.Display) = 136
         override fun getDisplayHeight() = 36
         override fun setupDisplay(display: HarvestReiCategoryCard.Display, bounds: Rectangle): List<Widget> {

@@ -104,7 +104,7 @@ enum class FairyQuestRecipeCard(
         "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
         "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
         "Breadia the fairy of bread", "麺麭精ブレアージャ",
-        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1), // TODO -> ケーキ精
+        listOf(MaterialCard.FRACTAL_WISP.item().toIngredient() to 1), // TODO -> ケーキ精
         listOf(Items.CAKE.createItemStack(1)),
     ),
     NEW_PRODUCT_FROM_FRI(
@@ -143,7 +143,7 @@ enum class FairyQuestRecipeCard(
         "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
         "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
         listOf(HaimeviskaBlockCard.LOG.item.toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item.toIngredient() to 16),
-        listOf(MaterialCard.MIRANAGITE.item.createItemStack(1)),
+        listOf(MaterialCard.MIRANAGITE.item().createItemStack(1)),
     ),
     FATAL_ACCIDENT(
         "fatal_accident", 0x000027, LootCategory.RARE,

@@ -48,9 +48,9 @@ enum class DebrisCard(
     RAW_IRON_DENSE("raw_iron_dense", 64 / 2, 8..24, { Items.RAW_IRON.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
     RAW_COPPER("raw_copper", 64, 2..6, { Items.RAW_COPPER.createItemStack() }, { overworld }),
     RAW_COPPER_DENSE("raw_copper_dense", 64 / 2, 8..24, { Items.RAW_COPPER.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
-    XARPITE("xarpite", 64, 2..6, { MaterialCard.XARPITE.item.createItemStack() }, { overworld }),
-    FAIRY_SCALES("fairy_scales", 64, 2..6, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { overworld }),
-    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 2, 8..24, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { +FAIRY_BIOME_TAG }),
+    XARPITE("xarpite", 64, 2..6, { MaterialCard.XARPITE.item().createItemStack() }, { overworld }),
+    FAIRY_SCALES("fairy_scales", 64, 2..6, { MaterialCard.FAIRY_SCALES.item().createItemStack() }, { overworld }),
+    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 2, 8..24, { MaterialCard.FAIRY_SCALES.item().createItemStack() }, { +FAIRY_BIOME_TAG }),
     ;
 
     val identifier = MirageFairy2024.identifier("${path}_debris")

@@ -344,7 +344,7 @@ enum class MotifCard(
             + mana(0.4)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.XARPITE()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + BlockMaterialCard.XARPITE_BLOCK.block + MaterialCard.XARPITE.item,
+        MotifCardRecipes().R + BlockMaterialCard.XARPITE_BLOCK.block + MaterialCard.XARPITE.item(),
     ),
     MIRANAGITE(
         "miranagite", 5, "Miranagitia", "蒼天石精ミラナギーチャ", 0x4EC5F4, 0x4394D3, 0x004477, 0x0C4CEF,
@@ -354,7 +354,7 @@ enum class MotifCard(
             + mana(0.4)
             + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
             + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item + OreCard.MIRANAGITE_ORE.block + OreCard.DEEPSLATE_MIRANAGITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item() + OreCard.MIRANAGITE_ORE.block + OreCard.DEEPSLATE_MIRANAGITE_ORE.block, // TODO タグ化
     ),
     CHAOS_STONE(
         "chaos_stone", 8, "Chaose Stonia", "混沌石精キャオセストーニャ", 0xDB5F00, 0xB36229, 0x78421C, 0xFFBF40,
@@ -364,7 +364,7 @@ enum class MotifCard(
             + miningSpeed(0.8)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.CHAOS_STONE()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + MaterialCard.CHAOS_STONE.item,
+        MotifCardRecipes().R + MaterialCard.CHAOS_STONE.item(),
     ),
 
     MAGNETITE(
@@ -373,7 +373,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + collection(1.0)
             + collection(3.0) * ToolMaterialCard.MAGNETITE(),
-        MotifCardRecipes().R + MaterialCard.MAGNETITE.item + OreCard.MAGNETITE_ORE.block + OreCard.DEEPSLATE_MAGNETITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R + MaterialCard.MAGNETITE.item() + OreCard.MAGNETITE_ORE.block + OreCard.DEEPSLATE_MAGNETITE_ORE.block, // TODO タグ化
     ),
     FLUORITE(
         "fluorite", 6, "Fluoritia", "蛍石精フルオリーチャ", 0xC0FEF3, 0x28E1C7, 0xAE91E9, 0x66CDEB,
@@ -383,7 +383,7 @@ enum class MotifCard(
             + luck(0.4)
             + StatusEffects.LUCK() * ToolMaterialCard.FLUORITE()
             + StatusEffects.LUCK(2) * ToolMaterialCard.FLUORITE() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + MaterialCard.FLUORITE.item + OreCard.FLUORITE_ORE.block + OreCard.DEEPSLATE_FLUORITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R + MaterialCard.FLUORITE.item() + OreCard.FLUORITE_ORE.block + OreCard.DEEPSLATE_FLUORITE_ORE.block, // TODO タグ化
     ),
     AMETHYST(
         "amethyst", 6, "Amethystia", "紫水晶精アメティスチャ", 0xCAA9FF, 0xA974FF, 0x9D60FF, 0xBC92FF,
@@ -787,7 +787,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + regeneration(0.4) * outdoor
-            + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item)
+            + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item())
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP(),
         MotifCardRecipes().R.common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
     ),
@@ -800,7 +800,7 @@ enum class MotifCard(
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP()
             + mending(1.0) * ToolMaterialCard.LUMINITE()
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
-        MotifCardRecipes().R + MaterialCard.PHANTOM_DROP.item,
+        MotifCardRecipes().R + MaterialCard.PHANTOM_DROP.item(),
     ),
     VELOPEDA(
         "velopeda", 6, "Velopedia", "呪草精ヴェロページャ", 0x8BD100, 0xD52D2D, 0xB51414, 0x840707,
@@ -808,8 +808,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.2) * outdoor
             + regeneration(0.2) * outdoor
-            + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item)
-            + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item),
+            + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item())
+            + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item()),
         MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DRY).nether + VeropedaCard.block,
     ),
     LUMINITE(
@@ -819,7 +819,7 @@ enum class MotifCard(
             + overall.defence(1.0)
             + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.LUMINITE()
             + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
-        MotifCardRecipes().R + MaterialCard.LUMINITE.item,
+        MotifCardRecipes().R + MaterialCard.LUMINITE.item(),
     ),
     GLOW_LICHEN(
         "glow_lichen", 5, "Glowe Lichenia", "光苔精グローウェリケーニャ", 0x639386, 0x639386, 0x639386, 0xAFB18B,
@@ -877,8 +877,8 @@ enum class MotifCard(
         ParentMotifs() + { WOOD } + { FOOD },
         PassiveSkillBuilder()
             + mana(0.6)
-            + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
-            + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item)
+            + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item())
+            + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item())
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
         MotifCardRecipes().R.overworld + HaimeviskaBlockCard.SAPLING.block + HaimeviskaBlockCard.LOG.block,
     ),

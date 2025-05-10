@@ -94,15 +94,15 @@ object ChaosCubeCard {
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
         entityType.registerLootTableGeneration { registries ->
             LootTable(
-                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item)).configure {
+                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item())).configure {
                     apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(0.0F, 2.0F)))
                     apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformLootNumberProvider.between(0.0F, 1.0F)))
                 },
-                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item)).configure {
+                LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item())).configure {
                     `when`(KilledByPlayerLootCondition.killedByPlayer())
                     `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.05F, 0.02F))
                 },
-                LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item)).configure {
+                LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item())).configure {
                     `when`(KilledByPlayerLootCondition.killedByPlayer())
                     `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.3F, 0.1F))
                 },

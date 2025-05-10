@@ -55,10 +55,10 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override val baseGrowth = 1.0 / 8.0
     override val baseFruitGeneration = 9.0
 
-    override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.PHANTOM_LEAVES.item, MaterialCard.PHANTOM_DROP.item)
+    override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item(), MaterialCard.PHANTOM_LEAVES.item(), MaterialCard.PHANTOM_DROP.item())
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("mirage")
     override val possibleTraits = setOf(

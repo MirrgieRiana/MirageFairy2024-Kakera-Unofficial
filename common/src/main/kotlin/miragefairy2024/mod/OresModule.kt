@@ -66,32 +66,32 @@ enum class OreCard(
     MAGNETITE_ORE(
         "magnetite_ore", "Magnetite Ore", "磁鉄鉱鉱石",
         null,
-        BaseStoneType.STONE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+        BaseStoneType.STONE, "magnetite_ore", MaterialCard.MAGNETITE.item(), 2 to 5,
     ),
     DEEPSLATE_MAGNETITE_ORE(
         "deepslate_magnetite_ore", "Deepslate Magnetite Ore", "深層磁鉄鉱鉱石",
         null,
-        BaseStoneType.DEEPSLATE, "magnetite_ore", MaterialCard.MAGNETITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "magnetite_ore", MaterialCard.MAGNETITE.item(), 2 to 5,
     ),
     FLUORITE_ORE(
         "fluorite_ore", "Fluorite Ore", "蛍石鉱石",
         null,
-        BaseStoneType.STONE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+        BaseStoneType.STONE, "fluorite_ore", MaterialCard.FLUORITE.item(), 2 to 5,
     ),
     DEEPSLATE_FLUORITE_ORE(
         "deepslate_fluorite_ore", "Deepslate Fluorite Ore", "深層蛍石鉱石",
         null,
-        BaseStoneType.DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "fluorite_ore", MaterialCard.FLUORITE.item(), 2 to 5,
     ),
     MIRANAGITE_ORE(
         "miranagite_ore", "Miranagite Ore", "蒼天石鉱石",
         PoemList(1).poem("What lies beyond a Garden of Eden?", "秩序の石は楽園の先に何を見るのか？"),
-        BaseStoneType.STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
+        BaseStoneType.STONE, "miranagite_ore", MaterialCard.MIRANAGITE.item(), 2 to 5,
     ),
     DEEPSLATE_MIRANAGITE_ORE(
         "deepslate_miranagite_ore", "Deepslate Miranagite Ore", "深層蒼天石鉱石",
         PoemList(1).poem("Singularities built by the Creator", "楽園が楽園であるための奇跡。"),
-        BaseStoneType.DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item, 2 to 5,
+        BaseStoneType.DEEPSLATE, "miranagite_ore", MaterialCard.MIRANAGITE.item(), 2 to 5,
     ),
     ;
 

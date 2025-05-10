@@ -319,12 +319,12 @@ fun initHaimeviskaBlocks() {
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
@@ -342,7 +342,7 @@ fun initHaimeviskaBlocks() {
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
@@ -360,8 +360,8 @@ fun initHaimeviskaBlocks() {
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
         requires(HaimeviskaBlockCard.LOG.item)
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
+    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item(), MaterialCard.HAIMEVISKA_ROSIN.item())
+    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item())
 
 }
 
@@ -474,8 +474,8 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
 
         // 生産
         val fortune = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], stack)
-        drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
-        drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
+        drop(MaterialCard.HAIMEVISKA_SAP.item(), 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
+        drop(MaterialCard.HAIMEVISKA_ROSIN.item(), 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
         level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * level.random.nextFloat())

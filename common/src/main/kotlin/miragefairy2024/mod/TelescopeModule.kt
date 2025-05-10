@@ -114,8 +114,8 @@ fun initTelescopeModule() {
         pattern("S S")
         define('S', Items.STICK)
         define('I', Items.COPPER_INGOT)
-        define('G', MaterialCard.FAIRY_CRYSTAL.item)
-    } on MaterialCard.FAIRY_CRYSTAL.item
+        define('G', MaterialCard.FAIRY_CRYSTAL.item())
+    } on MaterialCard.FAIRY_CRYSTAL.item()
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()
     TelescopeBlock.FIRST_GAIN_TRANSLATION.enJa()
@@ -254,7 +254,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         if (lastUsedInstant == null) {
 
             texts += text { FIRST_TRANSLATION() + ": "() + FIRST_GAIN_TRANSLATION(1000).green }
-            actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(10)) }
+            actions += { player.obtain(MaterialCard.JEWEL_100.item().createItemStack(10)) }
 
         } else {
 
@@ -268,7 +268,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
                 val remainingDuration = endOfPeriodOfLastUsedTime.toInstant(ZONE_OFFSET).toEpochMilli() - now.toEpochMilli()
                 if (remainingDuration <= 0) {
                     texts += text { translation() + ": "() + AVAILABLE_TRANSLATION().green }
-                    actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(countOfJewel100)) }
+                    actions += { player.obtain(MaterialCard.JEWEL_100.item().createItemStack(countOfJewel100)) }
                 } else {
                     texts += text { translation() + ": "() + RECEIVED_TRANSLATION().gray + " ("() + REUSE_TRANSLATION(Duration.ofMillis(remainingDuration).text) + ")"() }
                 }

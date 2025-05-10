@@ -103,10 +103,10 @@ fun initFairyFountainModule() {
         pattern(" F ")
         pattern("SQS")
         pattern("SSS")
-        define('F', MaterialCard.FAIRY_SCALES.item)
-        define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item)
+        define('F', MaterialCard.FAIRY_SCALES.item())
+        define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item())
         define('S', Items.COBBLESTONE)
-    } on MaterialCard.FAIRY_SCALES.item
+    } on MaterialCard.FAIRY_SCALES.item()
 }
 
 class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {
@@ -139,12 +139,12 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
 
         // 入力判定
-        if (!stack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+        if (!stack.`is`(MaterialCard.JEWEL_100.item())) { // 持っているアイテムが違う
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
             return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
         if (stack.count < 1) { // 個数が足りない
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
             return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
 
@@ -208,7 +208,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
             return InteractionResult.CONSUME
         } else {
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
             return InteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
     }

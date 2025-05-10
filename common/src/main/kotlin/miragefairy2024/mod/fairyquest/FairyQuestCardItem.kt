@@ -80,7 +80,7 @@ fun initFairyQuestCardItem() {
 
     fairyQuestCardFairyQuestTranslation.enJa()
 
-    registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item) {
+    registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item()) {
         requires(FairyQuestCardIngredient.toVanilla())
     } on FairyQuestCardCard.item from FairyQuestCardCard.item
 

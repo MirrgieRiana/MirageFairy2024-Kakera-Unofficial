@@ -79,8 +79,8 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             define('D', ItemTags.WOOL_CARPETS)
             define('L', ConventionalItemTags.GLASS_PANES)
             define('R', ItemTags.WOODEN_DOORS)
-            define('*', MaterialCard.FAIRY_CRYSTAL.item)
-        } on MaterialCard.FAIRY_CRYSTAL.item
+            define('*', MaterialCard.FAIRY_CRYSTAL.item())
+        } on MaterialCard.FAIRY_CRYSTAL.item()
     }
 }
 
