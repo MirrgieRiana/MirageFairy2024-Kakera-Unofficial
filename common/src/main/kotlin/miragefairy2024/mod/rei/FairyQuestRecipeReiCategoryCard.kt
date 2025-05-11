@@ -23,7 +23,7 @@ object FairyQuestRecipeReiCategoryCard : ReiCategoryCard<FairyQuestRecipeReiCate
 
     class Display(val recipe: FairyQuestRecipe) : BasicDisplay(
         listOf(
-            FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(recipe) }.toEntryStack().toEntryIngredient(),
+            FairyQuestCardCard.item().createItemStack().also { it.setFairyQuestRecipe(recipe) }.toEntryStack().toEntryIngredient(),
             *recipe.inputs.map { input -> input.first.items.map { it.copyWithCount(input.second).toEntryStack() }.toEntryIngredient() }.toTypedArray(),
         ),
         recipe.outputs.map { it.toEntryStack().toEntryIngredient() },

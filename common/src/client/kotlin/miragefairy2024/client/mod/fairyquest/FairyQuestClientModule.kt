@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
 fun initFairyQuestClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
-        if (!stack.`is`(FairyQuestCardCard.item)) return@RenderItemHandler
+        if (!stack.`is`(FairyQuestCardCard.item())) return@RenderItemHandler
         matrices.stack {
             model.transforms.getTransform(renderMode).apply(leftHanded, matrices)
 

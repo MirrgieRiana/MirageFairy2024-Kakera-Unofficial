@@ -20,6 +20,7 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.empty
@@ -83,7 +84,7 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.FAIRY_STATUE.item.createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
+        FairyStatueCard.FAIRY_STATUE.item().createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.create("case")
@@ -101,7 +102,8 @@ class FairyStatueCard(
     val identifier = MirageFairy2024.identifier(path)
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = FairyStatueBlockItem(this, block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block, Item.Properties()) }
+
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
         .poem(poem)
@@ -158,11 +160,11 @@ fun initFairyStatue() {
         // 登録
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
+        card.item.register()
 
         // アイテムグループ
-        card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
-            motifRegistry.sortedEntrySet.map { card.item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
+        card.item().registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
+            motifRegistry.sortedEntrySet.map { card.item().createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
         }
 
         // レンダリング
@@ -170,13 +172,13 @@ fun initFairyStatue() {
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
-        card.item.registerGeneratedModelGeneration()
+        card.item().registerGeneratedModelGeneration()
 
         // 翻訳
         card.block.enJa(card.brokenName)
         card.formatTranslation.enJa()
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
+        card.item().registerPoem(card.poemList)
+        card.item().registerPoemGeneration(card.poemList)
 
         // タグ
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
@@ -184,10 +186,10 @@ fun initFairyStatue() {
         // ドロップ
         card.block.registerLootTableGeneration { provider, _ ->
             LootTable(
-                LootPool(ItemLootPoolEntry(card.item)) {
+                LootPool(ItemLootPoolEntry(card.item())) {
                     setRolls(ConstantLootNumberProvider.exactly(1.0F))
                     apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FAIRY_MOTIF_DATA_COMPONENT_TYPE))
-                    provider.applyExplosionCondition(card.item, this)
+                    provider.applyExplosionCondition(card.item(), this)
                 },
             )
         }

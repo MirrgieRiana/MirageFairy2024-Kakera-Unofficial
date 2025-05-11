@@ -30,7 +30,7 @@ object FairyQuestRecipeClientReiCategoryCard : ClientReiCategoryCard<FairyQuestR
     override fun createCategory() = object : DisplayCategory<FairyQuestRecipeReiCategoryCard.Display> {
         override fun getCategoryIdentifier() = FairyQuestRecipeReiCategoryCard.identifier.first
         override fun getTitle(): Component = text { FairyQuestRecipeReiCategoryCard.translation() }
-        override fun getIcon(): Renderer = FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(FairyQuestRecipeCard.NEW_PRODUCT_FROM_FRI) }.toEntryStack()
+        override fun getIcon(): Renderer = FairyQuestCardCard.item().createItemStack().also { it.setFairyQuestRecipe(FairyQuestRecipeCard.NEW_PRODUCT_FROM_FRI) }.toEntryStack()
         override fun getDisplayWidth(display: FairyQuestRecipeReiCategoryCard.Display) = 18 * 9 + 10
         override fun getDisplayHeight() = 18 * 2 + 10
         override fun setupDisplay(display: FairyQuestRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {

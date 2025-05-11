@@ -251,7 +251,7 @@ fun initFairyQuestRecipe() {
             )
 
             fun registerChestLoot(lootTableId: ResourceKey<LootTable>, weight: Int) {
-                FairyQuestCardCard.item.registerChestLoot({ lootTableId }, weight) {
+                FairyQuestCardCard.item().registerChestLoot({ lootTableId }, weight) {
                     apply { SetFairyQuestRecipeLootFunction(listOf(), card.identifier) }
                 }
             }
@@ -306,7 +306,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
         }
         val recipeId = table.weightedRandom(context.random()) ?: return null // 有効なレシピが一つもない
 
-        return FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(fairyQuestRecipeRegistry.get(recipeId)!!) }
+        return FairyQuestCardCard.item().createItemStack().also { it.setFairyQuestRecipe(fairyQuestRecipeRegistry.get(recipeId)!!) }
     }
 }
 

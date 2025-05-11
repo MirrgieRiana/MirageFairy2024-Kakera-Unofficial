@@ -13,6 +13,7 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -41,40 +42,40 @@ import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
-) { CreativeGeneAmpouleCard.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(TraitCard.AIR_ADAPTATION.trait, 1))) } }
+) { CreativeGeneAmpouleCard.item().createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(TraitCard.AIR_ADAPTATION.trait, 1))) } }
 
 object CreativeGeneAmpouleCard {
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
-    val item = CreativeGeneAmpouleItem(Item.Properties().stacksTo(1))
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { CreativeGeneAmpouleItem(Item.Properties().stacksTo(1)) }
 }
 
 context(ModContext)
 fun initCreativeGeneAmpoule() {
     creativeGeneAmpouleItemGroupCard.init()
     CreativeGeneAmpouleCard.let { card ->
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
-        card.item.registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
+        card.item.register()
+        card.item().registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
             traitRegistry.sortedEntrySet.map { (_, trait) ->
-                card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
+                card.item().createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
             }
         }
-        card.item.registerModelGeneration(createCreativeGeneAmpouleModel())
-        card.item.registerColorProvider { itemStack, tintIndex ->
+        card.item().registerModelGeneration(createCreativeGeneAmpouleModel())
+        card.item().registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 1) {
                 itemStack.getTraitStacks().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.traitStackList.firstOrNull().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.trait.primaryEffect.color or 0xFF000000.toInt()
             } else {
                 0xFFFFFFFF.toInt()
             }
         }
-        card.item.enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命創造の針"))
+        card.item().enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命創造の針"))
         val poemList = PoemList(99)
             .poem("This allows you to freely edit traits.", "種類に従って球根を持つ草を生えさせよ。")
             .description("description1", "Use: Grant the trait", "使用時、特性を付与")
             .description("description2", "Use while sneaking: Remove the trait", "スニーク中に使用時、特性を削除")
             .description("description3", "Use: Increases bits", "使用時、ビットを増加")
             .description("description4", "Use while sneaking: Decreases bits", "スニーク中に使用時、ビットを減少")
-        card.item.registerPoem(poemList)
-        card.item.registerPoemGeneration(poemList)
+        card.item().registerPoem(poemList)
+        card.item().registerPoemGeneration(poemList)
     }
 }
 

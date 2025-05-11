@@ -9,6 +9,7 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -51,38 +52,38 @@ object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
     val jaName = "破損したフェアリークエストカード"
     val identifier = MirageFairy2024.identifier("fairy_quest_card")
-    val item = FairyQuestCardItem(Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyQuestCardItem(Item.Properties()) }
 }
 
-private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item.descriptionId + ".format" }, "“%s”", "『%s』")
+private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item().descriptionId + ".format" }, "“%s”", "『%s』")
 
 context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item }
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
+        card.item.register()
+        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.sortedEntrySet.map {
-                val itemStack = card.item.createItemStack()
+                val itemStack = card.item().createItemStack()
                 itemStack.setFairyQuestRecipe(it.value)
                 itemStack
             }
         }
-        card.item.registerModelGeneration(createFairyQuestCardModel())
-        card.item.registerColorProvider { itemStack, tintIndex ->
+        card.item().registerModelGeneration(createFairyQuestCardModel())
+        card.item().registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 0) {
                 itemStack.getFairyQuestRecipe()?.color?.let { it or 0xFF000000.toInt() } ?: 0xFFFF00FF.toInt()
             } else {
                 0xFFFFFFFF.toInt()
             }
         }
-        card.item.enJa(EnJa(card.enName, card.jaName))
+        card.item().enJa(EnJa(card.enName, card.jaName))
     }
 
     fairyQuestCardFairyQuestTranslation.enJa()
 
     registerShapelessRecipeGeneration(MaterialCard.FAIRY_QUEST_CARD_BASE.item()) {
         requires(FairyQuestCardIngredient.toVanilla())
-    } on FairyQuestCardCard.item from FairyQuestCardCard.item
+    } on FairyQuestCardCard.item() from FairyQuestCardCard.item()
 
     FairyQuestCardIngredient.SERIALIZER.register()
 
@@ -154,11 +155,11 @@ object FairyQuestCardIngredient : CustomIngredient {
     }
 
     override fun requiresTesting() = true
-    override fun test(stack: ItemStack) = stack.`is`(FairyQuestCardCard.item)
+    override fun test(stack: ItemStack) = stack.`is`(FairyQuestCardCard.item())
 
     override fun getMatchingStacks(): List<ItemStack> {
         return fairyQuestRecipeRegistry.sortedEntrySet.map {
-            val itemStack = FairyQuestCardCard.item.createItemStack()
+            val itemStack = FairyQuestCardCard.item().createItemStack()
             itemStack.setFairyQuestRecipe(it.value)
             itemStack
         }

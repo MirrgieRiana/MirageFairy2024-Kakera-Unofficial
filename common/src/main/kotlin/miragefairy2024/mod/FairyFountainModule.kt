@@ -161,7 +161,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val outputItemStack = run {
                 val chanceTable = getChanceTable()
                 val entry = chanceTable.weightedRandom(level.random)?.first
-                entry?.let { it.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.first) } } ?: Items.IRON_INGOT.createItemStack()
+                entry?.let { it.second.getFairyStatueCard().item().createItemStack().also { itemStack -> itemStack.setFairyMotif(it.first) } } ?: Items.IRON_INGOT.createItemStack()
             }
             player.obtain(outputItemStack)
         }
@@ -194,7 +194,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
-                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
+                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item().createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
                     motif = it.item.first?.first ?: MotifCard.AIR,
                     rate = it.weight,
                     count = 1.0,
