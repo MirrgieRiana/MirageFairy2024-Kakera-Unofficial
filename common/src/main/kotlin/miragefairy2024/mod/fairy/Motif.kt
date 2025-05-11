@@ -221,7 +221,7 @@ enum class MotifCard(
             + overall.defence(0.2)
             + melee.defence(0.4)
             + miningSpeed(0.7)
-            + miningSpeed(0.4) * food(Items.GRAVEL), // TODO 該当するアイテム
+            + miningSpeed(0.4) * food { Items.GRAVEL }, // TODO 該当するアイテム
         MotifCardRecipes().R.overworld.nether + Blocks.GRAVEL,
     ),
     MYCELIUM(
@@ -421,10 +421,10 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + miningSpeed(0.4) * food.atLeast(12)
-            + miningSpeed(0.2) * food(Items.CARROT)
-            + miningSpeed(0.2) * food(Items.POTATO)
-            + miningSpeed(0.2) * food(Items.BEETROOT)
-            + miningSpeed(0.8) * food(Items.PORKCHOP),
+            + miningSpeed(0.2) * food { Items.CARROT }
+            + miningSpeed(0.2) * food { Items.POTATO }
+            + miningSpeed(0.2) * food { Items.BEETROOT }
+            + miningSpeed(0.8) * food { Items.PORKCHOP },
         MotifCardRecipes().R.overworld + EntityType.PIG,
     ),
     COW(
@@ -432,8 +432,8 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + melee.attack(0.4) * food.atLeast(12)
-            + melee.attack(0.4) * food(Items.WHEAT)
-            + melee.attack(0.8) * food(Items.BEEF),
+            + melee.attack(0.4) * food { Items.WHEAT }
+            + melee.attack(0.8) * food { Items.BEEF },
         MotifCardRecipes().R.overworld + EntityType.COW,
     ),
     SHEEP(
@@ -441,8 +441,8 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + overall.defence(0.4) * food.atLeast(12)
-            + overall.defence(0.4) * food(Items.WHEAT)
-            + overall.defence(0.8) * food(Items.MUTTON),
+            + overall.defence(0.4) * food { Items.WHEAT }
+            + overall.defence(0.8) * food { Items.MUTTON },
         MotifCardRecipes().R.overworld + EntityType.SHEEP,
     ),
     CHICKEN(
@@ -450,9 +450,9 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + fall.defence(3.0) * food.atLeast(12)
-            + fall.defence(3.0) * food(Items.WHEAT)
-            + fall.defence(6.0) * food(Items.CHICKEN)
-            + StatusEffects.SLOW_FALLING() * food(Items.WHEAT) * fairyLevel.atLeast(11.0),
+            + fall.defence(3.0) * food { Items.WHEAT }
+            + fall.defence(6.0) * food { Items.CHICKEN }
+            + StatusEffects.SLOW_FALLING() * food { Items.WHEAT } * fairyLevel.atLeast(11.0),
         MotifCardRecipes().R.overworld + EntityType.CHICKEN,
     ),
     EGG(
@@ -460,7 +460,7 @@ enum class MotifCard(
         ParentMotifs() + { CHICKEN } + { FOOD },
         PassiveSkillBuilder()
             + health(0.8)
-            + regeneration(0.8) * food(Items.EGG),
+            + regeneration(0.8) * food { Items.EGG },
         MotifCardRecipes().R.overworld + EntityType.EGG,
     ),
     RABBIT(
@@ -468,16 +468,16 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + luck(0.4) * food.atLeast(12)
-            + luck(0.4) * food(Items.CARROT)
-            + luck(0.8) * food(Items.RABBIT)
-            + StatusEffects.JUMP(2) * food(Items.CARROT) * fairyLevel.atLeast(14.0),
+            + luck(0.4) * food { Items.CARROT }
+            + luck(0.8) * food { Items.RABBIT }
+            + StatusEffects.JUMP(2) * food { Items.CARROT } * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld + EntityType.RABBIT,
     ),
     WOLF(
         "wolf", 4, "Wolfia", "狼精ウォルフャ", 0x827165, 0xBFBDBE, 0x9E9A96, 0x3F3E3A,
         ParentMotifs() + { CARRY },
         PassiveSkillBuilder()
-            + melee.attack(0.4) * food(Items.MUTTON) // TODO 肉全般条件
+            + melee.attack(0.4) * food { Items.MUTTON } // TODO 肉全般条件
             + melee.attack(0.4) * food.atLeast(12)
             + speed(0.4) * food.atLeast(12),
         MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + EntityType.WOLF,
@@ -500,8 +500,8 @@ enum class MotifCard(
         "villager", 4, "Villageria", "村人精ヴィッラゲーリャ", 0xB58D63, 0x608C57, 0x608C57, 0x009800,
         ParentMotifs() + { HUMAN },
         PassiveSkillBuilder()
-            + experience(0.4) * level.atMost(29) * food(Items.WHEAT)
-            + experience(0.4) * level.atMost(29) * food(Items.POTATO)
+            + experience(0.4) * level.atMost(29) * food { Items.WHEAT }
+            + experience(0.4) * level.atMost(29) * food { Items.POTATO }
             + luck(0.6) * food.atLeast(12)
             + mana(5.0 * 0.2) { HUMAN },
         MotifCardRecipes().R.overworld + EntityType.VILLAGER,
@@ -587,7 +587,7 @@ enum class MotifCard(
         "rotten_flesh", 2, "Rottene Fleshia", "腐肉精ロッテーネフレーシャ", 0x846129, 0xBD5B2D, 0xBD5B2D, 0xBD422D,
         ParentMotifs() + { ZOMBIE } + { FOOD },
         PassiveSkillBuilder()
-            + overall.attack(1.0) * food(Items.ROTTEN_FLESH)
+            + overall.attack(1.0) * food { Items.ROTTEN_FLESH }
             + regeneration(0.4) * food.atMost(6)
             + hunger(1.0) * food.atLeast(7),
         MotifCardRecipes().R + { Items.ROTTEN_FLESH },
@@ -679,8 +679,8 @@ enum class MotifCard(
         "red_mushroom", 3, "Rede Mushroomia", "赤茸精レーデムシュローミャ", 0xE6DBA8, 0xFF0A0A, 0xFF0A0A, 0xBFD7D9,
         ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
-            + StatusEffects.HEALTH_BOOST(1) * food(Items.RED_MUSHROOM)
-            + StatusEffects.HEALTH_BOOST(2) * food(Items.RED_MUSHROOM) * fairyLevel.atLeast(10.0)
+            + StatusEffects.HEALTH_BOOST(1) * food { Items.RED_MUSHROOM }
+            + StatusEffects.HEALTH_BOOST(2) * food { Items.RED_MUSHROOM } * fairyLevel.atLeast(10.0)
             + magic.attack(0.6) * food.atLeast(12),
         MotifCardRecipes().R.overworld.nether + Blocks.RED_MUSHROOM + { Items.RED_MUSHROOM },
     ),
@@ -688,7 +688,7 @@ enum class MotifCard(
         "brown_mushroom", 3, "Browne Mushroomia", "茶茸精ブロウネムシュローミャ", 0xDEB6A2, 0xF0AD8B, 0xC28C70, 0xDE9571,
         ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
-            + regeneration(1.0) * food(Items.BROWN_MUSHROOM)
+            + regeneration(1.0) * food { Items.BROWN_MUSHROOM }
             + magic.defence(0.6) * food.atLeast(12),
         MotifCardRecipes().R.overworld.nether + Blocks.BROWN_MUSHROOM + { Items.BROWN_MUSHROOM },
     ),
@@ -699,15 +699,15 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + miningSpeed(0.4) * outdoor
-            + miningSpeed(0.8) * food(Items.WHEAT),
+            + miningSpeed(0.8) * food { Items.WHEAT },
         MotifCardRecipes().R.overworld + Blocks.WHEAT + { Items.WHEAT_SEEDS } + { Items.WHEAT },
     ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.GOLDEN_CARROT)
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food(Items.CARROT) * fairyLevel.atLeast(10.0),
+            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.GOLDEN_CARROT }
+            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.CARROT } * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R.overworld + Blocks.CARROTS + { Items.CARROT },
     ),
     POTATO(
@@ -715,7 +715,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + melee.attack(0.4) * outdoor
-            + melee.attack(0.8) * food(Items.POTATO),
+            + melee.attack(0.8) * food { Items.POTATO },
         MotifCardRecipes().R.overworld + Blocks.POTATOES + { Items.POTATO },
     ),
     POISONOUS_POTATO(
@@ -723,7 +723,7 @@ enum class MotifCard(
         ParentMotifs() + { POTATO },
         PassiveSkillBuilder()
             + overall.attack(0.2) * outdoor
-            + overall.attack(0.4) * food(Items.POISONOUS_POTATO),
+            + overall.attack(0.4) * food { Items.POISONOUS_POTATO },
         MotifCardRecipes().R.overworld + Blocks.POTATOES + { Items.POISONOUS_POTATO },
     ),
     BEETROOT(
@@ -731,7 +731,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD } + { FIRE },
         PassiveSkillBuilder()
             + fire.attack(0.4) * outdoor // TODO 火属性攻撃
-            + fire.attack(0.8) * food(Items.BEETROOT),
+            + fire.attack(0.8) * food { Items.BEETROOT },
         MotifCardRecipes().R.overworld + Blocks.BEETROOTS + { Items.BEETROOT },
     ),
     PUMPKIN(
@@ -739,7 +739,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + magic.attack(0.4) * outdoor
-            + magic.attack(0.8) * food(Items.PUMPKIN),
+            + magic.attack(0.8) * food { Items.PUMPKIN },
         MotifCardRecipes().R.overworld + Blocks.PUMPKIN + Blocks.CARVED_PUMPKIN,
     ),
     MELON(
@@ -747,7 +747,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + luck(0.4) * outdoor
-            + luck(0.8) * food(Items.MELON_SLICE),
+            + luck(0.8) * food { Items.MELON_SLICE },
         MotifCardRecipes().R.common(ConventionalBiomeTags.IS_JUNGLE) + Blocks.MELON + { Items.MELON_SLICE },
     ),
     APPLE(
@@ -755,7 +755,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + experience(0.4) * level.atMost(29) * outdoor
-            + experience(0.8) * level.atMost(29) * food(Items.APPLE),
+            + experience(0.8) * level.atMost(29) * food { Items.APPLE },
         MotifCardRecipes().R.overworld + { Items.APPLE },
     ),
     SWEET_BERRY(
@@ -763,7 +763,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + shooting.attack(0.4) * outdoor
-            + shooting.attack(0.8) * food(Items.SWEET_BERRIES)
+            + shooting.attack(0.8) * food { Items.SWEET_BERRIES }
             + spine.defence(2.0),
         MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + { Items.SWEET_BERRIES } + Blocks.SWEET_BERRY_BUSH,
     ),
@@ -772,7 +772,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD } + { WATER },
         PassiveSkillBuilder()
             + magic.attack(0.4) * indoor
-            + magic.attack(0.8) * food(Items.GLOW_BERRIES),
+            + magic.attack(0.8) * food { Items.GLOW_BERRIES },
         MotifCardRecipes().R.common(BiomeKeys.LUSH_CAVES) + { Items.GLOW_BERRIES } + Blocks.CAVE_VINES + Blocks.CAVE_VINES_PLANT,
     ),
     MIRAGE(
@@ -788,7 +788,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + regeneration(0.4) * outdoor
-            + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item())
+            + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item)
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP(),
         MotifCardRecipes().R.common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
     ),
@@ -809,8 +809,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.2) * outdoor
             + regeneration(0.2) * outdoor
-            + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item())
-            + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item()),
+            + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item)
+            + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item),
         MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DRY).nether + VeropedaCard.block,
     ),
     LUMINITE(
@@ -878,8 +878,8 @@ enum class MotifCard(
         ParentMotifs() + { WOOD } + { FOOD },
         PassiveSkillBuilder()
             + mana(0.6)
-            + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item())
-            + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item())
+            + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
+            + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item)
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
         MotifCardRecipes().R.overworld + HaimeviskaBlockCard.SAPLING.block + HaimeviskaBlockCard.LOG.block,
     ),
@@ -908,7 +908,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + speed(0.4)
-            + speed(0.8) * food(Items.SUGAR),
+            + speed(0.8) * food { Items.SUGAR },
         MotifCardRecipes().R + { Items.SUGAR },
     ),
     GOLDEN_APPLE(
@@ -917,8 +917,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.2) * food.atLeast(12)
             + regeneration(0.2) * food.atLeast(12)
-            + luck(0.6) * food(Items.GOLDEN_APPLE)
-            + regeneration(0.6) * food(Items.GOLDEN_APPLE),
+            + luck(0.6) * food { Items.GOLDEN_APPLE }
+            + regeneration(0.6) * food { Items.GOLDEN_APPLE },
         MotifCardRecipes().R + { Items.GOLDEN_APPLE },
     ),
     ENCHANTED_GOLDEN_APPLE(
@@ -926,11 +926,11 @@ enum class MotifCard(
         ParentMotifs() + { GOLDEN_APPLE } + { ENCHANT },
         PassiveSkillBuilder()
             + health(0.4) * food.atLeast(12)
-            + luck(0.8) * food(Items.ENCHANTED_GOLDEN_APPLE)
-            + regeneration(0.8) * food(Items.ENCHANTED_GOLDEN_APPLE)
-            + health(0.8) * food(Items.ENCHANTED_GOLDEN_APPLE)
-            + overall.defence(0.8) * food(Items.ENCHANTED_GOLDEN_APPLE)
-            + StatusEffects.FIRE_RESISTANCE() * food(Items.ENCHANTED_GOLDEN_APPLE),
+            + luck(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
+            + regeneration(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
+            + health(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
+            + overall.defence(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
+            + StatusEffects.FIRE_RESISTANCE() * food { Items.ENCHANTED_GOLDEN_APPLE },
         MotifCardRecipes().R + { Items.ENCHANTED_GOLDEN_APPLE },
     ),
     COOKIE(
@@ -938,7 +938,7 @@ enum class MotifCard(
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + miningSpeed(0.4) * food.atLeast(12)
-            + miningSpeed(0.8) * food(Items.COOKIE),
+            + miningSpeed(0.8) * food { Items.COOKIE },
         MotifCardRecipes().R + { Items.COOKIE },
     ),
     CAKE(
@@ -1315,7 +1315,7 @@ private val onFire get() = SimplePassiveSkillConditionCard.ON_FIRE
 private val inNether get() = SimplePassiveSkillConditionCard.IN_NETHER
 private val notInNether get() = SimplePassiveSkillConditionCard.NOT_IN_NETHER
 
-private fun food(item: Item) = ItemFoodIngredientPassiveSkillCondition(item)
+private fun food(item: () -> Item) = ItemFoodIngredientPassiveSkillCondition(item)
 private fun food(category: FoodIngredientCategoryCard) = CategoryFoodIngredientPassiveSkillCondition(category)
 
 private fun IntComparisonPassiveSkillCondition.Term.atLeast(threshold: Int) = IntComparisonPassiveSkillCondition(this, true, threshold)
