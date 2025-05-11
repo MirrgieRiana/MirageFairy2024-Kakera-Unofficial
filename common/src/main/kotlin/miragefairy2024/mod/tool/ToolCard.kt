@@ -479,8 +479,13 @@ class ToolCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
+
+    init {
+        configuration.apply()
+    }
+
     val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) {
-        configuration.also { it.apply() }.createItem(run {
+        configuration.createItem(run {
             val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.speed
 
             val rules = mutableListOf<Tool.Rule>()
