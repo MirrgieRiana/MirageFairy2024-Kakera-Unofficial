@@ -34,15 +34,15 @@ fun initFairyQuestClientModule() {
                 matrices.stack {
                     matrices.translate(0F, 1F / 16F, 0.02F)
                     matrices.scale(0.45F, 0.45F, 0.01F)
-                    val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon, null, null, 0)
-                    MinecraftClient.getInstance().itemRenderer.render(recipe.icon, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
+                    val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon(), null, null, 0)
+                    MinecraftClient.getInstance().itemRenderer.render(recipe.icon(), ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
                 }
                 matrices.stack {
                     matrices.translate(0F, 1F / 16F, -0.02F)
                     matrices.scale(0.45F, 0.45F, 0.01F)
                     matrices.mulPose(RotationAxis.YP.rotation(MathHelper.TWO_PI * 0.5F))
-                    val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon, null, null, 0)
-                    MinecraftClient.getInstance().itemRenderer.render(recipe.icon, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
+                    val resultModel = MinecraftClient.getInstance().itemRenderer.getModel(recipe.icon(), null, null, 0)
+                    MinecraftClient.getInstance().itemRenderer.render(recipe.icon(), ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
                 }
             }
 
