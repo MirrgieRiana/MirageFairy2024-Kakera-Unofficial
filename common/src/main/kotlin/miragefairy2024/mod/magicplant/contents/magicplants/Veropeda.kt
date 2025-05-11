@@ -54,7 +54,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
         createCuboidShape(7.0, 16.0),
     )
 
-    override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item(), MaterialCard.VEROPEDA_LEAF.item())
+    override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_BERRIES.item().createItemStack(count))
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_LEAF.item().createItemStack(count))
 

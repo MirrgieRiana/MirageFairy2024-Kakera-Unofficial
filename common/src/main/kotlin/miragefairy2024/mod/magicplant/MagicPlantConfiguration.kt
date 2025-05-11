@@ -43,7 +43,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     abstract val possibleTraits: Set<Trait>
 
     open val baseGrowth = 1.0
-    abstract val drops: List<Item>
+    abstract val drops: List<() -> Item>
 
     context(ModContext)
     open fun init() {
@@ -76,7 +76,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
 
         // レシピ
         card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-        card.item().registerHarvestNotation(drops)
+        card.item.registerHarvestNotation(drops)
 
     }
 }

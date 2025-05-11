@@ -361,8 +361,8 @@ fun initHaimeviskaBlocks() {
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
         requires(HaimeviskaBlockCard.LOG.item())
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    HaimeviskaBlockCard.DRIPPING_LOG.item().registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item(), MaterialCard.HAIMEVISKA_ROSIN.item())
-    HaimeviskaBlockCard.HOLLOW_LOG.item().registerHarvestNotation(MaterialCard.FRACTAL_WISP.item())
+    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
+    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
 
 }
 

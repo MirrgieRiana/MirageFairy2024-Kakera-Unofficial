@@ -58,7 +58,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override val baseGrowth = 0.2
     override val baseFruitGeneration = 0.1
 
-    override val drops = listOf(MaterialCard.LUMINITE.item(), Items.DIAMOND)
+    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
