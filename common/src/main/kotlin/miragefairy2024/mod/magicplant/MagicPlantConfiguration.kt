@@ -75,7 +75,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         card.block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
 
         // レシピ
-        card.item().registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
         card.item().registerHarvestNotation(drops)
 
     }

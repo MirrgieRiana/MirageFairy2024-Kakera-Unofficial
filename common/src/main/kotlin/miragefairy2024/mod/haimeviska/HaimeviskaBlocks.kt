@@ -356,8 +356,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ
-    HaimeviskaBlockCard.LEAVES.item().registerComposterInput(0.3F)
-    HaimeviskaBlockCard.SAPLING.item().registerComposterInput(0.3F)
+    HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
+    HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item(), 4) {
         requires(HaimeviskaBlockCard.LOG.item())
     } on HaimeviskaBlockCard.LOG.item() from HaimeviskaBlockCard.LOG.item()

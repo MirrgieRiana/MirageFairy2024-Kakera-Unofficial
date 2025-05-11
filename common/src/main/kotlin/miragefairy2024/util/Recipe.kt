@@ -305,8 +305,8 @@ fun Registration<Item>.registerChestLoot(
 }
 
 context(ModContext)
-fun Item.registerComposterInput(chance: Float) = ModEvents.onInitialize {
-    ComposterBlock.COMPOSTABLES.put(this, chance)
+fun Registration<Item>.registerComposterInput(chance: Float) = ModEvents.onInitialize {
+    ComposterBlock.COMPOSTABLES.put(this(), chance)
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */

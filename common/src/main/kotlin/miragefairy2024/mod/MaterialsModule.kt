@@ -136,7 +136,7 @@ class MaterialCard(
             PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
             fuelValue = 100,
         ) {
-            item().registerComposterInput(0.5F)
+            item.registerComposterInput(0.5F)
         }
         val MIRAGE_STEM = !MaterialCard(
             "mirage_stem", "Mirage Stem", "ミラージュの茎",
@@ -146,7 +146,7 @@ class MaterialCard(
             registerShapelessRecipeGeneration(item()) {
                 requires(MIRAGE_LEAVES.item())
             } on MIRAGE_LEAVES.item()
-            item().registerComposterInput(0.5F)
+            item.registerComposterInput(0.5F)
             registerShapedRecipeGeneration(Items.STICK, 2) {
                 pattern("#")
                 pattern("#")
@@ -217,7 +217,7 @@ class MaterialCard(
             PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
             fuelValue = 100,
         ) {
-            item().registerComposterInput(0.5F)
+            item.registerComposterInput(0.5F)
             registerSmeltingRecipeGeneration(item(), Items.IRON_NUGGET, 0.1) on item() modId MirageFairy2024.MOD_ID from item()
             registerBlastingRecipeGeneration(item(), Items.IRON_NUGGET, 0.1) on item() modId MirageFairy2024.MOD_ID from item()
         }
@@ -278,7 +278,7 @@ class MaterialCard(
                     .build()
             },
         ) {
-            item().registerComposterInput(0.3F)
+            item.registerComposterInput(0.3F)
         }
         val LUMINITE = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
