@@ -100,14 +100,14 @@ fun initFairyFountainModule() {
 
     }
 
-    registerShapedRecipeGeneration(FairyStatueFountainCard.item()) {
+    registerShapedRecipeGeneration(FairyStatueFountainCard.item) {
         pattern(" F ")
         pattern("SQS")
         pattern("SSS")
         define('F', MaterialCard.FAIRY_SCALES.item())
         define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item())
         define('S', Items.COBBLESTONE)
-    } on MaterialCard.FAIRY_SCALES.item()
+    } on MaterialCard.FAIRY_SCALES.item
 }
 
 class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {

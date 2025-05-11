@@ -83,7 +83,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
         guiSlotConfigurations += SLOTS
 
 
-        registerShapedRecipeGeneration(item()) {
+        registerShapedRecipeGeneration(item) {
             pattern("#A#")
             pattern("DCD")
             pattern("###")
@@ -91,7 +91,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
             define('#', Items.IRON_INGOT)
             define('C', Items.ITEM_FRAME)
             define('D', Items.LIGHT_BLUE_DYE)
-        } on BlockMaterialCard.AURA_STONE.item()
+        } on BlockMaterialCard.AURA_STONE.item
     }
 }
 

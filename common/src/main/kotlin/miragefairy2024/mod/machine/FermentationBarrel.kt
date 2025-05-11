@@ -56,14 +56,14 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 
-        registerShapedRecipeGeneration(item()) {
+        registerShapedRecipeGeneration(item) {
             pattern("ILI")
             pattern("LRL")
             pattern("ILI")
             define('L', HaimeviskaBlockCard.LOG.item())
             define('R', MaterialCard.HAIMEVISKA_ROSIN.item())
             define('I', Items.IRON_NUGGET)
-        } on MaterialCard.HAIMEVISKA_ROSIN.item()
+        } on MaterialCard.HAIMEVISKA_ROSIN.item
     }
 }
 

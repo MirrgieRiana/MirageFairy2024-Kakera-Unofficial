@@ -109,14 +109,14 @@ fun initTelescopeModule() {
 
     }
 
-    registerShapedRecipeGeneration(TelescopeCard.item()) {
+    registerShapedRecipeGeneration(TelescopeCard.item) {
         pattern("IIG")
         pattern(" S ")
         pattern("S S")
         define('S', Items.STICK)
         define('I', Items.COPPER_INGOT)
         define('G', MaterialCard.FAIRY_CRYSTAL.item())
-    } on MaterialCard.FAIRY_CRYSTAL.item()
+    } on MaterialCard.FAIRY_CRYSTAL.item
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()
     TelescopeBlock.FIRST_GAIN_TRANSLATION.enJa()

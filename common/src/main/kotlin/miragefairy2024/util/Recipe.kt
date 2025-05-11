@@ -70,16 +70,16 @@ class RecipeGenerationSettings<T> {
     var noGroup = false
 }
 
-infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: Item) = this.apply {
-    this.listeners += { it.criterion(item) }
+infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: () -> Item) = this.apply {
+    this.listeners += { it.criterion(item()) }
 }
 
 infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
     this.idModifiers += { ResourceLocation.fromNamespaceAndPath(modId, it.path) }
 }
 
-infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
-    this.idModifiers += { it * "_from_" * item.getIdentifier().path }
+infix fun <T> RecipeGenerationSettings<T>.from(item: () -> Item) = this.apply {
+    this.idModifiers += { it * "_from_" * item().getIdentifier().path }
 }
 
 fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.apply {
@@ -89,19 +89,19 @@ fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.appl
 context(ModContext)
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     creator: (RecipeCategory, Item, Int) -> T,
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: T.() -> Unit = {},
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = creator(settings.recipeCategory, item, count)
+        val builder = creator(settings.recipeCategory, item(), count)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
-        if (!settings.noGroup) builder.group(item)
+        if (!settings.noGroup) builder.group(item())
         block(builder)
-        val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(item().getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -109,35 +109,35 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
 
 context(ModContext)
 fun registerShapedRecipeGeneration(
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: ShapedRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::shaped, item, count, block)
 
 context(ModContext)
 fun registerShapelessRecipeGeneration(
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::shapeless, item, count, block)
 
 context(ModContext)
 fun registerSmeltingRecipeGeneration(
-    input: Item,
-    output: Item,
+    input: () -> Item,
+    output: () -> Item,
     experience: Double = 0.0,
     cookingTime: Int = 200,
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
+        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -145,21 +145,21 @@ fun registerSmeltingRecipeGeneration(
 
 context(ModContext)
 fun registerBlastingRecipeGeneration(
-    input: Item,
-    output: Item,
+    input: () -> Item,
+    output: () -> Item,
     experience: Double = 0.0,
     cookingTime: Int = 100,
     block: CookingRecipeJsonBuilder. () -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
+        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -203,7 +203,7 @@ fun MutableList<ItemStack>.pull(predicate: (ItemStack) -> Boolean): ItemStack? {
 // Others
 
 context(ModContext)
-fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
+fun registerCompressionRecipeGeneration(lowerItem: () -> Item, higherItem: () -> Item, count: Int = 9, noGroup: Boolean = false) {
     registerShapelessRecipeGeneration(higherItem, count = 1) {
         repeat(count) {
             requires(lowerItem)

@@ -76,7 +76,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
         guiSlotConfigurations += FAIRY_SLOT
 
 
-        registerShapedRecipeGeneration(item()) {
+        registerShapedRecipeGeneration(item) {
             pattern("#A#")
             pattern("DCD")
             pattern("###")
@@ -84,7 +84,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
             define('#', ItemTags.PLANKS)
             define('C', Items.BARREL)
             define('D', Items.PINK_DYE)
-        } on BlockMaterialCard.AURA_STONE.item()
+        } on BlockMaterialCard.AURA_STONE.item
     }
 }
 

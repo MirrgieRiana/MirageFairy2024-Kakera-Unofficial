@@ -85,13 +85,13 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
-        registerShapedRecipeGeneration(item()) {
+        registerShapedRecipeGeneration(item) {
             pattern("XXX")
             pattern("XFX")
             pattern("XXX")
             define('F', Items.FURNACE)
             define('X', MaterialCard.XARPITE.item())
-        } on MaterialCard.XARPITE.item()
+        } on MaterialCard.XARPITE.item
     }
 
     context(ModContext)

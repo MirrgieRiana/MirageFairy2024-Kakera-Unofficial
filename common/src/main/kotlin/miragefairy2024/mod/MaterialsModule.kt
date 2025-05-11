@@ -111,12 +111,12 @@ class MaterialCard(
             "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
             PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
         ) {
-            registerShapedRecipeGeneration(item()) {
+            registerShapedRecipeGeneration(item) {
                 pattern("  #")
                 pattern(" # ")
                 pattern("#  ")
                 define('#', MIRANAGITE.item())
-            } on MIRANAGITE.item() from MIRANAGITE.item()
+            } on MIRANAGITE.item from MIRANAGITE.item
         }
         val CHAOS_STONE = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
@@ -143,32 +143,32 @@ class MaterialCard(
             PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
             fuelValue = 100,
         ) {
-            registerShapelessRecipeGeneration(item()) {
+            registerShapelessRecipeGeneration(item) {
                 requires(MIRAGE_LEAVES.item())
-            } on MIRAGE_LEAVES.item()
+            } on MIRAGE_LEAVES.item
             item.registerComposterInput(0.5F)
-            registerShapedRecipeGeneration(Items.STICK, 2) {
+            registerShapedRecipeGeneration({ Items.STICK }, 2) {
                 pattern("#")
                 pattern("#")
                 define('#', item())
-            } on item() modId MirageFairy2024.MOD_ID from item()
+            } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_GLASS_FIBER = !MaterialCard(
             "fairy_glass_fiber", "Fairy Glass Fiber", "きらめきの糸",
             PoemList(1).poem("Fiber-optic nervous system", "意識の一部だったもの。"),
             soulStreamContainable = true,
         ) {
-            registerShapedRecipeGeneration(item()) {
+            registerShapedRecipeGeneration(item) {
                 pattern("###")
                 pattern("# #")
                 pattern("###")
                 define('#', MIRAGE_STEM.item())
-            } on MIRAGE_STEM.item()
-            registerShapedRecipeGeneration(Items.STRING) {
+            } on MIRAGE_STEM.item
+            registerShapedRecipeGeneration({ Items.STRING }) {
                 pattern("##")
                 pattern("##")
                 define('#', item())
-            } on item() modId MirageFairy2024.MOD_ID from item()
+            } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_CRYSTAL = !MaterialCard(
             "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
@@ -205,7 +205,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60,
-            ) on MIRAGE_FLOUR.item()
+            ) on MIRAGE_FLOUR.item
         }
         val MIRAGIUM_INGOT = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
@@ -218,8 +218,8 @@ class MaterialCard(
             fuelValue = 100,
         ) {
             item.registerComposterInput(0.5F)
-            registerSmeltingRecipeGeneration(item(), Items.IRON_NUGGET, 0.1) on item() modId MirageFairy2024.MOD_ID from item()
-            registerBlastingRecipeGeneration(item(), Items.IRON_NUGGET, 0.1) on item() modId MirageFairy2024.MOD_ID from item()
+            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
         val LILAGIUM_INGOT = !MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
@@ -235,7 +235,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60,
-            ) on Items.LILAC
+            ) on { Items.LILAC }
         } // TODO "Botanical alloy", "牡丹合金。"
         val MIRAGIDIAN_SHARD = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
@@ -249,7 +249,7 @@ class MaterialCard(
                 ),
                 output = MIRAGIDIAN.item().createItemStack(),
                 duration = 20 * 60,
-            ) on item() from item()
+            ) on item from item
         }
         val MIRAGIDIAN = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
@@ -261,7 +261,7 @@ class MaterialCard(
             PoemList(4).poem("More abrasion resistant than lethal", "合金として生きるということ。"),
             soulStreamContainable = true,
         ) {
-            registerSmeltingRecipeGeneration(item(), MIRAGIDIAN_SHARD.item()) on item() from item()
+            registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
         }
         val VEROPEDA_BERRIES = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
@@ -298,7 +298,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60,
-            ) on LUMINITE.item()
+            ) on LUMINITE.item
         }
         val HAIMEVISKA_SAP = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
@@ -315,12 +315,12 @@ class MaterialCard(
             },
         ) {
             // →松明
-            registerShapedRecipeGeneration(Items.TORCH) {
+            registerShapedRecipeGeneration({ Items.TORCH }) {
                 pattern("#")
                 pattern("S")
                 define('#', item())
                 define('S', Items.STICK)
-            } on item() modId MirageFairy2024.MOD_ID from item()
+            } on item modId MirageFairy2024.MOD_ID from item
         }
         val HAIMEVISKA_ROSIN = !MaterialCard(
             "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
@@ -328,12 +328,12 @@ class MaterialCard(
             fuelValue = 200,
         ) {
             // →粘着ピストン
-            registerShapedRecipeGeneration(Blocks.STICKY_PISTON.asItem()) {
+            registerShapedRecipeGeneration({ Blocks.STICKY_PISTON.asItem() }) {
                 pattern("S")
                 pattern("P")
                 define('P', Blocks.PISTON)
                 define('S', item())
-            } on item() modId MirageFairy2024.MOD_ID from item()
+            } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC = !MaterialCard(
             // TODO add recipe
@@ -447,7 +447,7 @@ class MaterialCard(
             "magnetite", "Magnetite", "磁鉄鉱",
             null,
         ) {
-            registerSmeltingRecipeGeneration(item(), Items.IRON_NUGGET, 0.7) on item() modId MirageFairy2024.MOD_ID from item()
+            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.7) on item modId MirageFairy2024.MOD_ID from item
         }
 
         val FLUORITE = !MaterialCard(
@@ -460,13 +460,13 @@ class MaterialCard(
                 .poem("A mirror that reflects sadistic desires", "前世が見える。              （らしい）"),
             // TODO 用途
         ) {
-            registerShapedRecipeGeneration(item()) {
+            registerShapedRecipeGeneration(item) {
                 pattern(" S ")
                 pattern("SFS")
                 pattern(" S ")
                 define('F', FLUORITE.item())
                 define('S', FAIRY_SCALES.item())
-            } on FLUORITE.item() from FLUORITE.item()
+            } on FLUORITE.item from FLUORITE.item
         }
 
         val TINY_BISMUTH_DUST = !MaterialCard(
@@ -484,7 +484,7 @@ class MaterialCard(
             "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
             null,
         ) {
-            registerSmeltingRecipeGeneration(BISMUTH_DUST.item(), item()) on BISMUTH_DUST.item() from BISMUTH_DUST.item()
+            registerSmeltingRecipeGeneration(BISMUTH_DUST.item, item) on BISMUTH_DUST.item from BISMUTH_DUST.item
         }
 
         val MINA_1 = !MaterialCard(
@@ -629,12 +629,12 @@ class MaterialCard(
             PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
             creator = { ApostleWandItem(it.stacksTo(1)) },
         ) {
-            registerShapedRecipeGeneration(item()) {
+            registerShapedRecipeGeneration(item) {
                 pattern(" G")
                 pattern("S ")
                 define('S', MIRAGE_STEM.item())
                 define('G', Items.GOLD_INGOT)
-            } on MIRAGE_STEM.item()
+            } on MIRAGE_STEM.item
         }
 
         val RUM = !MaterialCard(
@@ -661,7 +661,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60 * 5,
-            ) on Items.SUGAR_CANE
+            ) on { Items.SUGAR_CANE }
             FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.SUGAR_CANE
         }
         val CIDRE = !MaterialCard(
@@ -686,7 +686,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60 * 1,
-            ) on Items.APPLE
+            ) on { Items.APPLE }
             FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.APPLE
         }
         val FAIRY_LIQUEUR = !MaterialCard(
@@ -712,7 +712,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60 * 5,
-            ) on HAIMEVISKA_SAP.item()
+            ) on HAIMEVISKA_SAP.item
             FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + HAIMEVISKA_SAP.item()
         }
         val VEROPEDELIQUORA = !MaterialCard(
@@ -738,7 +738,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 60 * 5,
-            ) on VEROPEDA_BERRIES.item()
+            ) on VEROPEDA_BERRIES.item
             FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + VEROPEDA_BERRIES.item()
         }
         val POISON = !MaterialCard(
@@ -764,7 +764,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 5,
-            ) on Items.PUFFERFISH from Items.PUFFERFISH
+            ) on { Items.PUFFERFISH } from { Items.PUFFERFISH }
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
@@ -774,7 +774,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 5,
-            ) on Items.POISONOUS_POTATO from Items.POISONOUS_POTATO
+            ) on { Items.POISONOUS_POTATO } from { Items.POISONOUS_POTATO }
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
@@ -784,7 +784,7 @@ class MaterialCard(
                 ),
                 output = item().createItemStack(),
                 duration = 20 * 5,
-            ) on Items.SPIDER_EYE from Items.SPIDER_EYE
+            ) on { Items.SPIDER_EYE } from { Items.SPIDER_EYE }
         }
     }
 
@@ -823,29 +823,29 @@ fun initMaterialsModule() {
     DrinkItem.FLAMING_TRANSLATION.enJa()
 
     // ミラジウム圧縮
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item(), MaterialCard.MIRAGIUM_INGOT.item())
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)
 
     // ミラージュの花粉圧縮
-    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR.item(), MaterialCard.MIRAGE_FLOUR.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR.item(), MaterialCard.MIRAGE_FLOUR_OF_NATURE.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item(), MaterialCard.MIRAGE_FLOUR_OF_EARTH.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item(), MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item(), MaterialCard.MIRAGE_FLOUR_OF_SKY.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item(), MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item(), noGroup = true)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item(), MaterialCard.MIRAGE_FLOUR_OF_TIME.item(), noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.TINY_MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item, MaterialCard.MIRAGE_FLOUR_OF_EARTH.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item, MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item, MaterialCard.MIRAGE_FLOUR_OF_SKY.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_SKY.item, MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, noGroup = true)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item, MaterialCard.MIRAGE_FLOUR_OF_TIME.item, noGroup = true)
 
     // ビスマスの粉圧縮
-    registerCompressionRecipeGeneration(MaterialCard.TINY_BISMUTH_DUST.item(), MaterialCard.BISMUTH_DUST.item())
+    registerCompressionRecipeGeneration(MaterialCard.TINY_BISMUTH_DUST.item, MaterialCard.BISMUTH_DUST.item)
 
     // ミナ両替
-    registerCompressionRecipeGeneration(MaterialCard.MINA_1.item(), MaterialCard.MINA_5.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_5.item(), MaterialCard.MINA_10.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_10.item(), MaterialCard.MINA_50.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_50.item(), MaterialCard.MINA_100.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_100.item(), MaterialCard.MINA_500.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_500.item(), MaterialCard.MINA_1000.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_1000.item(), MaterialCard.MINA_5000.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.MINA_5000.item(), MaterialCard.MINA_10000.item(), 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_1.item, MaterialCard.MINA_5.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_5.item, MaterialCard.MINA_10.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_10.item, MaterialCard.MINA_50.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_50.item, MaterialCard.MINA_100.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_100.item, MaterialCard.MINA_500.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_500.item, MaterialCard.MINA_1000.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_1000.item, MaterialCard.MINA_5000.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.MINA_5000.item, MaterialCard.MINA_10000.item, 2)
 
     // ミーニャ⇔ミナ両替
     registerSpecialRecipe("minia_from_mina", 1) { inventory ->
@@ -881,14 +881,14 @@ fun initMaterialsModule() {
     }
 
     // フェアリージュエル両替
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item(), MaterialCard.JEWEL_5.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5.item(), MaterialCard.JEWEL_10.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_10.item(), MaterialCard.JEWEL_50.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_50.item(), MaterialCard.JEWEL_100.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_100.item(), MaterialCard.JEWEL_500.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_500.item(), MaterialCard.JEWEL_1000.item(), 2)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1000.item(), MaterialCard.JEWEL_5000.item(), 5)
-    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5000.item(), MaterialCard.JEWEL_10000.item(), 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1.item, MaterialCard.JEWEL_5.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5.item, MaterialCard.JEWEL_10.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_10.item, MaterialCard.JEWEL_50.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_50.item, MaterialCard.JEWEL_100.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_100.item, MaterialCard.JEWEL_500.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_500.item, MaterialCard.JEWEL_1000.item, 2)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_1000.item, MaterialCard.JEWEL_5000.item, 5)
+    registerCompressionRecipeGeneration(MaterialCard.JEWEL_5000.item, MaterialCard.JEWEL_10000.item, 2)
 
 }
 

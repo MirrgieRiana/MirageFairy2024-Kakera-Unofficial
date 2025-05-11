@@ -114,21 +114,21 @@ fun initBagModule() {
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
 
 
-    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item()) {
+    registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
         define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
         define('L', MaterialCard.MIRAGE_LEAVES.item())
-    } on MaterialCard.MIRAGE_LEAVES.item()
+    } on MaterialCard.MIRAGE_LEAVES.item
 
-    registerShapedRecipeGeneration(BagCard.SEED_BAG.item()) {
+    registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
         define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
         define('L', MaterialCard.PHANTOM_LEAVES.item())
-    } on MaterialCard.PHANTOM_LEAVES.item()
+    } on MaterialCard.PHANTOM_LEAVES.item
 }
 
 

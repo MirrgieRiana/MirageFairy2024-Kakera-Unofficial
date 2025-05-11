@@ -176,21 +176,21 @@ fun initBlockMaterialsModule() {
     }
 
     // 圧縮
-    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item(), BlockMaterialCard.XARPITE_BLOCK.item())
-    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item(), BlockMaterialCard.MIRANAGITE_BLOCK.item())
-    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item(), BlockMaterialCard.CHAOS_STONE_BLOCK.item())
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item(), BlockMaterialCard.MIRAGIDIAN_BLOCK.item())
-    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item(), BlockMaterialCard.LUMINITE_BLOCK.item())
+    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, BlockMaterialCard.XARPITE_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
 
     // 霊氣石
-    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item()) {
+    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
         pattern("XMX")
         pattern("MCM")
         pattern("XMX")
         define('X', MaterialCard.XARPITE.item())
         define('M', MaterialCard.MIRANAGITE.item())
         define('C', MaterialCard.FAIRY_CRYSTAL.item())
-    } on MaterialCard.FAIRY_CRYSTAL.item()
+    } on MaterialCard.FAIRY_CRYSTAL.item
 
 }
 

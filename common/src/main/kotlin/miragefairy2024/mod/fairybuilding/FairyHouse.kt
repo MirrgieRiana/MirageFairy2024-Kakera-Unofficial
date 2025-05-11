@@ -70,7 +70,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     override fun init() {
         super.init()
         BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_house")) { FairyHouseBlock.CODEC }
-        registerShapedRecipeGeneration(item()) {
+        registerShapedRecipeGeneration(item) {
             pattern("#U#")
             pattern("L*R")
             pattern("#D#")
@@ -80,7 +80,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             define('L', ConventionalItemTags.GLASS_PANES)
             define('R', ItemTags.WOODEN_DOORS)
             define('*', MaterialCard.FAIRY_CRYSTAL.item())
-        } on MaterialCard.FAIRY_CRYSTAL.item()
+        } on MaterialCard.FAIRY_CRYSTAL.item
     }
 }
 
