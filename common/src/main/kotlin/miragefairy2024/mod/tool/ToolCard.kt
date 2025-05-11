@@ -507,8 +507,8 @@ class ToolCard(
         item.enJa(name)
 
         val poemList2 = configuration.appendPoems(poemList)
-        item().registerPoem(poemList2)
-        item().registerPoemGeneration(poemList2)
+        item.registerPoem(poemList2)
+        item.registerPoemGeneration(poemList2)
 
         configuration.init(this)
         initializer(this@ModContext, this)

@@ -103,8 +103,8 @@ fun initBagModule() {
             .poem(card.poem)
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION1_TRANSLATION)
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION2_TRANSLATION)
-        card.item().registerPoem(poemList)
-        card.item().registerPoemGeneration(poemList)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
     }
 
 

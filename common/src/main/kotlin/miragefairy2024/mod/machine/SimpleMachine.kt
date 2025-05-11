@@ -85,8 +85,8 @@ abstract class SimpleMachineCard<B : SimpleMachineBlock, E : SimpleMachineBlockE
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
-        item().registerPoem(poemList)
-        item().registerPoemGeneration(poemList)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
         block.registerDefaultLootTableGeneration()
 

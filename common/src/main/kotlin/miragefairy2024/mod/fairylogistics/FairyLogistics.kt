@@ -92,8 +92,8 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem).description(description)
-        item().registerPoem(poemList)
-        item().registerPoemGeneration(poemList)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 

@@ -100,8 +100,8 @@ fun initTelescopeModule() {
         val poemList = PoemList(2)
             .poem("Tell me more about the human world!", "きみは妖精には見えないものが見えるんだね。")
             .description("Use once a day to obtain Fairy Jewels", "1日1回使用時にフェアリージュエルを獲得")
-        card.item().registerPoem(poemList)
-        card.item().registerPoemGeneration(poemList)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
 
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 

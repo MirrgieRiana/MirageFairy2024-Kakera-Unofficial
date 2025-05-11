@@ -129,8 +129,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
         block.enJa(name)
         val poemList = PoemList(tier).poem(poem)
-        item().registerPoem(poemList)
-        item().registerPoemGeneration(poemList)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
         block.registerBlockTagGeneration { HAIMEVISKA_LOGS }

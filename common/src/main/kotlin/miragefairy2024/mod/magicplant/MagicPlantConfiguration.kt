@@ -66,8 +66,8 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         val seedPoemList = PoemList(tier)
             .poem(poem)
             .poem("classification", classification)
-        card.item().registerPoem(seedPoemList)
-        card.item().registerPoemGeneration(seedPoemList)
+        card.item.registerPoem(seedPoemList)
+        card.item.registerPoemGeneration(seedPoemList)
 
         // 性質
         //card.block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく

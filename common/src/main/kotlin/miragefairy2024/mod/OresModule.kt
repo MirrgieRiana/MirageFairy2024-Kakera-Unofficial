@@ -151,8 +151,8 @@ fun initOresModule() {
 
         card.block.enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
-            card.item().registerPoem(card.poemList)
-            card.item().registerPoemGeneration(card.poemList)
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
         }
 
         card.block.registerOreLootTableGeneration(card.dropItem)

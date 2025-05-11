@@ -810,8 +810,8 @@ fun initMaterialsModule() {
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
-            card.item().registerPoem(card.poemList)
-            card.item().registerPoemGeneration(card.poemList)
+            card.item.registerPoem(card.poemList)
+            card.item.registerPoemGeneration(card.poemList)
         }
         if (card.fuelValue != null) card.item().registerFuel(card.fuelValue)
         if (card.soulStreamContainable) card.item().registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }

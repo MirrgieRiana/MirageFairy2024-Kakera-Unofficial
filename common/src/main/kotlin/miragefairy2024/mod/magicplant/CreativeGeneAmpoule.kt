@@ -74,8 +74,8 @@ fun initCreativeGeneAmpoule() {
             .description("description2", "Use while sneaking: Remove the trait", "スニーク中に使用時、特性を削除")
             .description("description3", "Use: Increases bits", "使用時、ビットを増加")
             .description("description4", "Use while sneaking: Decreases bits", "スニーク中に使用時、ビットを減少")
-        card.item().registerPoem(poemList)
-        card.item().registerPoemGeneration(poemList)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
     }
 }
 

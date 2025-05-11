@@ -289,8 +289,8 @@ fun initHaimeviskaBlocks() {
 
         // テキスト
         card.block.enJa(EnJa(card.configuration.enName, card.configuration.jaName))
-        card.item().registerPoem(card.configuration.poemList)
-        card.item().registerPoemGeneration(card.configuration.poemList)
+        card.item.registerPoem(card.configuration.poemList)
+        card.item.registerPoemGeneration(card.configuration.poemList)
 
         card.initializer(this@ModContext, card)
     }

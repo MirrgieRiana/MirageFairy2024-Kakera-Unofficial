@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.en
@@ -56,15 +57,15 @@ interface Poem {
     val type: PoemType
     fun getText(item: Item, context: Item.TooltipContext): Component
     context(ModContext)
-    fun init(item: Item) = Unit
+    fun init(item: Registration<Item>) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
     override fun getText(item: Item, context: Item.TooltipContext) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
     context(ModContext)
-    override fun init(item: Item) {
-        en { "${item.descriptionId}.$key" to en }
-        ja { "${item.descriptionId}.$key" to ja }
+    override fun init(item: Registration<Item>) {
+        en { "${item().descriptionId}.$key" to en }
+        ja { "${item().descriptionId}.$key" to ja }
     }
 }
 
@@ -102,13 +103,13 @@ fun PoemList.text(type: PoemType, text: Component) = this + TextPoem(type, text)
 // Util
 
 context(ModContext)
-fun Item.registerPoem(poemList: PoemList) = ModEvents.onInitialize {
-    require(this !in itemPoemListTable)
-    itemPoemListTable[this] = poemList
+fun Registration<Item>.registerPoem(poemList: PoemList) = ModEvents.onInitialize {
+    require(this() !in itemPoemListTable)
+    itemPoemListTable[this()] = poemList
 }
 
 context(ModContext)
-fun Item.registerPoemGeneration(poemList: PoemList) {
+fun Registration<Item>.registerPoemGeneration(poemList: PoemList) {
     poemList.poems.forEach {
         it.init(this)
     }

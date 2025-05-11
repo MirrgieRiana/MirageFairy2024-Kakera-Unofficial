@@ -91,8 +91,8 @@ fun initFairyFountainModule() {
             .poem("Where does this water spring from...?", "この水は一体どこから湧いてくるのだろう…")
             .description("description1", "Can draw lottery with 100 Fairy Jewels", "100フェアリージュエルで抽選ができる")
             .description("description2", "Use while sneaking to show loot table", "スニーク中に使用時、提供割合を表示")
-        card.item().registerPoem(poemList)
-        card.item().registerPoemGeneration(poemList)
+        card.item.registerPoem(poemList)
+        card.item.registerPoemGeneration(poemList)
 
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 

@@ -165,8 +165,8 @@ fun initBlockMaterialsModule() {
         if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
 
         card.block.enJa(EnJa(card.enName, card.jaName))
-        card.item().registerPoem(card.poemList)
-        card.item().registerPoemGeneration(card.poemList)
+        card.item.registerPoem(card.poemList)
+        card.item.registerPoemGeneration(card.poemList)
 
         card.block.registerDefaultLootTableGeneration()
 
