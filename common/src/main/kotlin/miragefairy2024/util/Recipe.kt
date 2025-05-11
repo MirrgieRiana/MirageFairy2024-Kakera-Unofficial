@@ -215,7 +215,7 @@ fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count
 }
 
 context(ModContext)
-fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
+fun Registration<Item>.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { id, tableBuilder, source, registries ->
         if (source.isBuiltin) {
@@ -227,7 +227,7 @@ fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<Loot
 }
 
 context(ModContext)
-fun Item.registerGrassDrop(
+fun Registration<Item>.registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
     biome: (() -> ResourceKey<Biome>)? = null,
@@ -237,7 +237,7 @@ fun Item.registerGrassDrop(
             otherwise(EmptyLootPoolEntry {
                 `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)))
             })
-            otherwise(ItemLootPoolEntry(this@registerGrassDrop) {
+            otherwise(ItemLootPoolEntry(this@registerGrassDrop()) {
                 `when`(RandomChanceLootCondition.randomChance(0.125F * amount))
                 if (biome != null) `when`(LocationCheckLootCondition.checkLocation(LocationPredicate.Builder.location().setBiomes(HolderSet.direct(registries[Registries.BIOME, biome()]))))
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
@@ -248,7 +248,7 @@ fun Item.registerGrassDrop(
 }
 
 context(ModContext)
-fun Item.registerExtraOreDrop(
+fun Registration<Item>.registerExtraOreDrop(
     oreBlock: Block,
     chance: Float = 1.0F,
     fortuneMultiplier: Int = 0,
@@ -258,7 +258,7 @@ fun Item.registerExtraOreDrop(
             otherwise(EmptyLootPoolEntry {
                 `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(listOf(EnchantmentPredicate(registries[Registries.ENCHANTMENT, Enchantments.SILK_TOUCH], NumberRange.Ints.atLeast(1)))))))
             })
-            otherwise(ItemLootPoolEntry(this@registerExtraOreDrop) {
+            otherwise(ItemLootPoolEntry(this@registerExtraOreDrop()) {
                 if (chance < 1.0F) `when`(RandomChanceLootCondition.randomChance(chance))
                 if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.explosionDecay())
@@ -268,7 +268,7 @@ fun Item.registerExtraOreDrop(
 }
 
 context(ModContext)
-fun Item.registerMobDrop(
+fun Registration<Item>.registerMobDrop(
     entityType: EntityType<*>,
     onlyKilledByPlayer: Boolean = false,
     dropRate: Pair<Float, Float>? = null,
@@ -276,7 +276,7 @@ fun Item.registerMobDrop(
     fortuneFactor: LootNumberProvider? = null,
 ) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder, registries ->
     tableBuilder.configure {
-        withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+        withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop()) {
             if (amount != null) apply(SetCountLootFunction.setCount(amount, false))
             if (fortuneFactor != null) apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, fortuneFactor))
         }) {
@@ -287,7 +287,7 @@ fun Item.registerMobDrop(
 }
 
 context(ModContext)
-fun Item.registerChestLoot(
+fun Registration<Item>.registerChestLoot(
     lootTableIdGetter: () -> ResourceKey<LootTable>,
     weight: Int = 10,
     count: IntRange? = null,
@@ -295,7 +295,7 @@ fun Item.registerChestLoot(
 ) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder, registries ->
     tableBuilder.modifyPools { lootPool ->
         lootPool.configure {
-            add(ItemLootPoolEntry(this@registerChestLoot) {
+            add(ItemLootPoolEntry(this@registerChestLoot()) {
                 setWeight(weight)
                 if (count != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(count.first.toFloat(), count.last.toFloat())))
                 block(this)

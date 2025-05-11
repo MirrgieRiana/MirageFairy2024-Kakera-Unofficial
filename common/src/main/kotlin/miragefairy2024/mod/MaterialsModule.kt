@@ -99,8 +99,8 @@ class MaterialCard(
             fuelValue = 200 * 16,
             // TODO 使えるワード：牢獄
         ) {
-            item().registerGrassDrop(0.03F, 1) // TODO 古代の遺構
-            item().registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
+            item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
+            item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
         }
         val MIRANAGITE = !MaterialCard(
             "miranagite", "Miranagite", "蒼天石",
@@ -122,13 +122,13 @@ class MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
         ) {
-            item().registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
-            item().registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
-            item().registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
-            item().registerChestLoot({ LootTables.DESERT_PYRAMID }, 10)
-            item().registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 3)
-            item().registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
-            item().registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
+            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
+            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
+            item.registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
+            item.registerChestLoot({ LootTables.DESERT_PYRAMID }, 10)
+            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 3)
+            item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
+            item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
 
         val MIRAGE_LEAVES = !MaterialCard(
@@ -426,7 +426,7 @@ class MaterialCard(
             // TODO 妖精からクラフト
             // TODO 用途
         ) {
-            item().registerGrassDrop(0.1F, 1)
+            item.registerGrassDrop(0.1F, 1)
         }
         val FRACTAL_WISP = !MaterialCard(
             "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
@@ -473,8 +473,8 @@ class MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
             null,
         ) {
-            item().registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
-            item().registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
+            item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
+            item.registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
         }
         val BISMUTH_DUST = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
