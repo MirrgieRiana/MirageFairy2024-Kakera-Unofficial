@@ -83,7 +83,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
         }
     }
 
-    override fun getWorkstations() = listOf(listOf(card.machine.toEntryStack()).toEntryIngredient())
+    override fun getWorkstations() = listOf(listOf(card.getMachine().toEntryStack()).toEntryIngredient())
 
     fun <C : ScreenHandler, T : HandledScreen<C>> registerScreen(registry: ScreenRegistry, screenClass: Class<out T>, rectangle: Rectangle) {
         registry.registerContainerClickArea(Rectangle(rectangle.x - 1, rectangle.y - 1, rectangle.width + 2, rectangle.height + 1 + 2), screenClass, card.identifier.first)
