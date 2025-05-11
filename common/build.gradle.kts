@@ -46,6 +46,8 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury:${rootProject.properties["architectury_api_version"] as String}")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.properties["kotlin_coroutines_version"] as String}") // Kotlin Coroutines
+
     implementation(project(path = ":mirrg.kotlin"))
 
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:16.0.799")

@@ -48,6 +48,7 @@ dependencies {
     // Platform
     modImplementation("org.sinytra.forgified-fabric-api:forgified-fabric-api:${rootProject.properties["forgified_fabric_api_version"] as String}") // Forgified Fabric API
     modImplementation("thedarkcolour:kotlinforforge:${rootProject.properties["kotlin_for_forge_version"] as String}") // Kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.properties["kotlin_coroutines_version"] as String}") // Kotlin Coroutines
     modImplementation("dev.architectury:architectury-neoforge:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
