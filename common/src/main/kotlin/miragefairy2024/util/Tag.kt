@@ -24,8 +24,8 @@ fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) =
 }
 
 context(ModContext)
-fun Item.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
-    it(tagProvider()).add(this)
+fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)

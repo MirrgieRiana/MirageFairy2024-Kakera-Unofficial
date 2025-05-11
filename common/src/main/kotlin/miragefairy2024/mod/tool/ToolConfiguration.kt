@@ -113,9 +113,9 @@ abstract class ToolConfiguration {
     context(ModContext)
     fun init(card: ToolCard) {
         tags.forEach {
-            card.item().registerItemTagGeneration { it }
+            card.item.registerItemTagGeneration { it }
         }
-        card.item().registerItemTagGeneration { toolMaterialCard.tag }
+        card.item.registerItemTagGeneration { toolMaterialCard.tag }
     }
 
     fun appendPoems(poemList: PoemList): PoemList {

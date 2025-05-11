@@ -178,7 +178,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.LEAVES }
-    card.item().registerItemTagGeneration { ItemTags.LEAVES }
+    card.item.registerItemTagGeneration { ItemTags.LEAVES }
     card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
 
 }
@@ -198,7 +198,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item().registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -222,7 +222,7 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item().registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 
@@ -242,7 +242,7 @@ private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.PLANKS }
-    card.item().registerItemTagGeneration { ItemTags.PLANKS }
+    card.item.registerItemTagGeneration { ItemTags.PLANKS }
 
 }
 
@@ -261,7 +261,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.SAPLINGS }
-    card.item().registerItemTagGeneration { ItemTags.SAPLINGS }
+    card.item.registerItemTagGeneration { ItemTags.SAPLINGS }
 
 }
 

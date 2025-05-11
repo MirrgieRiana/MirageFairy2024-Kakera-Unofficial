@@ -127,7 +127,7 @@ fun initFairyItem() {
 
         card.item.enJa(EnJa(card.enName, card.jaName))
 
-        card.item().registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+        card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
     }
 
     RARE_TRANSLATION.enJa()
