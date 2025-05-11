@@ -116,7 +116,7 @@ object ChaosCubeCard {
         spawnEggItem.register()
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
-        spawnEggItem().enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
+        spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
     }
 }
 

@@ -504,7 +504,7 @@ class ToolCard(
 
         item.registerModelGeneration(Models.FLAT_HANDHELD_ITEM)
 
-        item().enJa(name)
+        item.enJa(name)
 
         val poemList2 = configuration.appendPoems(poemList)
         item().registerPoem(poemList2)

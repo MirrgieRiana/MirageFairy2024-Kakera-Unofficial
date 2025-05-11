@@ -62,7 +62,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
 
         // 翻訳
         card.block.enJa(blockName)
-        card.item().enJa(itemName)
+        card.item.enJa(itemName)
         val seedPoemList = PoemList(tier)
             .poem(poem)
             .poem("classification", classification)

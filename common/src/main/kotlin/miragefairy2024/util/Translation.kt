@@ -25,9 +25,9 @@ fun Block.enJa(name: EnJa) {
 }
 
 context(ModContext)
-fun Item.enJa(name: EnJa) {
-    en { this.descriptionId to name.en }
-    ja { this.descriptionId to name.ja }
+fun Registration<Item>.enJa(name: EnJa) {
+    en { this().descriptionId to name.en }
+    ja { this().descriptionId to name.ja }
 }
 
 context(ModContext)

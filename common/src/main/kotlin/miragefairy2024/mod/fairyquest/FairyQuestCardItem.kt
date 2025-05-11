@@ -76,7 +76,7 @@ fun initFairyQuestCardItem() {
                 0xFFFFFFFF.toInt()
             }
         }
-        card.item().enJa(EnJa(card.enName, card.jaName))
+        card.item.enJa(EnJa(card.enName, card.jaName))
     }
 
     fairyQuestCardFairyQuestTranslation.enJa()

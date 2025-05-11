@@ -98,7 +98,7 @@ fun initBagModule() {
         card.item.register()
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
-        card.item().enJa(card.itemName)
+        card.item.enJa(card.itemName)
         val poemList = PoemList(card.tier)
             .poem(card.poem)
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION1_TRANSLATION)
