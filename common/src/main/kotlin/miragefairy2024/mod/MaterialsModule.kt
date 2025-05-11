@@ -814,7 +814,7 @@ val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identif
 context(ModContext)
 fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
-        BuiltInRegistries.ITEM.register(card.identifier) { card.item() }
+        card.item.register()
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(EnJa(card.enName, card.jaName))
