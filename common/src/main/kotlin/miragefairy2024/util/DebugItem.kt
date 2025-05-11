@@ -21,7 +21,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF888888.toInt(), action: (Level, PlayerEntity, Hand, ItemStack) -> Unit) {
-    val item = Registration(BuiltInRegistries.ITEM, MirageFairy2024.identifier(path)) {
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, MirageFairy2024.identifier(path)) {
         object : Item(Properties()) {
             override fun getName(stack: ItemStack) = text { path.toUpperCamelCase(afterDelimiter = " ")() }
             override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {

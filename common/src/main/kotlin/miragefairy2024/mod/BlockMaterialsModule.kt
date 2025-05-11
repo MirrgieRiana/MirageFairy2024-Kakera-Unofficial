@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -11,7 +12,6 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
-import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
@@ -141,7 +141,7 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 }
 
 context(ModContext)

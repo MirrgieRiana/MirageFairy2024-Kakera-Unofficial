@@ -12,8 +12,8 @@ import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
@@ -789,7 +789,7 @@ class MaterialCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = Registration(BuiltInRegistries.ITEM, identifier) {
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) {
         Item.Properties()
             .let { foodComponentCreator?.let { c -> it.food(c()) } ?: it }
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }

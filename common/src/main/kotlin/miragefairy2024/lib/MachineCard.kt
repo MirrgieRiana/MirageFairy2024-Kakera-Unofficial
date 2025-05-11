@@ -1,7 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.ModContext
-import miragefairy2024.util.Registration
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -78,7 +78,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     // Item
 
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
 
 
     // ScreenHandler

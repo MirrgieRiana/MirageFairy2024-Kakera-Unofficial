@@ -29,8 +29,8 @@ import miragefairy2024.mod.tool.items.FairyShovelConfiguration
 import miragefairy2024.mod.tool.items.FairySwordConfiguration
 import miragefairy2024.mod.tool.items.ScytheItem
 import miragefairy2024.mod.tool.items.ShootingStaffItem
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -479,7 +479,7 @@ class ToolCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = Registration(BuiltInRegistries.ITEM, identifier) {
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) {
         configuration.also { it.apply() }.createItem(run {
             val miningSpeedMultiplier = configuration.miningSpeedMultiplierOverride ?: configuration.toolMaterialCard.toolMaterial.speed
 

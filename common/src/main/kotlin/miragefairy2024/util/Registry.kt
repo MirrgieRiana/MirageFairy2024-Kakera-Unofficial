@@ -8,23 +8,23 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
 object RegistryEvents {
-    val registrations = mutableListOf<Registration<*, *>>()
+    val registrations = mutableListOf<CompletableRegistration<*, *>>()
 }
 
-class Registration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> U) : () -> T {
+class CompletableRegistration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> U) : () -> T {
     lateinit var value: U
     lateinit var holder: Holder<T>
     override fun invoke(): U = value
 }
 
 context(ModContext)
-fun Registration<*, *>.register() {
+fun CompletableRegistration<*, *>.register() {
     RegistryEvents.registrations += this
 }
 
 context(ModContext)
 fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T) {
-    RegistryEvents.registrations += Registration(this, identifier, creator)
+    RegistryEvents.registrations += CompletableRegistration(this, identifier, creator)
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

@@ -10,12 +10,12 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.particle.MagicSquareParticleChannel
 import miragefairy2024.mod.particle.MagicSquareParticlePacket
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
-import miragefairy2024.util.Registration
 import miragefairy2024.util.configure
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -78,7 +78,7 @@ object ChaosCubeCard {
     val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
         .dimensions(EntityDimensions.fixed(width, height))
         .build()
-    val spawnEggItem = Registration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties()) }
+    val spawnEggItem = CompletableRegistration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties()) }
 
     context(ModContext)
     fun init() {

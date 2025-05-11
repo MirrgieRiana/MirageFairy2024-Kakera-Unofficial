@@ -13,6 +13,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.text
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
@@ -20,7 +21,6 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
-import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.empty
@@ -102,7 +102,7 @@ class FairyStatueCard(
     val identifier = MirageFairy2024.identifier(path)
     val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block, Item.Properties()) }
 
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
