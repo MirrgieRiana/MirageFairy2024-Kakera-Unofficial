@@ -71,7 +71,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             addSlot(object : Slot(inputInventory, i, 0, 0) {
                 override fun mayPlace(stack: ItemStack): Boolean {
                     val input = recipe.inputs.getOrNull(i) ?: return false
-                    return input.first.test(stack)
+                    return input.first().test(stack)
                 }
             })
         }
@@ -108,7 +108,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
 
             // レシピ判定
             recipe.inputs.forEachIndexed { index, (ingredient, count) ->
-                if (!ingredient.test(inputInventory[index])) return
+                if (!ingredient().test(inputInventory[index])) return
                 if (inputInventory[index].count < count) return
                 onCraftStart += {
                     processingItemStacks += inputInventory[index].split(count)
@@ -143,7 +143,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             // 成果物の生成
             if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleInventory(recipe.outputs.size)
             recipe.outputs.forEachIndexed { index, itemStack ->
-                resultInventory[index] = itemStack.copy()
+                resultInventory[index] = itemStack().copy()
             }
 
             // リザルト格納
