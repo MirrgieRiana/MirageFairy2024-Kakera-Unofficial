@@ -1,5 +1,9 @@
 package miragefairy2024.neoforge
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
@@ -59,8 +63,15 @@ class MirageFairy2024NeoForgeMod {
         RegistryEvents.registrations.forEach { registration ->
             fun <T : Any, U : T> f(registration: CompletableRegistration<T, U>) {
                 if (event.registry == registration.registry) {
-                    registration.value = registration.creator() <-
-                    registration.holder = Registry.registerForHolder(registration.registry, registration.identifier, registration.value)
+                    val value = runBlocking {
+                        val deferred = CompletableDeferred<U>()
+                        launch(Dispatchers.Main.immediate) {
+                            deferred.complete(registration.creator())
+                        }
+                        if (deferred.isActive) throw IllegalStateException("Illegal suspend for initialization: ${registration.identifier}")
+                        deferred.await()
+                    }
+                    registration.complete(value, Registry.registerForHolder(registration.registry, registration.identifier, value))
                 }
             }
             f(registration)

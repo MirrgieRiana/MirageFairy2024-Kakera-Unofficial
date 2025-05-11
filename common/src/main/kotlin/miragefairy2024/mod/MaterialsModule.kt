@@ -84,7 +84,7 @@ class MaterialCard(
     val poemList: PoemList?,
     val fuelValue: Int? = null,
     val soulStreamContainable: Boolean = false,
-    val foodComponentCreator: (() -> FoodComponent)? = null,
+    val foodComponentCreator: (suspend () -> FoodComponent)? = null,
     val recipeRemainder: Item? = null,
     val creator: (Item.Properties) -> Item = ::Item,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
@@ -310,7 +310,7 @@ class MaterialCard(
                 FoodComponent.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(experienceStatusEffect.holder, 20), 1.0F)
+                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 20), 1.0F)
                     .build()
             },
         ) {
@@ -697,7 +697,7 @@ class MaterialCard(
                 FoodComponent.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(experienceStatusEffect.holder, 20 * 8, 1), 1.0F)
+                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 20 * 8, 1), 1.0F)
                     .build()
             },
             creator = { DrinkItem(it, flaming = 5) },
