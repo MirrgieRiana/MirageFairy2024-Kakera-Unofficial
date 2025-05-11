@@ -60,7 +60,7 @@ fun initCreativeGeneAmpoule() {
             }
         }
         card.item.registerModelGeneration(createCreativeGeneAmpouleModel())
-        card.item().registerColorProvider { itemStack, tintIndex ->
+        card.item.registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 1) {
                 itemStack.getTraitStacks().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.traitStackList.firstOrNull().or { return@registerColorProvider 0xFFFFFFFF.toInt() }.trait.primaryEffect.color or 0xFF000000.toInt()
             } else {

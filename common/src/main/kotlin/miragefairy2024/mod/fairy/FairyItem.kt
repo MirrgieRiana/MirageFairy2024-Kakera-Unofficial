@@ -87,7 +87,7 @@ fun initFairyItem() {
         }
 
         card.item.registerModelGeneration(createFairyModel())
-        card.item().registerColorProvider { itemStack, tintIndex ->
+        card.item.registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 4) {
                 val condensation = itemStack.getFairyCondensation()
                 when (getNiceCondensation(condensation).first) {

@@ -36,12 +36,12 @@ fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockSta
 }
 
 context(ModContext)
-fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
-    clientProxy!!.registerItemColorProvider(this, provider)
+fun Registration<Item>.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
+    clientProxy!!.registerItemColorProvider(this(), provider)
 }
 
 context(ModContext)
-fun BlockItem.registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
+fun Registration<BlockItem>.registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
     val block = itemStack.item.castOrThrow<BlockItem>().block
     clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultBlockState(), null, null, tintIndex)
 }

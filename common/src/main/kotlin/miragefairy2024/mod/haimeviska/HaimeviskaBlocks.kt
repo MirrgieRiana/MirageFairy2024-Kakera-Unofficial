@@ -171,7 +171,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
-    card.item().registerRedirectColorProvider()
+    card.item.registerRedirectColorProvider()
 
     // 性質
     card.block.registerFlammable(30, 30)
