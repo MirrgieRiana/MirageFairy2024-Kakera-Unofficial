@@ -100,8 +100,8 @@ enum class FortuneEffect {
 }
 
 context(ModContext)
-fun Block.registerOreLootTableGeneration(drop: Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
-    it.createSilkTouchDispatchTable(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop) {
+fun Block.registerOreLootTableGeneration(drop: () -> Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
+    it.createSilkTouchDispatchTable(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop()) {
         if (additionalCount != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             FortuneEffect.IGNORE -> Unit
