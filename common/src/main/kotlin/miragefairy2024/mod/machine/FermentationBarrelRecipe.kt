@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient
 
 object FermentationBarrelRecipeCard : SimpleMachineRecipeCard<FermentationBarrelRecipe>() {
     override val identifier = MirageFairy2024.identifier("fermentation_barrel")
-    override val icon = FermentationBarrelCard.item().createItemStack()
+    override fun getIcon() = FermentationBarrelCard.item().createItemStack()
     override val recipeClass = FermentationBarrelRecipe::class.java
     override fun createRecipe(group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): FermentationBarrelRecipe {
         return FermentationBarrelRecipe(this, group, inputs, output, duration)

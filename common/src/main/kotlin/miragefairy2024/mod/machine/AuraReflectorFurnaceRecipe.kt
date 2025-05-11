@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient
 
 object AuraReflectorFurnaceRecipeCard : SimpleMachineRecipeCard<AuraReflectorFurnaceRecipe>() {
     override val identifier = MirageFairy2024.identifier("aura_reflector_furnace")
-    override val icon = AuraReflectorFurnaceCard.item().createItemStack()
+    override fun getIcon() = AuraReflectorFurnaceCard.item().createItemStack()
     override val recipeClass = AuraReflectorFurnaceRecipe::class.java
     override fun createRecipe(group: String, inputs: List<Pair<Ingredient, Int>>, output: ItemStack, duration: Int): AuraReflectorFurnaceRecipe {
         return AuraReflectorFurnaceRecipe(this, group, inputs, output, duration)

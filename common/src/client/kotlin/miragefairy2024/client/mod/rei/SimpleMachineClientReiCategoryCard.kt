@@ -60,7 +60,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
     override fun createCategory() = object : DisplayCategory<SimpleMachineReiCategoryCard.Display<R>> {
         override fun getCategoryIdentifier() = card.identifier.first
         override fun getTitle() = text { card.translation() }
-        override fun getIcon(): Renderer = card.recipeCard.icon.toEntryStack()
+        override fun getIcon(): Renderer = card.recipeCard.getIcon().toEntryStack()
         override fun getDisplayWidth(display: SimpleMachineReiCategoryCard.Display<R>) = imageBound.width + 8 * 2 + 6
         override fun getDisplayHeight() = imageBound.height + 4 * 2 + 6
         override fun setupDisplay(display: SimpleMachineReiCategoryCard.Display<R>, bounds: Rectangle): List<Widget> {

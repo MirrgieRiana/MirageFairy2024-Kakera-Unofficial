@@ -39,7 +39,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     abstract val identifier: ResourceLocation
 
-    abstract val icon: ItemStack
+    abstract fun getIcon(): ItemStack
 
     val type = object : RecipeType<R> {
         override fun toString() = identifier.string
@@ -105,7 +105,7 @@ open class SimpleMachineRecipe(
     override fun assemble(inventory: SimpleMachineRecipeInput, registries: HolderLookup.Provider): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
     override fun getResultItem(registries: HolderLookup.Provider) = output
-    override fun getToastSymbol() = card.icon
+    override fun getToastSymbol() = card.getIcon()
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
 
