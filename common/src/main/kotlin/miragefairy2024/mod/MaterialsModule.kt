@@ -2,6 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
@@ -662,7 +663,9 @@ class MaterialCard(
                 output = { item().createItemStack() },
                 duration = 20 * 60 * 5,
             ) on { Items.SUGAR_CANE }
-            FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.SUGAR_CANE
+            ModEvents.onInitialize {
+                FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.SUGAR_CANE
+            }
         }
         val CIDRE = !MaterialCard(
             "cidre", "Cidre", "シードル",
@@ -687,7 +690,9 @@ class MaterialCard(
                 output = { item().createItemStack() },
                 duration = 20 * 60 * 1,
             ) on { Items.APPLE }
-            FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.APPLE
+            ModEvents.onInitialize {
+                FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.APPLE
+            }
         }
         val FAIRY_LIQUEUR = !MaterialCard(
             "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
@@ -713,7 +718,9 @@ class MaterialCard(
                 output = { item().createItemStack() },
                 duration = 20 * 60 * 5,
             ) on HAIMEVISKA_SAP.item
-            FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + HAIMEVISKA_SAP.item()
+            ModEvents.onInitialize {
+                FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + HAIMEVISKA_SAP.item()
+            }
         }
         val VEROPEDELIQUORA = !MaterialCard(
             "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
@@ -739,7 +746,9 @@ class MaterialCard(
                 output = { item().createItemStack() },
                 duration = 20 * 60 * 5,
             ) on VEROPEDA_BERRIES.item
-            FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + VEROPEDA_BERRIES.item()
+            ModEvents.onInitialize {
+                FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + VEROPEDA_BERRIES.item()
+            }
         }
         val POISON = !MaterialCard(
             "poison", "Poison", "毒薬",
