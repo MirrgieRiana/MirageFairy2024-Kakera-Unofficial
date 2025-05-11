@@ -68,7 +68,7 @@ fun initFairyQuestCardItem() {
                 itemStack
             }
         }
-        card.item().registerModelGeneration(createFairyQuestCardModel())
+        card.item.registerModelGeneration(createFairyQuestCardModel())
         card.item().registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 0) {
                 itemStack.getFairyQuestRecipe()?.color?.let { it or 0xFF000000.toInt() } ?: 0xFFFF00FF.toInt()

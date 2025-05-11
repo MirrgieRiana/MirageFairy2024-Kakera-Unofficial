@@ -502,7 +502,7 @@ class ToolCard(
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        item().registerModelGeneration(Models.FLAT_HANDHELD_ITEM)
+        item.registerModelGeneration(Models.FLAT_HANDHELD_ITEM)
 
         item().enJa(name)
 

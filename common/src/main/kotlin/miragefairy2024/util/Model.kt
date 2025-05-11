@@ -129,16 +129,16 @@ fun registerModelGeneration(identifierGetter: () -> ResourceLocation, texturedMo
 }
 
 context(ModContext)
-fun Item.registerModelGeneration(texturedModelCreator: () -> TexturedModel) = registerModelGeneration({ "item/" * this.getIdentifier() }) { texturedModelCreator() }
+fun Registration<Item>.registerModelGeneration(texturedModelCreator: () -> TexturedModel) = registerModelGeneration({ "item/" * this().getIdentifier() }) { texturedModelCreator() }
 
 context(ModContext)
-fun Item.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this) }) = this.registerModelGeneration { model with textureMapCreator() }
+fun Registration<Item>.registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this()) }) = this.registerModelGeneration { model with textureMapCreator() }
 
 context(ModContext)
-fun Item.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
+fun Registration<Item>.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
 
 context(ModContext)
-fun Item.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block) }
+fun Registration<Item>.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block) }
 
 context(ModContext)
 fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Provider) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }

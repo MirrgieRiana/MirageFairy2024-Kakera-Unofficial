@@ -86,7 +86,7 @@ fun initFairyItem() {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
         }
 
-        card.item().registerModelGeneration(createFairyModel())
+        card.item.registerModelGeneration(createFairyModel())
         card.item().registerColorProvider { itemStack, tintIndex ->
             if (tintIndex == 4) {
                 val condensation = itemStack.getFairyCondensation()

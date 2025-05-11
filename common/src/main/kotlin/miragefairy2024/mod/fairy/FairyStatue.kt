@@ -172,7 +172,7 @@ fun initFairyStatue() {
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
-        card.item().registerGeneratedModelGeneration()
+        card.item.registerGeneratedModelGeneration()
 
         // 翻訳
         card.block.enJa(card.brokenName)

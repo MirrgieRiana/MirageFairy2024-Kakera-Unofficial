@@ -168,7 +168,7 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
     }
     registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
     registerModelGeneration({ "block/uncharged_" * card.block.getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
-    card.item().registerModelGeneration(Model("block/charged_" * card.identifier))
+    card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
     card.item().registerRedirectColorProvider()
@@ -256,7 +256,7 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
             TextureKey.CROSS to "block/" * it.getIdentifier(),
         )
     }
-    card.item().registerBlockGeneratedModelGeneration(card.block)
+    card.item.registerBlockGeneratedModelGeneration(card.block)
     card.block.registerCutoutRenderLayer()
 
     // タグ

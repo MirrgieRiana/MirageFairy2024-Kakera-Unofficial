@@ -58,7 +58,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
 
         // 見た目
         card.block.registerCutoutRenderLayer()
-        card.item().registerGeneratedModelGeneration()
+        card.item.registerGeneratedModelGeneration()
 
         // 翻訳
         card.block.enJa(blockName)

@@ -32,7 +32,7 @@ fun registerDebugItem(path: String, icon: Item = Items.BOOK, color: Int = 0xFF88
     }
     item.register()
     item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-    item().registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
+    item.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(icon) }
     item().registerColorProvider { _, _ -> color }
 }
 

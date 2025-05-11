@@ -807,7 +807,7 @@ fun initMaterialsModule() {
     MaterialCard.entries.forEach { card ->
         BuiltInRegistries.ITEM.register(card.identifier) { card.item() }
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-        card.item().registerGeneratedModelGeneration()
+        card.item.registerGeneratedModelGeneration()
         card.item().enJa(EnJa(card.enName, card.jaName))
         if (card.poemList != null) {
             card.item().registerPoem(card.poemList)
