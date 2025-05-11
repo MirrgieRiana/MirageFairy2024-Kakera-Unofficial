@@ -311,6 +311,6 @@ fun Item.registerComposterInput(chance: Float) = ModEvents.onInitialize {
 
 /** @param ticks coal is `200 * 8 = 1600` */
 context(ModContext)
-fun Item.registerFuel(ticks: Int) = ModEvents.onInitialize {
-    FuelRegistry.INSTANCE.add(this, ticks)
+fun Registration<Item>.registerFuel(ticks: Int) = ModEvents.onInitialize {
+    FuelRegistry.INSTANCE.add(this(), ticks)
 }
