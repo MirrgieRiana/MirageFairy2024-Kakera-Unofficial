@@ -54,7 +54,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         card.item.register()
 
         // 分類
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // 見た目
         card.block.registerCutoutRenderLayer()

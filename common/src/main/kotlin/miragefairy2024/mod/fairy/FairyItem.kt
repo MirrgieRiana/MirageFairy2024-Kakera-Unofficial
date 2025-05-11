@@ -82,7 +82,7 @@ fun initFairyItem() {
     FairyCard.let { card ->
         card.item.register()
 
-        card.item().registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
         }
 

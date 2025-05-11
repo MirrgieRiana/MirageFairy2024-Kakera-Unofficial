@@ -81,7 +81,7 @@ fun initFairyFountainModule() {
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
         card.item.register()
 
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()

@@ -63,7 +63,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
     override fun init() {
         super.init()
 
-        item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         block.registerVariantsBlockStateGeneration {
             fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {

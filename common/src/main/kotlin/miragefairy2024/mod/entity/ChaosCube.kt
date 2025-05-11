@@ -114,7 +114,7 @@ object ChaosCubeCard {
         SpawnRestriction.register(entityType, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
 
         spawnEggItem.register()
-        spawnEggItem().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         spawnEggItem().registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem().enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
     }

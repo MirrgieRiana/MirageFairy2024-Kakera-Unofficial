@@ -163,7 +163,7 @@ fun initFairyStatue() {
         card.item.register()
 
         // アイテムグループ
-        card.item().registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { card.item().createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
         }
 

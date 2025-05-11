@@ -54,7 +54,7 @@ fun initCreativeGeneAmpoule() {
     creativeGeneAmpouleItemGroupCard.init()
     CreativeGeneAmpouleCard.let { card ->
         card.item.register()
-        card.item().registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
             traitRegistry.sortedEntrySet.map { (_, trait) ->
                 card.item().createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
             }

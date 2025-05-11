@@ -143,7 +143,7 @@ fun initOresModule() {
         BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
         card.item.register()
 
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration(card.texturedModelFactory)

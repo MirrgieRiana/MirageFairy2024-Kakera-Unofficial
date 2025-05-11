@@ -285,7 +285,7 @@ fun initHaimeviskaBlocks() {
         card.item.register()
 
         // カテゴリ
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
         card.block.enJa(EnJa(card.configuration.enName, card.configuration.jaName))

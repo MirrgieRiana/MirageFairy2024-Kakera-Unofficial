@@ -61,7 +61,7 @@ context(ModContext)
 fun initFairyQuestCardItem() {
     FairyQuestCardCard.let { card ->
         card.item.register()
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey) {
             fairyQuestRecipeRegistry.sortedEntrySet.map {
                 val itemStack = card.item().createItemStack()
                 itemStack.setFairyQuestRecipe(it.value)

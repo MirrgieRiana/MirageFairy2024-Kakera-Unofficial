@@ -96,7 +96,7 @@ context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
         card.item.register()
-        card.item().registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item().registerGeneratedModelGeneration()
         card.item().enJa(card.itemName)
         val poemList = PoemList(card.tier)
