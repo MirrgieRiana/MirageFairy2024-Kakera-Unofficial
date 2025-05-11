@@ -153,20 +153,20 @@ open class SimpleMachineRecipe(
 context(ModContext)
 fun <R : SimpleMachineRecipe> registerSimpleMachineRecipeGeneration(
     card: SimpleMachineRecipeCard<R>,
-    inputs: List<Pair<Ingredient, Int>>,
-    output: ItemStack,
+    inputs: List<Pair<() -> Ingredient, Int>>,
+    output: () -> ItemStack,
     duration: Int,
     block: SimpleMachineRecipeJsonBuilder<R>.() -> Unit = {},
 ): RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>> {
     val settings = RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = SimpleMachineRecipeJsonBuilder(card, RecipeCategory.MISC, inputs, output, duration)
-        builder.group(output.item)
+        val builder = SimpleMachineRecipeJsonBuilder(card, RecipeCategory.MISC, inputs.map { p -> Pair(p.first(), p.second) }, output(), duration)
+        builder.group(output().item)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.item.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().item.getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
