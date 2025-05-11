@@ -11,7 +11,11 @@ object RegistryEvents {
     val registrations = mutableListOf<CompletableRegistration<*, *>>()
 }
 
-class CompletableRegistration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> U) : () -> T {
+interface Registration<out T> : () -> T {
+    override operator fun invoke(): T
+}
+
+class CompletableRegistration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: () -> U) : Registration<U> {
     lateinit var value: U
     lateinit var holder: Holder<T>
     override fun invoke(): U = value
