@@ -130,7 +130,7 @@ enum class BlockMaterialCard(
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val block = run {
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) {
         val settings = AbstractBlock.Properties.of()
         settings.mapColor(mapColor)
         if (requiresTool) settings.requiresCorrectToolForDrops()
@@ -141,7 +141,7 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 context(ModContext)
@@ -150,7 +150,7 @@ fun initBlockMaterialsModule() {
     BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("semi_opaque_transparent_block")) { SemiOpaqueTransparentBlock.CODEC }
 
     BlockMaterialCard.entries.forEach { card ->
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

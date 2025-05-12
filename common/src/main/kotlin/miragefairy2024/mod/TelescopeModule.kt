@@ -74,8 +74,8 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 
@@ -88,12 +88,12 @@ fun initTelescopeModule() {
 
     TelescopeCard.let { card ->
 
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(EnJa("Minia's Telescope", "ミーニャの望遠鏡"))

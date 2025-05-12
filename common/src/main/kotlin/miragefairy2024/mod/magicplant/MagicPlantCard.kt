@@ -12,10 +12,10 @@ import net.minecraft.world.level.block.state.BlockState
 open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicPlantConfiguration<*, B>) {
     val blockIdentifier = MirageFairy2024.identifier(configuration.blockPath)
     val itemIdentifier = MirageFairy2024.identifier(configuration.itemPath)
-    val block = configuration.createBlock()
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, blockIdentifier) { configuration.createBlock() }
     private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(configuration, blockPos, blockState)
     val blockEntityType: BlockEntityType<MagicPlantBlockEntity> = BlockEntityType(::createBlockEntity, setOf(block), null)
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
     val possibleTraits = configuration.possibleTraits
 
     context(ModContext)

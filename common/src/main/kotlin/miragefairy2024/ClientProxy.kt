@@ -1,5 +1,6 @@
 package miragefairy2024
 
+import miragefairy2024.util.Registration
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -17,11 +18,11 @@ var clientProxy: ClientProxy? = null
 
 interface ClientProxy {
     fun registerItemTooltipCallback(block: (stack: ItemStack, context: Item.TooltipContext, lines: MutableList<Component>) -> Unit)
-    fun registerCutoutRenderLayer(block: Block)
-    fun registerTranslucentRenderLayer(block: Block)
+    fun registerCutoutRenderLayer(block: Registration<Block>)
+    fun registerTranslucentRenderLayer(block: Registration<Block>)
     fun getClientPlayer(): PlayerEntity?
     fun getBlockColorProvider(block: Block): BlockColorProvider?
-    fun registerBlockColorProvider(block: Block, provider: BlockColorProvider)
+    fun registerBlockColorProvider(block: Registration<Block>, provider: BlockColorProvider)
     fun getFoliageBlockColorProvider(): BlockColorProvider
     fun getItemColorProvider(item: Item): ItemColorProvider?
     fun registerItemColorProvider(item: Item, provider: ItemColorProvider)

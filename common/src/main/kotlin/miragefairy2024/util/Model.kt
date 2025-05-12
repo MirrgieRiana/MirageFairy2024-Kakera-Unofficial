@@ -138,7 +138,7 @@ context(ModContext)
 fun Registration<Item>.registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
 
 context(ModContext)
-fun Registration<Item>.registerBlockGeneratedModelGeneration(block: Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block) }
+fun Registration<Item>.registerBlockGeneratedModelGeneration(block: Registration<Block>) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block()) }
 
 context(ModContext)
-fun Block.registerModelGeneration(texturedModelFactory: TexturedModel.Provider) = registerModelGeneration({ "block/" * this.getIdentifier() }) { texturedModelFactory.get(this) }
+fun Registration<Block>.registerModelGeneration(texturedModelFactory: TexturedModel.Provider) = registerModelGeneration({ "block/" * this().getIdentifier() }) { texturedModelFactory.get(this()) }

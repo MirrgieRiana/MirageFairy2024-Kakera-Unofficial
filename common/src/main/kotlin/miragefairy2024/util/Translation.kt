@@ -19,9 +19,9 @@ fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapa
 }
 
 context(ModContext)
-fun Block.enJa(name: EnJa) {
-    en { this.descriptionId to name.en }
-    ja { this.descriptionId to name.ja }
+fun Registration<Block>.enJa(name: EnJa) {
+    en { this().descriptionId to name.en }
+    ja { this().descriptionId to name.ja }
 }
 
 context(ModContext)

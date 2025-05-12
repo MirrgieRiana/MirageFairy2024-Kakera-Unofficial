@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 
 context(ModContext)
-fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
-    it(tagProvider()).add(this)
+fun Registration<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)

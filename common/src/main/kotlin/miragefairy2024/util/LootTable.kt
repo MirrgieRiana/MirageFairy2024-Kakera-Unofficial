@@ -69,13 +69,13 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 
 context(ModContext)
-fun Block.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider, HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable { it, registries ->
-    it.add(this, initializer(it, registries).setRandomSequence(this.lootTable.location()))
+fun Registration<Block>.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider, HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable { it, registries ->
+    it.add(this(), initializer(it, registries).setRandomSequence(this().lootTable.location()))
 }
 
 context(ModContext)
-fun Block.registerDefaultLootTableGeneration() = this.registerLootTableGeneration { it, _ ->
-    it.createSingleItemTable(this)
+fun Registration<Block>.registerDefaultLootTableGeneration() = this.registerLootTableGeneration { it, _ ->
+    it.createSingleItemTable(this())
 }
 
 context(ModContext)
@@ -100,8 +100,8 @@ enum class FortuneEffect {
 }
 
 context(ModContext)
-fun Block.registerOreLootTableGeneration(drop: () -> Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
-    it.createSilkTouchDispatchTable(this, it.applyExplosionDecay(this, ItemLootPoolEntry(drop()) {
+fun Registration<Block>.registerOreLootTableGeneration(drop: () -> Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
+    it.createSilkTouchDispatchTable(this(), it.applyExplosionDecay(this(), ItemLootPoolEntry(drop()) {
         if (additionalCount != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {
             FortuneEffect.IGNORE -> Unit

@@ -5,6 +5,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
+import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -58,7 +59,7 @@ import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY))
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
     val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
 }
 
@@ -67,7 +68,7 @@ fun initPlacedItemBlock() {
     BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("placed_item")) { PlacedItemBlock.CODEC }
 
     PlacedItemCard.let { card ->
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
 
         card.block.registerSingletonBlockStateGeneration()

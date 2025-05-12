@@ -16,22 +16,22 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 
 context(ModContext)
-fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {
+fun Registration<Block>.registerCutoutRenderLayer() = ModEvents.onClientInit {
     clientProxy!!.registerCutoutRenderLayer(this)
 }
 
 context(ModContext)
-fun Block.registerTranslucentRenderLayer() = ModEvents.onClientInit {
+fun Registration<Block>.registerTranslucentRenderLayer() = ModEvents.onClientInit {
     clientProxy!!.registerTranslucentRenderLayer(this)
 }
 
 context(ModContext)
-fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
+fun Registration<Block>.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
     clientProxy!!.registerBlockColorProvider(this, provider)
 }
 
 context(ModContext)
-fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockState, world, blockPos, tintIndex ->
+fun Registration<Block>.registerFoliageColorProvider() = this.registerColorProvider { blockState, world, blockPos, tintIndex ->
     clientProxy!!.getFoliageBlockColorProvider().invoke(blockState, world, blockPos, tintIndex)
 }
 

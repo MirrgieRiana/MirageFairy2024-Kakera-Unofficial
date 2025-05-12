@@ -97,7 +97,7 @@ enum class OreCard(
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val block = run {
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) {
         val settings = when (baseStoneType) {
             BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE)
@@ -114,7 +114,7 @@ enum class OreCard(
         }
         ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
     val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
             BaseStoneType.STONE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/stone")
@@ -140,7 +140,7 @@ fun initOresModule() {
 
     OreCard.entries.forEach { card ->
 
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -167,8 +167,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block().defaultBlockState()))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block().defaultBlockState()))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

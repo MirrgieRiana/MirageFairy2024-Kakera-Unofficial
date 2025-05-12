@@ -100,9 +100,9 @@ class FairyStatueCard(
     mapColor: MapColor,
 ) {
     val identifier = MirageFairy2024.identifier(path)
-    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque()) }
     val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block, Item.Properties()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block.await(), Item.Properties()) }
 
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
@@ -158,7 +158,7 @@ fun initFairyStatue() {
     FairyStatueCard.entries.forEach { card ->
 
         // 登録
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
         card.item.register()
 
@@ -168,7 +168,7 @@ fun initFairyStatue() {
         }
 
         // レンダリング
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()

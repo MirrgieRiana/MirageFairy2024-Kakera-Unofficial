@@ -5,6 +5,7 @@ import miragefairy2024.ClientProxy
 import miragefairy2024.ItemColorProvider
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
+import miragefairy2024.util.Registration
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
@@ -37,12 +38,12 @@ class ClientProxyImpl : ClientProxy {
         }
     }
 
-    override fun registerCutoutRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.cutout())
+    override fun registerCutoutRenderLayer(block: Registration<Block>) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.cutout())
     }
 
-    override fun registerTranslucentRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.translucent())
+    override fun registerTranslucentRenderLayer(block: Registration<Block>) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.translucent())
     }
 
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
@@ -54,10 +55,10 @@ class ClientProxyImpl : ClientProxy {
         }
     }
 
-    override fun registerBlockColorProvider(block: Block, provider: BlockColorProvider) {
+    override fun registerBlockColorProvider(block: Registration<Block>, provider: BlockColorProvider) {
         ColorProviderRegistry.BLOCK.register({ blockState, world, blockPos, tintIndex ->
             provider(blockState, world, blockPos, tintIndex)
-        }, block)
+        }, block())
     }
 
     override fun getFoliageBlockColorProvider() = BlockColorProvider { _, world, blockPos, _ ->

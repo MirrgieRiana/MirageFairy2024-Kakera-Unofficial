@@ -66,8 +66,8 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque())
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block, Item.Properties()) }
+    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque()) }
+    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 context(ModContext)
@@ -78,12 +78,12 @@ fun initFairyFountainModule() {
 
     FairyStatueFountainCard.let { card ->
 
-        BuiltInRegistries.BLOCK.register(card.identifier) { card.block }
+        card.block.register()
         card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(EnJa("Fairy Statue Fountain", "妖精の像の泉"))

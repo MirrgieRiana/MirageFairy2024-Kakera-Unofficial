@@ -49,7 +49,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     open fun init() {
 
         // 登録
-        BuiltInRegistries.BLOCK.register(card.blockIdentifier) { card.block }
+        card.block.register()
         BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.blockIdentifier) { card.blockEntityType }
         card.item.register()
 
