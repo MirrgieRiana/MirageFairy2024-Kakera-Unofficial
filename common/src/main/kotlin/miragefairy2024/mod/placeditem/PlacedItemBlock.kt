@@ -60,7 +60,7 @@ import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
     val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
-    val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
+    val blockEntityType = CompletableRegistration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(::PlacedItemBlockEntity, setOf(block.await()), null) }
 }
 
 context(ModContext)
@@ -69,7 +69,7 @@ fun initPlacedItemBlock() {
 
     PlacedItemCard.let { card ->
         card.block.register()
-        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
+        card.blockEntityType.register()
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {
@@ -127,7 +127,7 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
 }
 
 // TODO 右クリックで立てたりする
-class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(PlacedItemCard.blockEntityType, pos, state), RenderingProxyBlockEntity {
+class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(PlacedItemCard.blockEntityType(), pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = Items.BARRIER.createItemStack()
     }

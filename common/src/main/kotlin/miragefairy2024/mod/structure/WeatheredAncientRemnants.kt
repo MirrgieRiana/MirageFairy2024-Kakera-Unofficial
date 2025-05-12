@@ -114,7 +114,7 @@ object WeatheredAncientRemnantsCard {
                 // これが無いと生成時に即水没してBlockEntityが作れたなったエラーログが大量に出る
                 RuleStructureProcessor(
                     StructureProcessorRule(
-                        BlockMatchRuleTest(PlacedItemCard.block),
+                        BlockMatchRuleTest(PlacedItemCard.block()),
                         BlockMatchRuleTest(Blocks.WATER),
                         Blocks.WATER.defaultBlockState(),
                     ),

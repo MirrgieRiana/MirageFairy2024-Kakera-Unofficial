@@ -129,7 +129,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
         var changed = false
         run finished@{
             blockVisitor(logs, visitOrigins = false, maxDistance = 6) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).`is`(HaimeviskaBlockCard.LEAVES.block)
+                world.getBlockState(toBlockPos).`is`(HaimeviskaBlockCard.LEAVES.block())
             }.forEach { (_, blockPos) ->
                 val blockState = world.getBlockState(blockPos)
                 if (blockState.getValue(HaimeviskaLeavesBlock.CHARGED)) {

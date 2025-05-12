@@ -50,7 +50,7 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
 
         // 登録
         card.block.register()
-        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.blockIdentifier) { card.blockEntityType }
+        card.blockEntityType.register()
         card.item.register()
 
         // 分類

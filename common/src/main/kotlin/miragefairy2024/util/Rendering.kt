@@ -57,6 +57,6 @@ fun RenderingProxy.renderItemStack(itemStack: ItemStack, dotX: Double, dotY: Dou
 }
 
 context(ModContext)
-fun <T> BlockEntityType<T>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
-    clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this)
+fun <T> Registration<BlockEntityType<T>>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
+    clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this())
 }

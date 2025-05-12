@@ -116,7 +116,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {

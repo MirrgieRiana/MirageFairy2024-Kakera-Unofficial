@@ -101,7 +101,7 @@ class FairyStatueCard(
 ) {
     val identifier = MirageFairy2024.identifier(path)
     val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque()) }
-    val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
+    val blockEntityType = CompletableRegistration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block.await()), null) }
     val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block.await(), Item.Properties()) }
 
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
@@ -159,7 +159,7 @@ fun initFairyStatue() {
 
         // 登録
         card.block.register()
-        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(card.identifier) { card.blockEntityType }
+        card.blockEntityType.register()
         card.item.register()
 
         // アイテムグループ
@@ -248,7 +248,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
 
 }
 
-class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity {
+class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType(), pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = EMPTY_ITEM_STACK
     }

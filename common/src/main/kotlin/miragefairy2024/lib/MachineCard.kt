@@ -2,7 +2,6 @@ package miragefairy2024.lib
 
 import miragefairy2024.ModContext
 import miragefairy2024.util.CompletableRegistration
-import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -74,7 +73,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
     val blockEntityAccessor = createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
+    val blockEntityType = CompletableRegistration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(blockEntityAccessor::create, setOf(block.await()), null) }
 
 
     // Item
@@ -120,7 +119,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     context(ModContext)
     open fun init() {
         block.register()
-        BuiltInRegistries.BLOCK_ENTITY_TYPE.register(identifier) { blockEntityType }
+        blockEntityType.register()
         item.register()
         BuiltInRegistries.MENU.register(identifier) { screenHandlerType }
     }

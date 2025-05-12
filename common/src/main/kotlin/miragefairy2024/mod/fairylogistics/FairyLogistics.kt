@@ -70,7 +70,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
                 return propertiesOf(
                     FairyLogisticsBlock.VERTICAL_FACING with verticalFacing,
                     HorizontalFacingBlock.FACING with direction,
-                ) with BlockStateVariant(model = "block/" * block.getIdentifier() * suffix).with(y = y)
+                ) with BlockStateVariant(model = "block/" * block().getIdentifier() * suffix).with(y = y)
             }
             listOf(
                 f(FairyLogisticsBlock.VerticalFacing.UP, Direction.NORTH, "_up", BlockStateVariantRotation.R180),

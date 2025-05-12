@@ -106,7 +106,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + speed(1.0),
-        MotifCardRecipes().R.always + Blocks.AIR,
+        MotifCardRecipes().R.always.block { Blocks.AIR },
     ),
 
     // 通常でない物質
@@ -135,7 +135,7 @@ enum class MotifCard(
             + miningSpeed(0.3)
             + StatusEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
             + StatusEffects.UNLUCK(3), // TODO MOBドロップを減らす効果
-        MotifCardRecipes().SR.end + BlockMaterialCard.LOCAL_VACUUM_DECAY.block,
+        MotifCardRecipes().SR.end.block(BlockMaterialCard.LOCAL_VACUUM_DECAY.block),
     ),
 
     // 天体
@@ -173,7 +173,7 @@ enum class MotifCard(
             + fire.defence(2.0 * 2.5) * onFire
             + ignition * health.atLeast(6.0)
             + mana(2.0) { FIRE },
-        MotifCardRecipes().R.nether + Blocks.FIRE,
+        MotifCardRecipes().R.nether.block { Blocks.FIRE },
     ),
 
     // 液体
@@ -185,7 +185,7 @@ enum class MotifCard(
             + overall.defence(0.5) * underwater
             + regeneration(1.0) * underwater
             + mana(2.0) { WATER }, // TODO ネザー以外で消火効果
-        MotifCardRecipes().R.overworld + Blocks.WATER,
+        MotifCardRecipes().R.overworld.block { Blocks.WATER },
     ),
     ETHANOL(
         "ethanol", 6, "Ethanolia", "酒精エタノーリャ", 0xDE805B, 0xDB5E2C, 0xDB5E2C, 0xD14711,
@@ -202,7 +202,7 @@ enum class MotifCard(
             + melee.attack(0.8) * onFire
             + magic.attack(0.8) * onFire
             + mana(0.4) { FIRE },
-        MotifCardRecipes().R.nether + Blocks.LAVA,
+        MotifCardRecipes().R.nether.block { Blocks.LAVA },
     ),
 
     // 土砂
@@ -222,7 +222,7 @@ enum class MotifCard(
             + melee.defence(0.4)
             + miningSpeed(0.7)
             + miningSpeed(0.4) * food { Items.GRAVEL }, // TODO 該当するアイテム
-        MotifCardRecipes().R.overworld.nether + Blocks.GRAVEL,
+        MotifCardRecipes().R.overworld.nether.block { Blocks.GRAVEL },
     ),
     MYCELIUM(
         "mycelium", 7, "Myceliumia", "菌糸精ミツェリウミャ", 0x8F7E86, 0x8B7071, 0x8B7071, 0x8B6264,
@@ -233,7 +233,7 @@ enum class MotifCard(
             + magic.attack(0.3) * light.atMost(12)
             + miningSpeed(0.3) * light.atMost(12)
             + mana(2.0) { MUSHROOM },
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_MUSHROOM) + Blocks.MYCELIUM,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_MUSHROOM).block { Blocks.MYCELIUM },
     ),
     SCULK(
         "sculk", 8, "Sculkia", "幽匿塊精スツルキャ", 0x19222C, 0x023F3D, 0x023F3D, 0x19C0C0,
@@ -243,7 +243,7 @@ enum class MotifCard(
             + overall.attack(0.4) * light.atMost(5)
             + magic.attack(0.4) * indoor
             + miningSpeed(0.4) * indoor,
-        MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK) + Blocks.SCULK,
+        MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK).block { Blocks.SCULK },
     ),
 
     // 岩石
@@ -255,7 +255,7 @@ enum class MotifCard(
             + miningSpeed(0.4)
             + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.STONE()
             + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
-        MotifCardRecipes().R.overworld + Blocks.STONE,
+        MotifCardRecipes().R.overworld.block { Blocks.STONE },
     ),
     DRIPSTONE(
         "dripstone", 5, "Dripstonia", "鍾乳石精ドリプストーニャ", 0xB19C7E, 0xA97F6F, 0xA97F6F, 0xAD7069,
@@ -264,7 +264,7 @@ enum class MotifCard(
             + shooting.attack(0.8)
             + overall.defence(0.3)
             + miningSpeed(0.2),
-        MotifCardRecipes().R.common(BiomeKeys.DRIPSTONE_CAVES) + Blocks.DRIPSTONE_BLOCK + Blocks.POINTED_DRIPSTONE,
+        MotifCardRecipes().R.common(BiomeKeys.DRIPSTONE_CAVES).block { Blocks.DRIPSTONE_BLOCK }.block { Blocks.POINTED_DRIPSTONE },
     ),
     DEEPSLATE(
         "deepslate", 5, "Deepslatia", "深層岩精デープスラーチャ", 0x74747A, 0x54545C, 0x54545C, 0x212129,
@@ -272,7 +272,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.defence(1.0)
             + miningSpeed(0.5),
-        MotifCardRecipes().R.overworld + Blocks.DEEPSLATE,
+        MotifCardRecipes().R.overworld.block { Blocks.DEEPSLATE },
     ),
     NETHERRACK(
         "netherrack", 7, "Netherrackia", "地獄岩精ネテッラッキャ", 0x9B5C5C, 0x703131, 0x703131, 0x8E1111,
@@ -282,7 +282,7 @@ enum class MotifCard(
             + fire.defence(2.0 * 0.5)
             + miningSpeed(0.2)
             + overall.attack(0.2) * onFire,
-        MotifCardRecipes().R.nether + Blocks.NETHERRACK,
+        MotifCardRecipes().R.nether.block { Blocks.NETHERRACK },
     ),
 
     // 金属
@@ -294,7 +294,7 @@ enum class MotifCard(
             + overall.defence(0.6)
             + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
             + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
-        MotifCardRecipes().R + Blocks.COPPER_BLOCK + { Items.COPPER_INGOT } + BlockTags.COPPER_ORES,
+        MotifCardRecipes().R.block { Blocks.COPPER_BLOCK }.item { Items.COPPER_INGOT } + BlockTags.COPPER_ORES,
     ),
     IRON(
         "iron", 4, "Ironia", "鉄精イローニャ", 0xA0A0A0, 0xD8D8D8, 0x727272, 0xD8AF93,
@@ -304,7 +304,7 @@ enum class MotifCard(
             + miningSpeed(0.5)
             + StatusEffects.DAMAGE_BOOST() * ToolMaterialCard.IRON()
             + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
-        MotifCardRecipes().R + Blocks.IRON_BLOCK + { Items.IRON_INGOT } + BlockTags.IRON_ORES,
+        MotifCardRecipes().R.block { Blocks.IRON_BLOCK }.item { Items.IRON_INGOT } + BlockTags.IRON_ORES,
     ),
     GOLD(
         "gold", 6, "Goldia", "金精ゴルジャ", 0xEFE642, 0xF4CC17, 0xF4CC17, 0xFDB61E,
@@ -314,7 +314,7 @@ enum class MotifCard(
             + miningSpeed(0.6)
             + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
             + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + Blocks.GOLD_BLOCK + { Items.GOLD_INGOT } + BlockTags.GOLD_ORES,
+        MotifCardRecipes().R.block { Blocks.GOLD_BLOCK }.item { Items.GOLD_INGOT } + BlockTags.GOLD_ORES,
     ),
     NETHERITE(
         "netherite", 9, "Netheritia", "地獄合金精ネテリーチャ", 0x8F788F, 0x74585B, 0x705558, 0x77302D,
@@ -324,7 +324,7 @@ enum class MotifCard(
             + luck(0.4)
             + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
             + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + Blocks.NETHERITE_BLOCK + { Items.NETHERITE_INGOT },
+        MotifCardRecipes().R.block { Blocks.NETHERITE_BLOCK }.item { Items.NETHERITE_INGOT },
     ),
 
     // 鉱物
@@ -335,7 +335,7 @@ enum class MotifCard(
             + overall.defence(0.8)
             + magic.attack(0.3)
             + luck(0.2),
-        MotifCardRecipes().R.end + Blocks.OBSIDIAN,
+        MotifCardRecipes().R.end.block { Blocks.OBSIDIAN },
     ),
     XARPITE(
         "xarpite", 5, "Xarpitia", "紅天石精シャルピーチャ", 0xD43333, 0xD45D5D, 0x8A1111, 0xAB0000,
@@ -345,7 +345,7 @@ enum class MotifCard(
             + mana(0.4)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.XARPITE()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + BlockMaterialCard.XARPITE_BLOCK.block + MaterialCard.XARPITE.item,
+        MotifCardRecipes().R.block(BlockMaterialCard.XARPITE_BLOCK.block).item(MaterialCard.XARPITE.item),
     ),
     MIRANAGITE(
         "miranagite", 5, "Miranagitia", "蒼天石精ミラナギーチャ", 0x4EC5F4, 0x4394D3, 0x004477, 0x0C4CEF,
@@ -355,7 +355,7 @@ enum class MotifCard(
             + mana(0.4)
             + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
             + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + BlockMaterialCard.MIRANAGITE_BLOCK.block + MaterialCard.MIRANAGITE.item + OreCard.MIRANAGITE_ORE.block + OreCard.DEEPSLATE_MIRANAGITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R.block(BlockMaterialCard.MIRANAGITE_BLOCK.block).item(MaterialCard.MIRANAGITE.item).block(OreCard.MIRANAGITE_ORE.block).block(OreCard.DEEPSLATE_MIRANAGITE_ORE.block), // TODO タグ化
     ),
     CHAOS_STONE(
         "chaos_stone", 8, "Chaose Stonia", "混沌石精キャオセストーニャ", 0xDB5F00, 0xB36229, 0x78421C, 0xFFBF40,
@@ -365,7 +365,7 @@ enum class MotifCard(
             + miningSpeed(0.8)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.CHAOS_STONE()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + MaterialCard.CHAOS_STONE.item,
+        MotifCardRecipes().R.item(MaterialCard.CHAOS_STONE.item),
     ),
 
     MAGNETITE(
@@ -374,7 +374,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + collection(1.0)
             + collection(3.0) * ToolMaterialCard.MAGNETITE(),
-        MotifCardRecipes().R + MaterialCard.MAGNETITE.item + OreCard.MAGNETITE_ORE.block + OreCard.DEEPSLATE_MAGNETITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R.item(MaterialCard.MAGNETITE.item).block(OreCard.MAGNETITE_ORE.block).block(OreCard.DEEPSLATE_MAGNETITE_ORE.block), // TODO タグ化
     ),
     FLUORITE(
         "fluorite", 6, "Fluoritia", "蛍石精フルオリーチャ", 0xC0FEF3, 0x28E1C7, 0xAE91E9, 0x66CDEB,
@@ -384,7 +384,7 @@ enum class MotifCard(
             + luck(0.4)
             + StatusEffects.LUCK() * ToolMaterialCard.FLUORITE()
             + StatusEffects.LUCK(2) * ToolMaterialCard.FLUORITE() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + MaterialCard.FLUORITE.item + OreCard.FLUORITE_ORE.block + OreCard.DEEPSLATE_FLUORITE_ORE.block, // TODO タグ化
+        MotifCardRecipes().R.item(MaterialCard.FLUORITE.item).block(OreCard.FLUORITE_ORE.block).block(OreCard.DEEPSLATE_FLUORITE_ORE.block), // TODO タグ化
     ),
     AMETHYST(
         "amethyst", 6, "Amethystia", "紫水晶精アメティスチャ", 0xCAA9FF, 0xA974FF, 0x9D60FF, 0xBC92FF,
@@ -393,7 +393,7 @@ enum class MotifCard(
             + magic.attack(0.5)
             + magic.defence(0.5)
             + luck(0.5),
-        MotifCardRecipes().R + Blocks.AMETHYST_BLOCK + { Items.AMETHYST_SHARD },
+        MotifCardRecipes().R.block { Blocks.AMETHYST_BLOCK }.item { Items.AMETHYST_SHARD },
     ),
     DIAMOND(
         "diamond", 7, "Diamondia", "金剛石精ディアモンジャ", 0x97FFE3, 0xD1FAF3, 0x70FFD9, 0x30DBBD,
@@ -403,7 +403,7 @@ enum class MotifCard(
             + miningSpeed(0.5)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.DIAMOND()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + Blocks.DIAMOND_BLOCK + { Items.DIAMOND } + BlockTags.DIAMOND_ORES,
+        MotifCardRecipes().R.block { Blocks.DIAMOND_BLOCK }.item { Items.DIAMOND } + BlockTags.DIAMOND_ORES,
     ),
     EMERALD(
         "emerald", 6, "Emeraldia", "翠玉精エメラルジャ", 0x9FF9B5, 0x81F99E, 0x17DD62, 0x008A25,
@@ -412,7 +412,7 @@ enum class MotifCard(
             + luck(1.0)
             + StatusEffects.LUCK() * ToolMaterialCard.EMERALD()
             + StatusEffects.LUCK(2) * ToolMaterialCard.EMERALD() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + Blocks.EMERALD_BLOCK + { Items.EMERALD } + BlockTags.EMERALD_ORES,
+        MotifCardRecipes().R.block { Blocks.EMERALD_BLOCK }.item { Items.EMERALD } + BlockTags.EMERALD_ORES,
     ),
 
     // 動物
@@ -547,7 +547,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + collection(0.5)
             + magic.attack(0.5),
-        MotifCardRecipes().R + { Items.ENDER_EYE },
+        MotifCardRecipes().R.item { Items.ENDER_EYE },
     ),
     PIGLIN_BRUTE(
         "piglin_brute", 7, "Pigline Brutia", "豚人畜生精ピグリーネブルーチャ", 0xEB9771, 0x403D11, 0x403D11, 0xE0B000,
@@ -590,7 +590,7 @@ enum class MotifCard(
             + overall.attack(1.0) * food { Items.ROTTEN_FLESH }
             + regeneration(0.4) * food.atMost(6)
             + hunger(1.0) * food.atLeast(7),
-        MotifCardRecipes().R + { Items.ROTTEN_FLESH },
+        MotifCardRecipes().R.item { Items.ROTTEN_FLESH },
     ),
     SKELETON(
         "skeleton", 2, "Skeletonia", "骸骨精スケレトーニャ", 0xCACACA, 0xCFCFCF, 0xCFCFCF, 0x494949,
@@ -614,7 +614,7 @@ enum class MotifCard(
         ParentMotifs() + { WITHER_SKELETON },
         PassiveSkillBuilder()
             + magic.attack(1.2) * food.atMost(6),
-        MotifCardRecipes().R + Blocks.WITHER_SKELETON_SKULL,
+        MotifCardRecipes().R.block { Blocks.WITHER_SKELETON_SKULL },
     ),
     WITHER(
         "wither", 8, "Witheria", "枯精ウィテーリャ", 0x181818, 0x3C3C3C, 0x141414, 0x557272,
@@ -636,7 +636,7 @@ enum class MotifCard(
             + magic.attack(0.4)
             + StatusEffects.DIG_SPEED() * ToolMaterialCard.NETHER_STAR()
             + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().R + { Items.NETHER_STAR },
+        MotifCardRecipes().R.item { Items.NETHER_STAR },
     ),
 
     // 魔法生物
@@ -682,7 +682,7 @@ enum class MotifCard(
             + StatusEffects.HEALTH_BOOST(1) * food { Items.RED_MUSHROOM }
             + StatusEffects.HEALTH_BOOST(2) * food { Items.RED_MUSHROOM } * fairyLevel.atLeast(10.0)
             + magic.attack(0.6) * food.atLeast(12),
-        MotifCardRecipes().R.overworld.nether + Blocks.RED_MUSHROOM + { Items.RED_MUSHROOM },
+        MotifCardRecipes().R.overworld.nether.block { Blocks.RED_MUSHROOM }.item { Items.RED_MUSHROOM },
     ),
     BROWN_MUSHROOM(
         "brown_mushroom", 3, "Browne Mushroomia", "茶茸精ブロウネムシュローミャ", 0xDEB6A2, 0xF0AD8B, 0xC28C70, 0xDE9571,
@@ -690,7 +690,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + regeneration(1.0) * food { Items.BROWN_MUSHROOM }
             + magic.defence(0.6) * food.atLeast(12),
-        MotifCardRecipes().R.overworld.nether + Blocks.BROWN_MUSHROOM + { Items.BROWN_MUSHROOM },
+        MotifCardRecipes().R.overworld.nether.block { Blocks.BROWN_MUSHROOM }.item { Items.BROWN_MUSHROOM },
     ),
 
     // 植物
@@ -700,7 +700,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + miningSpeed(0.4) * outdoor
             + miningSpeed(0.8) * food { Items.WHEAT },
-        MotifCardRecipes().R.overworld + Blocks.WHEAT + { Items.WHEAT_SEEDS } + { Items.WHEAT },
+        MotifCardRecipes().R.overworld.block { Blocks.WHEAT }.item { Items.WHEAT_SEEDS }.item { Items.WHEAT },
     ),
     CARROT(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
@@ -708,7 +708,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.GOLDEN_CARROT }
             + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.CARROT } * fairyLevel.atLeast(10.0),
-        MotifCardRecipes().R.overworld + Blocks.CARROTS + { Items.CARROT },
+        MotifCardRecipes().R.overworld.block { Blocks.CARROTS }.item { Items.CARROT },
     ),
     POTATO(
         "potato", 4, "Potatia", "芋精ポターチャ", 0xEAC278, 0xE7B456, 0xE7B456, 0x248420,
@@ -716,7 +716,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.4) * outdoor
             + melee.attack(0.8) * food { Items.POTATO },
-        MotifCardRecipes().R.overworld + Blocks.POTATOES + { Items.POTATO },
+        MotifCardRecipes().R.overworld.block { Blocks.POTATOES }.item { Items.POTATO },
     ),
     POISONOUS_POTATO(
         "poisonous_potato", 5, "Poisonouse Potatia", "毒芋精ポイソノウセポターチャ", 0xCFE661, 0xE7B456, 0xE7B456, 0x61B835,
@@ -724,7 +724,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.attack(0.2) * outdoor
             + overall.attack(0.4) * food { Items.POISONOUS_POTATO },
-        MotifCardRecipes().R.overworld + Blocks.POTATOES + { Items.POISONOUS_POTATO },
+        MotifCardRecipes().R.overworld.block { Blocks.POTATOES }.item { Items.POISONOUS_POTATO },
     ),
     BEETROOT(
         "beetroot", 4, "Beetrootia", "火焔菜精ベートローチャ", 0xC1727C, 0xA74D55, 0x96383D, 0x01A900,
@@ -732,7 +732,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + fire.attack(0.4) * outdoor // TODO 火属性攻撃
             + fire.attack(0.8) * food { Items.BEETROOT },
-        MotifCardRecipes().R.overworld + Blocks.BEETROOTS + { Items.BEETROOT },
+        MotifCardRecipes().R.overworld.block { Blocks.BEETROOTS }.item { Items.BEETROOT },
     ),
     PUMPKIN(
         "pumpkin", 4, "Pumpkinia", "南瓜精プンプキーニャ", 0x792D0F, 0xE48A40, 0xE48A40, 0xDCBE00,
@@ -740,7 +740,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.4) * outdoor
             + magic.attack(0.8) * food { Items.PUMPKIN },
-        MotifCardRecipes().R.overworld + Blocks.PUMPKIN + Blocks.CARVED_PUMPKIN,
+        MotifCardRecipes().R.overworld.block { Blocks.PUMPKIN }.block { Blocks.CARVED_PUMPKIN },
     ),
     MELON(
         "melon", 6, "Melonia", "西瓜精メローニャ", 0xFF5440, 0xA6EE63, 0x195612, 0x01A900,
@@ -748,7 +748,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.4) * outdoor
             + luck(0.8) * food { Items.MELON_SLICE },
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_JUNGLE) + Blocks.MELON + { Items.MELON_SLICE },
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_JUNGLE).block { Blocks.MELON }.item { Items.MELON_SLICE },
     ),
     APPLE(
         "apple", 4, "Applia", "林檎精アップーリャ", 0xFF755D, 0xFF564E, 0xFF0000, 0x01A900,
@@ -756,7 +756,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + experience(0.4) * level.atMost(29) * outdoor
             + experience(0.8) * level.atMost(29) * food { Items.APPLE },
-        MotifCardRecipes().R.overworld + { Items.APPLE },
+        MotifCardRecipes().R.overworld.item { Items.APPLE },
     ),
     SWEET_BERRY(
         "sweet_berry", 6, "Sweete Berria", "甘液果精スウェーテベッリャ", 0xB81D37, 0x4A070A, 0x4A070A, 0x126341,
@@ -765,7 +765,7 @@ enum class MotifCard(
             + shooting.attack(0.4) * outdoor
             + shooting.attack(0.8) * food { Items.SWEET_BERRIES }
             + spine.defence(2.0),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + { Items.SWEET_BERRIES } + Blocks.SWEET_BERRY_BUSH,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA).item { Items.SWEET_BERRIES }.block { Blocks.SWEET_BERRY_BUSH },
     ),
     GLOW_BERRY(
         "glow_berry", 6, "Glowe Berria", "蛍光液果精グローウェベッリャ", 0xFFB73A, 0x8F650C, 0x8F650C, 0x00841A,
@@ -773,7 +773,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.4) * indoor
             + magic.attack(0.8) * food { Items.GLOW_BERRIES },
-        MotifCardRecipes().R.common(BiomeKeys.LUSH_CAVES) + { Items.GLOW_BERRIES } + Blocks.CAVE_VINES + Blocks.CAVE_VINES_PLANT,
+        MotifCardRecipes().R.common(BiomeKeys.LUSH_CAVES).item { Items.GLOW_BERRIES }.block { Blocks.CAVE_VINES }.block { Blocks.CAVE_VINES_PLANT },
     ),
     MIRAGE(
         "mirage", 5, "Miragia", "妖精ミラージャ", 0x6DE3BE, 0x43FAFA, 0x43FAFA, 0x00F5F5,
@@ -781,7 +781,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + mana(1.0)
             + mending(1.0) * ToolMaterialCard.MIRAGE(),
-        MotifCardRecipes().R.overworld + MirageFlowerCard.block,
+        MotifCardRecipes().R.overworld.block(MirageFlowerCard.block),
     ),
     PHANTOM_FLOWER(
         "phantom_flower", 7, "Phantomia", "幻花精ファントーミャ", 0xB78EF5, 0xF2C4FF, 0xF2C4FF, 0x70B7D4,
@@ -790,7 +790,7 @@ enum class MotifCard(
             + regeneration(0.4) * outdoor
             + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item)
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP(),
-        MotifCardRecipes().R.common(BiomeCards.FAIRY_FOREST.registryKey) + PhantomFlowerCard.block,
+        MotifCardRecipes().R.common(BiomeCards.FAIRY_FOREST.registryKey).block(PhantomFlowerCard.block),
     ),
     PHANTOM_DROP(
         "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0xF091FF, 0xD834E0, 0x9E34E0, 0x5C09B0,
@@ -801,7 +801,7 @@ enum class MotifCard(
             + mending(1.0) * ToolMaterialCard.PHANTOM_DROP()
             + mending(1.0) * ToolMaterialCard.LUMINITE()
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
-        MotifCardRecipes().R + MaterialCard.PHANTOM_DROP.item,
+        MotifCardRecipes().R.item(MaterialCard.PHANTOM_DROP.item),
     ),
     VELOPEDA(
         "velopeda", 6, "Velopedia", "呪草精ヴェロページャ", 0x8BD100, 0xD52D2D, 0xB51414, 0x840707,
@@ -811,7 +811,7 @@ enum class MotifCard(
             + regeneration(0.2) * outdoor
             + magic.attack(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item)
             + regeneration(0.4) * food(MaterialCard.VEROPEDA_BERRIES.item),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DRY).nether + VeropedaCard.block,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DRY).nether.block(VeropedaCard.block),
     ),
     LUMINITE(
         "luminite", 7, "Luminitia", "輝石精ルミニーチャ", 0x9BE8E8, 0x75C7C7, 0x75C7C7, 0x5EE6E6,
@@ -820,14 +820,14 @@ enum class MotifCard(
             + overall.defence(1.0)
             + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.LUMINITE()
             + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
-        MotifCardRecipes().R + MaterialCard.LUMINITE.item,
+        MotifCardRecipes().R.item(MaterialCard.LUMINITE.item),
     ),
     GLOW_LICHEN(
         "glow_lichen", 5, "Glowe Lichenia", "光苔精グローウェリケーニャ", 0x639386, 0x639386, 0x639386, 0xAFB18B,
         ParentMotifs(),
         PassiveSkillBuilder()
             + magic.attack(1.2) * indoor, // TODO 発光パッシブ
-        MotifCardRecipes().R.overworld + Blocks.GLOW_LICHEN,
+        MotifCardRecipes().R.overworld.block { Blocks.GLOW_LICHEN },
     ),
     CACTUS(
         "cactus", 3, "Cactusia", "仙人掌精ツァツトゥーシャ", 0x008200, 0xB0FFAC, 0x00E100, 0x010000,
@@ -836,14 +836,14 @@ enum class MotifCard(
             + shooting.attack(1.2) * outdoor
             + regeneration(0.1) * outdoor
             + spine.defence(3.0),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT) + Blocks.CACTUS,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT).block { Blocks.CACTUS },
     ),
     DEAD_BUSH(
         "dead_bush", 3, "Deade Bushia", "枯木精デアデブーシャ", 0xB38247, 0xA17743, 0xA17743, 0x6E583F,
         ParentMotifs() + { WOOD },
         PassiveSkillBuilder()
             + shooting.attack(1.4) * outdoor,
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT).common(ConventionalBiomeTags.IS_BADLANDS) + Blocks.DEAD_BUSH,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_DESERT).common(ConventionalBiomeTags.IS_BADLANDS).block { Blocks.DEAD_BUSH },
     ),
 
     // 樹木
@@ -863,7 +863,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + health(0.6),
-        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA) + Blocks.SPRUCE_SAPLING + Blocks.SPRUCE_LOG,
+        MotifCardRecipes().R.common(ConventionalBiomeTags.IS_TAIGA).block { Blocks.SPRUCE_SAPLING }.block { Blocks.SPRUCE_LOG },
     ),
     DARK_OAK(
         "dark_oak", 5, "Darke Oakia", "濃樫精ダルケオアキャ", 0x4A361A, 0x478F1B, 0x2A5410, 0x326313,
@@ -871,7 +871,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.4)
             + health(0.6),
-        MotifCardRecipes().R.common(BiomeKeys.DARK_FOREST) + Blocks.DARK_OAK_SAPLING + Blocks.DARK_OAK_LOG,
+        MotifCardRecipes().R.common(BiomeKeys.DARK_FOREST).block { Blocks.DARK_OAK_SAPLING }.block { Blocks.DARK_OAK_LOG },
     ),
     HAIMEVISKA(
         "haimeviska", 3, "Haimeviskia", "精樹精ハイメヴィスキャ", 0x8A4C16, 0xB85CC4, 0x3E5918, 0x3C7A4D,
@@ -881,7 +881,7 @@ enum class MotifCard(
             + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
             + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item)
             + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
-        MotifCardRecipes().R.overworld + HaimeviskaBlockCard.SAPLING.block + HaimeviskaBlockCard.LOG.block,
+        MotifCardRecipes().R.overworld.block(HaimeviskaBlockCard.SAPLING.block).block(HaimeviskaBlockCard.LOG.block),
     ),
 
     // 植物モブ
@@ -909,7 +909,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + speed(0.4)
             + speed(0.8) * food { Items.SUGAR },
-        MotifCardRecipes().R + { Items.SUGAR },
+        MotifCardRecipes().R.item { Items.SUGAR },
     ),
     GOLDEN_APPLE(
         "golden_apple", 7, "Goldene Applia", "金林檎精ゴルデーネアップーリャ", 0xFF755D, 0xDEDE00, 0xDEDE00, 0x01A900,
@@ -919,7 +919,7 @@ enum class MotifCard(
             + regeneration(0.2) * food.atLeast(12)
             + luck(0.6) * food { Items.GOLDEN_APPLE }
             + regeneration(0.6) * food { Items.GOLDEN_APPLE },
-        MotifCardRecipes().R + { Items.GOLDEN_APPLE },
+        MotifCardRecipes().R.item { Items.GOLDEN_APPLE },
     ),
     ENCHANTED_GOLDEN_APPLE(
         "enchanted_golden_apple", 9, "Enchantede Goldene Applia", "付魔金林檎精エンキャンテーデゴルデーネアップーリャ", 0xFF755D, 0xDEDE00, 0xDEDE00, 0xDE4FD7,
@@ -931,7 +931,7 @@ enum class MotifCard(
             + health(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
             + overall.defence(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
             + StatusEffects.FIRE_RESISTANCE() * food { Items.ENCHANTED_GOLDEN_APPLE },
-        MotifCardRecipes().R + { Items.ENCHANTED_GOLDEN_APPLE },
+        MotifCardRecipes().R.item { Items.ENCHANTED_GOLDEN_APPLE },
     ),
     COOKIE(
         "cookie", 5, "Cookia", "麭精ツォーキャ", 0xCC850C, 0xE9994F, 0xDA843C, 0x882500,
@@ -939,14 +939,14 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + miningSpeed(0.4) * food.atLeast(12)
             + miningSpeed(0.8) * food { Items.COOKIE },
-        MotifCardRecipes().R + { Items.COOKIE },
+        MotifCardRecipes().R.item { Items.COOKIE },
     ),
     CAKE(
         "cake", 4, "Cakia", "蛋麭精ツァーキャ", 0xCC850C, 0xF5F0DC, 0xD3D0BF, 0xDE3334,
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
             + mana(3.0) { FOOD },
-        MotifCardRecipes().R + Blocks.CAKE + { Items.CAKE } + BlockTags.CANDLE_CAKES,
+        MotifCardRecipes().R.block { Blocks.CAKE }.item { Items.CAKE } + BlockTags.CANDLE_CAKES,
     ),
 
     // 道具
@@ -991,7 +991,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.attack(1.2) * onFire
             + ignition * StatusEffects.FIRE_RESISTANCE,
-        MotifCardRecipes().R + { Items.FLINT_AND_STEEL },
+        MotifCardRecipes().R.item { Items.FLINT_AND_STEEL },
     ),
     SHIELD(
         "shield", 3, "Shieldia", "盾精シエルジャ", 0xFFFFFF, 0xFFC48E, 0x5A5A8E, 0xFFFFFF,
@@ -999,14 +999,14 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.defence(0.3)
             + shooting.defence(0.8),
-        MotifCardRecipes().R + { Items.SHIELD },
+        MotifCardRecipes().R.item { Items.SHIELD },
     ),
     ARROW(
         "arrow", 3, "Arrowia", "矢精アッローウャ", 0xAD771F, 0xF2F2F2, 0xF2F2F2, 0x424242,
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.2),
-        MotifCardRecipes().R + { Items.ARROW },
+        MotifCardRecipes().R.item { Items.ARROW },
     ),
 
     // 建材
@@ -1015,7 +1015,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + melee.defence(1.5),
-        MotifCardRecipes().R + Blocks.IRON_BARS,
+        MotifCardRecipes().R.block { Blocks.IRON_BARS },
     ),
     GLASS(
         "glass", 3, "Glassia", "硝子精グラッシャ", 0xFFFFFF, 0xEFF5FF, 0xE8EDF5, 0xADE0E9,
@@ -1025,7 +1025,7 @@ enum class MotifCard(
             + StatusEffects.INVISIBILITY() * fairyLevel.atLeast(12.0)
             + StatusEffects.GLOWING() * health.atMost(1.0) * notInNether
             + StatusEffects.GLOWING() * fairyLevel.atLeast(12.0),
-        MotifCardRecipes().R + Blocks.GLASS,
+        MotifCardRecipes().R.block { Blocks.GLASS },
     ),
     MAGENTA_GLAZED_TERRACOTTA(
         "magenta_glazed_terracotta", 3, "Magente Glazede Terracottia", "赤紫釉陶精マゲンテグラゼデテッラツォッチャ", 0xFFFFFF, 0xF4B5CB, 0xCB58C2, 0x9D2D95,
@@ -1034,7 +1034,7 @@ enum class MotifCard(
             + shooting.attack(0.4)
             + shooting.defence(0.4)
             + luck(0.4),
-        MotifCardRecipes().R + Blocks.MAGENTA_GLAZED_TERRACOTTA,
+        MotifCardRecipes().R.block { Blocks.MAGENTA_GLAZED_TERRACOTTA },
     ),
     PURPUR(
         "purpur", 8, "Purpuria", "紫珀精プルプーリャ", 0xCBA8CB, 0xC08AC0, 0xC08AC0, 0xBC68BB,
@@ -1043,7 +1043,7 @@ enum class MotifCard(
             + collection(0.5)
             + magic.attack(0.2)
             + overall.defence(0.5),
-        MotifCardRecipes().R + Blocks.PURPUR_BLOCK,
+        MotifCardRecipes().R.block { Blocks.PURPUR_BLOCK },
     ),
 
     // ユーティリティ
@@ -1063,14 +1063,14 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(3.0) * overworld * thundering * outdoor
             + magic.defence(3.0) * overworld * thundering * outdoor,
-        MotifCardRecipes().R + Blocks.LIGHTNING_ROD,
+        MotifCardRecipes().R.block { Blocks.LIGHTNING_ROD },
     ),
     CHEST(
         "chest", 2, "Chestia", "箱精ケスチャ", 0xD6982D, 0xB3822E, 0xB3822E, 0x42392C,
         ParentMotifs(),
         PassiveSkillBuilder()
             + collection(1.5) * indoor,
-        MotifCardRecipes().R + Blocks.CHEST,
+        MotifCardRecipes().R.block { Blocks.CHEST },
     ),
     HOPPER(
         "hopper", 4, "Hopperia", "漏斗精ホッペーリャ", 0xFFFFFF, 0x797979, 0x646464, 0x5A5A5A,
@@ -1078,7 +1078,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + collection(0.6)
             + collection(0.6) * indoor,
-        MotifCardRecipes().R + Blocks.HOPPER,
+        MotifCardRecipes().R.block { Blocks.HOPPER },
     ),
     ANVIL(
         "anvil", 4, "Anvilia", "金床精アンヴィーリャ", 0xFFFFFF, 0xA9A9A9, 0x909090, 0xA86F18,
@@ -1086,7 +1086,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.8) * indoor
             + melee.attack(0.4),
-        MotifCardRecipes().R + Blocks.ANVIL,
+        MotifCardRecipes().R.block { Blocks.ANVIL },
     ),
     ENCHANTING_TABLE(
         "enchanting_table", 6, "Enchantinge Tablia", "付魔台精エンキャンティンゲターブリャ", 0x472F65, 0xCE2828, 0xCE2828, 0x7BFFDD,
@@ -1094,7 +1094,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + experience(0.6) * level.atMost(29) * indoor
             + magic.attack(0.6) * indoor,
-        MotifCardRecipes().R + Blocks.ENCHANTING_TABLE,
+        MotifCardRecipes().R.block { Blocks.ENCHANTING_TABLE },
     ),
     ENCHANT(
         "enchant", 6, "Enchantia", "付魔精エンキャンチャ", 0xD0C2FF, 0xF055FF, 0xC381E3, 0xBE00FF,
@@ -1103,7 +1103,7 @@ enum class MotifCard(
             + luck(0.2)
             + overall.attack(0.2)
             + magic.attack(0.6),
-        MotifCardRecipes().R + Blocks.ENCHANTING_TABLE + { Items.ENCHANTED_BOOK },
+        MotifCardRecipes().R.block { Blocks.ENCHANTING_TABLE }.item { Items.ENCHANTED_BOOK },
     ),
     BREWING_STAND(
         "brewing_stand", 7, "Brewinge Standia", "醸造台精ブレウィンゲスタンジャ", 0xFFFFFF, 0xAE5B5B, 0x7E7E7E, 0xFFDF55,
@@ -1114,7 +1114,7 @@ enum class MotifCard(
             + regeneration(0.2) * indoor
             + overall.attack(0.2) * indoor
             + overall.defence(0.2) * indoor,
-        MotifCardRecipes().R + Blocks.BREWING_STAND,
+        MotifCardRecipes().R.block { Blocks.BREWING_STAND },
     ),
     BEACON(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
@@ -1131,7 +1131,7 @@ enum class MotifCard(
             + StatusEffects.JUMP(2) * skyVisible * fairyLevel.atLeast(15.0)
             + StatusEffects.DAMAGE_BOOST(2) * skyVisible * fairyLevel.atLeast(16.0)
             + StatusEffects.DIG_SPEED(2) * skyVisible * fairyLevel.atLeast(17.0),
-        MotifCardRecipes().R + Blocks.BEACON,
+        MotifCardRecipes().R.block { Blocks.BEACON },
     ),
 
     // 回路
@@ -1141,7 +1141,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + miningSpeed(0.3)
             + miningSpeed(0.8) * indoor,
-        MotifCardRecipes().R + Blocks.TNT,
+        MotifCardRecipes().R.block { Blocks.TNT },
     ),
 
     // 場所
@@ -1211,7 +1211,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + StatusEffects.SLOW_FALLING()
             + overall.attack(0.8) * fairyLevel.atLeast(16.0),
-        MotifCardRecipes().SR + { Items.APPLE },
+        MotifCardRecipes().SR.item { Items.APPLE },
     ),
     ANTI_ENTROPY(
         "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
@@ -1276,8 +1276,8 @@ private val MotifCardRecipes.overworld get() = this.common(ConventionalBiomeTags
 private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IS_NETHER)
 private val MotifCardRecipes.end get() = this.common(ConventionalBiomeTags.IS_END)
 
-private operator fun MotifCardRecipes.plus(item: () -> Item) = this.onInit { ModEvents.onInitialize { FairyDreamRecipes.ITEM.register(item(), it) } }
-private operator fun MotifCardRecipes.plus(block: Block) = this.onInit { FairyDreamRecipes.BLOCK.register(block, it) }
+private fun MotifCardRecipes.item(item: () -> Item) = this.onInit { ModEvents.onInitialize { FairyDreamRecipes.ITEM.register(item(), it) } }
+private fun MotifCardRecipes.block(block: () -> Block) = this.onInit { FairyDreamRecipes.BLOCK.register(block(), it) }
 private operator fun MotifCardRecipes.plus(entityType: EntityType<*>) = this.onInit { FairyDreamRecipes.ENTITY_TYPE.register(entityType, it) }
 
 @JvmName("plusItemTag")

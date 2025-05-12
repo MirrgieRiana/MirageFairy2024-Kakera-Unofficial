@@ -58,7 +58,7 @@ fun initPlacedItemModule() {
 
             // 成功
 
-            world.setBlock(blockPos, PlacedItemCard.block.defaultBlockState(), Block.UPDATE_CLIENTS)
+            world.setBlock(blockPos, PlacedItemCard.block().defaultBlockState(), Block.UPDATE_CLIENTS)
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの配置に失敗した
             blockEntity.itemStack = itemStack
             blockEntity.itemX = packet.itemX
@@ -92,7 +92,7 @@ fun initPlacedItemModule() {
 
             val world = player.level()
 
-            if (!world.getBlockState(blockPos).`is`(PlacedItemCard.block)) return@registerServerPacketReceiver // ブロックが置かれていない
+            if (!world.getBlockState(blockPos).`is`(PlacedItemCard.block())) return@registerServerPacketReceiver // ブロックが置かれていない
             val blockEntity = world.getBlockEntity(blockPos) as? PlacedItemBlockEntity ?: return@registerServerPacketReceiver // ブロックの取得に失敗した
             val itemStack = blockEntity.itemStack
 

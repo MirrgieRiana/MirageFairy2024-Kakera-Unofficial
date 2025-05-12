@@ -33,7 +33,7 @@ fun initPlacedItemClientModule() {
             if (hitResult.type != HitResult.Type.BLOCK) return@run // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@run // ブロックをターゲットにしていない
 
-            if (!player.level().getBlockState(hitResult.blockPos).`is`(PlacedItemCard.block)) {
+            if (!player.level().getBlockState(hitResult.blockPos).`is`(PlacedItemCard.block())) {
                 val blockPos = if (player.level().getBlockState(hitResult.blockPos).canBeReplaced()) hitResult.blockPos else hitResult.blockPos.relative(hitResult.direction)
                 val rotation = when (hitResult.direction) {
                     Direction.DOWN -> Pair(MathHelper.HALF_PI.toDouble(), -(player.yRot.toDouble() + 180.0) / 180.0 * MathHelper.PI)

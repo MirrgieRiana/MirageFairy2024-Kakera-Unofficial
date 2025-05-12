@@ -97,7 +97,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     context(ModContext)
     override fun registerBlockStateGeneration() {
         block.registerVariantsBlockStateGeneration {
-            normal("block/" * block.getIdentifier())
+            normal("block/" * block().getIdentifier())
                 .withHorizontalRotation(HorizontalFacingBlock.FACING)
                 .with(AuraReflectorFurnaceBlock.LIT) { model, entry -> if (entry.value) model * "_lit" else model }
         }

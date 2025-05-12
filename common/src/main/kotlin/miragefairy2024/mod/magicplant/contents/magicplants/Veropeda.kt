@@ -117,13 +117,13 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
 
             // 小さな塊
             registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 

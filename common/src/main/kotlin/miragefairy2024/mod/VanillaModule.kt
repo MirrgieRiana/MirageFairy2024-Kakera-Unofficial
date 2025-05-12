@@ -23,22 +23,22 @@ enum class BlockTagCard(path: String) {
 context(ModContext)
 fun initVanillaModule() {
 
-    Blocks.WHITE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.ORANGE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.MAGENTA_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIGHT_BLUE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.YELLOW_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIME_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.PINK_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.GRAY_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.LIGHT_GRAY_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.CYAN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.PURPLE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BLUE_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BROWN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.GREEN_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.RED_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
-    Blocks.BLACK_CONCRETE.registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.WHITE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.ORANGE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.MAGENTA_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.LIGHT_BLUE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.YELLOW_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.LIME_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.PINK_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.GRAY_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.LIGHT_GRAY_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.CYAN_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.PURPLE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.BLUE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.BROWN_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.GREEN_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.RED_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
+    ({ Blocks.BLACK_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
     registerClientDebugItem("dump_biome_tags", Items.STRING, 0xFF00FF00.toInt()) { world, player, _, _ ->
