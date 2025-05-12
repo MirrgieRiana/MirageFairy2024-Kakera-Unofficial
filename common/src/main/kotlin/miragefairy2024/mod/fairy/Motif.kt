@@ -1277,7 +1277,7 @@ private val MotifCardRecipes.nether get() = this.common(ConventionalBiomeTags.IS
 private val MotifCardRecipes.end get() = this.common(ConventionalBiomeTags.IS_END)
 
 private fun MotifCardRecipes.item(item: () -> Item) = this.onInit { ModEvents.onInitialize { FairyDreamRecipes.ITEM.register(item(), it) } }
-private fun MotifCardRecipes.block(block: () -> Block) = this.onInit { FairyDreamRecipes.BLOCK.register(block(), it) }
+private fun MotifCardRecipes.block(block: () -> Block) = this.onInit { ModEvents.onInitialize { FairyDreamRecipes.BLOCK.register(block(), it) } }
 private operator fun MotifCardRecipes.plus(entityType: EntityType<*>) = this.onInit { FairyDreamRecipes.ENTITY_TYPE.register(entityType, it) }
 
 @JvmName("plusItemTag")
