@@ -52,6 +52,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(

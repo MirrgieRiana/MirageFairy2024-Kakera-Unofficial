@@ -45,6 +45,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
