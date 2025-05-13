@@ -28,17 +28,16 @@ import net.minecraft.core.Registry
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.loading.FMLEnvironment
 import net.neoforged.neoforge.registries.RegisterEvent
 
 @Mod(MirageFairy2024.MOD_ID)
 class MirageFairy2024NeoForgeMod {
     init {
+        Modules.init()
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            Modules.init()
-            clientProxy = ClientProxyImpl()
-            ModEvents.onClientInit.fire { it() }
-
             initFairyQuestClientModule()
             initFairyClientModule()
             initExtraPlayerDataClientModule()
@@ -52,10 +51,9 @@ class MirageFairy2024NeoForgeMod {
             initBagClientModule()
             initMachineClientModule()
             initSoundEventClientModule()
-        }
 
-        Modules.init()
-        ModEvents.onInitialize.fire { it() }
+            clientProxy = ClientProxyImpl()
+        }
     }
 
     @SubscribeEvent
@@ -76,5 +74,15 @@ class MirageFairy2024NeoForgeMod {
             }
             f(registration)
         }
+    }
+
+    @SubscribeEvent
+    fun register(event: FMLCommonSetupEvent) {
+        ModEvents.onInitialize.fire { it() }
+    }
+
+    @SubscribeEvent
+    fun register(event: FMLClientSetupEvent) {
+        ModEvents.onClientInit.fire { it() }
     }
 }
