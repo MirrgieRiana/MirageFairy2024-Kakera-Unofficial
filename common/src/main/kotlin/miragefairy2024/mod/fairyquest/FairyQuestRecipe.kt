@@ -10,6 +10,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.Chance
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -287,7 +288,7 @@ fun initFairyQuestRecipe() {
 
     BuiltInRegistries.LOOT_FUNCTION_TYPE.register(MirageFairy2024.identifier("set_fairy_quest_recipe")) { SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE }
 
-    BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("fairy_quest_card")) { FAIRY_QUEST_CARD_FEATURE }
+    Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card")) { FAIRY_QUEST_CARD_FEATURE }.register()
 
 }
 

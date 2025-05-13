@@ -129,7 +129,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
         run {
 
             // Fairy Ring Feature
-            BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }
+            Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register()
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {

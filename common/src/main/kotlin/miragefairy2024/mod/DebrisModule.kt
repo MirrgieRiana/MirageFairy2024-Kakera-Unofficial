@@ -6,6 +6,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.PlacedItemFeature
 import miragefairy2024.util.BiomeSelectorScope
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.get
@@ -62,7 +63,7 @@ enum class DebrisCard(
 context(ModContext)
 fun initDebrisModule() {
 
-    BuiltInRegistries.FEATURE.register(MirageFairy2024.identifier("debris")) { DEBRIS_FEATURE }
+    Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("debris")) { DEBRIS_FEATURE }.register()
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {
