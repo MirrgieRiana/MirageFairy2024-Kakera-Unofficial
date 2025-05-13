@@ -19,7 +19,7 @@ import net.minecraft.data.models.blockstates.BlockStateGenerator as BlockStateSu
 // registerBlockStateGeneration
 
 context(ModContext)
-fun Registration<Block>.registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
+fun (() -> Block).registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockStateModel {
     it.blockStateOutput.accept(object : BlockStateSupplier {
         override fun get() = creator()
         override fun getBlock() = this@registerBlockStateGeneration()
@@ -27,7 +27,7 @@ fun Registration<Block>.registerBlockStateGeneration(creator: () -> JsonElement)
 }
 
 context(ModContext)
-fun Registration<Block>.registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<BlockStateVariantEntry>) = this.registerBlockStateGeneration {
+fun (() -> Block).registerVariantsBlockStateGeneration(entriesGetter: VariantsBlockStateGenerationRegistrationScope.() -> List<BlockStateVariantEntry>) = this.registerBlockStateGeneration {
     jsonObject(
         "variants" to jsonObject(
             *entriesGetter(VariantsBlockStateGenerationRegistrationScope)
@@ -46,7 +46,7 @@ fun Registration<Block>.registerVariantsBlockStateGeneration(entriesGetter: Vari
 }
 
 context(ModContext)
-fun Registration<Block>.registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
+fun (() -> Block).registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockStateModel {
     it.blockStateOutput.accept(BlockStateModelGenerator.createSimpleBlock(this(), "block/" * this().getIdentifier()))
 }
 

@@ -20,21 +20,21 @@ fun ja(getter: () -> Pair<String, String>) = DataGenerationEvents.onGenerateJapa
 
 context(ModContext)
 @JvmName("enJaBlock")
-fun Registration<Block>.enJa(name: EnJa) {
+fun (() -> Block).enJa(name: EnJa) {
     en { this().descriptionId to name.en }
     ja { this().descriptionId to name.ja }
 }
 
 context(ModContext)
 @JvmName("enJaItem")
-fun Registration<Item>.enJa(name: EnJa) {
+fun (() -> Item).enJa(name: EnJa) {
     en { this().descriptionId to name.en }
     ja { this().descriptionId to name.ja }
 }
 
 context(ModContext)
 @JvmName("enJaEntityType")
-fun Registration<EntityType<*>>.enJa(name: EnJa) {
+fun (() -> EntityType<*>).enJa(name: EnJa) {
     en { this().descriptionId to name.en }
     ja { this().descriptionId to name.ja }
 }

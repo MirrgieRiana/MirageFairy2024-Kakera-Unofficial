@@ -69,12 +69,12 @@ fun SequenceLootPoolEntry(vararg children: LootPoolEntry.Builder<*>, initializer
 
 
 context(ModContext)
-fun Registration<Block>.registerLootTableGeneration(initializer: (FabricBlockLootTableProvider, HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable { it, registries ->
+fun (() -> Block).registerLootTableGeneration(initializer: (FabricBlockLootTableProvider, HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateBlockLootTable { it, registries ->
     it.add(this(), initializer(it, registries).setRandomSequence(this().lootTable.location()))
 }
 
 context(ModContext)
-fun Registration<Block>.registerDefaultLootTableGeneration() = this.registerLootTableGeneration { it, _ ->
+fun (() -> Block).registerDefaultLootTableGeneration() = this.registerLootTableGeneration { it, _ ->
     it.createSingleItemTable(this())
 }
 
@@ -89,7 +89,7 @@ fun registerArchaeologyLootTableGeneration(lootTableId: ResourceKey<LootTable>, 
 }
 
 context(ModContext)
-fun Registration<EntityType<*>>.registerLootTableGeneration(initializer: (HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable { it, registries ->
+fun (() -> EntityType<*>).registerLootTableGeneration(initializer: (HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable { it, registries ->
     it(this(), initializer(registries).setRandomSequence(this().defaultLootTable.location()))
 }
 
@@ -100,7 +100,7 @@ enum class FortuneEffect {
 }
 
 context(ModContext)
-fun Registration<Block>.registerOreLootTableGeneration(drop: () -> Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
+fun (() -> Block).registerOreLootTableGeneration(drop: () -> Item, additionalCount: ClosedFloatingPointRange<Float>? = null, fortuneEffect: FortuneEffect = FortuneEffect.ORE) = this.registerLootTableGeneration { it, registries ->
     it.createSilkTouchDispatchTable(this(), it.applyExplosionDecay(this(), ItemLootPoolEntry(drop()) {
         if (additionalCount != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(additionalCount.start, additionalCount.endInclusive)))
         when (fortuneEffect) {

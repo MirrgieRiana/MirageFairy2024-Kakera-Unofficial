@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.CreativeModeTab as ItemGroup
 
 context(ModContext)
-fun Registration<Item>.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         it.accept(this())
     }
@@ -20,7 +20,7 @@ fun Registration<Item>.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
 
 context(ModContext)
 @Suppress("UnusedReceiverParameter")
-fun Registration<Item>.registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.accept(itemStack)

@@ -215,7 +215,7 @@ fun registerCompressionRecipeGeneration(lowerItem: () -> Item, higherItem: () ->
 }
 
 context(ModContext)
-fun Registration<Item>.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
+fun (() -> Item).registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { id, tableBuilder, source, registries ->
         if (source.isBuiltin) {
@@ -227,7 +227,7 @@ fun Registration<Item>.registerLootTableModification(lootTableIdGetter: () -> Re
 }
 
 context(ModContext)
-fun Registration<Item>.registerGrassDrop(
+fun (() -> Item).registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
     biome: (() -> ResourceKey<Biome>)? = null,
@@ -248,7 +248,7 @@ fun Registration<Item>.registerGrassDrop(
 }
 
 context(ModContext)
-fun Registration<Item>.registerExtraOreDrop(
+fun (() -> Item).registerExtraOreDrop(
     oreBlock: Block,
     chance: Float = 1.0F,
     fortuneMultiplier: Int = 0,
@@ -268,7 +268,7 @@ fun Registration<Item>.registerExtraOreDrop(
 }
 
 context(ModContext)
-fun Registration<Item>.registerMobDrop(
+fun (() -> Item).registerMobDrop(
     entityType: EntityType<*>,
     onlyKilledByPlayer: Boolean = false,
     dropRate: Pair<Float, Float>? = null,
@@ -287,7 +287,7 @@ fun Registration<Item>.registerMobDrop(
 }
 
 context(ModContext)
-fun Registration<Item>.registerChestLoot(
+fun (() -> Item).registerChestLoot(
     lootTableIdGetter: () -> ResourceKey<LootTable>,
     weight: Int = 10,
     count: IntRange? = null,
@@ -305,12 +305,12 @@ fun Registration<Item>.registerChestLoot(
 }
 
 context(ModContext)
-fun Registration<Item>.registerComposterInput(chance: Float) = ModEvents.onInitialize {
+fun (() -> Item).registerComposterInput(chance: Float) = ModEvents.onInitialize {
     ComposterBlock.COMPOSTABLES.put(this(), chance)
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */
 context(ModContext)
-fun Registration<Item>.registerFuel(ticks: Int) = ModEvents.onInitialize {
+fun (() -> Item).registerFuel(ticks: Int) = ModEvents.onInitialize {
     FuelRegistry.INSTANCE.add(this(), ticks)
 }
