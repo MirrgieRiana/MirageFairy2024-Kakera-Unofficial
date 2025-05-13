@@ -38,6 +38,7 @@ repositories {
     maven("https://thedarkcolour.github.io/KotlinForForge/") // kotlin-for-forge
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
     maven("https://maven.wispforest.io/releases/") // owo-lib
+    maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-neoforge
 }
 
 dependencies {
@@ -71,6 +72,7 @@ dependencies {
     forgeRuntimeLibrary(include(api("io.wispforest.endec:jankson:0.1.3.1")!!)!!)
     forgeRuntimeLibrary(include(api("blue.endless:jankson:1.2.2")!!)!!)
 
+    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:1.21.1-4.1.0.3")
 }
 
 // https://github.com/modrinth/minotaur
