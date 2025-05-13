@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.passiveSkillEffectRegistry
+import miragefairy2024.util.Registration
 import miragefairy2024.util.boolean
 import miragefairy2024.util.double
 import miragefairy2024.util.get
@@ -16,7 +17,7 @@ abstract class AbstractPassiveSkillEffect<T>(path: String) : PassiveSkillEffect<
 
     context(ModContext)
     open fun init() {
-        passiveSkillEffectRegistry.register(identifier) { this }
+        Registration(passiveSkillEffectRegistry, identifier) { this }.register()
     }
 
     override val isPreprocessor = false

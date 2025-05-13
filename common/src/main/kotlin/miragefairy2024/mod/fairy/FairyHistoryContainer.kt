@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
+import miragefairy2024.util.Registration
 import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.register
@@ -17,7 +18,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyHistoryContainer() {
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("fairy_history_container")) { FairyHistoryContainerExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_history_container")) { FairyHistoryContainerExtraPlayerDataCategory }.register()
 }
 
 object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyHistoryContainer> {

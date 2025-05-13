@@ -10,6 +10,7 @@ import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.sync
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
@@ -63,7 +64,7 @@ fun initPassiveSkillExecution() {
     }
 
     // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("passive_skill_result")) { PassiveSkillResultExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("passive_skill_result")) { PassiveSkillResultExtraPlayerDataCategory }.register()
 
     // 翻訳
     PASSIVE_SKILL_TRANSLATION.enJa()

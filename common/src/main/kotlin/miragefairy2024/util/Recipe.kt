@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
@@ -182,7 +183,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     }
 
     serializer = SpecialRecipeSerializer(::SpecialCraftingRecipeImpl)
-    BuiltInRegistries.RECIPE_SERIALIZER.register(identifier) { serializer }
+    Registration(BuiltInRegistries.RECIPE_SERIALIZER, identifier) { serializer }.register()
     DataGenerationEvents.onGenerateRecipe {
         ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }

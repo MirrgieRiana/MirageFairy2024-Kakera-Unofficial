@@ -4,6 +4,7 @@ import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.Channel
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -67,7 +68,7 @@ class SoundEventPacket(
 context(ModContext)
 fun initSoundEventModule() {
     SoundEventCard.entries.forEach { card ->
-        BuiltInRegistries.SOUND_EVENT.register(card.identifier) { card.soundEvent }
+        Registration(BuiltInRegistries.SOUND_EVENT, card.identifier) { card.soundEvent }.register()
         DataGenerationEvents.onGenerateSound { it(card.path, card.translation.keyGetter(), card.sounds) }
         card.translation.enJa()
     }

@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
@@ -29,7 +30,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool 
 context(ModContext)
 fun initUnlimitedJigsaw() {
     UnlimitedJigsawCard.let { card ->
-        BuiltInRegistries.STRUCTURE_TYPE.register(card.identifier) { card.structureType }
+        Registration(BuiltInRegistries.STRUCTURE_TYPE, card.identifier) { card.structureType }.register()
     }
 }
 

@@ -3,6 +3,7 @@ package miragefairy2024.mod.haimeviska
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.get
 import miragefairy2024.util.per
@@ -48,7 +49,7 @@ context(ModContext)
 fun initHaimeviskaWorldGens() {
 
     // TreeDecoratorの登録
-    BuiltInRegistries.TREE_DECORATOR_TYPE.register(HaimeviskaTreeDecoratorCard.identifier) { HaimeviskaTreeDecoratorCard.type }
+    Registration(BuiltInRegistries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier) { HaimeviskaTreeDecoratorCard.type }.register()
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {

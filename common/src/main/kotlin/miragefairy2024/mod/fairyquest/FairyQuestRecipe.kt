@@ -44,6 +44,7 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
 import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
@@ -223,7 +224,7 @@ val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 context(ModContext)
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
-        fairyQuestRecipeRegistry.register(card.identifier) { card }
+        Registration(fairyQuestRecipeRegistry, card.identifier) { card }.register()
 
         card.titleTranslation.enJa()
         card.messageTranslation.enJa()
@@ -286,7 +287,7 @@ fun initFairyQuestRecipe() {
     }
     placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
-    BuiltInRegistries.LOOT_FUNCTION_TYPE.register(MirageFairy2024.identifier("set_fairy_quest_recipe")) { SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE }
+    Registration(BuiltInRegistries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe")) { SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE }.register()
 
     Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card")) { FAIRY_QUEST_CARD_FEATURE }.register()
 

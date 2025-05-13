@@ -6,6 +6,7 @@ import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.sync
+import miragefairy2024.util.Registration
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
@@ -23,7 +24,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyDreamContainer() {
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("fairy_dream")) { FairyDreamContainerExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_dream")) { FairyDreamContainerExtraPlayerDataCategory }.register()
 }
 
 object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {

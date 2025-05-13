@@ -36,6 +36,7 @@ import miragefairy2024.mod.passiveskill.effects.MiningSpeedPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.RegenerationPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.effects.StatusEffectPassiveSkillEffect
 import miragefairy2024.mod.tool.ToolMaterialCard
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -1370,7 +1371,7 @@ operator fun Motif?.contains(child: Motif?) = this == null || child != null && c
 context(ModContext)
 fun initMotif() {
     MotifCard.entries.forEach { card ->
-        motifRegistry.register(card.identifier) { card }
+        Registration(motifRegistry, card.identifier) { card }.register()
         card.translation.enJa()
         card.recipes.recipes.forEach {
             it(this@ModContext, card)

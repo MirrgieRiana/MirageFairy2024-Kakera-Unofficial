@@ -82,7 +82,7 @@ object TelescopeCard {
 context(ModContext)
 fun initTelescopeModule() {
 
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("telescope_mission")) { TelescopeMissionExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission")) { TelescopeMissionExtraPlayerDataCategory }.register()
 
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }.register()
 

@@ -40,11 +40,6 @@ fun Registration<*, *>.register() {
     RegistryEvents.registrations += this
 }
 
-context(ModContext)
-fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T) {
-    Registration(this, identifier, creator).register()
-}
-
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }
 
 operator fun <T> HolderLookup.Provider.get(registry: ResourceKey<Registry<T>>, key: ResourceKey<T>): Holder.Reference<T> = this.lookupOrThrow(registry).getOrThrow(key)

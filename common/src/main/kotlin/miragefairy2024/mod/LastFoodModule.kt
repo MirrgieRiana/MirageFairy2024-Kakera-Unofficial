@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.EatFoodCallback
+import miragefairy2024.util.Registration
 import miragefairy2024.util.get
 import miragefairy2024.util.long
 import miragefairy2024.util.register
@@ -22,7 +23,7 @@ context(ModContext)
 fun initLastFoodModule() {
 
     // 拡張プレイヤーデータ
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("last_food")) { LastFoodExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food")) { LastFoodExtraPlayerDataCategory }.register()
 
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register

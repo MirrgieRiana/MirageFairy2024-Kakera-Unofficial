@@ -3,6 +3,7 @@ package miragefairy2024.mod.particle
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
@@ -45,7 +46,7 @@ class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
 context(ModContext)
 fun initParticleModule() {
     ParticleTypeCard.entries.forEach { card ->
-        BuiltInRegistries.PARTICLE_TYPE.register(card.identifier) { card.particleType }
+        Registration(BuiltInRegistries.PARTICLE_TYPE, card.identifier) { card.particleType }.register()
         DataGenerationEvents.onGenerateParticles {
             val data = jsonObject(
                 "textures" to card.textures.map { it.string.jsonElement }.jsonArray,

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.util.RecipeGenerationSettings
+import miragefairy2024.util.Registration
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
 import miragefairy2024.util.register
@@ -54,8 +55,8 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     context(ModContext)
     fun init() {
-        BuiltInRegistries.RECIPE_TYPE.register(identifier) { type }
-        BuiltInRegistries.RECIPE_SERIALIZER.register(identifier) { serializer }
+        Registration(BuiltInRegistries.RECIPE_TYPE, identifier) { type }.register()
+        Registration(BuiltInRegistries.RECIPE_SERIALIZER, identifier) { serializer }.register()
     }
 
 }

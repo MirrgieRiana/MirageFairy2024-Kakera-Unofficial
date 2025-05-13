@@ -49,7 +49,7 @@ context(ModContext)
 fun initSoulStream() {
 
     // 拡張プレイヤーデータ
-    extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("soul_stream")) { SoulStreamExtraPlayerDataCategory }
+    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("soul_stream")) { SoulStreamExtraPlayerDataCategory }.register()
 
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {

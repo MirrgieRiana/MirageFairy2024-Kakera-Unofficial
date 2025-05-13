@@ -19,6 +19,7 @@ import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.traitRegistry
 import miragefairy2024.mod.magicplant.unaryPlus
 import miragefairy2024.util.HumidityCategory
+import miragefairy2024.util.Registration
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
@@ -527,7 +528,7 @@ context(ModContext)
 fun initTraitCard() {
     TraitCard.entries.forEach { card ->
         card.poemTranslation.enJa()
-        traitRegistry.register(card.identifier) { card.trait }
+        Registration(traitRegistry, card.identifier) { card.trait }.register()
         card.trait.enJa(card.enName, card.jaName)
     }
 }
