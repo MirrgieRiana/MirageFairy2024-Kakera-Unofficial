@@ -153,7 +153,7 @@ fun initFairyStatue() {
 
     FairyStatue.descriptionTranslation.enJa()
 
-    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_statue")) { FairyStatueBlock.CODEC }
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue")) { FairyStatueBlock.CODEC }.register()
 
     FairyStatueCard.entries.forEach { card ->
 

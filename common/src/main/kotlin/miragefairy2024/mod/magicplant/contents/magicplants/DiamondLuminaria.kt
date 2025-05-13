@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -113,7 +114,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override fun init() {
         super.init()
 
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }.register()
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {

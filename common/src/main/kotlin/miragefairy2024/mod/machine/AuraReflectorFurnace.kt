@@ -8,6 +8,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.TextureMap
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
@@ -79,7 +80,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun init() {
         super.init()
 
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("aura_reflector_furnace")) { AuraReflectorFurnaceBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("aura_reflector_furnace")) { AuraReflectorFurnaceBlock.CODEC }.register()
 
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 

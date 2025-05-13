@@ -8,6 +8,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -69,7 +70,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     context(ModContext)
     override fun init() {
         super.init()
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_house")) { FairyHouseBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_house")) { FairyHouseBlock.CODEC }.register()
         registerShapedRecipeGeneration(item) {
             pattern("#U#")
             pattern("L*R")

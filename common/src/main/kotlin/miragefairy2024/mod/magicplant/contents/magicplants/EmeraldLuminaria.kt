@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -117,7 +118,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override fun init() {
         super.init()
 
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }.register()
 
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {

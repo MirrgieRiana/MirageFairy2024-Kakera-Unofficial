@@ -7,6 +7,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -52,7 +53,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override fun init() {
         super.init()
 
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fermentation_barrel")) { FermentationBarrelBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fermentation_barrel")) { FermentationBarrelBlock.CODEC }.register()
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
 

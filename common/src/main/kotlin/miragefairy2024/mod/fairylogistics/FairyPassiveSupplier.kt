@@ -9,6 +9,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -66,7 +67,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun init() {
         super.init()
 
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_passive_supplier")) { FairyPassiveSupplierBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier")) { FairyPassiveSupplierBlock.CODEC }.register()
 
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }

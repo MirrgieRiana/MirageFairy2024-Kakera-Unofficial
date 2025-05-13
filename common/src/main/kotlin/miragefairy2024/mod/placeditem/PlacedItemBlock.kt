@@ -65,7 +65,7 @@ object PlacedItemCard {
 
 context(ModContext)
 fun initPlacedItemBlock() {
-    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("placed_item")) { PlacedItemBlock.CODEC }
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item")) { PlacedItemBlock.CODEC }.register()
 
     PlacedItemCard.let { card ->
         card.block.register()

@@ -74,7 +74,7 @@ context(ModContext)
 fun initFairyFountainModule() {
     FairyStatueFountainBlock.USAGE_TRANSLATION.enJa()
 
-    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_statue_fountain")) { FairyStatueFountainBlock.CODEC }
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue_fountain")) { FairyStatueFountainBlock.CODEC }.register()
 
     FairyStatueFountainCard.let { card ->
 

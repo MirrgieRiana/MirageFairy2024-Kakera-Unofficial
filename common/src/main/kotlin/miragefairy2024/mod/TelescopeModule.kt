@@ -84,7 +84,7 @@ fun initTelescopeModule() {
 
     extraPlayerDataCategoryRegistry.register(MirageFairy2024.identifier("telescope_mission")) { TelescopeMissionExtraPlayerDataCategory }
 
-    BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }.register()
 
     TelescopeCard.let { card ->
 

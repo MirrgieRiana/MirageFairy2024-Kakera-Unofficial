@@ -7,6 +7,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -87,7 +88,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     context(ModContext)
     override fun init() {
         super.init()
-        BuiltInRegistries.BLOCK_TYPE.register(MirageFairy2024.identifier("fairy_collector")) { FairyCollectorBlock.CODEC }
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector")) { FairyCollectorBlock.CODEC }.register()
         registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")
