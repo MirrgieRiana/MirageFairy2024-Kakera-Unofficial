@@ -9,7 +9,6 @@ import miragefairy2024.mod.fairy.getFairyMotif
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
-
 context(ModContext)
 fun initFairyStatueClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->

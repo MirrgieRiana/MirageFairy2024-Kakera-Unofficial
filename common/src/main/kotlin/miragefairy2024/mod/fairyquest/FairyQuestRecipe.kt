@@ -44,7 +44,6 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
 import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
