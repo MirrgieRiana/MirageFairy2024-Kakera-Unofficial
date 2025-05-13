@@ -28,13 +28,7 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
     init {
         with(ModContext()) {
             Modules.init()
-        }
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            with(ModContext()) {
-                initClientModules()
-            }
-
-            clientProxy = ClientProxyImpl()
+            if (FMLEnvironment.dist == Dist.CLIENT) initClientModules()
         }
 
         modEventBus.addListener(RegisterEvent::class.java) { event ->
@@ -62,6 +56,7 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
             ModEvents.onInitialize.fire { it() }
         }
         modEventBus.addListener(FMLClientSetupEvent::class.java) {
+            clientProxy = ClientProxyImpl()
             ModEvents.onClientInit.fire { it() }
         }
     }
