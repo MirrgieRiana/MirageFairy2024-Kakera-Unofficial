@@ -2,6 +2,7 @@ package miragefairy2024.mod.entity
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.SoundEventChannel
@@ -75,22 +76,26 @@ object ChaosCubeCard {
     fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: Level) = ChaosCubeEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("chaos_cube")
     val name = EnJa("Chaos Cube", "混沌のキューブ")
-    val entityType: EntityType<ChaosCubeEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
-        .dimensions(EntityDimensions.fixed(width, height))
-        .build()
-    val spawnEggItem = CompletableRegistration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType, 0xB36235, 0xFFC21D, Item.Properties()) }
+    val entityType = CompletableRegistration(BuiltInRegistries.ENTITY_TYPE, identifier) {
+        FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
+            .dimensions(EntityDimensions.fixed(width, height))
+            .build()
+    }
+    val spawnEggItem = CompletableRegistration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType.await(), 0xB36235, 0xFFC21D, Item.Properties()) }
 
     context(ModContext)
     fun init() {
-        BuiltInRegistries.ENTITY_TYPE.register(identifier) { entityType }
-        val attributes = HostileEntity.createMonsterAttributes()
-            .add(EntityAttributes.MAX_HEALTH, 100.0)
-            .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
-            .add(EntityAttributes.ARMOR, 12.0)
-            .add(EntityAttributes.ATTACK_DAMAGE, 20.0)
-            .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
-            .add(EntityAttributes.FOLLOW_RANGE, 48.0)
-        FabricDefaultAttributeRegistry.register(entityType, attributes)
+        entityType.register()
+        ModEvents.onInitialize {
+            val attributes = HostileEntity.createMonsterAttributes()
+                .add(EntityAttributes.MAX_HEALTH, 100.0)
+                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
+                .add(EntityAttributes.ARMOR, 12.0)
+                .add(EntityAttributes.ATTACK_DAMAGE, 20.0)
+                .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
+                .add(EntityAttributes.FOLLOW_RANGE, 48.0)
+            FabricDefaultAttributeRegistry.register(entityType(), attributes)
+        }
         entityType.enJa(name)
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
         entityType.registerLootTableGeneration { registries ->
@@ -111,7 +116,9 @@ object ChaosCubeCard {
         }
 
         entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
-        SpawnRestriction.register(entityType, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
+        ModEvents.onInitialize {
+            SpawnRestriction.register(entityType(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
+        }
 
         spawnEggItem.register()
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -339,7 +346,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
                         if (distance < 0.01) return@repeat // 近すぎるので射撃に失敗
 
                         // 発射体の生成
-                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType, entity.level())
+                        val projectileEntity = EtheroballisticBoltEntity(EtheroballisticBoltCard.entityType(), entity.level())
                         projectileEntity.owner = entity
                         projectileEntity.setPos(shootingX, shootingY, shootingZ)
                         projectileEntity.setDeltaMovement(

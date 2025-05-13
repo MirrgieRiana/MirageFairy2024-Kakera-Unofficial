@@ -115,7 +115,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         }
 
         // 生成
-        val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType, world)
+        val entity = AntimatterBoltEntity(AntimatterBoltCard.entityType(), world)
         entity.setPos(user.x, user.eyeY - 0.3, user.z)
         entity.shootFromRotation(user, user.xRot, user.yRot, 0.0F, speed, 1.0F)
         entity.owner = user

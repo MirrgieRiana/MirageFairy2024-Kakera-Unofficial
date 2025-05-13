@@ -49,8 +49,8 @@ fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) =
 }
 
 context(ModContext)
-fun EntityType<*>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
-    it(tagProvider()).add(this)
+fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)

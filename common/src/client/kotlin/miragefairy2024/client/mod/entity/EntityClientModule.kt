@@ -13,11 +13,11 @@ import net.minecraft.client.model.geom.builders.PartDefinition as ModelPartData
 
 fun initEntityClientModule() {
     EntityModelLayerRegistry.registerModelLayer(AntimatterBoltEntityRenderer.MAIN.entityModelLayer, AntimatterBoltEntityRenderer.MAIN.provider)
-    EntityRendererRegistry.register(AntimatterBoltCard.entityType, ::AntimatterBoltEntityRenderer)
+    EntityRendererRegistry.register(AntimatterBoltCard.entityType(), ::AntimatterBoltEntityRenderer)
     EntityModelLayerRegistry.registerModelLayer(ChaosCubeEntityRenderer.ROOT.entityModelLayer, ChaosCubeEntityRenderer.ROOT.provider)
-    EntityRendererRegistry.register(ChaosCubeCard.entityType, ::ChaosCubeEntityRenderer)
+    EntityRendererRegistry.register(ChaosCubeCard.entityType(), ::ChaosCubeEntityRenderer)
     EntityModelLayerRegistry.registerModelLayer(EtheroballisticBoltEntityRenderer.MAIN.entityModelLayer, EtheroballisticBoltEntityRenderer.MAIN.provider)
-    EntityRendererRegistry.register(EtheroballisticBoltCard.entityType, ::EtheroballisticBoltEntityRenderer)
+    EntityRendererRegistry.register(EtheroballisticBoltCard.entityType(), ::EtheroballisticBoltEntityRenderer)
 }
 
 class EntityModelLayerCard(

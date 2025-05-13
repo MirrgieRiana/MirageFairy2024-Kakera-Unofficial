@@ -34,9 +34,9 @@ fun Registration<Item>.enJa(name: EnJa) {
 
 context(ModContext)
 @JvmName("enJaEntityType")
-fun EntityType<*>.enJa(name: EnJa) {
-    en { this.descriptionId to name.en }
-    ja { this.descriptionId to name.ja }
+fun Registration<EntityType<*>>.enJa(name: EnJa) {
+    en { this().descriptionId to name.en }
+    ja { this().descriptionId to name.ja }
 }
 
 

@@ -93,8 +93,8 @@ fun ResourceKey<PlacedFeature>.registerFeature(step: GenerationStep.Decoration, 
 }
 
 context(ModContext)
-fun EntityType<*>.registerSpawn(spawnGroup: SpawnGroup, weight: Int, minGroupSize: Int, maxGroupSize: Int, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
-    BiomeModifications.addSpawn(biomeSelectorCreator(BiomeSelectorScope), spawnGroup, this, weight, minGroupSize, maxGroupSize)
+fun Registration<EntityType<*>>.registerSpawn(spawnGroup: SpawnGroup, weight: Int, minGroupSize: Int, maxGroupSize: Int, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
+    BiomeModifications.addSpawn(biomeSelectorCreator(BiomeSelectorScope), spawnGroup, this(), weight, minGroupSize, maxGroupSize)
 }
 
 

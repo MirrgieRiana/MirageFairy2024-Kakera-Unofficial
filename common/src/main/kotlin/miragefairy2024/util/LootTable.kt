@@ -89,8 +89,8 @@ fun registerArchaeologyLootTableGeneration(lootTableId: ResourceKey<LootTable>, 
 }
 
 context(ModContext)
-fun EntityType<*>.registerLootTableGeneration(initializer: (HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable { it, registries ->
-    it(this, initializer(registries).setRandomSequence(this.defaultLootTable.location()))
+fun Registration<EntityType<*>>.registerLootTableGeneration(initializer: (HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateEntityLootTable { it, registries ->
+    it(this(), initializer(registries).setRandomSequence(this().defaultLootTable.location()))
 }
 
 enum class FortuneEffect {
