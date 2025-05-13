@@ -77,9 +77,11 @@ enum class BagCard(
     ;
 
     companion object {
-        val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-            createBagScreenHandler(syncId, playerInventory, buf)
-        }, ByteBufCodecs.INT)
+        val screenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag")) {
+            ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+                createBagScreenHandler(syncId, playerInventory, buf)
+            }, ByteBufCodecs.INT)
+        }
 
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
@@ -108,7 +110,7 @@ fun initBagModule() {
     }
 
 
-    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("bag")) { BagCard.screenHandlerType }
+    BagCard.screenHandlerType.register()
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
@@ -350,7 +352,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
     }
 }
 
-open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
+open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType(), syncId) {
     override fun stillValid(player: PlayerEntity) = false
     override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
     open val card: BagCard? = null

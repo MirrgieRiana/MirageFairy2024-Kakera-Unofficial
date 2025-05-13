@@ -48,5 +48,5 @@ fun initFairyQuestClientModule() {
 
         }
     }
-    HandledScreens.register(fairyQuestCardScreenHandlerType) { gui, inventory, title -> FairyQuestCardScreen(gui, inventory, title) }
+    HandledScreens.register(fairyQuestCardScreenHandlerType()) { gui, inventory, title -> FairyQuestCardScreen(gui, inventory, title) }
 }

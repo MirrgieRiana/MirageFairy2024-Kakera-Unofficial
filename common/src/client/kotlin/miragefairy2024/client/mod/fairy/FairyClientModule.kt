@@ -47,8 +47,8 @@ var lastMousePositionInInventory: Pair<Double, Double>? = null
 fun initFairyClientModule() {
 
     // GUI登録
-    HandledScreens.register(motifTableScreenHandlerType) { gui, inventory, title -> MotifTableScreen(gui, inventory, title) }
-    HandledScreens.register(soulStreamScreenHandlerType) { gui, inventory, title -> SoulStreamScreen(gui, inventory, title) }
+    HandledScreens.register(motifTableScreenHandlerType()) { gui, inventory, title -> MotifTableScreen(gui, inventory, title) }
+    HandledScreens.register(soulStreamScreenHandlerType()) { gui, inventory, title -> SoulStreamScreen(gui, inventory, title) }
 
     // パケットハンドラ登録
     GainFairyDreamChannel.registerClientPacketReceiver { motif ->

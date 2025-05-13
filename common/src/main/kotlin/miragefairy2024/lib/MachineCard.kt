@@ -84,16 +84,18 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     // ScreenHandler
 
     abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
-    val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
-        val arguments = MachineScreenHandler.Arguments(
-            syncId,
-            playerInventory,
-            SimpleInventory(inventorySlotConfigurations.size),
-            ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.NULL,
-        )
-        createScreenHandler(arguments)
-    }, StreamCodec.unit(Unit))
+    val screenHandlerType = Registration(BuiltInRegistries.MENU, identifier) {
+        ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
+            val arguments = MachineScreenHandler.Arguments(
+                syncId,
+                playerInventory,
+                SimpleInventory(inventorySlotConfigurations.size),
+                ArrayPropertyDelegate(propertyConfigurations.size),
+                ScreenHandlerContext.NULL,
+            )
+            createScreenHandler(arguments)
+        }, StreamCodec.unit(Unit))
+    }
 
 
     // Gui
@@ -121,6 +123,6 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
         block.register()
         blockEntityType.register()
         item.register()
-        BuiltInRegistries.MENU.register(identifier) { screenHandlerType }
+        screenHandlerType.register()
     }
 }

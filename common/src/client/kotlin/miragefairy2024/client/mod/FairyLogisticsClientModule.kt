@@ -14,8 +14,8 @@ import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initFairyLogisticsClientModule() {
-    HandledScreens.register(FairyPassiveSupplierCard.screenHandlerType) { gui, inventory, title -> FairyPassiveSupplierScreen(FairyPassiveSupplierCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyActiveConsumerCard.screenHandlerType) { gui, inventory, title -> FairyActiveConsumerScreen(FairyActiveConsumerCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyPassiveSupplierCard.screenHandlerType()) { gui, inventory, title -> FairyPassiveSupplierScreen(FairyPassiveSupplierCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyActiveConsumerCard.screenHandlerType()) { gui, inventory, title -> FairyActiveConsumerScreen(FairyActiveConsumerCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 open class FairyLogisticsScreen<H : FairyLogisticsScreenHandler>(card: FairyLogisticsCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments)

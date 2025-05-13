@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairyquest
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.OutputSlot
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -25,19 +26,21 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
-}, ResourceLocation.STREAM_CODEC)
+val fairyQuestCardScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("fairy_quest_card")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+        FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
+    }, ResourceLocation.STREAM_CODEC)
+}
 
 val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toLanguageKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
-    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("fairy_quest_card")) { fairyQuestCardScreenHandlerType }
+    fairyQuestCardScreenHandlerType.register()
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
-class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {
+class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType(), syncId) {
     private val inputInventory = SimpleInventory(4)
     private var processingInventory = SimpleInventory(0)
     private var resultInventory = SimpleInventory(0)

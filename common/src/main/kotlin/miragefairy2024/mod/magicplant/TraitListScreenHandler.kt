@@ -2,6 +2,7 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -21,19 +22,21 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-val traitListScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-    TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, buf)
-}, TraitListScreenHandler.STREAM_CODEC)
+val traitListScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("trait_list")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+        TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, buf)
+    }, TraitListScreenHandler.STREAM_CODEC)
+}
 
 val traitListScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("trait_list").toLanguageKey()}" }, "Traits", "特性")
 
 context(ModContext)
 fun initTraitListScreenHandler() {
-    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("trait_list")) { traitListScreenHandlerType }
+    traitListScreenHandlerType.register()
     traitListScreenTranslation.enJa()
 }
 
-class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks) : ScreenHandler(traitListScreenHandlerType, syncId) {
+class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks) : ScreenHandler(traitListScreenHandlerType(), syncId) {
     companion object {
         val STREAM_CODEC = object : StreamCodec<FriendlyByteBuf, TraitStacks> {
             override fun encode(`object`: FriendlyByteBuf, object2: TraitStacks) {

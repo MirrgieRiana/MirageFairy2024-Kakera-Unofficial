@@ -38,7 +38,7 @@ import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initMagicPlantClientModule() {
-    HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
+    HandledScreens.register(traitListScreenHandlerType()) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
 class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {

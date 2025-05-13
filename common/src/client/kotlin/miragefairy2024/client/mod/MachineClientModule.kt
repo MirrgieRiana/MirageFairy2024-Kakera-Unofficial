@@ -18,8 +18,8 @@ import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 fun initMachineClientModule() {
-    HandledScreens.register(FermentationBarrelCard.screenHandlerType) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(AuraReflectorFurnaceCard.screenHandlerType) { gui, inventory, title -> AuraReflectorFurnaceScreen(AuraReflectorFurnaceCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FermentationBarrelCard.screenHandlerType()) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(AuraReflectorFurnaceCard.screenHandlerType()) { gui, inventory, title -> AuraReflectorFurnaceScreen(AuraReflectorFurnaceCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleMachineCard<*, *, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {

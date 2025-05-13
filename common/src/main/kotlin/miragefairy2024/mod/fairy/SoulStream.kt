@@ -8,6 +8,7 @@ import miragefairy2024.mod.ExtraPlayerDataCategory
 import miragefairy2024.mod.extraPlayerDataCategoryRegistry
 import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.Channel
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
@@ -66,7 +67,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    BuiltInRegistries.MENU.register(MirageFairy2024.identifier("soul_stream")) { soulStreamScreenHandlerType }
+    soulStreamScreenHandlerType.register()
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
@@ -117,11 +118,13 @@ object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_so
 
 // GUI
 
-val soulStreamScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
-    SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
-}, StreamCodec.unit(Unit))
+val soulStreamScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
+        SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
+    }, StreamCodec.unit(Unit))
+}
 
-class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
+class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType(), syncId) {
     init {
         repeat(3) { r ->
             repeat(9) { c ->

@@ -28,8 +28,8 @@ fun initFairyBuildingClientModule() {
         }
     }
 
-    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyHouseCard.screenHandlerType()) { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, MachineScreen.Arguments(gui, inventory, title)) }
+    HandledScreens.register(FairyCollectorCard.screenHandlerType()) { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {
