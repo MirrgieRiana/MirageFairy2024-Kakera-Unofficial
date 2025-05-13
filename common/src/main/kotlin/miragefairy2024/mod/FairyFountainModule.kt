@@ -12,8 +12,8 @@ import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.Chance
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -66,8 +66,8 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque()) }
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 context(ModContext)

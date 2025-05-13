@@ -8,12 +8,12 @@ import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -46,7 +46,7 @@ val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
 
 object CreativeGeneAmpouleCard {
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { CreativeGeneAmpouleItem(Item.Properties().stacksTo(1)) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { CreativeGeneAmpouleItem(Item.Properties().stacksTo(1)) }
 }
 
 context(ModContext)

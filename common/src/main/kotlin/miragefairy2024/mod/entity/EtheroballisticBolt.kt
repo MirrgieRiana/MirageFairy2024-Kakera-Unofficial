@@ -5,7 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.PhysicalMagicDamageTypeCard
-import miragefairy2024.util.CompletableRegistration
+import miragefairy2024.util.Registration
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer
 import miragefairy2024.util.register
@@ -39,7 +39,7 @@ object EtheroballisticBoltCard {
     val height = 0.5F
     fun createEntity(entityType: EntityType<EtheroballisticBoltEntity>, world: Level) = EtheroballisticBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("etheroballistic_bolt")
-    val entityType = CompletableRegistration(BuiltInRegistries.ENTITY_TYPE, identifier) {
+    val entityType = Registration(BuiltInRegistries.ENTITY_TYPE, identifier) {
         FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
             .dimensions(EntityDimensions.fixed(width, height))
             .build()

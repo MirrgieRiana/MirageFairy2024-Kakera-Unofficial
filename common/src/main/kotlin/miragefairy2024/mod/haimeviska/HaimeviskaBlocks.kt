@@ -15,12 +15,12 @@ import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.BlockStateVariant
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -142,8 +142,8 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     class Configuration(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { blockCreator() }
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { blockCreator() }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)

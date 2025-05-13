@@ -2,7 +2,7 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.util.CompletableRegistration
+import miragefairy2024.util.Registration
 import miragefairy2024.util.en
 import miragefairy2024.util.isServer
 import miragefairy2024.util.ja
@@ -15,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
-val experienceStatusEffect = CompletableRegistration(BuiltInRegistries.MOB_EFFECT, MirageFairy2024.identifier("experience")) { ExperienceStatusEffect() }
+val experienceStatusEffect = Registration(BuiltInRegistries.MOB_EFFECT, MirageFairy2024.identifier("experience")) { ExperienceStatusEffect() }
 
 context(ModContext)
 fun initStatusEffectModule() {

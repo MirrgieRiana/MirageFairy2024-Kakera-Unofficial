@@ -4,7 +4,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
-import miragefairy2024.util.CompletableRegistration
+import miragefairy2024.util.Registration
 import miragefairy2024.util.RegistryEvents
 import net.fabricmc.api.ModInitializer
 import net.minecraft.core.Registry
@@ -16,7 +16,7 @@ object MirageFairy2024FabricMod : ModInitializer {
         runBlocking {
             RegistryEvents.registrations.forEach { registration ->
                 launch {
-                    suspend fun <T : Any, U : T> f(registration: CompletableRegistration<T, U>) {
+                    suspend fun <T : Any, U : T> f(registration: Registration<T, U>) {
                         val value = registration.creator()
                         registration.complete(value, Registry.registerForHolder(registration.registry, registration.identifier, value))
                     }

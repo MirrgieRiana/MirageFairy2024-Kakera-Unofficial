@@ -10,10 +10,10 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
 object RegistryEvents {
-    val registrations = mutableListOf<CompletableRegistration<*, *>>()
+    val registrations = mutableListOf<Registration<*, *>>()
 }
 
-class CompletableRegistration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: suspend () -> U) : () -> U {
+class Registration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: suspend () -> U) : () -> U {
 
     private val value = CompletableDeferred<U>()
     private val holder = CompletableDeferred<Holder<T>>()
@@ -36,13 +36,13 @@ class CompletableRegistration<T : Any, U : T>(val registry: Registry<T>, val ide
 }
 
 context(ModContext)
-fun CompletableRegistration<*, *>.register() {
+fun Registration<*, *>.register() {
     RegistryEvents.registrations += this
 }
 
 context(ModContext)
 fun <T : Any> Registry<T>.register(identifier: ResourceLocation, creator: () -> T) {
-    RegistryEvents.registrations += CompletableRegistration(this, identifier, creator)
+    RegistryEvents.registrations += Registration(this, identifier, creator)
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

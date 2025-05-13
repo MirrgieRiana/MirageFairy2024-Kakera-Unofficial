@@ -5,12 +5,12 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.compound
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.double
@@ -59,8 +59,8 @@ import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
-    val blockEntityType = CompletableRegistration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(::PlacedItemBlockEntity, setOf(block.await()), null) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(::PlacedItemBlockEntity, setOf(block.await()), null) }
 }
 
 context(ModContext)

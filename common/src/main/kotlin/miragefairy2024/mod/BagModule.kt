@@ -3,10 +3,10 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -86,7 +86,7 @@ enum class BagCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BagItem(this, Item.Properties().stacksTo(1)) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BagItem(this, Item.Properties().stacksTo(1)) }
     val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }

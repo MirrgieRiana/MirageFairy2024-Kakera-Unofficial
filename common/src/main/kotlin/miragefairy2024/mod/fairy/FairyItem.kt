@@ -16,12 +16,12 @@ import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
@@ -63,7 +63,7 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyItem(Item.Properties().fireResistant()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyItem(Item.Properties().fireResistant()) }
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")

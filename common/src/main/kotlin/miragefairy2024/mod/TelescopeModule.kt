@@ -6,8 +6,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.particle.ParticleTypeCard
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -74,8 +74,8 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 

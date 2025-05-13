@@ -1,7 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.ModContext
-import miragefairy2024.util.CompletableRegistration
+import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -43,7 +43,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     abstract fun createBlockSettings(): FabricBlockSettings
     abstract fun createBlock(): B
-    val block = CompletableRegistration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
 
 
     // BlockEntity
@@ -73,12 +73,12 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
     val blockEntityAccessor = createBlockEntityAccessor()
-    val blockEntityType = CompletableRegistration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(blockEntityAccessor::create, setOf(block.await()), null) }
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(blockEntityAccessor::create, setOf(block.await()), null) }
 
 
     // Item
 
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 
 
     // ScreenHandler

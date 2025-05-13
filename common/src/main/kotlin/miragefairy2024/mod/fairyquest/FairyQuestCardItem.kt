@@ -5,11 +5,11 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
-import miragefairy2024.util.CompletableRegistration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -52,7 +52,7 @@ object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
     val jaName = "破損したフェアリークエストカード"
     val identifier = MirageFairy2024.identifier("fairy_quest_card")
-    val item = CompletableRegistration(BuiltInRegistries.ITEM, identifier) { FairyQuestCardItem(Item.Properties()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyQuestCardItem(Item.Properties()) }
 }
 
 private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item().descriptionId + ".format" }, "“%s”", "『%s』")

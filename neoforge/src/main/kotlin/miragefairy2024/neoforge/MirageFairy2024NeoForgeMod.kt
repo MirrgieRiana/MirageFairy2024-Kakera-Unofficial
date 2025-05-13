@@ -22,7 +22,7 @@ import miragefairy2024.client.mod.initPlacedItemClientModule
 import miragefairy2024.client.mod.initSoundEventClientModule
 import miragefairy2024.client.mod.particle.initParticleClientModule
 import miragefairy2024.clientProxy
-import miragefairy2024.util.CompletableRegistration
+import miragefairy2024.util.Registration
 import miragefairy2024.util.RegistryEvents
 import net.minecraft.core.Registry
 import net.neoforged.api.distmarker.Dist
@@ -61,7 +61,7 @@ class MirageFairy2024NeoForgeMod {
     @SubscribeEvent
     fun register(event: RegisterEvent) {
         RegistryEvents.registrations.forEach { registration ->
-            fun <T : Any, U : T> f(registration: CompletableRegistration<T, U>) {
+            fun <T : Any, U : T> f(registration: Registration<T, U>) {
                 if (event.registry == registration.registry) {
                     val value = runBlocking {
                         val deferred = CompletableDeferred<U>()
