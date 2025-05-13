@@ -8,19 +8,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
-import miragefairy2024.client.mod.entity.initEntityClientModule
-import miragefairy2024.client.mod.fairy.initFairyClientModule
-import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
-import miragefairy2024.client.mod.initBagClientModule
-import miragefairy2024.client.mod.initExtraPlayerDataClientModule
-import miragefairy2024.client.mod.initFairyBuildingClientModule
-import miragefairy2024.client.mod.initFairyLogisticsClientModule
-import miragefairy2024.client.mod.initFairyStatueClientModule
-import miragefairy2024.client.mod.initMachineClientModule
-import miragefairy2024.client.mod.initMagicPlantClientModule
-import miragefairy2024.client.mod.initPlacedItemClientModule
-import miragefairy2024.client.mod.initSoundEventClientModule
-import miragefairy2024.client.mod.particle.initParticleClientModule
+import miragefairy2024.client.initClientModules
 import miragefairy2024.clientProxy
 import miragefairy2024.util.Registration
 import miragefairy2024.util.RegistryEvents
@@ -39,19 +27,7 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
     init {
         Modules.init()
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            initFairyQuestClientModule()
-            initFairyClientModule()
-            initExtraPlayerDataClientModule()
-            initFairyBuildingClientModule()
-            initMagicPlantClientModule()
-            initEntityClientModule()
-            initParticleClientModule()
-            initFairyStatueClientModule()
-            initPlacedItemClientModule()
-            initFairyLogisticsClientModule()
-            initBagClientModule()
-            initMachineClientModule()
-            initSoundEventClientModule()
+            initClientModules()
 
             clientProxy = ClientProxyImpl()
         }
