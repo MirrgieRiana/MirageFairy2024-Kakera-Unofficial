@@ -11,6 +11,7 @@ import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.ModContext
 import miragefairy2024.client.util.inventoryNameLabel
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.client.util.slotContainer
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.BagCard
@@ -18,11 +19,10 @@ import miragefairy2024.mod.BagScreenHandler
 import mirrg.kotlin.hydrogen.atLeast
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 context(ModContext)
 fun initBagClientModule() {
-    HandledScreens.register(BagCard.screenHandlerType()) { gui, inventory, title -> BagScreen(gui, inventory, title) }
+    BagCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> BagScreen(gui, inventory, title) }
 }
 
 class BagScreen(handler: BagScreenHandler, private val playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, BagScreenHandler>(handler, playerInventory, title) {

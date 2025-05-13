@@ -3,6 +3,7 @@ package miragefairy2024.client.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.client.lib.MachineScreen
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
 import miragefairy2024.mod.machine.AuraReflectorFurnaceScreenHandler
 import miragefairy2024.mod.machine.FermentationBarrelCard
@@ -16,12 +17,11 @@ import net.minecraft.client.renderer.Rect2i
 import java.util.Optional
 import kotlin.math.roundToInt
 import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 context(ModContext)
 fun initMachineClientModule() {
-    HandledScreens.register(FermentationBarrelCard.screenHandlerType()) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(AuraReflectorFurnaceCard.screenHandlerType()) { gui, inventory, title -> AuraReflectorFurnaceScreen(AuraReflectorFurnaceCard, MachineScreen.Arguments(gui, inventory, title)) }
+    FermentationBarrelCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
+    AuraReflectorFurnaceCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> AuraReflectorFurnaceScreen(AuraReflectorFurnaceCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleMachineCard<*, *, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {

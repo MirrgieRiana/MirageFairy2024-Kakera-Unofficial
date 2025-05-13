@@ -2,6 +2,7 @@ package miragefairy2024.client.mod
 
 import miragefairy2024.ModContext
 import miragefairy2024.client.lib.MachineScreen
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.mod.fairylogistics.FairyActiveConsumerCard
 import miragefairy2024.mod.fairylogistics.FairyActiveConsumerScreenHandler
 import miragefairy2024.mod.fairylogistics.FairyLogisticsCard
@@ -12,12 +13,11 @@ import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 context(ModContext)
 fun initFairyLogisticsClientModule() {
-    HandledScreens.register(FairyPassiveSupplierCard.screenHandlerType()) { gui, inventory, title -> FairyPassiveSupplierScreen(FairyPassiveSupplierCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyActiveConsumerCard.screenHandlerType()) { gui, inventory, title -> FairyActiveConsumerScreen(FairyActiveConsumerCard, MachineScreen.Arguments(gui, inventory, title)) }
+    FairyPassiveSupplierCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> FairyPassiveSupplierScreen(FairyPassiveSupplierCard, MachineScreen.Arguments(gui, inventory, title)) }
+    FairyActiveConsumerCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> FairyActiveConsumerScreen(FairyActiveConsumerCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 open class FairyLogisticsScreen<H : FairyLogisticsScreenHandler>(card: FairyLogisticsCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments)

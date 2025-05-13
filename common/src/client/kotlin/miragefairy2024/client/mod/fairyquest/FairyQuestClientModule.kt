@@ -1,6 +1,7 @@
 package miragefairy2024.client.mod.fairyquest
 
 import miragefairy2024.ModContext
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.client.util.stack
 import miragefairy2024.mixin.client.api.RenderItemHandler
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
@@ -11,7 +12,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import com.mojang.math.Axis as RotationAxis
 import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
@@ -50,5 +50,5 @@ fun initFairyQuestClientModule() {
 
         }
     }
-    HandledScreens.register(fairyQuestCardScreenHandlerType()) { gui, inventory, title -> FairyQuestCardScreen(gui, inventory, title) }
+    fairyQuestCardScreenHandlerType.registerHandledScreen { gui, inventory, title -> FairyQuestCardScreen(gui, inventory, title) }
 }
