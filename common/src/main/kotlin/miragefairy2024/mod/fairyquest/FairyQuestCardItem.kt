@@ -87,7 +87,7 @@ fun initFairyQuestCardItem() {
 
     FairyQuestCardIngredient.SERIALIZER.register()
 
-    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_quest_recipe")) { FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE }
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_quest_recipe")) { FAIRY_QUEST_RECIPE_DATA_COMPONENT_TYPE }.register()
 }
 
 class FairyQuestCardItem(settings: Properties) : Item(settings) {

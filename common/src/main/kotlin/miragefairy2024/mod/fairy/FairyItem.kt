@@ -138,8 +138,8 @@ fun initFairyItem() {
 
     fairiesItemGroupCard.init()
 
-    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_motif")) { FAIRY_MOTIF_DATA_COMPONENT_TYPE }
-    BuiltInRegistries.DATA_COMPONENT_TYPE.register(MirageFairy2024.identifier("fairy_condensation")) { FAIRY_CONDENSATION_DATA_COMPONENT_TYPE }
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif")) { FAIRY_MOTIF_DATA_COMPONENT_TYPE }.register()
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation")) { FAIRY_CONDENSATION_DATA_COMPONENT_TYPE }.register()
 }
 
 private fun createFairyModel() = Model {
