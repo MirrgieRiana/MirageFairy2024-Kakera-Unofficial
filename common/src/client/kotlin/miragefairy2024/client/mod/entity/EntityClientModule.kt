@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod.entity
 
+import miragefairy2024.ModContext
 import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.EtheroballisticBoltCard
@@ -11,6 +12,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition as TexturedModel
 import net.minecraft.client.model.geom.builders.MeshDefinition as ModelData
 import net.minecraft.client.model.geom.builders.PartDefinition as ModelPartData
 
+context(ModContext)
 fun initEntityClientModule() {
     EntityModelLayerRegistry.registerModelLayer(AntimatterBoltEntityRenderer.MAIN.entityModelLayer, AntimatterBoltEntityRenderer.MAIN.provider)
     EntityRendererRegistry.register(AntimatterBoltCard.entityType(), ::AntimatterBoltEntityRenderer)

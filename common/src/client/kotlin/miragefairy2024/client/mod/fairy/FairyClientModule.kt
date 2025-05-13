@@ -9,6 +9,7 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.LimitedLabelComponent
 import miragefairy2024.client.util.createOwoToast
 import miragefairy2024.client.util.horizontalSpace
@@ -44,6 +45,7 @@ lateinit var soulStreamKey: KeyBinding
 
 var lastMousePositionInInventory: Pair<Double, Double>? = null
 
+context(ModContext)
 fun initFairyClientModule() {
 
     // GUI登録

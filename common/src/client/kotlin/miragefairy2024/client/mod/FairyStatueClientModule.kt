@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod
 
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.stack
 import miragefairy2024.mixin.client.api.RenderItemHandler
 import miragefairy2024.mod.fairy.FairyStatueBlockItem
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
 
+context(ModContext)
 fun initFairyStatueClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
         if (stack.item !is FairyStatueBlockItem) return@RenderItemHandler

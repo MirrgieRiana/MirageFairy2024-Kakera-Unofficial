@@ -1,5 +1,6 @@
 package miragefairy2024.client.fabric
 
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
@@ -13,6 +14,8 @@ object MirageFairy2024FabricClientMod : ClientModInitializer {
         clientProxy = ClientProxyImpl()
         ModEvents.onClientInit.fire { it() }
 
-        initClientModules()
+        with(ModContext()) {
+            initClientModules()
+        }
     }
 }

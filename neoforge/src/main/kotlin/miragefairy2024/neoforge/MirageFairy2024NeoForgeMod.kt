@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
@@ -27,7 +28,9 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
     init {
         Modules.init()
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            initClientModules()
+            with(ModContext()) {
+                initClientModules()
+            }
 
             clientProxy = ClientProxyImpl()
         }

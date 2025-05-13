@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod.fairyquest
 
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.stack
 import miragefairy2024.mixin.client.api.RenderItemHandler
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
@@ -15,6 +16,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdenti
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
+context(ModContext)
 fun initFairyQuestClientModule() {
     RenderItemHandler.listeners += RenderItemHandler { stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model ->
         if (!stack.`is`(FairyQuestCardCard.item())) return@RenderItemHandler

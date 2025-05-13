@@ -1,6 +1,7 @@
 package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.client.lib.MachineScreen
 import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
 import miragefairy2024.mod.machine.AuraReflectorFurnaceScreenHandler
@@ -17,6 +18,7 @@ import kotlin.math.roundToInt
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
+context(ModContext)
 fun initMachineClientModule() {
     HandledScreens.register(FermentationBarrelCard.screenHandlerType()) { gui, inventory, title -> FermentationBarrelScreen(FermentationBarrelCard, MachineScreen.Arguments(gui, inventory, title)) }
     HandledScreens.register(AuraReflectorFurnaceCard.screenHandlerType()) { gui, inventory, title -> AuraReflectorFurnaceScreen(AuraReflectorFurnaceCard, MachineScreen.Arguments(gui, inventory, title)) }

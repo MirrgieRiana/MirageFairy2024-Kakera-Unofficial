@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod
 
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.sendToServer
 import miragefairy2024.mixin.client.api.inputEventsHandlers
 import miragefairy2024.mod.placeditem.PLACE_ITEM_KEY_TRANSLATION
@@ -19,6 +20,7 @@ import net.minecraft.util.Mth as MathHelper
 
 lateinit var placeItemKey: KeyBinding
 
+context(ModContext)
 fun initPlacedItemClientModule() {
 
     placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.CATEGORY_GAMEPLAY)

@@ -1,5 +1,6 @@
 package miragefairy2024.client
 
+import miragefairy2024.ModContext
 import miragefairy2024.client.mod.entity.initEntityClientModule
 import miragefairy2024.client.mod.fairy.initFairyClientModule
 import miragefairy2024.client.mod.fairyquest.initFairyQuestClientModule
@@ -14,6 +15,7 @@ import miragefairy2024.client.mod.initPlacedItemClientModule
 import miragefairy2024.client.mod.initSoundEventClientModule
 import miragefairy2024.client.mod.particle.initParticleClientModule
 
+context(ModContext)
 fun initClientModules() {
     initFairyQuestClientModule()
     initFairyClientModule()

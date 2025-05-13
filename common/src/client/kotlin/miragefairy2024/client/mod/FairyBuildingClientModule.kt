@@ -1,6 +1,7 @@
 package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.client.lib.MachineScreen
 import miragefairy2024.mod.fairybuilding.FOLIA_TRANSLATION
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
@@ -21,6 +22,7 @@ import kotlin.math.roundToInt
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
+context(ModContext)
 fun initFairyBuildingClientModule() {
     ModelLoadingPlugin.register {
         FairyBuildingModelCard.entries.forEach { card ->
