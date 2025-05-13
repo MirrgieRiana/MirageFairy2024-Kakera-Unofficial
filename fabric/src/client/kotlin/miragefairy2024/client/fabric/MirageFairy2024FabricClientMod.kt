@@ -10,7 +10,9 @@ import net.fabricmc.api.ClientModInitializer
 
 object MirageFairy2024FabricClientMod : ClientModInitializer {
     override fun onInitializeClient() {
-        Modules.init()
+        with(ModContext()) {
+            Modules.init()
+        }
         clientProxy = ClientProxyImpl()
         ModEvents.onClientInit.fire { it() }
 

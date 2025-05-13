@@ -8,7 +8,9 @@ object TerraBlenderEvents {
 
 class MirageFairy2024TerraBlenderMod : TerraBlenderApi {
     override fun onTerraBlenderInitialized() {
-        Modules.init()
+        with(ModContext()) {
+            Modules.init()
+        }
         TerraBlenderEvents.onTerraBlenderInitialized.fire { it() }
     }
 }

@@ -2,6 +2,7 @@ package miragefairy2024.fabric
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
 import miragefairy2024.util.Registration
@@ -11,7 +12,9 @@ import net.minecraft.core.Registry
 
 object MirageFairy2024FabricMod : ModInitializer {
     override fun onInitialize() {
-        Modules.init()
+        with(ModContext()) {
+            Modules.init()
+        }
 
         runBlocking {
             RegistryEvents.registrations.forEach { registration ->

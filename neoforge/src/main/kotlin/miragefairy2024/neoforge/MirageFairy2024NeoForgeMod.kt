@@ -26,7 +26,9 @@ import net.neoforged.neoforge.registries.RegisterEvent
 @Mod(MirageFairy2024.MOD_ID)
 class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContainer) {
     init {
-        Modules.init()
+        with(ModContext()) {
+            Modules.init()
+        }
         if (FMLEnvironment.dist == Dist.CLIENT) {
             with(ModContext()) {
                 initClientModules()
