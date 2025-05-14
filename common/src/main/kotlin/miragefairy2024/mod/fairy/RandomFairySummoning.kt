@@ -10,6 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
@@ -76,7 +77,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         } else {
             if (world.isClientSide) return TypedActionResult.success(itemStack)
 
-            val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
+            val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
@@ -163,7 +164,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         }
 
         // モチーフの判定
-        val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.entries
+        val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.getOrCreate().entries
 
         // 抽選
         val result = getRandomFairy(world.random, motifSet, appearanceRateBonus) ?: return

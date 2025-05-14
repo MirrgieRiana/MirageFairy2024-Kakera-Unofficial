@@ -29,6 +29,7 @@ import miragefairy2024.util.darkGray
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.getOrDefault
 import miragefairy2024.util.gold
 import miragefairy2024.util.gray
 import miragefairy2024.util.green
@@ -222,7 +223,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                 ": x${stack.getFairyCondensation()}"(),
                 if (stack.count != 1) " *${stack.count}"() else empty(),
                 *(if (tooltipFlag.isAdvanced) listOf(
-                    "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.entries?.size ?: 0})"(), // TODO もっといい表示に
+                    "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.getOrDefault()?.entries?.size ?: 0})"(), // TODO もっといい表示に
                 ) else listOf()).toTypedArray()
             ).join().green
         }

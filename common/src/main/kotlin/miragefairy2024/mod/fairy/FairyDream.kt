@@ -2,12 +2,13 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.itemStacks
+import miragefairy2024.util.mutate
 import miragefairy2024.util.opposite
 import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.sendToClient
@@ -39,7 +40,7 @@ fun initFairyDream() {
 
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0xFF0000DD.toInt()) { world, player, _, _ ->
-        player.fairyDreamContainer.clear()
+        player.fairyDreamContainer.mutate { it.clear() }
         player.displayClientMessage(text { "Cleared fairy dream"() }, true)
     }
     registerServerDebugItem("debug_gain_fairy_dream", Items.STRING, 0xFF0000BB.toInt()) { world, player, hand, _ ->
@@ -48,11 +49,10 @@ fun initFairyDream() {
         val motif = fairyItemStack.getFairyMotif() ?: return@registerServerDebugItem
 
         if (!player.isShiftKeyDown) {
-            player.fairyDreamContainer[motif] = true
+            player.fairyDreamContainer.mutate { it[motif] = true }
             GainFairyDreamChannel.sendToClient(player, motif)
         } else {
-            player.fairyDreamContainer[motif] = false
-            FairyDreamContainerExtraPlayerDataCategory.sync(player)
+            player.fairyDreamContainer.mutate { it[motif] = false }
         }
     }
 
@@ -157,7 +157,7 @@ fun initFairyDream() {
                     motifs += FairyDreamRecipes.ENTITY_TYPE.test(it)
                 }
 
-                player.fairyDreamContainer.gain(player, motifs)
+                player.fairyDreamContainer.getOrCreate().gain(player, motifs)
 
             }
         }
