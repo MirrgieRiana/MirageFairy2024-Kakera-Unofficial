@@ -1,36 +1,38 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.ModContext
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.sync
-import miragefairy2024.util.Registration
 import miragefairy2024.util.boolean
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.obtain
-import miragefairy2024.util.register
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.minecraft.core.HolderLookup
+import net.minecraft.world.entity.Entity
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
-context(ModContext)
-fun initFairyDreamContainer() {
-    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_dream")) { FairyDreamContainerExtraPlayerDataCategory }.register()
+val FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE: AttachmentType<FairyDreamContainer> = AttachmentRegistry.create(MirageFairy2024.identifier("fairy_dream")) {
+    it.persistent(FairyDreamContainer.CODEC)
+    it.initializer { FairyDreamContainer() }
+    it.syncWith(FairyDreamContainer.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyDreamContainer> {
-    override fun create() = FairyDreamContainer()
-    override fun castOrThrow(value: Any) = value as FairyDreamContainer
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyDreamContainer> {
+var Entity.fairyDreamContainer
+    get() = this.getAttached(FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE)
+    set(value) {
+        this.setAttached(FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE, value)
+    }
+
+class FairyDreamContainer {
+    companion object {
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): FairyDreamContainer {
             val data = FairyDreamContainer()
             nbt.allKeys.forEach { key ->
@@ -48,11 +50,6 @@ object FairyDreamContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fair
             return nbt
         }
     }
-}
-
-val PlayerEntity.fairyDreamContainer get() = this.extraPlayerDataContainer.getOrInit(FairyDreamContainerExtraPlayerDataCategory)
-
-class FairyDreamContainer {
 
     private val map = mutableSetOf<Motif>()
 

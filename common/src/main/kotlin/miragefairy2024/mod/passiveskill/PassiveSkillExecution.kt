@@ -2,30 +2,29 @@ package miragefairy2024.mod.passiveskill
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.sync
-import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
-import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import kotlin.math.log
 import net.minecraft.nbt.CompoundTag as NbtCompound
@@ -62,9 +61,6 @@ fun initPassiveSkillExecution() {
             }
         }
     }
-
-    // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
-    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("passive_skill_result")) { PassiveSkillResultExtraPlayerDataCategory }.register()
 
     // 翻訳
     PASSIVE_SKILL_TRANSLATION.enJa()
@@ -205,11 +201,20 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
 
 // PassiveSkillResult
 
-object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<PassiveSkillResult> {
-    override fun create() = PassiveSkillResult()
-    override fun castOrThrow(value: Any) = value as PassiveSkillResult
+val PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE: AttachmentType<PassiveSkillResult> = AttachmentRegistry.create(MirageFairy2024.identifier("passive_skill_result")) {
+    it.persistent(PassiveSkillResult.CODEC)
+    it.initializer { PassiveSkillResult() }
+    it.syncWith(PassiveSkillResult.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+}
 
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
+var Entity.passiveSkillResult
+    get() = this.getAttached(PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE)
+    set(value) {
+        this.setAttached(PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE, value)
+    }
+
+class PassiveSkillResult {
+    companion object {
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
             val result = PassiveSkillResult()
             nbt.allKeys.forEach { key ->
@@ -236,9 +241,7 @@ object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<Passi
             return nbt
         }
     }
-}
 
-class PassiveSkillResult {
     val map = mutableMapOf<PassiveSkillEffect<*>, Any?>()
 
     operator fun <T> get(type: PassiveSkillEffect<T>) = if (type in map) type.castOrThrow(map[type]) else type.unit
@@ -251,9 +254,3 @@ class PassiveSkillResult {
         }
     }
 }
-
-var PlayerEntity.passiveSkillResult
-    get() = this.extraPlayerDataContainer.getOrInit(PassiveSkillResultExtraPlayerDataCategory)
-    set(value) {
-        this.extraPlayerDataContainer[PassiveSkillResultExtraPlayerDataCategory] = value
-    }

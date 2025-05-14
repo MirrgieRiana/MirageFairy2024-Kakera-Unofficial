@@ -4,9 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.Channel
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
@@ -20,6 +17,9 @@ import miragefairy2024.util.registerServerPacketReceiver
 import miragefairy2024.util.size
 import miragefairy2024.util.text
 import miragefairy2024.util.wrapper
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.core.HolderLookup
@@ -30,6 +30,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -47,9 +48,6 @@ val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, M
 
 context(ModContext)
 fun initSoulStream() {
-
-    // 拡張プレイヤーデータ
-    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("soul_stream")) { SoulStreamExtraPlayerDataCategory }.register()
 
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
@@ -78,10 +76,23 @@ fun initSoulStream() {
 
 // 拡張プレイヤーデータ
 
-object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
-    override fun create() = SoulStream()
-    override fun castOrThrow(value: Any) = value as SoulStream
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
+val SOUL_STREAM_ATTACHMENT_TYPE: AttachmentType<SoulStream> = AttachmentRegistry.create(MirageFairy2024.identifier("soul_stream")) {
+    it.persistent(SoulStream.CODEC)
+    it.initializer { SoulStream() }
+    it.syncWith(SoulStream.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+}
+
+var Entity.soulStream
+    get() = this.getAttached(SOUL_STREAM_ATTACHMENT_TYPE)
+    set(value) {
+        this.setAttached(SOUL_STREAM_ATTACHMENT_TYPE, value)
+    }
+
+class SoulStream : SimpleInventory(SLOT_COUNT) {
+    companion object {
+        const val SLOT_COUNT = 9 * 31
+        const val PASSIVE_SKILL_SLOT_COUNT = 9
+
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): SoulStream {
             val data = SoulStream()
             Inventories.loadAllItems(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.items, registry)
@@ -95,15 +106,6 @@ object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
             })
             return nbt
         }
-    }
-}
-
-val PlayerEntity.soulStream get() = this.extraPlayerDataContainer.getOrInit(SoulStreamExtraPlayerDataCategory)
-
-class SoulStream : SimpleInventory(SLOT_COUNT) {
-    companion object {
-        const val SLOT_COUNT = 9 * 31
-        const val PASSIVE_SKILL_SLOT_COUNT = 9
     }
 }
 

@@ -35,6 +35,9 @@ import miragefairy2024.util.withHorizontalRotation
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -44,6 +47,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -81,8 +85,6 @@ object TelescopeCard {
 
 context(ModContext)
 fun initTelescopeModule() {
-
-    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission")) { TelescopeMissionExtraPlayerDataCategory }.register()
 
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }.register()
 
@@ -312,12 +314,20 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
 }
 
 
-val PlayerEntity.telescopeMission get() = this.extraPlayerDataContainer.getOrInit(TelescopeMissionExtraPlayerDataCategory)
+val TELESCOPE_MISSION_ATTACHMENT_TYPE: AttachmentType<TelescopeMission> = AttachmentRegistry.create(MirageFairy2024.identifier("telescope_mission")) {
+    it.persistent(TelescopeMission.CODEC)
+    it.initializer { TelescopeMission() }
+    it.syncWith(TelescopeMission.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+}
 
-object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<TelescopeMission> {
-    override fun create() = TelescopeMission()
-    override fun castOrThrow(value: Any) = value as TelescopeMission
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<TelescopeMission> {
+var Entity.telescopeMission
+    get() = this.getAttached(TELESCOPE_MISSION_ATTACHMENT_TYPE)
+    set(value) {
+        this.setAttached(TELESCOPE_MISSION_ATTACHMENT_TYPE, value)
+    }
+
+class TelescopeMission {
+    companion object {
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): TelescopeMission {
             val data = TelescopeMission()
             data.lastUsedTime = nbt.wrapper["LastUsedTime"].long.get()
@@ -330,9 +340,7 @@ object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<Telesco
             return nbt
         }
     }
-}
 
-class TelescopeMission {
     var lastUsedTime: Long? = null
 }
 

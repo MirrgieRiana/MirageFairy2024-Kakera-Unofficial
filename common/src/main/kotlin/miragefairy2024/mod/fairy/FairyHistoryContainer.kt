@@ -1,30 +1,32 @@
 package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.ModContext
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
-import miragefairy2024.util.Registration
 import miragefairy2024.util.get
 import miragefairy2024.util.int
-import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
 import miragefairy2024.util.wrapper
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.minecraft.core.HolderLookup
+import net.minecraft.world.entity.Entity
 import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
-context(ModContext)
-fun initFairyHistoryContainer() {
-    Registration(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("fairy_history_container")) { FairyHistoryContainerExtraPlayerDataCategory }.register()
+val FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE: AttachmentType<FairyHistoryContainer> = AttachmentRegistry.create(MirageFairy2024.identifier("fairy_history_container")) {
+    it.persistent(FairyHistoryContainer.CODEC)
+    it.initializer { FairyHistoryContainer() }
+    it.syncWith(FairyHistoryContainer.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<FairyHistoryContainer> {
-    override fun create() = FairyHistoryContainer()
-    override fun castOrThrow(value: Any) = value as FairyHistoryContainer
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<FairyHistoryContainer> {
+var Entity.fairyHistoryContainer
+    get() = this.getAttached(FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE)
+    set(value) {
+        this.setAttached(FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE, value)
+    }
+
+class FairyHistoryContainer {
+    companion object {
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): FairyHistoryContainer {
             val data = FairyHistoryContainer()
             nbt.allKeys.forEach { key ->
@@ -42,9 +44,7 @@ object FairyHistoryContainerExtraPlayerDataCategory : ExtraPlayerDataCategory<Fa
             return nbt
         }
     }
-}
 
-class FairyHistoryContainer {
     private val map = mutableMapOf<Motif, Int>()
 
     val entries get() = map.entries
@@ -64,5 +64,3 @@ class FairyHistoryContainer {
         }
     }
 }
-
-val PlayerEntity.fairyHistoryContainer get() = this.extraPlayerDataContainer.getOrInit(FairyHistoryContainerExtraPlayerDataCategory)
