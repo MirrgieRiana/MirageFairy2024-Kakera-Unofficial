@@ -2,9 +2,9 @@ package miragefairy2024.mod.magicplant
 
 import com.mojang.serialization.Codec
 import miragefairy2024.util.bitCount
+import miragefairy2024.util.list
 import miragefairy2024.util.toNbtList
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import java.util.SortedMap
 import net.minecraft.nbt.CompoundTag as NbtCompound
@@ -16,7 +16,7 @@ import net.minecraft.nbt.Tag as NbtElement
 class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) {
     companion object {
         val CODEC: Codec<TraitStacks> = TraitStack.CODEC.listOf().xmap({ of(it) }, { it.traitStackList })
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, TraitStacks> = TraitStack.STREAM_CODEC.apply(ByteBufCodecs.list()).map({ of(it) }, { it.traitStackList })
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, TraitStacks> = TraitStack.STREAM_CODEC.list().map({ of(it) }, { it.traitStackList })
 
         fun of(traitStackList: Iterable<TraitStack>): TraitStacks {
             // 同じ特性をまとめて、各レベルをビットORする

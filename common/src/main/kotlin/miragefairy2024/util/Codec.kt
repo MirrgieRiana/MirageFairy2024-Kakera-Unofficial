@@ -11,6 +11,7 @@ import java.time.Instant
 import java.util.Optional
 
 fun <B : ByteBuf, V> StreamCodec<B, V>.optional(): StreamCodec<B, Optional<V>> = ByteBufCodecs.optional(this)
+fun <B : ByteBuf, V> StreamCodec<B, V>.list(): StreamCodec<B, List<V>> = this.apply(ByteBufCodecs.list())
 
 val INSTANT_CODEC: Codec<Instant> = Codec.LONG.xmap(Instant::ofEpochMilli, Instant::toEpochMilli)
 val INSTANT_STREAM_CODEC: StreamCodec<ByteBuf, Instant> = ByteBufCodecs.VAR_LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli)

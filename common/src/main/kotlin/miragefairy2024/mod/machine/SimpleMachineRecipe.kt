@@ -9,6 +9,7 @@ import miragefairy2024.util.RecipeGenerationSettings
 import miragefairy2024.util.Registration
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
+import miragefairy2024.util.list
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.times
@@ -139,7 +140,7 @@ open class SimpleMachineRecipe(
         override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, R> = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             { it.group },
-            INPUT_STREAM_CODEC.apply(ByteBufCodecs.list()),
+            INPUT_STREAM_CODEC.list(),
             { it.inputs },
             ItemStack.STREAM_CODEC,
             { it.output },
