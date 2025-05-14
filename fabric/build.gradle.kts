@@ -41,7 +41,6 @@ configurations {
 
 repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
-    maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
     maven("https://maven.wispforest.io/releases/") // owo-lib
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
@@ -85,8 +84,6 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.799")
     modCompileOnly("me.shedaniel.cloth:basic-math:0.6.1")
-
-    modImplementation("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.21.1:13.0.1")
 
     modImplementation("io.wispforest:owo-lib:0.12.15.4+1.21")
 
