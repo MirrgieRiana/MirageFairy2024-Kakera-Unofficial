@@ -34,3 +34,7 @@ fun <T> AttachmentDelegate<T>.mutate(block: (T) -> Unit) {
     block(data)
     this.set(data)
 }
+
+fun <T> AttachmentDelegate<T>.sync() {
+    this.set(this.get())
+}
