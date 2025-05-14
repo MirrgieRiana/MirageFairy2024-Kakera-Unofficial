@@ -1,5 +1,7 @@
 package miragefairy2024.mod.passiveskill
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.fairy.SoulStream
@@ -12,6 +14,7 @@ import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.string
 import miragefairy2024.util.text
@@ -23,6 +26,8 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.core.HolderLookup
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
@@ -139,7 +144,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
         addItemStack(it, true)
     }
     repeat(SoulStream.SLOT_COUNT) { index ->
-        addItemStack(this.soulStream[index], index < SoulStream.PASSIVE_SKILL_SLOT_COUNT)
+        addItemStack(this.soulStream.getOrCreate()[index], index < SoulStream.PASSIVE_SKILL_SLOT_COUNT)
     }
 
     // パッシブスキルを統合
@@ -203,18 +208,25 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
 
 val PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE: AttachmentType<PassiveSkillResult> = AttachmentRegistry.create(MirageFairy2024.identifier("passive_skill_result")) {
     it.persistent(PassiveSkillResult.CODEC)
-    it.initializer { PassiveSkillResult() }
+    it.initializer(::PassiveSkillResult)
     it.syncWith(PassiveSkillResult.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-var Entity.passiveSkillResult
-    get() = this.getAttached(PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE)
-    set(value) {
-        this.setAttached(PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE, value)
-    }
+val Entity.passiveSkillResult get() = this[PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE]
 
 class PassiveSkillResult {
     companion object {
+        val CODEC: Codec<PassiveSkillResult> = RecordCodecBuilder.create { instance ->
+            instance.group(
+
+
+            ).apply(instance) { }
+        }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = StreamCodec.composite(
+
+
+        ) { }
+
         override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
             val result = PassiveSkillResult()
             nbt.allKeys.forEach { key ->
