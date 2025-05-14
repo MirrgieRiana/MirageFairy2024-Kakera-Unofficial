@@ -165,6 +165,7 @@ tasks.register("fetchMirrgKotlin") {
         fetch("mirrg/kotlin/hydrogen/Number.kt")
         fetch("mirrg/kotlin/hydrogen/String.kt")
         fetch("mirrg/kotlin/java/hydrogen/Number.kt")
+        fetch("mirrg/kotlin/java/hydrogen/Optional.kt")
         fetch("mirrg/kotlin/slf4j/hydrogen/Logging.kt")
     }
 }
