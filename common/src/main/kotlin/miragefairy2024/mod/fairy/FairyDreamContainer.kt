@@ -33,7 +33,7 @@ class FairyDreamContainer {
         val ENTRY_CODEC: Codec<Pair<ResourceLocation, Boolean>> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ResourceLocation.CODEC.fieldOf("motif").forGetter { it.first },
-                Codec.LONG.fieldOf("gained").xmap({ it > 0 }, { if (it) 1 else 0 }).forGetter { it.second },
+                Codec.LONG.xmap({ it > 0 }, { if (it) 1 else 0 }).fieldOf("gained").forGetter { it.second },
             ).apply(instance, ::Pair)
         }
         val ENTRY_STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Pair<ResourceLocation, Boolean>> = StreamCodec.composite(
@@ -43,6 +43,15 @@ class FairyDreamContainer {
             { it.second },
             ::Pair,
         )
+
+        fun fromEntries(entries: List<Pair<ResourceLocation, Boolean>>): FairyDreamContainer {
+            val fairyDreamContainer = FairyDreamContainer()
+            entries.forEach { (key, value) ->
+                val motif = motifRegistry[key] ?: return@forEach
+                fairyDreamContainer[motif] = value
+            }
+            return fairyDreamContainer
+        }
 
         fun toEntries(fairyDreamContainer: FairyDreamContainer): List<Pair<ResourceLocation, Boolean>> {
             val entries = mutableListOf<Pair<ResourceLocation, Boolean>>()
@@ -54,15 +63,6 @@ class FairyDreamContainer {
 
         val CODEC: Codec<FairyDreamContainer> = ENTRY_CODEC.listOf().xmap(::fromEntries, ::toEntries)
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, FairyDreamContainer> = ENTRY_STREAM_CODEC.list().map(::fromEntries, ::toEntries)
-
-        fun fromEntries(entries: List<Pair<ResourceLocation, Boolean>>): FairyDreamContainer {
-            val fairyDreamContainer = FairyDreamContainer()
-            entries.forEach { (key, value) ->
-                val motif = miragefairy2024.mod.fairy.motifRegistry[key] ?: return@forEach
-                fairyDreamContainer[motif] = value
-            }
-            return fairyDreamContainer
-        }
     }
 
     private val map = mutableSetOf<Motif>()
