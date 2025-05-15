@@ -1331,7 +1331,7 @@ private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
 
-private operator fun <T> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
+private operator fun <T: Any> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
 private fun attribute(attribute: Holder<EntityAttribute>, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
