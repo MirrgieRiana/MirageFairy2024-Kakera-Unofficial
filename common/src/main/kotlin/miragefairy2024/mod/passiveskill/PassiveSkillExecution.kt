@@ -216,18 +216,11 @@ val Entity.passiveSkillResult get() = this[PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE]
 
 class PassiveSkillResult {
     companion object {
-        val CODEC: Codec<PassiveSkillResult> = RecordCodecBuilder.create { instance ->
-            instance.group(
 
 
-            ).apply(instance) { }
-        }
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = StreamCodec.composite(
 
 
-        ) { }
-
-        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
+        fun fromNbt(nbt: NbtCompound, ): PassiveSkillResult {
             val result = PassiveSkillResult()
             nbt.allKeys.forEach { key ->
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
@@ -240,7 +233,7 @@ class PassiveSkillResult {
             return result
         }
 
-        override fun toNbt(data: PassiveSkillResult, registry: HolderLookup.Provider): NbtCompound {
+        fun toNbt(data: PassiveSkillResult, ): NbtCompound {
             val nbt = NbtCompound()
             data.map.entries.forEach {
                 fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
@@ -252,6 +245,17 @@ class PassiveSkillResult {
             }
             return nbt
         }
+
+        val CODEC: Codec<PassiveSkillResult> = RecordCodecBuilder.create { instance ->
+            instance.group(
+
+
+            ).apply(instance) { }
+        }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = StreamCodec.composite(
+
+
+        ) { }
     }
 
     val map = mutableMapOf<PassiveSkillEffect<*>, Any?>()
