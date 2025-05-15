@@ -209,10 +209,17 @@ val Entity.passiveSkillResult get() = this[PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE]
 class PassiveSkillResult() {
     companion object {
         val CODEC: Codec<PassiveSkillResult> = Codec.dispatchedMap(passiveSkillEffectRegistry.byNameCodec()) { it.codec() }.xmap(::PassiveSkillResult, PassiveSkillResult::map)
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = StreamCodec.composite(
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = object : StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> {
+            override fun decode(buffer: RegistryFriendlyByteBuf): PassiveSkillResult {
 
 
-        ) { }
+            }
+
+            override fun encode(buffer: RegistryFriendlyByteBuf, value: PassiveSkillResult) {
+
+
+            }
+        }
     }
 
     constructor (map: Map<PassiveSkillEffect<*>, Any>) : this() {
