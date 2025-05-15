@@ -7,6 +7,7 @@ import miragefairy2024.mod.lastFood
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
+import miragefairy2024.util.getOrDefault
 import miragefairy2024.util.invoke
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.text
@@ -21,8 +22,8 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: () -> Item) : Pa
 
     override val text get() = text { translation(item().description) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
-        if (!(context.player.lastFood?.itemStack.orEmpty.item containsAsFoodIngredient item())) return false
-        val time = context.player.lastFood?.time ?: return false
+        if (!(context.player.lastFood.getOrDefault().itemStack.orEmpty.item containsAsFoodIngredient item())) return false
+        val time = context.player.lastFood.getOrDefault().time ?: return false
         val now = Instant.now()
         return time in now.minusSeconds(3600 * 25)..now
     }
@@ -31,8 +32,8 @@ class ItemFoodIngredientPassiveSkillCondition(private val item: () -> Item) : Pa
 class CategoryFoodIngredientPassiveSkillCondition(private val category: FoodIngredientCategory) : PassiveSkillCondition {
     override val text get() = text { ItemFoodIngredientPassiveSkillCondition.translation(category.text) }
     override fun test(context: PassiveSkillContext, level: Double, mana: Double): Boolean {
-        if (!(context.player.lastFood?.itemStack.orEmpty.item containsAsFoodIngredient category)) return false
-        val time = context.player.lastFood?.time ?: return false
+        if (!(context.player.lastFood.getOrDefault().itemStack.orEmpty.item containsAsFoodIngredient category)) return false
+        val time = context.player.lastFood.getOrDefault().time ?: return false
         val now = Instant.now()
         return time in now.minusSeconds(3600 * 25)..now
     }
