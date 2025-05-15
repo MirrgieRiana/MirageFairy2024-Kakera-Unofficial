@@ -250,7 +250,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
             tooltipComponents += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
-                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
+                fun <T: Any> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }

@@ -1,18 +1,18 @@
 package miragefairy2024.mod.passiveskill.effects
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.PrimitiveCodec
+import io.netty.buffer.ByteBuf
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.passiveSkillEffectRegistry
 import miragefairy2024.util.Registration
-import miragefairy2024.util.boolean
-import miragefairy2024.util.double
-import miragefairy2024.util.get
 import miragefairy2024.util.register
-import miragefairy2024.util.wrapper
-import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
-abstract class AbstractPassiveSkillEffect<T>(path: String) : PassiveSkillEffect<T> {
+abstract class AbstractPassiveSkillEffect<T : Any>(path: String) : PassiveSkillEffect<T> {
     val identifier = MirageFairy2024.identifier(path)
 
     context(ModContext)
@@ -27,14 +27,14 @@ abstract class AbstractDoublePassiveSkillEffect(path: String) : AbstractPassiveS
     override val unit = 0.0
     override fun castOrThrow(value: Any?) = value as Double
     override fun combine(a: Double, b: Double) = a + b
-    override fun fromNbt(nbt: NbtCompound) = nbt.wrapper["value"].double.get()!!
-    override fun toNbt(value: Double) = NbtCompound().also { it.wrapper["value"].double.set(value) }
+    override fun codec(): PrimitiveCodec<Double> = Codec.DOUBLE
+    override fun streamCodec(): StreamCodec<ByteBuf, Double> = ByteBufCodecs.DOUBLE
 }
 
 abstract class AbstractBooleanPassiveSkillEffect(path: String) : AbstractPassiveSkillEffect<Boolean>(path) {
     override val unit = false
     override fun castOrThrow(value: Any?) = value as Boolean
     override fun combine(a: Boolean, b: Boolean) = a || b
-    override fun fromNbt(nbt: NbtCompound) = nbt.wrapper["value"].boolean.get()!!
-    override fun toNbt(value: Boolean) = NbtCompound().also { it.wrapper["value"].boolean.set(value) }
+    override fun codec(): PrimitiveCodec<Boolean> = Codec.BOOL
+    override fun streamCodec(): StreamCodec<ByteBuf, Boolean> = ByteBufCodecs.BOOL
 }
