@@ -19,6 +19,7 @@ import miragefairy2024.util.not
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -167,8 +168,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
                 Registries.CONFIGURED_FEATURE[LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { end * !+BiomeKeys.THE_END } // エンド外縁の島々に通常クラスタ
+            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld + end * !+BiomeKeys.THE_END } // 地上・エンド外縁の島々に通常クラスタ
             NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
             LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
 
