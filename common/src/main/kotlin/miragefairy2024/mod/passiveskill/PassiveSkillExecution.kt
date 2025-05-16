@@ -211,13 +211,28 @@ class PassiveSkillResult() {
         val CODEC: Codec<PassiveSkillResult> = Codec.dispatchedMap(passiveSkillEffectRegistry.byNameCodec()) { it.codec() }.xmap(::PassiveSkillResult, PassiveSkillResult::map)
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = object : StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> {
             override fun decode(buffer: RegistryFriendlyByteBuf): PassiveSkillResult {
-
-
+                val value = PassiveSkillResult()
+                val size = buffer.readVarInt()
+                repeat(size) { _ ->
+                    val passiveSkillEffect = passiveSkillEffectRegistry.get(ResourceLocation.STREAM_CODEC.decode(buffer))!!
+                    fun <T : Any> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                        val it = passiveSkillEffect.streamCodec().decode(buffer)
+                        value.map[passiveSkillEffect] = it
+                    }
+                    f(passiveSkillEffect)
+                }
+                return value
             }
 
             override fun encode(buffer: RegistryFriendlyByteBuf, value: PassiveSkillResult) {
-
-
+                buffer.writeVarInt(value.map.size)
+                value.map.forEach { (passiveSkillEffect, it) ->
+                    fun <T : Any> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                        ResourceLocation.STREAM_CODEC.encode(buffer, passiveSkillEffectRegistry.getKey(passiveSkillEffect)!!)
+                        passiveSkillEffect.streamCodec().encode(buffer, it as T)
+                    }
+                    f(passiveSkillEffect)
+                }
             }
         }
     }
