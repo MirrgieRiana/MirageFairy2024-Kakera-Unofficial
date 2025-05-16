@@ -50,6 +50,13 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
     }
 
     val traitStackList by lazy { traitStackMap.map { TraitStack(it.key, it.value) } }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is TraitStacks) return false
+        return this.traitStackList == other.traitStackList
+    }
+
+    override fun hashCode() = traitStackList.hashCode()
 }
 
 
