@@ -48,9 +48,8 @@ class ClientProxyImpl : ClientProxy {
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
 
     override fun getBlockColorProvider(block: Block): BlockColorProvider? {
-        val provider = ColorProviderRegistry.BLOCK.get(block) ?: return null
         return BlockColorProvider { blockState, world, blockPos, tintIndex ->
-            provider.getColor(blockState, world as BlockRenderView?, blockPos, tintIndex)
+            MinecraftClient.getInstance().blockColors.getColor(blockState, world as BlockRenderView?, blockPos, tintIndex)
         }
     }
 
