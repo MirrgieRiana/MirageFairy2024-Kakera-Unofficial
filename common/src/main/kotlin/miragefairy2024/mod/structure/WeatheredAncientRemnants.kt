@@ -71,17 +71,17 @@ object WeatheredAncientRemnantsCard {
                     ItemLootPoolEntry(Items.RAW_COPPER).setWeight(10),
                     ItemLootPoolEntry(Items.GOLD_NUGGET).setWeight(10),
                     ItemLootPoolEntry(Items.GLASS_PANE).setWeight(5),
-                    ItemLootPoolEntry(MaterialCard.XARPITE.item).setWeight(20),
+                    ItemLootPoolEntry(MaterialCard.XARPITE.item()).setWeight(20),
 
-                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item).setWeight(3),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_PICKAXE.item()).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_AXE.item()).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SHOVEL.item()).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item()).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item()).setWeight(1).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item()).setWeight(3),
                     ItemLootPoolEntry(Items.AMETHYST_SHARD).setWeight(3),
                     ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item).setWeight(3),
+                    ItemLootPoolEntry(MaterialCard.JEWEL_100.item()).setWeight(3),
                     ItemLootPoolEntry(Items.MAP) {
                         apply(
                             ExplorationMapLootFunction.makeExplorationMap()
@@ -114,7 +114,7 @@ object WeatheredAncientRemnantsCard {
                 // これが無いと生成時に即水没してBlockEntityが作れたなったエラーログが大量に出る
                 RuleStructureProcessor(
                     StructureProcessorRule(
-                        BlockMatchRuleTest(PlacedItemCard.block),
+                        BlockMatchRuleTest(PlacedItemCard.block()),
                         BlockMatchRuleTest(Blocks.WATER),
                         Blocks.WATER.defaultBlockState(),
                     ),

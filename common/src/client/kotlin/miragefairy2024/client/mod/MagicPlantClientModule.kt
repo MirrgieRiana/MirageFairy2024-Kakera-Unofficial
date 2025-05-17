@@ -12,8 +12,10 @@ import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.ClickableContainer
 import miragefairy2024.client.util.inventoryNameLabel
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
@@ -35,10 +37,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import io.wispforest.owo.ui.core.Component as OwoComponent
 import net.minecraft.client.Minecraft as MinecraftClient
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
+context(ModContext)
 fun initMagicPlantClientModule() {
-    HandledScreens.register(traitListScreenHandlerType) { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
+    traitListScreenHandlerType.registerHandledScreen { gui, inventory, title -> TraitListScreen(gui, inventory, title) }
 }
 
 class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, TraitListScreenHandler>(handler, playerInventory, title) {

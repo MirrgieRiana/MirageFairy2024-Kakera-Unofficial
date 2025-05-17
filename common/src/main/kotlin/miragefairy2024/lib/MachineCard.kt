@@ -1,6 +1,8 @@
 package miragefairy2024.lib
 
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
+import miragefairy2024.util.dummyUnitStreamCodec
 import miragefairy2024.util.register
 import miragefairy2024.util.times
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -8,7 +10,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -42,7 +43,7 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     abstract fun createBlockSettings(): FabricBlockSettings
     abstract fun createBlock(): B
-    val block = createBlock()
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
 
 
     // BlockEntity
@@ -72,27 +73,29 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     abstract fun createBlockEntityAccessor(): BlockEntityAccessor<E>
     val blockEntityAccessor = createBlockEntityAccessor()
-    val blockEntityType = BlockEntityType(blockEntityAccessor::create, setOf(block), null)
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(blockEntityAccessor::create, setOf(block.await()), null) }
 
 
     // Item
 
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 
 
     // ScreenHandler
 
     abstract fun createScreenHandler(arguments: MachineScreenHandler.Arguments): H
-    val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
-        val arguments = MachineScreenHandler.Arguments(
-            syncId,
-            playerInventory,
-            SimpleInventory(inventorySlotConfigurations.size),
-            ArrayPropertyDelegate(propertyConfigurations.size),
-            ScreenHandlerContext.NULL,
-        )
-        createScreenHandler(arguments)
-    }, StreamCodec.unit(Unit))
+    val screenHandlerType = Registration(BuiltInRegistries.MENU, identifier) {
+        ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
+            val arguments = MachineScreenHandler.Arguments(
+                syncId,
+                playerInventory,
+                SimpleInventory(inventorySlotConfigurations.size),
+                ArrayPropertyDelegate(propertyConfigurations.size),
+                ScreenHandlerContext.NULL,
+            )
+            createScreenHandler(arguments)
+        }, dummyUnitStreamCodec())
+    }
 
 
     // Gui
@@ -117,9 +120,9 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
 
     context(ModContext)
     open fun init() {
-        block.register(BuiltInRegistries.BLOCK, identifier)
-        blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier)
-        item.register(BuiltInRegistries.ITEM, identifier)
-        screenHandlerType.register(BuiltInRegistries.MENU, identifier)
+        block.register()
+        blockEntityType.register()
+        item.register()
+        screenHandlerType.register()
     }
 }

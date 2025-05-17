@@ -3,6 +3,7 @@ package miragefairy2024.fabric
 import com.google.gson.JsonElement
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.Modules
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
@@ -42,7 +43,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as
 
 object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
-        Modules.init()
+        with(ModContext()) {
+            Modules.init()
+        }
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }
 
         val pack = fabricDataGenerator.createPack()

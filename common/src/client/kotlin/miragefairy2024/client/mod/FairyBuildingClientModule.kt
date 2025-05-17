@@ -1,7 +1,9 @@
 package miragefairy2024.client.mod
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.client.lib.MachineScreen
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.mod.fairybuilding.FOLIA_TRANSLATION
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingModelCard
@@ -19,8 +21,8 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import java.util.Optional
 import kotlin.math.roundToInt
 import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
+context(ModContext)
 fun initFairyBuildingClientModule() {
     ModelLoadingPlugin.register {
         FairyBuildingModelCard.entries.forEach { card ->
@@ -28,8 +30,8 @@ fun initFairyBuildingClientModule() {
         }
     }
 
-    HandledScreens.register(FairyHouseCard.screenHandlerType) { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, MachineScreen.Arguments(gui, inventory, title)) }
-    HandledScreens.register(FairyCollectorCard.screenHandlerType) { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, MachineScreen.Arguments(gui, inventory, title)) }
+    FairyHouseCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> FairyHouseScreen(FairyHouseCard, MachineScreen.Arguments(gui, inventory, title)) }
+    FairyCollectorCard.screenHandlerType.registerHandledScreen { gui, inventory, title -> FairyCollectorScreen(FairyCollectorCard, MachineScreen.Arguments(gui, inventory, title)) }
 }
 
 open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(card: FairyBuildingCard<*, *, *>, arguments: Arguments<H>) : MachineScreen<H>(card, arguments) {

@@ -1,33 +1,31 @@
 package miragefairy2024.mod.passiveskill
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.mod.fairy.SoulStream
 import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.soulStream
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
-import miragefairy2024.mod.sync
 import miragefairy2024.util.Translation
-import miragefairy2024.util.compound
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
-import miragefairy2024.util.register
-import miragefairy2024.util.string
+import miragefairy2024.util.set
 import miragefairy2024.util.text
-import miragefairy2024.util.toIdentifier
-import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Slot
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.minecraft.core.HolderLookup
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import kotlin.math.log
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
@@ -56,14 +54,10 @@ fun initPassiveSkillExecution() {
 
                 // 効果
                 result.update(player)
-                PassiveSkillResultExtraPlayerDataCategory.sync(player)
 
             }
         }
     }
-
-    // パッシブスキル更新時に使われる古いデータをプレイヤーに保存する
-    PassiveSkillResultExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("passive_skill_result"))
 
     // 翻訳
     PASSIVE_SKILL_TRANSLATION.enJa()
@@ -142,7 +136,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
         addItemStack(it, true)
     }
     repeat(SoulStream.SLOT_COUNT) { index ->
-        addItemStack(this.soulStream[index], index < SoulStream.PASSIVE_SKILL_SLOT_COUNT)
+        addItemStack(this.soulStream.getOrCreate()[index], index < SoulStream.PASSIVE_SKILL_SLOT_COUNT)
     }
 
     // パッシブスキルを統合
@@ -173,7 +167,7 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
         val level = passiveSkill.rare + log(passiveSkill.count, 3.0)
         val mana = level * (1.0 + manaBoostValue.map.entries.sumOf { (keyMotif, value) -> if (motif in keyMotif) value else 0.0 })
         passiveSkill.specifications.forEach { specification ->
-            fun <T> f(specification: PassiveSkillSpecification<T>) {
+            fun <T : Any> f(specification: PassiveSkillSpecification<T>) {
                 if (specification.effect.isPreprocessor == isPreprocessing) {
                     if (specification.conditions.all { it.test(context, level, mana) }) {
                         this.add(specification.effect, specification.valueProvider(mana))
@@ -188,11 +182,11 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
 fun PassiveSkillResult.update(player: PlayerEntity) {
     val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
-    val oldResult = player.passiveSkillResult
-    player.passiveSkillResult = this
+    val oldResult = player.passiveSkillResult.getOrCreate()
+    player.passiveSkillResult.set(this)
 
     passiveSkillEffectRegistry.entrySet().forEach {
-        fun <T> f(type: PassiveSkillEffect<T>) {
+        fun <T : Any> f(type: PassiveSkillEffect<T>) {
             val oldValue = oldResult[type]
             val newValue = this[type]
             type.update(context, oldValue, newValue)
@@ -204,45 +198,54 @@ fun PassiveSkillResult.update(player: PlayerEntity) {
 
 // PassiveSkillResult
 
-object PassiveSkillResultExtraPlayerDataCategory : ExtraPlayerDataCategory<PassiveSkillResult> {
-    override fun create() = PassiveSkillResult()
-    override fun castOrThrow(value: Any) = value as PassiveSkillResult
-
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<PassiveSkillResult> {
-        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): PassiveSkillResult {
-            val result = PassiveSkillResult()
-            nbt.allKeys.forEach { key ->
-                fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
-                    result.map[passiveSkillEffect] = passiveSkillEffect.fromNbt(nbt[key] as NbtCompound)
-                }
-
-                val passiveSkillEffect = passiveSkillEffectRegistry.get(key.toIdentifier()) ?: return@forEach
-                f(passiveSkillEffect)
-            }
-            return result
-        }
-
-        override fun toNbt(data: PassiveSkillResult, registry: HolderLookup.Provider): NbtCompound {
-            val nbt = NbtCompound()
-            data.map.entries.forEach {
-                fun <T> f(passiveSkillEffect: PassiveSkillEffect<T>) {
-                    val identifier = passiveSkillEffectRegistry.getKey(passiveSkillEffect) ?: return
-                    nbt.wrapper[identifier.string].compound.set(passiveSkillEffect.toNbt(passiveSkillEffect.castOrThrow(it.value)))
-                }
-
-                f(it.key)
-            }
-            return nbt
-        }
-    }
+val PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE: AttachmentType<PassiveSkillResult> = AttachmentRegistry.create(MirageFairy2024.identifier("passive_skill_result")) {
+    it.persistent(PassiveSkillResult.CODEC)
+    it.initializer(::PassiveSkillResult)
+    it.syncWith(PassiveSkillResult.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-class PassiveSkillResult {
-    val map = mutableMapOf<PassiveSkillEffect<*>, Any?>()
+val Entity.passiveSkillResult get() = this[PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE]
 
-    operator fun <T> get(type: PassiveSkillEffect<T>) = if (type in map) type.castOrThrow(map[type]) else type.unit
+class PassiveSkillResult() {
+    companion object {
+        val CODEC: Codec<PassiveSkillResult> = Codec.dispatchedMap(passiveSkillEffectRegistry.byNameCodec()) { it.codec() }.xmap(::PassiveSkillResult, PassiveSkillResult::map)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> = object : StreamCodec<RegistryFriendlyByteBuf, PassiveSkillResult> {
+            override fun decode(buffer: RegistryFriendlyByteBuf): PassiveSkillResult {
+                val value = PassiveSkillResult()
+                val size = buffer.readVarInt()
+                repeat(size) { _ ->
+                    val passiveSkillEffect = passiveSkillEffectRegistry.get(ResourceLocation.STREAM_CODEC.decode(buffer))!!
+                    fun <T : Any> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                        val it = passiveSkillEffect.streamCodec().decode(buffer)
+                        value.map[passiveSkillEffect] = it
+                    }
+                    f(passiveSkillEffect)
+                }
+                return value
+            }
 
-    fun <T> add(type: PassiveSkillEffect<T>, value: T) {
+            override fun encode(buffer: RegistryFriendlyByteBuf, value: PassiveSkillResult) {
+                buffer.writeVarInt(value.map.size)
+                value.map.forEach { (passiveSkillEffect, it) ->
+                    fun <T : Any> f(passiveSkillEffect: PassiveSkillEffect<T>) {
+                        ResourceLocation.STREAM_CODEC.encode(buffer, passiveSkillEffectRegistry.getKey(passiveSkillEffect)!!)
+                        passiveSkillEffect.streamCodec().encode(buffer, it as T)
+                    }
+                    f(passiveSkillEffect)
+                }
+            }
+        }
+    }
+
+    constructor (map: Map<PassiveSkillEffect<*>, Any>) : this() {
+        this.map += map
+    }
+
+    val map = mutableMapOf<PassiveSkillEffect<*>, Any>()
+
+    operator fun <T : Any> get(type: PassiveSkillEffect<T>) = if (type in map) type.castOrThrow(map[type]) else type.unit
+
+    fun <T : Any> add(type: PassiveSkillEffect<T>, value: T) {
         if (type in map) {
             map[type] = type.combine(type.castOrThrow(map[type]), value)
         } else {
@@ -250,9 +253,3 @@ class PassiveSkillResult {
         }
     }
 }
-
-var PlayerEntity.passiveSkillResult
-    get() = this.extraPlayerDataContainer.getOrInit(PassiveSkillResultExtraPlayerDataCategory)
-    set(value) {
-        this.extraPlayerDataContainer[PassiveSkillResultExtraPlayerDataCategory] = value
-    }

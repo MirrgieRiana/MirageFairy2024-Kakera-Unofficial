@@ -16,32 +16,32 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 
 context(ModContext)
-fun Block.registerCutoutRenderLayer() = ModEvents.onClientInit {
+fun (() -> Block).registerCutoutRenderLayer() = ModEvents.onClientInit {
     clientProxy!!.registerCutoutRenderLayer(this)
 }
 
 context(ModContext)
-fun Block.registerTranslucentRenderLayer() = ModEvents.onClientInit {
+fun (() -> Block).registerTranslucentRenderLayer() = ModEvents.onClientInit {
     clientProxy!!.registerTranslucentRenderLayer(this)
 }
 
 context(ModContext)
-fun Block.registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
+fun (() -> Block).registerColorProvider(provider: BlockColorProvider) = ModEvents.onClientInit {
     clientProxy!!.registerBlockColorProvider(this, provider)
 }
 
 context(ModContext)
-fun Block.registerFoliageColorProvider() = this.registerColorProvider { blockState, world, blockPos, tintIndex ->
+fun (() -> Block).registerFoliageColorProvider() = this.registerColorProvider { blockState, world, blockPos, tintIndex ->
     clientProxy!!.getFoliageBlockColorProvider().invoke(blockState, world, blockPos, tintIndex)
 }
 
 context(ModContext)
-fun Item.registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
-    clientProxy!!.registerItemColorProvider(this, provider)
+fun (() -> Item).registerColorProvider(provider: ItemColorProvider) = ModEvents.onClientInit {
+    clientProxy!!.registerItemColorProvider(this(), provider)
 }
 
 context(ModContext)
-fun BlockItem.registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
+fun (() -> BlockItem).registerRedirectColorProvider() = this.registerColorProvider { itemStack, tintIndex ->
     val block = itemStack.item.castOrThrow<BlockItem>().block
     clientProxy!!.getBlockColorProvider(block)!!.invoke(block.defaultBlockState(), null, null, tintIndex)
 }
@@ -57,6 +57,6 @@ fun RenderingProxy.renderItemStack(itemStack: ItemStack, dotX: Double, dotY: Dou
 }
 
 context(ModContext)
-fun <T> BlockEntityType<T>.registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
-    clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this)
+fun <T> (() -> BlockEntityType<T>).registerRenderingProxyBlockEntityRendererFactory() where T : BlockEntity, T : RenderingProxyBlockEntity = ModEvents.onClientInit {
+    clientProxy!!.registerRenderingProxyBlockEntityRendererFactory(this())
 }

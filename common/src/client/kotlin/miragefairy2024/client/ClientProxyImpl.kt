@@ -37,27 +37,26 @@ class ClientProxyImpl : ClientProxy {
         }
     }
 
-    override fun registerCutoutRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.cutout())
+    override fun registerCutoutRenderLayer(block: () -> Block) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.cutout())
     }
 
-    override fun registerTranslucentRenderLayer(block: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.translucent())
+    override fun registerTranslucentRenderLayer(block: () -> Block) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.translucent())
     }
 
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
 
     override fun getBlockColorProvider(block: Block): BlockColorProvider? {
-        val provider = ColorProviderRegistry.BLOCK.get(block) ?: return null
         return BlockColorProvider { blockState, world, blockPos, tintIndex ->
-            provider.getColor(blockState, world as BlockRenderView?, blockPos, tintIndex)
+            MinecraftClient.getInstance().blockColors.getColor(blockState, world as BlockRenderView?, blockPos, tintIndex)
         }
     }
 
-    override fun registerBlockColorProvider(block: Block, provider: BlockColorProvider) {
+    override fun registerBlockColorProvider(block: () -> Block, provider: BlockColorProvider) {
         ColorProviderRegistry.BLOCK.register({ blockState, world, blockPos, tintIndex ->
             provider(blockState, world, blockPos, tintIndex)
-        }, block)
+        }, block())
     }
 
     override fun getFoliageBlockColorProvider() = BlockColorProvider { _, world, blockPos, _ ->

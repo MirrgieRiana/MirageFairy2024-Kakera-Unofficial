@@ -16,10 +16,10 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
@@ -37,21 +37,22 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     abstract val poem: EnJa
     abstract val classification: EnJa
 
+    abstract fun getAgeProperty(): IntegerProperty
     abstract fun createBlock(): B
 
     abstract val family: ResourceLocation
     abstract val possibleTraits: Set<Trait>
 
     open val baseGrowth = 1.0
-    abstract val drops: List<Item>
+    abstract val drops: List<() -> Item>
 
     context(ModContext)
     open fun init() {
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.blockIdentifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.blockIdentifier)
-        card.item.register(BuiltInRegistries.ITEM, card.itemIdentifier)
+        card.block.register()
+        card.blockEntityType.register()
+        card.item.register()
 
         // 分類
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

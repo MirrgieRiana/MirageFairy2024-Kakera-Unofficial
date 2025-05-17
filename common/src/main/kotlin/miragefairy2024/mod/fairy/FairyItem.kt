@@ -21,6 +21,7 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.aqua
 import miragefairy2024.util.createItemStack
@@ -28,6 +29,7 @@ import miragefairy2024.util.darkGray
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.getOrDefault
 import miragefairy2024.util.gold
 import miragefairy2024.util.gray
 import miragefairy2024.util.green
@@ -62,7 +64,7 @@ object FairyCard {
     val enName = "Invalid Fairy"
     val jaName = "無効な妖精"
     val identifier = MirageFairy2024.identifier("fairy")
-    val item = FairyItem(Item.Properties().fireResistant())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyItem(Item.Properties().fireResistant()) }
 }
 
 private val identifier = MirageFairy2024.identifier("fairy")
@@ -79,7 +81,7 @@ val fairiesItemGroupCard = ItemGroupCard(
 context(ModContext)
 fun initFairyItem() {
     FairyCard.let { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.item.register()
 
         card.item.registerItemGroup(fairiesItemGroupCard.itemGroupKey) {
             motifRegistry.sortedEntrySet.map { it.value.createFairyItemStack() }
@@ -137,8 +139,8 @@ fun initFairyItem() {
 
     fairiesItemGroupCard.init()
 
-    FAIRY_MOTIF_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif"))
-    FAIRY_CONDENSATION_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation"))
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif")) { FAIRY_MOTIF_DATA_COMPONENT_TYPE }.register()
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation")) { FAIRY_CONDENSATION_DATA_COMPONENT_TYPE }.register()
 }
 
 private fun createFairyModel() = Model {
@@ -221,7 +223,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                 ": x${stack.getFairyCondensation()}"(),
                 if (stack.count != 1) " *${stack.count}"() else empty(),
                 *(if (tooltipFlag.isAdvanced) listOf(
-                    "  (History: ${player?.fairyHistoryContainer?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.entries?.size ?: 0})"(), // TODO もっといい表示に
+                    "  (History: ${player?.fairyHistoryContainer?.getOrDefault()?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.getOrDefault()?.entries?.size ?: 0})"(), // TODO もっといい表示に
                 ) else listOf()).toTypedArray()
             ).join().green
         }
@@ -248,7 +250,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
             tooltipComponents += text { (PASSIVE_SKILL_TRANSLATION() + ": "() + status.description.let { if (!isEffectiveItemStack) it.red else it }).let { if (isEffectiveItemStack) it.gold else it.gray } }
             val passiveSkillContext = player?.let { PassiveSkillContext(it.level(), it.eyeBlockPos, it) }
             motif.passiveSkillSpecifications.forEach { specification ->
-                fun <T> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
+                fun <T: Any> getSpecificationText(specification: PassiveSkillSpecification<T>): Component {
                     val actualMana = if (specification.effect.isPreprocessor) level else level * (1.0 + manaBoost)
                     val conditionValidityList = specification.conditions.map { Pair(it, passiveSkillContext != null && it.test(passiveSkillContext, level, mana)) }
                     val isAvailableSpecification = conditionValidityList.all { it.second }
@@ -319,7 +321,7 @@ fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSAT
 
 
 fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
-    val itemStack = FairyCard.item.createItemStack(count)
+    val itemStack = FairyCard.item().createItemStack(count)
     itemStack.setFairyMotif(this)
     itemStack.setFairyCondensation(condensation)
     return itemStack

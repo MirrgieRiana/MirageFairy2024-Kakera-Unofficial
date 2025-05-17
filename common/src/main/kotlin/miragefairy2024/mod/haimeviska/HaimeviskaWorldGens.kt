@@ -3,6 +3,7 @@ package miragefairy2024.mod.haimeviska
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.get
 import miragefairy2024.util.per
@@ -48,14 +49,14 @@ context(ModContext)
 fun initHaimeviskaWorldGens() {
 
     // TreeDecoratorの登録
-    HaimeviskaTreeDecoratorCard.type.register(BuiltInRegistries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier)
+    Registration(BuiltInRegistries.TREE_DECORATOR_TYPE, HaimeviskaTreeDecoratorCard.identifier) { HaimeviskaTreeDecoratorCard.type }.register()
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
         Feature.TREE with TreeFeatureConfig.TreeConfigurationBuilder(
-            BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block),
+            BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block()),
             LargeOakTrunkPlacer(22, 10, 0), // 最大32
-            BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block),
+            BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block()),
             LargeOakFoliagePlacer(ConstantIntProvider.of(2), ConstantIntProvider.of(2), 4),
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
@@ -63,19 +64,19 @@ fun initHaimeviskaWorldGens() {
 
     // まばらなPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_PLACED_FEATURE_KEY) {
-        val placementModifiers = placementModifiers { per(512) + tree(HaimeviskaBlockCard.SAPLING.block) }
+        val placementModifiers = placementModifiers { per(512) + tree(HaimeviskaBlockCard.SAPLING.block()) }
         Registries.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
     // 高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = placementModifiers { per(16) + tree(HaimeviskaBlockCard.SAPLING.block) }
+        val placementModifiers = placementModifiers { per(16) + tree(HaimeviskaBlockCard.SAPLING.block()) }
         Registries.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
     // 超高密度のPlacedFeature
     registerDynamicGeneration(HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-        val placementModifiers = placementModifiers { count(8) + tree(HaimeviskaBlockCard.SAPLING.block) }
+        val placementModifiers = placementModifiers { count(8) + tree(HaimeviskaBlockCard.SAPLING.block()) }
         Registries.CONFIGURED_FEATURE[HAIMEVISKA_CONFIGURED_FEATURE_KEY] with placementModifiers
     }
 
@@ -88,14 +89,14 @@ class HaimeviskaTreeDecorator : TreeDecorator() {
     override fun type() = HaimeviskaTreeDecoratorCard.type
     override fun place(generator: Context) {
         generator.logs().forEach { blockPos ->
-            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block.defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
+            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block().defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
             val direction = Direction.from2DDataValue(generator.random().nextInt(4))
             if (!generator.isAir(blockPos.relative(direction))) return@forEach // 正面が空気の場合のみ
             val r = generator.random().nextInt(100)
             if (r < 25) {
-                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             } else if (r < 35) {
-                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
             }
         }
     }

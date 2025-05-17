@@ -1,24 +1,43 @@
 package miragefairy2024.util
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
-context(ModContext)
-fun <T : Any> T.register(registry: Registry<T>, identifier: ResourceLocation): () -> Holder<T> {
-    lateinit var holder: Holder<T>
-    ModEvents.onRegistration {
-        holder = Registry.registerForHolder(registry, identifier, this@register)
-    }
-    return { holder }
+object RegistryEvents {
+    val registrations = mutableListOf<Registration<*, *>>()
 }
 
-fun <T : Any> T.registerStatic(registry: Registry<T>, identifier: ResourceLocation): Holder<T> {
-    return Registry.registerForHolder(registry, identifier, this)
+class Registration<T : Any, U : T>(val registry: Registry<T>, val identifier: ResourceLocation, val creator: suspend () -> U) : () -> U {
+
+    private val value = CompletableDeferred<U>()
+    private val holder = CompletableDeferred<Holder<T>>()
+
+    fun complete(value: U, holder: Holder<T>) {
+        this.value.complete(value)
+        this.holder.complete(holder)
+    }
+
+    suspend fun await() = value.await()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun invoke() = value.getCompleted()
+
+    suspend fun awaitHolder() = holder.await()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getHolder() = holder.getCompleted()
+
+}
+
+context(ModContext)
+fun Registration<*, *>.register() {
+    RegistryEvents.registrations += this
 }
 
 val <T> Registry<T>.sortedEntrySet: List<Map.Entry<ResourceKey<T>, T>> get() = this.entrySet().sortedBy { it.key.location() }

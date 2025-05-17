@@ -20,6 +20,7 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
@@ -141,8 +142,8 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> 
     class Configuration(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    val block = blockCreator()
-    val item = BlockItem(block, Item.Properties())
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { blockCreator() }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
@@ -159,14 +160,14 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     card.block.registerVariantsBlockStateGeneration {
-        val normal = BlockStateVariant(model = "block/" * card.block.getIdentifier())
+        val normal = BlockStateVariant(model = "block/" * card.block().getIdentifier())
         listOf(
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) with normal.with(model = "block/charged_" * card.block.getIdentifier()),
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) with normal.with(model = "block/uncharged_" * card.block.getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) with normal.with(model = "block/charged_" * card.block().getIdentifier()),
+            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) with normal.with(model = "block/uncharged_" * card.block().getIdentifier()),
         )
     }
-    registerModelGeneration({ "block/charged_" * card.block.getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
-    registerModelGeneration({ "block/uncharged_" * card.block.getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block) })
+    registerModelGeneration({ "block/charged_" * card.block().getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block()) })
+    registerModelGeneration({ "block/uncharged_" * card.block().getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block()) })
     card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
     card.block.registerCutoutRenderLayer()
     card.block.registerFoliageColorProvider()
@@ -187,7 +188,7 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
     DataGenerationEvents.onGenerateBlockStateModel {
-        it.woodProvider(card.block).logWithHorizontal(card.block)
+        it.woodProvider(card.block()).logWithHorizontal(card.block())
     }
 
     // 性質
@@ -205,11 +206,11 @@ context(ModContext)
 private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+    card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
     card.block.registerModelGeneration {
         Models.CUBE_ORIENTABLE.with(
-            TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier() * "_top",
-            TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block.getIdentifier(),
+            TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier() * "_top",
+            TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier(),
             TextureKey.FRONT to "block/" * it.getIdentifier(),
         )
     }
@@ -270,18 +271,18 @@ val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
-    HaimeviskaLeavesBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_leaves"))
-    HaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log"))
-    IncisedHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log"))
-    DrippingHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log"))
-    HollowHaimeviskaLogBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_leaves")) { HaimeviskaLeavesBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("haimeviska_log")) { HaimeviskaLogBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("incised_haimeviska_log")) { IncisedHaimeviskaLogBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log")) { DrippingHaimeviskaLogBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log")) { HollowHaimeviskaLogBlock.CODEC }.register()
 
 
     HaimeviskaBlockCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.item.register()
 
         // カテゴリ
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
@@ -296,59 +297,59 @@ fun initHaimeviskaBlocks() {
 
     // ドロップ
     HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration { it, _ ->
-        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block, HaimeviskaBlockCard.SAPLING.block, 0.05F, 0.0625F, 0.083333336F, 0.1F)
+        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block(), HaimeviskaBlockCard.SAPLING.block(), 0.05F, 0.0625F, 0.083333336F, 0.1F)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block, this)
+            provider.applyExplosionDecay(HaimeviskaBlockCard.INCISED_LOG.block(), this)
         }
     }
     HaimeviskaBlockCard.DRIPPING_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.DRIPPING_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
                 `when`(RandomChanceLootCondition.randomChance(0.01F))
             },
         ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block, this)
+            provider.applyExplosionDecay(HaimeviskaBlockCard.DRIPPING_LOG.block(), this)
         }
     }
     HaimeviskaBlockCard.HOLLOW_LOG.block.registerLootTableGeneration { provider, registries ->
         LootTable(
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.HOLLOW_LOG.item())) {
                 `when`(provider.hasSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item)) {
+            LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.LOG.item())) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
-            LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item) {
+            LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item()) {
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
             }) {
                 `when`(provider.doesNotHaveSilkTouch())
             },
         ) {
-            provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block, this)
+            provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block(), this)
         }
     }
     HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
@@ -358,7 +359,7 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
     HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-        requires(HaimeviskaBlockCard.LOG.item)
+        requires(HaimeviskaBlockCard.LOG.item())
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
@@ -422,7 +423,7 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
 
         // 加工
         stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand))
-        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.awardStat(Stats.ITEM_USED.get(stack.item))
 
         // エフェクト
@@ -443,7 +444,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
     override fun isRandomlyTicking(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (random.nextInt(100) == 0) {
-            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block.defaultBlockState().setValue(FACING, state.getValue(FACING)), Block.UPDATE_ALL)
+            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(FACING, state.getValue(FACING)), Block.UPDATE_ALL)
         }
     }
 }
@@ -461,7 +462,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         val direction = state.getValue(FACING)
 
         // 消費
-        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block.defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
             val actualCount = level.random.randomInt(count) atMost item.defaultMaxStackSize
@@ -474,8 +475,8 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
 
         // 生産
         val fortune = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], stack)
-        drop(MaterialCard.HAIMEVISKA_SAP.item, 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
-        drop(MaterialCard.HAIMEVISKA_ROSIN.item, 0.03 + 0.01 * fortune) // 妖精の木の涙
+        drop(MaterialCard.HAIMEVISKA_SAP.item(), 1.0 + 0.25 * fortune) // ハイメヴィスカの樹液
+        drop(MaterialCard.HAIMEVISKA_ROSIN.item(), 0.03 + 0.01 * fortune) // 妖精の木の涙
 
         // エフェクト
         level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 0.75F, 1.0F + 0.5F * level.random.nextFloat())

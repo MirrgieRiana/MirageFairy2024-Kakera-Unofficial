@@ -5,15 +5,14 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.fairy.FairyDreamRecipes
-import miragefairy2024.mod.fairy.FairyHistoryContainerExtraPlayerDataCategory
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.fairyHistoryContainer
 import miragefairy2024.mod.fairy.getRandomFairy
-import miragefairy2024.mod.sync
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
+import miragefairy2024.util.mutate
 import miragefairy2024.util.text
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
@@ -49,8 +48,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
             world.addFreshEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
 
             // 妖精召喚履歴に追加
-            player.fairyHistoryContainer[result.motif] += result.condensation * result.count
-            FairyHistoryContainerExtraPlayerDataCategory.sync(player)
+            player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
 
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
@@ -67,8 +65,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType() {
             entity.level().addFreshEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
 
             // 妖精召喚履歴に追加
-            attacker.fairyHistoryContainer[result.motif] += result.condensation * result.count
-            FairyHistoryContainerExtraPlayerDataCategory.sync(attacker)
+            attacker.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
 
         }
     }

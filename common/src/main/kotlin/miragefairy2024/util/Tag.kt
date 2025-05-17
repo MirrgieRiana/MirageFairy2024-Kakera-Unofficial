@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 
 context(ModContext)
-fun Block.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
-    it(tagProvider()).add(this)
+fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)
@@ -24,8 +24,8 @@ fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) =
 }
 
 context(ModContext)
-fun Item.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
-    it(tagProvider()).add(this)
+fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)
@@ -49,8 +49,8 @@ fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) =
 }
 
 context(ModContext)
-fun EntityType<*>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
-    it(tagProvider()).add(this)
+fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
+    it(tagProvider()).add(this())
 }
 
 context(ModContext)

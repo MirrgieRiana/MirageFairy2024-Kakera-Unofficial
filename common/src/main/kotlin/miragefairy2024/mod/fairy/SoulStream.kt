@@ -1,27 +1,31 @@
 package miragefairy2024.mod.fairy
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
-import miragefairy2024.mod.ExtraPlayerDataCategory
-import miragefairy2024.mod.extraPlayerDataCategoryRegistry
-import miragefairy2024.mod.extraPlayerDataContainer
 import miragefairy2024.util.Channel
+import miragefairy2024.util.ITEMS_CODEC
+import miragefairy2024.util.ITEMS_STREAM_CODEC
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
-import miragefairy2024.util.compound
+import miragefairy2024.util.dummyUnitStreamCodec
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
 import miragefairy2024.util.registerServerPacketReceiver
+import miragefairy2024.util.set
 import miragefairy2024.util.size
 import miragefairy2024.util.text
-import miragefairy2024.util.wrapper
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -29,12 +33,11 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
@@ -47,15 +50,12 @@ val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, M
 context(ModContext)
 fun initSoulStream() {
 
-    // 拡張プレイヤーデータ
-    SoulStreamExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("soul_stream"))
-
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
             player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
                 override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
-                    return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream)
+                    return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream.getOrCreate())
                 }
 
                 override fun getDisplayName() = text { SOUL_STREAM_TRANSLATION() }
@@ -66,7 +66,7 @@ fun initSoulStream() {
     }
 
     // GUI
-    soulStreamScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream"))
+    soulStreamScreenHandlerType.register()
 
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
@@ -77,32 +77,27 @@ fun initSoulStream() {
 
 // 拡張プレイヤーデータ
 
-object SoulStreamExtraPlayerDataCategory : ExtraPlayerDataCategory<SoulStream> {
-    override fun create() = SoulStream()
-    override fun castOrThrow(value: Any) = value as SoulStream
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<SoulStream> {
-        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): SoulStream {
-            val data = SoulStream()
-            Inventories.loadAllItems(nbt.wrapper["Inventory"].compound.get() ?: NbtCompound(), data.items, registry)
-            return data
-        }
-
-        override fun toNbt(data: SoulStream, registry: HolderLookup.Provider): NbtCompound {
-            val nbt = NbtCompound()
-            nbt.wrapper["Inventory"].compound.set(NbtCompound().also {
-                Inventories.saveAllItems(it, data.items, registry)
-            })
-            return nbt
-        }
-    }
+val SOUL_STREAM_ATTACHMENT_TYPE: AttachmentType<SoulStream> = AttachmentRegistry.create(MirageFairy2024.identifier("soul_stream")) {
+    it.persistent(SoulStream.CODEC)
+    it.initializer(::SoulStream)
+    it.syncWith(SoulStream.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-val PlayerEntity.soulStream get() = this.extraPlayerDataContainer.getOrInit(SoulStreamExtraPlayerDataCategory)
+val Entity.soulStream get() = this[SOUL_STREAM_ATTACHMENT_TYPE]
 
-class SoulStream : SimpleInventory(SLOT_COUNT) {
+class SoulStream() : SimpleInventory(SLOT_COUNT) {
     companion object {
         const val SLOT_COUNT = 9 * 31
         const val PASSIVE_SKILL_SLOT_COUNT = 9
+
+        val CODEC: Codec<SoulStream> = ITEMS_CODEC.xmap(::SoulStream, SoulStream::items)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SoulStream> = ITEMS_STREAM_CODEC.map(::SoulStream, SoulStream::items)
+    }
+
+    constructor(items: List<ItemStack>) : this() {
+        items.forEachIndexed { index, itemStack ->
+            if (index < size) this[index] = itemStack
+        }
     }
 }
 
@@ -117,11 +112,13 @@ object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_so
 
 // GUI
 
-val soulStreamScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
-    SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream)
-}, StreamCodec.unit(Unit))
+val soulStreamScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
+        SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream.getOrCreate())
+    }, dummyUnitStreamCodec())
+}
 
-class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType, syncId) {
+class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType(), syncId) {
     init {
         repeat(3) { r ->
             repeat(9) { c ->

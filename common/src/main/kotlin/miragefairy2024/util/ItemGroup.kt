@@ -12,15 +12,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.CreativeModeTab as ItemGroup
 
 context(ModContext)
-fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
-        it.accept(this)
+        it.accept(this())
     }
 }
 
 context(ModContext)
 @Suppress("UnusedReceiverParameter")
-fun Item.registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.accept(itemStack)
@@ -44,7 +44,7 @@ class ItemGroupCard(
 
     context(ModContext)
     fun init() {
-        itemGroup.register(BuiltInRegistries.CREATIVE_MODE_TAB, identifier)
+        Registration(BuiltInRegistries.CREATIVE_MODE_TAB, identifier) { itemGroup }.register()
         translation.enJa()
     }
 }

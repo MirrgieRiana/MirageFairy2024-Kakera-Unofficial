@@ -6,6 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -45,6 +46,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
@@ -55,8 +57,8 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     )
 
     override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_BERRIES.item.createItemStack(count))
-    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_LEAF.item.createItemStack(count))
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_BERRIES.item().createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_LEAF.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("veropeda")
     override val possibleTraits = setOf(
@@ -110,20 +112,20 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     override fun init() {
         super.init()
 
-        VeropedaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda")) { VeropedaBlock.CODEC }.register()
 
         // 地形生成
         run {
 
             // 小さな塊
             registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 

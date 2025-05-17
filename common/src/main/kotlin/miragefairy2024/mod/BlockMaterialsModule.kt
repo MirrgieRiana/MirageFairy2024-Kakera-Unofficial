@@ -11,6 +11,7 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
@@ -129,7 +130,7 @@ enum class BlockMaterialCard(
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val block = run {
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) {
         val settings = AbstractBlock.Properties.of()
         settings.mapColor(mapColor)
         if (requiresTool) settings.requiresCorrectToolForDrops()
@@ -140,17 +141,17 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 context(ModContext)
 fun initBlockMaterialsModule() {
-    LocalVacuumDecayBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay"))
-    SemiOpaqueTransparentBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay")) { LocalVacuumDecayBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block")) { SemiOpaqueTransparentBlock.CODEC }.register()
 
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -186,9 +187,9 @@ fun initBlockMaterialsModule() {
         pattern("XMX")
         pattern("MCM")
         pattern("XMX")
-        define('X', MaterialCard.XARPITE.item)
-        define('M', MaterialCard.MIRANAGITE.item)
-        define('C', MaterialCard.FAIRY_CRYSTAL.item)
+        define('X', MaterialCard.XARPITE.item())
+        define('M', MaterialCard.MIRANAGITE.item())
+        define('C', MaterialCard.FAIRY_CRYSTAL.item())
     } on MaterialCard.FAIRY_CRYSTAL.item
 
 }

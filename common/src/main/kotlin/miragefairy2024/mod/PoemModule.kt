@@ -56,15 +56,15 @@ interface Poem {
     val type: PoemType
     fun getText(item: Item, context: Item.TooltipContext): Component
     context(ModContext)
-    fun init(item: Item) = Unit
+    fun init(item: () -> Item) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
     override fun getText(item: Item, context: Item.TooltipContext) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
     context(ModContext)
-    override fun init(item: Item) {
-        en { "${item.descriptionId}.$key" to en }
-        ja { "${item.descriptionId}.$key" to ja }
+    override fun init(item: () -> Item) {
+        en { "${item().descriptionId}.$key" to en }
+        ja { "${item().descriptionId}.$key" to ja }
     }
 }
 
@@ -102,13 +102,13 @@ fun PoemList.text(type: PoemType, text: Component) = this + TextPoem(type, text)
 // Util
 
 context(ModContext)
-fun Item.registerPoem(poemList: PoemList) = ModEvents.onInitialize {
-    require(this !in itemPoemListTable)
-    itemPoemListTable[this] = poemList
+fun (() -> Item).registerPoem(poemList: PoemList) = ModEvents.onInitialize {
+    require(this() !in itemPoemListTable)
+    itemPoemListTable[this()] = poemList
 }
 
 context(ModContext)
-fun Item.registerPoemGeneration(poemList: PoemList) {
+fun (() -> Item).registerPoemGeneration(poemList: PoemList) {
     poemList.poems.forEach {
         it.init(this)
     }

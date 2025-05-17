@@ -31,7 +31,7 @@ import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity as LockableContainerBlockEntity
 
-abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType, pos, state), SidedInventory, RenderingProxyBlockEntity {
+abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType(), pos, state), SidedInventory, RenderingProxyBlockEntity {
 
     interface InventorySlotConfiguration {
         fun isValid(itemStack: ItemStack): Boolean
@@ -177,7 +177,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     override fun stillValid(player: PlayerEntity) = Container.stillValidBlockEntity(this, player)
 
-    override fun getDefaultName(): Component = card.block.name
+    override fun getDefaultName(): Component = card.block().name
 
     override fun createMenu(syncId: Int, playerInventory: Inventory): ScreenHandler {
         val arguments = MachineScreenHandler.Arguments(

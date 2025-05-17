@@ -70,16 +70,16 @@ class RecipeGenerationSettings<T> {
     var noGroup = false
 }
 
-infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: Item) = this.apply {
-    this.listeners += { it.criterion(item) }
+infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: () -> Item) = this.apply {
+    this.listeners += { it.criterion(item()) }
 }
 
 infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
     this.idModifiers += { ResourceLocation.fromNamespaceAndPath(modId, it.path) }
 }
 
-infix fun <T> RecipeGenerationSettings<T>.from(item: Item) = this.apply {
-    this.idModifiers += { it * "_from_" * item.getIdentifier().path }
+infix fun <T> RecipeGenerationSettings<T>.from(item: () -> Item) = this.apply {
+    this.idModifiers += { it * "_from_" * item().getIdentifier().path }
 }
 
 fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.apply {
@@ -89,19 +89,19 @@ fun <T> RecipeGenerationSettings<T>.noGroup(noGroup: Boolean = true) = this.appl
 context(ModContext)
 fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
     creator: (RecipeCategory, Item, Int) -> T,
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: T.() -> Unit = {},
 ): RecipeGenerationSettings<T> {
     val settings = RecipeGenerationSettings<T>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = creator(settings.recipeCategory, item, count)
+        val builder = creator(settings.recipeCategory, item(), count)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
-        if (!settings.noGroup) builder.group(item)
+        if (!settings.noGroup) builder.group(item())
         block(builder)
-        val identifier = settings.idModifiers.fold(item.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(item().getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -109,35 +109,35 @@ fun <T : CraftingRecipeJsonBuilder> registerRecipeGeneration(
 
 context(ModContext)
 fun registerShapedRecipeGeneration(
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: ShapedRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapedRecipeJsonBuilder> = registerRecipeGeneration(ShapedRecipeJsonBuilder::shaped, item, count, block)
 
 context(ModContext)
 fun registerShapelessRecipeGeneration(
-    item: Item,
+    item: () -> Item,
     count: Int = 1,
     block: ShapelessRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<ShapelessRecipeJsonBuilder> = registerRecipeGeneration(ShapelessRecipeJsonBuilder::shapeless, item, count, block)
 
 context(ModContext)
 fun registerSmeltingRecipeGeneration(
-    input: Item,
-    output: Item,
+    input: () -> Item,
+    output: () -> Item,
     experience: Double = 0.0,
     cookingTime: Int = 200,
     block: CookingRecipeJsonBuilder.() -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
+        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -145,21 +145,21 @@ fun registerSmeltingRecipeGeneration(
 
 context(ModContext)
 fun registerBlastingRecipeGeneration(
-    input: Item,
-    output: Item,
+    input: () -> Item,
+    output: () -> Item,
     experience: Double = 0.0,
     cookingTime: Int = 100,
     block: CookingRecipeJsonBuilder. () -> Unit = {},
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input), RecipeCategory.MISC, output, experience.toFloat(), cookingTime)
-        builder.group(output)
+        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().getIdentifier() * "_from_blasting") { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings
@@ -182,7 +182,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     }
 
     serializer = SpecialRecipeSerializer(::SpecialCraftingRecipeImpl)
-    serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
+    Registration(BuiltInRegistries.RECIPE_SERIALIZER, identifier) { serializer }.register()
     DataGenerationEvents.onGenerateRecipe {
         ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }
@@ -203,7 +203,7 @@ fun MutableList<ItemStack>.pull(predicate: (ItemStack) -> Boolean): ItemStack? {
 // Others
 
 context(ModContext)
-fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count: Int = 9, noGroup: Boolean = false) {
+fun registerCompressionRecipeGeneration(lowerItem: () -> Item, higherItem: () -> Item, count: Int = 9, noGroup: Boolean = false) {
     registerShapelessRecipeGeneration(higherItem, count = 1) {
         repeat(count) {
             requires(lowerItem)
@@ -215,7 +215,7 @@ fun registerCompressionRecipeGeneration(lowerItem: Item, higherItem: Item, count
 }
 
 context(ModContext)
-fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
+fun (() -> Item).registerLootTableModification(lootTableIdGetter: () -> ResourceKey<LootTable>, block: (LootTable.Builder, HolderLookup.Provider) -> Unit) = ModEvents.onInitialize {
     val lootTableId = lootTableIdGetter()
     LootTableEvents.MODIFY.register { id, tableBuilder, source, registries ->
         if (source.isBuiltin) {
@@ -227,7 +227,7 @@ fun Item.registerLootTableModification(lootTableIdGetter: () -> ResourceKey<Loot
 }
 
 context(ModContext)
-fun Item.registerGrassDrop(
+fun (() -> Item).registerGrassDrop(
     amount: Float = 1.0F,
     fortuneMultiplier: Int = 2,
     biome: (() -> ResourceKey<Biome>)? = null,
@@ -237,7 +237,7 @@ fun Item.registerGrassDrop(
             otherwise(EmptyLootPoolEntry {
                 `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)))
             })
-            otherwise(ItemLootPoolEntry(this@registerGrassDrop) {
+            otherwise(ItemLootPoolEntry(this@registerGrassDrop()) {
                 `when`(RandomChanceLootCondition.randomChance(0.125F * amount))
                 if (biome != null) `when`(LocationCheckLootCondition.checkLocation(LocationPredicate.Builder.location().setBiomes(HolderSet.direct(registries[Registries.BIOME, biome()]))))
                 apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
@@ -248,7 +248,7 @@ fun Item.registerGrassDrop(
 }
 
 context(ModContext)
-fun Item.registerExtraOreDrop(
+fun (() -> Item).registerExtraOreDrop(
     oreBlock: Block,
     chance: Float = 1.0F,
     fortuneMultiplier: Int = 0,
@@ -258,7 +258,7 @@ fun Item.registerExtraOreDrop(
             otherwise(EmptyLootPoolEntry {
                 `when`(MatchToolLootCondition.toolMatches(ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(listOf(EnchantmentPredicate(registries[Registries.ENCHANTMENT, Enchantments.SILK_TOUCH], NumberRange.Ints.atLeast(1)))))))
             })
-            otherwise(ItemLootPoolEntry(this@registerExtraOreDrop) {
+            otherwise(ItemLootPoolEntry(this@registerExtraOreDrop()) {
                 if (chance < 1.0F) `when`(RandomChanceLootCondition.randomChance(chance))
                 if (fortuneMultiplier > 0) apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], fortuneMultiplier))
                 apply(ExplosionDecayLootFunction.explosionDecay())
@@ -268,7 +268,7 @@ fun Item.registerExtraOreDrop(
 }
 
 context(ModContext)
-fun Item.registerMobDrop(
+fun (() -> Item).registerMobDrop(
     entityType: EntityType<*>,
     onlyKilledByPlayer: Boolean = false,
     dropRate: Pair<Float, Float>? = null,
@@ -276,7 +276,7 @@ fun Item.registerMobDrop(
     fortuneFactor: LootNumberProvider? = null,
 ) = this.registerLootTableModification({ entityType.defaultLootTable }) { tableBuilder, registries ->
     tableBuilder.configure {
-        withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop) {
+        withPool(LootPool(ItemLootPoolEntry(this@registerMobDrop()) {
             if (amount != null) apply(SetCountLootFunction.setCount(amount, false))
             if (fortuneFactor != null) apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, fortuneFactor))
         }) {
@@ -287,7 +287,7 @@ fun Item.registerMobDrop(
 }
 
 context(ModContext)
-fun Item.registerChestLoot(
+fun (() -> Item).registerChestLoot(
     lootTableIdGetter: () -> ResourceKey<LootTable>,
     weight: Int = 10,
     count: IntRange? = null,
@@ -295,7 +295,7 @@ fun Item.registerChestLoot(
 ) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder, registries ->
     tableBuilder.modifyPools { lootPool ->
         lootPool.configure {
-            add(ItemLootPoolEntry(this@registerChestLoot) {
+            add(ItemLootPoolEntry(this@registerChestLoot()) {
                 setWeight(weight)
                 if (count != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(count.first.toFloat(), count.last.toFloat())))
                 block(this)
@@ -305,12 +305,12 @@ fun Item.registerChestLoot(
 }
 
 context(ModContext)
-fun Item.registerComposterInput(chance: Float) = ModEvents.onInitialize {
-    ComposterBlock.COMPOSTABLES.put(this, chance)
+fun (() -> Item).registerComposterInput(chance: Float) = ModEvents.onInitialize {
+    ComposterBlock.COMPOSTABLES.put(this(), chance)
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */
 context(ModContext)
-fun Item.registerFuel(ticks: Int) = ModEvents.onInitialize {
-    FuelRegistry.INSTANCE.add(this, ticks)
+fun (() -> Item).registerFuel(ticks: Int) = ModEvents.onInitialize {
+    FuelRegistry.INSTANCE.add(this(), ticks)
 }

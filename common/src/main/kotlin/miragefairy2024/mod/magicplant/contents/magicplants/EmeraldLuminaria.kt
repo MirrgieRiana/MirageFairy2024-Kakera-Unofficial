@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -15,6 +16,7 @@ import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
@@ -49,6 +51,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
@@ -61,8 +64,8 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override val baseGrowth = 0.2
     override val baseFruitGeneration = 0.1
 
-    override val drops = listOf(MaterialCard.LUMINITE.item, Items.EMERALD)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item.createItemStack(count))
+    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.EMERALD })
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
     override val family = MirageFairy2024.identifier("luminaria")
@@ -116,11 +119,11 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     override fun init() {
         super.init()
 
-        EmeraldLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }.register()
 
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 
@@ -129,8 +132,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
             val placementModifiers = placementModifiers { per(32) + flower }
             Registries.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
+        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey }
 
         // 地下に配置
         registerDynamicGeneration(UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {

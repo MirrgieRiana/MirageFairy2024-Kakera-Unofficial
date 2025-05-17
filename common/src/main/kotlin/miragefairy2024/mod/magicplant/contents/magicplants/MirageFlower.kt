@@ -6,6 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -18,6 +19,7 @@ import miragefairy2024.util.not
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
@@ -52,6 +54,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(
@@ -63,8 +66,8 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("mirage")
     override val possibleTraits = setOf(
@@ -121,23 +124,23 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override fun init() {
         super.init()
 
-        MirageFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower")) { MirageFlowerBlock.CODEC }.register()
 
         // 地形生成
         run {
 
             // Fairy Ring Feature
-            FAIRY_RING_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring"))
+            Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register()
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
                 FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
@@ -165,8 +168,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
                 Registries.CONFIGURED_FEATURE[LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
             }
 
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上に通常クラスタ
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { end * !+BiomeKeys.THE_END } // エンド外縁の島々に通常クラスタ
+            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld + end * !+BiomeKeys.THE_END } // 地上・エンド外縁の島々に通常クラスタ
             NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
             LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
 
@@ -189,17 +191,17 @@ class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlow
 
 fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
     var count2 = count.toDouble()
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_SKY.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_SKY.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item.createItemStack(random.randomInt(count2)))
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0
-    return listOf(MaterialCard.MIRAGE_FLOUR_OF_TIME.item.createItemStack(random.randomInt(count2)))
+    return listOf(MaterialCard.MIRAGE_FLOUR_OF_TIME.item().createItemStack(random.randomInt(count2)))
 }

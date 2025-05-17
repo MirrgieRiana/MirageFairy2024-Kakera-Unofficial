@@ -12,7 +12,6 @@ import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initDebrisModule
 import miragefairy2024.mod.initEnchantmentModule
-import miragefairy2024.mod.initExtraPlayerDataModule
 import miragefairy2024.mod.initFairyFountainModule
 import miragefairy2024.mod.initFoodIngredientsModule
 import miragefairy2024.mod.initLastFoodModule
@@ -50,7 +49,6 @@ fun initModules() {
     initNinePatchTextureModule()
     initPlacedItemModule()
     initFairyModule()
-    initExtraPlayerDataModule()
     initPassiveSkillModule()
     initLastFoodModule()
     initFoodIngredientsModule()

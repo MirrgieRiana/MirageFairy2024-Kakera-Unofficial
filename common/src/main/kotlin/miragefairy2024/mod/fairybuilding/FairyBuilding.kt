@@ -123,7 +123,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        block.registerVariantsBlockStateGeneration { normal("block/" * block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
@@ -206,7 +206,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         val world = level ?: return
         val blockState = world.getBlockState(worldPosition)
-        if (!blockState.`is`(card.block)) return
+        if (!blockState.`is`(card.block())) return
         val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
 
         renderingProxy.stack {

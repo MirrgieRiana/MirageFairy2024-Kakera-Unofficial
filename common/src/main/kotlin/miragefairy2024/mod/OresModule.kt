@@ -10,6 +10,7 @@ import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.overworld
@@ -60,7 +61,7 @@ enum class OreCard(
     val poemList: PoemList?,
     val baseStoneType: BaseStoneType,
     texturePath: String,
-    val dropItem: Item,
+    val dropItem: () -> Item,
     experience: Pair<Int, Int>,
 ) {
     MAGNETITE_ORE(
@@ -96,7 +97,7 @@ enum class OreCard(
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val block = run {
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) {
         val settings = when (baseStoneType) {
             BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE)
@@ -113,7 +114,7 @@ enum class OreCard(
         }
         ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }
-    val item = BlockItem(block, Item.Properties())
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
     val texturedModelFactory = TexturedModel.Provider {
         val baseStoneTexture = when (baseStoneType) {
             BaseStoneType.STONE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/stone")
@@ -139,8 +140,8 @@ fun initOresModule() {
 
     OreCard.entries.forEach { card ->
 
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
@@ -166,8 +167,8 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block.defaultBlockState()))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block.defaultBlockState()))
+                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block().defaultBlockState()))
+                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block().defaultBlockState()))
             }
             Feature.ORE with OreFeatureConfig(targets, size)
         }

@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairyquest
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.OutputSlot
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -25,19 +26,21 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-val fairyQuestCardScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-    FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
-}, ResourceLocation.STREAM_CODEC)
+val fairyQuestCardScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("fairy_quest_card")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+        FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
+    }, ResourceLocation.STREAM_CODEC)
+}
 
 val guiFairyQuestCardFullScreenTranslation = Translation({ "gui.${MirageFairy2024.identifier("fairy_quest_card").toLanguageKey()}.fullScreen" }, "Click to full screen", "クリックで全画面表示")
 
 context(ModContext)
 fun initFairyQuestCardScreenHandler() {
-    fairyQuestCardScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("fairy_quest_card"))
+    fairyQuestCardScreenHandlerType.register()
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
-class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType, syncId) {
+class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType(), syncId) {
     private val inputInventory = SimpleInventory(4)
     private var processingInventory = SimpleInventory(0)
     private var resultInventory = SimpleInventory(0)
@@ -71,7 +74,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             addSlot(object : Slot(inputInventory, i, 0, 0) {
                 override fun mayPlace(stack: ItemStack): Boolean {
                     val input = recipe.inputs.getOrNull(i) ?: return false
-                    return input.first.test(stack)
+                    return input.first().test(stack)
                 }
             })
         }
@@ -108,7 +111,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
 
             // レシピ判定
             recipe.inputs.forEachIndexed { index, (ingredient, count) ->
-                if (!ingredient.test(inputInventory[index])) return
+                if (!ingredient().test(inputInventory[index])) return
                 if (inputInventory[index].count < count) return
                 onCraftStart += {
                     processingItemStacks += inputInventory[index].split(count)
@@ -143,7 +146,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             // 成果物の生成
             if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleInventory(recipe.outputs.size)
             recipe.outputs.forEachIndexed { index, itemStack ->
-                resultInventory[index] = itemStack.copy()
+                resultInventory[index] = itemStack().copy()
             }
 
             // リザルト格納

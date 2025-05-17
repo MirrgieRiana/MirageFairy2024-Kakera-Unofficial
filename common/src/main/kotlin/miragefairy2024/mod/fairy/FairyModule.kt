@@ -10,8 +10,6 @@ fun initFairyModule() {
     initMotifTableScreenHandler()
     initRandomFairySummoning()
     initFairyDream()
-    initFairyDreamContainer()
     initSoulStream()
-    initFairyHistoryContainer()
     initFairyStatue()
 }

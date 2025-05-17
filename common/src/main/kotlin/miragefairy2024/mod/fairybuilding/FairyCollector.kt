@@ -7,6 +7,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.collectItem
 import miragefairy2024.util.get
 import miragefairy2024.util.int
@@ -54,7 +55,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
                 this += p(7.0, 0.1, 8.0, 0.0F, 275.0F, 40.0)
                 this += p(12.0, 0.1, 8.0, 0.0F, 265.0F, 40.0)
                 this += p(8.0, 0.1, 6.0, 0.0F, 20.0F, 40.0)
-            })) { it.`is`(FairyCard.item) }, // 仕分け妖精
+            })) { it.`is`(FairyCard.item()) }, // 仕分け妖精
             FairyBuildingSlotConfiguration(106 + 18 * 0, 26 + 18 * 0, extractDirections = extractDirections, animation = ac(NONE, p(4.0, 2.0, 4.5, 0.0F, 270.0F, 200.0))), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 1, 26 + 18 * 0, extractDirections = extractDirections), // 箱
             FairyBuildingSlotConfiguration(106 + 18 * 2, 26 + 18 * 0, extractDirections = extractDirections), // 箱
@@ -87,12 +88,12 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
     context(ModContext)
     override fun init() {
         super.init()
-        FairyCollectorBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_collector")) { FairyCollectorBlock.CODEC }.register()
         registerShapedRecipeGeneration(item) {
             pattern(" C ")
             pattern("C#C")
             pattern(" C ")
-            define('#', FairyHouseCard.item)
+            define('#', FairyHouseCard.item())
             define('C', Items.CHEST)
         } on FairyHouseCard.item
     }

@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.mod.tool.MagicDamageTypeCard
+import miragefairy2024.util.Registration
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer
 import miragefairy2024.util.register
@@ -37,13 +38,15 @@ object AntimatterBoltCard {
     val height = 0.5F
     fun createEntity(entityType: EntityType<AntimatterBoltEntity>, world: Level) = AntimatterBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("antimatter_bolt")
-    val entityType: EntityType<AntimatterBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
-        .dimensions(EntityDimensions.fixed(width, height))
-        .build()
+    val entityType = Registration(BuiltInRegistries.ENTITY_TYPE, identifier) {
+        FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
+            .dimensions(EntityDimensions.fixed(width, height))
+            .build()
+    }
 
     context(ModContext)
     fun init() {
-        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
+        entityType.register()
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }

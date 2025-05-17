@@ -6,8 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.util.RecipeGenerationSettings
+import miragefairy2024.util.Registration
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.group
+import miragefairy2024.util.list
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.times
@@ -39,7 +41,7 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     abstract val identifier: ResourceLocation
 
-    abstract val icon: ItemStack
+    abstract fun getIcon(): ItemStack
 
     val type = object : RecipeType<R> {
         override fun toString() = identifier.string
@@ -54,8 +56,8 @@ abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
     context(ModContext)
     fun init() {
-        type.register(BuiltInRegistries.RECIPE_TYPE, identifier)
-        serializer.register(BuiltInRegistries.RECIPE_SERIALIZER, identifier)
+        Registration(BuiltInRegistries.RECIPE_TYPE, identifier) { type }.register()
+        Registration(BuiltInRegistries.RECIPE_SERIALIZER, identifier) { serializer }.register()
     }
 
 }
@@ -105,7 +107,7 @@ open class SimpleMachineRecipe(
     override fun assemble(inventory: SimpleMachineRecipeInput, registries: HolderLookup.Provider): ItemStack = output.copy()
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= inputs.size
     override fun getResultItem(registries: HolderLookup.Provider) = output
-    override fun getToastSymbol() = card.icon
+    override fun getToastSymbol() = card.getIcon()
     override fun getSerializer() = card.serializer
     override fun getType() = card.type
 
@@ -138,7 +140,7 @@ open class SimpleMachineRecipe(
         override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, R> = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             { it.group },
-            INPUT_STREAM_CODEC.apply(ByteBufCodecs.list()),
+            INPUT_STREAM_CODEC.list(),
             { it.inputs },
             ItemStack.STREAM_CODEC,
             { it.output },
@@ -153,20 +155,20 @@ open class SimpleMachineRecipe(
 context(ModContext)
 fun <R : SimpleMachineRecipe> registerSimpleMachineRecipeGeneration(
     card: SimpleMachineRecipeCard<R>,
-    inputs: List<Pair<Ingredient, Int>>,
-    output: ItemStack,
+    inputs: List<Pair<() -> Ingredient, Int>>,
+    output: () -> ItemStack,
     duration: Int,
     block: SimpleMachineRecipeJsonBuilder<R>.() -> Unit = {},
 ): RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>> {
     val settings = RecipeGenerationSettings<SimpleMachineRecipeJsonBuilder<R>>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = SimpleMachineRecipeJsonBuilder(card, RecipeCategory.MISC, inputs, output, duration)
-        builder.group(output.item)
+        val builder = SimpleMachineRecipeJsonBuilder(card, RecipeCategory.MISC, inputs.map { p -> Pair(p.first(), p.second) }, output(), duration)
+        builder.group(output().item)
         settings.listeners.forEach { listener ->
             listener(builder)
         }
         block(builder)
-        val identifier = settings.idModifiers.fold(output.item.getIdentifier()) { id, idModifier -> idModifier(id) }
+        val identifier = settings.idModifiers.fold(output().item.getIdentifier()) { id, idModifier -> idModifier(id) }
         builder.save(it, identifier)
     }
     return settings

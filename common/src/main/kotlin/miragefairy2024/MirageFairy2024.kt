@@ -24,7 +24,6 @@ import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
 
 object ModEvents {
-    val onRegistration = InitializationEventRegistry<() -> Unit>()
     val onInitialize = InitializationEventRegistry<() -> Unit>()
 
     val onClientInit = InitializationEventRegistry<() -> Unit>()

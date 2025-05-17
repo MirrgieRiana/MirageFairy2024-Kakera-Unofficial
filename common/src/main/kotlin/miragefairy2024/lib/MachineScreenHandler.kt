@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType, arguments.syncId) {
+open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType(), arguments.syncId) {
 
     class Arguments(
         val syncId: Int,

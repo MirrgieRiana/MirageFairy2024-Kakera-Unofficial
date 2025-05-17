@@ -20,6 +20,7 @@ import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.empty
@@ -83,7 +84,7 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
-        FairyStatueCard.FAIRY_STATUE.item.createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
+        FairyStatueCard.FAIRY_STATUE.item().createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
     val CASE: TextureKey = TextureKey.create("case")
@@ -99,9 +100,10 @@ class FairyStatueCard(
     mapColor: MapColor,
 ) {
     val identifier = MirageFairy2024.identifier(path)
-    val block = FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque())
-    val blockEntityType: BlockEntityType<FairyStatueBlockEntity> = BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block), null)
-    val item = FairyStatueBlockItem(this, block, Item.Properties())
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { FairyStatueBlock(this, FabricBlockSettings.create().mapColor(mapColor).strength(0.5F).nonOpaque()) }
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType({ pos, state -> FairyStatueBlockEntity(this, pos, state) }, setOf(block.await()), null) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyStatueBlockItem(this, block.await(), Item.Properties()) }
+
     val formatTranslation = Translation({ identifier.toLanguageKey("block", "format") }, format)
     val poemList = PoemList(0)
         .poem(poem)
@@ -151,22 +153,22 @@ fun initFairyStatue() {
 
     FairyStatue.descriptionTranslation.enJa()
 
-    FairyStatueBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue")) { FairyStatueBlock.CODEC }.register()
 
     FairyStatueCard.entries.forEach { card ->
 
         // 登録
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.blockEntityType.register()
+        card.item.register()
 
         // アイテムグループ
         card.item.registerItemGroup(FairyStatue.itemGroupCard.itemGroupKey) {
-            motifRegistry.sortedEntrySet.map { card.item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
+            motifRegistry.sortedEntrySet.map { card.item().createItemStack().also { itemStack -> itemStack.setFairyMotif(it.value) } }
         }
 
         // レンダリング
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
@@ -184,10 +186,10 @@ fun initFairyStatue() {
         // ドロップ
         card.block.registerLootTableGeneration { provider, _ ->
             LootTable(
-                LootPool(ItemLootPoolEntry(card.item)) {
+                LootPool(ItemLootPoolEntry(card.item())) {
                     setRolls(ConstantLootNumberProvider.exactly(1.0F))
                     apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FAIRY_MOTIF_DATA_COMPONENT_TYPE))
-                    provider.applyExplosionCondition(card.item, this)
+                    provider.applyExplosionCondition(card.item(), this)
                 },
             )
         }
@@ -246,7 +248,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
 
 }
 
-class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType, pos, state), RenderingProxyBlockEntity {
+class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType(), pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = EMPTY_ITEM_STACK
     }

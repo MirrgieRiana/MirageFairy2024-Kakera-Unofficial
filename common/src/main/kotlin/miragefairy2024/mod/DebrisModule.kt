@@ -6,6 +6,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.PlacedItemFeature
 import miragefairy2024.util.BiomeSelectorScope
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.get
@@ -48,9 +49,9 @@ enum class DebrisCard(
     RAW_IRON_DENSE("raw_iron_dense", 64 / 2, 8..24, { Items.RAW_IRON.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
     RAW_COPPER("raw_copper", 64, 2..6, { Items.RAW_COPPER.createItemStack() }, { overworld }),
     RAW_COPPER_DENSE("raw_copper_dense", 64 / 2, 8..24, { Items.RAW_COPPER.createItemStack() }, { +BiomeTags.IS_MOUNTAIN }),
-    XARPITE("xarpite", 64, 2..6, { MaterialCard.XARPITE.item.createItemStack() }, { overworld }),
-    FAIRY_SCALES("fairy_scales", 64, 2..6, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { overworld }),
-    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 2, 8..24, { MaterialCard.FAIRY_SCALES.item.createItemStack() }, { +FAIRY_BIOME_TAG }),
+    XARPITE("xarpite", 64, 2..6, { MaterialCard.XARPITE.item().createItemStack() }, { overworld }),
+    FAIRY_SCALES("fairy_scales", 64, 2..6, { MaterialCard.FAIRY_SCALES.item().createItemStack() }, { overworld }),
+    FAIRY_SCALES_DENSE("fairy_scales_dense", 64 / 2, 8..24, { MaterialCard.FAIRY_SCALES.item().createItemStack() }, { +FAIRY_BIOME_TAG }),
     ;
 
     val identifier = MirageFairy2024.identifier("${path}_debris")
@@ -62,7 +63,7 @@ enum class DebrisCard(
 context(ModContext)
 fun initDebrisModule() {
 
-    DEBRIS_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("debris"))
+    Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("debris")) { DEBRIS_FEATURE }.register()
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {

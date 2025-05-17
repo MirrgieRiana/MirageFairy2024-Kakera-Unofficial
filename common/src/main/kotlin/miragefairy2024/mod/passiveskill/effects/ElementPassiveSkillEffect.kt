@@ -7,6 +7,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -91,7 +92,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
             val attacker = source.entity
             if (attacker is PlayerEntity) {
                 var attackBonus = 0.0
-                attacker.passiveSkillResult[ElementPassiveSkillEffect].attackMap.forEach { (element, value) ->
+                attacker.passiveSkillResult.getOrCreate()[ElementPassiveSkillEffect].attackMap.forEach { (element, value) ->
                     if (element.test(source)) {
                         attackBonus += value
                     }
@@ -101,7 +102,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
 
             if (entity is PlayerEntity) {
                 var defenceBonus = 0.0
-                entity.passiveSkillResult[ElementPassiveSkillEffect].defenceMap.forEach { (element, value) ->
+                entity.passiveSkillResult.getOrCreate()[ElementPassiveSkillEffect].defenceMap.forEach { (element, value) ->
                     if (element.test(source)) {
                         defenceBonus += value
                     }

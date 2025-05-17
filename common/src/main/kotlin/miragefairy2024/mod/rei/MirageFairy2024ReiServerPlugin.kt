@@ -28,6 +28,6 @@ class MirageFairy2024ReiServerPlugin : REIServerPlugin {
             } else {
                 stack.getFairyMotif()?.getIdentifier()?.string?.hashCode()?.toLong() ?: 1L
             }
-        }, FairyCard.item)
+        }, FairyCard.item())
     }
 }

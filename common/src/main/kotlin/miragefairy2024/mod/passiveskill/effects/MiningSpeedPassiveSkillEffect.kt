@@ -7,6 +7,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
@@ -24,7 +25,7 @@ object MiningSpeedPassiveSkillEffect : AbstractDoublePassiveSkillEffect("mining_
 
         BlockBreakingCallback.EVENT.register { blockState, player, _, _, blockBreakingDelta ->
             if (player.mainHandItem.getDestroySpeed(blockState) <= 1F) return@register blockBreakingDelta
-            val newBlockBreakingDelta = blockBreakingDelta * (1F + player.passiveSkillResult[MiningSpeedPassiveSkillEffect].toFloat())
+            val newBlockBreakingDelta = blockBreakingDelta * (1F + player.passiveSkillResult.getOrCreate()[MiningSpeedPassiveSkillEffect].toFloat())
             if (blockBreakingDelta < 1F) newBlockBreakingDelta atMost 0.99F else newBlockBreakingDelta
         }
     }

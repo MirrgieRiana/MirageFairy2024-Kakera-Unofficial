@@ -9,6 +9,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -52,7 +53,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
         override val x: Int,
         override val y: Int,
     ) : MachineBlockEntity.InventorySlotConfiguration, MachineScreenHandler.GuiSlotConfiguration {
-        override fun isValid(itemStack: ItemStack) = itemStack.`is`(FairyCard.item)
+        override fun isValid(itemStack: ItemStack) = itemStack.`is`(FairyCard.item())
         override fun canInsert(direction: Direction) = true
         override fun canExtract(direction: Direction) = true
         override val isObservable = false
@@ -66,7 +67,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override fun init() {
         super.init()
 
-        FairyPassiveSupplierBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier")) { FairyPassiveSupplierBlock.CODEC }.register()
 
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
@@ -80,7 +81,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
             pattern("#A#")
             pattern("DCD")
             pattern("###")
-            define('A', BlockMaterialCard.AURA_STONE.item)
+            define('A', BlockMaterialCard.AURA_STONE.item())
             define('#', ItemTags.PLANKS)
             define('C', Items.BARREL)
             define('D', Items.PINK_DYE)
@@ -121,7 +122,7 @@ class FairyPassiveSupplierBlock(card: FairyPassiveSupplierCard) : FairyLogistics
 class FairyPassiveSupplierBlockEntity(private val card: FairyPassiveSupplierCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyPassiveSupplierBlockEntity>(card, pos, state) {
     companion object {
         fun getLogisticsPower(itemStack: ItemStack): Int {
-            if (!itemStack.`is`(FairyCard.item)) return 0
+            if (!itemStack.`is`(FairyCard.item())) return 0
             return (FairyFactoryBlockEntity.getFairyLevel(itemStack) * 10.0).floorToInt()
         }
     }

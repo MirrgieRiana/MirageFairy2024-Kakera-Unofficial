@@ -6,6 +6,7 @@ import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.invoke
 import miragefairy2024.mod.magicplant.TraitEffectKey
 import miragefairy2024.mod.magicplant.traitEffectKeyRegistry
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -84,7 +85,7 @@ enum class TraitEffectKeyCard(
 context(ModContext)
 fun initTraitEffectKeyCard() {
     TraitEffectKeyCard.entries.forEach { card ->
-        card.traitEffectKey.register(traitEffectKeyRegistry, card.identifier)
+        Registration(traitEffectKeyRegistry, card.identifier) { card.traitEffectKey }.register()
         card.translation.enJa()
     }
 }

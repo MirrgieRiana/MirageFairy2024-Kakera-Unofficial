@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -14,6 +15,7 @@ import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.placementModifiers
+import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
@@ -46,6 +48,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
@@ -58,8 +61,8 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override val baseGrowth = 0.2
     override val baseFruitGeneration = 0.1
 
-    override val drops = listOf(MaterialCard.LUMINITE.item, Items.DIAMOND)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item.createItemStack(count))
+    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
     override val family = MirageFairy2024.identifier("luminaria")
@@ -112,20 +115,18 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     override fun init() {
         super.init()
 
-        DiamondLuminariaBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }.register()
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
             val placementModifiers = placementModifiers { per(32) + flower }
             Registries.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_ICY }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
+        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey }
 
     }
 }

@@ -9,10 +9,12 @@ import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
 import miragefairy2024.client.util.LimitedLabelComponent
 import miragefairy2024.client.util.createOwoToast
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.registerClientPacketReceiver
+import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.client.util.sendToServer
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mixin.client.api.inputEventsHandlers
@@ -38,17 +40,17 @@ import org.lwjgl.glfw.GLFW
 import net.minecraft.client.KeyMapping as KeyBinding
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
-import net.minecraft.client.gui.screens.MenuScreens as HandledScreens
 
 lateinit var soulStreamKey: KeyBinding
 
 var lastMousePositionInInventory: Pair<Double, Double>? = null
 
+context(ModContext)
 fun initFairyClientModule() {
 
     // GUI登録
-    HandledScreens.register(motifTableScreenHandlerType) { gui, inventory, title -> MotifTableScreen(gui, inventory, title) }
-    HandledScreens.register(soulStreamScreenHandlerType) { gui, inventory, title -> SoulStreamScreen(gui, inventory, title) }
+    motifTableScreenHandlerType.registerHandledScreen { gui, inventory, title -> MotifTableScreen(gui, inventory, title) }
+    soulStreamScreenHandlerType.registerHandledScreen { gui, inventory, title -> SoulStreamScreen(gui, inventory, title) }
 
     // パケットハンドラ登録
     GainFairyDreamChannel.registerClientPacketReceiver { motif ->

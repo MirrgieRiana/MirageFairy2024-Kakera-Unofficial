@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -65,24 +66,24 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
-    val block = FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque())
-    val item = BlockItem(block, Item.Properties())
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 context(ModContext)
 fun initFairyFountainModule() {
     FairyStatueFountainBlock.USAGE_TRANSLATION.enJa()
 
-    FairyStatueFountainBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue_fountain"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_statue_fountain")) { FairyStatueFountainBlock.CODEC }.register()
 
     FairyStatueFountainCard.let { card ->
 
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(EnJa("Fairy Statue Fountain", "妖精の像の泉"))
@@ -103,8 +104,8 @@ fun initFairyFountainModule() {
         pattern(" F ")
         pattern("SQS")
         pattern("SSS")
-        define('F', MaterialCard.FAIRY_SCALES.item)
-        define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item)
+        define('F', MaterialCard.FAIRY_SCALES.item())
+        define('Q', MaterialCard.FAIRY_QUEST_CARD_BASE.item())
         define('S', Items.COBBLESTONE)
     } on MaterialCard.FAIRY_SCALES.item
 }
@@ -139,12 +140,12 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
 
         // 入力判定
-        if (!stack.`is`(MaterialCard.JEWEL_100.item)) { // 持っているアイテムが違う
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
-            return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
+        if (!stack.`is`(MaterialCard.JEWEL_100.item())) { // 持っているアイテムが違う
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION // なぜかFAILにすると後続のイベントがキャンセルされない
         }
         if (stack.count < 1) { // 個数が足りない
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
             return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
 
@@ -160,7 +161,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val outputItemStack = run {
                 val chanceTable = getChanceTable()
                 val entry = chanceTable.weightedRandom(level.random)?.first
-                entry?.let { it.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(it.first) } } ?: Items.IRON_INGOT.createItemStack()
+                entry?.let { it.second.getFairyStatueCard().item().createItemStack().also { itemStack -> itemStack.setFairyMotif(it.first) } } ?: Items.IRON_INGOT.createItemStack()
             }
             player.obtain(outputItemStack)
         }
@@ -193,7 +194,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val chanceTable2 = getChanceTable()
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
-                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item.createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
+                    showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item().createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
                     motif = it.item.first?.first ?: MotifCard.AIR,
                     rate = it.weight,
                     count = 1.0,
@@ -208,7 +209,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
 
             return InteractionResult.CONSUME
         } else {
-            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item.description) }, true)
+            if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
             return InteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
         }
     }

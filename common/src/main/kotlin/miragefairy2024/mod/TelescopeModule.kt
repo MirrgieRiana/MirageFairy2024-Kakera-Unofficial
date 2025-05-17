@@ -1,24 +1,31 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.INSTANT_CODEC
+import miragefairy2024.util.INSTANT_STREAM_CODEC
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
+import miragefairy2024.util.getOrDefault
 import miragefairy2024.util.gray
 import miragefairy2024.util.green
 import miragefairy2024.util.invoke
-import miragefairy2024.util.long
+import miragefairy2024.util.mutate
 import miragefairy2024.util.normal
 import miragefairy2024.util.obtain
 import miragefairy2024.util.on
+import miragefairy2024.util.optional
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -28,21 +35,28 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
+import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.times
 import miragefairy2024.util.withHorizontalRotation
-import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod
+import mirrg.kotlin.java.hydrogen.orNull
+import mirrg.kotlin.java.hydrogen.toOptional
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -60,7 +74,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import net.minecraft.nbt.CompoundTag as NbtCompound
+import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
@@ -73,26 +87,24 @@ import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque())
-    val item = BlockItem(block, Item.Properties())
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 }
 
 
 context(ModContext)
 fun initTelescopeModule() {
 
-    TelescopeMissionExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("telescope_mission"))
-
-    TelescopeBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }.register()
 
     TelescopeCard.let { card ->
 
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.block.register()
+        card.item.register()
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block.getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         card.block.registerCutoutRenderLayer()
 
         card.block.enJa(EnJa("Minia's Telescope", "ミーニャの望遠鏡"))
@@ -114,7 +126,7 @@ fun initTelescopeModule() {
         pattern("S S")
         define('S', Items.STICK)
         define('I', Items.COPPER_INGOT)
-        define('G', MaterialCard.FAIRY_CRYSTAL.item)
+        define('G', MaterialCard.FAIRY_CRYSTAL.item())
     } on MaterialCard.FAIRY_CRYSTAL.item
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()
@@ -131,8 +143,7 @@ fun initTelescopeModule() {
     TelescopeBlock.SECONDS_TRANSLATION.enJa()
 
     registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xFFDDC442.toInt()) { world, player, _, _ ->
-        player.telescopeMission.lastUsedInstant = null
-        TelescopeMissionExtraPlayerDataCategory.sync(player)
+        player.telescopeMission.set(null)
         player.displayClientMessage(text { "The last time the telescope was used has been reset"() }, true)
     }
 
@@ -203,8 +214,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
 
         level.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
 
-        player.telescopeMission.lastUsedInstant = now
-        TelescopeMissionExtraPlayerDataCategory.sync(player)
+        player.telescopeMission.mutate { it.lastUsedTime = now }
 
         return InteractionResult.CONSUME
     }
@@ -250,11 +260,11 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         val texts = mutableListOf<Component>()
         val actions = mutableListOf<() -> Unit>()
 
-        val lastUsedInstant = player.telescopeMission.lastUsedInstant
+        val lastUsedInstant = player.telescopeMission.getOrDefault().lastUsedTime
         if (lastUsedInstant == null) {
 
             texts += text { FIRST_TRANSLATION() + ": "() + FIRST_GAIN_TRANSLATION(1000).green }
-            actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(10)) }
+            actions += { player.obtain(MaterialCard.JEWEL_100.item().createItemStack(10)) }
 
         } else {
 
@@ -268,7 +278,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
                 val remainingDuration = endOfPeriodOfLastUsedTime.toInstant(ZONE_OFFSET).toEpochMilli() - now.toEpochMilli()
                 if (remainingDuration <= 0) {
                     texts += text { translation() + ": "() + AVAILABLE_TRANSLATION().green }
-                    actions += { player.obtain(MaterialCard.JEWEL_100.item.createItemStack(countOfJewel100)) }
+                    actions += { player.obtain(MaterialCard.JEWEL_100.item().createItemStack(countOfJewel100)) }
                 } else {
                     texts += text { translation() + ": "() + RECEIVED_TRANSLATION().gray + " ("() + REUSE_TRANSLATION(Duration.ofMillis(remainingDuration).text) + ")"() }
                 }
@@ -311,32 +321,27 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
 }
 
 
-val PlayerEntity.telescopeMission get() = this.extraPlayerDataContainer.getOrInit(TelescopeMissionExtraPlayerDataCategory)
-
-object TelescopeMissionExtraPlayerDataCategory : ExtraPlayerDataCategory<TelescopeMission> {
-    override fun create() = TelescopeMission()
-    override fun castOrThrow(value: Any) = value as TelescopeMission
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<TelescopeMission> {
-        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): TelescopeMission {
-            val data = TelescopeMission()
-            data.lastUsedTime = nbt.wrapper["LastUsedTime"].long.get()
-            return data
-        }
-
-        override fun toNbt(data: TelescopeMission, registry: HolderLookup.Provider): NbtCompound {
-            val nbt = NbtCompound()
-            nbt.wrapper["LastUsedTime"].long.set(data.lastUsedTime)
-            return nbt
-        }
-    }
+val TELESCOPE_MISSION_ATTACHMENT_TYPE: AttachmentType<TelescopeMission> = AttachmentRegistry.create(MirageFairy2024.identifier("telescope_mission")) {
+    it.persistent(TelescopeMission.CODEC)
+    it.initializer(::TelescopeMission)
+    it.syncWith(TelescopeMission.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
 }
 
-class TelescopeMission {
-    var lastUsedTime: Long? = null
-}
+val Entity.telescopeMission get() = this[TELESCOPE_MISSION_ATTACHMENT_TYPE]
 
-var TelescopeMission.lastUsedInstant
-    get() = lastUsedTime?.let { Instant.ofEpochMilli(it) }
-    set(value) {
-        lastUsedTime = value?.toEpochMilli()
+class TelescopeMission(var lastUsedTime: Instant? = null) {
+    companion object {
+        val CODEC: Codec<TelescopeMission> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                INSTANT_CODEC.optionalFieldOf("last_used_time").forGetter { it.lastUsedTime.toOptional() }
+            ).apply(instance, ::TelescopeMission)
+        }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, TelescopeMission> = StreamCodec.composite(
+            INSTANT_STREAM_CODEC.optional(),
+            { it.lastUsedTime.toOptional() },
+            ::TelescopeMission,
+        )
     }
+
+    constructor(lastUsedTime: Optional<Instant>) : this(lastUsedTime.orNull)
+}

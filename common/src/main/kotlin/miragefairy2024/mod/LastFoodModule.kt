@@ -1,74 +1,63 @@
 package miragefairy2024.mod
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixin.api.EatFoodCallback
+import miragefairy2024.util.INSTANT_CODEC
+import miragefairy2024.util.INSTANT_STREAM_CODEC
 import miragefairy2024.util.get
-import miragefairy2024.util.long
-import miragefairy2024.util.register
-import miragefairy2024.util.toItemStack
-import miragefairy2024.util.toNbt
-import miragefairy2024.util.wrapper
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.minecraft.core.HolderLookup
+import miragefairy2024.util.optional
+import miragefairy2024.util.set
+import mirrg.kotlin.java.hydrogen.orNull
+import mirrg.kotlin.java.hydrogen.toOptional
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
+import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.GameRules
 import java.time.Instant
-import net.minecraft.nbt.CompoundTag as NbtCompound
+import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initLastFoodModule() {
-
-    // 拡張プレイヤーデータ
-    LastFoodExtraPlayerDataCategory.register(extraPlayerDataCategoryRegistry, MirageFairy2024.identifier("last_food"))
-
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register
         entity as ServerPlayerEntity
-        entity.lastFood.itemStack = stack.copy()
-        entity.lastFood.time = Instant.now()
-        LastFoodExtraPlayerDataCategory.sync(entity)
-    }
-
-    // プレイヤーが死ぬとリセット
-    ServerLivingEntityEvents.AFTER_DEATH.register { entity, _ ->
-        if (entity !is PlayerEntity) return@register
-        entity as ServerPlayerEntity
-        if (entity.isSpectator) return@register
-        if (entity.level().gameRules.getBoolean(GameRules.RULE_KEEPINVENTORY)) return@register
-        entity.lastFood.itemStack = null
-        entity.lastFood.time = null
-        LastFoodExtraPlayerDataCategory.sync(entity)
-    }
-
-}
-
-
-// 拡張プレイヤーデータ
-
-object LastFoodExtraPlayerDataCategory : ExtraPlayerDataCategory<LastFood> {
-    override fun create() = LastFood()
-    override fun castOrThrow(value: Any) = value as LastFood
-    override val ioHandler = object : ExtraPlayerDataCategory.IoHandler<LastFood> {
-        override fun fromNbt(nbt: NbtCompound, registry: HolderLookup.Provider): LastFood {
-            val data = LastFood()
-            data.itemStack = nbt.wrapper["ItemStack"].get()?.toItemStack(registry)
-            data.time = nbt.wrapper["Time"].long.get()?.let { Instant.ofEpochMilli(it) }
-            return data
-        }
-
-        override fun toNbt(data: LastFood, registry: HolderLookup.Provider): NbtCompound {
-            val nbt = NbtCompound()
-            nbt.wrapper["ItemStack"].set(data.itemStack?.toNbt(registry))
-            nbt.wrapper["Time"].long.set(data.time?.toEpochMilli())
-            return nbt
-        }
+        entity.lastFood.set(LastFood(stack.copy(), Instant.now()))
     }
 }
 
-class LastFood(var itemStack: ItemStack? = null, var time: Instant? = null)
+val LAST_FOOD_ATTACHMENT_TYPE: AttachmentType<LastFood> = AttachmentRegistry.create(MirageFairy2024.identifier("last_food")) {
+    it.persistent(LastFood.CODEC)
+    it.initializer(::LastFood)
+    it.syncWith(LastFood.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+}
 
-val PlayerEntity.lastFood get() = this.extraPlayerDataContainer.getOrInit(LastFoodExtraPlayerDataCategory)
+val Entity.lastFood get() = this[LAST_FOOD_ATTACHMENT_TYPE]
+
+class LastFood(var itemStack: ItemStack? = null, var time: Instant? = null) {
+    companion object {
+        val CODEC: Codec<LastFood> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                ItemStack.CODEC.optionalFieldOf("item_stack").forGetter { it.itemStack.toOptional() },
+                INSTANT_CODEC.optionalFieldOf("time").forGetter { it.time.toOptional() },
+            ).apply(instance, ::LastFood)
+        }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, LastFood> = StreamCodec.composite(
+            ItemStack.STREAM_CODEC.optional(),
+            { it.itemStack.toOptional() },
+            INSTANT_STREAM_CODEC.optional(),
+            { it.time.toOptional() },
+            ::LastFood,
+        )
+    }
+
+    constructor(itemStack: Optional<ItemStack>, time: Optional<Instant>) : this(itemStack.orNull, time.orNull)
+}

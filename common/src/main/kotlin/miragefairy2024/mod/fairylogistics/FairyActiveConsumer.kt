@@ -8,6 +8,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.mergeInventory
@@ -76,7 +77,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override fun init() {
         super.init()
 
-        FairyActiveConsumerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_active_consumer"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_active_consumer")) { FairyActiveConsumerBlock.CODEC }.register()
 
 
         inventorySlotConfigurations += SLOTS
@@ -87,7 +88,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
             pattern("#A#")
             pattern("DCD")
             pattern("###")
-            define('A', BlockMaterialCard.AURA_STONE.item)
+            define('A', BlockMaterialCard.AURA_STONE.item())
             define('#', Items.IRON_INGOT)
             define('C', Items.ITEM_FRAME)
             define('D', Items.LIGHT_BLUE_DYE)

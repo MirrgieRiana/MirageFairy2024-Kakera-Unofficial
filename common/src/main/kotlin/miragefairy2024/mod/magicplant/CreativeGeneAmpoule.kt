@@ -13,6 +13,7 @@ import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -41,21 +42,21 @@ import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
-) { CreativeGeneAmpouleCard.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(TraitCard.AIR_ADAPTATION.trait, 1))) } }
+) { CreativeGeneAmpouleCard.item().createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(TraitCard.AIR_ADAPTATION.trait, 1))) } }
 
 object CreativeGeneAmpouleCard {
     val identifier = MirageFairy2024.identifier("creative_gene_ampoule")
-    val item = CreativeGeneAmpouleItem(Item.Properties().stacksTo(1))
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { CreativeGeneAmpouleItem(Item.Properties().stacksTo(1)) }
 }
 
 context(ModContext)
 fun initCreativeGeneAmpoule() {
     creativeGeneAmpouleItemGroupCard.init()
     CreativeGeneAmpouleCard.let { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.item.register()
         card.item.registerItemGroup(creativeGeneAmpouleItemGroupCard.itemGroupKey) {
             traitRegistry.sortedEntrySet.map { (_, trait) ->
-                card.item.createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
+                card.item().createItemStack().also { it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1))) }
             }
         }
         card.item.registerModelGeneration(createCreativeGeneAmpouleModel())

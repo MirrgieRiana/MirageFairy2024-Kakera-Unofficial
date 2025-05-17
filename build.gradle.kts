@@ -2,6 +2,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 plugins {
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
@@ -45,6 +46,16 @@ subprojects.filter { it.name in listOf("common", "fabric", "neoforge") }.f {
             // for more information about repositories.
 
             maven("https://maven.parchmentmc.org") // mapping
+        }
+
+        // runServer runDatagenでArchitectury Transformerがクライアント用のクラスを変換しようとして落ちる対策のためにclassの出力先を分ける
+        sourceSets.all {
+            java.destinationDirectory.set(layout.buildDirectory.dir("classes/${this.name}/java"))
+        }
+        extensions.configure<KotlinProjectExtension>("kotlin") {
+            sourceSets.all {
+                kotlin.destinationDirectory.set(layout.buildDirectory.dir("classes/${this.name}/kotlin"))
+            }
         }
 
         // configurationの追加のためにdependenciesより上にある必要がある
@@ -154,6 +165,7 @@ tasks.register("fetchMirrgKotlin") {
         fetch("mirrg/kotlin/hydrogen/Number.kt")
         fetch("mirrg/kotlin/hydrogen/String.kt")
         fetch("mirrg/kotlin/java/hydrogen/Number.kt")
+        fetch("mirrg/kotlin/java/hydrogen/Optional.kt")
         fetch("mirrg/kotlin/slf4j/hydrogen/Logging.kt")
     }
 }
@@ -253,5 +265,18 @@ tasks.register("buildPages") {
         """
 [MF24KU Lang Table](lang_table.html)
         """.let { File("build/pages/index.md").writeText(it) }
+    }
+}
+
+tasks.register("configurations") {
+    group = "help"
+    doLast {
+        rootProject.allprojects.forEach { project ->
+            println("=== Project: ${project.path} ===")
+            project.configurations.forEach { configuration ->
+                println("- ${if (configuration.isCanBeConsumed) "C" else "-"}${if (configuration.isCanBeResolved) "R" else "-"} ${configuration.name}")
+            }
+            println()
+        }
     }
 }

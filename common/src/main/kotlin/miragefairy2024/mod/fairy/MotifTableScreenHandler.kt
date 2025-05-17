@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EMPTY_ITEM_STACK
+import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import miragefairy2024.util.string
 import miragefairy2024.util.toIdentifier
@@ -39,16 +40,18 @@ val MOTIF_TABLE_STREAM_CODEC = object : StreamCodec<RegistryFriendlyByteBuf, Lis
     }
 }
 
-val motifTableScreenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-    MotifTableScreenHandler(syncId, buf)
-}, MOTIF_TABLE_STREAM_CODEC)
+val motifTableScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("motif_table")) {
+    ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+        MotifTableScreenHandler(syncId, buf)
+    }, MOTIF_TABLE_STREAM_CODEC)
+}
 
 context(ModContext)
 fun initMotifTableScreenHandler() {
-    motifTableScreenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("motif_table"))
+    motifTableScreenHandlerType.register()
 }
 
-class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType, syncId) {
+class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType(), syncId) {
     override fun stillValid(player: PlayerEntity) = true
     override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
 }

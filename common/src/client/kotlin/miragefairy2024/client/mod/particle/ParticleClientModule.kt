@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod.particle
 
+import miragefairy2024.ModContext
 import miragefairy2024.mod.particle.ParticleTypeCard
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
 import net.minecraft.client.particle.EndRodParticle
@@ -7,6 +8,7 @@ import net.minecraft.client.particle.FlyTowardsPositionParticle
 import net.minecraft.client.particle.ParticleProvider as ParticleFactory
 import net.minecraft.client.particle.SuspendedTownParticle as SuspendParticle
 
+context(ModContext)
 fun initParticleClientModule() {
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.MISSION.particleType, SuspendParticle::HappyVillagerProvider)
     ParticleFactoryRegistry.getInstance().register(ParticleTypeCard.COLLECTING_MAGIC.particleType, FlyTowardsPositionParticle::EnchantProvider)

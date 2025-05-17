@@ -10,6 +10,7 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementsData
 import miragefairy2024.util.ModelTexturesData
+import miragefairy2024.util.Registration
 import miragefairy2024.util.compound
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.double
@@ -58,17 +59,17 @@ import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY))
-    val blockEntityType = BlockEntityType(::PlacedItemBlockEntity, setOf(block), null)
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(::PlacedItemBlockEntity, setOf(block.await()), null) }
 }
 
 context(ModContext)
 fun initPlacedItemBlock() {
-    PlacedItemBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item"))
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("placed_item")) { PlacedItemBlock.CODEC }.register()
 
     PlacedItemCard.let { card ->
-        card.block.register(BuiltInRegistries.BLOCK, card.identifier)
-        card.blockEntityType.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, card.identifier)
+        card.block.register()
+        card.blockEntityType.register()
 
         card.block.registerSingletonBlockStateGeneration()
         card.block.registerModelGeneration {
@@ -126,7 +127,7 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
 }
 
 // TODO 右クリックで立てたりする
-class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(PlacedItemCard.blockEntityType, pos, state), RenderingProxyBlockEntity {
+class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(PlacedItemCard.blockEntityType(), pos, state), RenderingProxyBlockEntity {
     companion object {
         private val INVALID_ITEM_STACK = Items.BARRIER.createItemStack()
     }

@@ -16,13 +16,20 @@ loom {
 }
 
 configurations {
-    val common by creating {
+    val commonMain by creating {
         isCanBeResolved = true
         isCanBeConsumed = false
     }
-    getByName("compileClasspath").extendsFrom(common)
-    getByName("runtimeClasspath").extendsFrom(common)
-    getByName("developmentFabric").extendsFrom(common)
+    getByName("compileClasspath").extendsFrom(commonMain)
+    getByName("runtimeClasspath").extendsFrom(commonMain)
+    getByName("developmentFabric").extendsFrom(commonMain)
+
+    val commonClient by creating {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+    }
+    getByName("clientCompileClasspath").extendsFrom(commonClient)
+    getByName("clientRuntimeClasspath").extendsFrom(commonClient)
 
     // Files in this configuration will be bundled into your mod using the Shadow plugin.
     // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
@@ -34,7 +41,6 @@ configurations {
 
 repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
-    maven("https://maven.blamejared.com") // FauxCustomEntityData-fabric-1.20.2 //// 不安定なので lib/maven に格納
     maven("https://maven.wispforest.io/releases/") // owo-lib
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
 }
@@ -63,11 +69,13 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.properties["fabric_api_version"] as String}") // Fabric API
     // modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:${rootProject.properties["fabric_api_version"] as String}") // Deprecated Fabric API
     modImplementation("net.fabricmc:fabric-language-kotlin:${rootProject.properties["fabric_kotlin_version"] as String}") // Kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.properties["kotlin_coroutines_version"] as String}") // Kotlin Coroutines
     modImplementation("dev.architectury:architectury-fabric:${rootProject.properties["architectury_api_version"] as String}") // Architectury API
 
     // Module
-    "common"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
-    "clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output) // common client
+    "commonMain"(project(path = ":common", configuration = "mainNamedElements")) { isTransitive = false } // common
+    "commonClient"(project(path = ":common", configuration = "namedElements")) { isTransitive = false } // common
+    //"clientImplementation"(rootProject.project("common").sourceSets.named("client").get().output) // common client
     "shadowBundle"(project(path = ":common", configuration = "transformProductionFabric")) // common shadow
     implementation(project(path = ":mirrg.kotlin")) // mirrg.kotlin
     "shadowBundle"(project(path = ":mirrg.kotlin")) { isTransitive = false } // mirrg.kotlin shadow
@@ -77,10 +85,7 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.799")
     modCompileOnly("me.shedaniel.cloth:basic-math:0.6.1")
 
-    modImplementation("com.faux.fauxcustomentitydata:FauxCustomEntityData-fabric-1.21.1:13.0.1")
-
     modImplementation("io.wispforest:owo-lib:0.12.15.4+1.21")
-    include("io.wispforest:owo-sentinel:0.12.15.4+1.21")
 
     modApi("me.shedaniel.cloth:cloth-config:15.0.140")
 

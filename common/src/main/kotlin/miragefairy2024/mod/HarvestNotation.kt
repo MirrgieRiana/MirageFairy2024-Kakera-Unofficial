@@ -11,9 +11,9 @@ val harvestNotations = mutableListOf<HarvestNotation>()
 class HarvestNotation(val seed: ItemStack, val crops: List<ItemStack>)
 
 context(ModContext)
-fun Item.registerHarvestNotation(vararg drops: Item) = this.registerHarvestNotation(drops.asIterable())
+fun (() -> Item).registerHarvestNotation(vararg drops: () -> Item) = this.registerHarvestNotation(drops.asIterable())
 
 context(ModContext)
-fun Item.registerHarvestNotation(drops: Iterable<Item>) = ModEvents.onInitialize {
-    harvestNotations += HarvestNotation(this.createItemStack(), drops.map { it.createItemStack() })
+fun (() -> Item).registerHarvestNotation(drops: Iterable<() -> Item>) = ModEvents.onInitialize {
+    harvestNotations += HarvestNotation(this().createItemStack(), drops.map { it().createItemStack() })
 }

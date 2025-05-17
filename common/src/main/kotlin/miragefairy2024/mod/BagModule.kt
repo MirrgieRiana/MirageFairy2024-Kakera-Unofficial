@@ -6,6 +6,7 @@ import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
@@ -76,16 +77,18 @@ enum class BagCard(
     ;
 
     companion object {
-        val screenHandlerType = ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-            createBagScreenHandler(syncId, playerInventory, buf)
-        }, ByteBufCodecs.INT)
+        val screenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag")) {
+            ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
+                createBagScreenHandler(syncId, playerInventory, buf)
+            }, ByteBufCodecs.INT)
+        }
 
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val item = BagItem(this, Item.Properties().stacksTo(1))
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BagItem(this, Item.Properties().stacksTo(1)) }
     val inventorySize = inventoryWidth * inventoryHeight
     fun isValid(itemStack: ItemStack) = filter(itemStack)
 }
@@ -94,7 +97,7 @@ enum class BagCard(
 context(ModContext)
 fun initBagModule() {
     BagCard.entries.forEach { card ->
-        card.item.register(BuiltInRegistries.ITEM, card.identifier)
+        card.item.register()
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         card.item.registerGeneratedModelGeneration()
         card.item.enJa(card.itemName)
@@ -107,7 +110,7 @@ fun initBagModule() {
     }
 
 
-    BagCard.screenHandlerType.register(BuiltInRegistries.MENU, MirageFairy2024.identifier("bag"))
+    BagCard.screenHandlerType.register()
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
@@ -117,16 +120,16 @@ fun initBagModule() {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        define('S', MaterialCard.FAIRY_GLASS_FIBER.item)
-        define('L', MaterialCard.MIRAGE_LEAVES.item)
+        define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
+        define('L', MaterialCard.MIRAGE_LEAVES.item())
     } on MaterialCard.MIRAGE_LEAVES.item
 
     registerShapedRecipeGeneration(BagCard.SEED_BAG.item) {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        define('S', MaterialCard.FAIRY_GLASS_FIBER.item)
-        define('L', MaterialCard.PHANTOM_LEAVES.item)
+        define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
+        define('L', MaterialCard.PHANTOM_LEAVES.item())
     } on MaterialCard.PHANTOM_LEAVES.item
 }
 
@@ -349,7 +352,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
     }
 }
 
-open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType, syncId) {
+open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType(), syncId) {
     override fun stillValid(player: PlayerEntity) = false
     override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
     open val card: BagCard? = null

@@ -3,15 +3,16 @@ package miragefairy2024.mod.fairy
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
-import miragefairy2024.mod.sync
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
+import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.hasSameItemAndComponents
 import miragefairy2024.util.invoke
+import miragefairy2024.util.mutate
 import miragefairy2024.util.obtain
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
@@ -76,7 +77,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         } else {
             if (world.isClientSide) return TypedActionResult.success(itemStack)
 
-            val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.entries
+            val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
@@ -163,7 +164,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         }
 
         // モチーフの判定
-        val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.entries
+        val motifSet: Set<Motif> = getCommonMotifSet(player) + player.fairyDreamContainer.getOrCreate().entries
 
         // 抽選
         val result = getRandomFairy(world.random, motifSet, appearanceRateBonus) ?: return
@@ -172,8 +173,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         player.obtain(result.motif.createFairyItemStack(condensation = result.condensation, count = result.count))
 
         // 妖精召喚履歴に追加
-        player.fairyHistoryContainer[result.motif] += result.condensation * result.count
-        FairyHistoryContainerExtraPlayerDataCategory.sync(player)
+        player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
 
         // エフェクト
         world.playSound(null, player.x, player.y, player.z, SoundEvents.DEEPSLATE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F)

@@ -10,6 +10,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.Chance
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
@@ -55,13 +56,13 @@ val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder
 
 interface FairyQuestRecipe {
     val color: Int
-    val icon: ItemStack
+    val icon: () -> ItemStack
     val title: Component
     val message: Component
     val client: Component
     val duration: Int
-    val inputs: List<Pair<Ingredient, Int>>
-    val outputs: List<ItemStack>
+    val inputs: List<Pair<() -> Ingredient, Int>>
+    val outputs: List<() -> ItemStack>
 }
 
 @Suppress("SpellCheckingInspection")
@@ -75,10 +76,10 @@ enum class FairyQuestRecipeCard(
     jaMessage: String,
     enClient: String,
     jaClient: String,
-    override val inputs: List<Pair<Ingredient, Int>>,
-    override val outputs: List<ItemStack>,
+    override val inputs: List<Pair<() -> Ingredient, Int>>,
+    override val outputs: List<() -> ItemStack>,
     override val duration: Int = 20 * 10,
-    override val icon: ItemStack = outputs.first(),
+    override val icon: () -> ItemStack = outputs.first(),
 ) : FairyQuestRecipe {
     EMERGENCY_SITUATION(
         "emergency_situation", 0xFF6900, LootCategory.RARE,
@@ -86,8 +87,8 @@ enum class FairyQuestRecipeCard(
         "Help!!!\n\n!!!!\n\n!!!!!\n\nI'm out of toilet paper!!!!!!",
         "助けて！！！\n\n！！！！\n\n！！！！！\n\nトイレットペーパーが無いの！！！！！！",
         "The Institute of Fairy Research\nEthics Department\nTirirknofe Herirmina", "妖精研究所\n倫理部\nティリルクノフェ・ヘリルミーナ",
-        listOf(Items.PAPER.toIngredient() to 24),
-        listOf(Items.EMERALD.createItemStack(1)),
+        listOf({ Items.PAPER.toIngredient() } to 24),
+        listOf { Items.EMERALD.createItemStack(1) },
     ),
     NOTICE_FOR_CERAMIC_BRICK_DONATIONS(
         "notice_for_ceramic_brick_donations", 0xFFFAF2, LootCategory.RARE,
@@ -95,8 +96,8 @@ enum class FairyQuestRecipeCard(
         "We are actively seeking donations of ceramic bricks for the reconstruction project of the vacuum decay reactor. If you are in need, we will selectively provide reusable building materials.",
         "真空崩壊炉改修工事に向けてセラミックレンガの寄付を広く募集しております。必要な場合は、リユース可能な建築資材を選別してご提供いたします。",
         "The Institute of Fairy Research\nCordelia Branch", "妖精研究所\nコーディリア支部",
-        listOf(Items.BRICKS.toIngredient() to 1),
-        listOf(BlockMaterialCard.DRYWALL.item.createItemStack(1), Items.STONE_BRICKS.createItemStack(1), Items.WHITE_CONCRETE.createItemStack(1)),
+        listOf({ Items.BRICKS.toIngredient() } to 1),
+        listOf({ BlockMaterialCard.DRYWALL.item().createItemStack(1) }, { Items.STONE_BRICKS.createItemStack(1) }, { Items.WHITE_CONCRETE.createItemStack(1) }),
     ),
     IMPROMPTU_FANTASTIC_CARNIVAL(
         "impromptu_fantastic_carnival", 0xFCF5DF, LootCategory.RARE,
@@ -104,8 +105,8 @@ enum class FairyQuestRecipeCard(
         "Help! We're running out of cakes, and the chickens are taking their sweet time laying eggs! Can someone please help out? We don't have time to bake, so substitute it right away!",
         "たいへん！ケーキが足りないのにニワトリがなかなか卵を産まないの！お願い！作ってる時間はないから、今すぐ誰か代わりになって！",
         "Breadia the fairy of bread", "麺麭精ブレアージャ",
-        listOf(MaterialCard.FRACTAL_WISP.item.toIngredient() to 1), // TODO -> ケーキ精
-        listOf(Items.CAKE.createItemStack(1)),
+        listOf({ MaterialCard.FRACTAL_WISP.item().toIngredient() } to 1), // TODO -> ケーキ精
+        listOf { Items.CAKE.createItemStack(1) },
     ),
     NEW_PRODUCT_FROM_FRI(
         "new_product_from_fri", 0xAC5BD8, LootCategory.COMMON,
@@ -133,8 +134,8 @@ enum class FairyQuestRecipeCard(
             "※お子様の手の届かない場所に保管してください。",
         ).join("\n"),
         "The Institute of Fairy Research\nCreation Department", "妖精研究所\n創製部",
-        listOf(ItemTags.COALS.toIngredient() to 1),
-        listOf(Items.WHITE_BED.createItemStack(1)),
+        listOf({ ItemTags.COALS.toIngredient() } to 1),
+        listOf { Items.WHITE_BED.createItemStack(1) },
     ),
     VEGETATION_SURVEY(
         "vegetation_survey", 0x6BAF7C, LootCategory.RARE,
@@ -142,8 +143,8 @@ enum class FairyQuestRecipeCard(
         "The fairy trees...? We should be over a million light-years away from the Habitabilis Zona. I'm curious to divine the past of this star, so would you consider sending me samples of the vegetation?",
         "妖精の樹…？ここはハビタビリスゾーナから100万光年以上も離れた場所のはず…。この星の過去を占ってみたいから、植生サンプルを送ってくれないかしら？",
         "The Pearl Knights of Miranagi\nShinonome Astrology Academy\nRumeri", "みらなぎ聖騎士団\n東雲占卜院\nるめり",
-        listOf(HaimeviskaBlockCard.LOG.item.toIngredient() to 4, HaimeviskaBlockCard.LEAVES.item.toIngredient() to 16),
-        listOf(MaterialCard.MIRANAGITE.item.createItemStack(1)),
+        listOf({ HaimeviskaBlockCard.LOG.item().toIngredient() } to 4, { HaimeviskaBlockCard.LEAVES.item().toIngredient() } to 16),
+        listOf { MaterialCard.MIRANAGITE.item().createItemStack(1) },
     ),
     FATAL_ACCIDENT(
         "fatal_accident", 0x000027, LootCategory.RARE,
@@ -184,16 +185,16 @@ enum class FairyQuestRecipeCard(
         """.trimIndent().trim().replace("\n", "\n\n"),
         "The Institute of Fairy Research\nOphelia Branch\nLibrariania the fairy of librarian", "妖精研究所\nオフィーリア支部\n司書精リブラリアーニャ",
         listOf(
-            Items.BEDROCK.toIngredient() to 64,
-            Items.BEDROCK.toIngredient() to 64,
-            Items.BEDROCK.toIngredient() to 64,
-            Items.BEDROCK.toIngredient() to 64,
+            { Items.BEDROCK.toIngredient() } to 64,
+            { Items.BEDROCK.toIngredient() } to 64,
+            { Items.BEDROCK.toIngredient() } to 64,
+            { Items.BEDROCK.toIngredient() } to 64,
         ),
         listOf(
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.LOCAL_VACUUM_DECAY.item.createItemStack(64),
-            BlockMaterialCard.MIRANAGITE_BLOCK.item.createItemStack(64),
+            { BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64) },
+            { BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64) },
+            { BlockMaterialCard.LOCAL_VACUUM_DECAY.item().createItemStack(64) },
+            { BlockMaterialCard.MIRANAGITE_BLOCK.item().createItemStack(64) },
         ),
     ),
     ;
@@ -222,7 +223,7 @@ val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
 context(ModContext)
 fun initFairyQuestRecipe() {
     FairyQuestRecipeCard.entries.forEach { card ->
-        card.register(fairyQuestRecipeRegistry, card.identifier)
+        Registration(fairyQuestRecipeRegistry, card.identifier) { card }.register()
 
         card.titleTranslation.enJa()
         card.messageTranslation.enJa()
@@ -285,9 +286,9 @@ fun initFairyQuestRecipe() {
     }
     placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
 
-    SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe"))
+    Registration(BuiltInRegistries.LOOT_FUNCTION_TYPE, MirageFairy2024.identifier("set_fairy_quest_recipe")) { SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE }.register()
 
-    FAIRY_QUEST_CARD_FEATURE.register(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card"))
+    Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_quest_card")) { FAIRY_QUEST_CARD_FEATURE }.register()
 
 }
 
@@ -306,7 +307,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
         }
         val recipeId = table.weightedRandom(context.random()) ?: return null // 有効なレシピが一つもない
 
-        return FairyQuestCardCard.item.createItemStack().also { it.setFairyQuestRecipe(fairyQuestRecipeRegistry.get(recipeId)!!) }
+        return FairyQuestCardCard.item().createItemStack().also { it.setFairyQuestRecipe(fairyQuestRecipeRegistry.get(recipeId)!!) }
     }
 }
 

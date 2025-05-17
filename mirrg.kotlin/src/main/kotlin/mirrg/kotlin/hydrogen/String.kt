@@ -39,10 +39,12 @@ fun <T> Sequence<T>.join(separator: CharSequence = ", ", transform: (T) -> CharS
 
 
 /** 先頭の文字のみを大文字にします。 */
-fun String.toUpperCaseHead() = if (isEmpty()) this else take(1).uppercase() + drop(1)
+@Suppress("DEPRECATION")
+fun String.toUpperCaseHead() = if (isEmpty()) this else take(1).toUpperCase() + drop(1)
 
 /** 先頭の文字のみを小文字にします。 */
-fun String.toLowerCaseHead() = if (isEmpty()) this else take(1).lowercase() + drop(1)
+@Suppress("DEPRECATION")
+fun String.toLowerCaseHead() = if (isEmpty()) this else take(1).toLowerCase() + drop(1)
 
 /** @receiver スネークケースの文字列 */
 fun String.toUpperCamelCase(beforeDelimiter: String = "_", afterDelimiter: String = "") = split(beforeDelimiter).map { it.toUpperCaseHead() }.join(afterDelimiter)

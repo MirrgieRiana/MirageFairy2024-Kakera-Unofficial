@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.tool.PhysicalMagicDamageTypeCard
+import miragefairy2024.util.Registration
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer
 import miragefairy2024.util.register
@@ -38,13 +39,15 @@ object EtheroballisticBoltCard {
     val height = 0.5F
     fun createEntity(entityType: EntityType<EtheroballisticBoltEntity>, world: Level) = EtheroballisticBoltEntity(entityType, world)
     val identifier = MirageFairy2024.identifier("etheroballistic_bolt")
-    val entityType: EntityType<EtheroballisticBoltEntity> = FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
-        .dimensions(EntityDimensions.fixed(width, height))
-        .build()
+    val entityType = Registration(BuiltInRegistries.ENTITY_TYPE, identifier) {
+        FabricEntityTypeBuilder.create(spawnGroup) { entityType, world -> createEntity(entityType, world) }
+            .dimensions(EntityDimensions.fixed(width, height))
+            .build()
+    }
 
     context(ModContext)
     fun init() {
-        entityType.register(BuiltInRegistries.ENTITY_TYPE, identifier)
+        entityType.register()
         entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
     }
 }
@@ -137,7 +140,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
     override fun onHitEntity(entityHitResult: EntityHitResult) {
         super.onHitEntity(entityHitResult)
         entityHitResult.entity.hurt(level().damageSources().source(PhysicalMagicDamageTypeCard.registryKey, this, owner as? LivingEntity), damage)
-        if (level().random.nextInt(5) == 0) spawnAtLocation(MaterialCard.ETHEROBALLISTIC_BOLT_FRAGMENT.item)
+        if (level().random.nextInt(5) == 0) spawnAtLocation(MaterialCard.ETHEROBALLISTIC_BOLT_FRAGMENT.item())
     }
 
     override fun handleEntityEvent(status: Byte) {

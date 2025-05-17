@@ -18,7 +18,7 @@ import net.minecraft.world.item.alchemy.Potions
 
 val mirageFairy2024ItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("miragefairy2024"), "MF24KU", "MF24KU",
-) { MaterialCard.PHANTOM_DROP.item.createItemStack() }
+) { MaterialCard.PHANTOM_DROP.item().createItemStack() }
 
 context(ModContext)
 fun initCommonModule() {

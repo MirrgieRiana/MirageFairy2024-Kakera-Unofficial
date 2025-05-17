@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -43,6 +44,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
+    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(
@@ -57,8 +59,8 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.PHANTOM_LEAVES.item, MaterialCard.PHANTOM_DROP.item)
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item.createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item.createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("mirage")
     override val possibleTraits = setOf(
@@ -110,11 +112,11 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     override fun init() {
         super.init()
 
-        PhantomFlowerBlock.CODEC.register(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower"))
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower")) { PhantomFlowerBlock.CODEC }.register()
 
         // 地形生成
         registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block.withAge(card.block.maxAge))
+            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {

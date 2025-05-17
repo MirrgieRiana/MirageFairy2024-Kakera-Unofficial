@@ -10,6 +10,7 @@ import miragefairy2024.mod.magicplant.contents.magicplants.EmeraldLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
+import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -46,8 +47,8 @@ val RARITY_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.build
 context(ModContext)
 fun initMagicPlantModule() {
 
-    TRAIT_STACKS_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("trait_stacks"))
-    RARITY_DATA_COMPONENT_TYPE.register(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("rarity"))
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("trait_stacks")) { TRAIT_STACKS_DATA_COMPONENT_TYPE }.register()
+    Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("rarity")) { RARITY_DATA_COMPONENT_TYPE }.register()
 
     TRAIT_TRANSLATION.enJa()
     CREATIVE_ONLY_TRANSLATION.enJa()
