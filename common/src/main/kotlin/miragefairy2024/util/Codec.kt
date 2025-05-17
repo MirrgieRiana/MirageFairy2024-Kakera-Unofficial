@@ -18,3 +18,11 @@ val INSTANT_STREAM_CODEC: StreamCodec<ByteBuf, Instant> = ByteBufCodecs.VAR_LONG
 
 val ITEMS_CODEC: Codec<List<ItemStack>> = ItemContainerContents.CODEC.xmap({ it.stream().toList() }, { ItemContainerContents.fromItems(it) })
 val ITEMS_STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, List<ItemStack>> = ItemContainerContents.STREAM_CODEC.map({ it.stream().toList() }, { ItemContainerContents.fromItems(it) })
+
+/**
+ * ダミーのペイロードを追加するStreamCodecです。
+ * NeoForgeにおいてMenuを開く際にペイロードが空であるとバニラの機構を使うため、これを抑制するために用いられます。
+ *
+ * @see net.minecraft.server.level.ServerPlayer.openMenu
+ */
+fun dummyUnitStreamCodec(): StreamCodec<ByteBuf, Unit> = ByteBufCodecs.VAR_INT.map({ }, { 0 })

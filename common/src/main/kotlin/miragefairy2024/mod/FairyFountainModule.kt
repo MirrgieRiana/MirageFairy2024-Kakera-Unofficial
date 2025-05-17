@@ -142,7 +142,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
         // 入力判定
         if (!stack.`is`(MaterialCard.JEWEL_100.item())) { // 持っているアイテムが違う
             if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)
-            return ItemInteractionResult.CONSUME // なぜかFAILにすると後続のイベントがキャンセルされない
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION // なぜかFAILにすると後続のイベントがキャンセルされない
         }
         if (stack.count < 1) { // 個数が足りない
             if (level.isServer) player.displayClientMessage(text { USAGE_TRANSLATION(MaterialCard.JEWEL_100.item().description) }, true)

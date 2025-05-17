@@ -10,6 +10,7 @@ import miragefairy2024.util.ITEMS_CODEC
 import miragefairy2024.util.ITEMS_STREAM_CODEC
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
+import miragefairy2024.util.dummyUnitStreamCodec
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.getOrCreate
@@ -114,7 +115,7 @@ object OpenSoulStreamChannel : Channel<Unit>(MirageFairy2024.identifier("open_so
 val soulStreamScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("soul_stream")) {
     ExtendedScreenHandlerType({ syncId, playerInventory, _ ->
         SoulStreamScreenHandler(syncId, playerInventory, clientProxy!!.getClientPlayer()!!.soulStream.getOrCreate())
-    }, StreamCodec.unit(Unit))
+    }, dummyUnitStreamCodec())
 }
 
 class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType(), syncId) {
