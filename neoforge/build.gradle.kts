@@ -87,9 +87,13 @@ modrinth {
     dependencies {
         required.project("forgified-fabric-api")
         required.project("kotlin-for-forge")
+        required.project("owo-lib")
+        required.project("cloth-config")
+        required.project("terrablender")
+        required.project("architectury-api")
     }
 }
-//rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
+rootProject.tasks["uploadModrinth"].dependsOn(tasks["modrinth"])
 
 tasks.named<ProcessResources>("processResources") {
     inputs.property("version", project.version)

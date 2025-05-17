@@ -105,7 +105,6 @@ modrinth {
     dependencies {
         required.project("fabric-api")
         required.project("fabric-language-kotlin")
-        required.project("faux-custom-entity-data")
         required.project("owo-lib")
         required.project("cloth-config")
         required.project("terrablender")
