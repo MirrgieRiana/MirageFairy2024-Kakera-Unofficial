@@ -3,7 +3,7 @@ package miragefairy2024.mod
 import com.mojang.datafixers.util.Pair
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.TerraBlenderEvents
+import miragefairy2024.ModEvents
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
@@ -95,7 +95,7 @@ fun initBiomeModule() {
 
         card.init()
     }
-    TerraBlenderEvents.onTerraBlenderInitialized {
+    ModEvents.onTerraBlenderInitialized {
         BiomeCards.entries.forEach { card ->
 
             // バイオームをTerraBlenderに登録
@@ -251,7 +251,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
     }
 
     context(ModContext)
-    override fun init() = TerraBlenderEvents.onTerraBlenderInitialized {
+    override fun init() = ModEvents.onTerraBlenderInitialized {
         val rule = MaterialRules.ifTrue(
             MaterialRules.abovePreliminarySurface(),
             MaterialRules.ifTrue(

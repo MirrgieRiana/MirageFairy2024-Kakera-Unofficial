@@ -8,7 +8,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
-import miragefairy2024.TerraBlenderEvents
 import miragefairy2024.client.ClientProxyImpl
 import miragefairy2024.client.initClientModules
 import miragefairy2024.clientProxy
@@ -56,7 +55,7 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
         modEventBus.addListener(FMLCommonSetupEvent::class.java) {
             ModEvents.onInitialize.fire { it() }
             it.enqueueWork {
-                TerraBlenderEvents.onTerraBlenderInitialized.fire { it() }
+                ModEvents.onTerraBlenderInitialized.fire { it() }
             }
         }
         modEventBus.addListener(FMLClientSetupEvent::class.java) {

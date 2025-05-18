@@ -47,7 +47,7 @@
       }
     ],
     "terrablender": [
-      "miragefairy2024.MirageFairy2024TerraBlenderMod"
+      "miragefairy2024.fabric.MirageFairy2024FabricTerraBlenderEntryPoint"
     ]
   },
   "mixins": [

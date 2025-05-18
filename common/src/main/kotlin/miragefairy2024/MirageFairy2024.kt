@@ -25,8 +25,8 @@ import net.minecraft.world.level.storage.loot.LootTable
 
 object ModEvents {
     val onInitialize = InitializationEventRegistry<() -> Unit>()
-
     val onClientInit = InitializationEventRegistry<() -> Unit>()
+    val onTerraBlenderInitialized = InitializationEventRegistry<() -> Unit>()
 }
 
 object DataGenerationEvents {
