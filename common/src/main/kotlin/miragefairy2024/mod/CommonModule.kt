@@ -3,6 +3,8 @@ package miragefairy2024.mod
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.ModifyItemEnchantmentsHandler
+import miragefairy2024.platformProxy
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.register
@@ -24,6 +26,11 @@ context(ModContext)
 fun initCommonModule() {
     mirageFairy2024ItemGroupCard.init()
     WaterBottleIngredient.SERIALIZER.register()
+
+    platformProxy!!.registerModifyItemEnchantmentsHandler { itemStack, mutableItemEnchantments, enchantmentLookup ->
+        val item = itemStack.item as? ModifyItemEnchantmentsHandler ?: return@registerModifyItemEnchantmentsHandler
+        item.modifyItemEnchantments(itemStack, mutableItemEnchantments, enchantmentLookup)
+    }
 }
 
 object WaterBottleIngredient : CustomIngredient {
