@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:main/1",
+  "criteria": {
+    "has_fairy_crystal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:fairy_crystal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.end.kill_dragon.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:dragon_head"
+    },
+    "title": {
+      "translate": "advancements.end.kill_dragon.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_fairy_crystal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

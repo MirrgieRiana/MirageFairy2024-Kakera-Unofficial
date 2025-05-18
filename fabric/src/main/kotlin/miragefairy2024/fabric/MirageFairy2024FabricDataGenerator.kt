@@ -5,8 +5,11 @@ import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.platformProxy
 import miragefairy2024.util.string
+import miragefairy2024.util.text
+import miragefairy2024.util.translate
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -21,9 +24,15 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementHolder
+import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
+import net.minecraft.data.advancements.AdvancementProvider
+import net.minecraft.data.advancements.AdvancementSubProvider
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -31,10 +40,12 @@ import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
+import java.util.function.Consumer
 import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
 import net.minecraft.data.CachedOutput as DataWriter
 import net.minecraft.data.PackOutput as DataOutput
@@ -223,6 +234,41 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                     return CompletableFuture.allOf(*futures.toTypedArray())
                 }
             }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            AdvancementProvider(output, registriesFuture, listOf(object : AdvancementSubProvider {
+                override fun generate(registries: HolderLookup.Provider, writer: Consumer<AdvancementHolder>) {
+
+                    val advancementHolder = Advancement.Builder.advancement()
+                        .display(
+                            Blocks.END_STONE,
+                            text { translate("advancements.end.root.title") },
+                            text { translate("advancements.end.root.description") },
+                            ResourceLocation.withDefaultNamespace("textures/gui/advancements/backgrounds/end.png"),
+                            AdvancementType.TASK,
+                            false,
+                            false,
+                            false
+                        )
+                        .addCriterion("has_mirage_flour", InventoryChangeTrigger.TriggerInstance.hasItems(MaterialCard.MIRAGE_FLOUR.item))
+                        .save(writer, MirageFairy2024.identifier("main/1").string)
+                    val advancementHolder2 = Advancement.Builder.advancement()
+                        .parent(advancementHolder)
+                        .display(
+                            Blocks.DRAGON_HEAD,
+                            text { translate("advancements.end.kill_dragon.title") },
+                            text { translate("advancements.end.kill_dragon.description") },
+                            null,
+                            AdvancementType.TASK,
+                            true,
+                            true,
+                            false
+                        )
+                        .addCriterion("has_fairy_crystal", InventoryChangeTrigger.TriggerInstance.hasItems(MaterialCard.FAIRY_CRYSTAL.item))
+                        .save(writer, MirageFairy2024.identifier("main/2").string)
+
+                }
+            }))
         }
     }
 
