@@ -34,7 +34,7 @@ object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Valu
 
     fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
-        value.map.entries.forEach { (enchantment, level) ->
+        value.map.forEach { (enchantment, level) ->
             configuration.descriptions += DynamicPoem(PoemType.DESCRIPTION) { context ->
                 val trueEnchantment = context.registries().or { return@DynamicPoem Component.empty() }[Registries.ENCHANTMENT, enchantment].value()
                 text { trueEnchantment.description + if (level >= 2 || trueEnchantment.maxLevel >= 2) " "() + level.toRomanText() else ""() }
