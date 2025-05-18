@@ -6,8 +6,6 @@
     "AbstractBlockMixin",
     "BlockMixin",
     "DataGeneratorMixin",
-    "EnchantmentHelperMixin",
-    "ItemPredicateMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin"
   ],
