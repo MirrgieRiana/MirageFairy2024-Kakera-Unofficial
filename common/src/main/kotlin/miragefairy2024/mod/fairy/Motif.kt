@@ -1297,8 +1297,8 @@ private class PassiveSkillBuilder {
     val specifications = mutableListOf<PassiveSkillSpecification<*>>()
 }
 
-private operator fun <T: Any> PassiveSkillEffect<T>.invoke(valueProvider: (mana: Double) -> T) = PassiveSkillSpecification(listOf(), this, valueProvider)
-private operator fun <T: Any> PassiveSkillSpecification<T>.times(condition: PassiveSkillCondition) = PassiveSkillSpecification(this.conditions + condition, this.effect, this.valueProvider)
+private operator fun <T : Any> PassiveSkillEffect<T>.invoke(valueProvider: (mana: Double) -> T) = PassiveSkillSpecification(listOf(), this, valueProvider)
+private operator fun <T : Any> PassiveSkillSpecification<T>.times(condition: PassiveSkillCondition) = PassiveSkillSpecification(this.conditions + condition, this.effect, this.valueProvider)
 private operator fun PassiveSkillBuilder.plus(specification: PassiveSkillSpecification<*>) = this.also { it.specifications += specification }
 
 private val overworld get() = SimplePassiveSkillConditionCard.OVERWORLD
@@ -1331,7 +1331,7 @@ private val health get() = DoubleComparisonPassiveSkillCondition.HEALTH_TERM
 
 private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCondition(this)
 
-private operator fun <T: Any> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
+private operator fun <T : Any> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
 private fun attribute(attribute: Holder<EntityAttribute>, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
@@ -1383,7 +1383,7 @@ fun initMotif() {
         motifRegistry.sortedBy { if (it is MotifCard) it.ordinal else 99999999 }.forEach { motif ->
             sb.append("|${motif.displayName.string}|${motif.rare}|")
             motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
-                fun <T: Any> f(specification: PassiveSkillSpecification<T>) {
+                fun <T : Any> f(specification: PassiveSkillSpecification<T>) {
                     if (index > 0) sb.append("&br;")
                     sb.append(specification.effect.getText(specification.valueProvider(motif.rare.toDouble())).string)
                 }
@@ -1391,7 +1391,7 @@ fun initMotif() {
             }
             sb.append("|")
             motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
-                fun <T: Any> f(specification: PassiveSkillSpecification<T>) {
+                fun <T : Any> f(specification: PassiveSkillSpecification<T>) {
                     if (index > 0) sb.append("&br;")
                     sb.append(specification.effect.getText(specification.valueProvider(10.0)).string)
                 }
@@ -1399,7 +1399,7 @@ fun initMotif() {
             }
             sb.append("|")
             motif.passiveSkillSpecifications.forEachIndexed { index, specification ->
-                fun <T: Any> f(specification: PassiveSkillSpecification<T>) {
+                fun <T : Any> f(specification: PassiveSkillSpecification<T>) {
                     if (index > 0) sb.append("&br;")
                     sb.append(if (specification.conditions.isNotEmpty()) "[" + specification.conditions.map { it.text.string }.join(",") + "]" else "　")
                 }
