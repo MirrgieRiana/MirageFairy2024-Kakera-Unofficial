@@ -14,8 +14,6 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import miragefairy2024.util.yellow
-import mirrg.kotlin.hydrogen.max
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponents
@@ -30,8 +28,6 @@ import net.minecraft.world.item.SwordItem
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
-import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
@@ -62,6 +58,7 @@ class FairyScytheConfiguration(
 class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Properties) :
     ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, range, settings),
     FairyToolItem,
+    OverrideEnchantmentLevelCallback,
     ItemPredicateConvertorCallback {
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
@@ -81,7 +78,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = super.overrideEnchantmentLevel(enchantment, itemStack, oldLevel) max overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
+    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
 
     override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
 
@@ -89,7 +86,7 @@ class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, 
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, settings.attributes(createAttributes(material, attackDamage.toInt(), attackSpeed))), PostTryPickHandlerItem, OverrideEnchantmentLevelCallback {
+open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, settings.attributes(createAttributes(material, attackDamage.toInt(), attackSpeed))), PostTryPickHandlerItem {
     companion object {
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
@@ -155,17 +152,6 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
                     }
                 }
             }
-        }
-    }
-
-    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int): Int {
-        return if (enchantment.`is`(Enchantments.FORTUNE)) {
-            val enchantments = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY)
-            // TODO ↓NeoForgeになったときになんとかする
-            FabricLoader::class.java.toString() // ←NeoForgeに移行したとき用のリマインダー
-            oldLevel //max (enchantments.getLevel(EnchantmentCard.FERTILITY.enchantment))
-        } else {
-            oldLevel
         }
     }
 }

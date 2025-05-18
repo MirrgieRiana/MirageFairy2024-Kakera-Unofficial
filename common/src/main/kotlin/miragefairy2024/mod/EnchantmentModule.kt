@@ -8,10 +8,12 @@ import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerEnchantmentTagGeneration
+import miragefairy2024.util.registerItemTagGeneration
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.EnchantmentTags
+import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.item.Item
@@ -58,12 +60,6 @@ enum class EnchantmentCard(
         "magic_acceleration", EnJa("Magic Acceleration", "魔法加速"),
         MAGIC_WEAPON_ITEM_TAG, MAGIC_WEAPON_ITEM_TAG, EnchantmentRarity.COMMON,
         5, 1, 10, 30,
-        tags = listOf(EnchantmentTags.NON_TREASURE),
-    ),
-    FERTILITY(
-        "fertility", EnJa("Fertility", "豊穣"),
-        SCYTHE_ITEM_TAG, SCYTHE_ITEM_TAG, EnchantmentRarity.RARE,
-        3, 15, 9, 50,
         tags = listOf(EnchantmentTags.NON_TREASURE),
     ),
     FORTUNE_UP(
@@ -117,4 +113,6 @@ fun initEnchantmentModule() {
 
         oldLevel + entry.intValue
     }
+
+    SCYTHE_ITEM_TAG.registerItemTagGeneration { ItemTags.MINING_LOOT_ENCHANTABLE }
 }
