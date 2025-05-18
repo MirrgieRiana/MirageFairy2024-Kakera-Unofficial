@@ -11,6 +11,7 @@ import miragefairy2024.Modules
 import miragefairy2024.client.ClientProxyImpl
 import miragefairy2024.client.initClientModules
 import miragefairy2024.clientProxy
+import miragefairy2024.platformProxy
 import miragefairy2024.util.Registration
 import miragefairy2024.util.RegistryEvents
 import net.minecraft.core.Registry
@@ -27,6 +28,7 @@ import net.neoforged.neoforge.registries.RegisterEvent
 class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContainer) {
     init {
         with(ModContext()) {
+            platformProxy = NeoForgePlatformProxy()
             Modules.init()
             if (FMLEnvironment.dist == Dist.CLIENT) initClientModules()
         }

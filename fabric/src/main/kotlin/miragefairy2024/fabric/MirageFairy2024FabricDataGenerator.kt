@@ -5,6 +5,7 @@ import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
+import miragefairy2024.platformProxy
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
@@ -44,6 +45,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as
 object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         with(ModContext()) {
+            platformProxy = FabricPlatformProxy()
             Modules.init()
         }
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }

@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.Modules
+import miragefairy2024.platformProxy
 import miragefairy2024.util.Registration
 import miragefairy2024.util.RegistryEvents
 import net.fabricmc.api.ModInitializer
@@ -13,6 +14,7 @@ import net.minecraft.core.Registry
 object MirageFairy2024FabricMod : ModInitializer {
     override fun onInitialize() {
         with(ModContext()) {
+            platformProxy = FabricPlatformProxy()
             Modules.init()
         }
 
