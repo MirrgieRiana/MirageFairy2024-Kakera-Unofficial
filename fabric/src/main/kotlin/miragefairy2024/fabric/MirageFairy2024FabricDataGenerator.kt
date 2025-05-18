@@ -41,7 +41,7 @@ import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerato
 import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 
-object MirageFairy2024DataGenerator : DataGeneratorEntrypoint {
+object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         with(ModContext()) {
             Modules.init()

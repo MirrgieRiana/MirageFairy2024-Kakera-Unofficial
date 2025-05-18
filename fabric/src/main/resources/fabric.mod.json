@@ -30,7 +30,7 @@
     ],
     "fabric-datagen": [
       {
-        "value": "miragefairy2024.fabric.MirageFairy2024DataGenerator",
+        "value": "miragefairy2024.fabric.MirageFairy2024FabricDataGenerator",
         "adapter": "kotlin"
       }
     ],
