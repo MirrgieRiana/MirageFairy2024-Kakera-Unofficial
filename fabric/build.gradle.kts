@@ -13,6 +13,7 @@ architectury {
 
 loom {
     splitEnvironmentSourceSets()
+    accessWidenerPath = file("src/main/resources/miragefairy2024.accesswidener")
 }
 
 configurations {

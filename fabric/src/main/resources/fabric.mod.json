@@ -57,6 +57,7 @@
       "environment": "client"
     }
   ],
+  "accessWidener": "miragefairy2024.accesswidener",
   "depends": {
     "fabricloader": ">=0.16.13",
     "minecraft": "~1.21.1",
