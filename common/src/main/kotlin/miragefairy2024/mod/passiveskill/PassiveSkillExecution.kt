@@ -13,6 +13,7 @@ import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.get
 import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
+import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.Slot
@@ -37,6 +38,9 @@ val PASSIVE_SKILL_EFFECTIVE_TRANSLATION = Translation({ "gui.${identifier.toLang
 
 context(ModContext)
 fun initPassiveSkillExecution() {
+
+    // プレイヤー追加データ登録
+    PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE.register()
 
     // イベント処理
     ServerTickEvents.END_SERVER_TICK.register { server ->

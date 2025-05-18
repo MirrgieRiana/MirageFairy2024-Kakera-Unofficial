@@ -50,6 +50,9 @@ val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, M
 context(ModContext)
 fun initSoulStream() {
 
+    // プレイヤー追加データ
+    SOUL_STREAM_ATTACHMENT_TYPE.register()
+
     // ソウルストリームを開く要求パケット
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->

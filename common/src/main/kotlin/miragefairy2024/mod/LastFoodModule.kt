@@ -9,6 +9,7 @@ import miragefairy2024.util.INSTANT_CODEC
 import miragefairy2024.util.INSTANT_STREAM_CODEC
 import miragefairy2024.util.get
 import miragefairy2024.util.optional
+import miragefairy2024.util.register
 import miragefairy2024.util.set
 import mirrg.kotlin.java.hydrogen.orNull
 import mirrg.kotlin.java.hydrogen.toOptional
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initLastFoodModule() {
+    LAST_FOOD_ATTACHMENT_TYPE.register()
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register
         if (entity !is PlayerEntity) return@register

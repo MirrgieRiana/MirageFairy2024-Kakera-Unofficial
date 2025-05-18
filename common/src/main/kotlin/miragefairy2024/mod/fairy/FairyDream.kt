@@ -10,6 +10,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.itemStacks
 import miragefairy2024.util.mutate
 import miragefairy2024.util.opposite
+import miragefairy2024.util.register
 import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.registerServerToClientPayloadType
 import miragefairy2024.util.sendToClient
@@ -41,6 +42,9 @@ fun initFairyDream() {
 
     // パケットタイプ登録
     GainFairyDreamChannel.registerServerToClientPayloadType()
+
+    // プレイヤー追加データ登録
+    FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE.register()
 
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0xFF0000DD.toInt()) { world, player, _, _ ->

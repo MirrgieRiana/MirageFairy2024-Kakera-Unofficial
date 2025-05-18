@@ -1,5 +1,6 @@
 package miragefairy2024.util
 
+import miragefairy2024.ModContext
 import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 
@@ -38,3 +39,7 @@ fun <T> AttachmentDelegate<T>.mutate(block: (T) -> Unit) {
 fun <T> AttachmentDelegate<T>.sync() {
     this.set(this.get())
 }
+
+
+context(ModContext)
+fun AttachmentType<*>.register() = this // AttachmentTypeはインスタンス化した時点で登録成立

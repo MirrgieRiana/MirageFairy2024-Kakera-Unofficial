@@ -16,6 +16,7 @@ import miragefairy2024.util.mutate
 import miragefairy2024.util.obtain
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
+import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import miragefairy2024.util.text
@@ -53,6 +54,7 @@ context(ModContext)
 fun initRandomFairySummoning() {
     MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION.enJa()
     MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION.enJa()
+    FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE.register()
 }
 
 class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Properties) : Item(settings) {

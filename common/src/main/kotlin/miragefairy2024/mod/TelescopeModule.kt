@@ -95,6 +95,8 @@ object TelescopeCard {
 context(ModContext)
 fun initTelescopeModule() {
 
+    TELESCOPE_MISSION_ATTACHMENT_TYPE.register()
+
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("telescope")) { TelescopeBlock.CODEC }.register()
 
     TelescopeCard.let { card ->
