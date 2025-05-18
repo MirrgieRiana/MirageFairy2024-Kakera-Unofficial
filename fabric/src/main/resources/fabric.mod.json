@@ -52,6 +52,7 @@
   },
   "mixins": [
     "miragefairy2024.mixins.json",
+    "miragefairy2024.fabric.mixins.json",
     {
       "config": "miragefairy2024.client.mixins.json",
       "environment": "client"
