@@ -2,14 +2,14 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerEnchantmentTagGeneration
 import miragefairy2024.util.registerItemTagGeneration
-import net.minecraft.core.component.DataComponents
+import mirrg.kotlin.java.hydrogen.orNull
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.EnchantmentTags
@@ -19,7 +19,6 @@ import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.world.item.enchantment.ItemEnchantments
 
 val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("magic_weapon"))
 val SCYTHE_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("scythe"))
@@ -104,14 +103,13 @@ fun initEnchantmentModule() {
         card.init()
     }
 
-    OverrideEnchantmentLevelCallback.EVENT.register { enchantment, itemStack, oldLevel ->
-        if (!enchantment.`is`(Enchantments.FORTUNE)) return@register oldLevel
-        if (oldLevel == 0) return@register 0
-
-        val itemEnchantments = itemStack.get(DataComponents.ENCHANTMENTS) ?: ItemEnchantments.EMPTY
-        val entry = itemEnchantments.entrySet().firstOrNull { it.key.`is`(EnchantmentCard.FORTUNE_UP.key) } ?: return@register oldLevel
-
-        oldLevel + entry.intValue
+    platformProxy!!.registerModifyItemEnchantmentsHandler { _, mutableItemEnchantments, enchantmentLookup ->
+        val fortuneEnchantment = enchantmentLookup[Enchantments.FORTUNE].orNull ?: return@registerModifyItemEnchantmentsHandler
+        val fortuneLevel = mutableItemEnchantments.getLevel(fortuneEnchantment)
+        if (fortuneLevel == 0) return@registerModifyItemEnchantmentsHandler
+        val fortuneUpEnchantment = enchantmentLookup[EnchantmentCard.FORTUNE_UP.key].orNull ?: return@registerModifyItemEnchantmentsHandler
+        val fortuneUpLevel = mutableItemEnchantments.getLevel(fortuneUpEnchantment)
+        mutableItemEnchantments.set(fortuneEnchantment, fortuneLevel + fortuneUpLevel)
     }
 
     SCYTHE_ITEM_TAG.registerItemTagGeneration { ItemTags.MINING_LOOT_ENCHANTABLE }
