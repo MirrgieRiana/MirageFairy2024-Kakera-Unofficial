@@ -11,6 +11,7 @@ class MirageFairy2024FabricTerraBlenderEntryPoint : TerraBlenderApi {
         with(ModContext()) {
             platformProxy = FabricPlatformProxy()
             Modules.init()
+            initFabricModule()
         }
         ModEvents.onTerraBlenderInitialized.fire { it() }
     }

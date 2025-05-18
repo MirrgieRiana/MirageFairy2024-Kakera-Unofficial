@@ -16,6 +16,7 @@ object MirageFairy2024FabricMod : ModInitializer {
         with(ModContext()) {
             platformProxy = FabricPlatformProxy()
             Modules.init()
+            initFabricModule()
         }
 
         runBlocking {

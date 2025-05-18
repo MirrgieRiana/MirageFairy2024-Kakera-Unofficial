@@ -30,6 +30,7 @@ class MirageFairy2024NeoForgeMod(modEventBus: IEventBus, modContainer: ModContai
         with(ModContext()) {
             platformProxy = NeoForgePlatformProxy()
             Modules.init()
+            initNeoForgeModule()
             if (FMLEnvironment.dist == Dist.CLIENT) initClientModules()
         }
 

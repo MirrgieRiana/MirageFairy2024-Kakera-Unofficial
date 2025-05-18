@@ -47,6 +47,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         with(ModContext()) {
             platformProxy = FabricPlatformProxy()
             Modules.init()
+            initFabricModule()
         }
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }
 
