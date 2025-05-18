@@ -1,11 +1,10 @@
 package miragefairy2024.mod.tool.items
 
-import miragefairy2024.mixin.api.ItemPredicateConvertorCallback
-import miragefairy2024.mixin.api.OverrideEnchantmentLevelCallback
+import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
@@ -14,6 +13,7 @@ import net.minecraft.world.item.HoeItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
@@ -39,8 +39,7 @@ class FairyHoeConfiguration(
 class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
     HoeItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
-    OverrideEnchantmentLevelCallback,
-    ItemPredicateConvertorCallback {
+    ModifyItemEnchantmentsHandler {
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         super.mineBlock(stack, world, state, pos, miner)
@@ -59,9 +58,7 @@ class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, set
         inventoryTickImpl(stack, world, entity, slot, selected)
     }
 
-    override fun overrideEnchantmentLevel(enchantment: Holder<Enchantment>, itemStack: ItemStack, oldLevel: Int) = overrideEnchantmentLevelImpl(enchantment, itemStack, oldLevel)
-
-    override fun convertItemStack(itemStack: ItemStack) = convertItemStackImpl(itemStack)
+    override fun modifyItemEnchantments(itemStack: ItemStack, mutableItemEnchantments: ItemEnchantments.Mutable, enchantmentLookup: HolderLookup.RegistryLookup<Enchantment>) = modifyItemEnchantmentsImpl(itemStack, mutableItemEnchantments, enchantmentLookup)
 
     override fun isFoil(stack: ItemStack) = super.isFoil(stack) || hasGlintImpl(stack)
 

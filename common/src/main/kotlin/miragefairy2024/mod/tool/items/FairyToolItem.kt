@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool.items
 
 import miragefairy2024.mod.tool.ToolConfiguration
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.damagesource.DamageSource
@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -60,12 +61,10 @@ fun <I> I.inventoryTickImpl(stack: ItemStack, world: Level, entity: Entity, slot
     }
 }
 
-fun <I> I.overrideEnchantmentLevelImpl(enchantment: Holder<Enchantment>, @Suppress("UNUSED_PARAMETER") itemStack: ItemStack, oldLevel: Int): Int where I : Item, I : FairyToolItem {
-    return configuration.onOverrideEnchantmentLevelListeners.fold(oldLevel) { level, listener -> listener(this, enchantment, level) }
-}
-
-fun <I> I.convertItemStackImpl(itemStack: ItemStack): ItemStack where I : Item, I : FairyToolItem {
-    return configuration.onConvertItemStackListeners.fold(itemStack) { itemStack2, listener -> listener(this, itemStack2) }
+fun <I> I.modifyItemEnchantmentsImpl(itemStack: ItemStack, mutableItemEnchantments: ItemEnchantments.Mutable, enchantmentLookup: HolderLookup.RegistryLookup<Enchantment>) where I : Item, I : FairyToolItem {
+    configuration.modifyItemEnchantmentsHandlers.forEach {
+        it.modifyItemEnchantments(itemStack, mutableItemEnchantments, enchantmentLookup)
+    }
 }
 
 fun <I> I.hasGlintImpl(stack: ItemStack): Boolean where I : Item, I : FairyToolItem {

@@ -1,6 +1,7 @@
 package miragefairy2024.mod.tool
 
 import miragefairy2024.ModContext
+import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mixin.api.BlockCallback
 import miragefairy2024.mod.Poem
 import miragefairy2024.mod.PoemList
@@ -18,7 +19,6 @@ import miragefairy2024.mod.tool.items.onKilled
 import miragefairy2024.util.registerItemTagGeneration
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Holder
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
@@ -26,7 +26,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.Tool
-import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -100,13 +99,12 @@ abstract class ToolConfiguration {
     var magicMiningDamage = 1.0
     val descriptions = mutableListOf<Poem>()
     var hasGlint = false
+    val modifyItemEnchantmentsHandlers = mutableListOf<ModifyItemEnchantmentsHandler>()
 
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
     val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
     val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
-    val onOverrideEnchantmentLevelListeners = mutableListOf<(item: Item, enchantment: Holder<Enchantment>, old: Int) -> Int>()
-    val onConvertItemStackListeners = mutableListOf<(item: Item, itemStack: ItemStack) -> ItemStack>()
 
     abstract fun createItem(tool: Tool): Item
 
