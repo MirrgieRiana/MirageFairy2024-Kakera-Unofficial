@@ -11,6 +11,7 @@ import miragefairy2024.util.itemStacks
 import miragefairy2024.util.mutate
 import miragefairy2024.util.opposite
 import miragefairy2024.util.registerServerDebugItem
+import miragefairy2024.util.registerServerToClientPayloadType
 import miragefairy2024.util.sendToClient
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -37,6 +38,9 @@ val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.ga
 
 context(ModContext)
 fun initFairyDream() {
+
+    // パケットタイプ登録
+    GainFairyDreamChannel.registerServerToClientPayloadType()
 
     // デバッグアイテム
     registerServerDebugItem("debug_clear_fairy_dream", Items.STRING, 0xFF0000DD.toInt()) { world, player, _, _ ->

@@ -5,6 +5,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.Registration
 import miragefairy2024.util.register
+import miragefairy2024.util.registerServerToClientPayloadType
 import miragefairy2024.util.string
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
@@ -54,4 +55,5 @@ fun initParticleModule() {
             it(card.identifier, data)
         }
     }
+    MagicSquareParticleChannel.registerServerToClientPayloadType()
 }

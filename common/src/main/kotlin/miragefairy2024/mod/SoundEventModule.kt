@@ -8,6 +8,7 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
+import miragefairy2024.util.registerServerToClientPayloadType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -67,6 +68,7 @@ class SoundEventPacket(
 
 context(ModContext)
 fun initSoundEventModule() {
+    SoundEventChannel.registerServerToClientPayloadType()
     SoundEventCard.entries.forEach { card ->
         Registration(BuiltInRegistries.SOUND_EVENT, card.identifier) { card.soundEvent }.register()
         DataGenerationEvents.onGenerateSound { it(card.path, card.translation.keyGetter(), card.sounds) }
