@@ -36,13 +36,13 @@
     ],
     "rei_server": [
       {
-        "value": "miragefairy2024.mod.rei.MirageFairy2024ReiServerPlugin",
+        "value": "miragefairy2024.fabric.MirageFairy2024FabricReiServerPlugin",
         "adapter": "kotlin"
       }
     ],
     "rei_client": [
       {
-        "value": "miragefairy2024.client.mod.rei.MirageFairy2024ReiClientPlugin",
+        "value": "miragefairy2024.client.fabric.MirageFairy2024FabricReiClientPlugin",
         "adapter": "kotlin"
       }
     ],
