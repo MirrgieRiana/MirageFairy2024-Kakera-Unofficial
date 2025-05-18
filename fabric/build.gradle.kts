@@ -99,7 +99,7 @@ modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "miragefairy2024-kakera-unofficial"
     //versionNumber = project.mod_version
-    versionType = "beta"
+    versionType = if ("alpha" in project.version.toString()) "alpha" else if ("beta" in project.version.toString()) "beta" else "release"
     uploadFile = tasks["remapJar"]
     //gameVersions = ["1.20.2"]
     //loaders = ["fabric"]
