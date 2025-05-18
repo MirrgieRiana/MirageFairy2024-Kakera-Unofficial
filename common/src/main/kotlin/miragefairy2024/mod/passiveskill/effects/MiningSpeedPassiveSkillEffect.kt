@@ -2,7 +2,7 @@ package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mixin.api.BlockBreakingCallback
+import miragefairy2024.mixins.api.BlockBreakingCallback
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.util.Translation

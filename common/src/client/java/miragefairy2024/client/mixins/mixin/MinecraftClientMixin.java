@@ -1,4 +1,4 @@
-package miragefairy2024.mixin.client.impl;
+package miragefairy2024.client.mixins.mixin;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;

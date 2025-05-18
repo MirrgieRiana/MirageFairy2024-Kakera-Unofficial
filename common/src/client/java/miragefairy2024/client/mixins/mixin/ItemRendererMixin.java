@@ -1,4 +1,4 @@
-package miragefairy2024.mixin.client.impl;
+package miragefairy2024.client.mixins.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import miragefairy2024.mixin.client.api.RenderItemHandler;

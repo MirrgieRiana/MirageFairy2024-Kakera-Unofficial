@@ -1,4 +1,4 @@
-package miragefairy2024.mixin.api;
+package miragefairy2024.mixins.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

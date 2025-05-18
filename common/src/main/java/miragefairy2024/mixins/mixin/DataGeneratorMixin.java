@@ -1,4 +1,4 @@
-package miragefairy2024.mixin.impl;
+package miragefairy2024.mixins.mixin;
 
 import net.minecraft.data.DataGenerator;
 import org.spongepowered.asm.mixin.Mixin;

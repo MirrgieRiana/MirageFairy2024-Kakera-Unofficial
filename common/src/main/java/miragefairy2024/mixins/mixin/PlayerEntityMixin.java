@@ -1,6 +1,6 @@
-package miragefairy2024.mixin.impl;
+package miragefairy2024.mixins.mixin;
 
-import miragefairy2024.mixin.api.ExtraPlayerDataContainerGetter;
+import miragefairy2024.mixins.api.ExtraPlayerDataContainerGetter;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;

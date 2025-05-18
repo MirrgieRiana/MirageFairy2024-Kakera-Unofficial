@@ -1,9 +1,9 @@
-package miragefairy2024.mixin.impl;
+package miragefairy2024.mixins.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import miragefairy2024.mixin.api.DamageCallback;
-import miragefairy2024.mixin.api.EatFoodCallback;
+import miragefairy2024.mixins.api.DamageCallback;
+import miragefairy2024.mixins.api.EatFoodCallback;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

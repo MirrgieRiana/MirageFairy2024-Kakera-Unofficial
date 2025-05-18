@@ -3,7 +3,7 @@ package miragefairy2024.fabric.mixins.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import miragefairy2024.fabric.mixins.impl.ItemEnchantmentsConverterHelper;
-import miragefairy2024.mixin.api.ItemFilteringEnchantment;
+import miragefairy2024.mixins.api.ItemFilteringEnchantment;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;

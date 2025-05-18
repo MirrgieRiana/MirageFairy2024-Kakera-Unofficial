@@ -1,4 +1,4 @@
-package miragefairy2024.mixin.api;
+package miragefairy2024.mixins.api;
 
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;

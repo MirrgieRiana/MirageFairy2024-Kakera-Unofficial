@@ -1,6 +1,6 @@
-package miragefairy2024.mixin.impl;
+package miragefairy2024.mixins.mixin;
 
-import miragefairy2024.mixin.api.BlockCallback;
+import miragefairy2024.mixins.api.BlockCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

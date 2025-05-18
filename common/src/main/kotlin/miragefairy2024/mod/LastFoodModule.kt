@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mixin.api.EatFoodCallback
+import miragefairy2024.mixins.api.EatFoodCallback
 import miragefairy2024.util.INSTANT_CODEC
 import miragefairy2024.util.INSTANT_STREAM_CODEC
 import miragefairy2024.util.get

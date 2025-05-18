@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "miragefairy2024.mixin.impl",
+  "package": "miragefairy2024.mixins.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlockMixin",

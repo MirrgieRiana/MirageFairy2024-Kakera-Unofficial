@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.ModContext
 import miragefairy2024.ModifyItemEnchantmentsHandler
-import miragefairy2024.mixin.api.BlockCallback
+import miragefairy2024.mixins.api.BlockCallback
 import miragefairy2024.mod.Poem
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.plus
