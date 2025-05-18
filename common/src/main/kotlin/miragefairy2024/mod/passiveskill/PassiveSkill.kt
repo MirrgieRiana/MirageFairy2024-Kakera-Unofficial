@@ -30,8 +30,8 @@ interface PassiveSkillEffect<T : Any> {
     val unit: T
     fun castOrThrow(value: Any?): T
     fun combine(a: T, b: T): T
-    fun codec(): Codec<T> = Codec.unit(unit)
-    fun streamCodec(): StreamCodec<in RegistryFriendlyByteBuf, T> = StreamCodec.unit(unit)
+    fun codec(): Codec<T> = Codec.unit(Unit).xmap({ unit }, {})
+    fun streamCodec(): StreamCodec<in RegistryFriendlyByteBuf, T> = StreamCodec.unit<RegistryFriendlyByteBuf, _>(Unit).map({ unit }, {})
     fun update(context: PassiveSkillContext, oldValue: T, newValue: T)
 }
 
