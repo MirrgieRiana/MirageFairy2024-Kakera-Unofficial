@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.SpecialRecipeResult
@@ -48,10 +49,14 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
@@ -88,6 +93,7 @@ class MaterialCard(
     val foodComponentCreator: (suspend () -> FoodComponent)? = null,
     val recipeRemainder: Item? = null,
     val creator: (Item.Properties) -> Item = ::Item,
+    val advancementCreator: (MaterialCard.(ResourceLocation) -> AdvancementCard)? = null,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
 ) {
     companion object {
@@ -175,6 +181,14 @@ class MaterialCard(
             "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
             PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
             soulStreamContainable = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    icon = item(),
+                    name = EnJa("TODO", "水晶の飴"),
+                    description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"),
+                )
+            },
         )
         val PHANTOM_LEAVES = !MaterialCard(
             "phantom_leaves", "Phantom Leaves", "ファントムの葉",
@@ -362,6 +376,22 @@ class MaterialCard(
             PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
+            advancementCreator = {
+                AdvancementCard(it) {
+                    Advancement.Builder.advancement()
+                        .display(
+                            item,
+                            text { "植物の支配する世界"() },
+                            text { "妖花ミラージュは右クリックで収穫できる"() },
+                            MirageFairy2024.identifier("textures/block/aura_stone.png"),
+                            AdvancementType.TASK,
+                            false,
+                            false,
+                            false
+                        )
+                        .addCriterion("has_mirage_flour", InventoryChangeTrigger.TriggerInstance.hasItems(item))
+                }
+            }
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
@@ -804,6 +834,7 @@ class MaterialCard(
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
             .let { creator(it) }
     }
+    val advancementCard = advancementCreator?.invoke(identifier)
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))
@@ -824,6 +855,7 @@ fun initMaterialsModule() {
         }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
         if (card.soulStreamContainable) card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+        if (card.advancementCard != null) card.advancementCard.init()
         card.initializer(this@ModContext, card)
     }
 

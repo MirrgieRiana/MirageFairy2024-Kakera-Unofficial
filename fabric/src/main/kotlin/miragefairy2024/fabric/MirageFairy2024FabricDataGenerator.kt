@@ -1,15 +1,14 @@
 package miragefairy2024.fabric
 
 import com.google.gson.JsonElement
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.platformProxy
-import miragefairy2024.util.invoke
 import miragefairy2024.util.string
-import miragefairy2024.util.text
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -24,10 +23,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
-import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementHolder
-import net.minecraft.advancements.AdvancementType
-import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
@@ -237,35 +233,13 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             AdvancementProvider(output, registriesFuture, listOf(object : AdvancementSubProvider {
                 override fun generate(registries: HolderLookup.Provider, writer: Consumer<AdvancementHolder>) {
-
-                    val advancementHolder = Advancement.Builder.advancement()
-                        .display(
-                            MaterialCard.MIRAGE_FLOUR.item,
-                            text { "植物の支配する世界"() },
-                            text { "妖花ミラージュは右クリックで収穫できる"() },
-                            MirageFairy2024.identifier("textures/block/aura_stone.png"),
-                            AdvancementType.TASK,
-                            false,
-                            false,
-                            false
-                        )
-                        .addCriterion("has_mirage_flour", InventoryChangeTrigger.TriggerInstance.hasItems(MaterialCard.MIRAGE_FLOUR.item))
-                        .save(writer, MirageFairy2024.identifier("main/a1").string)
-                    val advancementHolder2 = Advancement.Builder.advancement()
-                        .parent(advancementHolder)
-                        .display(
-                            MaterialCard.FAIRY_CRYSTAL.item,
-                            text { "水晶の飴"() },
-                            text { "妖花ミラージュを栽培し希少品を収穫する"() },
-                            null,
-                            AdvancementType.TASK,
-                            true,
-                            true,
-                            false
-                        )
-                        .addCriterion("has_fairy_crystal", InventoryChangeTrigger.TriggerInstance.hasItems(MaterialCard.FAIRY_CRYSTAL.item))
-                        .save(writer, MirageFairy2024.identifier("main/a2").string)
-
+                    runBlocking {
+                        DataGenerationEvents.onGenerateAdvancement.fire {
+                            launch {
+                                it(writer)
+                            }
+                        }
+                    }
                 }
             }))
         }
