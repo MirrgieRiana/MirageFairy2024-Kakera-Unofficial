@@ -1,5 +1,5 @@
 {
-  "parent": "miragefairy2024:main/a1",
+  "parent": "miragefairy2024:mirage_flour",
   "criteria": {
     "has_fairy_crystal": {
       "conditions": {
@@ -13,12 +13,16 @@
     }
   },
   "display": {
-    "description": "妖花ミラージュを栽培し希少品を収穫する",
+    "description": {
+      "translate": "advancements.miragefairy2024.fairy_crystal.description"
+    },
     "icon": {
       "count": 1,
       "id": "miragefairy2024:fairy_crystal"
     },
-    "title": "水晶の飴"
+    "title": {
+      "translate": "advancements.miragefairy2024.fairy_crystal.title"
+    }
   },
   "requirements": [
     [

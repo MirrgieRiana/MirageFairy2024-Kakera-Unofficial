@@ -12,15 +12,17 @@
     }
   },
   "display": {
-    "announce_to_chat": false,
-    "background": "miragefairy2024:textures/block/aura_stone.png",
-    "description": "妖花ミラージュは右クリックで収穫できる",
+    "background": "miragefairy2024:textures/block/haimeviska_planks.png",
+    "description": {
+      "translate": "advancements.miragefairy2024.mirage_flour.description"
+    },
     "icon": {
       "count": 1,
       "id": "miragefairy2024:mirage_flour"
     },
-    "show_toast": false,
-    "title": "植物の支配する世界"
+    "title": {
+      "translate": "advancements.miragefairy2024.mirage_flour.title"
+    }
   },
   "requirements": [
     [

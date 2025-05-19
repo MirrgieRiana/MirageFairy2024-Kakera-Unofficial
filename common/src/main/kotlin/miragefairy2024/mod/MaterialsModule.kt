@@ -49,9 +49,6 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancements.Advancement
-import net.minecraft.advancements.AdvancementType
-import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -184,9 +181,11 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    icon = item(),
-                    name = EnJa("TODO", "水晶の飴"),
-                    description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"),
+                    context = AdvancementCard.Sub { MIRAGE_FLOUR.advancementCard!!.await() },
+                    icon = item,
+                    name = EnJa("TODO", "水晶の飴"), // TODO
+                    description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"), // TODO
+                    criterion = AdvancementCard.item(item),
                 )
             },
         )
@@ -377,20 +376,14 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
             advancementCreator = {
-                AdvancementCard(it) {
-                    Advancement.Builder.advancement()
-                        .display(
-                            item,
-                            text { "植物の支配する世界"() },
-                            text { "妖花ミラージュは右クリックで収穫できる"() },
-                            MirageFairy2024.identifier("textures/block/aura_stone.png"),
-                            AdvancementType.TASK,
-                            false,
-                            false,
-                            false
-                        )
-                        .addCriterion("has_mirage_flour", InventoryChangeTrigger.TriggerInstance.hasItems(item))
-                }
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Root(MirageFairy2024.identifier("textures/block/haimeviska_planks.png")),
+                    icon = item,
+                    name = EnJa("TODO", "植物の支配する世界"), // TODO
+                    description = EnJa("TODO", "妖花ミラージュを右クリックで収穫する"), // TODO
+                    criterion = AdvancementCard.item(item),
+                )
             }
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
@@ -834,7 +827,7 @@ class MaterialCard(
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
             .let { creator(it) }
     }
-    val advancementCard = advancementCreator?.invoke(identifier)
+    val advancementCard = advancementCreator?.invoke(this, identifier)
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))
