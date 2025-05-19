@@ -182,10 +182,10 @@ class MaterialCard(
                 AdvancementCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MIRAGE_FLOUR.advancementCard!!.await() },
-                    icon = item,
+                    icon = { item().createItemStack() },
                     name = EnJa("TODO", "水晶の飴"), // TODO
                     description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"), // TODO
-                    criterion = AdvancementCard.item(item),
+                    criterion = AdvancementCard.hasItem(item),
                 )
             },
         )
@@ -378,11 +378,11 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Root(MirageFairy2024.identifier("textures/block/haimeviska_planks.png")),
-                    icon = item,
-                    name = EnJa("TODO", "植物の支配する世界"), // TODO
-                    description = EnJa("TODO", "妖花ミラージュを右クリックで収穫する"), // TODO
-                    criterion = AdvancementCard.item(item),
+                    context = AdvancementCard.Sub { rootAdvancement.await() },
+                    icon = { IconItem.mirageFlowerIconItem().createItemStack() },
+                    name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
+                    description = EnJa("Right-click on the Mirage flower to harvest it", "妖花ミラージュを右クリックで収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
                 )
             }
         ) {

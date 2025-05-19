@@ -10,17 +10,18 @@ import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 
 class AdvancementCard(
     private val identifier: ResourceLocation,
     private val context: Context,
-    private val icon: () -> Item,
+    private val icon: () -> ItemStack,
     name: EnJa,
     description: EnJa,
     private val criterion: () -> Pair<String, Criterion<*>>,
 ) {
     companion object {
-        fun item(itemGetter: () -> Item): () -> Pair<String, Criterion<*>> {
+        fun hasItem(itemGetter: () -> Item): () -> Pair<String, Criterion<*>> {
             return {
                 val item = itemGetter()
                 Pair("has_${item.getIdentifier().path}", InventoryChangeTrigger.TriggerInstance.hasItems(item))

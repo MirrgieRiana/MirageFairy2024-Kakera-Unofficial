@@ -1,4 +1,5 @@
 {
+  "parent": "miragefairy2024:root",
   "criteria": {
     "has_mirage_flour": {
       "conditions": {
@@ -12,13 +13,12 @@
     }
   },
   "display": {
-    "background": "miragefairy2024:textures/block/haimeviska_planks.png",
     "description": {
       "translate": "advancements.miragefairy2024.mirage_flour.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:mirage_flour"
+      "id": "miragefairy2024:icon/mirage_flower"
     },
     "title": {
       "translate": "advancements.miragefairy2024.mirage_flour.title"
