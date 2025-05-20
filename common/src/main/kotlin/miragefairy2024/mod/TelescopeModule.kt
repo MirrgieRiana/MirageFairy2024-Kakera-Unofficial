@@ -8,6 +8,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.INSTANT_CODEC
 import miragefairy2024.util.INSTANT_STREAM_CODEC
@@ -89,6 +90,14 @@ object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { MaterialCard.FAIRY_CRYSTAL.advancement!!.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("The Eyes of Tertia", "第三の目"),
+        description = EnJa("Craft a telescope for a daily mission", "デイリーミッションのための望遠鏡をクラフトする"),
+        criterion = AdvancementCard.hasItem { item() },
+    )
 }
 
 
@@ -119,6 +128,8 @@ fun initTelescopeModule() {
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
+
+        card.advancement.init()
 
     }
 
