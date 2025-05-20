@@ -6,10 +6,12 @@ import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.Registration
 import miragefairy2024.util.TextureMap
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
@@ -76,6 +78,15 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
     override val recipeType = AuraReflectorFurnaceRecipeCard.type
 
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { MaterialCard.XARPITE.advancement!!.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("Polymerization of the Ego", "自我の重合"),
+        description = EnJa("Build an Aura Reflector Furnace and feed it with soul fuel", "オーラ反射炉を作って魂の燃料をくべよう"),
+        criterion = AdvancementCard.hasItem(item),
+    )
+
     context(ModContext)
     override fun init() {
         super.init()
@@ -93,6 +104,8 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
             define('F', Items.FURNACE)
             define('X', MaterialCard.XARPITE.item())
         } on MaterialCard.XARPITE.item
+
+        advancement.init()
     }
 
     context(ModContext)

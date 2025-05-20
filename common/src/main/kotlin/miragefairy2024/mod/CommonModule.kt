@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModifyItemEnchantmentsHandler
-import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.platformProxy
@@ -39,8 +38,9 @@ val rootAdvancement = AdvancementCard(
     context = AdvancementCard.Root(MirageFairy2024.identifier("textures/block/haimeviska_planks.png")),
     icon = { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() },
     name = EnJa("MF24KU", "MF24KU"),
-    description = EnJa("The Noisy Land of Tertia", "かしましきテルティアの大地"),
-    criterion = AdvancementCard.hasItem { FairyCard.item() },
+    description = EnJa("The Noisy Land of Tertia", "かしましきテルティアの地"),
+    criterion = AdvancementCard.hasItem { Items.STICK },
+    silent = true,
 )
 
 object IconItem {

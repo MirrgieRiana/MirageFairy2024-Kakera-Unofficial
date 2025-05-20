@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:fairy_crystal",
+  "criteria": {
+    "has_telescope": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:telescope"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.telescope.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:telescope"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.telescope.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_telescope"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

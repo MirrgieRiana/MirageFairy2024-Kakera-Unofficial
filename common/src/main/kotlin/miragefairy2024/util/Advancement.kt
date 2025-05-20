@@ -19,6 +19,7 @@ class AdvancementCard(
     name: EnJa,
     description: EnJa,
     private val criterion: () -> Pair<String, Criterion<*>>,
+    private val silent: Boolean = false,
 ) {
     companion object {
         fun hasItem(itemGetter: () -> Item): () -> Pair<String, Criterion<*>> {
@@ -52,8 +53,8 @@ class AdvancementCard(
                     text { descriptionTranslation() },
                     if (context is Root) context.texture else null,
                     AdvancementType.TASK,
-                    true,
-                    true,
+                    !silent,
+                    !silent,
                     false
                 )
                 .let {

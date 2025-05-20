@@ -101,6 +101,16 @@ class MaterialCard(
             "xarpite", "Xarpite", "紅天石",
             PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
             fuelValue = 200 * 16,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { rootAdvancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Aura-Resistant Plastic", "耐霊性プラスチック"),
+                    description = EnJa("Pick up the Xarpite lying around nearby", "その辺に落ちている紅天石を拾う"),
+                    criterion = AdvancementCard.hasItem(item),
+                )
+            },
             // TODO 使えるワード：牢獄
         ) {
             item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
@@ -109,6 +119,16 @@ class MaterialCard(
         val MIRANAGITE = !MaterialCard(
             "miranagite", "Miranagite", "蒼天石",
             PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { rootAdvancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("The Unknown World of Thaumaturgy", "魔術の世界"),
+                    description = EnJa("Mine the Miranagite underground", "地中の蒼天石を採掘する"),
+                    criterion = AdvancementCard.hasItem(item),
+                )
+            },
             // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
         )
         val MIRANAGITE_ROD = !MaterialCard(
@@ -183,8 +203,8 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MIRAGE_FLOUR.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("TODO", "水晶の飴"), // TODO
-                    description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"), // TODO
+                    name = EnJa("Organic Amorphous Material", "水晶の飴"),
+                    description = EnJa("Cultivate Mirage flowers and harvest a rare item", "妖花ミラージュを栽培し希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                 )
             },
@@ -384,7 +404,7 @@ class MaterialCard(
                     description = EnJa("Right-click on the Mirage flower to harvest it", "妖花ミラージュを右クリックで収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                 )
-            }
+            },
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }

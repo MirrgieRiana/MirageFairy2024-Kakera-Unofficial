@@ -10,7 +10,9 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.setFairyMotif
+import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -68,6 +70,14 @@ object FairyStatueFountainCard {
     val identifier = MirageFairy2024.identifier("fairy_statue_fountain")
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { FairyStatueFountainBlock(FabricBlockSettings.create().mapColor(MapColor.STONE).strength(1.0F).nonOpaque()) }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { FairyQuestCardCard.advancement.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("The Desire for Rerolls", "リセマラの誘い"),
+        description = EnJa("Throw a Fairy Jewel into a fairy statue fountain", "妖精の像の泉にフェアリージュエルを投げ込もう"),
+        criterion = AdvancementCard.hasItem { item() },
+    )
 }
 
 context(ModContext)
@@ -97,6 +107,8 @@ fun initFairyFountainModule() {
         card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
 
         card.block.registerDefaultLootTableGeneration()
+
+        card.advancement.init()
 
     }
 

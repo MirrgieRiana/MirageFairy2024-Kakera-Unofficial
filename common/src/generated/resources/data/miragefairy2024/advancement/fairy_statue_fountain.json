@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:fairy_quest_card",
+  "criteria": {
+    "has_fairy_statue_fountain": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:fairy_statue_fountain"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.fairy_statue_fountain.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:fairy_statue_fountain"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.fairy_statue_fountain.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_fairy_statue_fountain"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

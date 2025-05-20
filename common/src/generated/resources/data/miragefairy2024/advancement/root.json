@@ -1,10 +1,10 @@
 {
   "criteria": {
-    "has_fairy": {
+    "has_stick": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:fairy"
+            "items": "minecraft:stick"
           }
         ]
       },
@@ -12,6 +12,7 @@
     }
   },
   "display": {
+    "announce_to_chat": false,
     "background": "miragefairy2024:textures/block/haimeviska_planks.png",
     "description": {
       "translate": "advancements.miragefairy2024.root.description"
@@ -24,13 +25,14 @@
       "count": 1,
       "id": "miragefairy2024:fairy"
     },
+    "show_toast": false,
     "title": {
       "translate": "advancements.miragefairy2024.root.title"
     }
   },
   "requirements": [
     [
-      "has_fairy"
+      "has_stick"
     ]
   ],
   "sends_telemetry_event": true
