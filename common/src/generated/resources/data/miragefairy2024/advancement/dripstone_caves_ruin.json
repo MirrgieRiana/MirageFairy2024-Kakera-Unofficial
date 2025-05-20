@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:weathered_ancient_remnants",
+  "criteria": {
+    "visit_dripstone_caves_ruin": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "miragefairy2024:dripstone_caves_ruin"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.dripstone_caves_ruin.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:chaos_stone_block"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.dripstone_caves_ruin.title"
+    }
+  },
+  "requirements": [
+    [
+      "visit_dripstone_caves_ruin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

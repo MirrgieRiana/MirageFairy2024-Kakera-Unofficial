@@ -2,8 +2,11 @@ package miragefairy2024.mod.structure
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
@@ -12,6 +15,7 @@ import miragefairy2024.util.SinglePoolElement
 import miragefairy2024.util.StructurePool
 import miragefairy2024.util.StructureProcessorList
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.registerChestLootTableGeneration
@@ -48,7 +52,17 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator 
 
 object DripstoneCavesRuinCard {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
+    val key = Registries.STRUCTURE with identifier
     val translation = Translation({ identifier.toLanguageKey("structure") }, "Dripstone Caves Ruin", "鍾乳洞の遺跡")
+
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { WeatheredAncientRemnantsCard.advancement.await() },
+        icon = { BlockMaterialCard.CHAOS_STONE_BLOCK.item().createItemStack() },
+        name = EnJa("The Ancient Future Civilization", "古代の未来文明"),
+        description = EnJa("Unearth a map from the Weathered Ancient Remnants and explore the Dripstone Caves Ruin", "風化した旧世代の遺構から地図を発掘し、鍾乳洞の遺跡を訪れる"),
+        criterion = AdvancementCard.visit(key),
+    )
 
     context(ModContext)
     fun init() {
@@ -208,6 +222,8 @@ object DripstoneCavesRuinCard {
                 RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
             )
         }
+
+        advancement.init()
 
     }
 }

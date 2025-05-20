@@ -236,7 +236,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                     runBlocking {
                         DataGenerationEvents.onGenerateAdvancement.fire {
                             launch {
-                                it(writer)
+                                it(registries, writer)
                             }
                         }
                     }

@@ -4,7 +4,10 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.placeditem.PlacedItemCard
+import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.mod.tool.ToolCard
+import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
@@ -13,6 +16,7 @@ import miragefairy2024.util.SinglePoolElement
 import miragefairy2024.util.StructurePool
 import miragefairy2024.util.StructureProcessorList
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
@@ -54,9 +58,19 @@ import net.minecraft.world.level.storage.loot.functions.SetNameFunction as SetNa
 
 object WeatheredAncientRemnantsCard {
     val identifier = MirageFairy2024.identifier("weathered_ancient_remnants")
+    val key = Registries.STRUCTURE with identifier
     val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
     val onMapsTag: TagKey<Structure> = TagKey.create(Registries.STRUCTURE, MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps"))
+
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { Items.POLISHED_ANDESITE.createItemStack() },
+        name = EnJa("Scars Left by Spacefaring Humanity", "宇宙人類の爪痕"),
+        description = EnJa("Discover Weathered Ancient Remnants left on the surface", "地上に遺された風化した旧世代の遺構を発見する"),
+        criterion = AdvancementCard.visit(key),
+    )
 
     context(ModContext)
     fun init() {
@@ -153,6 +167,8 @@ object WeatheredAncientRemnantsCard {
                 RandomSpreadStructurePlacement(16, 8, SpreadType.LINEAR, 94857624),
             )
         }
+
+        advancement.init()
 
     }
 }

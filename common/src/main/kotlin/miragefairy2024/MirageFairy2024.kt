@@ -53,7 +53,7 @@ object DataGenerationEvents {
     val onGenerateNinePatchTexture = InitializationEventRegistry<((ResourceLocation, NinePatchTextureCard) -> Unit) -> Unit>()
     val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<ResourceLocation>) -> Unit) -> Unit>()
     val onGenerateParticles = InitializationEventRegistry<((identifier: ResourceLocation, jsonElement: JsonElement) -> Unit) -> Unit>()
-    val onGenerateAdvancement = InitializationEventRegistry<suspend (Consumer<AdvancementHolder>) -> Unit>()
+    val onGenerateAdvancement = InitializationEventRegistry<suspend (HolderLookup.Provider, Consumer<AdvancementHolder>) -> Unit>()
 
     val onBuildRegistry = InitializationEventRegistry<(RegistrySetBuilder) -> Unit>()
 
