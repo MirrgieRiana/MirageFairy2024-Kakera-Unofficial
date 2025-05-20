@@ -181,7 +181,7 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Sub { MIRAGE_FLOUR.advancementCard!!.await() },
+                    context = AdvancementCard.Sub { MIRAGE_FLOUR.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("TODO", "水晶の飴"), // TODO
                     description = EnJa("TODO", "妖花ミラージュを栽培し希少品を収穫する"), // TODO
@@ -827,7 +827,7 @@ class MaterialCard(
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
             .let { creator(it) }
     }
-    val advancementCard = advancementCreator?.invoke(this, identifier)
+    val advancement = advancementCreator?.invoke(this, identifier)
 }
 
 val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))
@@ -848,7 +848,7 @@ fun initMaterialsModule() {
         }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
         if (card.soulStreamContainable) card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
-        if (card.advancementCard != null) card.advancementCard.init()
+        if (card.advancement != null) card.advancement.init()
         card.initializer(this@ModContext, card)
     }
 
