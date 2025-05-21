@@ -6,8 +6,12 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
+import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
@@ -122,6 +126,15 @@ object FairyForestBiomeCard : BiomeCard(
     0.95F,
     BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, ConventionalBiomeTags.IS_FLORAL, FAIRY_BIOME_TAG,
 ) {
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { IconItem.phantomFlowerIconItem().createItemStack() },
+        name = EnJa("The Fairy Star", "妖精の星"),
+        description = EnJa("Travel the overworld and discover the Fairy Forest", "地上を旅して妖精の森を探す"),
+        criterion = AdvancementCard.visit(registryKey),
+    )
+
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.BiomeBuilder()
             .hasPrecipitation(true)
@@ -181,6 +194,11 @@ object FairyForestBiomeCard : BiomeCard(
 
             }.build()).build()
     }
+
+    context(ModContext)
+    override fun init() {
+        advancement.init()
+    }
 }
 
 object DeepFairyForestBiomeCard : BiomeCard(
@@ -195,6 +213,15 @@ object DeepFairyForestBiomeCard : BiomeCard(
     0.95F,
     BiomeTags.IS_OVERWORLD, BiomeTags.IS_FOREST, FAIRY_BIOME_TAG,
 ) {
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { FairyForestBiomeCard.advancement.await() },
+        icon = { HaimeviskaBlockCard.SAPLING.item().createItemStack() },
+        name = EnJa("The Forest of Memories", "記憶の森"),
+        description = EnJa("Travel the overworld and discover the Deep Fairy Forest", "地上を旅して妖精の樹海を探す"),
+        criterion = AdvancementCard.visit(registryKey),
+    )
+
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
         return Biome.BiomeBuilder()
             .hasPrecipitation(true)
@@ -275,5 +302,6 @@ object DeepFairyForestBiomeCard : BiomeCard(
             ),
         )
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MirageFairy2024.MOD_ID, rule)
+        advancement.init()
     }
 }
