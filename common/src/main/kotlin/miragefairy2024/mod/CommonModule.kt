@@ -45,11 +45,14 @@ val rootAdvancement = AdvancementCard(
 
 object IconItem {
     val mirageFlowerIconItem = Registration(BuiltInRegistries.ITEM, MirageFairy2024.identifier("icon/mirage_flower")) { Item(Item.Properties()) }
+    val phantomFlowerIconItem = Registration(BuiltInRegistries.ITEM, MirageFairy2024.identifier("icon/phantom_flower")) { Item(Item.Properties()) }
 
     context(ModContext)
     fun init() {
         mirageFlowerIconItem.register()
         mirageFlowerIconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) { TextureMap(TextureSlot.LAYER0 to MirageFairy2024.identifier("block/magic_plant/mirage_flower_age3")) }
+        phantomFlowerIconItem.register()
+        phantomFlowerIconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) { TextureMap(TextureSlot.LAYER0 to MirageFairy2024.identifier("block/magic_plant/phantom_flower_age3")) }
     }
 }
 
