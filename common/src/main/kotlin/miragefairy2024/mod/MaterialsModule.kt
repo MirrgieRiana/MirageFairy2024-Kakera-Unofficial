@@ -375,6 +375,8 @@ class MaterialCard(
             "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
             PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
             fuelValue = 200 * 8,
+            // TODO advancement
+            // 琥珀色の～～
         )
         val FAIRY_RUBBER = !MaterialCard(
             // TODO add purpose
