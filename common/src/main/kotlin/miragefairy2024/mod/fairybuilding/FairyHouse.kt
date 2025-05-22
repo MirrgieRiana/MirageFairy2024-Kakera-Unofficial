@@ -93,6 +93,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             define('R', ItemTags.WOODEN_DOORS)
             define('*', MaterialCard.FAIRY_CRYSTAL.item())
         } on MaterialCard.FAIRY_CRYSTAL.item
+        advancement.init()
     }
 }
 
