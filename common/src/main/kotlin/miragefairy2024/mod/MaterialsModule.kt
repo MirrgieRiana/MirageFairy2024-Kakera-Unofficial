@@ -462,6 +462,16 @@ class MaterialCard(
                 .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MirageFlowerCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Miravitational Lens", "ゆがむ空間"),
+                    description = EnJa("Condense Mirage Flour into Mirage Flour of Universe", "ミラージュの花粉を宇宙のミラージュの花粉まで濃縮する"),
+                    criterion = AdvancementCard.hasItem(item),
+                )
+            }
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
