@@ -11,6 +11,7 @@ import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.mod.haimeviska.haimeviskaAdvancement
+import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
@@ -247,6 +248,16 @@ class MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
             PoemList(3).poem("Metallic body", "妖精インゴット。"),
             soulStreamContainable = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { AuraReflectorFurnaceCard.advancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Solid Soul", "固形の魂"),
+                    description = EnJa("Use the Aura Reflector Furnace to refine Mirage Flour", "オーラ反射炉を使ってミラージュの花粉を製錬する"),
+                    criterion = AdvancementCard.hasItem(item),
+                )
+            },
         )
         val VEROPEDA_LEAF = !MaterialCard(
             "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
