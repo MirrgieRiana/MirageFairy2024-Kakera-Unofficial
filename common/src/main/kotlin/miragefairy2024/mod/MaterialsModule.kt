@@ -257,7 +257,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { AuraReflectorFurnaceCard.advancement.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Solid Soul", "固形の魂"),
+                    name = EnJa("Solid Soul", "固形の魂"), // TODO 魂塊
                     description = EnJa("Use the Aura Reflector Furnace to refine Mirage Flour", "オーラ反射炉を使ってミラージュの花粉を製錬する"),
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,
