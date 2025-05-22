@@ -8,12 +8,14 @@ import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.advancements.critereon.LocationPredicate
 import net.minecraft.advancements.critereon.PlayerTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.biome.Biome
@@ -29,10 +31,19 @@ class AdvancementCard(
     private val silent: Boolean = false,
 ) {
     companion object {
+        @JvmName("hasItem")
         fun hasItem(itemGetter: () -> Item): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
             return { _ ->
                 val item = itemGetter()
                 Pair("has_${item.getIdentifier().path}", InventoryChangeTrigger.TriggerInstance.hasItems(item))
+            }
+        }
+
+        @JvmName("hasItemTag")
+        fun hasItemTag(itemTagGetter: () -> TagKey<Item>): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
+            return { _ ->
+                val itemTag = itemTagGetter()
+                Pair("has_${itemTag.location.path}", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(itemTag)))
             }
         }
 
@@ -77,6 +88,8 @@ class AdvancementCard(
 
     context(ModContext)
     fun init() {
+        check(nameTranslation.en.length <= 30) { "Advancement name is too long: $identifier = ${nameTranslation.en}" }
+        check(nameTranslation.ja.length <= 18) { "Advancement name is too long: $identifier = ${nameTranslation.ja}" }
         nameTranslation.enJa()
         descriptionTranslation.enJa()
         DataGenerationEvents.onGenerateAdvancement { registries, writer ->

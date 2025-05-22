@@ -10,9 +10,11 @@ import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
+import miragefairy2024.mod.haimeviska.haimeviskaAdvancement
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -124,7 +126,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { rootAdvancement.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("The Unknown World of Thaumaturgy", "魔術の世界"),
+                    name = EnJa("The World of Thaumaturgy", "魔術の世界"),
                     description = EnJa("Mine the Miranagite underground", "地中の蒼天石を採掘する"),
                     criterion = AdvancementCard.hasItem(item),
                 )
@@ -201,7 +203,7 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Sub { MIRAGE_FLOUR.advancement!!.await() },
+                    context = AdvancementCard.Sub { MirageFlowerCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Organic Amorphous Material", "水晶の飴"),
                     description = EnJa("Cultivate Mirage flowers and harvest a rare item", "妖花ミラージュを栽培し希少品を収穫する"),
@@ -360,6 +362,16 @@ class MaterialCard(
             "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
             PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
             fuelValue = 200,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { haimeviskaAdvancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("The Taste of Nectar", "蜜の味"),
+                    description = EnJa("Obtain Haimeviska Rosin, rarely harvested from the Dripping Haimeviska Logs", "滴るハイメヴィスカの原木から稀に採取される妖精の木の涙を入手する"),
+                    criterion = AdvancementCard.hasItem(item),
+                )
+            },
         ) {
             // →粘着ピストン
             registerShapedRecipeGeneration({ Blocks.STICKY_PISTON.asItem() }) {
@@ -397,16 +409,6 @@ class MaterialCard(
             PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
             soulStreamContainable = true,
             creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
-            advancementCreator = {
-                AdvancementCard(
-                    identifier = it,
-                    context = AdvancementCard.Sub { rootAdvancement.await() },
-                    icon = { IconItem.mirageFlowerIconItem().createItemStack() },
-                    name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
-                    description = EnJa("Right-click on the Mirage flower to harvest it", "妖花ミラージュを右クリックで収穫する"),
-                    criterion = AdvancementCard.hasItem(item),
-                )
-            },
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }

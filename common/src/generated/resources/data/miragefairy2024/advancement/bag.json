@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:root",
+  "parent": "miragefairy2024:mirage_flower",
   "criteria": {
-    "has_mirage_flour": {
+    "has_bag": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:mirage_flour"
+            "items": "#miragefairy2024:bag"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.mirage_flour.description"
+      "translate": "advancements.miragefairy2024.bag.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:icon/mirage_flower"
+      "id": "miragefairy2024:plant_bag"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.mirage_flour.title"
+      "translate": "advancements.miragefairy2024.bag.title"
     }
   },
   "requirements": [
     [
-      "has_mirage_flour"
+      "has_bag"
     ]
   ],
   "sends_telemetry_event": true

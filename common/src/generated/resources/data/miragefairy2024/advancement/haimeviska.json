@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_haimeviska_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:haimeviska_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.haimeviska.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:hollow_haimeviska_log"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.haimeviska.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_haimeviska_log"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -17,6 +17,7 @@ open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicP
     val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockIdentifier) { BlockEntityType(::createBlockEntity, setOf(block.await()), null) }
     val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
     val possibleTraits = configuration.possibleTraits
+    val advancement = configuration.createAdvancement(blockIdentifier)
 
     context(ModContext)
     fun init() = configuration.init()

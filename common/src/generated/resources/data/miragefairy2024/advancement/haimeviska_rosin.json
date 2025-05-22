@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:haimeviska",
+  "criteria": {
+    "has_haimeviska_rosin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:haimeviska_rosin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.haimeviska_rosin.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:haimeviska_rosin"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.haimeviska_rosin.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_haimeviska_rosin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

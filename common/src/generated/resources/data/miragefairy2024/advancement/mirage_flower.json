@@ -1,0 +1,33 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_mirage_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:mirage_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.mirage_flower.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:icon/mirage_flower"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.mirage_flower.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_mirage_bulb"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

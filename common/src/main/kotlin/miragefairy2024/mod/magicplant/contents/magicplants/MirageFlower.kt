@@ -3,8 +3,11 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.IconItem
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.rootAdvancement
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.count
@@ -29,6 +32,7 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -119,6 +123,16 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_mirage_cluster")
     val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("mirage_cluster_fairy_forest")
     val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("large_mirage_cluster")
+
+    override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { IconItem.mirageFlowerIconItem().createItemStack() },
+        name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
+        //name = EnJa("Terraformer of the Fantasy World", "幻想世界のテラフォーマー"), // TODO どこかで使う
+        description = EnJa("Find the Mirage flower", "妖花ミラージュを摘もう"),
+        criterion = AdvancementCard.hasItem { card.item() },
+    )
 
     context(ModContext)
     override fun init() {

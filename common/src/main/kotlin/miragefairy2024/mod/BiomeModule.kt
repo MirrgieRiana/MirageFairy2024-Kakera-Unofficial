@@ -129,8 +129,8 @@ object FairyForestBiomeCard : BiomeCard(
     val advancement = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { IconItem.phantomFlowerIconItem().createItemStack() },
-        name = EnJa("The Fairy Star", "妖精の星"),
+        icon = { IconItem.phantomFlowerIconItem().createItemStack() }, // TODO もっと相応しいアイコンに変える
+        name = EnJa("Fairylands", "世界のそこかしこにあるおとぎの国"),
         description = EnJa("Travel the overworld and discover the Fairy Forest", "地上を旅して妖精の森を探す"),
         criterion = AdvancementCard.visit(registryKey),
     )
