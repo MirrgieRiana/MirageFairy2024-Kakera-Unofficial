@@ -77,6 +77,7 @@ object FairyStatueFountainCard {
         name = EnJa("The Desire for Rerolls", "リセマラの誘い"),
         description = EnJa("Throw a Fairy Jewel into a fairy statue fountain", "妖精の像の泉にフェアリージュエルを投げ込もう"),
         criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
     )
 }
 

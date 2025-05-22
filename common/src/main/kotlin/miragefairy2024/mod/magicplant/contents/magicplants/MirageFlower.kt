@@ -3,7 +3,6 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.IconItem
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.rootAdvancement
@@ -127,11 +126,12 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { IconItem.mirageFlowerIconItem().createItemStack() },
+        icon = { card.iconItem().createItemStack() },
         name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
         //name = EnJa("Terraformer of the Fantasy World", "幻想世界のテラフォーマー"), // TODO どこかで使う
         description = EnJa("Find the Mirage flower", "妖花ミラージュを摘もう"),
         criterion = AdvancementCard.hasItem { card.item() },
+        fairyJewels = 100,
     )
 
     context(ModContext)

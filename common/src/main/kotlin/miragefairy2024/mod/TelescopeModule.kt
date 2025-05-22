@@ -97,6 +97,7 @@ object TelescopeCard {
         name = EnJa("The Eyes of Tertia", "第三の目"),
         description = EnJa("Craft a telescope for a daily mission", "デイリーミッションのための望遠鏡をクラフトする"),
         criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
     )
 }
 

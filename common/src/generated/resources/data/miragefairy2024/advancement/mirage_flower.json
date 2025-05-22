@@ -18,7 +18,7 @@
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:icon/mirage_flower"
+      "id": "miragefairy2024:mirage_flower_icon"
     },
     "title": {
       "translate": "advancements.miragefairy2024.mirage_flower.title"
@@ -29,5 +29,10 @@
       "has_mirage_bulb"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/100"
+    ]
+  },
   "sends_telemetry_event": true
 }

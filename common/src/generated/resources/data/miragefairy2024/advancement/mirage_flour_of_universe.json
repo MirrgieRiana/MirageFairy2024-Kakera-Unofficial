@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:mirage_flower",
+  "criteria": {
+    "has_mirage_flour_of_universe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:mirage_flour_of_universe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.mirage_flour_of_universe.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:mirage_flour_of_universe"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.mirage_flour_of_universe.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_mirage_flour_of_universe"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/1000"
+    ]
+  },
+  "sends_telemetry_event": true
+}

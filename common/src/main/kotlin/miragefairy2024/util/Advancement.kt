@@ -2,9 +2,12 @@ package miragefairy2024.util
 
 import kotlinx.coroutines.CompletableDeferred
 import miragefairy2024.DataGenerationEvents
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.MaterialCard
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementHolder
+import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
@@ -20,6 +23,44 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
+
+object FairyJewelsLootTableHelper {
+    val cache = mutableMapOf<Int, ResourceKey<LootTable>>()
+    context(ModContext)
+    fun getOrInit(fairyJewels: Int): ResourceKey<LootTable> {
+        return cache.getOrPut(fairyJewels) {
+            val lootTableId = Registries.LOOT_TABLE with MirageFairy2024.identifier("jewels/$fairyJewels")
+            registerAdvancementRewardLootTableGeneration(lootTableId) {
+                LootTable {
+                    var i = fairyJewels
+
+                    fun f(item: Item, price: Int) {
+                        val count = i / price
+                        check(count <= 64)
+                        withPool(LootPool(ItemLootPoolEntry(item).apply(SetItemCountFunction.setCount(ConstantValue.exactly(count.toFloat())))))
+                        i -= price * count
+                    }
+
+                    f(MaterialCard.JEWEL_10000.item(), 10000)
+                    f(MaterialCard.JEWEL_5000.item(), 5000)
+                    f(MaterialCard.JEWEL_1000.item(), 1000)
+                    f(MaterialCard.JEWEL_500.item(), 500)
+                    f(MaterialCard.JEWEL_100.item(), 100)
+                    f(MaterialCard.JEWEL_50.item(), 50)
+                    f(MaterialCard.JEWEL_10.item(), 10)
+                    f(MaterialCard.JEWEL_5.item(), 5)
+                    f(MaterialCard.JEWEL_1.item(), 1)
+
+                    check(i == 0)
+                }
+            }
+            lootTableId
+        }
+    }
+}
 
 class AdvancementCard(
     private val identifier: ResourceLocation,
@@ -28,6 +69,8 @@ class AdvancementCard(
     name: EnJa,
     description: EnJa,
     private val criterion: (HolderLookup.Provider) -> Pair<String, Criterion<*>>,
+    private val fairyJewels: Int? = null,
+    private val type: AdvancementType = AdvancementType.TASK,
     private val silent: Boolean = false,
 ) {
     companion object {
@@ -92,6 +135,8 @@ class AdvancementCard(
         check(nameTranslation.ja.length <= 18) { "Advancement name is too long: $identifier = ${nameTranslation.ja}" }
         nameTranslation.enJa()
         descriptionTranslation.enJa()
+
+        val lootTableId = fairyJewels?.let { FairyJewelsLootTableHelper.getOrInit(it) }
         DataGenerationEvents.onGenerateAdvancement { registries, writer ->
             val advancement = Advancement.Builder.advancement()
                 .let { if (context is Sub) it.parent(context.parent()) else it }
@@ -100,7 +145,7 @@ class AdvancementCard(
                     text { nameTranslation() },
                     text { descriptionTranslation() },
                     if (context is Root) context.texture else null,
-                    AdvancementType.TASK,
+                    type,
                     !silent,
                     !silent,
                     false
@@ -109,6 +154,7 @@ class AdvancementCard(
                     val pair = criterion(registries)
                     it.addCriterion(pair.first, pair.second)
                 }
+                .let { if (lootTableId != null) it.rewards(AdvancementRewards.Builder().addLootTable(lootTableId).build()) else it }
                 .save(writer, identifier.string)
             deferred.complete(advancement)
         }

@@ -62,6 +62,7 @@ object DripstoneCavesRuinCard {
         name = EnJa("The Ancient Future Civ", "古代の未来文明"),
         description = EnJa("Unearth a map from the Weathered Ancient Remnants and explore the Dripstone Caves Ruin", "風化した旧世代の遺構から地図を発掘し、鍾乳洞の遺跡を訪れる"),
         criterion = AdvancementCard.visit(key),
+        fairyJewels = 100,
     )
 
     context(ModContext)

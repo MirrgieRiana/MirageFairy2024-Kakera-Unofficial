@@ -35,5 +35,10 @@
       "visit_dripstone_caves_ruin"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/100"
+    ]
+  },
   "sends_telemetry_event": true
 }

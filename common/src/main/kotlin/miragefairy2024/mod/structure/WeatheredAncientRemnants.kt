@@ -70,6 +70,7 @@ object WeatheredAncientRemnantsCard {
         name = EnJa("Spacefaring Humanity's Scars", "宇宙人類の爪痕"),
         description = EnJa("Discover Weathered Ancient Remnants left on the surface", "地上に遺された風化した旧世代の遺構を発見する"),
         criterion = AdvancementCard.visit(key),
+        fairyJewels = 100,
     )
 
     context(ModContext)

@@ -93,6 +93,11 @@ fun (() -> EntityType<*>).registerLootTableGeneration(initializer: (HolderLookup
     it(this(), initializer(registries).setRandomSequence(this().defaultLootTable.location()))
 }
 
+context(ModContext)
+fun registerAdvancementRewardLootTableGeneration(lootTableId: ResourceKey<LootTable>, initializer: (HolderLookup.Provider) -> LootTable.Builder) = DataGenerationEvents.onGenerateAdvancementRewardLootTable { it, registries ->
+    it(lootTableId, initializer(registries).setRandomSequence(lootTableId.location()))
+}
+
 enum class FortuneEffect {
     IGNORE,
     ORE,

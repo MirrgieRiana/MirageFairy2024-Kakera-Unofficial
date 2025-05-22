@@ -76,6 +76,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
         name = EnJa("My New Home", "新しい我が家"),
         description = EnJa("Hollow out a log to create a home for fairies", "原木をくりぬいて妖精の住み家を作ろう"),
         criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
     )
 
     context(ModContext)

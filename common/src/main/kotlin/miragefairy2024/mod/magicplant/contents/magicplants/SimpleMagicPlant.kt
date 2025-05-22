@@ -7,10 +7,13 @@ import miragefairy2024.mod.magicplant.MagicPlantConfiguration
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
+import miragefairy2024.util.Registration
+import miragefairy2024.util.TextureMap
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.normal
 import miragefairy2024.util.randomInt
+import miragefairy2024.util.register
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
@@ -18,7 +21,11 @@ import miragefairy2024.util.with
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.models.model.ModelTemplates
+import net.minecraft.data.models.model.TextureSlot
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
@@ -52,18 +59,26 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
     override fun init() {
         super.init()
 
+        // 登録
+        card.iconItem.register()
+
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()) with card.block().getAgeProperty() }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()) with getAgeProperty() }
         getAgeProperty().possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * card.block().getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * card.block().getIdentifier() * "_age$age")
             }
         }
+        card.iconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) {
+            TextureMap(TextureSlot.LAYER0 to "block/magic_plant/" * card.block().getIdentifier() * "_age${getAgeProperty().possibleValues.max()}")
+        }
 
     }
 }
 
-abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(configuration: SimpleMagicPlantConfiguration<*, B>) : MagicPlantCard<B>(configuration)
+abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(configuration: SimpleMagicPlantConfiguration<*, B>) : MagicPlantCard<B>(configuration) {
+    val iconItem = Registration(BuiltInRegistries.ITEM, blockIdentifier * "_icon") { Item(Item.Properties()) }
+}
 
 abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantConfiguration<*, *>, settings: Properties) : MagicPlantBlock(configuration, settings) {
 
@@ -84,7 +99,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
         builder.add(getAgeProperty()/* この関数は親クラスのinitで呼ばれるのでフィールドを参照できない */)
     }
 
-    fun getAge(state: BlockState) = state.getValue(agePropertyCache)!!
+    fun getAge(state: BlockState) = state.getValue(agePropertyCache)
     fun isMaxAge(state: BlockState) = getAge(state) >= maxAge
     fun withAge(age: Int): BlockState = defaultBlockState().setValue(agePropertyCache, age atLeast 0 atMost maxAge)
 

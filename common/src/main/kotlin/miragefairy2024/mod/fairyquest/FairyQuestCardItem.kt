@@ -62,6 +62,7 @@ object FairyQuestCardCard {
         name = EnJa("Time Crystal Radio", "時間結晶ラジオ"),
         description = EnJa("Look for the Fairy Quest Card lying around nearby", "その辺に落ちているフェアリークエストカードを探そう"),
         criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
     )
 }
 

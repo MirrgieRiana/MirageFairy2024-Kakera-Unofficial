@@ -101,6 +101,7 @@ enum class BagCard(
             name = EnJa("Explore the Overworld!!", "インベに余裕があるなら探検しよう！！"),
             description = EnJa("Craft a bag that can store a decent number of specific items", "特定のアイテムをそこそこ収納できるカバンを作成する"),
             criterion = AdvancementCard.hasItemTag { BAG_ITEM_TAG },
+            fairyJewels = 100,
         )
     }
 

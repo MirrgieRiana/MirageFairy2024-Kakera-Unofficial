@@ -8,6 +8,7 @@ import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATUR
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
+import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
@@ -129,10 +130,11 @@ object FairyForestBiomeCard : BiomeCard(
     val advancement = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { IconItem.phantomFlowerIconItem().createItemStack() }, // TODO もっと相応しいアイコンに変える
+        icon = { PhantomFlowerCard.item().createItemStack() }, // TODO もっと相応しいアイコンに変える
         name = EnJa("Fairylands", "世界のそこかしこにあるおとぎの国"),
         description = EnJa("Travel the overworld and discover the Fairy Forest", "地上を旅して妖精の森を探す"),
         criterion = AdvancementCard.visit(registryKey),
+        fairyJewels = 100,
     )
 
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
@@ -220,6 +222,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
         name = EnJa("The Forest of Memories", "記憶の森"),
         description = EnJa("Travel the overworld and discover the Deep Fairy Forest", "地上を旅して妖精の樹海を探す"),
         criterion = AdvancementCard.visit(registryKey),
+        fairyJewels = 100,
     )
 
     override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {

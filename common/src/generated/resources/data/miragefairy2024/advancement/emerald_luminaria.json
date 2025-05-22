@@ -1,11 +1,11 @@
 {
   "parent": "miragefairy2024:root",
   "criteria": {
-    "has_haimeviska_log": {
+    "has_emerald_luminaria_bulb": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:haimeviska_log"
+            "items": "miragefairy2024:emerald_luminaria_bulb"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.haimeviska.description"
+      "translate": "advancements.miragefairy2024.emerald_luminaria.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:dripping_haimeviska_log"
+      "id": "miragefairy2024:emerald_luminaria_icon"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.haimeviska.title"
+      "translate": "advancements.miragefairy2024.emerald_luminaria.title"
     }
   },
   "requirements": [
     [
-      "has_haimeviska_log"
+      "has_emerald_luminaria_bulb"
     ]
   ],
   "rewards": {

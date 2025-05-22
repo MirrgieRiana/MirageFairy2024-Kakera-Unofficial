@@ -85,6 +85,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
         name = EnJa("Polymerization of the Ego", "自我の重合"),
         description = EnJa("Build an Aura Reflector Furnace and feed it with soul fuel", "オーラ反射炉を作って魂の燃料をくべよう"),
         criterion = AdvancementCard.hasItem(item),
+        fairyJewels = 100,
     )
 
     context(ModContext)

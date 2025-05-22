@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:root",
+  "parent": "miragefairy2024:aura_reflector_furnace",
   "criteria": {
-    "has_haimeviska_log": {
+    "has_miragium_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:haimeviska_log"
+            "items": "miragefairy2024:miragium_ingot"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.haimeviska.description"
+      "translate": "advancements.miragefairy2024.miragium_ingot.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:dripping_haimeviska_log"
+      "id": "miragefairy2024:miragium_ingot"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.haimeviska.title"
+      "translate": "advancements.miragefairy2024.miragium_ingot.title"
     }
   },
   "requirements": [
     [
-      "has_haimeviska_log"
+      "has_miragium_ingot"
     ]
   ],
   "rewards": {

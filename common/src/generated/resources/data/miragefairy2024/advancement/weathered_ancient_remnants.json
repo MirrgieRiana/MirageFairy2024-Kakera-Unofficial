@@ -35,5 +35,10 @@
       "visit_weathered_ancient_remnants"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/100"
+    ]
+  },
   "sends_telemetry_event": true
 }

@@ -24,7 +24,7 @@
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:icon/phantom_flower"
+      "id": "miragefairy2024:phantom_bulb"
     },
     "title": {
       "translate": "advancements.miragefairy2024.fairy_forest.title"
@@ -35,5 +35,10 @@
       "fairy_forest"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/100"
+    ]
+  },
   "sends_telemetry_event": true
 }

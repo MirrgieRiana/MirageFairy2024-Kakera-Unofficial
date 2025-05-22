@@ -58,6 +58,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
         name = EnJa("The Scent of Haimeviska", "ハイメヴィスカの香り"),
         description = EnJa("Craft a Fermentation Barrel for alcoholic beverages and certain poisons", "アルコール飲料および一部の毒物のための醸造樽を作る"),
         criterion = AdvancementCard.hasItem(item),
+        fairyJewels = 100,
     )
 
     context(ModContext)

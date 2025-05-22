@@ -52,6 +52,7 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.advancements.AdvancementType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -112,6 +113,7 @@ class MaterialCard(
                     name = EnJa("Aura-Resistant Plastic", "耐霊性プラスチック"),
                     description = EnJa("Pick up the Xarpite lying around nearby", "その辺に落ちている紅天石を拾う"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
                 )
             },
             // TODO 使えるワード：牢獄
@@ -130,6 +132,7 @@ class MaterialCard(
                     name = EnJa("The World of Thaumaturgy", "魔術の世界"),
                     description = EnJa("Mine the Miranagite underground", "地中の蒼天石を採掘する"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
                 )
             },
             // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
@@ -209,6 +212,7 @@ class MaterialCard(
                     name = EnJa("Organic Amorphous Material", "水晶の飴"),
                     description = EnJa("Cultivate Mirage flowers and harvest a rare item", "妖花ミラージュを栽培し希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
                 )
             },
         )
@@ -256,6 +260,7 @@ class MaterialCard(
                     name = EnJa("Solid Soul", "固形の魂"),
                     description = EnJa("Use the Aura Reflector Furnace to refine Mirage Flour", "オーラ反射炉を使ってミラージュの花粉を製錬する"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
                 )
             },
         )
@@ -381,6 +386,7 @@ class MaterialCard(
                     name = EnJa("The Taste of Nectar", "蜜の味"),
                     description = EnJa("Obtain Haimeviska Rosin, rarely harvested from the Dripping Haimeviska Logs", "滴るハイメヴィスカの原木から稀に採取される妖精の木の涙を入手する"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
                 )
             },
         ) {
@@ -467,9 +473,11 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MirageFlowerCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Miravitational Lens", "ゆがむ空間"),
+                    name = EnJa("Warping Space", "ゆがむ空間"),
                     description = EnJa("Condense Mirage Flour into Mirage Flour of Universe", "ミラージュの花粉を宇宙のミラージュの花粉まで濃縮する"),
                     criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 1000,
+                    type = AdvancementType.CHALLENGE,
                 )
             }
         ) {

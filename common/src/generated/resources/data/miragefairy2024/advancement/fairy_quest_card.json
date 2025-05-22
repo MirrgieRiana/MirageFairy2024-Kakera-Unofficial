@@ -32,5 +32,10 @@
       "has_fairy_quest_card"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels/100"
+    ]
+  },
   "sends_telemetry_event": true
 }
