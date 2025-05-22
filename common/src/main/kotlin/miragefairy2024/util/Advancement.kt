@@ -32,7 +32,7 @@ object FairyJewelsLootTableHelper {
     context(ModContext)
     fun getOrInit(fairyJewels: Int): ResourceKey<LootTable> {
         return cache.getOrPut(fairyJewels) {
-            val lootTableId = Registries.LOOT_TABLE with MirageFairy2024.identifier("jewels/$fairyJewels")
+            val lootTableId = Registries.LOOT_TABLE with MirageFairy2024.identifier("jewels_$fairyJewels")
             registerAdvancementRewardLootTableGeneration(lootTableId) {
                 LootTable {
                     var i = fairyJewels
