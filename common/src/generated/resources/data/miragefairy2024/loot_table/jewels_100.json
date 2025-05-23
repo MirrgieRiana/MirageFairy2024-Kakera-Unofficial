@@ -43,7 +43,7 @@
           "functions": [
             {
               "add": false,
-              "count": 1.0,
+              "count": 0.0,
               "function": "minecraft:set_count"
             }
           ],
@@ -77,7 +77,7 @@
           "functions": [
             {
               "add": false,
-              "count": 0.0,
+              "count": 1.0,
               "function": "minecraft:set_count"
             }
           ],
@@ -155,5 +155,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "miragefairy2024:jewels/1000"
+  "random_sequence": "miragefairy2024:jewels_100"
 }
