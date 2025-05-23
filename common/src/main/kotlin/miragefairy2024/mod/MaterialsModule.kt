@@ -153,7 +153,8 @@ class MaterialCard(
         val CHAOS_STONE = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
-        ) {
+
+            ) {
             item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
             item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
             item.registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
@@ -279,7 +280,8 @@ class MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
             PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
             soulStreamContainable = true,
-        ) {
+
+            ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
@@ -315,7 +317,7 @@ class MaterialCard(
                     context = AdvancementCard.Sub { DripstoneCavesRuinCard.advancement.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Ancient Stainless Alloy", "古代のステンレス"),
-                    description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
+                    description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"), // TODO
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,
                 )
@@ -369,7 +371,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { LUMINITE.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Glassy Ambivalence", "ガラス質のアンビバレンス"),
+                    name = EnJa("Ambivalence in Glass", "ガラスの中のアンビバレンス"),
                     description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Miragium, Luminite, and Echo Shard", "ミラジウム、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,
