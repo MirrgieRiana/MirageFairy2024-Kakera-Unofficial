@@ -15,7 +15,9 @@ import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
+import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.structure.DripstoneCavesRuinCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -307,6 +309,17 @@ class MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
             PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
             soulStreamContainable = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { DripstoneCavesRuinCard.advancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Ancient Stainless Alloy", "古代のステンレス"),
+                    description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
         )
         val ETHEROBALLISTIC_BOLT_FRAGMENT = !MaterialCard(
             "etheroballistic_bolt_fragment", "Etheroballistic Bolt Fragment", "エテロバリスティック弾の破片",
@@ -335,11 +348,33 @@ class MaterialCard(
         val LUMINITE = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
             PoemList(4).poem("An end point of reincarnation", "彷徨える魂の行方。"),
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Etheroluminescence", "エテロルミネッセンス"),
+                    description = EnJa("Obtain Luminite, a rare item from plants of Luminariaceae family", "ルミナリア科植物のレアドロップであるルミナイトを手に入れる"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
         )
         val RESONITE_INGOT = !MaterialCard(
             "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
             PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
             soulStreamContainable = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { LUMINITE.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Ambivalence in Glass", "ガラスの中のアンビバレンス"),
+                    description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Miragium, Luminite, and Echo Shard", "ミラジウム、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
         ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
