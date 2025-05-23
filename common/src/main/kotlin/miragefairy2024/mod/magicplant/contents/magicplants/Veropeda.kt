@@ -5,6 +5,8 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.rootAdvancement
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -23,6 +25,7 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -107,6 +110,16 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     val LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_veropeda_cluster")
     val VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
     val NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_veropeda_cluster")
+
+    override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { card.iconItem().createItemStack() },
+        name = EnJa("Artificial Plant Species", "人造植物"),
+        description = EnJa("Harvest Veropeda the cursed grass, which grows in arid biomes and the nether", "乾燥系バイオームとネザーに分布する呪草ヴェロペダを収穫する"),
+        criterion = AdvancementCard.hasItem { card.item() },
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {
