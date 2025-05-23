@@ -369,7 +369,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { LUMINITE.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Ambivalence in Glass", "ガラスの中のアンビバレンス"),
+                    name = EnJa("Glassy Ambivalence", "ガラス質のアンビバレンス"),
                     description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Miragium, Luminite, and Echo Shard", "ミラジウム、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,

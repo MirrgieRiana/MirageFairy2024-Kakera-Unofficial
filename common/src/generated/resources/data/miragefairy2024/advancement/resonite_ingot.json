@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:diamond_luminaria",
+  "parent": "miragefairy2024:luminite",
   "criteria": {
-    "has_emerald_luminaria_bulb": {
+    "has_resonite_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:emerald_luminaria_bulb"
+            "items": "miragefairy2024:resonite_ingot"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.emerald_luminaria.description"
+      "translate": "advancements.miragefairy2024.resonite_ingot.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:emerald_luminaria_icon"
+      "id": "miragefairy2024:resonite_ingot"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.emerald_luminaria.title"
+      "translate": "advancements.miragefairy2024.resonite_ingot.title"
     }
   },
   "requirements": [
     [
-      "has_emerald_luminaria_bulb"
+      "has_resonite_ingot"
     ]
   ],
   "rewards": {
