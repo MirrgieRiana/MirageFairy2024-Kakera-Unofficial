@@ -120,7 +120,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
-        context = AdvancementCard.Sub { rootAdvancement.await() },
+        context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
         icon = { card.iconItem().createItemStack() },
         name = EnJa("Money Tree", "金のなる木"),
         description = EnJa("Search for Emerald Luminaria in a plant-rich biome", "植物の繁茂するバイオームでエメラルドルミナリアを探す"),
