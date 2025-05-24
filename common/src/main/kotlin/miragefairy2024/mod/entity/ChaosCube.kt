@@ -11,6 +11,8 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.particle.MagicSquareParticleChannel
 import miragefairy2024.mod.particle.MagicSquareParticlePacket
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.mod.structure.DripstoneCavesRuinCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -18,6 +20,7 @@ import miragefairy2024.util.LootTable
 import miragefairy2024.util.Model
 import miragefairy2024.util.Registration
 import miragefairy2024.util.configure
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
 import miragefairy2024.util.registerEntityTypeTagGeneration
@@ -83,6 +86,16 @@ object ChaosCubeCard {
     }
     val spawnEggItem = Registration(BuiltInRegistries.ITEM, identifier * "_egg") { SpawnEggItem(entityType.await(), 0xB36235, 0xFFC21D, Item.Properties()) }
 
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { DripstoneCavesRuinCard.advancement.await() },
+        icon = { MaterialCard.ETHEROBALLISTIC_BOLT_FRAGMENT.item().createItemStack() },
+        name = EnJa("Magical Control Program", "魔導制御プログラム"),
+        description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
+        criterion = AdvancementCard.kill(entityType),
+        fairyJewels = 100,
+    )
+
     context(ModContext)
     fun init() {
         entityType.register()
@@ -124,6 +137,8 @@ object ChaosCubeCard {
         spawnEggItem.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
         spawnEggItem.registerModelGeneration(Model(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")))
         spawnEggItem.enJa(EnJa("${name.en} Spawn Egg", "${name.ja}のスポーンエッグ"))
+
+        advancement.init()
     }
 }
 

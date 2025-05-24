@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:chaos_cube",
+  "parent": "miragefairy2024:weathered_ancient_remnants",
   "criteria": {
-    "has_miragidian": {
+    "has_chaos_stone": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian"
+            "items": "miragefairy2024:chaos_stone"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.miragidian.description"
+      "translate": "advancements.miragefairy2024.chaos_stone.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:miragidian"
+      "id": "miragefairy2024:chaos_stone"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.miragidian.title"
+      "translate": "advancements.miragefairy2024.chaos_stone.title"
     }
   },
   "requirements": [
     [
-      "has_miragidian"
+      "has_chaos_stone"
     ]
   ],
   "rewards": {

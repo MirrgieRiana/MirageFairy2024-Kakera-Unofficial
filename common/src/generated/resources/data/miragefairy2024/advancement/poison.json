@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:chaos_cube",
+  "parent": "miragefairy2024:fermentation_barrel",
   "criteria": {
-    "has_miragidian": {
+    "has_poison": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian"
+            "items": "miragefairy2024:poison"
           }
         ]
       },
@@ -14,24 +14,25 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.miragidian.description"
+      "translate": "advancements.miragefairy2024.poison.description"
     },
+    "frame": "goal",
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:miragidian"
+      "id": "miragefairy2024:poison"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.miragidian.title"
+      "translate": "advancements.miragefairy2024.poison.title"
     }
   },
   "requirements": [
     [
-      "has_miragidian"
+      "has_poison"
     ]
   ],
   "rewards": {
     "loot": [
-      "miragefairy2024:jewels_100"
+      "miragefairy2024:jewels_300"
     ]
   },
   "sends_telemetry_event": true

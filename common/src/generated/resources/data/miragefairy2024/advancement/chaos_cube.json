@@ -1,0 +1,42 @@
+{
+  "parent": "miragefairy2024:dripstone_caves_ruin",
+  "criteria": {
+    "kill_chaos_cube": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "miragefairy2024:chaos_cube"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.chaos_cube.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:etheroballistic_bolt_fragment"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.chaos_cube.title"
+    }
+  },
+  "requirements": [
+    [
+      "kill_chaos_cube"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

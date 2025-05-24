@@ -10,15 +10,19 @@ import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.Criterion
+import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.critereon.KilledTrigger
 import net.minecraft.advancements.critereon.LocationPredicate
 import net.minecraft.advancements.critereon.PlayerTrigger
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.biome.Biome
@@ -114,6 +118,15 @@ class AdvancementCard(
                             registries.lookupOrThrow(Registries.BIOME).getOrThrow(biome)
                         )
                     ),
+                )
+            }
+        }
+
+        fun kill(entityType: () -> EntityType<*>): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
+            return { _ ->
+                Pair(
+                    "kill_${BuiltInRegistries.ENTITY_TYPE.getKey(entityType()).path}",
+                    KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(entityType())),
                 )
             }
         }

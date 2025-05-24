@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:chaos_cube",
+  "parent": "miragefairy2024:miragium_ingot",
   "criteria": {
-    "has_miragidian": {
+    "has_lilagium_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian"
+            "items": "miragefairy2024:lilagium_ingot"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.miragidian.description"
+      "translate": "advancements.miragefairy2024.lilagium_ingot.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:miragidian"
+      "id": "miragefairy2024:lilagium_ingot"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.miragidian.title"
+      "translate": "advancements.miragefairy2024.lilagium_ingot.title"
     }
   },
   "requirements": [
     [
-      "has_miragidian"
+      "has_lilagium_ingot"
     ]
   ],
   "rewards": {

@@ -3,6 +3,7 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.RandomFairySummoningItem
@@ -13,11 +14,13 @@ import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.mod.haimeviska.haimeviskaAdvancement
 import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
+import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
-import miragefairy2024.mod.structure.DripstoneCavesRuinCard
+import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
+import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -103,7 +106,7 @@ class MaterialCard(
         val entries = mutableListOf<MaterialCard>()
         private operator fun MaterialCard.not() = apply { entries += this }
 
-        val XARPITE = !MaterialCard(
+        val XARPITE: MaterialCard = !MaterialCard(
             "xarpite", "Xarpite", "紅天石",
             PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
             fuelValue = 200 * 16,
@@ -123,7 +126,7 @@ class MaterialCard(
             item.registerGrassDrop(0.03F, 1) // TODO 古代の遺構
             item.registerMobDrop(EntityType.WITCH, onlyKilledByPlayer = true, dropRate = Pair(0.2F, 0.1F))
         }
-        val MIRANAGITE = !MaterialCard(
+        val MIRANAGITE: MaterialCard = !MaterialCard(
             "miranagite", "Miranagite", "蒼天石",
             PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
             advancementCreator = {
@@ -131,7 +134,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { rootAdvancement.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("The World of Thaumaturgy", "魔術の世界"),
+                    name = EnJa("The Unknown World of Magic", "魔法の世界"),
                     description = EnJa("Mine the Miranagite underground", "地中の蒼天石を採掘する"),
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,
@@ -139,7 +142,7 @@ class MaterialCard(
             },
             // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
         )
-        val MIRANAGITE_ROD = !MaterialCard(
+        val MIRANAGITE_ROD: MaterialCard = !MaterialCard(
             "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
             PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
         ) {
@@ -150,11 +153,21 @@ class MaterialCard(
                 define('#', MIRANAGITE.item())
             } on MIRANAGITE.item from MIRANAGITE.item
         }
-        val CHAOS_STONE = !MaterialCard(
+        val CHAOS_STONE: MaterialCard = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
-
-            ) {
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { WeatheredAncientRemnantsCard.advancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("The World of Science", "知られざる科学の世界"),
+                    description = EnJa("Obtain Chaos Stone from Weathered Ancient Remnants and other locations around the world", "風化した旧世代の遺構やその他の世界中の場所にある混沌の石を入手する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
+        ) {
             item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
             item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
             item.registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
@@ -164,14 +177,14 @@ class MaterialCard(
             item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
 
-        val MIRAGE_LEAVES = !MaterialCard(
+        val MIRAGE_LEAVES: MaterialCard = !MaterialCard(
             "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
             PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
             fuelValue = 100,
         ) {
             item.registerComposterInput(0.5F)
         }
-        val MIRAGE_STEM = !MaterialCard(
+        val MIRAGE_STEM: MaterialCard = !MaterialCard(
             "mirage_stem", "Mirage Stem", "ミラージュの茎",
             PoemList(1).poem("Cell wall composed of amorphous ether", "植物が手掛ける、分子レベルの硝子細工。"),
             fuelValue = 100,
@@ -186,7 +199,7 @@ class MaterialCard(
                 define('#', item())
             } on item modId MirageFairy2024.MOD_ID from item
         }
-        val FAIRY_GLASS_FIBER = !MaterialCard(
+        val FAIRY_GLASS_FIBER: MaterialCard = !MaterialCard(
             "fairy_glass_fiber", "Fairy Glass Fiber", "きらめきの糸",
             PoemList(1).poem("Fiber-optic nervous system", "意識の一部だったもの。"),
             soulStreamContainable = true,
@@ -203,7 +216,7 @@ class MaterialCard(
                 define('#', item())
             } on item modId MirageFairy2024.MOD_ID from item
         }
-        val FAIRY_CRYSTAL = !MaterialCard(
+        val FAIRY_CRYSTAL: MaterialCard = !MaterialCard(
             "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
             PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
             soulStreamContainable = true,
@@ -219,12 +232,12 @@ class MaterialCard(
                 )
             },
         )
-        val PHANTOM_LEAVES = !MaterialCard(
+        val PHANTOM_LEAVES: MaterialCard = !MaterialCard(
             "phantom_leaves", "Phantom Leaves", "ファントムの葉",
             PoemList(3).poem("The eroding reality", "析出する空想。"),
             fuelValue = 100,
         )
-        val PHANTOM_DROP = !MaterialCard(
+        val PHANTOM_DROP: MaterialCard = !MaterialCard(
             "phantom_drop", "Phantom Drop", "幻想の雫",
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
             soulStreamContainable = true,
@@ -236,8 +249,19 @@ class MaterialCard(
                     .alwaysEdible()
                     .build()
             },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { PhantomFlowerCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Materialized Fantasy", "植物が想像できることは植物が実現する"),
+                    description = EnJa("Obtain Phantom Drop, rarely harvested from the Phantom Flower", "幻花ファントムから稀に収穫できる幻想の雫を入手する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
         )
-        val MIRAGIUM_NUGGET = !MaterialCard(
+        val MIRAGIUM_NUGGET: MaterialCard = !MaterialCard(
             "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
             PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
             soulStreamContainable = true,
@@ -251,7 +275,7 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on MIRAGE_FLOUR.item
         }
-        val MIRAGIUM_INGOT = !MaterialCard(
+        val MIRAGIUM_INGOT: MaterialCard = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
             PoemList(3).poem("Metallic body", "妖精インゴット。"),
             soulStreamContainable = true,
@@ -267,7 +291,7 @@ class MaterialCard(
                 )
             },
         )
-        val VEROPEDA_LEAF = !MaterialCard(
+        val VEROPEDA_LEAF: MaterialCard = !MaterialCard(
             "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
             PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
             fuelValue = 100,
@@ -276,12 +300,22 @@ class MaterialCard(
             registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
             registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
-        val LILAGIUM_INGOT = !MaterialCard(
+        val LILAGIUM_INGOT: MaterialCard = !MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
             PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
             soulStreamContainable = true,
-
-            ) {
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MIRAGIUM_INGOT.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Alloy with Plants", "植物との合金"),
+                    description = EnJa("Create Lilagium using Miragium, lilac, and other materials", "ミラジウム、ライラックおよびその他の素材からリラジウムを作る"),
+                    criterion = AdvancementCard.hasItem(item),
+                    fairyJewels = 100,
+                )
+            },
+        ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
@@ -293,7 +327,7 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on { Items.LILAC }
         } // TODO "Botanical alloy", "牡丹合金。"
-        val MIRAGIDIAN_SHARD = !MaterialCard(
+        val MIRAGIDIAN_SHARD: MaterialCard = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
             PoemList(4).poem("The great collapse 30,000 years ago", "遥か三万年前のミラジウムが見た夢。"),
             soulStreamContainable = true,
@@ -307,30 +341,30 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on item from item
         }
-        val MIRAGIDIAN = !MaterialCard(
+        val MIRAGIDIAN: MaterialCard = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
             PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
             soulStreamContainable = true,
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Sub { DripstoneCavesRuinCard.advancement.await() },
+                    context = AdvancementCard.Sub { ChaosCubeCard.advancement.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Ancient Stainless Alloy", "古代のステンレス"),
-                    description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"), // TODO
+                    description = EnJa("Process Etheroballistic Bolt Fragments and sinter them using an Aura Reflector Furnace", "エテロバリスティック弾の破片を加工し、オーラ反射炉で焼結する"),
                     criterion = AdvancementCard.hasItem(item),
                     fairyJewels = 100,
                 )
             },
         )
-        val ETHEROBALLISTIC_BOLT_FRAGMENT = !MaterialCard(
+        val ETHEROBALLISTIC_BOLT_FRAGMENT: MaterialCard = !MaterialCard(
             "etheroballistic_bolt_fragment", "Etheroballistic Bolt Fragment", "エテロバリスティック弾の破片",
             PoemList(4).poem("More abrasion resistant than lethal", "合金として生きるということ。"),
             soulStreamContainable = true,
         ) {
             registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
         }
-        val VEROPEDA_BERRIES = !MaterialCard(
+        val VEROPEDA_BERRIES: MaterialCard = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
             PoemList(1)
                 .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
@@ -347,7 +381,7 @@ class MaterialCard(
         ) {
             item.registerComposterInput(0.3F)
         }
-        val LUMINITE = !MaterialCard(
+        val LUMINITE: MaterialCard = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
             PoemList(4).poem("An end point of reincarnation", "彷徨える魂の行方。"),
             advancementCreator = {
@@ -362,7 +396,7 @@ class MaterialCard(
                 )
             },
         )
-        val RESONITE_INGOT = !MaterialCard(
+        val RESONITE_INGOT: MaterialCard = !MaterialCard(
             "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
             PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
             soulStreamContainable = true,
@@ -389,7 +423,7 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
-        val HAIMEVISKA_SAP = !MaterialCard(
+        val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)
                 .poem("Smooth and mellow on the palate", "口福のアナムネシス。")
@@ -411,7 +445,7 @@ class MaterialCard(
                 define('S', Items.STICK)
             } on item modId MirageFairy2024.MOD_ID from item
         }
-        val HAIMEVISKA_ROSIN = !MaterialCard(
+        val HAIMEVISKA_ROSIN: MaterialCard = !MaterialCard(
             "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
             PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
             fuelValue = 200,
@@ -435,7 +469,7 @@ class MaterialCard(
                 define('S', item())
             } on item modId MirageFairy2024.MOD_ID from item
         }
-        val FAIRY_PLASTIC = !MaterialCard(
+        val FAIRY_PLASTIC: MaterialCard = !MaterialCard(
             // TODO add recipe
             // TODO add purpose
             "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
@@ -444,13 +478,13 @@ class MaterialCard(
             // TODO advancement
             // 琥珀色の～～
         )
-        val FAIRY_RUBBER = !MaterialCard(
+        val FAIRY_RUBBER: MaterialCard = !MaterialCard(
             // TODO add purpose
             "fairy_rubber", "Fairy Rubber", "夜のかけら",
             PoemList(3).poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた"),
         )
 
-        val TINY_MIRAGE_FLOUR = !MaterialCard(
+        val TINY_MIRAGE_FLOUR: MaterialCard = !MaterialCard(
             "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
             PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
             soulStreamContainable = true,
@@ -458,7 +492,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR = !MaterialCard(
+        val MIRAGE_FLOUR: MaterialCard = !MaterialCard(
             "mirage_flour", "Mirage Flour", "ミラージュの花粉",
             PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
             soulStreamContainable = true,
@@ -466,7 +500,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_NATURE = !MaterialCard(
+        val MIRAGE_FLOUR_OF_NATURE: MaterialCard = !MaterialCard(
             "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
             PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
             soulStreamContainable = true,
@@ -474,7 +508,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_EARTH = !MaterialCard(
+        val MIRAGE_FLOUR_OF_EARTH: MaterialCard = !MaterialCard(
             "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
             PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
             soulStreamContainable = true,
@@ -482,7 +516,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_UNDERWORLD = !MaterialCard(
+        val MIRAGE_FLOUR_OF_UNDERWORLD: MaterialCard = !MaterialCard(
             "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
             PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
             soulStreamContainable = true,
@@ -490,7 +524,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_SKY = !MaterialCard(
+        val MIRAGE_FLOUR_OF_SKY: MaterialCard = !MaterialCard(
             "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
             PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
             soulStreamContainable = true,
@@ -498,7 +532,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_UNIVERSE = !MaterialCard(
+        val MIRAGE_FLOUR_OF_UNIVERSE: MaterialCard = !MaterialCard(
             "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
             PoemList(3)
                 .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
@@ -520,7 +554,7 @@ class MaterialCard(
         ) {
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
-        val MIRAGE_FLOUR_OF_TIME = !MaterialCard(
+        val MIRAGE_FLOUR_OF_TIME: MaterialCard = !MaterialCard(
             "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
             PoemList(4)
                 .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
@@ -531,7 +565,7 @@ class MaterialCard(
             item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
         }
 
-        val FAIRY_SCALES = !MaterialCard(
+        val FAIRY_SCALES: MaterialCard = !MaterialCard(
             "fairy_scales", "Fairy Scales", "妖精の鱗粉",
             PoemList(1)
                 .poem("A catalyst that converts mana into erg", "湧き上がる、エルグの誘い。"),
@@ -542,7 +576,7 @@ class MaterialCard(
         ) {
             item.registerGrassDrop(0.1F, 1)
         }
-        val FRACTAL_WISP = !MaterialCard(
+        val FRACTAL_WISP: MaterialCard = !MaterialCard(
             "fractal_wisp", "Fractal Wisp", "フラクタルウィスプ",
             PoemList(1)
                 .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
@@ -552,23 +586,23 @@ class MaterialCard(
             // TODO 用途
         )
 
-        val FAIRY_QUEST_CARD_BASE = !MaterialCard(
+        val FAIRY_QUEST_CARD_BASE: MaterialCard = !MaterialCard(
             "fairy_quest_card_base", "Fairy Quest Card Base", "フェアリークエストカードベース",
             PoemList(1).poem("Am I hopeful in the parallel world?", "存在したかもしれない僕たちのかたち。")
         )
 
-        val MAGNETITE = !MaterialCard(
+        val MAGNETITE: MaterialCard = !MaterialCard(
             "magnetite", "Magnetite", "磁鉄鉱",
             null,
         ) {
             registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.7) on item modId MirageFairy2024.MOD_ID from item
         }
 
-        val FLUORITE = !MaterialCard(
+        val FLUORITE: MaterialCard = !MaterialCard(
             "fluorite", "Fluorite", "蛍石",
             null,
         )
-        val SPHERE_BASE = !MaterialCard(
+        val SPHERE_BASE: MaterialCard = !MaterialCard(
             "sphere_base", "Sphere Base", "スフィアベース",
             PoemList(2)
                 .poem("A mirror that reflects sadistic desires", "前世が見える。              （らしい）"),
@@ -583,25 +617,25 @@ class MaterialCard(
             } on FLUORITE.item from FLUORITE.item
         }
 
-        val TINY_BISMUTH_DUST = !MaterialCard(
+        val TINY_BISMUTH_DUST: MaterialCard = !MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
             null,
         ) {
             item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
             item.registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
         }
-        val BISMUTH_DUST = !MaterialCard(
+        val BISMUTH_DUST: MaterialCard = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
             null,
         )
-        val BISMUTH_INGOT = !MaterialCard(
+        val BISMUTH_INGOT: MaterialCard = !MaterialCard(
             "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
             null,
         ) {
             registerSmeltingRecipeGeneration(BISMUTH_DUST.item, item) on BISMUTH_DUST.item from BISMUTH_DUST.item
         }
 
-        val MINA_1 = !MaterialCard(
+        val MINA_1: MaterialCard = !MaterialCard(
             "mina_1", "1 Mina", "1ミナ",
             PoemList(0)
                 .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
@@ -609,7 +643,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(1, it.fireResistant()) },
         )
-        val MINA_5 = !MaterialCard(
+        val MINA_5: MaterialCard = !MaterialCard(
             "mina_5", "5 Mina", "5ミナ",
             PoemList(0)
                 .poem("Fairy snack", "ご縁があるよ")
@@ -617,7 +651,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(5, it.fireResistant()) },
         )
-        val MINA_10 = !MaterialCard(
+        val MINA_10: MaterialCard = !MaterialCard(
             "mina_10", "10 Mina", "10ミナ",
             PoemList(0)
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
@@ -625,7 +659,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(10, it.fireResistant()) },
         )
-        val MINA_50 = !MaterialCard(
+        val MINA_50: MaterialCard = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
             PoemList(0)
                 .poem("The Society failed to replicate this.", "形而上学的有機結晶")
@@ -633,7 +667,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(50, it.fireResistant()) },
         )
-        val MINA_100 = !MaterialCard(
+        val MINA_100: MaterialCard = !MaterialCard(
             "mina_100", "100 Mina", "100ミナ",
             PoemList(0)
                 .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
@@ -641,7 +675,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(100, it.fireResistant()) },
         )
-        val MINA_500 = !MaterialCard(
+        val MINA_500: MaterialCard = !MaterialCard(
             "mina_500", "500 Mina", "500ミナ",
             PoemList(0)
                 .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
@@ -649,7 +683,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(500, it.fireResistant()) },
         )
-        val MINA_1000 = !MaterialCard(
+        val MINA_1000: MaterialCard = !MaterialCard(
             "mina_1000", "1000 Mina", "1000ミナ",
             PoemList(0)
                 .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
@@ -657,7 +691,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(1000, it.fireResistant()) },
         )
-        val MINA_5000 = !MaterialCard(
+        val MINA_5000: MaterialCard = !MaterialCard(
             "mina_5000", "5000 Mina", "5000ミナ",
             PoemList(0)
                 .poem("The price of a soul.", "魂の値段。")
@@ -665,7 +699,7 @@ class MaterialCard(
             soulStreamContainable = true,
             creator = { MinaItem(5000, it.fireResistant()) },
         )
-        val MINA_10000 = !MaterialCard(
+        val MINA_10000: MaterialCard = !MaterialCard(
             "mina_10000", "10000 Mina", "10000ミナ",
             PoemList(0)
                 .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
@@ -674,63 +708,63 @@ class MaterialCard(
             creator = { MinaItem(10000, it.fireResistant()) },
         )
 
-        val JEWEL_1 = !MaterialCard(
+        val JEWEL_1: MaterialCard = !MaterialCard(
             "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
             PoemList(0)
                 .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_5 = !MaterialCard(
+        val JEWEL_5: MaterialCard = !MaterialCard(
             "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
             PoemList(0)
                 .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_10 = !MaterialCard(
+        val JEWEL_10: MaterialCard = !MaterialCard(
             "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
             PoemList(0)
                 .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_50 = !MaterialCard(
+        val JEWEL_50: MaterialCard = !MaterialCard(
             "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
             PoemList(0)
                 .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_100 = !MaterialCard(
+        val JEWEL_100: MaterialCard = !MaterialCard(
             "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
             PoemList(0)
                 .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_500 = !MaterialCard(
+        val JEWEL_500: MaterialCard = !MaterialCard(
             "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
             PoemList(0)
                 .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_1000 = !MaterialCard(
+        val JEWEL_1000: MaterialCard = !MaterialCard(
             "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
             PoemList(0)
                 .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_5000 = !MaterialCard(
+        val JEWEL_5000: MaterialCard = !MaterialCard(
             "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
             PoemList(0)
                 .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
             soulStreamContainable = true,
             creator = { Item(it.fireResistant()) },
         )
-        val JEWEL_10000 = !MaterialCard(
+        val JEWEL_10000: MaterialCard = !MaterialCard(
             "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
             PoemList(0)
                 .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
@@ -738,7 +772,7 @@ class MaterialCard(
             creator = { Item(it.fireResistant()) },
         )
 
-        val APOSTLE_WAND = !MaterialCard(
+        val APOSTLE_WAND: MaterialCard = !MaterialCard(
             "apostle_wand", "Apostle's Wand", "使徒のステッキ",
             PoemList(2).poem("The key to the fairy world", "妖精界への鍵。"),
             creator = { ApostleWandItem(it.stacksTo(1)) },
@@ -751,7 +785,7 @@ class MaterialCard(
             } on MIRAGE_STEM.item
         }
 
-        val RUM = !MaterialCard(
+        val RUM: MaterialCard = !MaterialCard(
             "rum", "Rum", "ラム酒",
             null,
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
@@ -780,7 +814,7 @@ class MaterialCard(
                 FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.SUGAR_CANE
             }
         }
-        val CIDRE = !MaterialCard(
+        val CIDRE: MaterialCard = !MaterialCard(
             "cidre", "Cidre", "シードル",
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
@@ -807,7 +841,7 @@ class MaterialCard(
                 FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + Items.APPLE
             }
         }
-        val FAIRY_LIQUEUR = !MaterialCard(
+        val FAIRY_LIQUEUR: MaterialCard = !MaterialCard(
             "fairy_liqueur", "Fairy Liqueur", "妖精のリキュール",
             PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
@@ -835,7 +869,7 @@ class MaterialCard(
                 FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + HAIMEVISKA_SAP.item()
             }
         }
-        val VEROPEDELIQUORA = !MaterialCard(
+        val VEROPEDELIQUORA: MaterialCard = !MaterialCard(
             "veropedeliquora", "Veropedeliquora", "ヴェロペデリコラ",
             PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
@@ -863,7 +897,7 @@ class MaterialCard(
                 FoodIngredientsRegistry.registry[item()] = FoodIngredients() + FoodIngredientCategoryCard.ALCOHOL + VEROPEDA_BERRIES.item()
             }
         }
-        val POISON = !MaterialCard(
+        val POISON: MaterialCard = !MaterialCard(
             "poison", "Poison", "毒薬",
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
@@ -876,6 +910,18 @@ class MaterialCard(
                     .build()
             },
             creator = { DrinkItem(it) },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { FermentationBarrelCard.advancement.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("May Contain Trace Toxic", "本品は毒物と共通の設備で製造してます"),
+                    description = EnJa("Produce poisons using a Fermentation Barrel", "醸造樽で毒薬を作る"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementType.GOAL,
+                    fairyJewels = 300,
+                )
+            },
         ) {
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,

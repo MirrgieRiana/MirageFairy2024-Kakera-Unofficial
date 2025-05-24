@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:chaos_cube",
+  "parent": "miragefairy2024:phantom_flower",
   "criteria": {
-    "has_miragidian": {
+    "has_phantom_drop": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian"
+            "items": "miragefairy2024:phantom_drop"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.miragidian.description"
+      "translate": "advancements.miragefairy2024.phantom_drop.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:miragidian"
+      "id": "miragefairy2024:phantom_drop"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.miragidian.title"
+      "translate": "advancements.miragefairy2024.phantom_drop.title"
     }
   },
   "requirements": [
     [
-      "has_miragidian"
+      "has_phantom_drop"
     ]
   ],
   "rewards": {
