@@ -282,7 +282,7 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Sub { AuraReflectorFurnaceCard.advancement.await() },
+                    context = AdvancementCard.Sub { AuraReflectorFurnaceCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Solid Soul", "固形の魂"), // TODO 魂塊
                     description = EnJa("Use the Aura Reflector Furnace to refine Mirage Flour", "オーラ反射炉を使ってミラージュの花粉を製錬する"),
@@ -913,7 +913,7 @@ class MaterialCard(
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
-                    context = AdvancementCard.Sub { FermentationBarrelCard.advancement.await() },
+                    context = AdvancementCard.Sub { FermentationBarrelCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("May Contain Trace Toxic", "本品は毒物と共通の設備で製造してます"),
                     description = EnJa("Produce poisons using a Fermentation Barrel", "醸造樽で毒薬を作る"),

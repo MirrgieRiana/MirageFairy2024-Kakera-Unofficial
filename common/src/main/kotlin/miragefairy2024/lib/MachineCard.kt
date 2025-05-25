@@ -1,6 +1,7 @@
 package miragefairy2024.lib
 
 import miragefairy2024.ModContext
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.Registration
 import miragefairy2024.util.dummyUnitStreamCodec
 import miragefairy2024.util.register
@@ -118,11 +119,18 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
     }
 
 
+    // Advancement
+
+    open fun createAdvancement(): AdvancementCard? = null
+    val advancement = createAdvancement()
+
+
     context(ModContext)
     open fun init() {
         block.register()
         blockEntityType.register()
         item.register()
         screenHandlerType.register()
+        advancement?.init()
     }
 }

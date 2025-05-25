@@ -51,7 +51,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
 
     override val recipeType = FermentationBarrelRecipeCard.type
 
-    val advancement = AdvancementCard(
+    override fun createAdvancement() = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { MaterialCard.HAIMEVISKA_ROSIN.advancement!!.await() },
         icon = { item().createItemStack() },
@@ -77,8 +77,6 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
             define('R', MaterialCard.HAIMEVISKA_ROSIN.item())
             define('I', Items.IRON_NUGGET)
         } on MaterialCard.HAIMEVISKA_ROSIN.item
-
-        advancement.init()
     }
 }
 

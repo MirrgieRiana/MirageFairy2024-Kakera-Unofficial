@@ -78,7 +78,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
     override val recipeType = AuraReflectorFurnaceRecipeCard.type
 
-    val advancement = AdvancementCard(
+    override fun createAdvancement() = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { MaterialCard.XARPITE.advancement!!.await() },
         icon = { item().createItemStack() },
@@ -105,8 +105,6 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
             define('F', Items.FURNACE)
             define('X', MaterialCard.XARPITE.item())
         } on MaterialCard.XARPITE.item
-
-        advancement.init()
     }
 
     context(ModContext)

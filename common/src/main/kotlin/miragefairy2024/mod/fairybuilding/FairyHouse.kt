@@ -69,7 +69,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
     override val collectingFolia = 2_000
     override val maxFolia = 4_000
 
-    val advancement = AdvancementCard(
+    override fun createAdvancement() = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { MaterialCard.FAIRY_CRYSTAL.advancement!!.await() },
         icon = { item().createItemStack() },
@@ -94,7 +94,6 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             define('R', ItemTags.WOODEN_DOORS)
             define('*', MaterialCard.FAIRY_CRYSTAL.item())
         } on MaterialCard.FAIRY_CRYSTAL.item
-        advancement.init()
     }
 }
 
