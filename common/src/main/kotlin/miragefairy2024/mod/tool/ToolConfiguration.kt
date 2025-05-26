@@ -98,6 +98,7 @@ abstract class ToolConfiguration {
     var magicMiningDamage = 1.0
     val descriptions = mutableListOf<Poem>()
     var hasGlint = false
+    var fireResistant = false
     val modifyItemEnchantmentsHandlers = mutableListOf<ModifyItemEnchantmentsHandler>()
 
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()

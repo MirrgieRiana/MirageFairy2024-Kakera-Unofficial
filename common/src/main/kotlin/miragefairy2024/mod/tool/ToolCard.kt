@@ -13,6 +13,7 @@ import miragefairy2024.mod.tool.effects.areaMining
 import miragefairy2024.mod.tool.effects.collection
 import miragefairy2024.mod.tool.effects.cutAll
 import miragefairy2024.mod.tool.effects.enchantment
+import miragefairy2024.mod.tool.effects.fireResistant
 import miragefairy2024.mod.tool.effects.glint
 import miragefairy2024.mod.tool.effects.mineAll
 import miragefairy2024.mod.tool.effects.obtainFairy
@@ -499,6 +500,7 @@ class ToolCard(
             }
 
             FairyToolProperties(Tool(rules, 1F, configuration.miningDamage))
+                .let { if (configuration.fireResistant) it.fireResistant() else it }
         })
     }
 
