@@ -165,7 +165,7 @@ object WeatheredAncientRemnantsCard {
                 listOf(
                     StructureSet.StructureSelectionEntry(Registries.STRUCTURE[structureKey], 1),
                 ),
-                RandomSpreadStructurePlacement(16, 8, SpreadType.LINEAR, 94857624),
+                RandomSpreadStructurePlacement(32, 8, SpreadType.LINEAR, 94857624),
             )
         }
 
