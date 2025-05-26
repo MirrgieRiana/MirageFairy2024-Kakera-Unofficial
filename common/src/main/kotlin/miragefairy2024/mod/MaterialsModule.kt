@@ -96,6 +96,7 @@ class MaterialCard(
     val poemList: PoemList?,
     val fuelValue: Int? = null,
     val soulStreamContainable: Boolean = false,
+    val fireResistant: Boolean = false,
     val foodComponentCreator: (suspend () -> FoodComponent)? = null,
     val recipeRemainder: Item? = null,
     val creator: (Item.Properties) -> Item = ::Item,
@@ -580,8 +581,7 @@ class MaterialCard(
             PoemList(1)
                 .poem("poem1", "The fairy of the fairy of the fairy", "妖精の妖精の妖精の妖精の妖精の妖精の妖精")
                 .poem("poem2", "of the fairy of the fairy of the f", "の妖精の妖精の妖精の妖精の妖精の妖精の妖"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) }
+            soulStreamContainable = true, fireResistant = true,
             // TODO 用途
         )
 
@@ -639,136 +639,127 @@ class MaterialCard(
             PoemList(0)
                 .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(1, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(1, it) },
         )
         val MINA_5: MaterialCard = !MaterialCard(
             "mina_5", "5 Mina", "5ミナ",
             PoemList(0)
                 .poem("Fairy snack", "ご縁があるよ")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(5, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(5, it) },
         )
         val MINA_10: MaterialCard = !MaterialCard(
             "mina_10", "10 Mina", "10ミナ",
             PoemList(0)
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(10, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(10, it) },
         )
         val MINA_50: MaterialCard = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
             PoemList(0)
                 .poem("The Society failed to replicate this.", "形而上学的有機結晶")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(50, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(50, it) },
         )
         val MINA_100: MaterialCard = !MaterialCard(
             "mina_100", "100 Mina", "100ミナ",
             PoemList(0)
                 .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(100, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(100, it) },
         )
         val MINA_500: MaterialCard = !MaterialCard(
             "mina_500", "500 Mina", "500ミナ",
             PoemList(0)
                 .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(500, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(500, it) },
         )
         val MINA_1000: MaterialCard = !MaterialCard(
             "mina_1000", "1000 Mina", "1000ミナ",
             PoemList(0)
                 .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(1000, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(1000, it) },
         )
         val MINA_5000: MaterialCard = !MaterialCard(
             "mina_5000", "5000 Mina", "5000ミナ",
             PoemList(0)
                 .poem("The price of a soul.", "魂の値段。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(5000, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(5000, it) },
         )
         val MINA_10000: MaterialCard = !MaterialCard(
             "mina_10000", "10000 Mina", "10000ミナ",
             PoemList(0)
                 .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
-            soulStreamContainable = true,
-            creator = { MinaItem(10000, it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
+            creator = { MinaItem(10000, it) },
         )
 
         val JEWEL_1: MaterialCard = !MaterialCard(
             "jewel_1", "1 Fairy Jewel", "1フェアリージュエル",
             PoemList(0)
                 .poem("Long ago, fairies were the nectar.", "その昔、妖精は木の蜜だった。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_5: MaterialCard = !MaterialCard(
             "jewel_5", "5 Fairy Jewel", "5フェアリージュエル",
             PoemList(0)
                 .poem("The nectar bloomed from the ground.", "木の蜜は地に触れ、花を咲かせた。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_10: MaterialCard = !MaterialCard(
             "jewel_10", "10 Fairy Jewel", "10フェアリージュエル",
             PoemList(0)
                 .poem("The wind, sky, and sun laughed.", "風と空と太陽が笑った。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_50: MaterialCard = !MaterialCard(
             "jewel_50", "50 Fairy Jewel", "50フェアリージュエル",
             PoemList(0)
                 .poem("Fairies simply drifted along.", "妖精はただ漂っていた。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_100: MaterialCard = !MaterialCard(
             "jewel_100", "100 Fairy Jewel", "100フェアリージュエル",
             PoemList(0)
                 .poem("One day, humans touched fairies.", "その日、人が現れ、妖精に触れた。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_500: MaterialCard = !MaterialCard(
             "jewel_500", "500 Fairy Jewel", "500フェアリージュエル",
             PoemList(0)
                 .poem("Fairies took form and learned emotion.", "妖精は妖精の姿へとなり、感情を知った。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_1000: MaterialCard = !MaterialCard(
             "jewel_1000", "1000 Fairy Jewel", "1000フェアリージュエル",
             PoemList(0)
                 .poem("Fairies learned joy and pain.", "妖精は悦びと痛みを知った。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_5000: MaterialCard = !MaterialCard(
             "jewel_5000", "5000 Fairy Jewel", "5000フェアリージュエル",
             PoemList(0)
                 .poem("Humans saw the fairies and felt relief.", "人は妖精を見て、安堵した。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
         val JEWEL_10000: MaterialCard = !MaterialCard(
             "jewel_10000", "10000 Fairy Jewel", "10000フェアリージュエル",
             PoemList(0)
                 .poem("Thus, humans lost their form.", "こうして、人は人の姿を失った。"),
-            soulStreamContainable = true,
-            creator = { Item(it.fireResistant()) },
+            soulStreamContainable = true, fireResistant = true,
         )
 
         val APOSTLE_WAND: MaterialCard = !MaterialCard(
@@ -959,6 +950,7 @@ class MaterialCard(
         Item.Properties()
             .let { foodComponentCreator?.let { c -> it.food(c()) } ?: it }
             .let { if (recipeRemainder != null) it.craftRemainder(recipeRemainder) else it }
+            .let { if (fireResistant) it.fireResistant() else it }
             .let { creator(it) }
     }
     val advancement = advancementCreator?.invoke(this, identifier)
