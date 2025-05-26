@@ -27,6 +27,7 @@ import miragefairy2024.mod.tool.items.FairyScytheConfiguration
 import miragefairy2024.mod.tool.items.FairyShootingStaffConfiguration
 import miragefairy2024.mod.tool.items.FairyShovelConfiguration
 import miragefairy2024.mod.tool.items.FairySwordConfiguration
+import miragefairy2024.mod.tool.items.FairyToolProperties
 import miragefairy2024.mod.tool.items.ScytheItem
 import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.EnJa
@@ -497,7 +498,7 @@ class ToolCard(
                 rules += Tool.Rule.minesAndDrops(it, miningSpeedMultiplier)
             }
 
-            Tool(rules, 1F, configuration.miningDamage)
+            FairyToolProperties(Tool(rules, 1F, configuration.miningDamage))
         })
     }
 

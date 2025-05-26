@@ -26,9 +26,9 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
@@ -45,7 +45,7 @@ class FairyShootingStaffConfiguration(
     var basePower: Float,
     var baseMaxDistance: Float,
 ) : ToolConfiguration() {
-    override fun createItem(tool: Tool) = FairyShootingStaffItem(this, FairyToolProperties(tool))
+    override fun createItem(properties: Item.Properties) = FairyShootingStaffItem(this, properties)
 
     init {
         this.tags += MAGIC_WEAPON_ITEM_TAG

@@ -12,8 +12,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
@@ -25,7 +25,7 @@ import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
-    override fun createItem(tool: Tool) = FairyKnifeItem(this, FairyToolProperties(tool))
+    override fun createItem(properties: Item.Properties) = FairyKnifeItem(this, properties)
 
     init {
         this.attackDamage = 2.0F

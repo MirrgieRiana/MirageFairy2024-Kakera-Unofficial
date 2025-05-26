@@ -22,10 +22,10 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.SwordItem
 import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
@@ -44,7 +44,7 @@ class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     private val range: Int = 1
 ) : FairyMiningToolConfiguration() {
-    override fun createItem(tool: Tool) = FairyScytheItem(this, range, FairyToolProperties(tool))
+    override fun createItem(properties: Item.Properties) = FairyScytheItem(this, range, properties)
 
     init {
         this.attackDamage = 4.0F

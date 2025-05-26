@@ -25,7 +25,6 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.component.Tool
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -106,7 +105,7 @@ abstract class ToolConfiguration {
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
     val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
 
-    abstract fun createItem(tool: Tool): Item
+    abstract fun createItem(properties: Item.Properties): Item
 
     context(ModContext)
     fun init(card: ToolCard) {
