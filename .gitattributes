@@ -1,21 +1,22 @@
-*.bash          text eol=lf
-*.bat           text eol=crlf
-*.jar          -text
-*.java          text eol=lf
-*.json          text eol=lf
-*.kt            text eol=lf
-*.kts           text eol=lf
-*.mcmeta        text eol=lf
-*.md            text eol=lf
-*.ogg          -text
-*.pdn          -text
-*.png          -text
-*.properties    text eol=lf
-*.toml          text eol=lf
-*.wav          -text
-*.xml           text eol=lf
-*.yml           text eol=lf
-.gitattributes  text eol=lf
-.gitignore      text eol=lf
-LICENSE         text eol=lf
-gradlew         text eol=lf
+*.accesswidener  text eol=lf
+*.bash           text eol=lf
+*.bat            text eol=crlf
+*.jar           -text
+*.java           text eol=lf
+*.json           text eol=lf
+*.kt             text eol=lf
+*.kts            text eol=lf
+*.mcmeta         text eol=lf
+*.md             text eol=lf
+*.ogg           -text
+*.pdn           -text
+*.png           -text
+*.properties     text eol=lf
+*.toml           text eol=lf
+*.wav           -text
+*.xml            text eol=lf
+*.yml            text eol=lf
+.gitattributes   text eol=lf
+.gitignore       text eol=lf
+LICENSE          text eol=lf
+gradlew          text eol=lf
