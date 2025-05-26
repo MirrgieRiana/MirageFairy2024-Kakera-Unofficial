@@ -30,7 +30,10 @@ import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.CaveVines
+import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.entity.player.Player as PlayerEntity
@@ -107,8 +110,16 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
                         val targetBlockPos = blockPos.offset(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
                         val targetBlock = targetBlockState.block
-                        if (targetBlock is MagicPlantBlock) {
-                            if (targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)) effective = true
+                        when (targetBlock) {
+                            is MagicPlantBlock -> {
+                                val result = targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)
+                                if (result) effective = true
+                            }
+
+                            is SweetBerryBushBlock, is CaveVines -> {
+                                val result = targetBlockState.useWithoutItem(world, user, BlockHitResult(blockHitResult.location.add(x.toDouble(), y.toDouble(), z.toDouble()), blockHitResult.direction, targetBlockPos, false))
+                                if (result.consumesAction()) effective = true
+                            }
                         }
                     }
                 }
