@@ -8,6 +8,7 @@ import miragefairy2024.mod.FairyForestBiomeCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -118,7 +119,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
         name = EnJa("Selective Pressure of Cuteness", "かわいいの淘汰圧"),
         description = EnJa("Search for the Phantom Flower hidden in the Fairy Forest", "妖精の森に隠れている幻花ファントムを探す"),
         criterion = AdvancementCard.hasItem { card.item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.GOAL,
     )
 
     context(ModContext)

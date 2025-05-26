@@ -66,6 +66,20 @@ object FairyJewelsLootTableHelper {
     }
 }
 
+enum class AdvancementCardType(
+    val type: AdvancementType,
+    val announceChat: Boolean,
+    val showToast: Boolean,
+    val fairyJewels: Int?,
+) {
+    SILENT(AdvancementType.TASK, false, false, null),
+    TOAST_ONLY(AdvancementType.TASK, false, true, null),
+    TOAST_AND_JEWELS(AdvancementType.TASK, false, true, 50),
+    NORMAL(AdvancementType.TASK, true, true, 100),
+    GOAL(AdvancementType.GOAL, true, true, 300),
+    CHALLENGE(AdvancementType.CHALLENGE, true, true, 1000),
+}
+
 class AdvancementCard(
     private val identifier: ResourceLocation,
     private val context: Context,
@@ -73,9 +87,7 @@ class AdvancementCard(
     name: EnJa,
     description: EnJa,
     private val criterion: (HolderLookup.Provider) -> Pair<String, Criterion<*>>,
-    private val fairyJewels: Int? = null,
-    private val type: AdvancementType = AdvancementType.TASK,
-    private val silent: Boolean = false,
+    private val type: AdvancementCardType,
 ) {
     companion object {
         fun hasAnyItem(): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
@@ -155,7 +167,7 @@ class AdvancementCard(
         nameTranslation.enJa()
         descriptionTranslation.enJa()
 
-        val lootTableId = fairyJewels?.let { FairyJewelsLootTableHelper.getOrInit(it) }
+        val lootTableId = type.fairyJewels?.let { FairyJewelsLootTableHelper.getOrInit(it) }
         DataGenerationEvents.onGenerateAdvancement { registries, writer ->
             val advancement = Advancement.Builder.advancement()
                 .let { if (context is Sub) it.parent(context.parent()) else it }
@@ -164,10 +176,10 @@ class AdvancementCard(
                     text { nameTranslation() },
                     text { descriptionTranslation() },
                     if (context is Root) context.texture else null,
-                    type,
-                    !silent,
-                    !silent,
-                    false
+                    type.type,
+                    type.showToast,
+                    type.announceChat,
+                    false,
                 )
                 .let {
                     val pair = criterion(registries)

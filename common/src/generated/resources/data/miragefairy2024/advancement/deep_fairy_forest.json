@@ -19,6 +19,7 @@
     }
   },
   "display": {
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.miragefairy2024.deep_fairy_forest.description"
     },
@@ -35,10 +36,5 @@
       "deep_fairy_forest"
     ]
   ],
-  "rewards": {
-    "loot": [
-      "miragefairy2024:jewels_100"
-    ]
-  },
   "sends_telemetry_event": true
 }

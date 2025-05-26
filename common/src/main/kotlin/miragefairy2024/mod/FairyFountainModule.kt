@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.Chance
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -77,7 +78,7 @@ object FairyStatueFountainCard {
         name = EnJa("The Desire for Rerolls", "リセマラの誘い"),
         description = EnJa("Throw a Fairy Jewel into a fairy statue fountain", "妖精の像の泉にフェアリージュエルを投げ込もう"),
         criterion = AdvancementCard.hasItem { item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.GOAL,
     )
 }
 

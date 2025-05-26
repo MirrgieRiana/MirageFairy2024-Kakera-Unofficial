@@ -19,6 +19,7 @@
     }
   },
   "display": {
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.miragefairy2024.weathered_ancient_remnants.description"
     },
@@ -37,7 +38,7 @@
   ],
   "rewards": {
     "loot": [
-      "miragefairy2024:jewels_100"
+      "miragefairy2024:jewels_50"
     ]
   },
   "sends_telemetry_event": true

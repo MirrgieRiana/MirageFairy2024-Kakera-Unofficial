@@ -8,6 +8,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -121,7 +122,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
         name = EnJa("Even Carbon Freezes", "炭素も凍る季節"),
         description = EnJa("Search for Diamond Luminaria in a cold biome", "寒冷バイオームでダイヤモンドルミナリアを探す"),
         criterion = AdvancementCard.hasItem { card.item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

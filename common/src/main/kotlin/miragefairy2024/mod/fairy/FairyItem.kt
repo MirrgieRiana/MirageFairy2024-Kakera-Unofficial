@@ -20,6 +20,7 @@ import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
@@ -53,7 +54,6 @@ import miragefairy2024.util.times
 import miragefairy2024.util.toHolderSetCodec
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.advancements.critereon.ItemSubPredicate
@@ -375,7 +375,7 @@ val rare10Advancement = AdvancementCard(
             )
         )
     },
-    fairyJewels = 100,
+    type = AdvancementCardType.NORMAL,
 )
 val timiaAdvancement = AdvancementCard(
     identifier = MotifCard.TIME.identifier,
@@ -393,8 +393,7 @@ val timiaAdvancement = AdvancementCard(
             )
         )
     },
-    fairyJewels = 1000,
-    type = AdvancementType.CHALLENGE,
+    type = AdvancementCardType.CHALLENGE,
 )
 
 

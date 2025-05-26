@@ -6,6 +6,7 @@ import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -62,7 +63,7 @@ object DripstoneCavesRuinCard {
         name = EnJa("The Ancient Future Civ", "古代の未来文明"),
         description = EnJa("Unearth a map from the Weathered Ancient Remnants and explore the Dripstone Cave Ruin", "風化した旧世代の遺構から地図を発掘し、鍾乳洞の遺跡を訪れる"),
         criterion = AdvancementCard.visit(key),
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

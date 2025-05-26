@@ -7,6 +7,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.Registration
@@ -85,7 +86,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
         name = EnJa("Polymerization of the Ego", "自我の重合"),
         description = EnJa("Build an Aura Reflector Furnace and feed it with soul fuel", "オーラ反射炉を作って魂の燃料をくべよう"),
         criterion = AdvancementCard.hasItem(item),
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

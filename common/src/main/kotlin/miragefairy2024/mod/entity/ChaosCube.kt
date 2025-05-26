@@ -13,6 +13,7 @@ import miragefairy2024.mod.particle.MagicSquareParticlePacket
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.mod.structure.DripstoneCavesRuinCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -93,7 +94,7 @@ object ChaosCubeCard {
         name = EnJa("Magical Control Program", "魔導制御プログラム"),
         description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Cave Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
         criterion = AdvancementCard.kill(entityType),
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

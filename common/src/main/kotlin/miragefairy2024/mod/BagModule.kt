@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
@@ -101,7 +102,7 @@ enum class BagCard(
             name = EnJa("Explore the Overworld!!", "インベに余裕があるなら探検しよう！！"),
             description = EnJa("Craft a bag that can store a decent number of specific items", "特定のアイテムをそこそこ収納できるカバンを作成する"),
             criterion = AdvancementCard.hasItemTag { BAG_ITEM_TAG },
-            fairyJewels = 100,
+            type = AdvancementCardType.GOAL,
         )
     }
 

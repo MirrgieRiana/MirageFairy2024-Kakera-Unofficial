@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.count
@@ -131,7 +132,7 @@ object MirageFlowerConfiguration : SimpleMagicPlantConfiguration<MirageFlowerCar
         //name = EnJa("Terraformer of the Fantasy World", "幻想世界のテラフォーマー"), // TODO どこかで使う
         description = EnJa("Find the Mirage flower", "妖花ミラージュを摘もう"),
         criterion = AdvancementCard.hasItem { card.item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

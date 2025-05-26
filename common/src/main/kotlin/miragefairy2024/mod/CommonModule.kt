@@ -8,6 +8,7 @@ import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.platformProxy
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.createItemStack
@@ -33,8 +34,7 @@ val rootAdvancement = AdvancementCard(
     name = EnJa("MF24KU", "MF24KU"),
     description = EnJa("The Noisy Land of Tertia", "かしましきテルティアの地"),
     criterion = AdvancementCard.hasAnyItem(),
-    fairyJewels = 100,
-    silent = true,
+    type = AdvancementCardType.SILENT,
 )
 
 context(ModContext)

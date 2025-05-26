@@ -7,6 +7,7 @@ import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.mod.tool.ToolCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemLootPoolEntry
 import miragefairy2024.util.LootPool
@@ -70,7 +71,7 @@ object WeatheredAncientRemnantsCard {
         name = EnJa("Spacefaring Humanity's Scars", "宇宙人類の爪痕"),
         description = EnJa("Discover Weathered Ancient Remnants left on the surface", "地上に遺された風化した旧世代の遺構を発見する"),
         criterion = AdvancementCard.visit(key),
-        fairyJewels = 100,
+        type = AdvancementCardType.TOAST_AND_JEWELS,
     )
 
     context(ModContext)

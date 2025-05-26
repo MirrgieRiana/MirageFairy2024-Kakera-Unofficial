@@ -22,6 +22,7 @@ import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.SpecialRecipeResult
@@ -57,7 +58,6 @@ import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.text
 import miragefairy2024.util.toRomanText
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.advancements.AdvancementType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -118,7 +118,7 @@ class MaterialCard(
                     name = EnJa("Aura-Resistant Plastic", "耐霊性プラスチック"),
                     description = EnJa("Pick up the Xarpite lying around nearby", "その辺に落ちている紅天石を拾う"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.TOAST_AND_JEWELS,
                 )
             },
             // TODO 使えるワード：牢獄
@@ -137,7 +137,7 @@ class MaterialCard(
                     name = EnJa("The Unknown World of Magic", "魔法の世界"),
                     description = EnJa("Mine the Miranagite underground", "地中の蒼天石を採掘する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.TOAST_AND_JEWELS,
                 )
             },
             // TODO The origin of the universe 無限の深淵、破壊と再生の輪廻。
@@ -164,7 +164,7 @@ class MaterialCard(
                     name = EnJa("The World of Science", "知られざる科学の世界"),
                     description = EnJa("Obtain Chaos Stone from Weathered Ancient Remnants and other locations around the world", "風化した旧世代の遺構やその他の世界中の場所にある混沌の石を入手する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         ) {
@@ -228,7 +228,7 @@ class MaterialCard(
                     name = EnJa("Organic Amorphous Material", "水晶の飴"),
                     description = EnJa("Cultivate Mirage flowers and harvest a rare item", "妖花ミラージュを栽培し希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         )
@@ -257,7 +257,7 @@ class MaterialCard(
                     name = EnJa("Materialized Fantasy", "植物が想像できることは植物が実現する"),
                     description = EnJa("Obtain Phantom Drop, rarely harvested from the Phantom Flower", "幻花ファントムから稀に収穫できる幻想の雫を入手する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         )
@@ -287,7 +287,7 @@ class MaterialCard(
                     name = EnJa("Solid Soul", "固形の魂"), // TODO 魂塊
                     description = EnJa("Use the Aura Reflector Furnace to refine Mirage Flour", "オーラ反射炉を使ってミラージュの花粉を製錬する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         )
@@ -312,7 +312,7 @@ class MaterialCard(
                     name = EnJa("Alloy with Plants", "植物との合金"),
                     description = EnJa("Create Lilagium using Miragium, lilac, and other materials", "ミラジウム、ライラックおよびその他の素材からリラジウムを作る"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.GOAL,
                 )
             },
         ) {
@@ -353,7 +353,7 @@ class MaterialCard(
                     name = EnJa("Ancient Stainless Alloy", "古代のステンレス"),
                     description = EnJa("Process Etheroballistic Bolt Fragments and sinter them using an Aura Reflector Furnace", "エテロバリスティック弾の破片を加工し、オーラ反射炉で焼結する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         )
@@ -392,7 +392,7 @@ class MaterialCard(
                     name = EnJa("Etheroluminescence", "エテロルミネッセンス"),
                     description = EnJa("Obtain Luminite, a rare item from plants of Luminariaceae family", "ルミナリア科植物のレアドロップであるルミナイトを手に入れる"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         )
@@ -408,7 +408,7 @@ class MaterialCard(
                     name = EnJa("Ambivalence in Glass", "ガラスの中のアンビバレンス"),
                     description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Miragium, Luminite, and Echo Shard", "ミラジウム、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         ) {
@@ -457,7 +457,7 @@ class MaterialCard(
                     name = EnJa("The Taste of Nectar", "蜜の味"),
                     description = EnJa("Obtain Haimeviska Rosin, rarely harvested from the Dripping Haimeviska Logs", "滴るハイメヴィスカの原木から稀に採取される妖精の木の涙を入手する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 100,
+                    type = AdvancementCardType.NORMAL,
                 )
             },
         ) {
@@ -547,8 +547,7 @@ class MaterialCard(
                     name = EnJa("Warping Space", "ゆがむ空間"),
                     description = EnJa("Condense Mirage Flour into Mirage Flour of Universe", "ミラージュの花粉を宇宙のミラージュの花粉まで濃縮する"),
                     criterion = AdvancementCard.hasItem(item),
-                    fairyJewels = 1000,
-                    type = AdvancementType.CHALLENGE,
+                    type = AdvancementCardType.CHALLENGE,
                 )
             }
         ) {
@@ -918,8 +917,7 @@ class MaterialCard(
                     name = EnJa("May Contain Trace Toxic", "本品は毒物と共通の設備で製造してます"),
                     description = EnJa("Produce poisons using a Fermentation Barrel", "醸造樽で毒薬を作る"),
                     criterion = AdvancementCard.hasItem(item),
-                    type = AdvancementType.GOAL,
-                    fairyJewels = 300,
+                    type = AdvancementCardType.GOAL,
                 )
             },
         ) {

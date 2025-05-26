@@ -7,6 +7,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.collectItem
@@ -94,7 +95,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
         name = EnJa("Cleaner Driven by Curiosity", "好奇心の収集機"),
         description = EnJa("Place four chests in the Fairy House", "妖精の家にチェストを置く"),
         criterion = AdvancementCard.hasItem { item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

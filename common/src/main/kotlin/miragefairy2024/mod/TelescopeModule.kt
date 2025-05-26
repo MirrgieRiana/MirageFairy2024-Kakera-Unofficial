@@ -9,6 +9,7 @@ import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.INSTANT_CODEC
 import miragefairy2024.util.INSTANT_STREAM_CODEC
@@ -97,7 +98,7 @@ object TelescopeCard {
         name = EnJa("The Eyes of Tertia", "第三の目"),
         description = EnJa("Craft a telescope for a daily mission", "デイリーミッションのための望遠鏡をクラフトする"),
         criterion = AdvancementCard.hasItem { item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.GOAL,
     )
 }
 

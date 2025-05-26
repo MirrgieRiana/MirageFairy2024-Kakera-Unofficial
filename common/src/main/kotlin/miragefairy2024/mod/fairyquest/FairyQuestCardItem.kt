@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -62,7 +63,7 @@ object FairyQuestCardCard {
         name = EnJa("Time Crystal Radio", "時間結晶ラジオ"),
         description = EnJa("Look for the Fairy Quest Card lying around nearby", "その辺に落ちているフェアリークエストカードを探そう"),
         criterion = AdvancementCard.hasItem { item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 }
 

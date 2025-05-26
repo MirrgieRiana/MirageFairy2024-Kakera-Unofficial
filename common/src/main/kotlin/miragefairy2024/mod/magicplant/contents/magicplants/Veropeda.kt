@@ -7,6 +7,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -118,7 +119,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
         name = EnJa("Artificial Plant Species", "人造植物"),
         description = EnJa("Harvest Veropeda the cursed grass, which grows in arid biomes and the nether", "乾燥系バイオームとネザーに分布する呪草ヴェロペダを収穫する"),
         criterion = AdvancementCard.hasItem { card.item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

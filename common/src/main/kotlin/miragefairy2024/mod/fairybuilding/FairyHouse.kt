@@ -8,6 +8,7 @@ import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
@@ -76,7 +77,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
         name = EnJa("My New Home", "新しい我が家"),
         description = EnJa("Hollow out a log to create a home for fairies", "原木をくりぬいて妖精の住み家を作ろう"),
         criterion = AdvancementCard.hasItem { item() },
-        fairyJewels = 100,
+        type = AdvancementCardType.NORMAL,
     )
 
     context(ModContext)

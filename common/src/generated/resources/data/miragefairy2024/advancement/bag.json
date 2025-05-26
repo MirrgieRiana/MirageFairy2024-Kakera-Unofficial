@@ -16,6 +16,7 @@
     "description": {
       "translate": "advancements.miragefairy2024.bag.description"
     },
+    "frame": "goal",
     "icon": {
       "count": 1,
       "id": "miragefairy2024:plant_bag"
@@ -31,7 +32,7 @@
   ],
   "rewards": {
     "loot": [
-      "miragefairy2024:jewels_100"
+      "miragefairy2024:jewels_300"
     ]
   },
   "sends_telemetry_event": true

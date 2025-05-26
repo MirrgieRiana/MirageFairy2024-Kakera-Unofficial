@@ -33,10 +33,5 @@
       "has_item"
     ]
   ],
-  "rewards": {
-    "loot": [
-      "miragefairy2024:jewels_100"
-    ]
-  },
   "sends_telemetry_event": true
 }
