@@ -136,8 +136,9 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
 
     override fun mineBlock(stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity): Boolean {
         val tool = stack.get(DataComponents.TOOL) ?: return false
-        if (!world.isClientSide && state.getDestroySpeed(world, pos) != 0.0F && tool.damagePerBlock > 0) {
-            if (miner.random.nextFloat() < 0.2F) {
+        if (!world.isClientSide && tool.damagePerBlock > 0) {
+            val damageRate = if (state.getDestroySpeed(world, pos) != 0.0F) 0.5F else 0.1F
+            if (miner.random.nextFloat() < damageRate) {
                 stack.hurtAndBreak(tool.damagePerBlock, miner, EquipmentSlot.MAINHAND)
             }
         }
