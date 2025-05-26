@@ -53,7 +53,7 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
         super.init()
 
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()) with card.block().getAgeProperty() }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()) with getAgeProperty() }
         getAgeProperty().possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * card.block().getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * card.block().getIdentifier() * "_age$age")
