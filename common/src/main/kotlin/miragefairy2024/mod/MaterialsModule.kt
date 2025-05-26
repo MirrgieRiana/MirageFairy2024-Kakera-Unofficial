@@ -331,7 +331,7 @@ class MaterialCard(
         val MIRAGIDIAN_SHARD: MaterialCard = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
             PoemList(4).poem("The great collapse 30,000 years ago", "遥か三万年前のミラジウムが見た夢。"),
-            soulStreamContainable = true,
+            soulStreamContainable = true, fireResistant = true,
         ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
@@ -345,7 +345,7 @@ class MaterialCard(
         val MIRAGIDIAN: MaterialCard = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
             PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
-            soulStreamContainable = true,
+            soulStreamContainable = true, fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -361,7 +361,7 @@ class MaterialCard(
         val ETHEROBALLISTIC_BOLT_FRAGMENT: MaterialCard = !MaterialCard(
             "etheroballistic_bolt_fragment", "Etheroballistic Bolt Fragment", "エテロバリスティック弾の破片",
             PoemList(4).poem("More abrasion resistant than lethal", "合金として生きるということ。"),
-            soulStreamContainable = true,
+            soulStreamContainable = true, fireResistant = true,
         ) {
             registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
         }

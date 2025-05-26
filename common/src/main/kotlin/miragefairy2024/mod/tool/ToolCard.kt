@@ -367,27 +367,27 @@ class ToolCard(
         val MIRAGIDIAN_PICKAXE = !ToolCard(
             "miragidian_pickaxe", EnJa("Miragidian Pickaxe", "ミラジディアンのつるはし"),
             PoemList(4).poem(EnJa("The reinforced will of the substance", "高速度鋼という名の誇り。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable(),
+            FairyPickaxeConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable().fireResistant(),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.MIRAGIDIAN.item) }
         val MIRAGIDIAN_AXE = !ToolCard(
             "miragidian_axe", EnJa("Miragidian Axe", "ミラジディアンの斧"),
             PoemList(4).poem(EnJa("The Ancient Future Relic", "古代の未来遺物。")),
-            FairyAxeConfiguration(ToolMaterialCard.MIRAGIDIAN, 5.0F, -3.0F).soulStreamContainable(),
+            FairyAxeConfiguration(ToolMaterialCard.MIRAGIDIAN, 5.0F, -3.0F).soulStreamContainable().fireResistant(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.MIRAGIDIAN.item) }
         val MIRAGIDIAN_SHOVEL = !ToolCard(
             "miragidian_shovel", EnJa("Miragidian Shovel", "ミラジディアンのシャベル"),
             PoemList(4).poem(EnJa("An alloy that will outlive humanity", "文明の光よりも堅牢な闇。")),
-            FairyShovelConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable(),
+            FairyShovelConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable().fireResistant(),
         ) { registerShovelRecipeGeneration(item, MaterialCard.MIRAGIDIAN.item) }
         val MIRAGIDIAN_HOE = !ToolCard(
             "miragidian_hoe", EnJa("Miragidian Hoe", "ミラジディアンのクワ"),
             PoemList(4).poem(EnJa("They were killed by containment targets", "宇宙人類の然程輝きのない栄光。")),
-            FairyHoeConfiguration(ToolMaterialCard.MIRAGIDIAN, -3, 0.0F).soulStreamContainable(),
+            FairyHoeConfiguration(ToolMaterialCard.MIRAGIDIAN, -3, 0.0F).soulStreamContainable().fireResistant(),
         ) { registerHoeRecipeGeneration(item, MaterialCard.MIRAGIDIAN.item) }
         val MIRAGIDIAN_SWORD = !ToolCard(
             "miragidian_sword", EnJa("Miragidian Sword", "ミラジディアンの剣"),
             PoemList(4).poem(EnJa("Watching the end of civilization.", "この星の運命を写す瞳。")),
-            FairySwordConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable(),
+            FairySwordConfiguration(ToolMaterialCard.MIRAGIDIAN).soulStreamContainable().fireResistant(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.MIRAGIDIAN.item) }
         val MIRANAGITE_KNIFE = !ToolCard(
             "miranagite_knife", EnJa("Miranagite Knife", "蒼天石のナイフ"),
