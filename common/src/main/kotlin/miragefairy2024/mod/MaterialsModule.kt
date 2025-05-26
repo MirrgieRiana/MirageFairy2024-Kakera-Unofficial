@@ -415,9 +415,9 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(MIRAGIUM_INGOT.item()) }, 1),
-                    Pair({ Ingredient.of(Items.ECHO_SHARD) }, 1),
+                    Pair({ Ingredient.of(FAIRY_CRYSTAL.item()) }, 1),
                     Pair({ Ingredient.of(LUMINITE.item()) }, 1),
+                    Pair({ Ingredient.of(Items.ECHO_SHARD) }, 1),
                 ),
                 output = { item().createItemStack() },
                 duration = 20 * 60,

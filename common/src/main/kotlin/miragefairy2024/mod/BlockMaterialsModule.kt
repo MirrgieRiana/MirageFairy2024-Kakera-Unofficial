@@ -189,9 +189,9 @@ fun initBlockMaterialsModule() {
     registerSimpleMachineRecipeGeneration(
         AuraReflectorFurnaceRecipeCard,
         inputs = listOf(
+            Pair({ Ingredient.of(MaterialCard.FAIRY_CRYSTAL.item()) }, 1),
             Pair({ Ingredient.of(MaterialCard.XARPITE.item()) }, 4),
             Pair({ Ingredient.of(MaterialCard.MIRANAGITE.item()) }, 4),
-            Pair({ Ingredient.of(MaterialCard.FAIRY_CRYSTAL.item()) }, 1),
         ),
         output = { BlockMaterialCard.AURA_STONE.item().createItemStack() },
         duration = 20 * 60,
