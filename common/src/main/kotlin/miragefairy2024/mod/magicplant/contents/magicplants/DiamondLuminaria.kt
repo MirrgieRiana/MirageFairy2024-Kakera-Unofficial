@@ -139,7 +139,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
             val placementModifiers = placementModifiers { per(32) + flower }
             Registries.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey }
+        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
 
     }
 }

@@ -144,7 +144,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
             val placementModifiers = placementModifiers { per(32) + flower }
             Registries.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
         }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey }
+        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
 
         // 地下に配置
         registerDynamicGeneration(UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
