@@ -64,6 +64,7 @@ enum class BlockMaterialCard(
     requiresTool: Boolean = false,
     dropsNothing: Boolean = false,
     restrictsSpawning: Boolean = false,
+    fireResistant: Boolean = false,
     velocityMultiplier: Float? = null,
     blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
@@ -99,7 +100,7 @@ enum class BlockMaterialCard(
     MIRAGIDIAN_BLOCK(
         "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
         PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
-        MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true,
+        MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true, fireResistant = true,
         tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
     ),
     LUMINITE_BLOCK(
@@ -144,7 +145,7 @@ enum class BlockMaterialCard(
         if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties().let { if (fireResistant) it.fireResistant() else it }) }
 }
 
 context(ModContext)
