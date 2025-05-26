@@ -1,6 +1,8 @@
 package miragefairy2024.fabric
 
 import com.google.gson.JsonElement
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -21,9 +23,12 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
+import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
+import net.minecraft.data.advancements.AdvancementProvider
+import net.minecraft.data.advancements.AdvancementSubProvider
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -35,6 +40,7 @@ import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
+import java.util.function.Consumer
 import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
 import net.minecraft.data.CachedOutput as DataWriter
 import net.minecraft.data.PackOutput as DataOutput
@@ -223,6 +229,19 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                     return CompletableFuture.allOf(*futures.toTypedArray())
                 }
             }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            AdvancementProvider(output, registriesFuture, listOf(object : AdvancementSubProvider {
+                override fun generate(registries: HolderLookup.Provider, writer: Consumer<AdvancementHolder>) {
+                    runBlocking {
+                        DataGenerationEvents.onGenerateAdvancement.fire {
+                            launch {
+                                it(registries, writer)
+                            }
+                        }
+                    }
+                }
+            }))
         }
     }
 
