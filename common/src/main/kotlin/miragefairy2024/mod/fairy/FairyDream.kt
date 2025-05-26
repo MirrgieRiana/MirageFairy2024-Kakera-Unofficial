@@ -69,6 +69,7 @@ fun initFairyDream() {
         if (server.tickCount % (20 * 5) == 0) {
             server.playerList.players.forEach { player ->
                 if (player.isSpectator) return@forEach
+                if (player.tickCount < 20 * 60) return@forEach
                 val world = player.level()
                 val random = world.random
 
