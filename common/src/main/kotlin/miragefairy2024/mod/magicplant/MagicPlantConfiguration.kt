@@ -7,6 +7,7 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -46,6 +47,8 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
     open val baseGrowth = 1.0
     abstract val drops: List<() -> Item>
 
+    open fun createAdvancement(identifier: ResourceLocation): AdvancementCard? = null
+
     context(ModContext)
     open fun init() {
 
@@ -78,6 +81,9 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         // レシピ
         card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
         card.item.registerHarvestNotation(drops)
+
+        // 進捗
+        card.advancement?.init()
 
     }
 }
