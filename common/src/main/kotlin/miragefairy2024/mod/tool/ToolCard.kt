@@ -434,12 +434,12 @@ class ToolCard(
         val XARPITE_PICKAXE = !ToolCard(
             "xarpite_pickaxe", EnJa("Xarpite Pickaxe", "紅天石のつるはし"),
             PoemList(2).poem(EnJa("Shears space using astral induction", "鉱石の魂を貪る血塗られた有機質。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.XARPITE).mineAll(),
+            FairyPickaxeConfiguration(ToolMaterialCard.XARPITE).mineAll().collection(),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.XARPITE.item) }
         val XARPITE_AXE = !ToolCard(
             "xarpite_axe", EnJa("Xarpite Axe", "紅天石の斧"),
             PoemList(2).poem(EnJa("Strip the log from the space", "空間にこびりついた丸太の除去に。")),
-            FairyAxeConfiguration(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll(),
+            FairyAxeConfiguration(ToolMaterialCard.XARPITE, 6.0F, -3.1F).cutAll().collection(),
         ) { registerAxeRecipeGeneration(item, MaterialCard.XARPITE.item) }
         val CHAOS_STONE_PICKAXE = !ToolCard(
             "chaos_stone_pickaxe", EnJa("Chaos Stone Pickaxe", "混沌のつるはし"),
