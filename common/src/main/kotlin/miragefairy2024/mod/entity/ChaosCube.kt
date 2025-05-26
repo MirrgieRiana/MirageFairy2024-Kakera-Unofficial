@@ -91,7 +91,7 @@ object ChaosCubeCard {
         context = AdvancementCard.Sub { DripstoneCavesRuinCard.advancement.await() },
         icon = { MaterialCard.ETHEROBALLISTIC_BOLT_FRAGMENT.item().createItemStack() },
         name = EnJa("Magical Control Program", "魔導制御プログラム"),
-        description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Caves Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
+        description = EnJa("Defeat the Chaos Cube that appears in the Dripstone Cave Ruin", "鍾乳洞の遺跡に出現する混沌のキューブを倒す"),
         criterion = AdvancementCard.kill(entityType),
         fairyJewels = 100,
     )
