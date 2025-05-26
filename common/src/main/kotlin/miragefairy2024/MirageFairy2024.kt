@@ -47,6 +47,7 @@ object DataGenerationEvents {
     val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateEntityLootTable = InitializationEventRegistry<((EntityType<*>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
+    val onGenerateAdvancementRewardLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateRecipe = InitializationEventRegistry<(RecipeOutput) -> Unit>()
     val onGenerateEnglishTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()
     val onGenerateJapaneseTranslation = InitializationEventRegistry<(FabricLanguageProvider.TranslationBuilder) -> Unit>()

@@ -132,6 +132,14 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val registries = registriesFuture.join()
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ADVANCEMENT_REWARD) {
+                override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
+                    DataGenerationEvents.onGenerateAdvancementRewardLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
+                }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : FabricRecipeProvider(output, registriesFuture) {
                 override fun buildRecipes(recipeOutput: RecipeOutput) = DataGenerationEvents.onGenerateRecipe.fire { it(recipeOutput) }
             }
