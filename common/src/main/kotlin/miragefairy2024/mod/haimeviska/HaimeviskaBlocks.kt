@@ -297,7 +297,7 @@ fun initHaimeviskaBlocks() {
 
     // ドロップ
     HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration { it, _ ->
-        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block(), HaimeviskaBlockCard.SAPLING.block(), 0.05F, 0.0625F, 0.083333336F, 0.1F)
+        it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block(), HaimeviskaBlockCard.SAPLING.block(), 0.05F / 4F, 0.0625F / 4F, 0.083333336F / 4F, 0.1F / 4F)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
