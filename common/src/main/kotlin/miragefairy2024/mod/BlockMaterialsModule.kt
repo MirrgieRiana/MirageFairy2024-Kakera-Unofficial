@@ -3,6 +3,8 @@ package miragefairy2024.mod
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
+import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -12,6 +14,7 @@ import miragefairy2024.util.ModelFaceData
 import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Registration
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
@@ -22,7 +25,6 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
-import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
@@ -38,6 +40,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
@@ -183,14 +186,16 @@ fun initBlockMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
 
     // 霊氣石
-    registerShapedRecipeGeneration(BlockMaterialCard.AURA_STONE.item) {
-        pattern("XMX")
-        pattern("MCM")
-        pattern("XMX")
-        define('X', MaterialCard.XARPITE.item())
-        define('M', MaterialCard.MIRANAGITE.item())
-        define('C', MaterialCard.FAIRY_CRYSTAL.item())
-    } on MaterialCard.FAIRY_CRYSTAL.item
+    registerSimpleMachineRecipeGeneration(
+        AuraReflectorFurnaceRecipeCard,
+        inputs = listOf(
+            Pair({ Ingredient.of(MaterialCard.XARPITE.item()) }, 4),
+            Pair({ Ingredient.of(MaterialCard.MIRANAGITE.item()) }, 4),
+            Pair({ Ingredient.of(MaterialCard.FAIRY_CRYSTAL.item()) }, 1),
+        ),
+        output = { BlockMaterialCard.AURA_STONE.item().createItemStack() },
+        duration = 20 * 60,
+    ) on MaterialCard.FAIRY_CRYSTAL.item
 
 }
 
