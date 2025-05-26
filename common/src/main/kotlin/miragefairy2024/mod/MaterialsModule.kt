@@ -397,7 +397,7 @@ class MaterialCard(
             },
         )
         val RESONITE_INGOT: MaterialCard = !MaterialCard(
-            "resonite_ingot", "Resonite Ingot", "共鳴石インゴット",
+            "resonite_ingot", "Resonite", "共鳴石",
             PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
             soulStreamContainable = true,
             advancementCreator = {
