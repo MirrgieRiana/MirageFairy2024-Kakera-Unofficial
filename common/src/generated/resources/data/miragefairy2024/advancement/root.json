@@ -1,11 +1,9 @@
 {
   "criteria": {
-    "has_stick": {
+    "has_item": {
       "conditions": {
         "items": [
-          {
-            "items": "minecraft:stick"
-          }
+          {}
         ]
       },
       "trigger": "minecraft:inventory_changed"
@@ -32,7 +30,7 @@
   },
   "requirements": [
     [
-      "has_stick"
+      "has_item"
     ]
   ],
   "rewards": {

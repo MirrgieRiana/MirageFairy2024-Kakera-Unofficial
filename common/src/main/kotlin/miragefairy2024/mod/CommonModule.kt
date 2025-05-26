@@ -32,7 +32,7 @@ val rootAdvancement = AdvancementCard(
     icon = { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() },
     name = EnJa("MF24KU", "MF24KU"),
     description = EnJa("The Noisy Land of Tertia", "かしましきテルティアの地"),
-    criterion = AdvancementCard.hasItem { Items.STICK },
+    criterion = AdvancementCard.hasAnyItem(),
     fairyJewels = 100,
     silent = true,
 )

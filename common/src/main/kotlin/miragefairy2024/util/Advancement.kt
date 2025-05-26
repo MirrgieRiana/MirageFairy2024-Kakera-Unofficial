@@ -78,6 +78,12 @@ class AdvancementCard(
     private val silent: Boolean = false,
 ) {
     companion object {
+        fun hasAnyItem(): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
+            return { _ ->
+                Pair("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item()))
+            }
+        }
+
         @JvmName("hasItem")
         fun hasItem(itemGetter: () -> Item): (HolderLookup.Provider) -> Pair<String, Criterion<*>> {
             return { _ ->
