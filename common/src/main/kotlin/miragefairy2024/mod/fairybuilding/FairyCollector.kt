@@ -6,9 +6,11 @@ import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.collectItem
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.int
 import miragefairy2024.util.invoke
@@ -84,6 +86,16 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
 
     override val collectingFolia = 10_000
     override val maxFolia = 20_000
+
+    override fun createAdvancement() = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { FairyHouseCard.advancement!!.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("Cleaner Driven by Curiosity", "好奇心の収集機"),
+        description = EnJa("Place four chests in the Fairy House", "妖精の家にチェストを置く"),
+        criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {

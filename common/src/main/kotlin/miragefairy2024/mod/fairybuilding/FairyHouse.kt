@@ -7,8 +7,10 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -66,6 +68,16 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
 
     override val collectingFolia = 2_000
     override val maxFolia = 4_000
+
+    override fun createAdvancement() = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { MaterialCard.FAIRY_CRYSTAL.advancement!!.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("My New Home", "新しい我が家"),
+        description = EnJa("Hollow out a log to create a home for fairies", "原木をくりぬいて妖精の住み家を作ろう"),
+        criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {

@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:weathered_ancient_remnants",
+  "criteria": {
+    "has_chaos_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:chaos_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.chaos_stone.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:chaos_stone"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.chaos_stone.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_chaos_stone"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

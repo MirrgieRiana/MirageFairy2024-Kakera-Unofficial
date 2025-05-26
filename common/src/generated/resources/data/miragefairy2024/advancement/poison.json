@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:fermentation_barrel",
+  "criteria": {
+    "has_poison": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:poison"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.poison.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:poison"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.poison.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_poison"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_300"
+    ]
+  },
+  "sends_telemetry_event": true
+}

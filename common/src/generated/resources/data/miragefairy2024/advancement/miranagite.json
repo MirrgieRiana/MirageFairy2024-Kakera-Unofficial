@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_miranagite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:miranagite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.miranagite.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:miranagite"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.miranagite.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_miranagite"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

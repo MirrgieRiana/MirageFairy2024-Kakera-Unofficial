@@ -6,8 +6,10 @@ import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
@@ -48,6 +50,16 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
     override val slots = inputSlots + outputSlots
 
     override val recipeType = FermentationBarrelRecipeCard.type
+
+    override fun createAdvancement() = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { MaterialCard.HAIMEVISKA_ROSIN.advancement!!.await() },
+        icon = { item().createItemStack() },
+        name = EnJa("The Scent of Haimeviska", "ハイメヴィスカの香り"),
+        description = EnJa("Craft a Fermentation Barrel for alcoholic beverages and certain poisons", "アルコール飲料および一部の毒物のための醸造樽を作る"),
+        criterion = AdvancementCard.hasItem(item),
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {

@@ -1,0 +1,46 @@
+{
+  "parent": "miragefairy2024:mirage_flower",
+  "criteria": {
+    "has_rare_10_fairy": {
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "miragefairy2024:fairy_rare": {
+                "min": 10
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.rare_10_fairy.description"
+    },
+    "icon": {
+      "components": {
+        "miragefairy2024:fairy_condensation": 1,
+        "miragefairy2024:fairy_motif": "miragefairy2024:sun"
+      },
+      "count": 1,
+      "id": "miragefairy2024:fairy"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.rare_10_fairy.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_rare_10_fairy"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

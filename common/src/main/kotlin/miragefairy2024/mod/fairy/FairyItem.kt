@@ -1,10 +1,13 @@
 package miragefairy2024.mod.fairy
 
+import com.mojang.serialization.Codec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.invoke
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.passiveskill.PASSIVE_SKILL_TRANSLATION
 import miragefairy2024.mod.passiveskill.PassiveSkill
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
@@ -16,6 +19,7 @@ import miragefairy2024.mod.passiveskill.collect
 import miragefairy2024.mod.passiveskill.description
 import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
@@ -46,8 +50,16 @@ import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
 import miragefairy2024.util.text
 import miragefairy2024.util.times
+import miragefairy2024.util.toHolderSetCodec
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.formatAs
+import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.critereon.InventoryChangeTrigger
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.critereon.ItemSubPredicate
+import net.minecraft.advancements.critereon.MinMaxBounds
+import net.minecraft.advancements.critereon.SingleComponentItemPredicate
+import net.minecraft.core.HolderSet
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -141,6 +153,12 @@ fun initFairyItem() {
 
     Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_motif")) { FAIRY_MOTIF_DATA_COMPONENT_TYPE }.register()
     Registration(BuiltInRegistries.DATA_COMPONENT_TYPE, MirageFairy2024.identifier("fairy_condensation")) { FAIRY_CONDENSATION_DATA_COMPONENT_TYPE }.register()
+
+    FairyMotifItemSubPredicate.INSTANCE.register()
+    FairyRareItemSubPredicate.INSTANCE.register()
+
+    rare10Advancement.init()
+    timiaAdvancement.init()
 }
 
 private fun createFairyModel() = Model {
@@ -318,6 +336,66 @@ val FAIRY_CONDENSATION_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataCompone
 
 fun ItemStack.getFairyCondensation() = this.get(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE) ?: 1
 fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
+
+
+class FairyMotifItemSubPredicate(val motif: HolderSet<Motif>) : SingleComponentItemPredicate<Motif> {
+    companion object {
+        val CODEC: Codec<FairyMotifItemSubPredicate> = motifRegistryKey.toHolderSetCodec().xmap(::FairyMotifItemSubPredicate, FairyMotifItemSubPredicate::motif)
+        val INSTANCE = Registration(BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE, MirageFairy2024.identifier("fairy_motif")) { ItemSubPredicate.Type(CODEC) }
+    }
+
+    override fun componentType() = FAIRY_MOTIF_DATA_COMPONENT_TYPE
+    override fun matches(stack: ItemStack, value: Motif) = motif.contains(motifRegistry.wrapAsHolder(value))
+}
+
+class FairyRareItemSubPredicate(val rare: MinMaxBounds.Ints) : SingleComponentItemPredicate<Motif> {
+    companion object {
+        val CODEC: Codec<FairyRareItemSubPredicate> = MinMaxBounds.Ints.CODEC.xmap(::FairyRareItemSubPredicate, FairyRareItemSubPredicate::rare)
+        val INSTANCE = Registration(BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE, MirageFairy2024.identifier("fairy_rare")) { ItemSubPredicate.Type(CODEC) }
+    }
+
+    override fun componentType() = FAIRY_MOTIF_DATA_COMPONENT_TYPE
+    override fun matches(stack: ItemStack, value: Motif) = rare.matches(value.rare)
+}
+
+
+val rare10Advancement = AdvancementCard(
+    identifier = MirageFairy2024.identifier("rare_10_fairy"),
+    context = AdvancementCard.Sub { MirageFlowerCard.advancement!!.await() },
+    icon = { MotifCard.SUN.createFairyItemStack() },
+    name = EnJa("Transcendence of Nature", "自然の超越"),
+    description = EnJa("Summon a level 10 rarity fairy", "レア度10の妖精を召喚する"),
+    criterion = {
+        Pair(
+            "has_rare_10_fairy", InventoryChangeTrigger.TriggerInstance.hasItems(
+                ItemPredicate.Builder.item().withSubPredicate(
+                    FairyRareItemSubPredicate.INSTANCE(),
+                    FairyRareItemSubPredicate(MinMaxBounds.Ints.atLeast(10)),
+                )
+            )
+        )
+    },
+    fairyJewels = 100,
+)
+val timiaAdvancement = AdvancementCard(
+    identifier = MotifCard.TIME.identifier,
+    context = AdvancementCard.Sub { MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.advancement!!.await() },
+    icon = { MotifCard.TIME.createFairyItemStack() },
+    name = EnJa("Fairy of Time", "時の妖精"),
+    description = EnJa("Summon Timia the fairy of time", "時精ティーミャを召喚する"),
+    criterion = {
+        Pair(
+            "has_time_fairy", InventoryChangeTrigger.TriggerInstance.hasItems(
+                ItemPredicate.Builder.item().withSubPredicate(
+                    FairyMotifItemSubPredicate.INSTANCE(),
+                    FairyMotifItemSubPredicate(HolderSet.direct(motifRegistry.wrapAsHolder(MotifCard.TIME))),
+                )
+            )
+        )
+    },
+    fairyJewels = 1000,
+    type = AdvancementType.CHALLENGE,
+)
 
 
 fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {

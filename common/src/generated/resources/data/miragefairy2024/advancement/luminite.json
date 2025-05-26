@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:diamond_luminaria",
+  "criteria": {
+    "has_luminite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:luminite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.luminite.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:luminite"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.luminite.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_luminite"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

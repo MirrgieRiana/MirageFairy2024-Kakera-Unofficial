@@ -4,7 +4,11 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModifyItemEnchantmentsHandler
+import miragefairy2024.mod.fairy.MotifCard
+import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.platformProxy
+import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.register
@@ -22,10 +26,24 @@ val mirageFairy2024ItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("miragefairy2024"), "MF24KU", "MF24KU",
 ) { MaterialCard.PHANTOM_DROP.item().createItemStack() }
 
+val rootAdvancement = AdvancementCard(
+    identifier = MirageFairy2024.identifier("root"),
+    context = AdvancementCard.Root(MirageFairy2024.identifier("textures/block/haimeviska_planks.png")),
+    icon = { MotifCard.MAGENTA_GLAZED_TERRACOTTA.createFairyItemStack() },
+    name = EnJa("MF24KU", "MF24KU"),
+    description = EnJa("The Noisy Land of Tertia", "かしましきテルティアの地"),
+    criterion = AdvancementCard.hasItem { Items.STICK },
+    fairyJewels = 100,
+    silent = true,
+)
+
 context(ModContext)
 fun initCommonModule() {
     mirageFairy2024ItemGroupCard.init()
+
     WaterBottleIngredient.SERIALIZER.register()
+
+    rootAdvancement.init()
 
     platformProxy!!.registerModifyItemEnchantmentsHandler { itemStack, mutableItemEnchantments, enchantmentLookup ->
         val item = itemStack.item as? ModifyItemEnchantmentsHandler ?: return@registerModifyItemEnchantmentsHandler

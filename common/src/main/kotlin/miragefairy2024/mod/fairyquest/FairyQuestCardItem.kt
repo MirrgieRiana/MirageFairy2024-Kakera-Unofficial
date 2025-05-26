@@ -5,6 +5,8 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
+import miragefairy2024.mod.rootAdvancement
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
@@ -53,6 +55,15 @@ object FairyQuestCardCard {
     val jaName = "破損したフェアリークエストカード"
     val identifier = MirageFairy2024.identifier("fairy_quest_card")
     val item = Registration(BuiltInRegistries.ITEM, identifier) { FairyQuestCardItem(Item.Properties()) }
+    val advancement = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { item().createItemStack().also { it.setFairyQuestRecipe(FairyQuestRecipeCard.VEGETATION_SURVEY) } },
+        name = EnJa("Time Crystal Radio", "時間結晶ラジオ"),
+        description = EnJa("Look for the Fairy Quest Card lying around nearby", "その辺に落ちているフェアリークエストカードを探そう"),
+        criterion = AdvancementCard.hasItem { item() },
+        fairyJewels = 100,
+    )
 }
 
 private val fairyQuestCardFairyQuestTranslation = Translation({ FairyQuestCardCard.item().descriptionId + ".format" }, "“%s”", "『%s』")
@@ -77,6 +88,7 @@ fun initFairyQuestCardItem() {
             }
         }
         card.item.enJa(EnJa(card.enName, card.jaName))
+        card.advancement.init()
     }
 
     fairyQuestCardFairyQuestTranslation.enJa()

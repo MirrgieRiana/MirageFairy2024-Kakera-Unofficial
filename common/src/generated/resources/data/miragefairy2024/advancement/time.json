@@ -1,0 +1,45 @@
+{
+  "parent": "miragefairy2024:mirage_flour_of_universe",
+  "criteria": {
+    "has_time_fairy": {
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "miragefairy2024:fairy_motif": "miragefairy2024:time"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.time.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "components": {
+        "miragefairy2024:fairy_condensation": 1,
+        "miragefairy2024:fairy_motif": "miragefairy2024:time"
+      },
+      "count": 1,
+      "id": "miragefairy2024:fairy"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.time.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_time_fairy"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_1000"
+    ]
+  },
+  "sends_telemetry_event": true
+}

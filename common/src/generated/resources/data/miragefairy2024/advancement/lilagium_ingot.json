@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:miragium_ingot",
+  "criteria": {
+    "has_lilagium_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:lilagium_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.lilagium_ingot.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:lilagium_ingot"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.lilagium_ingot.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_lilagium_ingot"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

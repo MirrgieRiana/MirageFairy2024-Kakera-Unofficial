@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:fairy_forest",
+  "criteria": {
+    "has_phantom_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:phantom_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.phantom_flower.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:phantom_flower_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.phantom_flower.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_phantom_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

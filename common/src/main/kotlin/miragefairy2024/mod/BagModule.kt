@@ -3,11 +3,14 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.FilteringSlot
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndComponentsAndCount
@@ -21,6 +24,7 @@ import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
@@ -29,11 +33,13 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
@@ -85,6 +91,18 @@ enum class BagCard(
 
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
+
+        val BAG_ITEM_TAG = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("bag"))
+
+        val bagAdvancement = AdvancementCard(
+            identifier = MirageFairy2024.identifier("bag"),
+            context = AdvancementCard.Sub { MirageFlowerCard.advancement!!.await() },
+            icon = { PLANT_BAG.item().createItemStack() },
+            name = EnJa("Explore the Overworld!!", "インベに余裕があるなら探検しよう！！"),
+            description = EnJa("Craft a bag that can store a decent number of specific items", "特定のアイテムをそこそこ収納できるカバンを作成する"),
+            criterion = AdvancementCard.hasItemTag { BAG_ITEM_TAG },
+            fairyJewels = 100,
+        )
     }
 
     val identifier = MirageFairy2024.identifier(path)
@@ -107,6 +125,7 @@ fun initBagModule() {
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION2_TRANSLATION)
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
+        card.item.registerItemTagGeneration { BagCard.BAG_ITEM_TAG }
     }
 
 
@@ -114,6 +133,8 @@ fun initBagModule() {
 
     BagCard.DESCRIPTION1_TRANSLATION.enJa()
     BagCard.DESCRIPTION2_TRANSLATION.enJa()
+
+    BagCard.bagAdvancement.init()
 
 
     registerShapedRecipeGeneration(BagCard.PLANT_BAG.item) {

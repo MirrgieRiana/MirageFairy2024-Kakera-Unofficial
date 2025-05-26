@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:mirage_flower",
+  "criteria": {
+    "has_fairy_crystal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:fairy_crystal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.fairy_crystal.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:fairy_crystal"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.fairy_crystal.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_fairy_crystal"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

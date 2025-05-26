@@ -1,0 +1,44 @@
+{
+  "criteria": {
+    "has_stick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:stick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "miragefairy2024:textures/block/haimeviska_planks.png",
+    "description": {
+      "translate": "advancements.miragefairy2024.root.description"
+    },
+    "icon": {
+      "components": {
+        "miragefairy2024:fairy_condensation": 1,
+        "miragefairy2024:fairy_motif": "miragefairy2024:magenta_glazed_terracotta"
+      },
+      "count": 1,
+      "id": "miragefairy2024:fairy"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.miragefairy2024.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_stick"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

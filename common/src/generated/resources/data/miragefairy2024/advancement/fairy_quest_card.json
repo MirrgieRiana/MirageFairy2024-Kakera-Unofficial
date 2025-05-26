@@ -1,0 +1,41 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_fairy_quest_card": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:fairy_quest_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.fairy_quest_card.description"
+    },
+    "icon": {
+      "components": {
+        "miragefairy2024:fairy_quest_recipe": "miragefairy2024:vegetation_survey"
+      },
+      "count": 1,
+      "id": "miragefairy2024:fairy_quest_card"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.fairy_quest_card.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_fairy_quest_card"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

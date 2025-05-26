@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:phantom_flower",
+  "criteria": {
+    "has_phantom_drop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:phantom_drop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.phantom_drop.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:phantom_drop"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.phantom_drop.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_phantom_drop"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

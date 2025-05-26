@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:luminite",
+  "criteria": {
+    "has_resonite_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:resonite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.resonite_ingot.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:resonite_ingot"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.resonite_ingot.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_resonite_ingot"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

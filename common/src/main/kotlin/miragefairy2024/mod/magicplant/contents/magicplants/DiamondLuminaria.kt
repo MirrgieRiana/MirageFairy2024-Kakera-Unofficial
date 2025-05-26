@@ -6,6 +6,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.rootAdvancement
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -24,6 +26,7 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -110,6 +113,16 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
 
     val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
     val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
+
+    override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { rootAdvancement.await() },
+        icon = { card.iconItem().createItemStack() },
+        name = EnJa("Even Carbon Freezes", "炭素も凍る季節"),
+        description = EnJa("Search for Diamond Luminaria in a cold biome", "寒冷バイオームでダイヤモンドルミナリアを探す"),
+        criterion = AdvancementCard.hasItem { card.item() },
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {

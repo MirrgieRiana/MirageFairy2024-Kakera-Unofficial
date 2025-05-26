@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_veropeda_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:veropeda_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.veropeda.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:veropeda_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.veropeda.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_veropeda_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

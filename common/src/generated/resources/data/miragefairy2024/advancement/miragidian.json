@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:chaos_cube",
+  "criteria": {
+    "has_miragidian": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:miragidian"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.miragidian.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:miragidian"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.miragidian.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_miragidian"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

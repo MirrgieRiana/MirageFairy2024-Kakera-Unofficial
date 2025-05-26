@@ -4,8 +4,10 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
+import miragefairy2024.mod.FairyForestBiomeCard
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
@@ -21,6 +23,7 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -107,6 +110,16 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
 
     val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
     val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
+
+    override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
+        identifier = identifier,
+        context = AdvancementCard.Sub { FairyForestBiomeCard.advancement.await() },
+        icon = { card.iconItem().createItemStack() },
+        name = EnJa("Selective Pressure of Cuteness", "かわいいの淘汰圧"),
+        description = EnJa("Search for the Phantom Flower hidden in the Fairy Forest", "妖精の森に隠れている幻花ファントムを探す"),
+        criterion = AdvancementCard.hasItem { card.item() },
+        fairyJewels = 100,
+    )
 
     context(ModContext)
     override fun init() {
