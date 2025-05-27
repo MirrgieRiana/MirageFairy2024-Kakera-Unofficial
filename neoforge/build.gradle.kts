@@ -84,6 +84,7 @@ modrinth {
     uploadFile = tasks["remapJar"]
     //gameVersions = ["1.20.2"]
     //loaders = ["neoforge"]
+    changelog.set(getChangeLog(rootProject.file("CHANGELOG.md"), rootProject.properties["mod_version"] as String))
     dependencies {
         required.project("forgified-fabric-api")
         required.project("kotlin-for-forge")
