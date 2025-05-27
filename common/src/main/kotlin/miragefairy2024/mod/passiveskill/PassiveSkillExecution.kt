@@ -46,6 +46,8 @@ fun initPassiveSkillExecution() {
     ServerTickEvents.END_SERVER_TICK.register { server ->
         if (server.tickCount % 20 == 0) {
             server.playerList.players.forEach { player ->
+                if (player.isSpectator) return@forEach
+                if (!player.isAlive) return@forEach
 
                 // 現在装備しているパッシブスキルの列挙
                 val passiveSkillProviders = player.findPassiveSkillProviders()
