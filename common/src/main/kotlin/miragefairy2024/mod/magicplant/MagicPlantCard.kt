@@ -29,12 +29,14 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBlock> {
+@Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
+abstract class MagicPlantCard<B : MagicPlantBlock> {
     companion object {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }
 
-    abstract val card: C
+    open val card = this
+    open val configuration = this
 
     abstract val blockPath: String
     abstract val blockName: EnJa
@@ -92,18 +94,12 @@ abstract class MagicPlantConfiguration<C : MagicPlantCard<B>, B : MagicPlantBloc
         card.advancement?.init()
 
     }
-}
 
-open class MagicPlantCard<B : MagicPlantBlock>(private val configuration: MagicPlantConfiguration<*, B>) {
     val blockIdentifier = MirageFairy2024.identifier(configuration.blockPath)
     val itemIdentifier = MirageFairy2024.identifier(configuration.itemPath)
     val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { configuration.createBlock() }
     private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(configuration, blockPos, blockState)
     val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockIdentifier) { BlockEntityType(::createBlockEntity, setOf(block.await()), null) }
     val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
-    val possibleTraits = configuration.possibleTraits
     val advancement = configuration.createAdvancement(blockIdentifier)
-
-    context(ModContext)
-    fun init() = configuration.init()
 }

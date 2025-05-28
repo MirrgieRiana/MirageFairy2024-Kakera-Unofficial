@@ -41,7 +41,7 @@ import net.minecraft.world.level.block.SupportType as SideShapeType
 import net.minecraft.world.level.storage.loot.LootParams as LootContextParameterSet
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams as LootContextParameters
 
-abstract class MagicPlantBlock(private val configuration: MagicPlantConfiguration<*, *>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
 
     // Block Entity
 

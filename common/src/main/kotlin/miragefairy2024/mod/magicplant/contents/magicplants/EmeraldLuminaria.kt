@@ -43,7 +43,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLuminariaCard, EmeraldLuminariaBlock>() {
+object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
     override val card get() = EmeraldLuminariaCard
 
     override val blockPath = "emerald_luminaria"
@@ -157,9 +157,7 @@ object EmeraldLuminariaConfiguration : SimpleMagicPlantConfiguration<EmeraldLumi
     }
 }
 
-object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>(EmeraldLuminariaConfiguration)
-
-class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaConfiguration, settings) {
+class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(EmeraldLuminariaCard, settings) {
     companion object {
         val CODEC: MapCodec<EmeraldLuminariaBlock> = simpleCodec(::EmeraldLuminariaBlock)
     }

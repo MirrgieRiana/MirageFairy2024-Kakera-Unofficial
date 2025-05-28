@@ -39,7 +39,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, VeropedaBlock>() {
+object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
     override val card get() = VeropedaCard
 
     override val blockPath = "veropeda"
@@ -163,9 +163,7 @@ object VeropedaConfiguration : SimpleMagicPlantConfiguration<VeropedaCard, Verop
     }
 }
 
-object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>(VeropedaConfiguration)
-
-class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaConfiguration, settings) {
+class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaCard, settings) {
     companion object {
         val CODEC: MapCodec<VeropedaBlock> = simpleCodec(::VeropedaBlock)
     }

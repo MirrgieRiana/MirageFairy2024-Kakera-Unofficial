@@ -3,7 +3,6 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.MagicPlantCard
-import miragefairy2024.mod.magicplant.MagicPlantConfiguration
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
@@ -43,7 +42,10 @@ import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
-abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : SimpleMagicPlantBlock> : MagicPlantConfiguration<C, B>() {
+abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<B>() {
+    override val card get() = this
+    override val configuration get() = this
+
     abstract val outlineShapes: List<VoxelShape>
 
     open val baseSeedGeneration = 1.0
@@ -54,6 +56,8 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
+
+    val iconItem = Registration(BuiltInRegistries.ITEM, blockIdentifier * "_icon") { Item(Item.Properties()) }
 
     context(ModContext)
     override fun init() {
@@ -76,11 +80,7 @@ abstract class SimpleMagicPlantConfiguration<C : SimpleMagicPlantCard<B>, B : Si
     }
 }
 
-abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock>(configuration: SimpleMagicPlantConfiguration<*, B>) : MagicPlantCard<B>(configuration) {
-    val iconItem = Registration(BuiltInRegistries.ITEM, blockIdentifier * "_icon") { Item(Item.Properties()) }
-}
-
-abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantConfiguration<*, *>, settings: Properties) : MagicPlantBlock(configuration, settings) {
+abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantCard<*>, settings: Properties) : MagicPlantBlock(configuration, settings) {
 
     // Property
 

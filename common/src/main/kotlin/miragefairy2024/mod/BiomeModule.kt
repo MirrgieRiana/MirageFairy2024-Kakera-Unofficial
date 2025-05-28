@@ -7,7 +7,7 @@ import miragefairy2024.ModEvents
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
-import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerConfiguration
+import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -191,7 +191,7 @@ object FairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultExtraVegetation(lookupBackedBuilder)
                 DefaultBiomeFeatures.addCommonBerryBushes(lookupBackedBuilder)
-                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerCard.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 
@@ -274,7 +274,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
                 lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
                 DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerConfiguration.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
+                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MirageFlowerCard.MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
                 lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
 

@@ -41,7 +41,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLuminariaCard, DiamondLuminariaBlock>() {
+object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
     override val card get() = DiamondLuminariaCard
 
     override val blockPath = "diamond_luminaria"
@@ -145,9 +145,7 @@ object DiamondLuminariaConfiguration : SimpleMagicPlantConfiguration<DiamondLumi
     }
 }
 
-object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>(DiamondLuminariaConfiguration)
-
-class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(DiamondLuminariaConfiguration, settings) {
+class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(DiamondLuminariaCard, settings) {
     companion object {
         val CODEC: MapCodec<DiamondLuminariaBlock> = simpleCodec(::DiamondLuminariaBlock)
     }

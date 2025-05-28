@@ -37,7 +37,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerCard, PhantomFlowerBlock>() {
+object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
     override val card get() = PhantomFlowerCard
 
     override val blockPath = "phantom_flower"
@@ -142,9 +142,7 @@ object PhantomFlowerConfiguration : SimpleMagicPlantConfiguration<PhantomFlowerC
     }
 }
 
-object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>(PhantomFlowerConfiguration)
-
-class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerConfiguration, settings) {
+class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerCard, settings) {
     companion object {
         val CODEC: MapCodec<PhantomFlowerBlock> = simpleCodec(::PhantomFlowerBlock)
     }
