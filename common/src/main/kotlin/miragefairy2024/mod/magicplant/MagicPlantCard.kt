@@ -36,15 +36,23 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     }
 
     abstract val blockPath: String
+    val blockIdentifier = MirageFairy2024.identifier(blockPath)
     abstract val blockName: EnJa
+    abstract fun getAgeProperty(): IntegerProperty
+    abstract fun createBlock(): B
+    val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { createBlock() }
+
     abstract val itemPath: String
+    val itemIdentifier = MirageFairy2024.identifier(itemPath)
     abstract val itemName: EnJa
+    val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
+
+    private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(this, blockPos, blockState)
+    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockIdentifier) { BlockEntityType(::createBlockEntity, setOf(block.await()), null) }
+
     abstract val tier: Int
     abstract val poem: EnJa
     abstract val classification: EnJa
-
-    abstract fun getAgeProperty(): IntegerProperty
-    abstract fun createBlock(): B
 
     abstract val family: ResourceLocation
     abstract val possibleTraits: Set<Trait>
@@ -53,6 +61,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     abstract val drops: List<() -> Item>
 
     open fun createAdvancement(identifier: ResourceLocation): AdvancementCard? = null
+    val advancement = createAdvancement(blockIdentifier)
 
     context(ModContext)
     open fun init() {
@@ -91,12 +100,4 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
         advancement?.init()
 
     }
-
-    val blockIdentifier = MirageFairy2024.identifier(blockPath)
-    val itemIdentifier = MirageFairy2024.identifier(itemPath)
-    val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { createBlock() }
-    private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(this, blockPos, blockState)
-    val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockIdentifier) { BlockEntityType(::createBlockEntity, setOf(block.await()), null) }
-    val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
-    val advancement = createAdvancement(blockIdentifier)
 }
