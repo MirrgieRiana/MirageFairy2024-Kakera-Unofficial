@@ -65,14 +65,14 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
         iconItem.register()
 
         // 見た目
-        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()) with getAgeProperty() }
-        getAgeProperty().possibleValues.forEach { age ->
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()) with ageProperty }
+        ageProperty.possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * block().getIdentifier() * "_age$age" }) {
                 Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * block().getIdentifier() * "_age$age")
             }
         }
         iconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) {
-            TextureMap(TextureSlot.LAYER0 to "block/magic_plant/" * block().getIdentifier() * "_age${getAgeProperty().possibleValues.max()}")
+            TextureMap(TextureSlot.LAYER0 to "block/magic_plant/" * block().getIdentifier() * "_age${ageProperty.possibleValues.max()}")
         }
 
     }

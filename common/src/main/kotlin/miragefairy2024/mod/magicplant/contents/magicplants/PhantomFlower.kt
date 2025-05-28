@@ -38,15 +38,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
-    override val blockPath = "phantom_flower"
+    override fun getBlockPath() = "phantom_flower"
     override val blockName = EnJa("Phantom Flower", "幻花ファントム")
-    override val itemPath = "phantom_bulb"
+    override fun getItemPath() = "phantom_bulb"
     override val itemName = EnJa("Phantom Bulb", "ファントムの球根")
     override val tier = 3
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(

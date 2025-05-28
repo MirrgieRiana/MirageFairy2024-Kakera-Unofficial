@@ -40,15 +40,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
-    override val blockPath = "veropeda"
+    override fun getBlockPath() = "veropeda"
     override val blockName = EnJa("Veropeda", "呪草ヴェロペダ")
-    override val itemPath = "veropeda_bulb"
+    override fun getItemPath() = "veropeda_bulb"
     override val itemName = EnJa("Veropeda Bulb", "ヴェロペダの球根")
     override val tier = 1
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(

@@ -35,15 +35,15 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }
 
-    abstract val blockPath: String
-    val blockIdentifier = MirageFairy2024.identifier(blockPath)
+    abstract fun getBlockPath(): String
+    val blockIdentifier = MirageFairy2024.identifier(getBlockPath())
     abstract val blockName: EnJa
-    abstract fun getAgeProperty(): IntegerProperty
+    abstract val ageProperty: IntegerProperty
     abstract fun createBlock(): B
     val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { createBlock() }
 
-    abstract val itemPath: String
-    val itemIdentifier = MirageFairy2024.identifier(itemPath)
+    abstract fun getItemPath(): String
+    val itemIdentifier = MirageFairy2024.identifier(getItemPath())
     abstract val itemName: EnJa
     val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
 

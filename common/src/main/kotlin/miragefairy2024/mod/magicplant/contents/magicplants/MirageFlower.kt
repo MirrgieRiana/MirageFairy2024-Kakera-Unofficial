@@ -48,15 +48,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
-    override val blockPath = "mirage_flower"
+    override fun getBlockPath() = "mirage_flower"
     override val blockName = EnJa("Mirage Flower", "妖花ミラージュ")
-    override val itemPath = "mirage_bulb"
+    override fun getItemPath() = "mirage_bulb"
     override val itemName = EnJa("Mirage Bulb", "ミラージュの球根")
     override val tier = 1
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
 
     override val outlineShapes = listOf(

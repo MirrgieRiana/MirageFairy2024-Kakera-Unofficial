@@ -42,15 +42,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
-    override val blockPath = "diamond_luminaria"
+    override fun getBlockPath() = "diamond_luminaria"
     override val blockName = EnJa("Diamond Luminaria", "金剛石輝草ダイヤモンドルミナリア")
-    override val itemPath = "diamond_luminaria_bulb"
+    override fun getItemPath() = "diamond_luminaria_bulb"
     override val itemName = EnJa("Diamond Luminaria Bulb", "ダイヤモンドルミナリアの球根")
     override val tier = 3
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(

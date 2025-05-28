@@ -44,15 +44,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
-    override val blockPath = "emerald_luminaria"
+    override fun getBlockPath() = "emerald_luminaria"
     override val blockName = EnJa("Emerald Luminaria", "翠玉輝草エメラルドルミナリア")
-    override val itemPath = "emerald_luminaria_bulb"
+    override fun getItemPath() = "emerald_luminaria_bulb"
     override val itemName = EnJa("Emerald Luminaria Bulb", "エメラルドルミナリアの球根")
     override val tier = 3
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
