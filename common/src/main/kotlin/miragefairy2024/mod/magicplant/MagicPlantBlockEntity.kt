@@ -14,7 +14,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as B
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
 
-class MagicPlantBlockEntity(private val configuration: MagicPlantCard<*>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.blockEntityType(), pos, state) {
+class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType(), pos, state) {
 
     private var traitStacks: TraitStacks? = null
 
@@ -49,7 +49,7 @@ class MagicPlantBlockEntity(private val configuration: MagicPlantCard<*>, pos: B
     override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(configuration.possibleTraits, world.getBiome(worldPosition), world.random)
+            val result = spawnTraitStacks(card.possibleTraits, world.getBiome(worldPosition), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)

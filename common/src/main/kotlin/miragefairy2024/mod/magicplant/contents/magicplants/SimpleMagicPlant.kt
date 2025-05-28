@@ -78,7 +78,7 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
     }
 }
 
-abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlantCard<*>, settings: Properties) : MagicPlantBlock(configuration, settings) {
+abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, settings: Properties) : MagicPlantBlock(card, settings) {
 
     // Property
 
@@ -104,7 +104,7 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
 
     // Shape
 
-    private val outlineShapesCache = configuration.outlineShapes.toTypedArray()
+    private val outlineShapesCache = card.outlineShapes.toTypedArray()
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
@@ -133,25 +133,25 @@ abstract class SimpleMagicPlantBlock(private val configuration: SimpleMagicPlant
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
 
         if (isMaxAge(blockState)) {
-            val seedCount = world.random.randomInt(configuration.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val seedCount = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             repeat(seedCount) {
                 drops += calculateCrossedSeed(world, blockPos, traitStacks, crossbreeding)
             }
         }
 
         if (isMaxAge(blockState)) {
-            val fruitCount = world.random.randomInt(configuration.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += configuration.getFruitDrops(fruitCount, world.random)
+            val fruitCount = world.random.randomInt(card.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (fruitCount > 0) drops += card.getFruitDrops(fruitCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val leafCount = world.random.randomInt(configuration.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += configuration.getLeafDrops(leafCount, world.random)
+            val leafCount = world.random.randomInt(card.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (leafCount > 0) drops += card.getLeafDrops(leafCount, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val rareCount = world.random.randomInt(configuration.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += configuration.getRareDrops(rareCount, world.random)
+            val rareCount = world.random.randomInt(card.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (rareCount > 0) drops += card.getRareDrops(rareCount, world.random)
         }
 
         return drops
