@@ -43,8 +43,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<B>() {
-    override val card get() = this
-    override val configuration get() = this
 
     abstract val outlineShapes: List<VoxelShape>
 
@@ -64,17 +62,17 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
         super.init()
 
         // 登録
-        card.iconItem.register()
+        iconItem.register()
 
         // 見た目
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()) with getAgeProperty() }
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()) with getAgeProperty() }
         getAgeProperty().possibleValues.forEach { age ->
-            registerModelGeneration({ "block/" * card.block().getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * card.block().getIdentifier() * "_age$age")
+            registerModelGeneration({ "block/" * block().getIdentifier() * "_age$age" }) {
+                Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * block().getIdentifier() * "_age$age")
             }
         }
-        card.iconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) {
-            TextureMap(TextureSlot.LAYER0 to "block/magic_plant/" * card.block().getIdentifier() * "_age${getAgeProperty().possibleValues.max()}")
+        iconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) {
+            TextureMap(TextureSlot.LAYER0 to "block/magic_plant/" * block().getIdentifier() * "_age${getAgeProperty().possibleValues.max()}")
         }
 
     }

@@ -42,8 +42,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
-    override val card get() = DiamondLuminariaCard
-
     override val blockPath = "diamond_luminaria"
     override val blockName = EnJa("Diamond Luminaria", "金剛石輝草ダイヤモンドルミナリア")
     override val itemPath = "diamond_luminaria_bulb"
@@ -118,10 +116,10 @@ object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { card.iconItem().createItemStack() },
+        icon = { iconItem().createItemStack() },
         name = EnJa("Even Carbon Freezes", "炭素も凍る季節"),
         description = EnJa("Search for Diamond Luminaria in a cold biome", "寒冷バイオームでダイヤモンドルミナリアを探す"),
-        criterion = AdvancementCard.hasItem { card.item() },
+        criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
 
@@ -133,7 +131,7 @@ object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
 
         // 地形生成
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {

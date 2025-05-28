@@ -40,8 +40,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
-    override val card get() = VeropedaCard
-
     override val blockPath = "veropeda"
     override val blockName = EnJa("Veropeda", "呪草ヴェロペダ")
     override val itemPath = "veropeda_bulb"
@@ -115,10 +113,10 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { card.iconItem().createItemStack() },
+        icon = { iconItem().createItemStack() },
         name = EnJa("Artificial Plant Species", "人造植物"),
         description = EnJa("Harvest Veropeda the cursed grass, which grows in arid biomes and the nether", "乾燥系バイオームとネザーに分布する呪草ヴェロペダを収穫する"),
-        criterion = AdvancementCard.hasItem { card.item() },
+        criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
 
@@ -133,13 +131,13 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
 
             // 小さな塊
             registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // 大きな塊
             registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 

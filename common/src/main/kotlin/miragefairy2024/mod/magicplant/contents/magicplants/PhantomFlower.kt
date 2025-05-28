@@ -38,8 +38,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
-    override val card get() = PhantomFlowerCard
-
     override val blockPath = "phantom_flower"
     override val blockName = EnJa("Phantom Flower", "幻花ファントム")
     override val itemPath = "phantom_bulb"
@@ -115,10 +113,10 @@ object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { FairyForestBiomeCard.advancement.await() },
-        icon = { card.iconItem().createItemStack() },
+        icon = { iconItem().createItemStack() },
         name = EnJa("Selective Pressure of Cuteness", "かわいいの淘汰圧"),
         description = EnJa("Search for the Phantom Flower hidden in the Fairy Forest", "妖精の森に隠れている幻花ファントムを探す"),
-        criterion = AdvancementCard.hasItem { card.item() },
+        criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.GOAL,
     )
 
@@ -130,7 +128,7 @@ object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
 
         // 地形生成
         registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
         registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {

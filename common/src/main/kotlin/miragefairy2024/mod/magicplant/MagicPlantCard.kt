@@ -35,9 +35,6 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
         fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
     }
 
-    open val card = this
-    open val configuration = this
-
     abstract val blockPath: String
     abstract val blockName: EnJa
     abstract val itemPath: String
@@ -61,45 +58,45 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     open fun init() {
 
         // 登録
-        card.block.register()
-        card.blockEntityType.register()
-        card.item.register()
+        block.register()
+        blockEntityType.register()
+        item.register()
 
         // 分類
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // 見た目
-        card.block.registerCutoutRenderLayer()
-        card.item.registerGeneratedModelGeneration()
+        block.registerCutoutRenderLayer()
+        item.registerGeneratedModelGeneration()
 
         // 翻訳
-        card.block.enJa(blockName)
-        card.item.enJa(itemName)
+        block.enJa(blockName)
+        item.enJa(itemName)
         val seedPoemList = PoemList(tier)
             .poem(poem)
             .poem("classification", classification)
-        card.item.registerPoem(seedPoemList)
-        card.item.registerPoemGeneration(seedPoemList)
+        item.registerPoem(seedPoemList)
+        item.registerPoemGeneration(seedPoemList)
 
         // 性質
-        //card.block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
-        card.block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
-        card.block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
+        //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
+        block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
+        block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
 
         // レシピ
-        card.item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
-        card.item.registerHarvestNotation(drops)
+        item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
+        item.registerHarvestNotation(drops)
 
         // 進捗
-        card.advancement?.init()
+        advancement?.init()
 
     }
 
-    val blockIdentifier = MirageFairy2024.identifier(configuration.blockPath)
-    val itemIdentifier = MirageFairy2024.identifier(configuration.itemPath)
-    val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { configuration.createBlock() }
-    private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(configuration, blockPos, blockState)
+    val blockIdentifier = MirageFairy2024.identifier(blockPath)
+    val itemIdentifier = MirageFairy2024.identifier(itemPath)
+    val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { createBlock() }
+    private fun createBlockEntity(blockPos: BlockPos, blockState: BlockState) = MagicPlantBlockEntity(this, blockPos, blockState)
     val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockIdentifier) { BlockEntityType(::createBlockEntity, setOf(block.await()), null) }
     val item = Registration(BuiltInRegistries.ITEM, itemIdentifier) { MagicPlantSeedItem(block.await(), Item.Properties()) }
-    val advancement = configuration.createAdvancement(blockIdentifier)
+    val advancement = createAdvancement(blockIdentifier)
 }

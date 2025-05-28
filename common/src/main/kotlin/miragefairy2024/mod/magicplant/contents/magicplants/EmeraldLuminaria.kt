@@ -44,8 +44,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
-    override val card get() = EmeraldLuminariaCard
-
     override val blockPath = "emerald_luminaria"
     override val blockName = EnJa("Emerald Luminaria", "翠玉輝草エメラルドルミナリア")
     override val itemPath = "emerald_luminaria_bulb"
@@ -121,10 +119,10 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
-        icon = { card.iconItem().createItemStack() },
+        icon = { iconItem().createItemStack() },
         name = EnJa("Money Tree", "金のなる木"),
         description = EnJa("Search for Emerald Luminaria in a plant-rich biome", "植物の繁茂するバイオームでエメラルドルミナリアを探す"),
-        criterion = AdvancementCard.hasItem { card.item() },
+        criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
 
@@ -136,7 +134,7 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
 
         // Configured Feature
         registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
             Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
         }
 

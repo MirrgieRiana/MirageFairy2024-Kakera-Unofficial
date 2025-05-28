@@ -48,8 +48,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
-    override val card get() = MirageFlowerCard
-
     override val blockPath = "mirage_flower"
     override val blockName = EnJa("Mirage Flower", "妖花ミラージュ")
     override val itemPath = "mirage_bulb"
@@ -127,11 +125,11 @@ object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
-        icon = { card.iconItem().createItemStack() },
+        icon = { iconItem().createItemStack() },
         name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
         //name = EnJa("Terraformer of the Fantasy World", "幻想世界のテラフォーマー"), // TODO どこかで使う
         description = EnJa("Find the Mirage flower", "妖花ミラージュを摘もう"),
-        criterion = AdvancementCard.hasItem { card.item() },
+        criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
 
@@ -149,13 +147,13 @@ object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
 
             // 小さな塊ConfiguredFeature
             registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
                 Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 
             // Fairy Ring ConfiguredFeature
             registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(card.block().withAge(card.block().maxAge))
+                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
                 FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
             }
 

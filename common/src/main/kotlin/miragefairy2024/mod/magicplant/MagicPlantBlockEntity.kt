@@ -14,7 +14,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as B
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
 
-class MagicPlantBlockEntity(private val configuration: MagicPlantCard<*>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.card.blockEntityType(), pos, state) {
+class MagicPlantBlockEntity(private val configuration: MagicPlantCard<*>, pos: BlockPos, state: BlockState) : BlockEntity(configuration.blockEntityType(), pos, state) {
 
     private var traitStacks: TraitStacks? = null
 
