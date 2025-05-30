@@ -3,45 +3,29 @@ package miragefairy2024.mod.magicplant.contents.magicplants
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
-import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.getOr
+import miragefairy2024.util.nether
+import miragefairy2024.util.netherBottomFlower
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
-import miragefairy2024.util.plus
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
-import miragefairy2024.util.unaryPlus
-import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object NetherLuminariaCard : SimpleMagicPlantCard<NetherLuminariaBlock>() {
     override fun getBlockPath() = "nether_luminaria"
@@ -64,7 +48,7 @@ object NetherLuminariaCard : SimpleMagicPlantCard<NetherLuminariaBlock>() {
 
     override val baseGrowth = 0.2
 
-    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.EMERALD })
+    override val drops = listOf(MaterialCard.NETHER_LUMINARIA_BERRY.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.NETHER_LUMINARIA_BERRY.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("luminaria")
@@ -112,7 +96,6 @@ object NetherLuminariaCard : SimpleMagicPlantCard<NetherLuminariaBlock>() {
 
     val NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("nether_luminaria_cluster")
     val NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_luminaria_cluster")
-    val UNDERGROUND_NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("underground_nether_luminaria_cluster")
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
@@ -130,25 +113,13 @@ object NetherLuminariaCard : SimpleMagicPlantCard<NetherLuminariaBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("nether_luminaria")) { NetherLuminariaBlock.CODEC }.register()
 
-        // Configured Feature
-        registerDynamicGeneration(NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) {
+                NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + netherBottomFlower }) { nether }
+            }
         }
-
-        // 地上に配置
-        registerDynamicGeneration(NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { per(32) + flower }
-            Registries.CONFIGURED_FEATURE[NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-        }
-        NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
-
-        // 地下に配置
-        registerDynamicGeneration(UNDERGROUND_NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { count(32) + undergroundFlower }
-            Registries.CONFIGURED_FEATURE[NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-        }
-        UNDERGROUND_NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeKeys.LUSH_CAVES }
 
     }
 }
