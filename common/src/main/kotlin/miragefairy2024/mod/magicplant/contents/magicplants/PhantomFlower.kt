@@ -14,21 +14,15 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
@@ -126,16 +120,13 @@ object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower")) { PhantomFlowerBlock.CODEC }.register()
 
-        // 地形生成
-        registerDynamicGeneration(PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) {
+                PHANTOM_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +BiomeCards.FAIRY_FOREST.registryKey }
+            }
         }
-        registerDynamicGeneration(PHANTOM_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { per(16) + flower }
-            Registries.CONFIGURED_FEATURE[PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-        }
-        PHANTOM_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeCards.FAIRY_FOREST.registryKey }
 
     }
 }

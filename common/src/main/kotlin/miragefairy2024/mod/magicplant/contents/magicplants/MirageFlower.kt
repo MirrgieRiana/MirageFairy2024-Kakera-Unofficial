@@ -15,18 +15,14 @@ import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.end
 import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.not
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
@@ -35,9 +31,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
@@ -139,52 +133,23 @@ object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower")) { MirageFlowerBlock.CODEC }.register()
 
-        // 地形生成
-        run {
+        Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
 
-            // Fairy Ring Feature
-            Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register()
-
-            // 小さな塊ConfiguredFeature
-            registerDynamicGeneration(MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) { // 小さな塊
+                MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
+                NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(64) + netherFlower }) { nether } // ネザーにネザー用クラスタ
+                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower }) // 妖精の森
             }
-
-            // Fairy Ring ConfiguredFeature
-            registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-                FAIRY_RING_FEATURE with FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        }
+        FAIRY_RING_FEATURE {
+            LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
+                FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) { // Fairy Ring
+                LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(600) + flower }) { overworld }  // 地上にFairy Ring
             }
-
-            // 地上とエンド用PlacedFeature
-            registerDynamicGeneration(MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(16) + flower }
-                Registries.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            // ネザー用PlacedFeature
-            registerDynamicGeneration(NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(64) + netherFlower }
-                Registries.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            // 妖精の森用PlacedFeature
-            registerDynamicGeneration(MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { count(4) + flower }
-                Registries.CONFIGURED_FEATURE[MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            // Fairy Ring PlacedFeature
-            registerDynamicGeneration(LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(600) + flower }
-                Registries.CONFIGURED_FEATURE[LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld + end * !+BiomeKeys.THE_END } // 地上・エンド外縁の島々に通常クラスタ
-            NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザーにネザー用クラスタ
-            LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld } // 地上にFairy Ring
-
         }
 
     }
