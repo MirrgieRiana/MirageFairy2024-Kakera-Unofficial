@@ -7,6 +7,75 @@ object MapColorViewerGeneratorMain {
     @JvmStatic
     fun main(args: Array<String>) {
         val colorPairs = listOf(
+            Pair("NONE", 0),
+            Pair("GRASS", 8368696),
+            Pair("SAND", 16247203),
+            Pair("WOOL", 13092807),
+            Pair("FIRE", 16711680),
+            Pair("ICE", 10526975),
+            Pair("METAL", 10987431),
+            Pair("PLANT", 31744),
+            Pair("SNOW", 16777215),
+            Pair("CLAY", 10791096),
+            Pair("DIRT", 9923917),
+            Pair("STONE", 7368816),
+            Pair("WATER", 4210943),
+            Pair("WOOD", 9402184),
+            Pair("QUARTZ", 16776437),
+            Pair("COLOR_ORANGE", 14188339),
+            Pair("COLOR_MAGENTA", 11685080),
+            Pair("COLOR_LIGHT_BLUE", 6724056),
+            Pair("COLOR_YELLOW", 15066419),
+            Pair("COLOR_LIGHT_GREEN", 8375321),
+            Pair("COLOR_PINK", 15892389),
+            Pair("COLOR_GRAY", 5000268),
+            Pair("COLOR_LIGHT_GRAY", 10066329),
+            Pair("COLOR_CYAN", 5013401),
+            Pair("COLOR_PURPLE", 8339378),
+            Pair("COLOR_BLUE", 3361970),
+            Pair("COLOR_BROWN", 6704179),
+            Pair("COLOR_GREEN", 6717235),
+            Pair("COLOR_RED", 10040115),
+            Pair("COLOR_BLACK", 1644825),
+            Pair("GOLD", 16445005),
+            Pair("DIAMOND", 6085589),
+            Pair("LAPIS", 4882687),
+            Pair("EMERALD", 55610),
+            Pair("PODZOL", 8476209),
+            Pair("NETHER", 7340544),
+            Pair("TERRACOTTA_WHITE", 13742497),
+            Pair("TERRACOTTA_ORANGE", 10441252),
+            Pair("TERRACOTTA_MAGENTA", 9787244),
+            Pair("TERRACOTTA_LIGHT_BLUE", 7367818),
+            Pair("TERRACOTTA_YELLOW", 12223780),
+            Pair("TERRACOTTA_LIGHT_GREEN", 6780213),
+            Pair("TERRACOTTA_PINK", 10505550),
+            Pair("TERRACOTTA_GRAY", 3746083),
+            Pair("TERRACOTTA_LIGHT_GRAY", 8874850),
+            Pair("TERRACOTTA_CYAN", 5725276),
+            Pair("TERRACOTTA_PURPLE", 8014168),
+            Pair("TERRACOTTA_BLUE", 4996700),
+            Pair("TERRACOTTA_BROWN", 4993571),
+            Pair("TERRACOTTA_GREEN", 5001770),
+            Pair("TERRACOTTA_RED", 9321518),
+            Pair("TERRACOTTA_BLACK", 2430480),
+            Pair("CRIMSON_NYLIUM", 12398641),
+            Pair("CRIMSON_STEM", 9715553),
+            Pair("CRIMSON_HYPHAE", 6035741),
+            Pair("WARPED_NYLIUM", 1474182),
+            Pair("WARPED_STEM", 3837580),
+            Pair("WARPED_HYPHAE", 5647422),
+            Pair("WARPED_WART_BLOCK", 1356933),
+            Pair("DEEPSLATE", 6579300),
+            Pair("RAW_IRON", 14200723),
+            Pair("GLOW_LICHEN", 8365974),
+        )
+        f(colorPairs)
+    }
+
+    @JvmStatic
+    fun main_1_20_1_yarn(args: Array<String>) {
+        val colorPairs = listOf(
             Pair("PALE_GREEN", 8368696),
             Pair("PALE_YELLOW", 16247203),
             Pair("WHITE_GRAY", 0xC7C7C7),
@@ -69,7 +138,10 @@ object MapColorViewerGeneratorMain {
             Pair("RAW_IRON_PINK", 14200723),
             Pair("LICHEN_GREEN", 8365974),
         )
+        f(colorPairs)
+    }
 
+    private fun f(colorPairs: List<Pair<String, Int>>) {
         val html = html {
             "html" {
                 "head" {
