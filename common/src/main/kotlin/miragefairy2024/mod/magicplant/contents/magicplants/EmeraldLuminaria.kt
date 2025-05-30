@@ -14,14 +14,10 @@ import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
@@ -31,9 +27,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
@@ -132,25 +126,20 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }.register()
 
-        // Configured Feature
-        registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) {
+                EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey }  // 地上 // TODO 妖精の森が強すぎる
+            }
         }
-
-        // 地上に配置
-        registerDynamicGeneration(EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { per(32) + flower }
-            Registries.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
+        Feature.FLOWER {
+            EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) {
+                UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + undergroundFlower }) { +BiomeKeys.LUSH_CAVES } // 地下
+            }
         }
-        EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
-
-        // 地下に配置
-        registerDynamicGeneration(UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { count(32) + undergroundFlower }
-            Registries.CONFIGURED_FEATURE[EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-        }
-        UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +BiomeKeys.LUSH_CAVES }
 
     }
 }
