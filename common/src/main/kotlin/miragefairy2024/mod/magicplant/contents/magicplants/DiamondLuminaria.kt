@@ -14,14 +14,10 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
@@ -30,9 +26,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
@@ -129,16 +123,13 @@ object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }.register()
 
-        // 地形生成
-        registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-            val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-            Feature.FLOWER with RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) {
+                DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
+            }
         }
-        registerDynamicGeneration(DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY) {
-            val placementModifiers = placementModifiers { per(32) + flower }
-            Registries.CONFIGURED_FEATURE[DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-        }
-        DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
 
     }
 }

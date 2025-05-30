@@ -13,14 +13,10 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
-import miragefairy2024.util.get
 import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
-import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.register
-import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerFeature
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
@@ -28,9 +24,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
@@ -126,36 +120,19 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda")) { VeropedaBlock.CODEC }.register()
 
-        // 地形生成
-        run {
-
-            // 小さな塊
-            registerDynamicGeneration(VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        Feature.FLOWER {
+            VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) { // 小さな塊
+                VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +ConventionalBiomeTags.IS_DRY } // 地上用クラスタ
             }
-
-            // 大きな塊
-            registerDynamicGeneration(LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY) {
-                val blockStateProvider = BlockStateProvider.simple(block().withAge(block().maxAge))
-                Feature.FLOWER with RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(blockStateProvider)))
+        }
+        Feature.FLOWER {
+            LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
+            }) { // 大きな塊
+                NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + netherFlower }) { nether } // ネザー用クラスタ
             }
-
-            // 地上
-            registerDynamicGeneration(VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(16) + flower }
-                Registries.CONFIGURED_FEATURE[VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            // ネザー
-            registerDynamicGeneration(NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY) {
-                val placementModifiers = placementModifiers { per(8) + netherFlower }
-                Registries.CONFIGURED_FEATURE[LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY] with placementModifiers
-            }
-
-            VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { +ConventionalBiomeTags.IS_DRY } // 地上用クラスタ
-            NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { nether } // ネザー用クラスタ
-
         }
 
     }
