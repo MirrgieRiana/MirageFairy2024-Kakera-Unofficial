@@ -114,7 +114,7 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Money Tree", "金のなる木"),
+        name = EnJa("Money Tree", "お金のなる木"),
         description = EnJa("Search for Emerald Luminaria in a plant-rich biome", "植物の繁茂するバイオームでエメラルドルミナリアを探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
@@ -131,12 +131,6 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
                 EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey }  // 地上 // TODO 妖精の森が強すぎる
-            }
-        }
-        Feature.FLOWER {
-            EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
                 UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + undergroundFlower }) { +BiomeKeys.LUSH_CAVES } // 地下
             }
         }
