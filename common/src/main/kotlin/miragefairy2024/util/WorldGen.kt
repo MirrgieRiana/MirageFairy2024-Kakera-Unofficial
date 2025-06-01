@@ -164,12 +164,11 @@ val flower: List<PlacementModifier>
     )
 
 context(PlacementModifiersScope)
-val netherBottomFlower
-    get(): List<PlacementModifier> = listOf(
-        HeightRangePlacementModifier.triangle(YOffset.absolute(32 - 20), YOffset.absolute(32 + 20)),
-        CountMultilayerPlacementModifier.of(1),
-        BiomePlacementModifier.biome(),
-    )
+fun netherBottomFlower(minY: Int, maxY: Int): List<PlacementModifier> = listOf(
+    HeightRangePlacementModifier.uniform(YOffset.absolute(minY), YOffset.absolute(maxY)),
+    CountMultilayerPlacementModifier.of(1),
+    BiomePlacementModifier.biome(),
+)
 
 context(PlacementModifiersScope)
 val netherFlower

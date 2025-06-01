@@ -1,5 +1,5 @@
 {
-  "parent": "miragefairy2024:diamond_luminaria",
+  "parent": "miragefairy2024:nether_luminaria",
   "criteria": {
     "has_gold_luminaria_bulb": {
       "conditions": {

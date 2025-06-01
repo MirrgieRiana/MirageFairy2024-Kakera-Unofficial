@@ -106,7 +106,7 @@ object NetherLuminariaCard : AbstractNetherLuminariaCard<NetherLuminariaBlock>()
     override fun getItemPath() = "nether_luminaria_bulb"
     override val itemName = EnJa("Nether Luminaria Bulb", "ネザールミナリアの球根")
     override val tier = 4
-    override val poem = EnJa("TODO", "TODO") // TODO
+    override val poem = EnJa("Purification of the tainted soul", "地獄に灯る光。")
 
     override fun createBlock() = NetherLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
@@ -122,7 +122,7 @@ object NetherLuminariaCard : AbstractNetherLuminariaCard<NetherLuminariaBlock>()
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("TODO", "地底の太陽"), // TODO
+        name = EnJa("Subterranean Sun", "地底の太陽"),
         description = EnJa("Search for Nether Luminaria in the bottom of Nether Wastes", "ネザーの荒地の最下層でネザールミナリアを探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
@@ -138,7 +138,7 @@ object NetherLuminariaCard : AbstractNetherLuminariaCard<NetherLuminariaBlock>()
             NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + netherBottomFlower }) { +Biomes.NETHER_WASTES }
+                NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + netherBottomFlower(32, 45) }) { +Biomes.NETHER_WASTES }
             }
         }
 
@@ -154,7 +154,7 @@ class NetherLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(NetherL
 
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 
-    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult? {
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
         val blockEntity = level.getBlockEntity(pos)
         if (blockEntity !is MagicPlantBlockEntity) return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
         if (!stack.`is`(ConventionalItemTags.GOLD_INGOTS)) return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
@@ -183,7 +183,7 @@ object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
     override fun getItemPath() = "gold_luminaria_bulb"
     override val itemName = EnJa("Gold Luminaria Bulb", "ゴールドルミナリアの球根")
     override val tier = 4
-    override val poem = EnJa("TODO", "TODO") // TODO
+    override val poem = EnJa("Frozen Prominence", "摂氏100度の金環食。")
 
     override fun createBlock() = GoldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
@@ -195,7 +195,7 @@ object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
-        context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
+        context = AdvancementCard.Sub { NetherLuminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
         name = EnJa("Gold Tree", "金のなる木"),
         description = EnJa("Use a gold ingot on the Nether Luminaria", "ネザールミナリアに金インゴットを使用する"),

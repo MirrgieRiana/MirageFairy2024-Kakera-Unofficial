@@ -434,6 +434,7 @@ class MaterialCard(
                     .nutrition(1)
                     .saturationModifier(0.1F)
                     .fast()
+                    .alwaysEdible()
                     .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
                     .build()
             },
