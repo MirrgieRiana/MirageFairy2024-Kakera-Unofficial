@@ -131,12 +131,6 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
                 EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_JUNGLE + +BiomeCards.FAIRY_FOREST.registryKey }  // 地上 // TODO 妖精の森が強すぎる
-            }
-        }
-        Feature.FLOWER {
-            EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
                 UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + undergroundFlower }) { +BiomeKeys.LUSH_CAVES } // 地下
             }
         }
