@@ -164,6 +164,13 @@ val flower: List<PlacementModifier>
     )
 
 context(PlacementModifiersScope)
+fun rangedNetherFlower(minY: Int, maxY: Int): List<PlacementModifier> = listOf(
+    HeightRangePlacementModifier.uniform(YOffset.absolute(minY), YOffset.absolute(maxY)),
+    CountMultilayerPlacementModifier.of(1),
+    BiomePlacementModifier.biome(),
+)
+
+context(PlacementModifiersScope)
 val netherFlower
     get(): List<PlacementModifier> = listOf(
         CountMultilayerPlacementModifier.of(1),
