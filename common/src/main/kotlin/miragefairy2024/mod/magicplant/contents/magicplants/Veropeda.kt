@@ -108,7 +108,7 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Artificial Plant Species", "人造植物"),
+        name = EnJa("Artificial Plant Species", "人造植物"), // TODO 未使用ポエム：人間が作り出したモンスター
         description = EnJa("Harvest Veropeda the cursed grass, which grows in arid biomes and the nether", "乾燥系バイオームとネザーに分布する呪草ヴェロペダを収穫する"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
