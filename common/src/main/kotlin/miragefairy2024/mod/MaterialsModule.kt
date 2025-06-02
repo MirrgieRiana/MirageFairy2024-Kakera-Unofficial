@@ -424,6 +424,21 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
+        val NETHER_LUMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "nether_luminaria_berry", "Nether Luminaria Berry", "ネザールミナリアの実",
+            PoemList(1)
+                .poem("TODO", "TODO") // TODO
+                .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
+                    .build()
+            },
+        )
         val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)
