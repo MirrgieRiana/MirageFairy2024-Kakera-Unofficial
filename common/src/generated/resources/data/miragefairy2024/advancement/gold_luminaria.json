@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:nether_luminaria",
+  "criteria": {
+    "has_gold_luminaria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:gold_luminaria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.gold_luminaria.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:gold_luminaria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.gold_luminaria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_gold_luminaria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_300"
+    ]
+  },
+  "sends_telemetry_event": true
+}
