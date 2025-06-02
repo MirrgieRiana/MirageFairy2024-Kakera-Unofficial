@@ -20,7 +20,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
     fun getTraitStacks() = traitStacks
 
-    fun setTraitStacks(traitStacks: TraitStacks) {
+    fun setTraitStacks(traitStacks: TraitStacks?) {
         this.traitStacks = traitStacks
         setChanged()
     }
