@@ -183,7 +183,7 @@ object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
     override fun getItemPath() = "gold_luminaria_bulb"
     override val itemName = EnJa("Gold Luminaria Bulb", "ゴールドルミナリアの球根")
     override val tier = 4
-    override val poem = EnJa("Frozen Prominence", "摂氏100度の金環食。")
+    override val poem = EnJa("Gold-plated prominence.", "摂氏100度の金環食。")
 
     override fun createBlock() = GoldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
