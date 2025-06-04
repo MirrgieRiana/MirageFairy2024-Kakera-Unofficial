@@ -13,6 +13,7 @@ import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.per
+import miragefairy2024.util.plus
 import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
@@ -119,7 +120,7 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
             SARRACENIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchConfiguration(20, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
             }) {
-                SARRACENIA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + flower }) { +ConventionalBiomeTags.IS_SWAMP }
+                SARRACENIA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + flower }) { +ConventionalBiomeTags.IS_SWAMP + +ConventionalBiomeTags.IS_JUNGLE }
             }
         }
     }

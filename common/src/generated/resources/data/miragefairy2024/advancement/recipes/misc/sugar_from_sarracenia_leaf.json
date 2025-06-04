@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sarracenia_leaf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:sarracenia_leaf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:sugar_from_sarracenia_leaf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sarracenia_leaf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:sugar_from_sarracenia_leaf"
+    ]
+  }
+}
