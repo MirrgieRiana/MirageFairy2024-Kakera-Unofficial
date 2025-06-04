@@ -384,10 +384,14 @@ class MaterialCard(
         }
         val SARRACENIA_LEAF: MaterialCard = !MaterialCard(
             "sarracenia_leaf", "Sarracenia Leaf", "サラセニアの葉",
-            PoemList(1).poem("TODO", "TODO"), // TODO
+            PoemList(1).poem("Fruity and sweet and sour.", "とけた果肉と蜜の味。"),
             fuelValue = 100,
         ) {
-            item.registerComposterInput(0.5F) // TODO 用途
+            item.registerComposterInput(0.5F)
+            registerShapelessRecipeGeneration({ Items.SUGAR }) {
+                requires(item)
+            } on item modId MirageFairy2024.MOD_ID from item
+            // TODO 酸を回収する手段
         }
         val LUMINITE: MaterialCard = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",

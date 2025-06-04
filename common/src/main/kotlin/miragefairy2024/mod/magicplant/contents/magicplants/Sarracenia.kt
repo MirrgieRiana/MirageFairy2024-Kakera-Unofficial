@@ -36,7 +36,7 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
     override fun getItemPath() = "sarracenia_bulb"
     override val itemName = EnJa("Sarracenia Bulb", "サラセニアの球根")
     override val tier = 1
-    override val poem = EnJa("TODO", "TODO") // TODO
+    override val poem = EnJa("Waiting for a flying creature...", "妖精たちの憩いの場。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_3
@@ -49,8 +49,9 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
         createCuboidShape(7.0, 16.0),
     )
 
-    override val drops = listOf(MaterialCard.SARRACENIA_LEAF.item)
+    override val drops = listOf(MaterialCard.SARRACENIA_LEAF.item, MaterialCard.FAIRY_SCALES.item)
     override fun getLeafDrops(count: Int, random: RandomSource) = listOf(MaterialCard.SARRACENIA_LEAF.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.FAIRY_SCALES.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("veropeda")
     override val possibleTraits = setOf(
@@ -102,8 +103,8 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { VeropedaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("TODO", "TODO"), // TODO
-        description = EnJa("TODO", "TODO"), // TODO
+        name = EnJa("Temptation of Sugar and Acid", "糖と酸の誘惑"),
+        description = EnJa("Find Sarracenia in the swampland", "沼地のサラセニアを見つける"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
