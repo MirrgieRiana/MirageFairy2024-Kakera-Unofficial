@@ -292,15 +292,6 @@ class MaterialCard(
                 )
             },
         )
-        val VEROPEDA_LEAF: MaterialCard = !MaterialCard(
-            "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
-            PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
-            fuelValue = 100,
-        ) {
-            item.registerComposterInput(0.5F)
-            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
-            registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
-        }
         val LILAGIUM_INGOT: MaterialCard = !MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
             PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
@@ -365,6 +356,15 @@ class MaterialCard(
         ) {
             registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
         }
+        val VEROPEDA_LEAF: MaterialCard = !MaterialCard(
+            "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
+            PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
+            fuelValue = 100,
+        ) {
+            item.registerComposterInput(0.5F)
+            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+        }
         val VEROPEDA_BERRIES: MaterialCard = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
             PoemList(1)
@@ -381,6 +381,13 @@ class MaterialCard(
             },
         ) {
             item.registerComposterInput(0.3F)
+        }
+        val SARRACENIA_LEAF: MaterialCard = !MaterialCard(
+            "sarracenia_leaf", "Sarracenia Leaf", "サラセニアの葉",
+            PoemList(1).poem("TODO", "TODO"), // TODO
+            fuelValue = 100,
+        ) {
+            item.registerComposterInput(0.5F) // TODO 用途
         }
         val LUMINITE: MaterialCard = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
@@ -407,7 +414,7 @@ class MaterialCard(
                     context = AdvancementCard.Sub { LUMINITE.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Ambivalence in Glass", "ガラスの中のアンビバレンス"),
-                    description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Miragium, Luminite, and Echo Shard", "ミラジウム、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
+                    description = EnJa("Craft a Resonite using an Aura Reflector Furnace with Fairy Crystal, Luminite, and Echo Shard", "フェアリークリスタル、ルミナイト、および残響の欠片からオーラ反射炉を使って共鳴石を製作する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
                 )
