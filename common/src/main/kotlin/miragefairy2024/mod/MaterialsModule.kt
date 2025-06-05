@@ -438,7 +438,7 @@ class MaterialCard(
         val NETHER_LUMINARIA_BERRY: MaterialCard = !MaterialCard(
             "nether_luminaria_berry", "Nether Luminaria Berry", "ネザールミナリアベリー",
             PoemList(1)
-                .poem("Molten soul jelly.", "心頭滅却のプロミネンス。")
+                .poem("Jewel of Hell", "心頭滅却のプロミネンス。")
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
