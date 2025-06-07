@@ -461,7 +461,7 @@ class MaterialCard(
                     context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Jewel of Hell", "地獄の宝石"),
-                    description = EnJa("Harvest Prominite from Prominaria", "ネザーのルミナリアからプロミナイトを収穫する"),
+                    description = EnJa("Harvest Prominite from Prominaria", "ネザーのプロミナリアからプロミナイトを収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
                 )
