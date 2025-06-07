@@ -208,6 +208,7 @@ val PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE: AttachmentType<PassiveSkillResult> = A
     it.persistent(PassiveSkillResult.CODEC)
     it.initializer(::PassiveSkillResult)
     it.syncWith(PassiveSkillResult.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+    it.copyOnDeath()
 }
 
 val Entity.passiveSkillResult get() = this[PASSIVE_SKILL_RESULT_ATTACHMENT_TYPE]

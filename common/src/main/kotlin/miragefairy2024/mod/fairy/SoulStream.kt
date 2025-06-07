@@ -84,6 +84,7 @@ val SOUL_STREAM_ATTACHMENT_TYPE: AttachmentType<SoulStream> = AttachmentRegistry
     it.persistent(SoulStream.CODEC)
     it.initializer(::SoulStream)
     it.syncWith(SoulStream.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+    it.copyOnDeath()
 }
 
 val Entity.soulStream get() = this[SOUL_STREAM_ATTACHMENT_TYPE]

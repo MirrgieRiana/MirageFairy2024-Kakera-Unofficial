@@ -24,6 +24,7 @@ val FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE: AttachmentType<FairyDreamContainer> =
     it.persistent(FairyDreamContainer.CODEC)
     it.initializer(::FairyDreamContainer)
     it.syncWith(FairyDreamContainer.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+    it.copyOnDeath()
 }
 
 val Entity.fairyDreamContainer get() = this[FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE]

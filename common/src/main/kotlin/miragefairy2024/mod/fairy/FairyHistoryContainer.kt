@@ -18,6 +18,7 @@ val FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE: AttachmentType<FairyHistoryContaine
     it.persistent(FairyHistoryContainer.CODEC)
     it.initializer(::FairyHistoryContainer)
     it.syncWith(FairyHistoryContainer.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+    it.copyOnDeath()
 }
 
 val Entity.fairyHistoryContainer get() = this[FAIRY_HISTORY_CONTAINER_ATTACHMENT_TYPE]

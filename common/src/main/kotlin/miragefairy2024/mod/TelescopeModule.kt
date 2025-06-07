@@ -340,6 +340,7 @@ val TELESCOPE_MISSION_ATTACHMENT_TYPE: AttachmentType<TelescopeMission> = Attach
     it.persistent(TelescopeMission.CODEC)
     it.initializer(::TelescopeMission)
     it.syncWith(TelescopeMission.STREAM_CODEC, AttachmentSyncPredicate.targetOnly())
+    it.copyOnDeath()
 }
 
 val Entity.telescopeMission get() = this[TELESCOPE_MISSION_ATTACHMENT_TYPE]
