@@ -1,11 +1,11 @@
 package miragefairy2024.client
 
+import dev.architectury.registry.client.rendering.RenderTypeRegistry
 import miragefairy2024.BlockColorProvider
 import miragefairy2024.ClientProxy
 import miragefairy2024.ItemColorProvider
 import miragefairy2024.RenderingProxy
 import miragefairy2024.RenderingProxyBlockEntity
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.minecraft.client.renderer.BiomeColors
@@ -38,11 +38,11 @@ class ClientProxyImpl : ClientProxy {
     }
 
     override fun registerCutoutRenderLayer(block: () -> Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.cutout())
+        RenderTypeRegistry.register(RenderLayer.cutout(), block())
     }
 
     override fun registerTranslucentRenderLayer(block: () -> Block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block(), RenderLayer.translucent())
+        RenderTypeRegistry.register(RenderLayer.translucent(), block())
     }
 
     override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
