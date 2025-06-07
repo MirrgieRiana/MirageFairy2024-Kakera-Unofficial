@@ -19,8 +19,8 @@ import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
-import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -437,7 +437,7 @@ class MaterialCard(
             ) on LUMINITE.item
         }
         val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
-            "prominaria_berry", "Prominaria Berry", "ネザールミナリアベリー",
+            "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
             PoemList(4)
                 .poem("", "心頭滅却のプロミネンス。") // TODO
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
