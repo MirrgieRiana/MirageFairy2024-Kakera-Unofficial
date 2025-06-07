@@ -19,6 +19,7 @@ import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
 import miragefairy2024.util.AdvancementCard
@@ -435,10 +436,10 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
-        val NETHER_LUMINARIA_BERRY: MaterialCard = !MaterialCard(
-            "nether_luminaria_berry", "Nether Luminaria Berry", "ネザールミナリアベリー",
-            PoemList(1)
-                .poem("Jewel of Hell", "心頭滅却のプロミネンス。")
+        val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "prominaria_berry", "Prominaria Berry", "ネザールミナリアベリー",
+            PoemList(4)
+                .poem("", "心頭滅却のプロミネンス。") // TODO
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
@@ -448,6 +449,22 @@ class MaterialCard(
                     .alwaysEdible()
                     .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
                     .build()
+            },
+        )
+        val PROMINITE: MaterialCard = !MaterialCard(
+            "prominite", "Prominite", "プロミナイト",
+            PoemList(4).poem("", ""),// TODO
+            fireResistant = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Jewel of Hell", "地獄の宝石"),
+                    description = EnJa("Harvest Prominite from Prominaria", "ネザーのルミナリアからプロミナイトを収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
             },
         )
         val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(

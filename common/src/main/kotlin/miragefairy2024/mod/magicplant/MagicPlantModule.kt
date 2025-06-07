@@ -7,9 +7,9 @@ import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.EmeraldLuminariaCard
-import miragefairy2024.mod.magicplant.contents.magicplants.GoldLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.GoldProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
-import miragefairy2024.mod.magicplant.contents.magicplants.NetherLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.SarraceniaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
@@ -29,8 +29,8 @@ val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     SarraceniaCard,
     DiamondLuminariaCard,
     EmeraldLuminariaCard,
-    NetherLuminariaCard,
-    GoldLuminariaCard,
+    ProminariaCard,
+    GoldProminariaCard,
 )
 
 private val identifier = MirageFairy2024.identifier("magic_plant")

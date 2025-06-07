@@ -25,6 +25,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
@@ -44,7 +45,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-abstract class AbstractNetherLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
+abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
     override val ageProperty: IntProperty = BlockStateProperties.AGE_3
@@ -100,30 +101,31 @@ abstract class AbstractNetherLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMa
     )
 }
 
-object NetherLuminariaCard : AbstractNetherLuminariaCard<NetherLuminariaBlock>() {
-    override fun getBlockPath() = "nether_luminaria"
-    override val blockName = EnJa("Nether Luminaria", "地獄輝草ネザールミナリア")
-    override fun getItemPath() = "nether_luminaria_bulb"
-    override val itemName = EnJa("Nether Luminaria Bulb", "ネザールミナリアの球根")
+object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
+    override fun getBlockPath() = "prominaria"
+    override val blockName = EnJa("Prominaria", "紅炎草プロミナリア")
+    override fun getItemPath() = "prominaria_bulb"
+    override val itemName = EnJa("Prominaria Bulb", "プロミナリアの球根")
     override val tier = 4
     override val poem = EnJa("Purification of the tainted soul", "地獄にともる灯。")
 
-    override fun createBlock() = NetherLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
 
-    override val drops = listOf(MaterialCard.NETHER_LUMINARIA_BERRY.item)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.NETHER_LUMINARIA_BERRY.item().createItemStack(count))
+    override val drops = listOf(MaterialCard.PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
 
-    val NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("nether_luminaria_cluster")
-    val NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_luminaria_cluster")
+    val PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("prominaria_cluster")
+    val PROMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("prominaria_cluster")
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
         name = EnJa("Subterranean Sun", "地底の太陽"),
-        description = EnJa("Search for Nether Luminaria in the bottom of Nether Wastes", "ネザーの荒地の最下層でネザールミナリアを探す"),
+        description = EnJa("Search for Prominaria in the bottom of Nether Wastes", "ネザーの荒地の最下層でプロミナリアを探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
@@ -132,22 +134,22 @@ object NetherLuminariaCard : AbstractNetherLuminariaCard<NetherLuminariaBlock>()
     override fun init() {
         super.init()
 
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("nether_luminaria")) { NetherLuminariaBlock.CODEC }.register()
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("prominaria")) { ProminariaBlock.CODEC }.register()
 
         Feature.FLOWER {
-            NETHER_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
+            PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                NETHER_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES }
+                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES }
             }
         }
 
     }
 }
 
-class NetherLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(NetherLuminariaCard, settings) {
+class ProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(ProminariaCard, settings) {
     companion object {
-        val CODEC: MapCodec<NetherLuminariaBlock> = simpleCodec(::NetherLuminariaBlock)
+        val CODEC: MapCodec<ProminariaBlock> = simpleCodec(::ProminariaBlock)
     }
 
     override fun codec() = CODEC
@@ -165,7 +167,7 @@ class NetherLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(NetherL
         val rare = blockEntity.isRare()
         val natural = blockEntity.isNatural()
 
-        level.setBlock(pos, GoldLuminariaCard.block().defaultBlockState().setValue(BlockStateProperties.AGE_3, age), 0b1011)
+        level.setBlock(pos, GoldProminariaCard.block().defaultBlockState().setValue(BlockStateProperties.AGE_3, age), 0b1011)
         val newBlockEntity = level.getBlockEntity(pos) as MagicPlantBlockEntity
         newBlockEntity.setTraitStacks(traitStacks)
         newBlockEntity.setRare(rare)
@@ -177,15 +179,15 @@ class NetherLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(NetherL
     }
 }
 
-object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
-    override fun getBlockPath() = "gold_luminaria"
-    override val blockName = EnJa("Gold Luminaria", "金輝草ゴールドルミナリア")
-    override fun getItemPath() = "gold_luminaria_bulb"
-    override val itemName = EnJa("Gold Luminaria Bulb", "ゴールドルミナリアの球根")
+object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
+    override fun getBlockPath() = "gold_prominaria"
+    override val blockName = EnJa("Gold Prominaria", "金炎草ゴールドプロミナリア")
+    override fun getItemPath() = "gold_prominaria_bulb"
+    override val itemName = EnJa("Gold Prominaria Bulb", "ゴールドプロミナリアの球根")
     override val tier = 4
     override val poem = EnJa("Gold-plated prominence.", "摂氏100度の金環食。")
 
-    override fun createBlock() = GoldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.05
     override val baseSeedGeneration = 0.0
@@ -195,10 +197,10 @@ object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
-        context = AdvancementCard.Sub { NetherLuminariaCard.advancement!!.await() },
+        context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
         name = EnJa("Gold Tree", "金のなる木"),
-        description = EnJa("Use a gold ingot on the Nether Luminaria", "ネザールミナリアに金インゴットを使用する"),
+        description = EnJa("Use a gold ingot on the Prominaria", "プロミナリアに金インゴットを使用する"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.GOAL,
     )
@@ -207,13 +209,13 @@ object GoldLuminariaCard : AbstractNetherLuminariaCard<GoldLuminariaBlock>() {
     override fun init() {
         super.init()
 
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("gold_luminaria")) { GoldLuminariaBlock.CODEC }.register()
+        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("gold_prominaria")) { GoldProminariaBlock.CODEC }.register()
     }
 }
 
-class GoldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(GoldLuminariaCard, settings) {
+class GoldProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(GoldProminariaCard, settings) {
     companion object {
-        val CODEC: MapCodec<GoldLuminariaBlock> = simpleCodec(::GoldLuminariaBlock)
+        val CODEC: MapCodec<GoldProminariaBlock> = simpleCodec(::GoldProminariaBlock)
     }
 
     override fun codec() = CODEC

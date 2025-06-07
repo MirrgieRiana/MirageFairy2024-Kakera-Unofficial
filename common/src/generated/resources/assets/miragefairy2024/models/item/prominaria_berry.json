@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "miragefairy2024:item/nether_luminaria_berry"
+    "layer0": "miragefairy2024:item/prominaria_berry"
   }
 }

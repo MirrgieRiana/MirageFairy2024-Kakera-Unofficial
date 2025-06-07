@@ -1,11 +1,11 @@
 {
-  "parent": "miragefairy2024:nether_luminaria",
+  "parent": "miragefairy2024:prominaria",
   "criteria": {
-    "has_gold_luminaria_bulb": {
+    "has_gold_prominaria_bulb": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:gold_luminaria_bulb"
+            "items": "miragefairy2024:gold_prominaria_bulb"
           }
         ]
       },
@@ -14,20 +14,20 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.gold_luminaria.description"
+      "translate": "advancements.miragefairy2024.gold_prominaria.description"
     },
     "frame": "goal",
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:gold_luminaria_icon"
+      "id": "miragefairy2024:gold_prominaria_icon"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.gold_luminaria.title"
+      "translate": "advancements.miragefairy2024.gold_prominaria.title"
     }
   },
   "requirements": [
     [
-      "has_gold_luminaria_bulb"
+      "has_gold_prominaria_bulb"
     ]
   ],
   "rewards": {

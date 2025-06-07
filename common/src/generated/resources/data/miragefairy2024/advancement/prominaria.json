@@ -1,11 +1,11 @@
 {
   "parent": "miragefairy2024:diamond_luminaria",
   "criteria": {
-    "has_nether_luminaria_bulb": {
+    "has_prominaria_bulb": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:nether_luminaria_bulb"
+            "items": "miragefairy2024:prominaria_bulb"
           }
         ]
       },
@@ -14,19 +14,19 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.miragefairy2024.nether_luminaria.description"
+      "translate": "advancements.miragefairy2024.prominaria.description"
     },
     "icon": {
       "count": 1,
-      "id": "miragefairy2024:nether_luminaria_icon"
+      "id": "miragefairy2024:prominaria_icon"
     },
     "title": {
-      "translate": "advancements.miragefairy2024.nether_luminaria.title"
+      "translate": "advancements.miragefairy2024.prominaria.title"
     }
   },
   "requirements": [
     [
-      "has_nether_luminaria_bulb"
+      "has_prominaria_bulb"
     ]
   ],
   "rewards": {
