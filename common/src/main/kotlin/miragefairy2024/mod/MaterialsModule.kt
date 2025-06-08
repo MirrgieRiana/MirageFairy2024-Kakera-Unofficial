@@ -292,15 +292,6 @@ class MaterialCard(
                 )
             },
         )
-        val VEROPEDA_LEAF: MaterialCard = !MaterialCard(
-            "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
-            PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
-            fuelValue = 100,
-        ) {
-            item.registerComposterInput(0.5F)
-            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
-            registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
-        }
         val LILAGIUM_INGOT: MaterialCard = !MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
             PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
@@ -364,6 +355,15 @@ class MaterialCard(
             soulStreamContainable = true, fireResistant = true,
         ) {
             registerSmeltingRecipeGeneration(item, MIRAGIDIAN_SHARD.item) on item from item
+        }
+        val VEROPEDA_LEAF: MaterialCard = !MaterialCard(
+            "veropeda_leaf", "Veropeda Leaf", "ヴェロペダの葉",
+            PoemList(1).poem("Said to house the soul of a demon", "その身融かされるまでの快楽。"),
+            fuelValue = 100,
+        ) {
+            item.registerComposterInput(0.5F)
+            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
         val VEROPEDA_BERRIES: MaterialCard = !MaterialCard(
             "veropeda_berries", "Veropeda Berries", "ヴェロペダの実",
