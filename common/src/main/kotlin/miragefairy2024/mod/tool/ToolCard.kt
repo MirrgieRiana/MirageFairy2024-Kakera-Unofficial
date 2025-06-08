@@ -364,6 +364,26 @@ class ToolCard(
             PoemList(5).poem(EnJa("The mind synchronize with the body", "精神と肉体の調和。")),
             FairyBattleAxeConfiguration(ToolMaterialCard.RESONITE, 7.0F, -3.0F).cutAll().enchantment(Enchantments.SHARPNESS, 6).soulStreamContainable(),
         ) { registerBattleAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val PROMINITE_PICKAXE = !ToolCard(
+            "prominite_pickaxe", EnJa("Prominite Pickaxe", "プロミナイトのつるはし"),
+            PoemList(4).poem(EnJa("Energetic soul extract", "精製された魂の残滓。")), // TODO
+            FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_AXE = !ToolCard(
+            "prominite_axe", EnJa("Prominite Axe", "プロミナイトの斧"),
+            PoemList(4).poem(EnJa("Spiritual ectoplasm recycler", "失われた記憶の断片。")), // TODO
+            FairyAxeConfiguration(ToolMaterialCard.PROMINITE, 4.0F, -3.0F).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
+        ) { registerAxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_SHOVEL = !ToolCard(
+            "prominite_shovel", EnJa("Prominite Shovel", "プロミナイトのシャベル"),
+            PoemList(4).poem(EnJa("Energetic soul extract", "精製された魂の残滓。")), // TODO
+            FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
+        ) { registerShovelRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_SWORD = !ToolCard(
+            "prominite_sword", EnJa("Prominite Sword", "プロミナイトの剣"),
+            PoemList(4).poem(EnJa("Bionic etheroluminescence illuminator", "光を生み出す力。")), // TODO
+            FairySwordConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val MIRAGIDIAN_PICKAXE = !ToolCard(
             "miragidian_pickaxe", EnJa("Miragidian Pickaxe", "ミラジディアンのつるはし"),
             PoemList(4).poem(EnJa("The reinforced will of the substance", "高速度鋼という名の誇り。")),

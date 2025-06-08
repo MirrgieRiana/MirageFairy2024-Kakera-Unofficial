@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:prominaria",
+  "criteria": {
+    "has_gold_prominaria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:gold_prominaria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.gold_prominaria.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:gold_prominaria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.gold_prominaria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_gold_prominaria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_300"
+    ]
+  },
+  "sends_telemetry_event": true
+}
