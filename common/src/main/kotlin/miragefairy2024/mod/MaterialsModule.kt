@@ -439,7 +439,7 @@ class MaterialCard(
         val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
             "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
             PoemList(4)
-                .poem("", "心頭滅却のプロミネンス。") // TODO
+                .poem("Guardian flame of lost souls.", "心頭滅却のプロミネンス。")
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
