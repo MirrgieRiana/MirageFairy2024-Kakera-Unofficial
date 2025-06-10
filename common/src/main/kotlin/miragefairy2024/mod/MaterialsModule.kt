@@ -18,6 +18,7 @@ import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MerrrriaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
@@ -462,6 +463,31 @@ class MaterialCard(
                     icon = { item().createItemStack() },
                     name = EnJa("Jewel of Hell", "地獄の宝石"),
                     description = EnJa("Harvest Prominite from Prominaria", "ネザーのプロミナリアからプロミナイトを収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
+        )
+        val MERRRRIA_DROP: MaterialCard = !MaterialCard(
+            "merrrria_drop", "Merrrria Drop", "月のしずく",
+            PoemList(4)
+                .poem("TODO", "TODO") // TODO
+                .description("Grants night vision when eaten", "食べると暗視を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0.3F)
+                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 60), 1.0F)
+                    .alwaysEdible()
+                    .build()
+            },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("TODO", "TODO"), // TODO
+                    description = EnJa("TODO", "TODO"), // TODO
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
                 )
