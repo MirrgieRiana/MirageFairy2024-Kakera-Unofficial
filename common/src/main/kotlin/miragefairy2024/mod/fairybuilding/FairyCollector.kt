@@ -92,7 +92,7 @@ object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollector
         identifier = identifier,
         context = AdvancementCard.Sub { FairyHouseCard.advancement!!.await() },
         icon = { item().createItemStack() },
-        name = EnJa("Cleaner Driven by Curiosity", "好奇心の収集機"),
+        name = EnJa("Cleaner Driven by Curiosity", "好奇心の収集家"),
         description = EnJa("Place four chests in the Fairy House", "妖精の家にチェストを置く"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
