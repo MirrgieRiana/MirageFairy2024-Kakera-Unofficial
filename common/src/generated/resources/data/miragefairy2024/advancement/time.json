@@ -5,6 +5,7 @@
       "conditions": {
         "items": [
           {
+            "items": "miragefairy2024:fairy",
             "predicates": {
               "miragefairy2024:fairy_motif": "miragefairy2024:time"
             }

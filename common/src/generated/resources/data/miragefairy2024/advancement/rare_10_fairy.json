@@ -5,6 +5,7 @@
       "conditions": {
         "items": [
           {
+            "items": "miragefairy2024:fairy",
             "predicates": {
               "miragefairy2024:fairy_rare": {
                 "min": 10

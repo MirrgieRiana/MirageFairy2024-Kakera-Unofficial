@@ -368,10 +368,9 @@ val rare10Advancement = AdvancementCard(
     criterion = {
         Pair(
             "has_rare_10_fairy", InventoryChangeTrigger.TriggerInstance.hasItems(
-                ItemPredicate.Builder.item().withSubPredicate(
-                    FairyRareItemSubPredicate.INSTANCE(),
-                    FairyRareItemSubPredicate(MinMaxBounds.Ints.atLeast(10)),
-                )
+                ItemPredicate.Builder.item()
+                    .of(FairyCard.item())
+                    .withSubPredicate(FairyRareItemSubPredicate.INSTANCE(), FairyRareItemSubPredicate(MinMaxBounds.Ints.atLeast(10)))
             )
         )
     },
@@ -386,10 +385,9 @@ val timiaAdvancement = AdvancementCard(
     criterion = {
         Pair(
             "has_time_fairy", InventoryChangeTrigger.TriggerInstance.hasItems(
-                ItemPredicate.Builder.item().withSubPredicate(
-                    FairyMotifItemSubPredicate.INSTANCE(),
-                    FairyMotifItemSubPredicate(HolderSet.direct(motifRegistry.wrapAsHolder(MotifCard.TIME))),
-                )
+                ItemPredicate.Builder.item()
+                    .of(FairyCard.item())
+                    .withSubPredicate(FairyMotifItemSubPredicate.INSTANCE(), FairyMotifItemSubPredicate(HolderSet.direct(motifRegistry.wrapAsHolder(MotifCard.TIME))))
             )
         )
     },
