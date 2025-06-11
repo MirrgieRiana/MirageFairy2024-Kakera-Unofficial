@@ -14,7 +14,7 @@ import net.minecraft.nbt.CompoundTag as NbtCompound
 
 // api
 
-class TraitStack(val trait: Trait, val level: Int) {
+data class TraitStack(val trait: Trait, val level: Int) {
     companion object {
         val CODEC: Codec<TraitStack> = RecordCodecBuilder.create { instance ->
             instance.group(
