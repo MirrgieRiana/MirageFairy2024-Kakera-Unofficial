@@ -469,7 +469,7 @@ class MaterialCard(
             },
         )
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
-            "merrrria_drop", "Merrrria Drop", "月の歌声",
+            "merrrria_drop", "Merrrria Drop", "月のしらべ",
             PoemList(4)
                 .poem("TODO", "TODO") // TODO
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
