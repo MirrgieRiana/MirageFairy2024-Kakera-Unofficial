@@ -52,7 +52,6 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     )
 
     override val drops = listOf(MaterialCard.MERRRRIA_DROP.item)
-        get
 
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.MERRRRIA_DROP.item().createItemStack(count))
 

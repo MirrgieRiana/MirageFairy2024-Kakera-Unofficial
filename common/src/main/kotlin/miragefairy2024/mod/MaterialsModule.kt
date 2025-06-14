@@ -469,9 +469,9 @@ class MaterialCard(
             },
         )
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
-            "merrrria_drop", "Merrrria Drop", "月のしらべ",
+            "merrrria_drop", "Merrrria Drop", "月鈴のしずく",
             PoemList(4)
-                .poem("TODO", "TODO") // TODO
+                .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
