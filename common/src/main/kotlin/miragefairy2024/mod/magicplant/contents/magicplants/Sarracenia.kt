@@ -35,7 +35,7 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
     override fun getBlockPath() = "sarracenia"
     override val blockName = EnJa("Sarracenia", "瓶子草サラセニア")
     override fun getItemPath() = "sarracenia_bulb"
-    override val itemName = EnJa("Sarracenia Bulb", "サラセニアの球根")
+    override val itemName = EnJa("Sarracenia Bulb", "瓶子草サラセニアの球根")
     override val tier = 1
     override val poem = EnJa("Waiting for a flying creature...", "妖精たちの憩いの場。")
     override val classification = EnJa("Order Miragales, family Veropedaceae", "妖花目ヴェロペダ科")

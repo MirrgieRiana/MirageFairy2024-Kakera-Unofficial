@@ -105,7 +105,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun getBlockPath() = "prominaria"
     override val blockName = EnJa("Prominaria", "紅炎草プロミナリア")
     override fun getItemPath() = "prominaria_bulb"
-    override val itemName = EnJa("Prominaria Bulb", "プロミナリアの球根")
+    override val itemName = EnJa("Prominaria Bulb", "紅炎草プロミナリアの球根")
     override val tier = 4
     override val poem = EnJa("Purification of the tainted soul", "地獄にともる灯。")
 
@@ -183,7 +183,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override fun getBlockPath() = "gold_prominaria"
     override val blockName = EnJa("Gold Prominaria", "金炎草ゴールドプロミナリア")
     override fun getItemPath() = "gold_prominaria_bulb"
-    override val itemName = EnJa("Gold Prominaria Bulb", "ゴールドプロミナリアの球根")
+    override val itemName = EnJa("Gold Prominaria Bulb", "金炎草ゴールドプロミナリアの球根")
     override val tier = 4
     override val poem = EnJa("Gold-plated prominence.", "摂氏100度の金環食。")
 

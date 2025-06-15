@@ -487,7 +487,7 @@ class MaterialCard(
                     context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("TODO", "TODO"), // TODO
-                    description = EnJa("TODO", "TODO"), // TODO
+                    description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
                 )

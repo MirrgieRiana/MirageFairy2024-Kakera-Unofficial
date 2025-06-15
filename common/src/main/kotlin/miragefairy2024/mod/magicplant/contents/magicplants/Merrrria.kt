@@ -35,13 +35,13 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override fun getBlockPath() = "merrrria"
     override val blockName = EnJa("Merrrria", "月鈴花メルルルリア")
     override fun getItemPath() = "merrrria_bulb"
-    override val itemName = EnJa("Merrrria Bulb", "メルルルリアの球根")
+    override val itemName = EnJa("Merrrria Bulb", "月鈴花メルルルリアの球根")
     override val tier = 3
     override val poem = EnJa("TODO", "TODO") // TODO
     override val classification = EnJa("Order Miragales, family Merrrriaceae", "妖花目メルルルリア科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_4
-    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).sound(SoundType.AMETHYST))
+    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).sound(SoundType.AMETHYST)) // TODO age4のときだけ淡く光る、マグマブロックのレンダリングになる
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0), // TODO
@@ -106,8 +106,8 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("TODO", "TODO"), // TODO
-        description = EnJa("TODO", "TODO"), // TODO
+        name = EnJa("Windswept Nocturne", "風が知らせる夜想曲"),
+        description = EnJa("Search for Merrrria flowers blooming in the windswept", "吹きさらしの丘に咲くメルルルリアの花を探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
     )
@@ -128,6 +128,10 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     }
 }
 
+// TODO　光のパーティクル
+// TODO 夜間ランダムでアメジストの音がする
+// TODO 成長がage3で止まる
+// TODO age3以上の際、randomTickで夜の間だけage4、そうでなければage3になる
 class MerrrriaBlock(settings: Properties) : SimpleMagicPlantBlock(MerrrriaCard, settings) {
     companion object {
         val CODEC: MapCodec<MerrrriaBlock> = simpleCodec(::MerrrriaBlock)
