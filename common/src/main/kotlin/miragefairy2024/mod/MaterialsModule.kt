@@ -454,7 +454,7 @@ class MaterialCard(
         )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
-            PoemList(4).poem("", ""),// TODO
+            PoemList(4).poem("Extreme radical soul sealing stone.", "太陽の石。"),
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
