@@ -199,7 +199,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Gold Tree", "金のなる木"),
+        name = EnJa("Gold Tree", "金のなる木"), // TODO どこかで使う：地獄の沙汰も金次第
         description = EnJa("Use a gold ingot on the Prominaria", "プロミナリアに金インゴットを使用する"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.GOAL,

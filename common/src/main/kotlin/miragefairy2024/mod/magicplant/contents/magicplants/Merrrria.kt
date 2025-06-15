@@ -5,6 +5,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -18,12 +19,18 @@ import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -41,7 +48,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override val classification = EnJa("Order Miragales, family Merrrriaceae", "妖花目メルルルリア科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_4
-    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).sound(SoundType.AMETHYST)) // TODO age4のときだけ淡く光る、マグマブロックのレンダリングになる
+    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).lightLevel { if (it.getValue(ageProperty) == 4) 6 else 0 }.emissiveRendering { it, _, _ -> it.getValue(ageProperty) == 4 }.sound(SoundType.AMETHYST).randomTicks()) // TODO age4のときだけ淡く光る、マグマブロックのレンダリングになる
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0), // TODO
@@ -106,7 +113,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Windswept Nocturne", "風が知らせる夜想曲"),
+        name = EnJa("Windswept Concert", "風の知らせる月鈴歌"),
         description = EnJa("Search for Merrrria flowers blooming in the windswept", "吹きさらしの丘に咲くメルルルリアの花を探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
@@ -128,10 +135,6 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     }
 }
 
-// TODO　光のパーティクル
-// TODO 夜間ランダムでアメジストの音がする
-// TODO 成長がage3で止まる
-// TODO age3以上の際、randomTickで夜の間だけage4、そうでなければage3になる
 class MerrrriaBlock(settings: Properties) : SimpleMagicPlantBlock(MerrrriaCard, settings) {
     companion object {
         val CODEC: MapCodec<MerrrriaBlock> = simpleCodec(::MerrrriaBlock)
@@ -140,4 +143,50 @@ class MerrrriaBlock(settings: Properties) : SimpleMagicPlantBlock(MerrrriaCard, 
     override fun codec() = CODEC
 
     override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_4
+
+    override fun canGrow(blockState: BlockState) = getAge(blockState) < 3 // 0→3までは自然成長
+
+    override fun move(world: ServerLevel, blockPos: BlockPos, blockState: BlockState, speed: Double, autoPick: Boolean) {
+        super.move(world, blockPos, blockState, speed, autoPick)
+
+        // 3と4の間は昼と夜で繰り返す
+        if (getAge(blockState) >= 3) {
+            val newBlockState = withAge(if (world.isNight) 4 else 3)
+            if (newBlockState != blockState) {
+                world.setBlock(blockPos, newBlockState, UPDATE_CLIENTS)
+            }
+        }
+
+    }
+
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: RandomSource) {
+        super.animateTick(state, world, pos, random)
+        if (getAge(state) == 4) {
+            if (world.isNight) {
+                if (random.nextInt(50) == 0) {
+                    world.playLocalSound(
+                        pos.x.toDouble() + 0.5,
+                        pos.y.toDouble() + 0.5,
+                        pos.z.toDouble() + 0.5,
+                        SoundEvents.AMETHYST_BLOCK_RESONATE,
+                        SoundSource.BLOCKS,
+                        0.25F,
+                        0.3F + 1.4F * random.nextFloat(),
+                        false,
+                    )
+                    repeat(4) {
+                        world.addParticle(
+                            ParticleTypeCard.AURA.particleType,
+                            pos.x.toDouble() + random.nextDouble(),
+                            pos.y.toDouble() + random.nextDouble(),
+                            pos.z.toDouble() + random.nextDouble(),
+                            0.0,
+                            0.1,
+                            0.0,
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

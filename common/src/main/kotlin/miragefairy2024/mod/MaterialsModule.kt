@@ -471,13 +471,13 @@ class MaterialCard(
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月鈴のしずく",
             PoemList(4)
-                .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
+                .poem("Tales of latex that charm fairies.", "月夜に響く、鈴の唄。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
                     .nutrition(2)
                     .saturationModifier(0.3F)
-                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 60), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 120), 1.0F)
                     .alwaysEdible()
                     .build()
             },
@@ -486,7 +486,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("TODO", "TODO"), // TODO
+                    name = EnJa("Nocturnal Nocturne", "真夜中だけの演奏会"),
                     description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
