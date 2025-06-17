@@ -454,14 +454,14 @@ class MaterialCard(
         )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
-            PoemList(4).poem("Extreme radical soul sealing stone.", "太陽の石。"),
+            PoemList(4).poem("Extreme radical soul purification stone.", "魂の漂白石。"),
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
                     context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Jewel of Hell", "地獄の宝石"),
+                    name = EnJa("Equality under Physical Law", "物理法則の下の平等"),
                     description = EnJa("Harvest Prominite from Prominaria", "ネザーのプロミナリアからプロミナイトを収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
