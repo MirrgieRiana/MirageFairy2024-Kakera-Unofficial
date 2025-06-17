@@ -455,6 +455,7 @@ class MaterialCard(
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Extreme radical soul purification stone.", "魂の漂白石。"),
+            PoemList(4).poem("Extreme radical soul purification stone.", "魂の漂白石。"), // 熱情の石。
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
@@ -471,7 +472,7 @@ class MaterialCard(
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月鈴のしずく",
             PoemList(4)
-                .poem("Tales of latex that charm fairies.", "月夜に響く、鈴の唄。")
+                .poem("Tales of latex that charm fairies.", "月夜に響く、幻想の詩。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
