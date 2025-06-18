@@ -98,7 +98,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun getBlockStateAfterGrowth(blockState: BlockState, amount: Int): BlockState
 
     /** 時間経過や骨粉などによって呼び出される成長と自動収穫などのためのイベントを処理します。 */
-    protected fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
+    protected open fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
         val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
 
