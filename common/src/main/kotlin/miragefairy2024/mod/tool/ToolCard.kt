@@ -376,7 +376,7 @@ class ToolCard(
         ) { registerAxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_SHOVEL = !ToolCard(
             "prominite_shovel", EnJa("Prominite Shovel", "プロミナイトのシャベル"),
-            PoemList(5).poem(EnJa("TODO", "")), // TODO
+            PoemList(5).poem(EnJa("TODO", "救済の火。")), // TODO
             FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerShovelRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_HOE = !ToolCard(
