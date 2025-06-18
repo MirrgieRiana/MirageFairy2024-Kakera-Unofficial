@@ -45,7 +45,7 @@ object MirageFlowerCard : SimpleMagicPlantCard<MirageFlowerBlock>() {
     override fun getBlockPath() = "mirage_flower"
     override val blockName = EnJa("Mirage Flower", "妖花ミラージュ")
     override fun getItemPath() = "mirage_bulb"
-    override val itemName = EnJa("Mirage Bulb", "ミラージュの球根")
+    override val itemName = EnJa("Mirage Bulb", "妖花ミラージュの球根")
     override val tier = 1
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
