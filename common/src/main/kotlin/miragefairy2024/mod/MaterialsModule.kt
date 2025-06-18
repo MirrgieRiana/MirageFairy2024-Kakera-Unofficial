@@ -454,7 +454,7 @@ class MaterialCard(
         )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
-            PoemList(4).poem("Judgment of Random", "熱になる魂、光になる魂。"), // 熱情の石。 魂の漂白石 Stone that purifies tainted souls.
+            PoemList(4).poem("Arbitrament of Randomness", "炎になる魂。光になる魂。"), // 熱情の石。 魂の漂白石 Stone that purifies tainted souls.
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(

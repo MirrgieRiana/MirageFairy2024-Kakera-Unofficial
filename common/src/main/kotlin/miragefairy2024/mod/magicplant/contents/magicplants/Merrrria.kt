@@ -37,6 +37,7 @@ import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
 import net.minecraft.world.level.material.MapColor
+import kotlin.math.pow
 
 object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override fun getBlockPath() = "merrrria"
@@ -48,7 +49,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override val classification = EnJa("Order Miragales, family Merrrriaceae", "妖花目メルルルリア科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_4
-    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).lightLevel { if (it.getValue(ageProperty) == 4) 6 else 0 }.emissiveRendering { it, _, _ -> it.getValue(ageProperty) == 4 }.sound(SoundType.AMETHYST).randomTicks()) // TODO age4のときだけ淡く光る、マグマブロックのレンダリングになる
+    override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).lightLevel { if (it.getValue(ageProperty) == 4) 6 else 0 }.emissiveRendering { it, _, _ -> it.getValue(ageProperty) == 4 }.sound(SoundType.AMETHYST))
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0), // TODO
@@ -138,6 +139,11 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
 class MerrrriaBlock(settings: Properties) : SimpleMagicPlantBlock(MerrrriaCard, settings) {
     companion object {
         val CODEC: MapCodec<MerrrriaBlock> = simpleCodec(::MerrrriaBlock)
+        private val PITCHES = listOf(
+            listOf(0, 2, 4, 5, 7, 9, 11).map { it + 12 * 0 },
+            listOf(0, 2, 4, 5, 7, 9, 11).map { it + 12 * 1 },
+            listOf(0).map { it + 12 * 2 },
+        ).flatten().map { 2F.pow(it / 12F) }
     }
 
     override fun codec() = CODEC
@@ -162,29 +168,29 @@ class MerrrriaBlock(settings: Properties) : SimpleMagicPlantBlock(MerrrriaCard, 
     override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: RandomSource) {
         super.animateTick(state, world, pos, random)
         if (getAge(state) == 4) {
-            if (world.isNight) {
-                if (random.nextInt(50) == 0) {
-                    world.playLocalSound(
-                        pos.x.toDouble() + 0.5,
-                        pos.y.toDouble() + 0.5,
-                        pos.z.toDouble() + 0.5,
-                        SoundEvents.AMETHYST_BLOCK_RESONATE,
-                        SoundSource.BLOCKS,
-                        0.25F,
-                        0.3F + 1.4F * random.nextFloat(),
-                        false,
+            if (random.nextInt(50) == 0) {
+                // クライアント側ではisNightが機能しないので夜だけ演奏はできない
+                val pitch = PITCHES[random.nextInt(PITCHES.size)]
+                world.playLocalSound(
+                    pos.x.toDouble() + 0.5,
+                    pos.y.toDouble() + 0.5,
+                    pos.z.toDouble() + 0.5,
+                    SoundEvents.AMETHYST_BLOCK_RESONATE,
+                    SoundSource.BLOCKS,
+                    0.25F,
+                    0.3F * pitch,
+                    false,
+                )
+                repeat(4) {
+                    world.addParticle(
+                        ParticleTypeCard.AURA.particleType,
+                        pos.x.toDouble() + random.nextDouble(),
+                        pos.y.toDouble() + random.nextDouble(),
+                        pos.z.toDouble() + random.nextDouble(),
+                        0.0,
+                        0.1,
+                        0.0,
                     )
-                    repeat(4) {
-                        world.addParticle(
-                            ParticleTypeCard.AURA.particleType,
-                            pos.x.toDouble() + random.nextDouble(),
-                            pos.y.toDouble() + random.nextDouble(),
-                            pos.z.toDouble() + random.nextDouble(),
-                            0.0,
-                            0.1,
-                            0.0,
-                        )
-                    }
                 }
             }
         }
