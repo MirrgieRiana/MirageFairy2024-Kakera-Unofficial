@@ -113,7 +113,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Windswept Concert", "風の知らせる月鈴歌"),
+        name = EnJa("Windswept Concert", "風の知らせる演奏会"),
         description = EnJa("Search for Merrrria flowers blooming in the windswept", "吹きさらしの丘に咲くメルルルリアの花を探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,

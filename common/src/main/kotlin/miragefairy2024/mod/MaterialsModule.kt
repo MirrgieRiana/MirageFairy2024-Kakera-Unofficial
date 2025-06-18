@@ -454,7 +454,7 @@ class MaterialCard(
         )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
-            PoemList(4).poem("Extreme radical soul purification stone.", "魂の漂白石。"), // 熱情の石。
+            PoemList(4).poem("Stone that purifies tainted souls.", "救済の火。"), // 熱情の石。 魂の漂白石
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
@@ -469,9 +469,9 @@ class MaterialCard(
             },
         )
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
-            "merrrria_drop", "Merrrria Drop", "月鈴のしずく",
+            "merrrria_drop", "Merrrria Drop", "月のしずく",
             PoemList(4)
-                .poem("Tales of latex that charm fairies.", "月夜に響く、幻想の詩。")
+                .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
@@ -486,7 +486,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Nocturnal Nocturne", "真夜中だけの演奏会"),
+                    name = EnJa("Nocturnal Nocturne", "真夜中だけの夜想曲"),
                     description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
