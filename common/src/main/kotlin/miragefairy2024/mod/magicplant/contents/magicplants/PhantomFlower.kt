@@ -35,7 +35,7 @@ object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
     override fun getBlockPath() = "phantom_flower"
     override val blockName = EnJa("Phantom Flower", "幻花ファントム")
     override fun getItemPath() = "phantom_bulb"
-    override val itemName = EnJa("Phantom Bulb", "ファントムの球根")
+    override val itemName = EnJa("Phantom Bulb", "幻花ファントムの球根")
     override val tier = 3
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")

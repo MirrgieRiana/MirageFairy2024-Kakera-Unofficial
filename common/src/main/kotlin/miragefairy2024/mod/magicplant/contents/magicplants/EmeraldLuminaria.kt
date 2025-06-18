@@ -41,7 +41,7 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
     override fun getBlockPath() = "emerald_luminaria"
     override val blockName = EnJa("Emerald Luminaria", "翠玉輝草エメラルドルミナリア")
     override fun getItemPath() = "emerald_luminaria_bulb"
-    override val itemName = EnJa("Emerald Luminaria Bulb", "エメラルドルミナリアの球根")
+    override val itemName = EnJa("Emerald Luminaria Bulb", "翠玉輝草エメラルドルミナリアの球根")
     override val tier = 3
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
