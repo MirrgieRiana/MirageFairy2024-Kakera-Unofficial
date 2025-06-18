@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "minecraft:sugar",
+  "ingredients": [
+    {
+      "item": "miragefairy2024:sarracenia_leaf"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:sugar"
+  }
+}
