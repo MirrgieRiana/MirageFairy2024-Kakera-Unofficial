@@ -106,8 +106,8 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val blockName = EnJa("Prominaria", "紅炎草プロミナリア")
     override fun getItemPath() = "prominaria_bulb"
     override val itemName = EnJa("Prominaria Bulb", "紅炎草プロミナリアの球根")
-    override val tier = 4
-    override val poem = EnJa("Purification of the tainted soul", "地獄にともる灯。")
+    override val tier = 3
+    override val poem = EnJa("Cleansing of tainted souls.", "死霊を貪り、生きる。")
 
     override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
@@ -124,7 +124,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Subterranean Sun", "地底の太陽"),
+        name = EnJa("Subterranean Sun", "地獄にともる灯"),
         description = EnJa("Search for Prominaria in the bottom of Nether Wastes", "ネザーの荒地の最下層でプロミナリアを探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
@@ -184,8 +184,8 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val blockName = EnJa("Gold Prominaria", "金炎草ゴールドプロミナリア")
     override fun getItemPath() = "gold_prominaria_bulb"
     override val itemName = EnJa("Gold Prominaria Bulb", "金炎草ゴールドプロミナリアの球根")
-    override val tier = 4
-    override val poem = EnJa("Gold-plated prominence.", "摂氏100度の金環食。")
+    override val tier = 3
+    override val poem = EnJa("Gold-plated prominence.", "地獄の沙汰も金次第。")
 
     override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
@@ -199,7 +199,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
         identifier = identifier,
         context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Gold Tree", "金のなる木"), // TODO どこかで使う：地獄の沙汰も金次第
+        name = EnJa("Gold Tree", "金のなる木"),
         description = EnJa("Use a gold ingot on the Prominaria", "プロミナリアに金インゴットを使用する"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.GOAL,

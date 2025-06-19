@@ -439,7 +439,7 @@ class MaterialCard(
         }
         val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
             "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
-            PoemList(4)
+            PoemList(3)
                 .poem("Guardian flame of lost souls.", "心頭滅却のプロミネンス。")
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
             foodComponentCreator = {
@@ -454,7 +454,7 @@ class MaterialCard(
         )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
-            PoemList(4).poem("Arbitrament of Randomness", "炎になる魂。光になる魂。"), // 熱情の石。 魂の漂白石 Stone that purifies tainted souls.
+            PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
             fireResistant = true,
             advancementCreator = {
                 AdvancementCard(
@@ -468,6 +468,9 @@ class MaterialCard(
                 )
             },
         )
+
+        // EnJa("Gold-plated prominence.", "摂氏100度の金環食。") // TODO ゴールドプロミナリアの実
+
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月のしずく",
             PoemList(4)

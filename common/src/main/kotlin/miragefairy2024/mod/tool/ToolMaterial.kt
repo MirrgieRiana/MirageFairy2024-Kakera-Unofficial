@@ -43,7 +43,7 @@ enum class FairyToolMaterials(
     PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 12, { MaterialCard.PHANTOM_DROP.item().toIngredient() }),
     LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 21, { MaterialCard.LUMINITE.item().toIngredient() }),
     RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 19, { MaterialCard.RESONITE_INGOT.item().toIngredient() }),
-    PROMINITE(Tiers.NETHERITE, 3650, 7.0F, 2.0F, 13, { MaterialCard.PROMINITE.item().toIngredient() }),
+    PROMINITE(Tiers.DIAMOND, 1125, 7.0F, 2.0F, 13, { MaterialCard.PROMINITE.item().toIngredient() }),
     XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 20, { MaterialCard.XARPITE.item().toIngredient() }),
     MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 24, { MaterialCard.MIRANAGITE.item().toIngredient() }),
     CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 15, { MaterialCard.CHAOS_STONE.item().toIngredient() }),

@@ -366,32 +366,32 @@ class ToolCard(
         ) { registerBattleAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
         val PROMINITE_PICKAXE = !ToolCard(
             "prominite_pickaxe", EnJa("Prominite Pickaxe", "プロミナイトのつるはし"),
-            PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
+            PoemList(4).poem(EnJa("Refined soul fuel.", "打ち砕かれた魂の残骸。")),
             FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_AXE = !ToolCard(
             "prominite_axe", EnJa("Prominite Axe", "プロミナイトの斧"),
-            PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
+            PoemList(4).poem(EnJa("Unpredictable movement of flames.", "カオスの鉄槌。")),
             FairyAxeConfiguration(ToolMaterialCard.PROMINITE, 4.0F, -3.0F).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerAxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_SHOVEL = !ToolCard(
             "prominite_shovel", EnJa("Prominite Shovel", "プロミナイトのシャベル"),
-            PoemList(5).poem(EnJa("TODO", "救済の炎。")), // TODO
+            PoemList(4).poem(EnJa("Flame that burns misfortune.", "救済の火。")),
             FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerShovelRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_HOE = !ToolCard(
             "prominite_hoe", EnJa("Prominite Hoe", "プロミナイトのクワ"),
-            PoemList(5).poem(EnJa("TODO", "折り重なる死霊の宴。")), // TODO
+            PoemList(4).poem(EnJa("Regenerated spirit.", "命の萌芽。")),
             FairyHoeConfiguration(ToolMaterialCard.PROMINITE, -3, 0.0F).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerHoeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_SWORD = !ToolCard(
             "prominite_sword", EnJa("Prominite Sword", "プロミナイトの剣"),
-            PoemList(5).poem(EnJa("TODO", "赤熱する闘志の聲。")), // TODO
+            PoemList(4).poem(EnJa("Struggle for the fate.", "「存在」の争奪。")),
             FairySwordConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_SCYTHE = !ToolCard(
             "prominite_scythe", EnJa("Prominite Scythe", "プロミナイトの大鎌"),
-            PoemList(5).poem(EnJa("TODO", "TODO")), // TODO
+            PoemList(4).poem(EnJa("Piles of what was once consciousness.", "折り重なる沈黙の宴。")),
             FairyScytheConfiguration(ToolMaterialCard.PROMINITE).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerScytheRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val MIRAGIDIAN_PICKAXE = !ToolCard(
