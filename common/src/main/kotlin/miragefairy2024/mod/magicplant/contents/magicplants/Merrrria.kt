@@ -45,7 +45,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override fun getItemPath() = "merrrria_bulb"
     override val itemName = EnJa("Merrrria Bulb", "月鈴花メルルルリアの球根")
     override val tier = 3
-    override val poem = EnJa("TODO", "TODO") // TODO
+    override val poem = EnJa("Windswept concert.", "風の知らせる演奏会。")
     override val classification = EnJa("Order Miragales, family Merrrriaceae", "妖花目メルルルリア科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_4
@@ -109,12 +109,14 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
 
     val MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("merrrria_cluster")
     val MERRRRIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("merrrria_cluster")
+    val MERRRRIA_LARGE_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("merrrria_large_cluster")
+    val MERRRRIA_LARGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("merrrria_large_cluster")
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("Windswept Concert", "風の知らせる演奏会"),
+        name = EnJa("Hill where a Moon Blooms", "月の咲く丘"),
         description = EnJa("Search for Merrrria flowers blooming in the windswept", "吹きさらしの丘に咲くメルルルリアの花を探す"),
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.NORMAL,
@@ -130,7 +132,12 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
             MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
             }) {
-                MERRRRIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+                MERRRRIA_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+            }
+            MERRRRIA_LARGE_CLUSTER_CONFIGURED_FEATURE_KEY({
+                RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
+            }) {
+                MERRRRIA_LARGE_CLUSTER_PLACED_FEATURE_KEY({ per(128) + flower }) { +ConventionalBiomeTags.IS_WINDSWEPT }
             }
         }
     }

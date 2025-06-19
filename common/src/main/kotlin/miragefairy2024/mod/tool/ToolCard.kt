@@ -381,7 +381,7 @@ class ToolCard(
         ) { registerShovelRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_HOE = !ToolCard(
             "prominite_hoe", EnJa("Prominite Hoe", "プロミナイトのクワ"),
-            PoemList(4).poem(EnJa("Regenerated spirit.", "命の萌芽。")),
+            PoemList(4).poem(EnJa("Regenerated spirit.", "生命の萌芽。")),
             FairyHoeConfiguration(ToolMaterialCard.PROMINITE, -3, 0.0F).enchantment(Enchantments.FIRE_ASPECT).fireResistant(), // TODO 採掘時精錬効果
         ) { registerHoeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val PROMINITE_SWORD = !ToolCard(

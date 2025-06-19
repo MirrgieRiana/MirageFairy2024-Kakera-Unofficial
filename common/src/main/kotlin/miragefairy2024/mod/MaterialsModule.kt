@@ -468,9 +468,24 @@ class MaterialCard(
                 )
             },
         )
-
-        // EnJa("Gold-plated prominence.", "摂氏100度の金環食。") // TODO ゴールドプロミナリアの実
-
+        val GOLD_PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "gold_prominaria_berry", "Gold Prominaria Berry", "ゴールドプロミナリアの実",
+            PoemList(3)
+                .poem("Gold-plated prominence.", "摂氏100度の金環食。")
+                .description("Grants absorption when eaten", "食べると衝撃吸収を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120), 1.0F)
+                    .build()
+            },
+        ) {
+            registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+        }
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月のしずく",
             PoemList(4)
@@ -489,7 +504,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Nocturnal Nocturne", "真夜中だけの夜想曲"),
+                    name = EnJa("Nocturnal Nocturne", "真夜中だけのノクターン"),
                     description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,

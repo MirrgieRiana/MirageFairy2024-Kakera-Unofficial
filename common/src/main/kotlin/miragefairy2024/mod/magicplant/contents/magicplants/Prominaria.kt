@@ -14,6 +14,7 @@ import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
+import miragefairy2024.util.plus
 import miragefairy2024.util.rangedNetherFlower
 import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
@@ -30,7 +31,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.state.BlockState
@@ -107,7 +107,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun getItemPath() = "prominaria_bulb"
     override val itemName = EnJa("Prominaria Bulb", "紅炎草プロミナリアの球根")
     override val tier = 3
-    override val poem = EnJa("Cleansing of tainted souls.", "死霊を貪り、生きる。")
+    override val poem = EnJa("Cleansing of tainted souls.", "死霊を貪り、命に変える。")
 
     override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
@@ -140,7 +140,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
             PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES }
+                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
             }
         }
 
@@ -192,8 +192,8 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val baseGrowth = 0.05
     override val baseSeedGeneration = 0.0
 
-    override val drops = listOf { Items.GOLD_NUGGET }
-    override fun getFruitDrops(count: Int, random: Random) = listOf(Items.GOLD_NUGGET.createItemStack(count))
+    override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item)
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,

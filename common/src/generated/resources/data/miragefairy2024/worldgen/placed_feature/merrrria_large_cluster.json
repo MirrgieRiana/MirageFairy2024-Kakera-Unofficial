@@ -1,9 +1,9 @@
 {
-  "feature": "miragefairy2024:merrrria_cluster",
+  "feature": "miragefairy2024:merrrria_large_cluster",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 16
+      "chance": 128
     },
     {
       "type": "minecraft:in_square"
