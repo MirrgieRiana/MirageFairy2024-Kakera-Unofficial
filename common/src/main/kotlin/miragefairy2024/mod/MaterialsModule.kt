@@ -64,6 +64,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.Stats
+import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -99,6 +100,7 @@ class MaterialCard(
     val fireResistant: Boolean = false,
     val foodComponentCreator: (suspend () -> FoodComponent)? = null,
     val recipeRemainder: Item? = null,
+    val tags: List<TagKey<Item>>? = null,
     val creator: (Item.Properties) -> Item = ::Item,
     val advancementCreator: (MaterialCard.(ResourceLocation) -> AdvancementCard)? = null,
     val initializer: context(ModContext) MaterialCard.() -> Unit = {},
@@ -489,56 +491,51 @@ class MaterialCard(
             "tiny_mirage_flour", "Tiny Pile of Mirage Flour", "小さなミラージュの花粉",
             PoemList(1).poem("Compose the body of Mirage fairy", "ささやかな温もりを、てのひらの上に。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(-1.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR: MaterialCard = !MaterialCard(
             "mirage_flour", "Mirage Flour", "ミラージュの花粉",
             PoemList(1).poem("Containing metallic organic matter", "叡智の根源、創発のファンタジア。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(0.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_NATURE: MaterialCard = !MaterialCard(
             "mirage_flour_of_nature", "Mirage Flour of Nature", "自然のミラージュの花粉",
             PoemList(1).poem("Use the difference in ether resistance", "艶やかなほたる色に煌めく鱗粉。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(1.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_EARTH: MaterialCard = !MaterialCard(
             "mirage_flour_of_earth", "Mirage Flour of Earth", "大地のミラージュの花粉",
             PoemList(2).poem("As intelligent as humans", "黄金の魂が示す、好奇心の輝き。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(2.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_UNDERWORLD: MaterialCard = !MaterialCard(
             "mirage_flour_of_underworld", "Mirage Flour of Underworld", "地底のミラージュの花粉",
             PoemList(2).poem("Awaken fairies in the world and below", "1,300ケルビンの夜景。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(3.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_SKY: MaterialCard = !MaterialCard(
             "mirage_flour_of_sky", "Mirage Flour of Sky", "天空のミラージュの花粉",
             PoemList(3).poem("Explore atmosphere and nearby universe", "蒼淵を彷徨う影、導きの光。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(4.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_UNIVERSE: MaterialCard = !MaterialCard(
             "mirage_flour_of_universe", "Mirage Flour of Universe", "宇宙のミラージュの花粉",
             PoemList(3)
                 .poem("poem1", "Leap spaces by collapsing time crystals,", "運命の束、時の結晶、光速の呪いを退けよ、")
                 .poem("poem2", "capture ether beyond observable universe", "讃えよ、アーカーシャに眠る自由の頂きを。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(5.0), it) },
             advancementCreator = {
                 AdvancementCard(
@@ -551,19 +548,16 @@ class MaterialCard(
                     type = AdvancementCardType.CHALLENGE,
                 )
             }
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
         val MIRAGE_FLOUR_OF_TIME: MaterialCard = !MaterialCard(
             "mirage_flour_of_time", "Mirage Flour of Time", "時空のミラージュの花粉",
             PoemList(4)
                 .poem("poem1", "Attracts nearby parallel worlds outside", "虚空に眠る時の断片。因果の光が貫くとき、")
                 .poem("poem2", "this universe and collects their ether.", "亡失の世界は探し始める。無慈悲な真実を。"),
             soulStreamContainable = true,
+            tags = listOf(MIRAGE_FLOUR_TAG),
             creator = { RandomFairySummoningItem(9.0.pow(6.0), it) },
-        ) {
-            item.registerItemTagGeneration { MIRAGE_FLOUR_TAG }
-        }
+        )
 
         val FAIRY_SCALES: MaterialCard = !MaterialCard(
             "fairy_scales", "Fairy Scales", "妖精の鱗粉",
@@ -975,6 +969,11 @@ fun initMaterialsModule() {
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
         if (card.soulStreamContainable) card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
         if (card.advancement != null) card.advancement.init()
+        if (card.tags != null) {
+            card.tags.forEach { tag ->
+                card.item.registerItemTagGeneration { tag }
+            }
+        }
         card.initializer(this@ModContext, card)
     }
 
