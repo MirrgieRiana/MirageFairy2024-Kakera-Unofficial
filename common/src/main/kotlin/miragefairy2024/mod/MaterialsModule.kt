@@ -18,8 +18,10 @@ import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MerrrriaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
+import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -384,6 +386,17 @@ class MaterialCard(
         ) {
             item.registerComposterInput(0.3F)
         }
+        val SARRACENIA_LEAF: MaterialCard = !MaterialCard(
+            "sarracenia_leaf", "Sarracenia Leaf", "サラセニアの葉",
+            PoemList(1).poem("Fruity and sweet and sour.", "とけた果肉と蜜の味。"),
+            fuelValue = 100,
+        ) {
+            item.registerComposterInput(0.5F)
+            registerShapelessRecipeGeneration({ Items.SUGAR }) {
+                requires(item)
+            } on item modId MirageFairy2024.MOD_ID from item
+            // TODO 酸を回収する手段
+        }
         val LUMINITE: MaterialCard = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
             PoemList(4).poem("An end point of reincarnation", "彷徨える魂の行方。"),
@@ -426,6 +439,81 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
+        val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
+            PoemList(3)
+                .poem("Guardian flame of lost souls.", "心頭滅却のプロミネンス。")
+                .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
+                    .build()
+            },
+        )
+        val PROMINITE: MaterialCard = !MaterialCard(
+            "prominite", "Prominite", "プロミナイト",
+            PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
+            fireResistant = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Equality under Physical Law", "物理法則の下の平等"),
+                    description = EnJa("Harvest Prominite from Prominaria", "ネザーのプロミナリアからプロミナイトを収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
+        )
+        val GOLD_PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "gold_prominaria_berry", "Gold Prominaria Berry", "ゴールドプロミナリアの実",
+            PoemList(3)
+                .poem("Gold-plated prominence.", "摂氏100度の金環食。")
+                .description("Grants absorption when eaten", "食べると衝撃吸収を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120), 1.0F)
+                    .build()
+            },
+            tags = listOf(ItemTags.PIGLIN_LOVED),
+        ) {
+            registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+        }
+        val MERRRRIA_DROP: MaterialCard = !MaterialCard(
+            "merrrria_drop", "Merrrria Drop", "月のしずく",
+            PoemList(4)
+                .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
+                .description("Grants night vision when eaten", "食べると暗視を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0.3F)
+                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 120), 1.0F)
+                    .alwaysEdible()
+                    .build()
+            },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Nocturnal Nocturne", "真夜中だけのノクターン"),
+                    description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
+        )
         val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)

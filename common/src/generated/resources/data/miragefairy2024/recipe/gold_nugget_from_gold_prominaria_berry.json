@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "group": "minecraft:gold_nugget",
+  "ingredient": {
+    "item": "miragefairy2024:gold_prominaria_berry"
+  },
+  "result": {
+    "id": "minecraft:gold_nugget"
+  }
+}

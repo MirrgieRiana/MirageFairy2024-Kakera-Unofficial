@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:diamond_luminaria",
+  "criteria": {
+    "has_prominaria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:prominaria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.prominaria.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:prominaria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.prominaria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_prominaria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:prominaria",
+  "criteria": {
+    "has_prominite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:prominite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.prominite.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:prominite"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.prominite.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_prominite"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}
