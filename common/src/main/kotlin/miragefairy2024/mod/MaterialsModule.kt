@@ -425,6 +425,11 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
+        val PROMINITE: MaterialCard = !MaterialCard(
+            "prominite", "Prominite", "プロミナイト",
+            PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
+            fireResistant = true,
+        )
         val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
             PoemList(1)
