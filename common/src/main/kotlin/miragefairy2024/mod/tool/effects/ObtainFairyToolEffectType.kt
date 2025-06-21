@@ -17,7 +17,7 @@ import miragefairy2024.util.text
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun ToolConfiguration.obtainFairy(appearanceRateBonus: Double) = this.also {
+fun <T : ToolConfiguration> T.obtainFairy(appearanceRateBonus: Double) = this.also {
     this.merge(ObtainFairyToolEffectType, appearanceRateBonus) { appearanceRateBonus ->
         ObtainFairyToolEffectType.apply(this, appearanceRateBonus)
     }

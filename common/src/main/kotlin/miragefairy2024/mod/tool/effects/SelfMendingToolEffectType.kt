@@ -13,7 +13,7 @@ import miragefairy2024.util.repair
 import miragefairy2024.util.text
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
-fun ToolConfiguration.selfMending(speed: Int) = this.also {
+fun <T : ToolConfiguration> T.selfMending(speed: Int) = this.also {
     this.merge(SelfMendingToolEffectType, speed) { speed ->
         SelfMendingToolEffectType.apply(this, speed)
     }

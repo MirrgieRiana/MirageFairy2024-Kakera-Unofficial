@@ -13,7 +13,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.ExperienceOrb as ExperienceOrbEntity
 import net.minecraft.world.phys.AABB as Box
 
-fun ToolConfiguration.collection() = this.also {
+fun <T : ToolConfiguration> T.collection() = this.also {
     this.merge(CollectionToolEffectType, true) { enabled ->
         CollectionToolEffectType.apply(this, enabled)
     }

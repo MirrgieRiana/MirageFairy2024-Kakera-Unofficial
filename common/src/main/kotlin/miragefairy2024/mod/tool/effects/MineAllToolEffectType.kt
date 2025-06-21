@@ -17,7 +17,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun ToolConfiguration.mineAll() = this.also {
+fun <T : ToolConfiguration> T.mineAll() = this.also {
     this.merge(MineAllToolEffectType, true) { enabled ->
         MineAllToolEffectType.apply(this, enabled)
     }

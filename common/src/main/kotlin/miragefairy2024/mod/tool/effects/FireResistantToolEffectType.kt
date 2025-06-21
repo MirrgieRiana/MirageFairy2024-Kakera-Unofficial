@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.mod.tool.ToolConfiguration
 
-fun ToolConfiguration.fireResistant() = this.also {
+fun <T : ToolConfiguration> T.fireResistant() = this.also {
     this.merge(FireResistantToolEffectType, true) { enabled ->
         FireResistantToolEffectType.apply(this, enabled)
     }

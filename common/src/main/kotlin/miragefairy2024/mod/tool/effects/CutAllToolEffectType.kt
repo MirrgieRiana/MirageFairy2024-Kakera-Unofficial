@@ -19,7 +19,7 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun ToolConfiguration.cutAll() = this.also {
+fun <T : ToolConfiguration> T.cutAll() = this.also {
     this.merge(CutAllToolEffectType, true) { enabled ->
         CutAllToolEffectType.apply(this, enabled)
     }

@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool.effects
 
 import miragefairy2024.mod.tool.ToolConfiguration
 
-fun ToolConfiguration.glint() = this.also {
+fun <T : ToolConfiguration> T.glint() = this.also {
     this.merge(GlintToolEffectType, true) { enabled ->
         GlintToolEffectType.apply(this, enabled)
     }

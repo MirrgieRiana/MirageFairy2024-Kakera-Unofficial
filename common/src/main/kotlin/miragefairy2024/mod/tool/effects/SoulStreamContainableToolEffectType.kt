@@ -11,7 +11,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 
-fun ToolConfiguration.soulStreamContainable() = this.also {
+fun <T : ToolConfiguration> T.soulStreamContainable() = this.also {
     this.merge(SoulStreamContainableToolEffectType, true) { enabled ->
         SoulStreamContainableToolEffectType.apply(this, enabled)
     }

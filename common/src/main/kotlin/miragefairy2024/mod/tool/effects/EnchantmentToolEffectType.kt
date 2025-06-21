@@ -19,7 +19,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.enchantment.Enchantment
 
-fun ToolConfiguration.enchantment(enchantment: ResourceKey<Enchantment>, level: Int = 1) = this.also {
+fun <T : ToolConfiguration> T.enchantment(enchantment: ResourceKey<Enchantment>, level: Int = 1) = this.also {
     this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level))) { map ->
         EnchantmentToolEffectType.apply(this, map)
     }

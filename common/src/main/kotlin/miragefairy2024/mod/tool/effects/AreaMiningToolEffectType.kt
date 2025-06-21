@@ -16,7 +16,7 @@ import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun ToolConfiguration.areaMining(level: Int = 1) = this.also {
+fun <T : ToolConfiguration> T.areaMining(level: Int = 1) = this.also {
     this.merge(AreaMiningToolEffectType, level) { level ->
         AreaMiningToolEffectType.apply(this, level)
     }
