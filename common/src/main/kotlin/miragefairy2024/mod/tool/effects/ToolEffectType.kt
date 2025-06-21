@@ -1,7 +1,20 @@
 package miragefairy2024.mod.tool.effects
 
+import miragefairy2024.ModContext
 import miragefairy2024.mod.tool.ToolEffectType
 import mirrg.kotlin.hydrogen.max
+
+context(ModContext)
+fun initToolEffectType() {
+    AreaMiningToolEffectType.init()
+    MineAllToolEffectType.init()
+    CutAllToolEffectType.init()
+    SelfMendingToolEffectType.init()
+    ObtainFairyToolEffectType.init()
+    CollectionToolEffectType.init()
+    SoulStreamContainableToolEffectType.init()
+    RoughenHoeToolEffectType.init()
+}
 
 abstract class BooleanToolEffectType : ToolEffectType<Boolean> {
     override fun castOrThrow(value: Any?) = value as Boolean

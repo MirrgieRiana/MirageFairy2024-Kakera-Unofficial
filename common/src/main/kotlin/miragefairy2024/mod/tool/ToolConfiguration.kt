@@ -6,14 +6,6 @@ import miragefairy2024.mixins.api.BlockCallback
 import miragefairy2024.mod.Poem
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.plus
-import miragefairy2024.mod.tool.effects.AreaMiningToolEffectType
-import miragefairy2024.mod.tool.effects.CollectionToolEffectType
-import miragefairy2024.mod.tool.effects.CutAllToolEffectType
-import miragefairy2024.mod.tool.effects.MineAllToolEffectType
-import miragefairy2024.mod.tool.effects.ObtainFairyToolEffectType
-import miragefairy2024.mod.tool.effects.RoughenHoeToolEffectType
-import miragefairy2024.mod.tool.effects.SelfMendingToolEffectType
-import miragefairy2024.mod.tool.effects.SoulStreamContainableToolEffectType
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
@@ -47,15 +39,6 @@ fun initToolConfiguration() {
         if (item !is FairyToolItem) return@register
         item.onKilled(entity, attacker, damageSource)
     }
-
-    AreaMiningToolEffectType.init()
-    MineAllToolEffectType.init()
-    CutAllToolEffectType.init()
-    SelfMendingToolEffectType.init()
-    ObtainFairyToolEffectType.init()
-    CollectionToolEffectType.init()
-    SoulStreamContainableToolEffectType.init()
-    RoughenHoeToolEffectType.init()
 
 }
 
