@@ -31,7 +31,7 @@ open class FairyPickaxeConfiguration(
     }
 }
 
-class FairyPickaxeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
+class FairyPickaxeItem(override val configuration: FairyPickaxeConfiguration, settings: Properties) :
     PickaxeItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {

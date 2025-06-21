@@ -30,7 +30,7 @@ open class FairyShovelConfiguration(
     }
 }
 
-class FairyShovelItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
+class FairyShovelItem(override val configuration: FairyShovelConfiguration, settings: Properties) :
     ShovelItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {

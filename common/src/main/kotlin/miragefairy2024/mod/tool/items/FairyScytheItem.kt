@@ -58,7 +58,7 @@ open class FairyScytheConfiguration(
     }
 }
 
-class FairyScytheItem(override val configuration: FairyMiningToolConfiguration, range: Int, settings: Properties) :
+class FairyScytheItem(override val configuration: FairyScytheConfiguration, range: Int, settings: Properties) :
     ScytheItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, range, settings),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {

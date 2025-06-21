@@ -36,7 +36,7 @@ open class FairyKnifeConfiguration(
     }
 }
 
-class FairyKnifeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
+class FairyKnifeItem(override val configuration: FairyKnifeConfiguration, settings: Properties) :
     KnifeItem(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed, settings),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {

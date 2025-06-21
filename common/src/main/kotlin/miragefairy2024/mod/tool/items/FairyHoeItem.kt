@@ -36,7 +36,7 @@ open class FairyHoeConfiguration(
     }
 }
 
-class FairyHoeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
+class FairyHoeItem(override val configuration: FairyHoeConfiguration, settings: Properties) :
     HoeItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {

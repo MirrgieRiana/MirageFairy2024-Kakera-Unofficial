@@ -36,7 +36,7 @@ open class FairyAxeConfiguration(
     }
 }
 
-class FairyAxeItem(override val configuration: FairyMiningToolConfiguration, settings: Properties) :
+class FairyAxeItem(override val configuration: FairyAxeConfiguration, settings: Properties) :
     AxeItem(configuration.toolMaterialCard.toolMaterial, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {
