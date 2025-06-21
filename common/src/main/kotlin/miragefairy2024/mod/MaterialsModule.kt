@@ -65,6 +65,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.Stats
+import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -437,11 +438,45 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
+        val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
+            PoemList(3)
+                .poem("Guardian flame of lost souls.", "心頭滅却のプロミネンス。")
+                .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
+                    .build()
+            },
+        )
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
             fireResistant = true,
         )
+        val GOLD_PROMINARIA_BERRY: MaterialCard = !MaterialCard(
+            "gold_prominaria_berry", "Gold Prominaria Berry", "ゴールドプロミナリアの実",
+            PoemList(3)
+                .poem("Gold-plated prominence.", "摂氏100度の金環食。")
+                .description("Grants absorption when eaten", "食べると衝撃吸収を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.1F)
+                    .fast()
+                    .alwaysEdible()
+                    .effect(StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120), 1.0F)
+                    .build()
+            },
+            tags = listOf(ItemTags.PIGLIN_LOVED),
+        ) {
+            registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+        }
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月のしずく",
             PoemList(4)
