@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:root",
+  "criteria": {
+    "has_merrrria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:merrrria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.merrrria.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:merrrria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.merrrria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_merrrria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

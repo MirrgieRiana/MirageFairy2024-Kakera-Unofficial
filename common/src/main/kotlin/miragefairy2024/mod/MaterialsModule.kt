@@ -18,6 +18,7 @@ import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.MerrrriaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.structure.WeatheredAncientRemnantsCard
@@ -440,6 +441,31 @@ class MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
             fireResistant = true,
+        )
+        val MERRRRIA_DROP: MaterialCard = !MaterialCard(
+            "merrrria_drop", "Merrrria Drop", "月のしずく",
+            PoemList(4)
+                .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
+                .description("Grants night vision when eaten", "食べると暗視を付与"),
+            foodComponentCreator = {
+                FoodComponent.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0.3F)
+                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 120), 1.0F)
+                    .alwaysEdible()
+                    .build()
+            },
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MerrrriaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Nocturnal Nocturne", "真夜中だけのノクターン"),
+                    description = EnJa("Harvest the rare item of Merrrria", "月鈴花メルルルリアの希少品を収穫する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
         )
         val HAIMEVISKA_SAP: MaterialCard = !MaterialCard(
             "haimeviska_sap", "Haimeviska Sap", "ハイメヴィスカの樹液",
