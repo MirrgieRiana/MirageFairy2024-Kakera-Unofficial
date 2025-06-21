@@ -40,7 +40,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.TieredItem as ToolItem
 
-class FairyShootingStaffConfiguration(
+open class FairyShootingStaffConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     var basePower: Float,
     var baseMaxDistance: Float,

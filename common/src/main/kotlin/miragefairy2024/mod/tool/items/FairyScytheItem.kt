@@ -40,7 +40,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.level.ClipContext as RaycastContext
 
-class FairyScytheConfiguration(
+open class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     private val range: Int = 1
 ) : FairyMiningToolConfiguration() {

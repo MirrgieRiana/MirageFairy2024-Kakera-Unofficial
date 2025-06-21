@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
-class FairyKnifeConfiguration(
+open class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairyKnifeItem(this, properties)

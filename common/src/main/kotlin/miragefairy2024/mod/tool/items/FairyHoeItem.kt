@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState
  * @param attackDamage wood: 0, stone: -1, gold: 0, iron: -2, diamond: -3, netherite: -4
  * @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
  */
-class FairyHoeConfiguration(
+open class FairyHoeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     attackDamage: Int,
     attackSpeed: Float,

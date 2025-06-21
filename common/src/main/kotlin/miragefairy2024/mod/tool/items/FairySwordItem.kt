@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 
-class FairySwordConfiguration(
+open class FairySwordConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairySwordItem(this, properties)

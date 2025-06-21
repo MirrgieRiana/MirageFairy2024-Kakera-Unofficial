@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.item.Tier as ToolMaterial
 
-class FairyBattleAxeConfiguration(
+open class FairyBattleAxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
     attackDamage: Float,
     attackSpeed: Float,

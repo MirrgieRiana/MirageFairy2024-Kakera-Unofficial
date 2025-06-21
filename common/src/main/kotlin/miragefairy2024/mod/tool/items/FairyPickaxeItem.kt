@@ -17,7 +17,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-class FairyPickaxeConfiguration(
+open class FairyPickaxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairyPickaxeItem(this, properties)
