@@ -9,4 +9,3 @@ fun initToolModule() {
     initToolCard()
     initToolConfiguration()
 }
-
