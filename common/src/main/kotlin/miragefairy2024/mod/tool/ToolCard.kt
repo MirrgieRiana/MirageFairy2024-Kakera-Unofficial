@@ -29,8 +29,6 @@ import miragefairy2024.mod.tool.items.FairyShootingStaffConfiguration
 import miragefairy2024.mod.tool.items.FairyShovelConfiguration
 import miragefairy2024.mod.tool.items.FairySwordConfiguration
 import miragefairy2024.mod.tool.items.FairyToolProperties
-import miragefairy2024.mod.tool.items.ScytheItem
-import miragefairy2024.mod.tool.items.ShootingStaffItem
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
@@ -49,15 +47,9 @@ import net.minecraft.data.models.model.ModelTemplates as Models
 
 context(ModContext)
 fun initToolCard() {
-
-    ScytheItem.DESCRIPTION_TRANSLATION.enJa()
-    ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
-    ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
-
     ToolCard.entries.forEach {
         it.init()
     }
-
 }
 
 class ToolCard(

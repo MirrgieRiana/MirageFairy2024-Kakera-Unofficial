@@ -2,6 +2,7 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.ModContext
 import miragefairy2024.mod.tool.effects.initToolEffectType
+import miragefairy2024.mod.tool.items.initFairyToolItem
 
 context(ModContext)
 fun initToolModule() {
@@ -10,4 +11,5 @@ fun initToolModule() {
     initToolCard()
     initToolConfiguration()
     initToolEffectType()
+    initFairyToolItem()
 }

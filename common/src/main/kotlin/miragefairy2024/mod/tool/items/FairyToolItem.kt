@@ -1,6 +1,8 @@
 package miragefairy2024.mod.tool.items
 
+import miragefairy2024.ModContext
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.util.enJa
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentType
@@ -17,6 +19,14 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.entity.player.Player as PlayerEntity
+
+context(ModContext)
+fun initFairyToolItem() {
+    ScytheItem.DESCRIPTION_TRANSLATION.enJa()
+    ShootingStaffItem.NOT_ENOUGH_EXPERIENCE_TRANSLATION.enJa()
+    ShootingStaffItem.DESCRIPTION_TRANSLATION.enJa()
+}
+
 
 class FairyToolProperties(private val tool: Tool) : Item.Properties() {
     override fun <T : Any> component(component: DataComponentType<T>, value: T): Item.Properties {
