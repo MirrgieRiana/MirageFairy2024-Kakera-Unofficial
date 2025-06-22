@@ -9,9 +9,11 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.HoeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -25,6 +27,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.gameevent.GameEvent
 import java.util.function.Consumer
 import java.util.function.Predicate
 
@@ -79,6 +82,7 @@ class FairyHoeItem(override val configuration: FairyHoeConfiguration, settings: 
 
 interface TillingRecipe {
     fun test(context: UseOnContext, blockState: BlockState): Consumer<UseOnContext>?
+    fun useOnEntity(stack: ItemStack, player: Player, interactionTarget: LivingEntity, usedHand: InteractionHand) = InteractionResult.PASS
 }
 
 class MapTillingRecipe(private val map: Map<Block, com.mojang.datafixers.util.Pair<Predicate<UseOnContext>, Consumer<UseOnContext>>>) : TillingRecipe {
@@ -111,6 +115,17 @@ open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: Tillin
                 if (blockState == target) return null
                 return changeIntoState(target)
             }
+
+            override fun useOnEntity(stack: ItemStack, player: Player, interactionTarget: LivingEntity, usedHand: InteractionHand): InteractionResult {
+                val level = interactionTarget.level()
+                if (level.isClientSide()) return InteractionResult.sidedSuccess(level.isClientSide)
+                val blockPos = interactionTarget.blockPosition()
+                level.setBlock(blockPos, target, 11)
+                level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, target))
+                interactionTarget.discard()
+                level.playSound(null, blockPos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F)
+                return InteractionResult.sidedSuccess(level.isClientSide)
+            }
         }
     }
 
@@ -124,5 +139,9 @@ open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: Tillin
         result.accept(context)
         if (player != null) context.itemInHand.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.hand))
         return InteractionResult.sidedSuccess(level.isClientSide)
+    }
+
+    override fun interactLivingEntity(stack: ItemStack, player: Player, interactionTarget: LivingEntity, usedHand: InteractionHand): InteractionResult {
+        return tillingRecipe.useOnEntity(stack, player, interactionTarget, usedHand)
     }
 }
