@@ -47,6 +47,8 @@ enum class FairyToolMaterials(
     MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 24, { MaterialCard.MIRANAGITE.item().toIngredient() }),
     CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 15, { MaterialCard.CHAOS_STONE.item().toIngredient() }),
     HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 11, { MaterialCard.HAIMEVISKA_ROSIN.item().toIngredient() }),
+
+    NEUTRONIUM(Tiers.NETHERITE, Int.MAX_VALUE - 100, 8.0F, 3.0F, 10, { Items.BEDROCK.toIngredient() }),
     ;
 
     override fun getUses() = durability
@@ -87,6 +89,8 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", "Miranagite Tool", "蒼天石ツール"),
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),
     HAIMEVISKA_ROSIN(FairyToolMaterials.HAIMEVISKA_ROSIN, "haimeviska_rosin_tool", "Rosin Tool", "涙ツール"),
+
+    NEUTRONIUM(FairyToolMaterials.NEUTRONIUM, "neutronium_tool", "Neutronium Tool", "ニュートロニウムツール")
     ;
 
     val identifier = MirageFairy2024.identifier(path)

@@ -19,6 +19,8 @@ import miragefairy2024.mod.tool.effects.mineAll
 import miragefairy2024.mod.tool.effects.obtainFairy
 import miragefairy2024.mod.tool.effects.selfMending
 import miragefairy2024.mod.tool.effects.soulStreamContainable
+import miragefairy2024.mod.tool.effects.tillingRecipe
+import miragefairy2024.mod.tool.items.AdvancedHoeItem
 import miragefairy2024.mod.tool.items.FairyAxeConfiguration
 import miragefairy2024.mod.tool.items.FairyBattleAxeConfiguration
 import miragefairy2024.mod.tool.items.FairyHoeConfiguration
@@ -470,6 +472,12 @@ class ToolCard(
             PoemList(2).poem(EnJa("The story of the lonely tree", "涙の中に消えた友――")),
             FairySwordConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining().collection().enchantment(Enchantments.UNBREAKING, 2),
         ) { registerSwordRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
+
+        val CREATIVE_HOE = !ToolCard(
+            "creative_hoe", EnJa("Creative Hoe", "アカーシャのクワ"),
+            PoemList(null).poem(EnJa("Changes everything into farmland.", "適度に湿った地が現れよ。")),
+            FairyHoeConfiguration(ToolMaterialCard.NEUTRONIUM, -3, 0.0F).tillingRecipe(AdvancedHoeItem.CREATIVE_RECIPE),
+        )
     }
 
     val identifier = MirageFairy2024.identifier(path)
