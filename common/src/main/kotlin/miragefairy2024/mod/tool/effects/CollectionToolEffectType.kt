@@ -11,7 +11,6 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.ExperienceOrb as ExperienceOrbEntity
-import net.minecraft.world.phys.AABB as Box
 
 fun <T : ToolConfiguration> T.collection() = this.also {
     this.merge(CollectionToolEffectType, true) { enabled ->
@@ -20,7 +19,7 @@ fun <T : ToolConfiguration> T.collection() = this.also {
 }
 
 object CollectionToolEffectType : BooleanToolEffectType() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.collection" }, "Collect drop items when mined or killed", "採掘・撃破時にドロップ品を回収")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.collection" }, "Collect drop items when killed", "撃破時にドロップ品を回収")
 
     context(ModContext)
     fun init() {
@@ -30,17 +29,7 @@ object CollectionToolEffectType : BooleanToolEffectType() {
     fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
-        configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, _, _, _ ->
-            if (player.level() != world) return@fail
-            world.getEntitiesOfClass(ItemEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleportTo(player.x, player.y, player.z)
-                it.setNoPickUpDelay()
-            }
-            world.getEntitiesOfClass(ExperienceOrbEntity::class.java, Box(pos)) { !it.isSpectator }.forEach {
-                it.teleportTo(player.x, player.y, player.z)
-            }
-        }
-        configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
+        configuration.onKilledListeners += fail@{ _, entity, attacker, _ -> // TODO エンチャントにする
             if (attacker.level() != entity.level()) return@fail
             entity.level().getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleportTo(attacker.x, attacker.y, attacker.z)
