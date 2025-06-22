@@ -63,7 +63,7 @@ enum class EnchantmentCard(
     ),
     FORTUNE_UP(
         "fortune_up", EnJa("Fortune Up", "幸運強化"),
-        NONE_ITEM_TAG, NONE_ITEM_TAG, EnchantmentRarity.RARE,
+        ItemTags.MINING_LOOT_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
         3, 25, 25, 50,
         tags = listOf(EnchantmentTags.TREASURE),
     ),

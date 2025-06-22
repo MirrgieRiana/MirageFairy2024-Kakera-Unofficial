@@ -1,5 +1,5 @@
 {
-  "anvil_cost": 4,
+  "anvil_cost": 8,
   "description": {
     "translate": "enchantment.miragefairy2024.fortune_up"
   },
@@ -16,6 +16,6 @@
   "slots": [
     "mainhand"
   ],
-  "supported_items": "#miragefairy2024:none",
-  "weight": 2
+  "supported_items": "#minecraft:enchantable/mining_loot",
+  "weight": 1
 }
