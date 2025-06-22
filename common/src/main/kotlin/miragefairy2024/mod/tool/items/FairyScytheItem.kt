@@ -109,8 +109,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
                     (-range..range).forEach { z ->
                         val targetBlockPos = blockPos.offset(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
-                        val targetBlock = targetBlockState.block
-                        when (targetBlock) {
+                        when (val targetBlock = targetBlockState.block) {
                             is MagicPlantBlock -> {
                                 val result = targetBlock.tryPick(world, targetBlockPos, user, itemStack, true, false)
                                 if (result) effective = true
