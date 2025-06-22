@@ -2,9 +2,11 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mixins.api.BlockCallback
 import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
+import miragefairy2024.util.get
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerEnchantmentTagGeneration
@@ -17,7 +19,10 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.item.crafting.SingleRecipeInput
 import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
 
 val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("magic_weapon"))
@@ -67,6 +72,12 @@ enum class EnchantmentCard(
         3, 25, 25, 50,
         tags = listOf(EnchantmentTags.TREASURE),
     ),
+    SMELTING(
+        "smelting", EnJa("Smelting", "精錬"),
+        ItemTags.MINING_LOOT_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
+        1, 25, 25, 50,
+        tags = listOf(EnchantmentTags.TREASURE),
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -110,6 +121,18 @@ fun initEnchantmentModule() {
         val fortuneUpEnchantment = enchantmentLookup[EnchantmentCard.FORTUNE_UP.key].orNull ?: return@registerModifyItemEnchantmentsHandler
         val fortuneUpLevel = mutableItemEnchantments.getLevel(fortuneUpEnchantment)
         mutableItemEnchantments.set(fortuneEnchantment, fortuneLevel + fortuneUpLevel)
+    }
+
+    BlockCallback.GET_DROPS_BY_ENTITY.register { state, level, _, _, _, tool, drops ->
+        val smeltingLevel = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.SMELTING.key], tool)
+        if (smeltingLevel == 0) return@register drops
+        if (!tool.isCorrectToolForDrops(state)) return@register drops
+        drops.map {
+            val recipe = level.recipeManager.getRecipeFor(RecipeType.SMELTING, SingleRecipeInput(it), level).orNull ?: return@map it
+            val result = recipe.value.getResultItem(level.registryAccess())
+            if (result.isEmpty) return@map it
+            result.copyWithCount(it.count)
+        }
     }
 
     SCYTHE_ITEM_TAG.registerItemTagGeneration { ItemTags.MINING_LOOT_ENCHANTABLE }
