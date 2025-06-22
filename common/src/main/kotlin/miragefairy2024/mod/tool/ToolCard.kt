@@ -358,6 +358,36 @@ class ToolCard(
             PoemList(5).poem(EnJa("The mind synchronize with the body", "精神と肉体の調和。")),
             FairyBattleAxeConfiguration(ToolMaterialCard.RESONITE, 7.0F, -3.0F).cutAll().enchantment(Enchantments.SHARPNESS, 6).soulStreamContainable(),
         ) { registerBattleAxeRecipeGeneration(item, MaterialCard.RESONITE_INGOT.item) }
+        val PROMINITE_PICKAXE = !ToolCard(
+            "prominite_pickaxe", EnJa("Prominite Pickaxe", "プロミナイトのつるはし"),
+            PoemList(4).poem(EnJa("Refined soul fuel.", "打ち砕かれた魂の残骸。")),
+            FairyPickaxeConfiguration(ToolMaterialCard.PROMINITE).fireResistant().enchantment(EnchantmentCard.SMELTING.key),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_AXE = !ToolCard(
+            "prominite_axe", EnJa("Prominite Axe", "プロミナイトの斧"),
+            PoemList(4).poem(EnJa("Unpredictable movement of flames.", "カオスの鉄槌。")),
+            FairyAxeConfiguration(ToolMaterialCard.PROMINITE, 4.0F, -3.0F).fireResistant().enchantment(EnchantmentCard.SMELTING.key),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_SHOVEL = !ToolCard(
+            "prominite_shovel", EnJa("Prominite Shovel", "プロミナイトのシャベル"),
+            PoemList(4).poem(EnJa("Flame that burns misfortune.", "救済の火。")),
+            FairyShovelConfiguration(ToolMaterialCard.PROMINITE).fireResistant().enchantment(EnchantmentCard.SMELTING.key),
+        ) { registerShovelRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_HOE = !ToolCard(
+            "prominite_hoe", EnJa("Prominite Hoe", "プロミナイトのクワ"),
+            PoemList(4).poem(EnJa("Regenerated spirit.", "生命の萌芽。")),
+            FairyHoeConfiguration(ToolMaterialCard.PROMINITE, -3, 0.0F).fireResistant().enchantment(EnchantmentCard.SMELTING.key).tillingRecipe(AdvancedHoeItem.ROUGHEN_RECIPE),
+        ) { registerHoeRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_SWORD = !ToolCard(
+            "prominite_sword", EnJa("Prominite Sword", "プロミナイトの剣"),
+            PoemList(4).poem(EnJa("Struggle for the fate.", "「存在」の争奪。")),
+            FairySwordConfiguration(ToolMaterialCard.PROMINITE).fireResistant().enchantment(Enchantments.FIRE_ASPECT),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.PROMINITE.item) }
+        val PROMINITE_SCYTHE = !ToolCard(
+            "prominite_scythe", EnJa("Prominite Scythe", "プロミナイトの大鎌"),
+            PoemList(4).poem(EnJa("Piles of what was once consciousness.", "折り重なる沈黙の宴。")),
+            FairyScytheConfiguration(ToolMaterialCard.PROMINITE).fireResistant().enchantment(EnchantmentCard.SMELTING.key),
+        ) { registerScytheRecipeGeneration(item, MaterialCard.PROMINITE.item) }
         val MIRAGIDIAN_PICKAXE = !ToolCard(
             "miragidian_pickaxe", EnJa("Miragidian Pickaxe", "ミラジディアンのつるはし"),
             PoemList(4).poem(EnJa("The reinforced will of the substance", "高速度鋼という名の誇り。")),
