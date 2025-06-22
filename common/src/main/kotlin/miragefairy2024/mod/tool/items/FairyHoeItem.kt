@@ -23,6 +23,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Consumer
 import java.util.function.Predicate
@@ -104,6 +105,13 @@ open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: Tillin
                 Blocks.WARPED_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
             )
         )
+        val CREATIVE_RECIPE = object : TillingRecipe {
+            private val target = Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, FarmBlock.MAX_MOISTURE)
+            override fun test(context: UseOnContext, blockState: BlockState): Consumer<UseOnContext>? {
+                if (blockState == target) return null
+                return changeIntoState(target)
+            }
+        }
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
