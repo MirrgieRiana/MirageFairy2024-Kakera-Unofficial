@@ -30,4 +30,18 @@ public class BlockMixin {
     private static void getDrops(BlockState state, ServerLevel level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack tool, CallbackInfoReturnable<List<ItemStack>> cir) {
         cir.setReturnValue(BlockCallback.GET_DROPS_BY_ENTITY.invoker().getDrops(state, level, pos, blockEntity, entity, tool, cir.getReturnValue()));
     }
+
+    @Inject(method = "dropResources(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"))
+    private static void dropResourcesHead(BlockState state, Level level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack tool, CallbackInfo ci) {
+        if (level instanceof ServerLevel) {
+            BlockCallback.BEFORE_DROP_BY_ENTITY.invoker().onDropByEntity(state, level, pos, blockEntity, entity, tool);
+        }
+    }
+
+    @Inject(method = "dropResources(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("TAIL"))
+    private static void dropResourcesTail(BlockState state, Level level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack tool, CallbackInfo ci) {
+        if (level instanceof ServerLevel) {
+            BlockCallback.AFTER_DROP_BY_ENTITY.invoker().onDropByEntity(state, level, pos, blockEntity, entity, tool);
+        }
+    }
 }

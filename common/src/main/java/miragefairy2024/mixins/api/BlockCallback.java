@@ -29,11 +29,27 @@ public class BlockCallback {
         return newDrops;
     });
 
+    public final static Event<DropByEntity> BEFORE_DROP_BY_ENTITY = EventFactory.createArrayBacked(DropByEntity.class, callbacks -> (state, level, pos, blockEntity, entity, tool) -> {
+        for (DropByEntity callback : callbacks) {
+            callback.onDropByEntity(state, level, pos, blockEntity, entity, tool);
+        }
+    });
+
+    public final static Event<DropByEntity> AFTER_DROP_BY_ENTITY = EventFactory.createArrayBacked(DropByEntity.class, callbacks -> (state, level, pos, blockEntity, entity, tool) -> {
+        for (DropByEntity callback : callbacks) {
+            callback.onDropByEntity(state, level, pos, blockEntity, entity, tool);
+        }
+    });
+
     public interface AfterBreak {
         void afterBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool);
     }
 
     public interface GetDropsByEntity {
         List<ItemStack> getDrops(BlockState state, ServerLevel level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack tool, List<ItemStack> drops);
+    }
+
+    public interface DropByEntity {
+        void onDropByEntity(BlockState state, Level level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack tool);
     }
 }
