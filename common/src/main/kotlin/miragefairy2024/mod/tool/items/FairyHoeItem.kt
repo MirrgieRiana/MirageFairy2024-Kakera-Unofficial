@@ -38,7 +38,7 @@ open class FairyHoeConfiguration(
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairyHoeItem(this, properties)
 
-    var roughen: Boolean = false
+    var tillingRecipe: TillingRecipe? = null
 
     init {
         this.attackDamage = attackDamage.toFloat()
@@ -49,7 +49,7 @@ open class FairyHoeConfiguration(
 }
 
 class FairyHoeItem(override val configuration: FairyHoeConfiguration, settings: Properties) :
-    AdvancedHoeItem(configuration.toolMaterialCard.toolMaterial, configuration.roughen, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
+    AdvancedHoeItem(configuration.toolMaterialCard.toolMaterial, configuration.tillingRecipe ?: VANILLA_RECIPE, settings.attributes(createAttributes(configuration.toolMaterialCard.toolMaterial, configuration.attackDamage, configuration.attackSpeed))),
     FairyToolItem,
     ModifyItemEnchantmentsHandler {
 
@@ -76,33 +76,44 @@ class FairyHoeItem(override val configuration: FairyHoeConfiguration, settings: 
 
 }
 
-open class AdvancedHoeItem(toolMaterial: Tier, private val roughen: Boolean, settings: Properties) : HoeItem(toolMaterial, settings) {
+interface TillingRecipe {
+    fun test(context: UseOnContext, blockState: BlockState): Consumer<UseOnContext>?
+}
+
+class MapTillingRecipe(private val map: Map<Block, com.mojang.datafixers.util.Pair<Predicate<UseOnContext>, Consumer<UseOnContext>>>) : TillingRecipe {
+    override fun test(context: UseOnContext, blockState: BlockState): Consumer<UseOnContext>? {
+        val pair = map[blockState.block] ?: return null
+        if (!pair.first.test(context)) return null
+        return pair.second
+    }
+}
+
+open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: TillingRecipe, settings: Properties) : HoeItem(toolMaterial, settings) {
     companion object {
-        val ROUGHEN_TILLABLES: Map<Block, com.mojang.datafixers.util.Pair<Predicate<UseOnContext>, Consumer<UseOnContext>>> = mapOf(
-            Blocks.FARMLAND to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
-            Blocks.GRASS_BLOCK to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
-            Blocks.MYCELIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
-            Blocks.PODZOL to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
-            Blocks.DIRT_PATH to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
-            Blocks.ROOTED_DIRT to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoStateAndDropItem(Blocks.DIRT.defaultBlockState(), Items.HANGING_ROOTS)),
-            Blocks.DIRT to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.COARSE_DIRT.defaultBlockState())),
-            Blocks.CRIMSON_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
-            Blocks.WARPED_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
+        val VANILLA_RECIPE = MapTillingRecipe(TILLABLES)
+        val ROUGHEN_RECIPE = MapTillingRecipe(
+            mapOf(
+                Blocks.FARMLAND to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
+                Blocks.GRASS_BLOCK to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
+                Blocks.MYCELIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
+                Blocks.PODZOL to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
+                Blocks.DIRT_PATH to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.DIRT.defaultBlockState())),
+                Blocks.ROOTED_DIRT to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoStateAndDropItem(Blocks.DIRT.defaultBlockState(), Items.HANGING_ROOTS)),
+                Blocks.DIRT to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.COARSE_DIRT.defaultBlockState())),
+                Blocks.CRIMSON_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
+                Blocks.WARPED_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
+            )
         )
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val level = context.level
         val blockPos = context.clickedPos
-        val map = if (roughen && context.player?.isShiftKeyDown != true) ROUGHEN_TILLABLES else TILLABLES
-        val pair = map[level.getBlockState(blockPos).block] ?: return InteractionResult.PASS
-        val predicate = pair.first
-        val consumer = pair.second
-        if (!predicate.test(context)) return InteractionResult.PASS
+        val result = tillingRecipe.test(context, level.getBlockState(blockPos)) ?: return InteractionResult.PASS
         val player = context.player
         level.playSound(player, blockPos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F)
         if (level.isClientSide) return InteractionResult.sidedSuccess(level.isClientSide)
-        consumer.accept(context)
+        result.accept(context)
         if (player != null) context.itemInHand.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.hand))
         return InteractionResult.sidedSuccess(level.isClientSide)
     }

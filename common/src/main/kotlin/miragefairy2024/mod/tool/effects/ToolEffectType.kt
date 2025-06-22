@@ -13,7 +13,7 @@ fun initToolEffectType() {
     ObtainFairyToolEffectType.init()
     CollectionToolEffectType.init()
     SoulStreamContainableToolEffectType.init()
-    RoughenHoeToolEffectType.init()
+    TillingRecipeHoeToolEffectType.init()
 }
 
 abstract class BooleanToolEffectType : ToolEffectType<Boolean> {
