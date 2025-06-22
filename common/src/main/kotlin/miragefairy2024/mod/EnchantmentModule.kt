@@ -18,12 +18,15 @@ import net.minecraft.tags.EnchantmentTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EquipmentSlotGroup
+import net.minecraft.world.entity.ExperienceOrb
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.crafting.SingleRecipeInput
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.phys.AABB
 
 val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("magic_weapon"))
 val SCYTHE_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("scythe"))
@@ -74,6 +77,12 @@ enum class EnchantmentCard(
     ),
     SMELTING(
         "smelting", EnJa("Smelting", "精錬"),
+        ItemTags.MINING_LOOT_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
+        1, 25, 25, 50,
+        tags = listOf(EnchantmentTags.TREASURE),
+    ),
+    STICKY_MINING(
+        "sticky_mining", EnJa("Sticky Mining", "粘着採掘"),
         ItemTags.MINING_LOOT_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
         1, 25, 25, 50,
         tags = listOf(EnchantmentTags.TREASURE),
@@ -132,6 +141,38 @@ fun initEnchantmentModule() {
             val result = recipe.value.getResultItem(level.registryAccess())
             if (result.isEmpty) return@map it
             result.copyWithCount(it.count)
+        }
+    }
+
+    run {
+        val listener = ThreadLocal<() -> Unit>()
+        BlockCallback.BEFORE_DROP_BY_ENTITY.register { _, level, pos, _, entity, tool ->
+            if (entity == null) return@register
+            val stickyMiningLevel = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.STICKY_MINING.key], tool)
+            if (stickyMiningLevel == 0) return@register
+
+            val oldItemEntities = level.getEntitiesOfClass(ItemEntity::class.java, AABB(pos)) { !it.isSpectator }.toSet()
+            val oldExperienceOrbs = level.getEntitiesOfClass(ExperienceOrb::class.java, AABB(pos)) { !it.isSpectator }.toSet()
+
+            listener.set {
+                val newItemEntities = level.getEntitiesOfClass(ItemEntity::class.java, AABB(pos)) { !it.isSpectator }.toSet()
+                val newExperienceOrbs = level.getEntitiesOfClass(ExperienceOrb::class.java, AABB(pos)) { !it.isSpectator }.toSet()
+
+                (newItemEntities - oldItemEntities).forEach {
+                    it.teleportTo(entity.x, entity.y, entity.z)
+                    it.setNoPickUpDelay()
+                }
+                (newExperienceOrbs - oldExperienceOrbs).forEach {
+                    it.teleportTo(entity.x, entity.y, entity.z)
+                }
+            }
+        }
+        BlockCallback.AFTER_DROP_BY_ENTITY.register { _, _, _, _, _, _ ->
+            val listener2 = listener.get()
+            if (listener2 != null) {
+                listener2.invoke()
+                listener.remove()
+            }
         }
     }
 
