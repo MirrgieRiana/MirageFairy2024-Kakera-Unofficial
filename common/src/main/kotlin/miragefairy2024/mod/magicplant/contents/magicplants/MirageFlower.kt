@@ -167,23 +167,6 @@ class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlow
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
-fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
-    var count2 = count.toDouble()
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_SKY.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item().createItemStack(random.randomInt(count2)))
-    count2 /= 9.0
-    return listOf(MaterialCard.MIRAGE_FLOUR_OF_TIME.item().createItemStack(random.randomInt(count2)))
-}
-
 object PhantomFlowerCard : SimpleMagicPlantCard<PhantomFlowerBlock>() {
     override fun getBlockPath() = "phantom_flower"
     override val blockName = EnJa("Phantom Flower", "幻花ファントム")
@@ -292,4 +275,21 @@ class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFl
     override fun codec() = CODEC
 
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+}
+
+private fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
+    var count2 = count.toDouble()
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_NATURE.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_EARTH.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNDERWORLD.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_SKY.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR_OF_UNIVERSE.item().createItemStack(random.randomInt(count2)))
+    count2 /= 9.0
+    return listOf(MaterialCard.MIRAGE_FLOUR_OF_TIME.item().createItemStack(random.randomInt(count2)))
 }
