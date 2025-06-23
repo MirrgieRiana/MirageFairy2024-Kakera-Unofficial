@@ -91,6 +91,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     override val tier = 1
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
 
+    override val blockCodec = MirageFlowerBlock.CODEC
     override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
@@ -135,8 +136,6 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     override fun init() {
         super.init()
 
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("mirage_flower")) { MirageFlowerBlock.CODEC }.register()
-
         Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
 
         Feature.FLOWER {
@@ -177,6 +176,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override val tier = 3
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
 
+    override val blockCodec = PhantomFlowerBlock.CODEC
     override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
     override val baseGrowth = 1.0 / 8.0
@@ -208,8 +208,6 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("phantom_flower")) { PhantomFlowerBlock.CODEC }.register()
 
         Feature.FLOWER {
             PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY({

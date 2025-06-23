@@ -10,17 +10,14 @@ import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.per
-import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
@@ -49,6 +46,7 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override val classification = EnJa("Order Miragales, family Merrrriaceae", "妖花目メルルルリア科")
 
     override val ageProperty: IntegerProperty = BlockStateProperties.AGE_4
+    override val blockCodec = MerrrriaBlock.CODEC
     override fun createBlock() = MerrrriaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.ICE).lightLevel { if (it.getValue(ageProperty) == 4) 6 else 0 }.emissiveRendering { it, _, _ -> it.getValue(ageProperty) == 4 }.sound(SoundType.AMETHYST))
 
     override val outlineShapes = listOf(
@@ -111,8 +109,6 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("merrrria")) { MerrrriaBlock.CODEC }.register()
 
         Feature.FLOWER {
             MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY({

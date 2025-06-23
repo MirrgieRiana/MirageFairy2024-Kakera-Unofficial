@@ -9,7 +9,6 @@ import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
@@ -17,11 +16,9 @@ import miragefairy2024.util.nether
 import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
-import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
@@ -90,6 +87,7 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     override val tier = 1
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
 
+    override val blockCodec = VeropedaBlock.CODEC
     override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
 
     override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
@@ -116,8 +114,6 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("veropeda")) { VeropedaBlock.CODEC }.register()
 
         Feature.FLOWER {
             VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
@@ -155,6 +151,7 @@ object SarraceniaCard : AbstractVeropedaCard<SarraceniaBlock>() {
     override val tier = 1
     override val poem = EnJa("Waiting for a flying creature...", "妖精たちの憩いの場。")
 
+    override val blockCodec = SarraceniaBlock.CODEC
     override fun createBlock() = SarraceniaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(SoundType.CROP))
 
     override val drops = listOf(MaterialCard.SARRACENIA_LEAF.item, MaterialCard.FAIRY_SCALES.item)
@@ -179,8 +176,6 @@ object SarraceniaCard : AbstractVeropedaCard<SarraceniaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("sarracenia")) { SarraceniaBlock.CODEC }.register()
 
         Feature.FLOWER {
             SARRACENIA_CLUSTER_CONFIGURED_FEATURE_KEY({

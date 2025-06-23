@@ -11,7 +11,6 @@ import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
@@ -20,14 +19,12 @@ import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.rangedNetherFlower
-import miragefairy2024.util.register
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.undergroundFlower
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.core.BlockPos
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
@@ -93,6 +90,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override val tier = 3
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
 
+    override val blockCodec = DiamondLuminariaBlock.CODEC
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
@@ -122,8 +120,6 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("diamond_luminaria")) { DiamondLuminariaBlock.CODEC }.register()
 
         Feature.FLOWER {
             DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
@@ -164,6 +160,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override val tier = 3
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
 
+    override val blockCodec = EmeraldLuminariaBlock.CODEC
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
@@ -194,8 +191,6 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("emerald_luminaria")) { EmeraldLuminariaBlock.CODEC }.register()
 
         Feature.FLOWER {
             EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
@@ -233,6 +228,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val tier = 3
     override val poem = EnJa("Cleansing of tainted souls.", "死霊を貪り、命に変える。")
 
+    override val blockCodec = ProminariaBlock.CODEC
     override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
@@ -257,8 +253,6 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("prominaria")) { ProminariaBlock.CODEC }.register()
 
         Feature.FLOWER {
             PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
@@ -311,6 +305,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val tier = 3
     override val poem = EnJa("Gold-plated prominence.", "地獄の沙汰も金次第。")
 
+    override val blockCodec = GoldProminariaBlock.CODEC
     override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.05
@@ -328,13 +323,6 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
         criterion = AdvancementCard.hasItem { item() },
         type = AdvancementCardType.GOAL,
     )
-
-    context(ModContext)
-    override fun init() {
-        super.init()
-
-        Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("gold_prominaria")) { GoldProminariaBlock.CODEC }.register()
-    }
 }
 
 class GoldProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(GoldProminariaCard, settings) {

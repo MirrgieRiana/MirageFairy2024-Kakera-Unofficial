@@ -1,5 +1,6 @@
 package miragefairy2024.mod.magicplant
 
+import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
@@ -39,7 +40,9 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     val blockIdentifier = MirageFairy2024.identifier(getBlockPath())
     abstract val blockName: EnJa
     abstract val ageProperty: IntegerProperty
+    abstract val blockCodec: MapCodec<B>
     abstract fun createBlock(): B
+    val blockType = Registration(BuiltInRegistries.BLOCK_TYPE, blockIdentifier) { blockCodec }
     val block = Registration(BuiltInRegistries.BLOCK, blockIdentifier) { createBlock() }
 
     abstract fun getItemPath(): String
@@ -67,6 +70,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     open fun init() {
 
         // 登録
+        blockType.register()
         block.register()
         blockEntityType.register()
         item.register()
