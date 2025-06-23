@@ -219,37 +219,9 @@ class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(Emeral
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
-abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
-    override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
-
-    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
-
-    override val outlineShapes = listOf(
-        createCuboidShape(4.0, 6.0),
-        createCuboidShape(5.0, 13.0),
-        createCuboidShape(7.0, 16.0),
-        createCuboidShape(7.0, 16.0),
-    )
-
-    override val family = MirageFairy2024.identifier("luminaria")
-    override val possibleTraits = setOf(
-        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        TraitCard.COLD_ADAPTATION.trait, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
+abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : AbstractLuminariaCard<B>() {
+    override val possibleTraits = super.possibleTraits + setOf(
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
     )
 }
 
