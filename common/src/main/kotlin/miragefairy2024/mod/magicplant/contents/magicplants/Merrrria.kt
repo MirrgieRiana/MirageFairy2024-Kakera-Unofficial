@@ -109,7 +109,6 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))

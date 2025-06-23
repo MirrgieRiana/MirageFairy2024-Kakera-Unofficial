@@ -120,7 +120,6 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -128,7 +127,6 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
                 DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY + +BiomeCards.FAIRY_FOREST.registryKey } // TODO 妖精の森が強すぎる
             }
         }
-
     }
 }
 
@@ -191,7 +189,6 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -200,7 +197,6 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
                 UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + undergroundFlower }) { +Biomes.LUSH_CAVES } // 地下
             }
         }
-
     }
 }
 
@@ -253,7 +249,6 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -261,7 +256,6 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
                 PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
             }
         }
-
     }
 }
 

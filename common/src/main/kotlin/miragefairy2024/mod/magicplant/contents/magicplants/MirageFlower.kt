@@ -135,9 +135,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
-
         Feature.FLOWER {
             MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -154,7 +152,6 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
                 LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(600) + flower }) { overworld }  // 地上にFairy Ring
             }
         }
-
     }
 }
 
@@ -208,7 +205,6 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -216,7 +212,6 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
                 PHANTOM_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +BiomeCards.FAIRY_FOREST.registryKey }
             }
         }
-
     }
 }
 

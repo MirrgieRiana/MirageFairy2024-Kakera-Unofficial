@@ -114,7 +114,6 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-
         Feature.FLOWER {
             VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
@@ -129,7 +128,6 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
                 NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + netherFlower }) { nether } // ネザー用クラスタ
             }
         }
-
     }
 }
 
