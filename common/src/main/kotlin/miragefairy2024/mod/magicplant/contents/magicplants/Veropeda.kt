@@ -65,12 +65,9 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
 
     override val family = MirageFairy2024.identifier("veropeda")
     override val possibleTraits = setOf(
-        //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
         TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
         TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        //TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        //TraitCard.AIR_ADAPTATION.trait, // 空間適応
         TraitCard.COLD_ADAPTATION.trait, // 低温適応
         TraitCard.WARM_ADAPTATION.trait, // 中温適応
         TraitCard.HOT_ADAPTATION.trait, // 高温適応
@@ -82,28 +79,17 @@ object VeropedaCard : SimpleMagicPlantCard<VeropedaBlock>() {
         TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
         TraitCard.RARE_PRODUCTION.trait, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
-        //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        //TraitCard.NODED_STEM.trait, // 節状の茎
         TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.SPINY_LEAVES.trait, // 棘のある葉
-        //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
-        //TraitCard.HEATING_MECHANISM.trait, // 発熱機構
-        //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
         TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
         TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
         TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
         TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
-        //TraitCard.ETHER_PREDATION.trait, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
         TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
-        //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
-        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
         TraitCard.CROSSBREEDING.trait, // 交雑
-        //TraitCard.PLANTS_WITH_SELF_AWARENESS.trait, // 自我を持つ植物
-        //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
     val VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("veropeda_cluster")
@@ -180,12 +166,9 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
 
     override val family = MirageFairy2024.identifier("veropeda")
     override val possibleTraits = setOf(
-        //TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait, // 光合成
         TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
         TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        //TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        //TraitCard.AIR_ADAPTATION.trait, // 空間適応
         TraitCard.COLD_ADAPTATION.trait, // 低温適応
         TraitCard.WARM_ADAPTATION.trait, // 中温適応
         TraitCard.HOT_ADAPTATION.trait, // 高温適応
@@ -197,28 +180,17 @@ object SarraceniaCard : SimpleMagicPlantCard<SarraceniaBlock>() {
         TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
         TraitCard.RARE_PRODUCTION.trait, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
-        //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        //TraitCard.NODED_STEM.trait, // 節状の茎
         TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.SPINY_LEAVES.trait, // 棘のある葉
-        //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
-        //TraitCard.HEATING_MECHANISM.trait, // 発熱機構
-        //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
         TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
         TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
         TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
         TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
-        //TraitCard.ETHER_PREDATION.trait, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
         TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
-        //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
-        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
         TraitCard.CROSSBREEDING.trait, // 交雑
-        //TraitCard.PLANTS_WITH_SELF_AWARENESS.trait, // 自我を持つ植物
-        //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
     val SARRACENIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("sarracenia_cluster")

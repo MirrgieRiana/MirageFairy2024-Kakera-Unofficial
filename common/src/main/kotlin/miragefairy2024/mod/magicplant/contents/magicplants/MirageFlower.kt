@@ -103,7 +103,6 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
         TraitCard.NODED_STEM.trait, // 節状の茎
         TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
-        //TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
         TraitCard.DESERT_GEM.trait, // 砂漠の宝石
         TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
         TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
@@ -111,10 +110,6 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
         TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
         TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
-        //TraitCard.PHANTOM_FLOWER.trait, // 幻の花
-        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
-        //TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
     val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
@@ -193,21 +188,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item().createItemStack(count))
 
     override val possibleTraits = super.possibleTraits + setOf(
-        //TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        //TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
-        //TraitCard.NODED_STEM.trait, // 節状の茎
-        //TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
-        //TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        //TraitCard.DESERT_GEM.trait, // 砂漠の宝石
-        //TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
-        //TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
-        //TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
-        //TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
-        //TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
-        //TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
         TraitCard.PHANTOM_FLOWER.trait, // 幻の花
-        //TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        //TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
         TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
     )
 
