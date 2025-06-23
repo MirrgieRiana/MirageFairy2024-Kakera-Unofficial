@@ -52,17 +52,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
-    override fun getBlockPath() = "diamond_luminaria"
-    override val blockName = EnJa("Diamond Luminaria", "金剛石輝草ダイヤモンドルミナリア")
-    override fun getItemPath() = "diamond_luminaria_bulb"
-    override val itemName = EnJa("Diamond Luminaria Bulb", "金剛石輝草ダイヤモンドルミナリアの球根")
-    override val tier = 3
-    override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
+abstract class AbstractLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
     override val ageProperty: IntProperty = BlockStateProperties.AGE_3
-    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val outlineShapes = listOf(
         createCuboidShape(4.0, 6.0),
@@ -70,13 +63,6 @@ object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
         createCuboidShape(7.0, 16.0),
         createCuboidShape(7.0, 16.0),
     )
-
-    override val baseGrowth = 0.2
-    override val baseFruitGeneration = 0.1
-
-    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
     override val family = MirageFairy2024.identifier("luminaria")
     override val possibleTraits = setOf(
@@ -94,9 +80,30 @@ object DiamondLuminariaCard : SimpleMagicPlantCard<DiamondLuminariaBlock>() {
         TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
         TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
         TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        TraitCard.HEATING_MECHANISM.trait, // 発熱機構
         TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
         TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
+    )
+}
+
+object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
+    override fun getBlockPath() = "diamond_luminaria"
+    override val blockName = EnJa("Diamond Luminaria", "金剛石輝草ダイヤモンドルミナリア")
+    override fun getItemPath() = "diamond_luminaria_bulb"
+    override val itemName = EnJa("Diamond Luminaria Bulb", "金剛石輝草ダイヤモンドルミナリアの球根")
+    override val tier = 3
+    override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
+
+    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
+
+    override val baseGrowth = 0.2
+    override val baseFruitGeneration = 0.1
+
+    override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
+    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
+
+    override val possibleTraits = super.possibleTraits + setOf(
+        TraitCard.HEATING_MECHANISM.trait, // 発熱機構
     )
 
     val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
@@ -149,24 +156,15 @@ fun getLuminance(age: Int): Int {
     }
 }
 
-object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
+object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override fun getBlockPath() = "emerald_luminaria"
     override val blockName = EnJa("Emerald Luminaria", "翠玉輝草エメラルドルミナリア")
     override fun getItemPath() = "emerald_luminaria_bulb"
     override val itemName = EnJa("Emerald Luminaria Bulb", "翠玉輝草エメラルドルミナリアの球根")
     override val tier = 3
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
-    override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
 
-    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
-
-    override val outlineShapes = listOf(
-        createCuboidShape(4.0, 6.0),
-        createCuboidShape(5.0, 13.0),
-        createCuboidShape(7.0, 16.0),
-        createCuboidShape(7.0, 16.0),
-    )
 
     override val baseGrowth = 0.2
     override val baseFruitGeneration = 0.1
@@ -175,25 +173,8 @@ object EmeraldLuminariaCard : SimpleMagicPlantCard<EmeraldLuminariaBlock>() {
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
-    override val family = MirageFairy2024.identifier("luminaria")
-    override val possibleTraits = setOf(
-        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        TraitCard.COLD_ADAPTATION.trait, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
+    override val possibleTraits = super.possibleTraits + setOf(
         TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        TraitCard.ETERNAL_TREASURE.trait, // 悠久の秘宝
-        TraitCard.TREASURE_OF_XARPA.trait, // シャルパの秘宝
     )
 
     val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
