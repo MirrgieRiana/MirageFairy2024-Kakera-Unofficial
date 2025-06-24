@@ -80,7 +80,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             if (world.isClientSide) return TypedActionResult.success(itemStack)
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
-            val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedDescending()
+            val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().sortedWith(CondensedMotifChanceComparator.reversed())
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
                 override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
@@ -223,11 +223,13 @@ fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
 
 fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { Chance((1.0 / 3.0).pow(it.rare - 1) * amplifier, it) } // 通常花粉・レア度1で100%になる
 
-class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, val rate: Double, val count: Double) : Comparable<CondensedMotifChance> {
-    override fun compareTo(other: CondensedMotifChance): Int {
-        (rate cmp other.rate).let { if (it != 0) return it }
-        (count cmp other.count).let { if (it != 0) return it }
-        (motif.getIdentifier()!! cmp other.motif.getIdentifier()!!).let { if (it != 0) return it }
+class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, val rate: Double, val count: Double)
+
+object CondensedMotifChanceComparator : Comparator<CondensedMotifChance> {
+    override fun compare(o1: CondensedMotifChance, o2: CondensedMotifChance): Int {
+        (o1.rate cmp o2.rate).let { if (it != 0) return it }
+        (o1.count cmp o2.count).let { if (it != 0) return it }
+        (o1.motif.getIdentifier()!! cmp o2.motif.getIdentifier()!!).let { if (it != 0) return it }
         return 0
     }
 }
