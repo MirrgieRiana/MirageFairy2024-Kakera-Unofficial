@@ -2,6 +2,8 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.util.Chance
+import miragefairy2024.util.CondensedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Registration
 import miragefairy2024.util.register
@@ -20,9 +22,9 @@ val MOTIF_TABLE_STREAM_CODEC = object : StreamCodec<RegistryFriendlyByteBuf, Lis
         `object`.writeInt(object2.size)
         object2.forEach {
             ItemStack.STREAM_CODEC.encode(`object`, it.showingItemStack)
-            `object`.writeUtf(it.motif.getIdentifier()!!.string)
-            `object`.writeDouble(it.rate)
-            `object`.writeDouble(it.count)
+            `object`.writeUtf(it.item.item.item.getIdentifier()!!.string)
+            `object`.writeDouble(it.item.weight)
+            `object`.writeDouble(it.item.item.count)
         }
     }
 
@@ -34,7 +36,7 @@ val MOTIF_TABLE_STREAM_CODEC = object : StreamCodec<RegistryFriendlyByteBuf, Lis
             val motifId = `object`.readUtf()
             val rate = `object`.readDouble()
             val count = `object`.readDouble()
-            chanceTable += CondensedMotifChance(showingItemStack, motifRegistry.get(motifId.toIdentifier())!!, rate, count)
+            chanceTable += CondensedMotifChance(showingItemStack, Chance(rate, CondensedItem(count, motifRegistry.get(motifId.toIdentifier())!!)))
         }
         return chanceTable
     }

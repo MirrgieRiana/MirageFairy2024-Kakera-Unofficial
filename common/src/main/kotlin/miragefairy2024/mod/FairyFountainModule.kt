@@ -15,6 +15,7 @@ import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.Chance
+import miragefairy2024.util.CondensedItem
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
@@ -209,9 +210,13 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             val chanceTable = chanceTable2.map {
                 CondensedMotifChance(
                     showingItemStack = it.item.first?.let { entry -> entry.second.getFairyStatueCard().item().createItemStack().also { itemStack -> itemStack.setFairyMotif(entry.first) } } ?: Items.IRON_INGOT.createItemStack(),
-                    motif = it.item.first?.first ?: MotifCard.AIR,
-                    rate = it.weight,
-                    count = 1.0,
+                    item = Chance(
+                        weight = it.weight,
+                        item = CondensedItem(
+                            count = 1.0,
+                            item = it.item.first?.first ?: MotifCard.AIR,
+                        ),
+                    ),
                 )
             }
 

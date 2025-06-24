@@ -66,13 +66,13 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Invent
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
                                     })
-                                    child(Components.label(text { (chance.rate * 100 formatAs "%.4f%%")() }).apply {
+                                    child(Components.label(text { (chance.item.weight * 100 formatAs "%.4f%%")() }).apply {
                                         sizing(Sizing.fixed(50), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)
                                         color(Color.ofRgb(0x404040))
                                     })
-                                    child(Components.label(text { "x"() + (chance.count formatAs "%.2f")() }).apply {
+                                    child(Components.label(text { "x"() + (chance.item.item.count formatAs "%.2f")() }).apply {
                                         sizing(Sizing.fixed(80), Sizing.content())
                                         horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                         verticalTextAlignment(VerticalAlignment.CENTER)

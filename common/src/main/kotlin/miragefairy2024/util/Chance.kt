@@ -7,6 +7,10 @@ class Chance<out T : Any>(val weight: Double, val item: T) {
     override fun toString() = "${weight formatAs "%8.4f"}: $item"
 }
 
+class CondensedItem<out T : Any>(val count: Double, val item: T) {
+    override fun toString() = "$item x ${count formatAs "%.2f"}"
+}
+
 infix fun <T : Any> Double.chanceTo(item: T) = Chance(this, item)
 
 

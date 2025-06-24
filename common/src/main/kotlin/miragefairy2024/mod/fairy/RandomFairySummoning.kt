@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.APPEARANCE_RATE_BONUS_TRANSLATION
 import miragefairy2024.util.Chance
+import miragefairy2024.util.CondensedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
@@ -188,7 +189,7 @@ class RandomFairyResult(val motif: Motif, val condensation: Int, val count: Int)
 fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
 
     // 提供割合の生成
-    val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { Chance(it.rate, Single(it)) }.toMutableList()
+    val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { Chance(it.item.weight, Single(it)) }.toMutableList()
     val totalWeight = chanceTable.totalWeight
     if (totalWeight < 1.0) chanceTable += Chance(1.0 - totalWeight, Single(null))
 
@@ -197,14 +198,14 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 
     // actualCondensation は condensation を超えない最大の3の整数乗
     // condensation = 11.46 の場合、 actualCondensation = 9
-    val actualCondensation = getNiceCondensation(condensedMotif.count).second
+    val actualCondensation = getNiceCondensation(condensedMotif.item.item.count).second
 
     // 上の場合、 count ≒ 1.27
-    val count = condensedMotif.count / actualCondensation
+    val count = condensedMotif.item.item.count / actualCondensation
     val actualCount = random.randomInt(count)
 
     return RandomFairyResult(
-        motif = condensedMotif.motif,
+        motif = condensedMotif.item.item.item,
         condensation = actualCondensation,
         count = actualCount,
     )
@@ -223,13 +224,13 @@ fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
 
 fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { Chance((1.0 / 3.0).pow(it.rare - 1) * amplifier, it) } // 通常花粉・レア度1で100%になる
 
-class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, val rate: Double, val count: Double)
+class CondensedMotifChance(val showingItemStack: ItemStack, val item: Chance<CondensedItem<Motif>>)
 
 object CondensedMotifChanceComparator : Comparator<CondensedMotifChance> {
     override fun compare(o1: CondensedMotifChance, o2: CondensedMotifChance): Int {
-        (o1.rate cmp o2.rate).let { if (it != 0) return it }
-        (o1.count cmp o2.count).let { if (it != 0) return it }
-        (o1.motif.getIdentifier()!! cmp o2.motif.getIdentifier()!!).let { if (it != 0) return it }
+        (o1.item.weight cmp o2.item.weight).let { if (it != 0) return it }
+        (o1.item.item.count cmp o2.item.item.count).let { if (it != 0) return it }
+        (o1.item.item.item.getIdentifier()!! cmp o2.item.item.item.getIdentifier()!!).let { if (it != 0) return it }
         return 0
     }
 }
@@ -270,12 +271,12 @@ fun Iterable<Chance<Motif>>.compressRate(): List<CondensedMotifChance> {
 
             (currentIndex downTo 0).forEach { index ->
                 val entry = sortedMotifChanceList[index]
-                condensedMotifChanceList += CondensedMotifChance(entry.item.createFairyItemStack(), entry.item, actualRatePerRemainingEntry, entry.weight / actualRatePerRemainingEntry)
+                condensedMotifChanceList += CondensedMotifChance(entry.item.createFairyItemStack(), Chance(actualRatePerRemainingEntry, CondensedItem(entry.weight / actualRatePerRemainingEntry, entry.item)))
             }
 
             break
         } else { // 現在のエントリーをそのまま受理出来る
-            condensedMotifChanceList += CondensedMotifChance(currentEntry.item.createFairyItemStack(), currentEntry.item, currentEntry.weight, 1.0)
+            condensedMotifChanceList += CondensedMotifChance(currentEntry.item.createFairyItemStack(), Chance(currentEntry.weight, CondensedItem(1.0, currentEntry.item)))
             rateOfLastEntry = rateOfCurrentEntry
             rateOfConsumedEntries = estimatedRateOfNextConsumedEntries
         }
