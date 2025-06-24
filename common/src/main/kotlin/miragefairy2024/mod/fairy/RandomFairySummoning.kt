@@ -221,9 +221,7 @@ fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
     }.map { it.motif }.toSet()
 }
 
-class MotifChance(val motif: Motif, val rate: Double)
-
-fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { MotifChance(it, (1.0 / 3.0).pow(it.rare - 1) * amplifier) } // 通常花粉・レア度1で100%になる
+fun Iterable<Motif>.toChanceTable(amplifier: Double = 1.0) = this.map { Chance((1.0 / 3.0).pow(it.rare - 1) * amplifier, it) } // 通常花粉・レア度1で100%になる
 
 class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, val rate: Double, val count: Double) : Comparable<CondensedMotifChance> {
     override fun compareTo(other: CondensedMotifChance): Int {
@@ -235,8 +233,8 @@ class CondensedMotifChance(val showingItemStack: ItemStack, val motif: Motif, va
 }
 
 /** 出現率の合計が最大100%になるように出現率の高いものから出現率を切り詰め、失われた出現率を凝縮数に還元します */
-fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
-    val sortedMotifChanceList = this.sortedByDescending { it.rate } // 確率が大きいものから順に並んでいる
+fun Iterable<Chance<Motif>>.compressRate(): List<CondensedMotifChance> {
+    val sortedMotifChanceList = this.sortedByDescending { it.weight } // 確率が大きいものから順に並んでいる
     val condensedMotifChanceList = mutableListOf<CondensedMotifChance>()
 
     // ↑確率
@@ -257,7 +255,7 @@ fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
     while (currentIndex >= 0) {
         val countOfRemainingEntries = currentIndex + 1
         val currentEntry = sortedMotifChanceList[currentIndex]
-        val rateOfCurrentEntry = currentEntry.rate
+        val rateOfCurrentEntry = currentEntry.weight
         val additionalRateOfCurrentEntry = rateOfCurrentEntry - rateOfLastEntry
         val additionalRateOfAllRemainingEntries = additionalRateOfCurrentEntry * countOfRemainingEntries
         val estimatedRateOfNextConsumedEntries = rateOfConsumedEntries + additionalRateOfAllRemainingEntries
@@ -270,12 +268,12 @@ fun Iterable<MotifChance>.compressRate(): List<CondensedMotifChance> {
 
             (currentIndex downTo 0).forEach { index ->
                 val entry = sortedMotifChanceList[index]
-                condensedMotifChanceList += CondensedMotifChance(entry.motif.createFairyItemStack(), entry.motif, actualRatePerRemainingEntry, entry.rate / actualRatePerRemainingEntry)
+                condensedMotifChanceList += CondensedMotifChance(entry.item.createFairyItemStack(), entry.item, actualRatePerRemainingEntry, entry.weight / actualRatePerRemainingEntry)
             }
 
             break
         } else { // 現在のエントリーをそのまま受理出来る
-            condensedMotifChanceList += CondensedMotifChance(currentEntry.motif.createFairyItemStack(), currentEntry.motif, currentEntry.rate, 1.0)
+            condensedMotifChanceList += CondensedMotifChance(currentEntry.item.createFairyItemStack(), currentEntry.item, currentEntry.weight, 1.0)
             rateOfLastEntry = rateOfCurrentEntry
             rateOfConsumedEntries = estimatedRateOfNextConsumedEntries
         }
