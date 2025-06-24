@@ -49,7 +49,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
     override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(card.possibleTraits, world.getBiome(worldPosition), world.random)
+            val result = spawnTraitStacks(card, world.getBiome(worldPosition), world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
@@ -84,7 +84,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-private fun spawnTraitStacks(possibleTraits: Iterable<Trait>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
+private fun spawnTraitStacks(card: MagicPlantCard<*>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
 
     // スポーン条件判定
     val aTraitStackList = mutableListOf<TraitStack>()
@@ -92,7 +92,7 @@ private fun spawnTraitStacks(possibleTraits: Iterable<Trait>, biome: RegistryEnt
     val nTraitStackList = mutableListOf<TraitStack>()
     val rTraitStackList = mutableListOf<TraitStack>()
     val sTraitStackList = mutableListOf<TraitStack>()
-    possibleTraits.forEach { trait ->
+    card.possibleTraits.forEach { trait ->
         trait.spawnSpecs.forEach { spawnSpec ->
             if (spawnSpec.condition.canSpawn(biome)) {
                 val traitStackList = when (spawnSpec.rarity) {
