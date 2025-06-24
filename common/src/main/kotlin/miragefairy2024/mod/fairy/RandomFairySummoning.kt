@@ -192,8 +192,7 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
     // 提供割合の生成
     val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
         .compressRate()
-        .map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }
-        .map { Chance(it.item.weight, Single(it)) }
+        .map { Chance(it.weight, Single(CondensedMotifChance(it.item.item.createFairyItemStack(), it))) }
         .filled { Single(null) }
 
     // ガチャ
