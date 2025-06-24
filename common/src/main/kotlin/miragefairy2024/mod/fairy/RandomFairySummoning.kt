@@ -82,7 +82,10 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
             if (world.isClientSide) return TypedActionResult.success(itemStack)
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
-            val chanceTable = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }.sortedWith(CondensedMotifChanceComparator.reversed())
+            val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
+                .compressRate()
+                .map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }
+                .sortedWith(CondensedMotifChanceComparator.reversed())
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
                 override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
