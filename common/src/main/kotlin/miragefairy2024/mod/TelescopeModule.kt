@@ -40,6 +40,7 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
 import miragefairy2024.util.times
+import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.java.hydrogen.floorMod
@@ -157,7 +158,7 @@ fun initTelescopeModule() {
     TelescopeBlock.MINUTES_TRANSLATION.enJa()
     TelescopeBlock.SECONDS_TRANSLATION.enJa()
 
-    registerServerDebugItem("reset_telescope_mission", Items.STRING, 0xFFDDC442.toInt()) { world, player, _, _ ->
+    registerServerDebugItem("reset_telescope_mission", Items.STRING.toTextureSource(), 0xFFDDC442.toInt()) { world, player, _, _ ->
         player.telescopeMission.set(null)
         player.displayClientMessage(text { "The last time the telescope was used has been reset"() }, true)
     }

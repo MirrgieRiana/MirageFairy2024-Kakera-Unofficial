@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
+import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
@@ -41,7 +42,7 @@ fun initVanillaModule() {
     ({ Blocks.BLACK_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
 
 
-    registerClientDebugItem("dump_biome_tags", Items.STRING, 0xFF00FF00.toInt()) { world, player, _, _ ->
+    registerClientDebugItem("dump_biome_tags", Items.STRING.toTextureSource(), 0xFF00FF00.toInt()) { world, player, _, _ ->
         val tags = world.registryAccess().registryOrThrow(Registries.BIOME).tagNames.toList()
         val sb = StringBuilder()
         tags.sortedBy { it.location() }.forEach { tag ->

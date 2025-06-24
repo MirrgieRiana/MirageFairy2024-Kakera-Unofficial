@@ -43,6 +43,7 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerClientDebugItem
 import miragefairy2024.util.text
+import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
@@ -1378,7 +1379,7 @@ fun initMotif() {
         }
     }
 
-    registerClientDebugItem("dump_fairy_motifs", Items.STRING, 0xFFF200FF.toInt()) { world, player, _, _ ->
+    registerClientDebugItem("dump_fairy_motifs", Items.STRING.toTextureSource(), 0xFFF200FF.toInt()) { world, player, _, _ ->
         val sb = StringBuilder()
         motifRegistry.sortedBy { if (it is MotifCard) it.ordinal else 99999999 }.forEach { motif ->
             sb.append("|${motif.displayName.string}|${motif.rare}|")
