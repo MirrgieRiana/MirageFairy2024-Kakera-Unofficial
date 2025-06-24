@@ -236,10 +236,13 @@ object CondensedMotifChanceComparator : Comparator<CondensedMotifChance> {
 }
 
 /** 出現率の合計が最大100%になるように出現率の高いものから出現率を切り詰め、失われた出現率を凝縮数に還元します */
-fun Iterable<Chance<Motif>>.compressRate(): List<Chance<CondensedItem<Motif>>> {
-    val sortedMotifChanceList = this.sortedByDescending { it.weight } // 確率が大きいものから順に並んでいる
-    val condensedMotifChanceList = mutableListOf<Chance<CondensedItem<Motif>>>()
+fun <T : Any> Iterable<Chance<T>>.compressRate(): List<Chance<CondensedItem<T>>> {
+    val sortedChanceList = this.sortedByDescending { it.weight } // 確率が大きいものから順に並んでいる
+    val condensedChanceList = mutableListOf<Chance<CondensedItem<T>>>() // 出力用リスト
 
+    // エントリーを確率の高い順に左から右に並べる
+    // 希少なものはそのままの確率で、確率が溢れた場合、残りの確率をその時点で残っているすべてのエントリーで等分する
+    //
     // ↑確率
     // │*
     // │***
@@ -252,38 +255,38 @@ fun Iterable<Chance<Motif>>.compressRate(): List<Chance<CondensedItem<Motif>>> {
     // 確率が大きすぎるエントリは潰され、確率が小さいエントリはそのまま残る
     // 実際には一番上の#は半端なところで削れる（下記における確率の分配）
 
-    var rateOfLastEntry = 0.0
-    var rateOfConsumedEntries = 0.0
-    var currentIndex = sortedMotifChanceList.size - 1
-    while (currentIndex >= 0) {
-        val countOfRemainingEntries = currentIndex + 1
-        val currentEntry = sortedMotifChanceList[currentIndex]
-        val rateOfCurrentEntry = currentEntry.weight
-        val additionalRateOfCurrentEntry = rateOfCurrentEntry - rateOfLastEntry
-        val additionalRateOfAllRemainingEntries = additionalRateOfCurrentEntry * countOfRemainingEntries
-        val estimatedRateOfNextConsumedEntries = rateOfConsumedEntries + additionalRateOfAllRemainingEntries
-        if (estimatedRateOfNextConsumedEntries > 1) { // 現在のエントリーをそのまま受理すると確率が溢れる
+    var weightOfLastEntry = 0.0 // 現在の全体で受理済みの1個当たりの確率
+    var weightOfConsumedEntries = 0.0 // 現在の全体で受理済みの確率
+    var currentIndex = sortedChanceList.size - 1
+    while (currentIndex >= 0) { // 確率が小さいものから順にイテレートする
+        val countOfRemainingEntries = currentIndex + 1 // 現在のエントリーも含む残りのエントリー数
+        val currentEntry = sortedChanceList[currentIndex] // 現在のエントリー
+        val weightOfCurrentEntry = currentEntry.weight // 現在のエントリーの確率
+        val additionalWeightOfCurrentEntry = weightOfCurrentEntry - weightOfLastEntry // 現在のエントリーをそのまま受理することで生じる1個当たりの確率の増分
+        val additionalWeightOfAllRemainingEntries = additionalWeightOfCurrentEntry * countOfRemainingEntries // 現在のエントリーをそのまま受理することで生じる全体の確率の増分
+        val estimatedWeightOfNextConsumedEntries = weightOfConsumedEntries + additionalWeightOfAllRemainingEntries // 現在のエントリーをそのまま受理する場合の全体の確率
+        if (estimatedWeightOfNextConsumedEntries > 1) { // 現在のエントリーをそのまま受理すると確率が溢れる
             // 利用可能な確率を残りのすべてのエントリーで分配
 
-            val usableRateOfAllRemainingEntries = 1.0 - rateOfConsumedEntries
-            val usableRatePerRemainingEntry = usableRateOfAllRemainingEntries / countOfRemainingEntries
-            val actualRatePerRemainingEntry = rateOfLastEntry + usableRatePerRemainingEntry
+            val usableWeightOfAllRemainingEntries = 1.0 - weightOfConsumedEntries // 利用可能な全体の残りの確率
+            val usableWeightPerRemainingEntry = usableWeightOfAllRemainingEntries / countOfRemainingEntries // 残りのエントリーで利用可能な1個当たりの確率
+            val actualWeightPerRemainingEntry = weightOfLastEntry + usableWeightPerRemainingEntry // 残りの各エントリーに割り当てられる実際の確率
 
-            (currentIndex downTo 0).forEach { index ->
-                val entry = sortedMotifChanceList[index]
-                condensedMotifChanceList += Chance(actualRatePerRemainingEntry, CondensedItem(entry.weight / actualRatePerRemainingEntry, entry.item))
+            (currentIndex downTo 0).forEach { index -> // 残りのエントリーを希少な順に排出
+                val entry = sortedChanceList[index]
+                condensedChanceList += Chance(actualWeightPerRemainingEntry, CondensedItem(entry.weight / actualWeightPerRemainingEntry, entry.item))
             }
 
             break
         } else { // 現在のエントリーをそのまま受理出来る
-            condensedMotifChanceList += Chance(currentEntry.weight, CondensedItem(1.0, currentEntry.item))
-            rateOfLastEntry = rateOfCurrentEntry
-            rateOfConsumedEntries = estimatedRateOfNextConsumedEntries
+            condensedChanceList += Chance(currentEntry.weight, CondensedItem(1.0, currentEntry.item)) // 排出
+            weightOfLastEntry = weightOfCurrentEntry // 現在の全体で受理済みの1個当たりの確率を更新
+            weightOfConsumedEntries = estimatedWeightOfNextConsumedEntries // 現在の全体で受理済みの確率を更新
         }
         currentIndex--
     }
 
-    return condensedMotifChanceList
+    return condensedChanceList
 }
 
 fun getNiceCondensation(value: Double) = getNiceCondensation(value.floorToInt())
