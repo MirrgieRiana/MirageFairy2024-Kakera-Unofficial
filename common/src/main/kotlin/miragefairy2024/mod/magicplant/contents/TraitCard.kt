@@ -508,7 +508,7 @@ class TraitCard(
             return if (factor != 0.0) {
                 val traitEffects = MutableTraitEffects()
                 traitEffectKeyCardStacks.forEach {
-                    traitEffects[it.first.traitEffectKey] = it.first.traitEffectKey.getValue(it.second * level) * factor
+                    traitEffects[it.first.traitEffectKey] = it.first.traitEffectKey.getValue(it.second * getTraitPower(level)) * factor
                 }
                 traitEffects
             } else {
@@ -517,6 +517,18 @@ class TraitCard(
         }
     }
 
+}
+
+private fun getTraitPower(level: Int): Int {
+    var a = level
+    var power = 0
+    var i = 1
+    while (a != 0) {
+        if (a and 0x1 != 0) power += i
+        a = a ushr 1
+        i++
+    }
+    return power
 }
 
 private fun MutableList<TraitSpawnSpec>.register(binary: String, rarity: TraitSpawnRarity, conditionGetter: context(TraitSpawnConditionScope)() -> TraitSpawnCondition = { anywhere }) {
