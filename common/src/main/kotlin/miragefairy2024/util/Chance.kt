@@ -65,7 +65,7 @@ fun <T : Any> List<Chance<T>>.distinct(equals: (T, T) -> Boolean): List<Chance<T
 
 
 /** 出現率の合計が最大100%になるように出現率の高いものから出現率を切り詰め、失われた出現率を凝縮数に還元します */
-fun <T : Any> Iterable<Chance<T>>.compressRate(): List<Chance<CondensedItem<T>>> {
+fun <T : Any> Iterable<Chance<T>>.compressWeight(): List<Chance<CondensedItem<T>>> {
     val sortedChanceList = this.sortedByDescending { it.weight } // 確率が大きいものから順に並んでいる
     val condensedChanceList = mutableListOf<Chance<CondensedItem<T>>>() // 出力用リスト
 

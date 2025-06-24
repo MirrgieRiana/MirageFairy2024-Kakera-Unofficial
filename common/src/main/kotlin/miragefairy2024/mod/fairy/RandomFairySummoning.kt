@@ -8,7 +8,7 @@ import miragefairy2024.util.CondensedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
-import miragefairy2024.util.compressRate
+import miragefairy2024.util.compressWeight
 import miragefairy2024.util.enJa
 import miragefairy2024.util.filled
 import miragefairy2024.util.get
@@ -83,7 +83,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
-                .compressRate()
+                .compressWeight()
                 .map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }
                 .sortedWith(CondensedMotifChanceComparator.reversed())
 
@@ -194,7 +194,7 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
 
     // 提供割合の生成
     val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
-        .compressRate()
+        .compressWeight()
         .map { Chance(it.weight, Single(CondensedMotifChance(it.item.item.createFairyItemStack(), it))) }
         .filled { Single(null) }
 
