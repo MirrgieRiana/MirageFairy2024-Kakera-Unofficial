@@ -10,6 +10,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.blue
 import miragefairy2024.util.compressRate
 import miragefairy2024.util.enJa
+import miragefairy2024.util.filled
 import miragefairy2024.util.get
 import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.hasSameItemAndComponents
@@ -22,7 +23,6 @@ import miragefairy2024.util.register
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import miragefairy2024.util.text
-import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.Single
@@ -190,9 +190,11 @@ class RandomFairyResult(val motif: Motif, val condensation: Int, val count: Int)
 fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
 
     // 提供割合の生成
-    val chanceTable: MutableList<Chance<Single<CondensedMotifChance?>>> = motifSet.toChanceTable(appearanceRateBonus).compressRate().map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }.map { Chance(it.item.weight, Single(it)) }.toMutableList()
-    val totalWeight = chanceTable.totalWeight
-    if (totalWeight < 1.0) chanceTable += Chance(1.0 - totalWeight, Single(null))
+    val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
+        .compressRate()
+        .map { CondensedMotifChance(it.item.item.createFairyItemStack(), it) }
+        .map { Chance(it.item.weight, Single(it)) }
+        .filled { Single(null) }
 
     // ガチャ
     val condensedMotif = chanceTable.weightedRandom(random)?.first ?: return null

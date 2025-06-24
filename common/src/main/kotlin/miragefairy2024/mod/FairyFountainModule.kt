@@ -21,6 +21,7 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.filled
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isServer
@@ -36,7 +37,6 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.text
 import miragefairy2024.util.times
-import miragefairy2024.util.totalWeight
 import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.Single
@@ -252,10 +252,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
         f(0.01 + 0.02 + 0.03 + 0.09, Rarity.SR)
         f(0.01 + 0.02 + 0.03 + 0.09 + 0.85, Rarity.R)
 
-        val totalWeight = chanceTable.totalWeight
-        if (totalWeight < 0.9999) chanceTable += Chance(1.0 - totalWeight, Single(null))
-
-        return chanceTable
+        return chanceTable.filled { Single(null) }
     }
 
 }

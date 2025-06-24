@@ -16,6 +16,11 @@ infix fun <T : Any> Double.chanceTo(item: T) = Chance(this, item)
 
 val List<Chance<*>>.totalWeight get() = this.sumOf { it.weight }
 
+fun <T : Any> List<Chance<T>>.filled(creator: () -> T): List<Chance<T>> {
+    val totalWeight = this.totalWeight
+    return if (totalWeight < 0.9999) this + Chance(1.0 - totalWeight, creator()) else this
+}
+
 
 /** @param randomValue 0以上1未満の値 */
 fun <T : Any> List<Chance<T>>.weightedRandom(randomValue: Double): T? {
