@@ -1,16 +1,16 @@
 {
-  "feature": "miragefairy2024:mirage_cluster",
+  "feature": "miragefairy2024:phantom_flower_cluster",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 64
+      "chance": 16
     },
     {
       "type": "minecraft:in_square"
     },
     {
-      "type": "minecraft:count_on_every_layer",
-      "count": 1
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
     },
     {
       "type": "minecraft:biome"

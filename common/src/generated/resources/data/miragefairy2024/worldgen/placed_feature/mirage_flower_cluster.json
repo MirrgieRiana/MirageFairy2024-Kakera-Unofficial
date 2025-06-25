@@ -1,14 +1,12 @@
 {
-  "feature": "miragefairy2024:large_mirage_cluster",
+  "feature": "miragefairy2024:mirage_flower_cluster",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 600
+      "chance": 16
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 8,
-      "y_spread": 0
+      "type": "minecraft:in_square"
     },
     {
       "type": "minecraft:heightmap",

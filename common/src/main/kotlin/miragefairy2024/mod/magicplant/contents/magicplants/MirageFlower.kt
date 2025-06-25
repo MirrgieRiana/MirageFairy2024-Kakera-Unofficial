@@ -29,9 +29,7 @@ import miragefairy2024.util.square
 import miragefairy2024.util.surface
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
-import miragefairy2024.util.with
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -153,13 +151,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
     )
 
-    val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
-    val MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("mirage_cluster")
-    val LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("large_mirage_cluster")
-    val MIRAGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("mirage_cluster")
-    val NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("nether_mirage_cluster")
-    val MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("mirage_cluster_fairy_forest")
-    val LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("large_mirage_cluster")
+    private val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
@@ -177,19 +169,15 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         super.init()
         Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
         Feature.FLOWER {
-            MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) { // 小さな塊
-                MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
-                NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(64) + flower(square, nether) }) { nether } // ネザーにネザー用クラスタ
-                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
+            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
+                placedFeature("nether_cluster", { per(64) + flower(square, nether) }) { nether } // ネザーにネザー用クラスタ
+                placedFeature("fairy_forest_cluster", { count(4) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
             }
         }
         FAIRY_RING_FEATURE {
-            LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
-                FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) { // Fairy Ring
-                LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(600) + flower(center, surface) }) { overworld }  // 地上にFairy Ring
+            configuredFeature("fairy_ring", { FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // Fairy Ring
+                placedFeature("fairy_ring", { per(600) + flower(center, surface) }) { overworld }  // 地上にFairy Ring
             }
         }
     }
@@ -233,9 +221,6 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
         TraitCard.FLOWER_OF_THE_END.trait to 0.05, // 終焉の花
     )
 
-    val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
-    val PHANTOM_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
-
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { FairyForestBiomeCard.advancement.await() },
@@ -250,10 +235,8 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
-                PHANTOM_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }
+            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }
             }
         }
     }

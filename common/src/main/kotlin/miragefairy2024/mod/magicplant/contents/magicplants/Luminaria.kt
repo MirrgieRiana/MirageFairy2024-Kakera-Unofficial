@@ -22,11 +22,9 @@ import miragefairy2024.util.square
 import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.underground
-import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.core.BlockPos
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -126,9 +124,6 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
         TraitCard.HEATING_MECHANISM.trait to 0.05, // 発熱機構
     )
 
-    val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
-    val DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
-
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
@@ -143,10 +138,8 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
-                DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
+            configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+                placedFeature("cluster", { per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
             }
         }
     }
@@ -197,10 +190,6 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
         TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
     )
 
-    val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
-    val EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
-    val UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("underground_emerald_luminaria_cluster")
-
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
@@ -215,11 +204,9 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
-                EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
-                UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + flower(square, underground) }) { +Biomes.LUSH_CAVES } // 地下
+            configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+                placedFeature("cluster", { per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
+                placedFeature("underground_cluster", { count(32) + flower(square, underground) }) { +Biomes.LUSH_CAVES } // 地下
             }
         }
     }
@@ -261,9 +248,6 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
 
-    val PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("prominaria_cluster")
-    val PROMINARIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("prominaria_cluster")
-
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { DiamondLuminariaCard.advancement!!.await() },
@@ -278,10 +262,8 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
-            }) {
-                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + flower(square, rangedNether(32, 45)) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
+            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+                placedFeature("cluster", { per(4) + flower(square, rangedNether(32, 45)) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
             }
         }
     }

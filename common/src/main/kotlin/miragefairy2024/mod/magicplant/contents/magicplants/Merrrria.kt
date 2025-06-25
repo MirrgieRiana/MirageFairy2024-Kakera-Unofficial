@@ -18,10 +18,8 @@ import miragefairy2024.util.per
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
-import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
-import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -120,11 +118,6 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
     )
 
-    val MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("merrrria_cluster")
-    val MERRRRIA_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("merrrria_cluster")
-    val MERRRRIA_LARGE_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("merrrria_large_cluster")
-    val MERRRRIA_LARGE_CLUSTER_PLACED_FEATURE_KEY = Registries.PLACED_FEATURE with MirageFairy2024.identifier("merrrria_large_cluster")
-
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
         context = AdvancementCard.Sub { rootAdvancement.await() },
@@ -139,15 +132,11 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
-            }) {
-                MERRRRIA_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+            configuredFeature("cluster", { RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
             }
-            MERRRRIA_LARGE_CLUSTER_CONFIGURED_FEATURE_KEY({
-                RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
-            }) {
-                MERRRRIA_LARGE_CLUSTER_PLACED_FEATURE_KEY({ per(128) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+            configuredFeature("large_cluster", { RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
+                placedFeature("large_cluster", { per(128) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
             }
         }
     }
