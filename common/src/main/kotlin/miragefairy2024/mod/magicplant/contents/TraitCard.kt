@@ -4,11 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
-import miragefairy2024.mod.magicplant.TraitSpawnCondition
-import miragefairy2024.mod.magicplant.TraitSpawnConditionScope
-import miragefairy2024.mod.magicplant.TraitSpawnRarity
-import miragefairy2024.mod.magicplant.TraitSpawnSpec
-import miragefairy2024.mod.magicplant.anywhere
 import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.traitRegistry
@@ -321,10 +316,6 @@ private fun getTraitPower(level: Int): Int {
         i++
     }
     return power
-}
-
-private fun MutableList<TraitSpawnSpec>.register(binary: String, rarity: TraitSpawnRarity, conditionGetter: context(TraitSpawnConditionScope)() -> TraitSpawnCondition = { anywhere }) {
-    this += TraitSpawnSpec(conditionGetter(TraitSpawnConditionScope), rarity, binary.toInt(2))
 }
 
 

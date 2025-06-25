@@ -64,7 +64,6 @@ fun initMagicPlantModule() {
     INVALID_TRANSLATION.enJa()
 
 
-    initTraitSpawnConditionScope()
     initTraitListScreenHandler()
     initTraitConditionCard()
     initTraitEffectKeyCard()
