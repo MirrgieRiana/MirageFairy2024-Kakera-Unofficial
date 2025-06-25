@@ -33,8 +33,6 @@ abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> 
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Trait> = ByteBufCodecs.registry(traitRegistryKey)
     }
 
-    abstract val spawnSpecs: List<TraitSpawnSpec>
-
     abstract val conditions: List<TraitCondition>
     abstract val primaryEffect: TraitEffectKey<*>
     abstract val effectStacks: List<Pair<TraitEffectKey<*>, Double>>

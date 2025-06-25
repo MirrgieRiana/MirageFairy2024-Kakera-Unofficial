@@ -86,6 +86,10 @@ fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity
 
 private fun spawnTraitStacks(card: MagicPlantCard<*>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
 
+    card.possibleTraits
+
+
+
     // スポーン条件判定
     val aTraitStackList = mutableListOf<TraitStack>()
     val cTraitStackList = mutableListOf<TraitStack>()
