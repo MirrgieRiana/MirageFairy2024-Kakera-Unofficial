@@ -26,7 +26,6 @@ import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
-import miragefairy2024.mod.magicplant.TraitSpawnRarity
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
@@ -52,7 +51,7 @@ import io.wispforest.owo.ui.core.Component as OwoComponent
 object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyclopediaReiCategoryCard.Display>(TraitEncyclopediaReiCategoryCard) {
     override fun registerDisplays(registry: DisplayRegistry) {
         traitRegistry.sortedEntrySet.forEach { (_, trait) ->
-            val seedItemStacks = magicPlantCards.filter { trait in it.possibleTraits }.map { card ->
+            val seedItemStacks = magicPlantCards.filter { trait in it.randomTraitChances }.map { card ->
                 card.item().createItemStack().also {
                     it.setTraitStacks(TraitStacks.of(TraitStack(trait, 1)))
                 }
@@ -168,6 +167,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
                                     }
                                 })
                                 child().child(verticalSpace(2))
+                                /*
                                 display.trait.spawnSpecs.forEach { spawnSpec -> // 出現条件
                                     child().child(Containers.stack(Sizing.fill(100), Sizing.content()).apply {
                                         child(Components.label(text { spawnSpec.level.toString(2)() }).color(Color.ofRgb(0xFF404040.toInt())).shadow(false).apply { // レベル
@@ -194,6 +194,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
                                         })
                                     })
                                 }
+                                */
                             })
                         }
                         cardView = ClickableContainer(Sizing.fill(100), Sizing.fill(100), {

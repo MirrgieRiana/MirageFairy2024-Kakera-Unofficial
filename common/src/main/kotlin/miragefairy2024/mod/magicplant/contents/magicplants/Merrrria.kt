@@ -62,33 +62,59 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.MERRRRIA_DROP.item().createItemStack(count))
 
     override val family = MirageFairy2024.identifier("merrrria")
-    override val possibleTraits = setOf(
-        // TODO
-        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
-        TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
-        TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        TraitCard.COLD_ADAPTATION.trait, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
-        TraitCard.RARE_PRODUCTION.trait, // 希少品生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
-        TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
-        TraitCard.GOLDEN_APPLE.trait, // 金のリンゴ
-        TraitCard.SPINY_LEAVES.trait, // 棘のある葉
-        TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
-        TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
-        TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
-        TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
-        TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
-        TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
-        TraitCard.CROSSBREEDING.trait, // 交雑
+    override val defaultTraitBits = mapOf(
+        TraitCard.PHOTOSYNTHESIS.trait to 0b1000, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0b1000, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b1000, // 養分吸収
+        TraitCard.COLD_ADAPTATION.trait to 0b1000, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0b1000, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0b1000, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0b1000, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0b1000, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0b1000, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b1000, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0b1000, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0b1000, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait to 0b1000, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0b1000, // 経験値生成
+        TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0b1000, // 禁断の果実
+        TraitCard.GOLDEN_APPLE.trait to 0b1000, // 金のリンゴ
+        TraitCard.SPINY_LEAVES.trait to 0b1000, // 棘のある葉
+        TraitCard.ADVERSITY_FLOWER.trait to 0b1000, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait to 0b1000, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait to 0b1000, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait to 0b1000, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait to 0b1000, // アスファルトに咲く花
+        TraitCard.PROSPERITY_OF_SPECIES.trait to 0b1000, // 種の繁栄
+        TraitCard.CROSSBREEDING.trait to 0b1000, // 交雑
+    )
+    override val randomTraitChances = mapOf(
+        TraitCard.PHOTOSYNTHESIS.trait to 0.1, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0.1, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.1, // 養分吸収
+        TraitCard.COLD_ADAPTATION.trait to 0.1, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0.1, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0.1, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.1, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.1, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.1, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.1, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.1, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0.1, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait to 0.1, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.1, // 経験値生成
+        TraitCard.FOUR_LEAFED.trait to 0.1, // 四つ葉
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0.1, // 禁断の果実
+        TraitCard.GOLDEN_APPLE.trait to 0.1, // 金のリンゴ
+        TraitCard.SPINY_LEAVES.trait to 0.1, // 棘のある葉
+        TraitCard.ADVERSITY_FLOWER.trait to 0.1, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait to 0.1, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait to 0.1, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait to 0.1, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait to 0.1, // アスファルトに咲く花
+        TraitCard.PROSPERITY_OF_SPECIES.trait to 0.1, // 種の繁栄
+        TraitCard.CROSSBREEDING.trait to 0.1, // 交雑
     )
 
     val MERRRRIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("merrrria_cluster")
