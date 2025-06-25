@@ -141,8 +141,6 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
                 placedFeature("cluster", { per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS } // 地上用クラスタ
             }
-        }
-        Feature.FLOWER {
             configuredFeature("large_cluster", { RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 大きな塊
                 placedFeature("nether_cluster", { per(8) + flower(center, nether) }) { nether } // ネザー用クラスタ
             }
