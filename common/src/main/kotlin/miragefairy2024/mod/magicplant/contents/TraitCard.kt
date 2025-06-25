@@ -302,7 +302,11 @@ class TraitCard(
                 null
             }
         }
+
+        override fun toString() = "$identifier"
     }
+
+    override fun toString() = "TraitCard[$identifier]"
 
 }
 
