@@ -30,6 +30,81 @@ class TraitCard(
         val entries = mutableListOf<TraitCard>()
         operator fun TraitCard.not() = also { entries += this }
 
+        // 汎用
+        val COLD_ADAPTATION = !TraitCard(
+            "cold_adaptation", "Cold Adaptation", "低温適応",
+            "Only plants that have adapted to low solar radiation, low temperatures, water freezing, snow cover, and harsh cold environments can survive under the extreme cold of the ice.",
+            "低い日射量、低い気温、水分の凍結、雪による遮蔽、過酷な低温環境に適応した植物だけが極寒の氷の下で生き残ることができる。",
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
+        )
+        val WARM_ADAPTATION = !TraitCard(
+            "warm_adaptation", "Warm Adaptation", "中温適応",
+            "In environments with comfortable temperatures, plants can save evolutionary energy that would otherwise be allocated to cold or heat resistance. As a result, they are able to devote more energy to growth and reproduction.",
+            "快適な気温の環境では、耐寒や耐暑に割り当てる進化的エネルギーを節約できる。その結果、植物はより多くのエネルギーを成長や繁殖に割くことができる。",
+            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
+        )
+        val HOT_ADAPTATION = !TraitCard(
+            "hot_adaptation", "Hot Adaptation", "高温適応",
+            "The jungle, a paradise for plants, the scorching desert, the fiery inferno—though all these are high-temperature environments, their actual conditions vary greatly. This trait is merely a collection of minor techniques that prove useful across various high-temperature environments.",
+            "植物の楽園であるジャングル地帯、炎天下の砂漠、灼熱地獄、一口に高温環境といっても、その実態は様々である。この形質は、高温環境全般で役に立つ小技の寄せ集めにすぎない。",
+            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
+        )
+        val ARID_ADAPTATION = !TraitCard(
+            "arid_adaptation", "Arid Adaptation", "乾燥適応",
+            "Evolution is often ruthless. The prosperity of the species as a whole does not necessarily lead to the happiness of each individual.",
+            "進化とは、ときに非情である。種という全体の繁栄が、必ずしも個々の個体の幸福に繋がるとは限らないのだ。",
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+        )
+        val MESIC_ADAPTATION = !TraitCard(
+            "mesic_adaptation", "Mesic Adaptation", "中湿適応",
+            "Moderate humidity provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
+            "極端でない湿度は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
+            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+        )
+        val HUMID_ADAPTATION = !TraitCard(
+            "humid_adaptation", "Humid Adaptation", "湿潤適応",
+            "The plant that designs and operates the most efficient flow for converting H2O and CO2 into O2 and organic matter will ultimately dominate humid environments.",
+            "H2OとCO2をO2と有機物に加工するフローを最も効率的に設計・運用した工場が、最終的に湿潤な環境を制覇する。",
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
+        )
+        val SEEDS_PRODUCTION = !TraitCard(
+            "seeds_production", "Seeds Production", "種子生成",
+            "Strictly speaking, seeds refer to the reproductive structures formed in the lower part of the pistil. However, in many plants in the order Miragales, seeds tend to detach and disperse quickly. For convenience, bulbs are often treated as seeds in these plants.",
+            "種子とは、狭義にはめしべの下部に形成される繁殖組織をいう。しかし、妖花目の植物は種子がすぐに欠落し拡散されるものが多いため、便宜上球根を種子同然に扱うことが多い。",
+            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
+        )
+        val FRUITS_PRODUCTION = !TraitCard(
+            "fruits_production", "Fruits Production", "果実生成",
+            "Human ancestors lived arboreal lives and primarily consumed fruit. While humans cannot eat raw meat, they can eat raw fruit. Interestingly, the nutritional values of fairies shares many similarities with that of common fruit.",
+            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、興味深いことに妖精の栄養価は一般的な果実のそれと多くが共通している。",
+            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
+        )
+        val LEAVES_PRODUCTION = !TraitCard(
+            "leaves_production", "Leaves Production", "葉面生成",
+            "Between 1.2 and 0.8 billion years ago, green plants emerged and developed the ability to fix carbon, while simultaneously losing their symbiotic relationship with etherobacteria. The fact that most modern plants lack intelligence is said to be a remnant of this evolutionary change.",
+            "12-8億年前、緑色植物が出現し、炭素固定能力を発達させた一方で、エテロバクテリアとの細胞内共生を退化させた。現生植物の多くに知性が欠落している事実は、この進化の名残りと言われている。",
+            listOf(), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
+        )
+        val RARE_PRODUCTION = !TraitCard(
+            "rare_production", "Rare Production", "希少品生成",
+            "This trait does not actually exist as a single gene, but is instead a collection of various genetic characteristics responsible for the formation of certain parts, such as the crystallization of phytoliths in the fruit, which humans deem rare or valuable.",
+            "この特性は、実際には遺伝子上には存在せず、果実部におけるプラントオパールの結晶化など、人間が希少と判断するいくつかの部位を形成する遺伝的形質をまとめたものである。",
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
+        )
+        val EXPERIENCE_PRODUCTION = !TraitCard(
+            "experience_production", "Xp Production", "経験値生成",
+            "The question of whether plants experience consciousness has long been a subject of debate. The discovery of plants that generate experience orbs has brought this discussion to a new stage.",
+            "植物は意識体験をするか？という問いかけは、長年の議論の対象であった。経験値オーブを生成する植物の発見は、この議論を新たな局面へと導いた。",
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
+        )
+        val CROSSBREEDING = !TraitCard(
+            "crossbreeding", "Crossbreeding", "交雑",
+            "By crossbreeding with different species of plants within the same family, it is possible to introduce genetic traits that the original plant species does not naturally possess.",
+            "同じ科の異種の植物との交配により、その植物種には本来備わらない遺伝的形質を持たせることができる。",
+            listOf(), listOf(TraitEffectKeyCard.CROSSBREEDING to 0.1),
+        )
+
+        // 共通
         val ETHER_RESPIRATION = !TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
             "Through the action of the astral radiation, ether is vaporized, generating a vortex of souls. Since the appearance of etherobacteria billions of years ago, the universe has been filled with life forms possessing will.",
@@ -67,81 +142,12 @@ class TraitCard(
             "高エネルギーアストラル放射線によってエーテルを分解することで、宇宙空間での生命維持を行う。この作用は岩石惑星のテラフォーミングの上で重要である。",
             listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.03, TraitEffectKeyCard.TEMPERATURE to 0.03, TraitEffectKeyCard.HUMIDITY to 0.03),
         )
-        val COLD_ADAPTATION = !TraitCard(
-            "cold_adaptation", "Cold Adaptation", "低温適応",
-            "Only plants that have adapted to low solar radiation, low temperatures, water freezing, snow cover, and harsh cold environments can survive under the extreme cold of the ice.",
-            "低い日射量、低い気温、水分の凍結、雪による遮蔽、過酷な低温環境に適応した植物だけが極寒の氷の下で生き残ることができる。",
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
-        )
-        val WARM_ADAPTATION = !TraitCard(
-            "warm_adaptation", "Warm Adaptation", "中温適応",
-            "In environments with comfortable temperatures, plants can save evolutionary energy that would otherwise be allocated to cold or heat resistance. As a result, they are able to devote more energy to growth and reproduction.",
-            "快適な気温の環境では、耐寒や耐暑に割り当てる進化的エネルギーを節約できる。その結果、植物はより多くのエネルギーを成長や繁殖に割くことができる。",
-            listOf(TraitConditionCard.MEDIUM_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
-        )
-        val HOT_ADAPTATION = !TraitCard(
-            "hot_adaptation", "Hot Adaptation", "高温適応",
-            "The jungle, a paradise for plants, the scorching desert, the fiery inferno—though all these are high-temperature environments, their actual conditions vary greatly. This trait is merely a collection of minor techniques that prove useful across various high-temperature environments.",
-            "植物の楽園であるジャングル地帯、炎天下の砂漠、灼熱地獄、一口に高温環境といっても、その実態は様々である。この形質は、高温環境全般で役に立つ小技の寄せ集めにすぎない。",
-            listOf(TraitConditionCard.HIGH_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.1),
-        )
-        val ARID_ADAPTATION = !TraitCard(
-            "arid_adaptation", "Arid Adaptation", "乾燥適応",
-            "Evolution is often ruthless. The prosperity of the species as a whole does not necessarily lead to the happiness of each individual.",
-            "進化とは、ときに非情である。種という全体の繁栄が、必ずしも個々の個体の幸福に繋がるとは限らないのだ。",
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
-        )
-        val MESIC_ADAPTATION = !TraitCard(
-            "mesic_adaptation", "Mesic Adaptation", "中湿適応",
-            "Moderate humidity provide comfort for plants as well, allowing a diverse range of species to thrive. In such an environment, a straightforward struggle for survival is required, with no possibility of escape or hiding, and no tricks. Winning in an ordinary world is the most challenging of all.",
-            "極端でない湿度は、植物にとっても快適であり、多様な植物が繁栄する。ここでは、逃げも隠れもできない、小細工なしの生存競争が求められる。普通の世界で勝利することが最も難しいのだ。",
-            listOf(TraitConditionCard.MEDIUM_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
-        )
-        val HUMID_ADAPTATION = !TraitCard(
-            "humid_adaptation", "Humid Adaptation", "湿潤適応",
-            "The plant that designs and operates the most efficient flow for converting H2O and CO2 into O2 and organic matter will ultimately dominate humid environments.",
-            "H2OとCO2をO2と有機物に加工するフローを最も効率的に設計・運用した工場が、最終的に湿潤な環境を制覇する。",
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1),
-        )
-
-        val SEEDS_PRODUCTION = !TraitCard(
-            "seeds_production", "Seeds Production", "種子生成",
-            "Strictly speaking, seeds refer to the reproductive structures formed in the lower part of the pistil. However, in many plants in the order Miragales, seeds tend to detach and disperse quickly. For convenience, bulbs are often treated as seeds in these plants.",
-            "種子とは、狭義にはめしべの下部に形成される繁殖組織をいう。しかし、妖花目の植物は種子がすぐに欠落し拡散されるものが多いため、便宜上球根を種子同然に扱うことが多い。",
-            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
-        )
-        val FRUITS_PRODUCTION = !TraitCard(
-            "fruits_production", "Fruits Production", "果実生成",
-            "Human ancestors lived arboreal lives and primarily consumed fruit. While humans cannot eat raw meat, they can eat raw fruit. Interestingly, the nutritional values of fairies shares many similarities with that of common fruit.",
-            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、興味深いことに妖精の栄養価は一般的な果実のそれと多くが共通している。",
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
-        )
-        val LEAVES_PRODUCTION = !TraitCard(
-            "leaves_production", "Leaves Production", "葉面生成",
-            "Between 1.2 and 0.8 billion years ago, green plants emerged and developed the ability to fix carbon, while simultaneously losing their symbiotic relationship with etherobacteria. The fact that most modern plants lack intelligence is said to be a remnant of this evolutionary change.",
-            "12-8億年前、緑色植物が出現し、炭素固定能力を発達させた一方で、エテロバクテリアとの細胞内共生を退化させた。現生植物の多くに知性が欠落している事実は、この進化の名残りと言われている。",
-            listOf(), listOf(TraitEffectKeyCard.LEAVES_PRODUCTION to 0.1),
-        )
-        val RARE_PRODUCTION = !TraitCard(
-            "rare_production", "Rare Production", "希少品生成",
-            "This trait does not actually exist as a single gene, but is instead a collection of various genetic characteristics responsible for the formation of certain parts, such as the crystallization of phytoliths in the fruit, which humans deem rare or valuable.",
-            "この特性は、実際には遺伝子上には存在せず、果実部におけるプラントオパールの結晶化など、人間が希少と判断するいくつかの部位を形成する遺伝的形質をまとめたものである。",
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
-        )
-        val EXPERIENCE_PRODUCTION = !TraitCard(
-            "experience_production", "Xp Production", "経験値生成",
-            "The question of whether plants experience consciousness has long been a subject of debate. The discovery of plants that generate experience orbs has brought this discussion to a new stage.",
-            "植物は意識体験をするか？という問いかけは、長年の議論の対象であった。経験値オーブを生成する植物の発見は、この議論を新たな局面へと導いた。",
-            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
-        )
-
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
             "A powerful light illuminates the world. A gentle breeze sways the trees. Mirage petals brush against the cheeks. Swirling pollen comes together, transforming into the body of a fairy. The fairy knows. The fate of everything in this world.",
             "力強い光が世界を照らす。朗らかな風が木々を揺らす。ミラージュの花びらが頬を撫でる。渦巻く花粉は一つになり、妖精へと姿を変える。妖精は知っている。この世のすべての運命を。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         )
-
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
             "The probability of a certain type of plant having a set of four leaves is typically less than 1 in 10,000, reflecting the high luck of the discoverer. Therefore, by adjusting random numbers so that all leaves are in sets of four, it is theoretically possible to maximize the luck of all humanity at all times.",
@@ -249,12 +255,6 @@ class TraitCard(
             "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
-        )
-        val CROSSBREEDING = !TraitCard(
-            "crossbreeding", "Crossbreeding", "交雑",
-            "By crossbreeding with different species of plants within the same family, it is possible to introduce genetic traits that the original plant species does not naturally possess.",
-            "同じ科の異種の植物との交配により、その植物種には本来備わらない遺伝的形質を持たせることができる。",
-            listOf(), listOf(TraitEffectKeyCard.CROSSBREEDING to 0.1),
         )
         val PLANTS_WITH_SELF_AWARENESS = !TraitCard(
             "plants_with_self_awareness", "Plants with Self-Awareness", "自我を持つ植物",
