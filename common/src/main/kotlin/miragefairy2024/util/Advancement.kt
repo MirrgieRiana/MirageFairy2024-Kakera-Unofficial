@@ -33,6 +33,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 
 object FairyJewelsLootTableHelper {
     val cache = mutableMapOf<Int, ResourceKey<LootTable>>()
+
     context(ModContext)
     fun getOrInit(fairyJewels: Int): ResourceKey<LootTable> {
         return cache.getOrPut(fairyJewels) {

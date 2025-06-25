@@ -55,12 +55,14 @@ enum class PoemType(val color: Formatting) {
 interface Poem {
     val type: PoemType
     fun getText(item: Item, context: Item.TooltipContext): Component
+
     context(ModContext)
     fun init(item: () -> Item) = Unit
 }
 
 class InternalPoem(override val type: PoemType, private val key: String, private val en: String, private val ja: String) : Poem {
     override fun getText(item: Item, context: Item.TooltipContext) = text { translate("${item.descriptionId}.$key").formatted(type.color) }
+
     context(ModContext)
     override fun init(item: () -> Item) {
         en { "${item().descriptionId}.$key" to en }

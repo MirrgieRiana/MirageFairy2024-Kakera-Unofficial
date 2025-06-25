@@ -30,79 +30,79 @@ public class EnchantmentHelperMixin {
     }
 
     @Inject(
-            method = "getItemEnchantmentLevel",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
-                    ordinal = 0,
-                    shift = At.Shift.BY,
-                    by = 2
-            )
+        method = "getItemEnchantmentLevel",
+        at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0,
+            shift = At.Shift.BY,
+            by = 2
+        )
     )
     private static void getItemEnchantmentLevel(
-            Holder<Enchantment> enchantment,
-            ItemStack stack,
-            CallbackInfoReturnable<Integer> cir,
-            @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
+        Holder<Enchantment> enchantment,
+        ItemStack stack,
+        CallbackInfoReturnable<Integer> cir,
+        @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
     ) {
         itemEnchantments.set(ItemEnchantmentsConverterHelper.convertItemEnchantments(stack, itemEnchantments.get()));
     }
 
     @Inject(
-            method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
-                    ordinal = 0,
-                    shift = At.Shift.BY,
-                    by = 2
-            )
+        method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",
+        at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0,
+            shift = At.Shift.BY,
+            by = 2
+        )
     )
     private static void runIterationOnItem(
-            ItemStack stack,
-            EnchantmentHelper.EnchantmentVisitor visitor,
-            CallbackInfo ci,
-            @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
+        ItemStack stack,
+        EnchantmentHelper.EnchantmentVisitor visitor,
+        CallbackInfo ci,
+        @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
     ) {
         itemEnchantments.set(ItemEnchantmentsConverterHelper.convertItemEnchantments(stack, itemEnchantments.get()));
     }
 
     @Inject(
-            method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
-                    ordinal = 0,
-                    shift = At.Shift.BY,
-                    by = 2
-            )
+        method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V",
+        at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0,
+            shift = At.Shift.BY,
+            by = 2
+        )
     )
     private static void runIterationOnItem(
-            ItemStack stack,
-            EquipmentSlot slot,
-            LivingEntity entity,
-            EnchantmentHelper.EnchantmentInSlotVisitor visitor,
-            CallbackInfo ci,
-            @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
+        ItemStack stack,
+        EquipmentSlot slot,
+        LivingEntity entity,
+        EnchantmentHelper.EnchantmentInSlotVisitor visitor,
+        CallbackInfo ci,
+        @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
     ) {
         itemEnchantments.set(ItemEnchantmentsConverterHelper.convertItemEnchantments(stack, itemEnchantments.get()));
     }
 
     @Inject(
-            method = "hasTag",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
-                    ordinal = 0,
-                    shift = At.Shift.BY,
-                    by = 2
-            )
+        method = "hasTag",
+        at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0,
+            shift = At.Shift.BY,
+            by = 2
+        )
     )
     private static void hasTag(
-            ItemStack stack,
-            TagKey<Enchantment> tag,
-            CallbackInfoReturnable<Boolean> cir,
-            @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
+        ItemStack stack,
+        TagKey<Enchantment> tag,
+        CallbackInfoReturnable<Boolean> cir,
+        @Local(ordinal = 0) LocalRef<ItemEnchantments> itemEnchantments
     ) {
         itemEnchantments.set(ItemEnchantmentsConverterHelper.convertItemEnchantments(stack, itemEnchantments.get()));
     }

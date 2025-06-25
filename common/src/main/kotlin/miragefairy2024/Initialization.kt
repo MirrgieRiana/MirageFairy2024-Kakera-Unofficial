@@ -24,6 +24,7 @@ class InitializationEventRegistry<T> {
 object Modules {
     private val lock = Any()
     private var initialized = false
+
     context(ModContext)
     fun init() {
         synchronized(lock) {

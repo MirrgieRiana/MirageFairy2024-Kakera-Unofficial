@@ -74,6 +74,7 @@ abstract class BiomeCard(
     vararg val tags: TagKey<Biome>,
 ) {
     abstract fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome
+
     context(ModContext)
     open fun init() = Unit
 
