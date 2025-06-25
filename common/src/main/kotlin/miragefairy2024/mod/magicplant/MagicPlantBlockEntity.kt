@@ -111,7 +111,7 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
 
     // 凝縮率を加味したビット番号の抽選リスト
     val bitNumberChances = (1..10).map { bitNumber ->
-        val weight = 0.5.pow((bitNumber - 1).toDouble()) * selectedCondensedTrait.count
+        val weight = 0.5 * 0.5.pow((bitNumber - 1).toDouble()) * selectedCondensedTrait.count // 0x0001 のときに 0.5、1ビットシフトごとに半減
         Chance(weight, bitNumber)
     }
 
@@ -124,7 +124,7 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
     // ビット番号の抽選
     val selectedCondensedBitNumberResult = actualCondensedBitNumberChances.weightedRandom(random)!!
     val selectedCondensedBitNumber = selectedCondensedBitNumberResult.first
-    if (selectedCondensedBitNumber == null) return Pair(TraitStacks.of(card.defaultTraitBits), false) // 式の関係上実際には通過しないはず
+    if (selectedCondensedBitNumber == null) return Pair(TraitStacks.of(card.defaultTraitBits), false)
 
     // 抽選結果を加味した特性リストの生成
     // ビット番号の凝縮数があふれた分は、単に無視する
