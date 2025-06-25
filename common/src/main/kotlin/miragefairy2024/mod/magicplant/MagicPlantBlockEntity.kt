@@ -1,13 +1,17 @@
 package miragefairy2024.mod.magicplant
 
+import miragefairy2024.util.Chance
+import miragefairy2024.util.compressWeight
+import miragefairy2024.util.filled
+import miragefairy2024.util.weightedRandom
+import mirrg.kotlin.hydrogen.Single
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.core.Holder as RegistryEntry
+import kotlin.math.pow
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
@@ -49,7 +53,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
     override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(card, world.getBiome(worldPosition), world.random)
+            val result = spawnTraitStacks(card, world.random)
             setTraitStacks(result.first)
             setRare(result.second)
             setNatural(true)
@@ -84,68 +88,50 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-private fun spawnTraitStacks(card: MagicPlantCard<*>, biome: RegistryEntry<Biome>, random: Random): Pair<TraitStacks, Boolean> {
+private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<TraitStacks, Boolean> {
 
-    // スポーン条件判定
-    val aTraitStackList = mutableListOf<TraitStack>()
-    val cTraitStackList = mutableListOf<TraitStack>()
-    val nTraitStackList = mutableListOf<TraitStack>()
-    val rTraitStackList = mutableListOf<TraitStack>()
-    val sTraitStackList = mutableListOf<TraitStack>()
-    card.possibleTraits.forEach { trait ->
-        trait.spawnSpecs.forEach { spawnSpec ->
-            if (spawnSpec.condition.canSpawn(biome)) {
-                val traitStackList = when (spawnSpec.rarity) {
-                    TraitSpawnRarity.ALWAYS -> aTraitStackList
-                    TraitSpawnRarity.COMMON -> cTraitStackList
-                    TraitSpawnRarity.NORMAL -> nTraitStackList
-                    TraitSpawnRarity.RARE -> rTraitStackList
-                    TraitSpawnRarity.S_RARE -> sTraitStackList
-                }
-                traitStackList += TraitStack(trait, spawnSpec.level)
-            }
-        }
-    }
+    // 特性数上限を加味した抽選リスト
+    val defaultTraits = card.defaultTraitBits.keys
+    val actualRandomTraitChances = if (defaultTraits.size >= MAX_TRAIT_COUNT) {
+        card.randomTraitChances.entries.filter { (trait, _) -> trait in defaultTraits }
+    } else {
+        card.randomTraitChances.entries
+    }.map { Chance(it.value, it.key) }
+
+    // 確率があふれていた場合に凝縮率に還元し、ハズレを加味した特性の提供割合
+    val actualCondensedTraitChances = actualRandomTraitChances
+        .compressWeight()
+        .map { Chance(it.weight, Single(it.item)) }
+        .filled { Single(null) }
 
     // 抽選
-    val resultTraitStackList = mutableListOf<TraitStack>()
-    var isRare = false
-    val r = random.nextDouble()
-    when {
-        r < 0.01 -> { // +S
-            resultTraitStackList += aTraitStackList
-            resultTraitStackList += cTraitStackList
-            if (sTraitStackList.isNotEmpty()) {
-                resultTraitStackList += sTraitStackList[random.nextInt(sTraitStackList.size)]
-                isRare = true
-            }
-        }
+    val selectedCondensedTraitResult = actualCondensedTraitChances.weightedRandom(random)!!
+    val selectedCondensedTrait = selectedCondensedTraitResult.first
+    if (selectedCondensedTrait == null) return Pair(TraitStacks.of(card.defaultTraitBits), false)
 
-        r >= 0.02 && r < 0.1 -> { // +R
-            resultTraitStackList += aTraitStackList
-            resultTraitStackList += cTraitStackList
-            if (rTraitStackList.isNotEmpty()) {
-                resultTraitStackList += rTraitStackList[random.nextInt(rTraitStackList.size)]
-            }
-        }
-
-        r >= 0.01 && r < 0.02 -> { // -C
-            resultTraitStackList += aTraitStackList
-            if (cTraitStackList.isNotEmpty()) {
-                cTraitStackList.removeAt(random.nextInt(cTraitStackList.size))
-                resultTraitStackList += cTraitStackList
-                isRare = true
-            }
-        }
-
-        else -> { // +N
-            resultTraitStackList += aTraitStackList
-            resultTraitStackList += cTraitStackList
-            if (nTraitStackList.isNotEmpty()) {
-                resultTraitStackList += nTraitStackList[random.nextInt(nTraitStackList.size)]
-            }
-        }
+    // 凝縮率を加味したビット番号の抽選リスト
+    val bitNumberChances = (1..10).map { bitNumber ->
+        val weight = 0.5.pow((bitNumber - 1).toDouble()) * selectedCondensedTrait.count
+        Chance(weight, bitNumber)
     }
 
-    return Pair(TraitStacks.of(resultTraitStackList), isRare)
+    // 確率があふれていた場合に凝縮率に還元し、ハズレを加味したビット番号の提供割合
+    val actualCondensedBitNumberChances = bitNumberChances
+        .compressWeight()
+        .map { Chance(it.weight, Single(it.item)) }
+        .filled { Single(null) }
+
+    // ビット番号の抽選
+    val selectedCondensedBitNumberResult = actualCondensedBitNumberChances.weightedRandom(random)!!
+    val selectedCondensedBitNumber = selectedCondensedBitNumberResult.first
+    if (selectedCondensedBitNumber == null) return Pair(TraitStacks.of(card.defaultTraitBits), false) // 式の関係上実際には通過しないはず
+
+    // 抽選結果を加味した特性リストの生成
+    // ビット番号の凝縮数があふれた分は、単に無視する
+    val selectedTrait = selectedCondensedTrait.item
+    val selectedBits = 1 shl (selectedCondensedBitNumber.item - 1)
+    val actualTraitBits = card.defaultTraitBits.toMutableMap()
+    actualTraitBits[selectedTrait] = (actualTraitBits[selectedTrait] ?: 0) xor selectedBits
+
+    return Pair(TraitStacks.of(actualTraitBits), true/* TODO このアルゴリズムでレアをどう判定するのか？ */)
 }

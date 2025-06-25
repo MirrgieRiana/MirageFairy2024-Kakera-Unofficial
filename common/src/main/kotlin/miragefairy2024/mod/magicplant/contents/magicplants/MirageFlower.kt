@@ -56,30 +56,55 @@ abstract class AbstractMirageFlowerCard<B : SimpleMagicPlantBlock> : SimpleMagic
     )
 
     override val family = MirageFairy2024.identifier("mirage")
-    override val possibleTraits = setOf(
-        TraitCard.ETHER_RESPIRATION.trait, // エーテル呼吸
-        TraitCard.PHOTOSYNTHESIS.trait, // 光合成
-        TraitCard.PHAEOSYNTHESIS.trait, // 闇合成
-        TraitCard.OSMOTIC_ABSORPTION.trait, // 養分吸収
-        TraitCard.AIR_ADAPTATION.trait, // 空間適応
-        TraitCard.COLD_ADAPTATION.trait, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait, // 葉面生成
-        TraitCard.RARE_PRODUCTION.trait, // 希少品生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait, // 経験値生成
-        TraitCard.FOUR_LEAFED.trait, // 四つ葉
-        TraitCard.SPINY_LEAVES.trait, // 棘のある葉
-        TraitCard.HEATING_MECHANISM.trait, // 発熱機構
-        TraitCard.ETHER_PREDATION.trait, // エーテル捕食
-        TraitCard.PROSPERITY_OF_SPECIES.trait, // 種の繁栄
-        TraitCard.CROSSBREEDING.trait, // 交雑
-        TraitCard.PLANTS_WITH_SELF_AWARENESS.trait, // 自我を持つ植物
+    override val defaultTraitBits = mapOf(
+        TraitCard.ETHER_RESPIRATION.trait to 0b1000, // エーテル呼吸
+        TraitCard.PHOTOSYNTHESIS.trait to 0b1000, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0b1000, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b1000, // 養分吸収
+        TraitCard.AIR_ADAPTATION.trait to 0b1000, // 空間適応
+        TraitCard.COLD_ADAPTATION.trait to 0b1000, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0b1000, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0b1000, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0b1000, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0b1000, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0b1000, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b1000, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0b1000, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0b1000, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait to 0b1000, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0b1000, // 経験値生成
+        TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
+        TraitCard.SPINY_LEAVES.trait to 0b1000, // 棘のある葉
+        TraitCard.HEATING_MECHANISM.trait to 0b1000, // 発熱機構
+        TraitCard.ETHER_PREDATION.trait to 0b1000, // エーテル捕食
+        TraitCard.PROSPERITY_OF_SPECIES.trait to 0b1000, // 種の繁栄
+        TraitCard.CROSSBREEDING.trait to 0b1000, // 交雑
+        TraitCard.PLANTS_WITH_SELF_AWARENESS.trait to 0b1000, // 自我を持つ植物
+    )
+    override val randomTraitChances = mapOf(
+        TraitCard.ETHER_RESPIRATION.trait to 0.1, // エーテル呼吸
+        TraitCard.PHOTOSYNTHESIS.trait to 0.1, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0.1, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.1, // 養分吸収
+        TraitCard.AIR_ADAPTATION.trait to 0.1, // 空間適応
+        TraitCard.COLD_ADAPTATION.trait to 0.1, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0.1, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0.1, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.1, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.1, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.1, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.1, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.1, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0.1, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait to 0.1, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.1, // 経験値生成
+        TraitCard.FOUR_LEAFED.trait to 0.1, // 四つ葉
+        TraitCard.SPINY_LEAVES.trait to 0.1, // 棘のある葉
+        TraitCard.HEATING_MECHANISM.trait to 0.1, // 発熱機構
+        TraitCard.ETHER_PREDATION.trait to 0.1, // エーテル捕食
+        TraitCard.PROSPERITY_OF_SPECIES.trait to 0.1, // 種の繁栄
+        TraitCard.CROSSBREEDING.trait to 0.1, // 交雑
+        TraitCard.PLANTS_WITH_SELF_AWARENESS.trait to 0.1, // 自我を持つ植物
     )
 }
 
@@ -99,18 +124,31 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item().createItemStack(count))
 
-    override val possibleTraits = super.possibleTraits + setOf(
-        TraitCard.CRYSTAL_ABSORPTION.trait, // 鉱物吸収
-        TraitCard.FAIRY_BLESSING.trait, // 妖精の祝福
-        TraitCard.NODED_STEM.trait, // 節状の茎
-        TraitCard.FRUIT_OF_KNOWLEDGE.trait, // 禁断の果実
-        TraitCard.DESERT_GEM.trait, // 砂漠の宝石
-        TraitCard.WATERLOGGING_TOLERANCE.trait, // 浸水耐性
-        TraitCard.ADVERSITY_FLOWER.trait, // 高嶺の花
-        TraitCard.FLESHY_LEAVES.trait, // 肉厚の葉
-        TraitCard.NATURAL_ABSCISSION.trait, // 自然落果
-        TraitCard.CARNIVOROUS_PLANT.trait, // 食虫植物
-        TraitCard.PAVEMENT_FLOWERS.trait, // アスファルトに咲く花
+    override val defaultTraitBits = super.defaultTraitBits + mapOf(
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0b1000, // 鉱物吸収
+        TraitCard.FAIRY_BLESSING.trait to 0b1000, // 妖精の祝福
+        TraitCard.NODED_STEM.trait to 0b1000, // 節状の茎
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0b1000, // 禁断の果実
+        TraitCard.DESERT_GEM.trait to 0b1000, // 砂漠の宝石
+        TraitCard.WATERLOGGING_TOLERANCE.trait to 0b1000, // 浸水耐性
+        TraitCard.ADVERSITY_FLOWER.trait to 0b1000, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait to 0b1000, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait to 0b1000, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait to 0b1000, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait to 0b1000, // アスファルトに咲く花
+    )
+    override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.1, // 鉱物吸収
+        TraitCard.FAIRY_BLESSING.trait to 0.1, // 妖精の祝福
+        TraitCard.NODED_STEM.trait to 0.1, // 節状の茎
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0.1, // 禁断の果実
+        TraitCard.DESERT_GEM.trait to 0.1, // 砂漠の宝石
+        TraitCard.WATERLOGGING_TOLERANCE.trait to 0.1, // 浸水耐性
+        TraitCard.ADVERSITY_FLOWER.trait to 0.1, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait to 0.1, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait to 0.1, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait to 0.1, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait to 0.1, // アスファルトに咲く花
     )
 
     val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
@@ -184,9 +222,13 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item().createItemStack(count))
 
-    override val possibleTraits = super.possibleTraits + setOf(
-        TraitCard.PHANTOM_FLOWER.trait, // 幻の花
-        TraitCard.FLOWER_OF_THE_END.trait, // 終焉の花
+    override val defaultTraitBits = super.defaultTraitBits + mapOf(
+        TraitCard.PHANTOM_FLOWER.trait to 0b1000, // 幻の花
+        TraitCard.FLOWER_OF_THE_END.trait to 0b1000, // 終焉の花
+    )
+    override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.PHANTOM_FLOWER.trait to 0.1, // 幻の花
+        TraitCard.FLOWER_OF_THE_END.trait to 0.1, // 終焉の花
     )
 
     val PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("phantom_cluster")
