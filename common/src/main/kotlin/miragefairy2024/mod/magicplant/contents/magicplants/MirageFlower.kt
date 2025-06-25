@@ -12,19 +12,21 @@ import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
+import miragefairy2024.util.center
 import miragefairy2024.util.count
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.end
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
-import miragefairy2024.util.netherFlower
 import miragefairy2024.util.not
 import miragefairy2024.util.overworld
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
+import miragefairy2024.util.square
+import miragefairy2024.util.surface
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
@@ -178,16 +180,16 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
             MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) { // 小さな塊
-                MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
-                NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(64) + netherFlower }) { nether } // ネザーにネザー用クラスタ
-                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
+                MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
+                NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(64) + flower(square, nether) }) { nether } // ネザーにネザー用クラスタ
+                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
             }
         }
         FAIRY_RING_FEATURE {
             LARGE_MIRAGE_CLUSTER_CONFIGURED_FEATURE_KEY({
                 FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) { // Fairy Ring
-                LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(600) + flower }) { overworld }  // 地上にFairy Ring
+                LARGE_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(600) + flower(center, surface) }) { overworld }  // 地上にFairy Ring
             }
         }
     }
@@ -251,7 +253,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
             PHANTOM_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                PHANTOM_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +BiomeCards.FAIRY_FOREST.registryKey }
+                PHANTOM_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }
             }
         }
     }

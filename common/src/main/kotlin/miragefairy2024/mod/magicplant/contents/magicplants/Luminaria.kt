@@ -17,9 +17,11 @@ import miragefairy2024.util.flower
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
-import miragefairy2024.util.rangedNetherFlower
+import miragefairy2024.util.rangedNether
+import miragefairy2024.util.square
+import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
-import miragefairy2024.util.undergroundFlower
+import miragefairy2024.util.underground
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
@@ -144,7 +146,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
             DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
+                DIAMOND_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
             }
         }
     }
@@ -216,8 +218,8 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
             EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
-                UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + undergroundFlower }) { +Biomes.LUSH_CAVES } // 地下
+                EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
+                UNDERGROUND_EMERALD_LUMINARIA_CLUSTER_PLACED_FEATURE_KEY({ count(32) + flower(square, underground) }) { +Biomes.LUSH_CAVES } // 地下
             }
         }
     }
@@ -279,7 +281,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
             PROMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) {
-                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + rangedNetherFlower(32, 45) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
+                PROMINARIA_CLUSTER_PLACED_FEATURE_KEY({ per(4) + flower(square, rangedNether(32, 45)) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
             }
         }
     }

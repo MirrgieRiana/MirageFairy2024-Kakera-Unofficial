@@ -9,13 +9,15 @@ import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.center
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
-import miragefairy2024.util.netherFlower
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
+import miragefairy2024.util.square
+import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
@@ -146,14 +148,14 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
             VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) { // 小さな塊
-                VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { +ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS } // 地上用クラスタ
+                VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS } // 地上用クラスタ
             }
         }
         Feature.FLOWER {
             LARGE_VEROPEDA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it)))
             }) { // 大きな塊
-                NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + netherFlower }) { nether } // ネザー用クラスタ
+                NETHER_VEROPEDA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + flower(center, nether) }) { nether } // ネザー用クラスタ
             }
         }
     }
@@ -208,7 +210,7 @@ object SarraceniaCard : AbstractVeropedaCard<SarraceniaBlock>() {
             SARRACENIA_CLUSTER_CONFIGURED_FEATURE_KEY({
                 RandomPatchConfiguration(20, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it)))
             }) {
-                SARRACENIA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + flower }) { +ConventionalBiomeTags.IS_SWAMP + +ConventionalBiomeTags.IS_JUNGLE }
+                SARRACENIA_CLUSTER_PLACED_FEATURE_KEY({ per(8) + flower(center, surface) }) { +ConventionalBiomeTags.IS_SWAMP + +ConventionalBiomeTags.IS_JUNGLE }
             }
         }
     }

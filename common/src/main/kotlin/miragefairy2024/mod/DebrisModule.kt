@@ -16,6 +16,8 @@ import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.register
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
+import miragefairy2024.util.square
+import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
@@ -70,7 +72,7 @@ fun initDebrisModule() {
             DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.of(card.count.first, card.count.last), card.itemStackGetter())
         }
         registerDynamicGeneration(card.placedFeatureKey) {
-            val placementModifiers = placementModifiers { per(card.perChunks) + flower }
+            val placementModifiers = placementModifiers { per(card.perChunks) + flower(square, surface) }
             Registries.CONFIGURED_FEATURE[card.configuredFeatureKey] with placementModifiers
         }
         card.placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION, card.biomeSelectorCreator)

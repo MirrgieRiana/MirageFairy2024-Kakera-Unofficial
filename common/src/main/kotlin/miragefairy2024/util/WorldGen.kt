@@ -155,37 +155,64 @@ fun uniformOre(minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf
     BiomePlacementModifier.biome(),
 )
 
+fun interface HorizontalPlacementType {
+    fun getPlacementModifiers(): List<PlacementModifier>
+}
+
+/** 半径8未満のFeatureまで可能。 */
 context(PlacementModifiersScope)
-val flower: List<PlacementModifier>
-    get() = listOf(
-        SquarePlacementModifier.spread(),
-        PlacedFeatures.HEIGHTMAP,
-        BiomePlacementModifier.biome(),
-    )
+val none
+    get() = HorizontalPlacementType { listOf() }
+
+/** 半径8未満のFeatureまで可能。 */
+context(PlacementModifiersScope)
+val square
+    get() = HorizontalPlacementType { listOf(SquarePlacementModifier.spread()) }
+
+/** 半径16未満のFeatureまで可能。 */
+context(PlacementModifiersScope)
+val center
+    get() = HorizontalPlacementType { listOf(RandomOffsetPlacementModifier.horizontal(ConstantIntProvider.of(8))) }
+
+fun interface VerticalPlacementType {
+    fun getPlacementModifiers(): List<PlacementModifier>
+}
 
 context(PlacementModifiersScope)
-fun rangedNetherFlower(minY: Int, maxY: Int): List<PlacementModifier> = listOf(
-    HeightRangePlacementModifier.uniform(YOffset.absolute(minY), YOffset.absolute(maxY)),
-    CountMultilayerPlacementModifier.of(1),
-    BiomePlacementModifier.biome(),
-)
+val surface
+    get() = VerticalPlacementType { listOf(PlacedFeatures.HEIGHTMAP) }
 
 context(PlacementModifiersScope)
-val netherFlower
-    get(): List<PlacementModifier> = listOf(
-        CountMultilayerPlacementModifier.of(1),
-        BiomePlacementModifier.biome(),
-    )
+val nether
+    get() = VerticalPlacementType { listOf(CountMultilayerPlacementModifier.of(1)) }
 
 context(PlacementModifiersScope)
-val undergroundFlower: List<PlacementModifier>
-    get() = listOf(
-        SquarePlacementModifier.spread(),
-        PlacedFeatures.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+val underground
+    get() = VerticalPlacementType {
+        listOf(
+            PlacedFeatures.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacementModifier.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacementModifier.vertical(ConstantIntProvider.of(1)),
+        )
+    }
+
+context(PlacementModifiersScope)
+fun rangedNether(minY: Int, maxY: Int) = VerticalPlacementType {
+    listOf(
+        HeightRangePlacementModifier.uniform(YOffset.absolute(minY), YOffset.absolute(maxY)),
         EnvironmentScanPlacementModifier.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
         RandomOffsetPlacementModifier.vertical(ConstantIntProvider.of(1)),
+    )
+}
+
+context(PlacementModifiersScope)
+fun flower(horizontal: HorizontalPlacementType, vertical: VerticalPlacementType): List<PlacementModifier> {
+    return listOf(
+        *horizontal.getPlacementModifiers().toTypedArray(),
+        *vertical.getPlacementModifiers().toTypedArray(),
         BiomePlacementModifier.biome(),
     )
+}
 
 
 // Structure

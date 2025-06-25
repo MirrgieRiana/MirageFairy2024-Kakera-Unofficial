@@ -24,6 +24,8 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerChestLoot
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
+import miragefairy2024.util.square
+import miragefairy2024.util.surface
 import miragefairy2024.util.text
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.weightedRandom
@@ -281,7 +283,7 @@ fun initFairyQuestRecipe() {
         FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
     }
     val placedFeatureKey = registerDynamicGeneration(Registries.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
-        val placementModifiers = placementModifiers { per(256) + flower }
+        val placementModifiers = placementModifiers { per(256) + flower(square, surface) }
         Registries.CONFIGURED_FEATURE[configuredFeatureKey] with placementModifiers
     }
     placedFeatureKey.registerFeature(GenerationStep.Decoration.VEGETAL_DECORATION) { overworld }
