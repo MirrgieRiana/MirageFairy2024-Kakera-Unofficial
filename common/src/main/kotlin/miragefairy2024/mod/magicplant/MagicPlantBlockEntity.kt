@@ -131,7 +131,12 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
     val selectedTrait = selectedCondensedTrait.item
     val selectedBits = 1 shl (selectedCondensedBitNumber.item - 1)
     val actualTraitBits = card.defaultTraitBits.toMutableMap()
-    actualTraitBits[selectedTrait] = (actualTraitBits[selectedTrait] ?: 0) xor selectedBits
+    val newBits = (actualTraitBits[selectedTrait] ?: 0) xor selectedBits
+    if (newBits == 0) {
+        actualTraitBits.remove(selectedTrait)
+    } else {
+        actualTraitBits[selectedTrait] = newBits
+    }
 
     return Pair(TraitStacks.of(actualTraitBits), true/* TODO このアルゴリズムでレアをどう判定するのか？ */)
 }
