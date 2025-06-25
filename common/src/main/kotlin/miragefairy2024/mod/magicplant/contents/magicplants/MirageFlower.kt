@@ -180,7 +180,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
             }) { // 小さな塊
                 MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(16) + flower }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
                 NETHER_MIRAGE_CLUSTER_PLACED_FEATURE_KEY({ per(64) + netherFlower }) { nether } // ネザーにネザー用クラスタ
-                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower }) // 妖精の森
+                MIRAGE_CLUSTER_FAIRY_FOREST_PLACED_FEATURE_KEY({ count(4) + flower }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
             }
         }
         FAIRY_RING_FEATURE {
