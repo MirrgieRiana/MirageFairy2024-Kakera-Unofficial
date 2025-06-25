@@ -78,31 +78,31 @@ abstract class AbstractVeropedaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlan
         TraitCard.CROSSBREEDING.trait to 0b1000, // 交雑
     )
     override val randomTraitChances = mapOf(
-        TraitCard.PHOTOSYNTHESIS.trait to 0.1, // 光合成
-        TraitCard.PHAEOSYNTHESIS.trait to 0.1, // 闇合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0.1, // 養分吸収
-        TraitCard.COLD_ADAPTATION.trait to 0.1, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait to 0.1, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait to 0.1, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait to 0.1, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait to 0.1, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait to 0.1, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0.1, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait to 0.1, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0.1, // 葉面生成
-        TraitCard.RARE_PRODUCTION.trait to 0.1, // 希少品生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.1, // 経験値生成
-        TraitCard.FOUR_LEAFED.trait to 0.1, // 四つ葉
-        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0.1, // 禁断の果実
-        TraitCard.GOLDEN_APPLE.trait to 0.1, // 金のリンゴ
-        TraitCard.SPINY_LEAVES.trait to 0.1, // 棘のある葉
-        TraitCard.ADVERSITY_FLOWER.trait to 0.1, // 高嶺の花
-        TraitCard.FLESHY_LEAVES.trait to 0.1, // 肉厚の葉
-        TraitCard.NATURAL_ABSCISSION.trait to 0.1, // 自然落果
-        TraitCard.CARNIVOROUS_PLANT.trait to 0.1, // 食虫植物
-        TraitCard.PAVEMENT_FLOWERS.trait to 0.1, // アスファルトに咲く花
-        TraitCard.PROSPERITY_OF_SPECIES.trait to 0.1, // 種の繁栄
-        TraitCard.CROSSBREEDING.trait to 0.1, // 交雑
+        TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0.05, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
+        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0.05, // 葉面生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
+        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
+        TraitCard.FRUIT_OF_KNOWLEDGE.trait to 0.05, // 禁断の果実
+        TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
+        TraitCard.SPINY_LEAVES.trait to 0.05, // 棘のある葉
+        TraitCard.ADVERSITY_FLOWER.trait to 0.05, // 高嶺の花
+        TraitCard.FLESHY_LEAVES.trait to 0.05, // 肉厚の葉
+        TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
+        TraitCard.CARNIVOROUS_PLANT.trait to 0.05, // 食虫植物
+        TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
+        TraitCard.PROSPERITY_OF_SPECIES.trait to 0.05, // 種の繁栄
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
     )
 }
 

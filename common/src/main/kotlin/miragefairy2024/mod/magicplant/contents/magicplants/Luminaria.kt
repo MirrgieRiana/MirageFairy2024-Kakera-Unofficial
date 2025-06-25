@@ -80,22 +80,22 @@ abstract class AbstractLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPla
         TraitCard.TREASURE_OF_XARPA.trait to 0b1000, // シャルパの秘宝
     )
     override val randomTraitChances = mapOf(
-        TraitCard.PHOTOSYNTHESIS.trait to 0.1, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0.1, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait to 0.1, // 鉱物吸収
-        TraitCard.COLD_ADAPTATION.trait to 0.1, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait to 0.1, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait to 0.1, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait to 0.1, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait to 0.1, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait to 0.1, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0.1, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait to 0.1, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0.1, // 葉面生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.1, // 経験値生成
-        TraitCard.GOLDEN_APPLE.trait to 0.1, // 金のリンゴ
-        TraitCard.ETERNAL_TREASURE.trait to 0.1, // 悠久の秘宝
-        TraitCard.TREASURE_OF_XARPA.trait to 0.1, // シャルパの秘宝
+        TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0.05, // 葉面生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
+        TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
+        TraitCard.ETERNAL_TREASURE.trait to 0.05, // 悠久の秘宝
+        TraitCard.TREASURE_OF_XARPA.trait to 0.05, // シャルパの秘宝
     )
 }
 
@@ -121,7 +121,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
         TraitCard.HEATING_MECHANISM.trait to 0b1000, // 発熱機構
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
-        TraitCard.HEATING_MECHANISM.trait to 0.1, // 発熱機構
+        TraitCard.HEATING_MECHANISM.trait to 0.05, // 発熱機構
     )
 
     val DIAMOND_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("diamond_luminaria_cluster")
@@ -192,7 +192,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
         TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0.1, // 四つ葉
+        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
     )
 
     val EMERALD_LUMINARIA_CLUSTER_CONFIGURED_FEATURE_KEY = Registries.CONFIGURED_FEATURE with MirageFairy2024.identifier("emerald_luminaria_cluster")
@@ -238,7 +238,7 @@ abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : AbstractLumin
         TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0.1, // 四つ葉
+        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
     )
 }
 
