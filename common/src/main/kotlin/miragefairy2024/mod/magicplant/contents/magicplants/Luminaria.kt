@@ -136,15 +136,7 @@ class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(Diamon
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
-fun getLuminance(age: Int): Int {
-    return when (age) {
-        0 -> 2
-        1 -> 4
-        2 -> 8
-        3 -> 15
-        else -> 0
-    }
-}
+private fun getLuminance(age: Int) = if (age == 3) 15 else 0
 
 object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override fun getBlockPath() = "emerald_luminaria"
