@@ -141,6 +141,12 @@ class TraitCard(
             "オーラ濃度のゆらぎにより、環境中の有機元素からエーテル結晶を成長させる。これはアンデッド生物の形成と同じ作用である。",
             listOf(TraitConditionCard.DARKNESS), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
+        val CARNIVOROUS_PLANT = !TraitCard(
+            "carnivorous_plant", "Carnivorous Plant", "食虫植物",
+            "It captures small animals like insects and breaks them down with digestive fluids. This is one of the strategies for surviving in nutrient-poor soil.",
+            "昆虫などの小動物を捕らえ、消化液により分解する。栄養の少ない土壌で生活するための戦略の一つである。",
+            listOf(TraitConditionCard.SUNSHINE_ENVIRONMENT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
+        )
         val ETHER_RESPIRATION = !TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
             "Through the action of the astral radiation, ether is vaporized, generating a vortex of souls. Since the appearance of etherobacteria billions of years ago, the universe has been filled with life forms possessing will.",
@@ -153,18 +159,30 @@ class TraitCard(
             "生きとし生ける者はみな、エーテルの魂を持つ。なれば、妖精の魂はどこから来るのか？ミラージュはある意味肉食植物だ。",
             listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.05, TraitEffectKeyCard.PRODUCTION_BOOST to 0.05),
         )
-        val CARNIVOROUS_PLANT = !TraitCard(
-            "carnivorous_plant", "Carnivorous Plant", "食虫植物",
-            "It captures small animals like insects and breaks them down with digestive fluids. This is one of the strategies for surviving in nutrient-poor soil.",
-            "昆虫などの小動物を捕らえ、消化液により分解する。栄養の少ない土壌で生活するための戦略の一つである。",
-            listOf(TraitConditionCard.SUNSHINE_ENVIRONMENT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
-        )
 
         // 共通その他
+        val FRUIT_OF_KNOWLEDGE = !TraitCard(
+            "fruit_of_knowledge", "Forbidden Fruit", "禁断の果実",
+            "Consciousness, memory, soul, and genes--all this information is produced by the vortex motion of the gaseous etheric body. It is prophesied that the astral vortex, bound by the forbidden fruit, will connect to the creative demon, who possesses all knowledge beyond time and space.",
+            "意識、記憶、魂、遺伝子、これらすべての情報は、気相エーテル体の渦状運動によってもたらされる。禁断の果実に束縛されたアストラル渦は、時空を超えたありとあらゆる知識を持つというアカーシャの悪魔につながることが予言されている。",
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
+        )
+        val PROSPERITY_OF_SPECIES = !TraitCard(
+            "prosperity_of_species", "Prosperity of Species", "種の繁栄",
+            "Those who bear many offspring, those who are flexible to change, those who are greedy, those who eliminate their enemies, and those who, in the end, leave behind many descendants are the ones who win the struggle for survival.",
+            "多くの子を産む者、変化に柔軟な者、欲張りな者、敵を蹴落とす者、結果的に多くの子孫を遺せた者が生存競争を勝ち抜くのだ。",
+            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
+        )
         val FOUR_LEAFED = !TraitCard(
             "four_leafed", "Four-leafed", "四つ葉",
             "The probability of a certain type of plant having a set of four leaves is typically less than 1 in 10,000, reflecting the high luck of the discoverer. Therefore, by adjusting random numbers so that all leaves are in sets of four, it is theoretically possible to maximize the luck of all humanity at all times.",
             "ある種の植物の葉が4枚組となる確率は通常1万分の1以下であり、これは発見者の運気の高さを反映している。したがって、すべての葉が4枚組となるように乱数調整を行うことで、理論上全人類の運気を常に最大化できる。",
+            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
+        )
+        val GOLDEN_APPLE = !TraitCard(
+            "golden_apple", "Golden Apple", "金のリンゴ",
+            "When a sheep is dyed with lapis lazuli powder and then sheared, it will subsequently grow blue wool. This phenomenon is known as exogenous pigment induction.",
+            "ヒツジをラピスラズリの粉末で着色して毛を刈り取ると、そのヒツジは以後、青色の毛を生やすようになる。このような現象を外因性色素誘導と呼ぶ。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
         )
         val NODED_STEM = !TraitCard(
@@ -173,29 +191,11 @@ class TraitCard(
             "妖花目の植物の茎は、竹や麦などと同様に節目を持つことで知られる。これらの節目は失活した成長点であり、原理的にはすべての節目で成長を行うことにより高速な生育が可能である。",
             listOf(), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         )
-        val FRUIT_OF_KNOWLEDGE = !TraitCard(
-            "fruit_of_knowledge", "Forbidden Fruit", "禁断の果実",
-            "Consciousness, memory, soul, and genes--all this information is produced by the vortex motion of the gaseous etheric body. It is prophesied that the astral vortex, bound by the forbidden fruit, will connect to the creative demon, who possesses all knowledge beyond time and space.",
-            "意識、記憶、魂、遺伝子、これらすべての情報は、気相エーテル体の渦状運動によってもたらされる。禁断の果実に束縛されたアストラル渦は、時空を超えたありとあらゆる知識を持つというアカーシャの悪魔につながることが予言されている。",
-            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
-        )
-        val GOLDEN_APPLE = !TraitCard(
-            "golden_apple", "Golden Apple", "金のリンゴ",
-            "When a sheep is dyed with lapis lazuli powder and then sheared, it will subsequently grow blue wool. This phenomenon is known as exogenous pigment induction.",
-            "ヒツジをラピスラズリの粉末で着色して毛を刈り取ると、そのヒツジは以後、青色の毛を生やすようになる。このような現象を外因性色素誘導と呼ぶ。",
-            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
-        )
         val SPINY_LEAVES = !TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘のある葉",
             "Spines prevent the loss of water through transpiration and are also used for defense against herbivorous animals. The spines of plants in the Miragaceae family are made of sharp tissues containing silicates, which can easily pierce human skin and cause mild inflammation.",
             "棘は水分の蒸散を防ぎ、草食動物からの防御にも使われる。ミラージュ科の植物が持つ棘はケイ酸塩を含む鋭利な組織でできており、人間の皮膚を容易に傷つけ、軽度の炎症を引き起こす。",
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1), // TODO 接触ダメージ
-        )
-        val DESERT_GEM = !TraitCard(
-            "desert_gem", "Desert Gem", "砂漠の宝石",
-            "Legends of plants that bear beautiful gemstones can be found in various desert regions and are often revered. Physiologically, these gemstones are formed as a means for the plants to expel excess metal ions, absorbed due to the low moisture content in the soil.",
-            "美しい宝石を実らせる植物の伝承は各地の砂漠地帯において見られ、信仰の対象とされる。生理学的には、土中の水分含有量が少ないために過剰に吸収した金属イオンを排出するために形成される。",
-            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
         val HEATING_MECHANISM = !TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
@@ -209,23 +209,23 @@ class TraitCard(
             "中空の茎を発達させ、能動的に酸素を送り込むことで、浸水状態にあっても根が酸欠状態になるのを防ぐ。これにより、他の植物が根腐れを起こすような環境でも生育できる。",
             listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         )
+        val FLESHY_LEAVES = !TraitCard(
+            "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
+            "As a result of evolving to minimize surface area exposed to the air in order to prevent water loss, the leaves have become thick and are now capable of storing water internally.",
+            "水分の蒸発を防ぐために空気との接触面積を最小化するように進化した結果、葉は肉厚になり、内部に水分を蓄えるようになった。",
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
+        )
         val ADVERSITY_FLOWER = !TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "A flower that blooms in adversity is rarer and more beautiful than any other. Even if it shines only for a fleeting moment, it becomes an unattainable object of desire, forever etched in people's hearts.",
             "逆境に咲く花は、どんな花よりも希少で美しい。たとえそれが一瞬の輝きであったとしても、手に入れることのできない、あこがれの存在として人々の胸に刻まれる。",
             listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
-        val FLESHY_LEAVES = !TraitCard(
-            "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
-            "As a result of evolving to minimize surface area exposed to the air in order to prevent water loss, the leaves have become thick and are now capable of storing water internally.",
-            "水分の蒸発を防ぐために空気との接触面積を最小化するように進化した結果、葉は肉厚になり、内部に水分を蓄えるようになった。",
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.05),
-        )
-        val PROSPERITY_OF_SPECIES = !TraitCard(
-            "prosperity_of_species", "Prosperity of Species", "種の繁栄",
-            "Those who bear many offspring, those who are flexible to change, those who are greedy, those who eliminate their enemies, and those who, in the end, leave behind many descendants are the ones who win the struggle for survival.",
-            "多くの子を産む者、変化に柔軟な者、欲張りな者、敵を蹴落とす者、結果的に多くの子孫を遺せた者が生存競争を勝ち抜くのだ。",
-            listOf(), listOf(TraitEffectKeyCard.SEEDS_PRODUCTION to 0.1),
+        val DESERT_GEM = !TraitCard(
+            "desert_gem", "Desert Gem", "砂漠の宝石",
+            "Legends of plants that bear beautiful gemstones can be found in various desert regions and are often revered. Physiologically, these gemstones are formed as a means for the plants to expel excess metal ions, absorbed due to the low moisture content in the soil.",
+            "美しい宝石を実らせる植物の伝承は各地の砂漠地帯において見られ、信仰の対象とされる。生理学的には、土中の水分含有量が少ないために過剰に吸収した金属イオンを排出するために形成される。",
+            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
 
         // 専用
