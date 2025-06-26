@@ -74,6 +74,7 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
         TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
         TraitCard.LEAVES_PRODUCTION.trait to 0b00101000, // 葉面生成
         TraitCard.CROSSBREEDING.trait to 0b00101000, // 交雑
+        TraitCard.CARNIVOROUS_PLANT.trait to 0b00101000, // 食虫植物
         TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
