@@ -68,13 +68,13 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.VEROPEDA_LEAF.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
-        TraitCard.HOT_ADAPTATION.trait to 0b101000, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait to 0b101000, // 乾燥適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0b101000, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait to 0b101000, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0b101000, // 葉面生成
-        TraitCard.CROSSBREEDING.trait to 0b101000, // 交雑
-        TraitCard.PAVEMENT_FLOWERS.trait to 0b101000, // アスファルトに咲く花
+        TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0b00101000, // 乾燥適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0b00101000, // 葉面生成
+        TraitCard.CROSSBREEDING.trait to 0b00101000, // 交雑
+        TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
         TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
@@ -145,15 +145,15 @@ object SarraceniaCard : AbstractVeropedaCard<SarraceniaBlock>() {
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.FAIRY_SCALES.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
-        TraitCard.WARM_ADAPTATION.trait to 0b101000, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait to 0b101000, // 高温適応
-        TraitCard.HUMID_ADAPTATION.trait to 0b101000, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0b101000, // 種子生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0b101000, // 葉面生成
-        TraitCard.PHOTOSYNTHESIS.trait to 0b101000, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0b101000, // 養分吸収
-        TraitCard.WATERLOGGING_TOLERANCE.trait to 0b101000, // 浸水耐性
-        TraitCard.CARNIVOROUS_PLANT.trait to 0b101000, // 食虫植物
+        TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
+        TraitCard.HUMID_ADAPTATION.trait to 0b00101000, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.LEAVES_PRODUCTION.trait to 0b00101000, // 葉面生成
+        TraitCard.PHOTOSYNTHESIS.trait to 0b00101000, // 光合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
+        TraitCard.WATERLOGGING_TOLERANCE.trait to 0b00101000, // 浸水耐性
+        TraitCard.CARNIVOROUS_PLANT.trait to 0b00101000, // 食虫植物
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応

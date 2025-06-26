@@ -61,42 +61,6 @@ abstract class AbstractLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPla
     )
 
     override val family = MirageFairy2024.identifier("luminaria")
-    override val defaultTraitBits = mapOf(
-        TraitCard.PHOTOSYNTHESIS.trait to 0b1000, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0b1000, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait to 0b1000, // 鉱物吸収
-        TraitCard.COLD_ADAPTATION.trait to 0b1000, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait to 0b1000, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait to 0b1000, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait to 0b1000, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait to 0b1000, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait to 0b1000, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0b1000, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait to 0b1000, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0b1000, // 葉面生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait to 0b1000, // 経験値生成
-        TraitCard.GOLDEN_APPLE.trait to 0b1000, // 金のリンゴ
-        TraitCard.ETERNAL_TREASURE.trait to 0b1000, // 悠久の秘宝
-        TraitCard.TREASURE_OF_XARPA.trait to 0b1000, // シャルパの秘宝
-    )
-    override val randomTraitChances = mapOf(
-        TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
-        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
-        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
-        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
-        TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
-        TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
-        TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
-        TraitCard.LEAVES_PRODUCTION.trait to 0.05, // 葉面生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
-        TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
-        TraitCard.ETERNAL_TREASURE.trait to 0.05, // 悠久の秘宝
-        TraitCard.TREASURE_OF_XARPA.trait to 0.05, // シャルパの秘宝
-    )
 }
 
 object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
@@ -118,10 +82,28 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
-        TraitCard.HEATING_MECHANISM.trait to 0b1000, // 発熱機構
+        TraitCard.COLD_ADAPTATION.trait to 0b00101000, // 低温適応
+        TraitCard.MESIC_ADAPTATION.trait to 0b00101000, // 中湿適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
+        TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
+        TraitCard.ETERNAL_TREASURE.trait to 0b00101000, // 悠久の秘宝
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.SPINY_LEAVES.trait to 0.05, // 棘のある葉
         TraitCard.HEATING_MECHANISM.trait to 0.05, // 発熱機構
+        TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
+        TraitCard.ETERNAL_TREASURE.trait to 0.05, // 悠久の秘宝
     )
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
@@ -184,10 +166,28 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
+        TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
+        TraitCard.HUMID_ADAPTATION.trait to 0b00101000, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
+        TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
+        TraitCard.ETERNAL_TREASURE.trait to 0b00101000, // 悠久の秘宝
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
+        TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
+        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
+        TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.NODED_STEM.trait to 0.05, // 節状の茎
+        TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
+        TraitCard.ETERNAL_TREASURE.trait to 0.05, // 悠久の秘宝
     )
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
@@ -222,14 +222,7 @@ class EmeraldLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(Emeral
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
-abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : AbstractLuminariaCard<B>() {
-    override val defaultTraitBits = super.defaultTraitBits + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0b1000, // 四つ葉
-    )
-    override val randomTraitChances = super.randomTraitChances + mapOf(
-        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
-    )
-}
+abstract class AbstractProminariaCard<B : SimpleMagicPlantBlock> : AbstractLuminariaCard<B>()
 
 object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun getBlockPath() = "prominaria"
@@ -247,6 +240,27 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val drops = listOf(MaterialCard.PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
+
+    override val defaultTraitBits = super.defaultTraitBits + mapOf(
+        TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0b00101000, // 乾燥適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
+        TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
+        TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
+        TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
+    )
+    override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
+        TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
+    )
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
@@ -317,6 +331,28 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
 
     override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))
+
+    override val defaultTraitBits = super.defaultTraitBits + mapOf(
+        TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0b00101000, // 乾燥適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
+        TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
+        TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
+    )
+    override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.HOT_ADAPTATION.trait to 0.05, // 高温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
+        TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
+        TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
+    )
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,

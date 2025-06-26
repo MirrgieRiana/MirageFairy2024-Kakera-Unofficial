@@ -64,28 +64,27 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
 
     override val family = MirageFairy2024.identifier("merrrria")
     override val defaultTraitBits = mapOf(
-        TraitCard.COLD_ADAPTATION.trait to 0b101000, // 低温適応
-        TraitCard.MESIC_ADAPTATION.trait to 0b101000, // 中湿適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0b101000, // 種子生成
-        TraitCard.RARE_PRODUCTION.trait to 0b101000, // 希少品生成
-        TraitCard.PHOTOSYNTHESIS.trait to 0b101000, // 光合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0b101000, // 養分吸収
-        TraitCard.ADVERSITY_FLOWER.trait to 0b101000, // 高嶺の花
+        TraitCard.COLD_ADAPTATION.trait to 0b00101000, // 低温適応
+        TraitCard.MESIC_ADAPTATION.trait to 0b00101000, // 中湿適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
+        TraitCard.PHOTOSYNTHESIS.trait to 0b00101000, // 光合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
+        TraitCard.ADVERSITY_FLOWER.trait to 0b00101000, // 高嶺の花
     )
     override val randomTraitChances = mapOf(
-        TraitCard.COLD_ADAPTATION.trait to 0.1, // 低温適応
-        TraitCard.WARM_ADAPTATION.trait to 0.1, // 中温適応
-        TraitCard.MESIC_ADAPTATION.trait to 0.1, // 中湿適応
-        TraitCard.SEEDS_PRODUCTION.trait to 0.1, // 種子生成
-        TraitCard.RARE_PRODUCTION.trait to 0.1, // 希少品生成
-        TraitCard.EXPERIENCE_PRODUCTION.trait to 0.1, // 経験値生成
-        TraitCard.CROSSBREEDING.trait to 0.1, // 交雑
-        TraitCard.NATURAL_ABSCISSION.trait to 0.1, // 自然落果
-        TraitCard.PHOTOSYNTHESIS.trait to 0.1, // 光合成
-        TraitCard.PHAEOSYNTHESIS.trait to 0.1, // 闇合成
-        TraitCard.OSMOTIC_ABSORPTION.trait to 0.1, // 養分吸収
-        TraitCard.NODED_STEM.trait to 0.1, // 節状の茎
-        TraitCard.ADVERSITY_FLOWER.trait to 0.1, // 高嶺の花
+        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
+        TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
+        TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
+        TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
+        TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
+        TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
+        TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0.05, // 闇合成
+        TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
+        TraitCard.NODED_STEM.trait to 0.05, // 節状の茎
+        TraitCard.ADVERSITY_FLOWER.trait to 0.05, // 高嶺の花
     )
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
