@@ -1,7 +1,11 @@
 package miragefairy2024.mod.machine
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.MaterialCard
 import miragefairy2024.util.createItemStack
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -30,11 +34,13 @@ class AuraReflectorFurnaceRecipe(
     duration,
 ) {
     companion object {
-        val FUELS = mutableListOf<Item>()
+        val FUELS = mutableMapOf<ResourceKey<Item>, Int>()
 
         init {
-            FUELS += Items.SOUL_SAND
-            FUELS += Items.SOUL_SOIL
+            FUELS[BuiltInRegistries.ITEM.getResourceKey(Items.SOUL_SAND).get()] = 20 * 10
+            FUELS[BuiltInRegistries.ITEM.getResourceKey(Items.SOUL_SOIL).get()] = 20 * 10
         }
+
+        fun getFuelValue(item: Item) = FUELS[BuiltInRegistries.ITEM.getResourceKey(item).get()]
     }
 }

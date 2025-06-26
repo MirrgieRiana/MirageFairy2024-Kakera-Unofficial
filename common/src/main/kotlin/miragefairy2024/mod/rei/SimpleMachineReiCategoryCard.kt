@@ -20,6 +20,7 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.gson.hydrogen.toJsonElement
 import mirrg.kotlin.hydrogen.Single
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.ItemStack
 
 abstract class SimpleMachineReiCategoryCard<R : SimpleMachineRecipe>(path: String, enName: String, jaName: String) : ReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(path, enName, jaName) {
@@ -66,6 +67,8 @@ object AuraReflectorFurnaceReiCategoryCard : SimpleMachineReiCategoryCard<AuraRe
     fun getFuelInputIndices(recipe: AuraReflectorFurnaceRecipe) = listOf(recipe.inputs.size)
 
     override fun getInputs(recipe: AuraReflectorFurnaceRecipe): List<EntryIngredient> {
-        return super.getInputs(recipe) + listOf(AuraReflectorFurnaceRecipe.FUELS.map { it.createItemStack().toEntryStack() }.toEntryIngredient())
+        return super.getInputs(recipe) + listOf(AuraReflectorFurnaceRecipe.FUELS.map {
+            BasicDisplay.registryAccess()[Registries.ITEM, it.key].value().createItemStack().toEntryStack()
+        }.toEntryIngredient())
     }
 }
