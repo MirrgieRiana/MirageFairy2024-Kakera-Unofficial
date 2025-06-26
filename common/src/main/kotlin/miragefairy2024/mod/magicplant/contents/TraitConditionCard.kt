@@ -22,6 +22,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.levelgen.Heightmap
 
 enum class TraitConditionCard(
@@ -43,6 +44,7 @@ enum class TraitConditionCard(
     MEDIUM_HUMIDITY("medium_humidity", Emoji.MEDIUM_HUMIDITY, "Medium Humidity", "普通の湿度", { world, blockPos -> if (world.getBiome(blockPos).humidityCategory == HumidityCategory.MEDIUM) 1.0 else 0.0 }),
     HIGH_HUMIDITY("high_humidity", Emoji.HIGH_HUMIDITY, "High Humidity", "高い湿度", { world, blockPos -> if (world.getBiome(blockPos).humidityCategory == HumidityCategory.HIGH) 1.0 else 0.0 }),
     OUTDOOR("outdoor", Emoji.OUTDOOR, "Outdoor", "屋外", { world, blockPos -> if (blockPos.y >= world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos).y) 1.0 else 0.0 }),
+    SUNSHINE_ENVIRONMENT("sunshine_environment", Emoji.OUTDOOR, "Sunshine Environment", "日照環境", { world, blockPos -> world.getBrightness(LightLayer.SKY, blockPos) / 15.0 }),
     NATURAL("natural", Emoji.NATURAL, "Natural", "天然", { world, blockPos -> if (world.getMagicPlantBlockEntity(blockPos)?.isNatural() == true) 1.0 else 0.0 }),
     HIGH_ALTITUDE("high_altitude", Emoji.UP, "High Altitude", "高地", { world, blockPos -> world.getHighAltitudeFactor(blockPos) }),
     LOW_ALTITUDE("low_altitude", Emoji.DOWN, "Low Altitude", "低地", { world, blockPos -> world.getLowAltitudeFactor(blockPos) }),
