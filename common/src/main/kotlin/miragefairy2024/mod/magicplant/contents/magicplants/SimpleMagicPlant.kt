@@ -133,25 +133,25 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
 
         if (isMaxAge(blockState)) {
-            val seedCount = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            repeat(seedCount) {
+            val count = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            repeat(count) {
                 drops += calculateCrossedSeed(world, blockPos, traitStacks, crossbreeding)
             }
         }
 
         if (isMaxAge(blockState)) {
-            val fruitCount = world.random.randomInt(card.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (fruitCount > 0) drops += card.getFruitDrops(fruitCount, world.random)
+            val count = world.random.randomInt(card.baseFruitGeneration * fruitGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (count > 0) drops += card.getFruitDrops(count, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val leafCount = world.random.randomInt(card.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (leafCount > 0) drops += card.getLeafDrops(leafCount, world.random)
+            val count = world.random.randomInt(card.baseLeafGeneration * leafGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (count > 0) drops += card.getLeafDrops(count, world.random)
         }
 
         if (isMaxAge(blockState)) {
-            val rareCount = world.random.randomInt(card.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
-            if (rareCount > 0) drops += card.getRareDrops(rareCount, world.random)
+            val count = world.random.randomInt(card.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (count > 0) drops += card.getRareDrops(count, world.random)
         }
 
         return drops
