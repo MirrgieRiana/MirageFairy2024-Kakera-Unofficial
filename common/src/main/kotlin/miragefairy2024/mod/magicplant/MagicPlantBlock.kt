@@ -100,15 +100,25 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     /** 時間経過や骨粉などによって呼び出される成長と自動収穫などのためのイベントを処理します。 */
     protected open fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
         val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
-        val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
+        val mainTraitEffects = calculateTraitEffects(world, blockPos, traitStacks)
+        val traitEffectsListForGrowth = listOf(
+            mainTraitEffects,
+            calculateTraitEffects(world, blockPos.offset(-1, 0, 0), traitStacks),
+            calculateTraitEffects(world, blockPos.offset(+1, 0, 0), traitStacks),
+            calculateTraitEffects(world, blockPos.offset(0, 0, -1), traitStacks),
+            calculateTraitEffects(world, blockPos.offset(0, 0, +1), traitStacks),
+        )
 
         // 成長
         if (canGrow(blockState)) {
-            val nutrition = traitEffects[TraitEffectKeyCard.NUTRITION.traitEffectKey]
-            val temperature = traitEffects[TraitEffectKeyCard.TEMPERATURE.traitEffectKey]
-            val humidity = traitEffects[TraitEffectKeyCard.HUMIDITY.traitEffectKey]
-            val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
-            val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * 0.2 * nutrition * temperature * humidity * (1 + growthBoost) * speed)
+            val traitGrowth = traitEffectsListForGrowth.minOf { traitEffects ->
+                val nutrition = traitEffects[TraitEffectKeyCard.NUTRITION.traitEffectKey]
+                val temperature = traitEffects[TraitEffectKeyCard.TEMPERATURE.traitEffectKey]
+                val humidity = traitEffects[TraitEffectKeyCard.HUMIDITY.traitEffectKey]
+                val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
+                nutrition * temperature * humidity * (1 + growthBoost)
+            }
+            val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * 0.2 * traitGrowth * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlock(blockPos, newBlockState, UPDATE_CLIENTS)
@@ -119,7 +129,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         if (autoPick && canAutoPick(blockState)) run {
             if (world.getEntities(EntityType.ITEM, blockPos.toBox()) { true }.isNotEmpty()) return@run // アイテムがそこに存在する場合は中止
             if (world.getEntities(EntityType.EXPERIENCE_ORB, blockPos.toBox()) { true }.isNotEmpty()) return@run // 経験値がそこに存在する場合は中止
-            val naturalAbscission = traitEffects[TraitEffectKeyCard.NATURAL_ABSCISSION.traitEffectKey]
+            val naturalAbscission = mainTraitEffects[TraitEffectKeyCard.NATURAL_ABSCISSION.traitEffectKey]
             if (!(world.random.nextDouble() < naturalAbscission)) return@run // 確率で失敗
             pick(world, blockPos, null, null, false)
         }
