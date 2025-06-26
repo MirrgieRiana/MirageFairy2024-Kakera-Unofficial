@@ -25,7 +25,7 @@ enum class TraitEffectKeyCard(
     color: Int,
     isLogScale: Boolean,
 ) {
-    NUTRITION("nutrition", Emoji.NUTRITION, "Nutrition", "栄養値", 1100.0, 0xCECECE, false),
+    NUTRITION("nutrition", Emoji.NUTRITION, "Nutrition", "栄養値", 1100.0, 0x99DD99, false),
     TEMPERATURE("temperature", Emoji.MEDIUM_TEMPERATURE, "Temperature Environment", "気温環境値", 1200.0, 0xE89D84, false),
     HUMIDITY("humidity", Emoji.MEDIUM_HUMIDITY, "Humidity Environment", "湿度環境値", 1300.0, 0x8ECCCC, false),
 
@@ -33,7 +33,7 @@ enum class TraitEffectKeyCard(
     FRUITS_PRODUCTION("fruits_production", Emoji.FRUITS_PRODUCTION, "Fruits Production", "果実生成", 2200.0, 0xFF87BF, false),
     LEAVES_PRODUCTION("leaves_production", Emoji.LEAVES_PRODUCTION, "Leaves Production", "葉面生成", 2300.0, 0x32C900, false),
     RARE_PRODUCTION("rare_production", Emoji.RARE_PRODUCTION, "Rare Production", "希少品生成", 2400.0, 0x00E2E2, false),
-    SPECIAL_PRODUCTION("special_production", Emoji.RARE_PRODUCTION, "Special Production", "特殊品生成", 2500.0, 0x00E2E2, false),
+    SPECIAL_PRODUCTION("special_production", Emoji.RARE_PRODUCTION, "Special Production", "特殊品生成", 2500.0, 0x00D390, false),
     EXPERIENCE_PRODUCTION("experience_production", Emoji.LEVEL, "Experience Production", "経験値生成", 2600.0, 0xEFEF00, false),
 
     GROWTH_BOOST("growth_boost", Emoji.GROWTH_BOOST, "Growth Boost", "成長速度ブースト", 3100.0, 0x00C600, false),
