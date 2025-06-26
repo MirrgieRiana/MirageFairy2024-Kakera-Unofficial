@@ -337,6 +337,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
         TraitCard.ARID_ADAPTATION.trait to 0b00101000, // 乾燥適応
         TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
         TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
+        TraitCard.GOLDEN_APPLE.trait to 0b00101000, // 金のリンゴ
         TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
     )
