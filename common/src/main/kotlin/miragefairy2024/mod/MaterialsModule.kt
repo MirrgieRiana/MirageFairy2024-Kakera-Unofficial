@@ -455,7 +455,9 @@ class MaterialCard(
                     .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
                     .build()
             },
-        )
+        ) {
+            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 5
+        }
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
@@ -490,6 +492,7 @@ class MaterialCard(
             },
             tags = listOf(ItemTags.PIGLIN_LOVED),
         ) {
+            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 5
             registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
             registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
