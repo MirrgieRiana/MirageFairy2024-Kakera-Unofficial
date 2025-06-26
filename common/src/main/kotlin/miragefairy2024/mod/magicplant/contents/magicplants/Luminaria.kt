@@ -120,7 +120,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
-                placedFeature("cluster", { per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
+                placedFeature("cluster", { per(128) + flower(square, surface) }) { +ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY }
             }
         }
     }
@@ -203,7 +203,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
-                placedFeature("cluster", { per(32) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
+                placedFeature("cluster", { per(128) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE }  // 地上
                 placedFeature("underground_cluster", { count(32) + flower(square, underground) }) { +Biomes.LUSH_CAVES } // 地下
             }
         }
