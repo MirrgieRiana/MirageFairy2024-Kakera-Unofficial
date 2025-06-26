@@ -445,6 +445,7 @@ class MaterialCard(
             PoemList(3)
                 .poem("Guardian flame of lost souls.", "心頭滅却のプロミネンス。")
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
+            fireResistant = true, fuelValue = 200,
             foodComponentCreator = {
                 FoodComponent.Builder()
                     .nutrition(1)
@@ -460,7 +461,7 @@ class MaterialCard(
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
-            fireResistant = true,
+            fireResistant = true, fuelValue = 200 * 16,
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -480,6 +481,7 @@ class MaterialCard(
             PoemList(3)
                 .poem("Gold-plated prominence.", "摂氏100度の金環食。")
                 .description("Grants absorption when eaten", "食べると衝撃吸収を付与"),
+            fireResistant = true, fuelValue = 200,
             foodComponentCreator = {
                 FoodComponent.Builder()
                     .nutrition(1)
