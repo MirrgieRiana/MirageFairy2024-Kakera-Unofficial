@@ -76,7 +76,7 @@ class TraitCard(
         val FRUITS_PRODUCTION = !TraitCard(
             "fruits_production", "Fruits Production", "果実生成",
             "Human ancestors lived arboreal lives and primarily consumed fruit. While humans cannot eat raw meat, they can eat raw fruit. Interestingly, the nutritional values of fairies shares many similarities with that of common fruit.",
-            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、興味深いことに妖精の栄養価は一般的な果実のそれと多くが共通している。", // 人間的祖先樹上生活及果実食。人間生肉消化不能、一方果実生食可。興味深事、妖精的栄養価一般的果実的栄養大概共通。
+            "ヒトの祖先は樹上生活を行い、果実食であった。ヒトは肉を生食できないが、果実は生食することができる。ところで、興味深いことに妖精の栄養価は一般的な果実のそれと多くが共通している。", // 人間的祖先樹上生活又果実食。人間生肉消化不能、一方果実生食可能。他方、興味深事、妖精的栄養価一般的果実的栄養価大体共通。
             listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.1),
         )
         val LEAVES_PRODUCTION = !TraitCard(
