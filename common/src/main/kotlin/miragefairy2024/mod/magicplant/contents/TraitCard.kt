@@ -103,6 +103,12 @@ class TraitCard(
             "同じ科の異種の植物との交配により、その植物種には本来備わらない遺伝的形質を持たせることができる。",
             listOf(), listOf(TraitEffectKeyCard.CROSSBREEDING to 0.1),
         )
+        val NATURAL_ABSCISSION = !TraitCard(
+            "natural_abscission", "Natural Abscission", "自然落果",
+            "A part of the plant's body falls off and drops to the ground. The wind, animals, and sometimes even humans carry it far away. For the plant, the automation of harvesting is merely a means of reproduction.",
+            "植物の体の一部が欠落し、地面に落ちる。それを風や動物、ときには人間が遠くへ運ぶ。収穫の自動化は、植物にとっては繁殖の手段にすぎないのだ。",
+            listOf(), listOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 0.1),
+        )
 
         // 共通
         val ETHER_RESPIRATION = !TraitCard(
@@ -135,7 +141,6 @@ class TraitCard(
             "宝石質に含まれる光のオーラが自然アストラル線によって励起され、酵素の作用で生成された増殖のエルグが植物組織の自己複製作用を誘発する。",
             listOf(TraitConditionCard.FLOOR_CRYSTAL_ERG), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
-
         val AIR_ADAPTATION = !TraitCard(
             "air_adaptation", "Spatial Adaptation", "空間適応",
             "By decomposing ether with high-energy astral radiation, life support is maintained in outer space. This process is essential for the terraforming of rocky planets.",
@@ -207,12 +212,6 @@ class TraitCard(
             "As a result of evolving to minimize surface area exposed to the air in order to prevent water loss, the leaves have become thick and are now capable of storing water internally.",
             "水分の蒸発を防ぐために空気との接触面積を最小化するように進化した結果、葉は肉厚になり、内部に水分を蓄えるようになった。",
             listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.LEAVES_PRODUCTION to 0.05),
-        )
-        val NATURAL_ABSCISSION = !TraitCard(
-            "natural_abscission", "Natural Abscission", "自然落果",
-            "A part of the plant's body falls off and drops to the ground. The wind, animals, and sometimes even humans carry it far away. For the plant, the automation of harvesting is merely a means of reproduction.",
-            "植物の体の一部が欠落し、地面に落ちる。それを風や動物、ときには人間が遠くへ運ぶ。収穫の自動化は、植物にとっては繁殖の手段にすぎないのだ。",
-            listOf(), listOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 0.1),
         )
         val CARNIVOROUS_PLANT = !TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
