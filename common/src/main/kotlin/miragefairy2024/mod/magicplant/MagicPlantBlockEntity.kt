@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.math.pow
+import kotlin.math.sqrt
 import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
@@ -111,7 +112,10 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
 
     // 凝縮率を加味したビット番号の抽選リスト
     val bitNumberChances = (1..10).map { bitNumber ->
-        val weight = 0.5 * 0.5.pow((bitNumber - 1).toDouble()) * selectedCondensedTrait.count // 0x0001 のときに 0.5、1ビットシフトごとに半減
+        val a = 1.0 - 1.0 / sqrt(10.0) // 0.6837...
+        val b = sqrt(0.1) // 0.3162...
+        val c = (bitNumber - 1).toDouble() // 0 .. 9
+        val weight = a * b.pow(c) * selectedCondensedTrait.count // 2左シフトごとに1/10、全部合わせて約1
         Chance(weight, bitNumber)
     }
 
