@@ -75,11 +75,10 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
-    override val baseFruitGeneration = 0.1
 
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getSpecialDrops(count: Int, random: Random) = listOf(Items.DIAMOND.createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.COLD_ADAPTATION.trait to 0b00101000, // 低温適応
@@ -159,11 +158,10 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = 0.2
-    override val baseFruitGeneration = 0.1
 
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.EMERALD })
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getSpecialDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応
@@ -328,15 +326,18 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
 
     override val baseGrowth = 0.05
     override val baseSeedGeneration = 0.0
+    override val baseRareGeneration = 0.5
 
-    override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item)
+    override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.HOT_ADAPTATION.trait to 0b00101000, // 高温適応
         TraitCard.ARID_ADAPTATION.trait to 0b00101000, // 乾燥適応
         TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
         TraitCard.FRUITS_PRODUCTION.trait to 0b00101000, // 果実生成
+        TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
         TraitCard.GOLDEN_APPLE.trait to 0b00101000, // 金のリンゴ
         TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait to 0b00101000, // アスファルトに咲く花
