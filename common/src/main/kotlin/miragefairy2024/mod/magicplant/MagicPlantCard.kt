@@ -58,8 +58,8 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     abstract val classification: EnJa
 
     abstract val family: ResourceLocation
-    abstract val defaultTraitBits: Map<Trait, Int>
-    abstract val randomTraitChances: Map<Trait, Double>
+    open val defaultTraitBits: Map<Trait, Int> = mapOf()
+    open val randomTraitChances: Map<Trait, Double> = mapOf()
 
     open val baseGrowth = 1.0
     abstract val drops: List<() -> Item>
