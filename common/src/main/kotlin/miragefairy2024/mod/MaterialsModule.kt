@@ -13,6 +13,7 @@ import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
 import miragefairy2024.mod.haimeviska.haimeviskaAdvancement
 import miragefairy2024.mod.machine.AuraReflectorFurnaceCard
+import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipe
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.FermentationBarrelCard
 import miragefairy2024.mod.machine.FermentationBarrelRecipeCard
@@ -64,6 +65,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.Stats
 import net.minecraft.tags.ItemTags
@@ -469,7 +471,9 @@ class MaterialCard(
                     type = AdvancementCardType.NORMAL,
                 )
             },
-        )
+        ) {
+            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 60
+        }
         val GOLD_PROMINARIA_BERRY: MaterialCard = !MaterialCard(
             "gold_prominaria_berry", "Gold Prominaria Berry", "ゴールドプロミナリアの実",
             PoemList(3)
