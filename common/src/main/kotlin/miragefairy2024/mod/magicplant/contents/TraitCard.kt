@@ -145,19 +145,19 @@ class TraitCard(
             "ether_respiration", "Ether Respiration", "エーテル呼吸",
             "Through the action of the astral radiation, ether is vaporized, generating a vortex of souls. Since the appearance of etherobacteria billions of years ago, the universe has been filled with life forms possessing will.",
             "情緒体の作用によってエーテルを気化し、魂の渦を生成する。数十億年前にエテロバクテリアが姿を現して以来、宇宙には意志を持った生命で溢れた。",
-            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
         )
         val ETHER_PREDATION = !TraitCard(
             "ether_predation", "Ether Predation", "エーテル捕食",
             "All living beings possess an etheric soul. If that is the case, where do the souls of fairies come from? In a sense, the Mirage is a carnivorous plant.",
             "生きとし生ける者はみな、エーテルの魂を持つ。なれば、妖精の魂はどこから来るのか？ミラージュはある意味肉食植物だ。",
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.NUTRITION to 0.05),
+            listOf(), listOf(TraitEffectKeyCard.NUTRITION to 0.05, TraitEffectKeyCard.PRODUCTION_BOOST to 0.05),
         )
         val CARNIVOROUS_PLANT = !TraitCard(
             "carnivorous_plant", "Carnivorous Plant", "食虫植物",
             "It captures small animals like insects and breaks them down with digestive fluids. This is one of the strategies for surviving in nutrient-poor soil.",
             "昆虫などの小動物を捕らえ、消化液により分解する。栄養の少ない土壌で生活するための戦略の一つである。",
-            listOf(TraitConditionCard.OUTDOOR), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
+            listOf(TraitConditionCard.SUNSHINE_ENVIRONMENT), listOf(TraitEffectKeyCard.NUTRITION to 0.1),
         )
 
         // 共通その他
@@ -189,37 +189,37 @@ class TraitCard(
             "spiny_leaves", "Spiny Leaves", "棘のある葉",
             "Spines prevent the loss of water through transpiration and are also used for defense against herbivorous animals. The spines of plants in the Miragaceae family are made of sharp tissues containing silicates, which can easily pierce human skin and cause mild inflammation.",
             "棘は水分の蒸散を防ぎ、草食動物からの防御にも使われる。ミラージュ科の植物が持つ棘はケイ酸塩を含む鋭利な組織でできており、人間の皮膚を容易に傷つけ、軽度の炎症を引き起こす。",
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.1), // TODO 接触ダメージ
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1), // TODO 接触ダメージ
         )
         val DESERT_GEM = !TraitCard(
             "desert_gem", "Desert Gem", "砂漠の宝石",
             "Legends of plants that bear beautiful gemstones can be found in various desert regions and are often revered. Physiologically, these gemstones are formed as a means for the plants to expel excess metal ions, absorbed due to the low moisture content in the soil.",
             "美しい宝石を実らせる植物の伝承は各地の砂漠地帯において見られ、信仰の対象とされる。生理学的には、土中の水分含有量が少ないために過剰に吸収した金属イオンを排出するために形成される。",
-            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
+            listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
         val HEATING_MECHANISM = !TraitCard(
             "heating_mechanism", "Heating Mechanism", "発熱機構",
             "Bacteria symbiotic within the cells generate heat through their metabolism. This heat helps prevent growth from stalling in cold environments.",
             "細胞内に共生するバクテリアが、代謝によって熱を発生させる。この熱によって低温環境で成長が停滞することを防ぐ。",
-            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.TEMPERATURE to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
+            listOf(TraitConditionCard.LOW_TEMPERATURE), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         )
         val WATERLOGGING_TOLERANCE = !TraitCard(
             "waterlogging_tolerance", "Waterlogging Tolerance", "浸水耐性",
             "By developing hollow stems that actively transport oxygen, this plant prevents its roots from becoming oxygen-deprived even in waterlogged conditions. As a result, it can thrive in environments where other plants would suffer from root rot.",
             "中空の茎を発達させ、能動的に酸素を送り込むことで、浸水状態にあっても根が酸欠状態になるのを防ぐ。これにより、他の植物が根腐れを起こすような環境でも生育できる。",
-            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.GROWTH_BOOST to 0.05),
+            listOf(TraitConditionCard.HIGH_HUMIDITY), listOf(TraitEffectKeyCard.GROWTH_BOOST to 0.1),
         )
         val ADVERSITY_FLOWER = !TraitCard(
             "adversity_flower", "Adversity Flower", "高嶺の花",
             "A flower that blooms in adversity is rarer and more beautiful than any other. Even if it shines only for a fleeting moment, it becomes an unattainable object of desire, forever etched in people's hearts.",
             "逆境に咲く花は、どんな花よりも希少で美しい。たとえそれが一瞬の輝きであったとしても、手に入れることのできない、あこがれの存在として人々の胸に刻まれる。",
-            listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.05, TraitEffectKeyCard.RARE_PRODUCTION to 0.05 * 0.03),
+            listOf(TraitConditionCard.HIGH_ALTITUDE), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
         )
         val FLESHY_LEAVES = !TraitCard(
             "fleshy_leaves", "Fleshy Leaves", "肉厚の葉",
             "As a result of evolving to minimize surface area exposed to the air in order to prevent water loss, the leaves have become thick and are now capable of storing water internally.",
             "水分の蒸発を防ぐために空気との接触面積を最小化するように進化した結果、葉は肉厚になり、内部に水分を蓄えるようになった。",
-            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.HUMIDITY to 0.05, TraitEffectKeyCard.LEAVES_PRODUCTION to 0.05),
+            listOf(TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.05),
         )
         val PROSPERITY_OF_SPECIES = !TraitCard(
             "prosperity_of_species", "Prosperity of Species", "種の繁栄",
@@ -239,7 +239,7 @@ class TraitCard(
             "plants_with_self_awareness", "Plants with Self-Awareness", "自我を持つ植物",
             "On a colonized planet lacking native flying animals, giving mobility to airborne reproductive cells is beneficial in terms of increasing the probability of encounters between individual organisms.",
             "固有の飛行性動物を欠いた開拓型惑星において、空中散布式の生殖細胞に運動能力を与えることは、個体同士の遭遇確率の点で有益である。",
-            listOf(), listOf(TraitEffectKeyCard.FRUITS_PRODUCTION to 0.03, TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.03),
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         )
         val FAIRY_BLESSING = !TraitCard(
             "fairy_blessing", "Fairy Blessing", "妖精の祝福",
@@ -257,7 +257,7 @@ class TraitCard(
             "flower_of_the_end", "Flower of the End", "終焉の花",
             "When the vacuum decayed and the concept of the world met its end, that flower never lost its smile until the very last moment.",
             "真空が崩壊し、世界という概念が消滅を迎えるとき、その花は最後の瞬間まで笑顔を絶やさなかった。",
-            listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.05, TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.05),
+            listOf(), listOf(TraitEffectKeyCard.EXPERIENCE_PRODUCTION to 0.1),
         )
         val ETERNAL_TREASURE = !TraitCard(
             "eternal_treasure", "Eternal Treasure", "悠久の秘宝",
