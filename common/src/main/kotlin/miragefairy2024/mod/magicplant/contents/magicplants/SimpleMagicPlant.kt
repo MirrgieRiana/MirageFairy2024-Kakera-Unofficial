@@ -50,10 +50,12 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
     open val baseFruitGeneration = 1.0
     open val baseLeafGeneration = 1.0
     open val baseRareGeneration = 1.0
+    open val baseSpecialGeneration = 1.0
 
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
     open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getSpecialDrops(count: Int, random: Random): List<ItemStack> = listOf()
 
     val iconItem = Registration(BuiltInRegistries.ITEM, blockIdentifier * "_icon") { Item(Item.Properties()) }
 
@@ -128,6 +130,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         val fruitGeneration = traitEffects[TraitEffectKeyCard.FRUITS_PRODUCTION.traitEffectKey]
         val leafGeneration = traitEffects[TraitEffectKeyCard.LEAVES_PRODUCTION.traitEffectKey]
         val rareGeneration = traitEffects[TraitEffectKeyCard.RARE_PRODUCTION.traitEffectKey]
+        val specialGeneration = traitEffects[TraitEffectKeyCard.SPECIAL_PRODUCTION.traitEffectKey]
         val generationBoost = traitEffects[TraitEffectKeyCard.PRODUCTION_BOOST.traitEffectKey]
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
@@ -152,6 +155,11 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         if (isMaxAge(blockState)) {
             val count = world.random.randomInt(card.baseRareGeneration * rareGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             if (count > 0) drops += card.getRareDrops(count, world.random)
+        }
+
+        if (isMaxAge(blockState)) {
+            val count = world.random.randomInt(card.baseSpecialGeneration * specialGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            if (count > 0) drops += card.getSpecialDrops(count, world.random)
         }
 
         return drops
