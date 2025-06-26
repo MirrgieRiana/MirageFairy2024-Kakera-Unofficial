@@ -39,6 +39,7 @@ class AuraReflectorFurnaceRecipe(
         init {
             FUELS[BuiltInRegistries.ITEM.getResourceKey(Items.SOUL_SAND).get()] = 20 * 10
             FUELS[BuiltInRegistries.ITEM.getResourceKey(Items.SOUL_SOIL).get()] = 20 * 10
+            FUELS[ResourceKey.create(Registries.ITEM, MaterialCard.PROMINITE.item.identifier)] = 20 * 60
         }
 
         fun getFuelValue(item: Item) = FUELS[BuiltInRegistries.ITEM.getResourceKey(item).get()]
