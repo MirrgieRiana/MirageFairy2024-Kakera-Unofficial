@@ -19,7 +19,7 @@ data class TraitStack(val trait: Trait, val level: Int) {
         val CODEC: Codec<TraitStack> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Trait.CODEC.fieldOf("trait").forGetter { it.trait },
-                Codec.intRange(0, 255).fieldOf("level").forGetter { it.level },
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf("level").forGetter { it.level },
             ).apply(instance, ::TraitStack)
         }
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, TraitStack> = StreamCodec.composite(Trait.STREAM_CODEC, { it.trait }, ByteBufCodecs.INT, { it.level }, ::TraitStack)
