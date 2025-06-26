@@ -33,6 +33,8 @@ class Registration<T : Any, U : T>(val registry: Registry<T>, val identifier: Re
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getHolder() = holder.getCompleted()
 
+    val key = ResourceKey.create(registry.key(), identifier)
+
 }
 
 context(ModContext)

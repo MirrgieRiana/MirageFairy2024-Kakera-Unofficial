@@ -65,7 +65,6 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.stats.Stats
 import net.minecraft.tags.ItemTags
@@ -456,7 +455,7 @@ class MaterialCard(
                     .build()
             },
         ) {
-            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 5
+            AuraReflectorFurnaceRecipe.FUELS[item.key] = 20 * 5
         }
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
@@ -474,7 +473,7 @@ class MaterialCard(
                 )
             },
         ) {
-            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 60
+            AuraReflectorFurnaceRecipe.FUELS[item.key] = 20 * 60
         }
         val GOLD_PROMINARIA_BERRY: MaterialCard = !MaterialCard(
             "gold_prominaria_berry", "Gold Prominaria Berry", "ゴールドプロミナリアの実",
@@ -492,7 +491,7 @@ class MaterialCard(
             },
             tags = listOf(ItemTags.PIGLIN_LOVED),
         ) {
-            AuraReflectorFurnaceRecipe.FUELS[ResourceKey.create(Registries.ITEM, item.identifier)] = 20 * 5
+            AuraReflectorFurnaceRecipe.FUELS[item.key] = 20 * 5
             registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
             registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
         }
