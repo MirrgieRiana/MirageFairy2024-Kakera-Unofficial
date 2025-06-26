@@ -184,7 +184,7 @@ class TraitCard(
             "When a sheep is dyed with lapis lazuli powder and then sheared, it will subsequently grow blue wool. This phenomenon is known as exogenous pigment induction.",
             "ヒツジをラピスラズリの粉末で着色して毛を刈り取ると、そのヒツジは以後、青色の毛を生やすようになる。このような現象を外因性色素誘導と呼ぶ。",
             listOf(), listOf(TraitEffectKeyCard.FORTUNE_FACTOR to 0.1),
-        )
+        ) // TODO 突然変異の仕組みがないと没特性になってしまう
         val NODED_STEM = !TraitCard(
             "noded_stem", "Noded Stem", "節状の茎",
             "The stems of plants in the order Miragales are known for having nodes, similar to bamboo or wheat. These nodes are deactivated growth points, and in principle, rapid growth is possible by activating growth at all nodes simultaneously.",
@@ -226,7 +226,7 @@ class TraitCard(
             "Legends of plants that bear beautiful gemstones can be found in various desert regions and are often revered. Physiologically, these gemstones are formed as a means for the plants to expel excess metal ions, absorbed due to the low moisture content in the soil.",
             "美しい宝石を実らせる植物の伝承は各地の砂漠地帯において見られ、信仰の対象とされる。生理学的には、土中の水分含有量が少ないために過剰に吸収した金属イオンを排出するために形成される。",
             listOf(TraitConditionCard.HIGH_TEMPERATURE, TraitConditionCard.LOW_HUMIDITY), listOf(TraitEffectKeyCard.PRODUCTION_BOOST to 0.1),
-        )
+        ) // TODO これを使う植物を追加
 
         // 専用
         val AIR_ADAPTATION = !TraitCard(
@@ -270,7 +270,7 @@ class TraitCard(
             "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
             listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.03 * 0.03),
-        )
+        ) // TODO ルミナリアのシナリオ
 
         // Creative Only
         val CREATIVE_GROWTH = !TraitCard(
