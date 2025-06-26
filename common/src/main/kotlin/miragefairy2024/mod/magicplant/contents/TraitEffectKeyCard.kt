@@ -33,7 +33,8 @@ enum class TraitEffectKeyCard(
     FRUITS_PRODUCTION("fruits_production", Emoji.FRUITS_PRODUCTION, "Fruits Production", "果実生成", 2200.0, 0xFF87BF, false),
     LEAVES_PRODUCTION("leaves_production", Emoji.LEAVES_PRODUCTION, "Leaves Production", "葉面生成", 2300.0, 0x32C900, false),
     RARE_PRODUCTION("rare_production", Emoji.RARE_PRODUCTION, "Rare Production", "希少品生成", 2400.0, 0x00E2E2, false),
-    EXPERIENCE_PRODUCTION("experience_production", Emoji.LEVEL, "Experience Production", "経験値生成", 2500.0, 0xEFEF00, false),
+    SPECIAL_PRODUCTION("special_production", Emoji.RARE_PRODUCTION, "Special Production", "特殊品生成", 2500.0, 0x00E2E2, false),
+    EXPERIENCE_PRODUCTION("experience_production", Emoji.LEVEL, "Experience Production", "経験値生成", 2600.0, 0xEFEF00, false),
 
     GROWTH_BOOST("growth_boost", Emoji.GROWTH_BOOST, "Growth Boost", "成長速度ブースト", 3100.0, 0x00C600, false),
     PRODUCTION_BOOST("production_boost", Emoji.PRODUCTION_BOOST, "Production Boost", "生産量ブースト", 3200.0, 0xFF4242, false),
