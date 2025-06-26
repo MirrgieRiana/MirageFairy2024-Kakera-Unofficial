@@ -57,7 +57,7 @@ The storyline of MirageFairy2024 is set on a planet where plants have become wil
 
 ## Documentation
 
-The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](CHANGELOG.md).
+The specifications of this MOD are officially documented in Japanese only in [CHANGELOG.md](https://github.com/MirrgieRiana/MirageFairy2024-Kakera-Unofficial/blob/main/CHANGELOG.md).
 
 There is currently no comprehensive official documentation explaining the specifications of this MOD at a specific point in time, and the only available resources are unofficial wikis.
 
