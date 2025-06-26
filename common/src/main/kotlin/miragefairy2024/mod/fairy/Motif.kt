@@ -462,7 +462,8 @@ enum class MotifCard(
         ParentMotifs() + { CHICKEN } + { FOOD },
         PassiveSkillBuilder()
             + health(0.8)
-            + regeneration(0.8) * food { Items.EGG },
+            + regeneration(0.8) * food { Items.EGG }
+            + mana(5.0) { CHICKEN },
         MotifCardRecipes().R.overworld + EntityType.EGG,
     ),
     RABBIT(
