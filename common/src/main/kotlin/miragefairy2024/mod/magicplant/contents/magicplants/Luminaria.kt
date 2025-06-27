@@ -74,7 +74,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override val blockCodec = DiamondLuminariaBlock.CODEC
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
-    override val baseGrowth = 0.2
+    override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
@@ -149,7 +149,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override val blockCodec = EmeraldLuminariaBlock.CODEC
     override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
 
-    override val baseGrowth = 0.2
+    override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.EMERALD })
     override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
@@ -225,7 +225,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val blockCodec = ProminariaBlock.CODEC
     override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
 
-    override val baseGrowth = 0.2
+    override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
@@ -316,9 +316,8 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val blockCodec = GoldProminariaBlock.CODEC
     override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
 
-    override val baseGrowth = 0.05
+    override val baseGrowth = super.baseGrowth / 5 / 4
     override val baseSeedGeneration = 0.0
-    override val baseRareGeneration = 0.5
 
     override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
     override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))

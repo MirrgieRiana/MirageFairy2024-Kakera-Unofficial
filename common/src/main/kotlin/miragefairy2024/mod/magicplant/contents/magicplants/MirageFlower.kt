@@ -164,8 +164,8 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override val blockCodec = PhantomFlowerBlock.CODEC
     override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
-    override val baseGrowth = 1.0 / 8.0
-    override val baseFruitGeneration = 9.0
+    override val baseGrowth = super.baseGrowth / 8.0
+    override val baseFruitGeneration = super.baseFruitGeneration * 9.0
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.PHANTOM_LEAVES.item, MaterialCard.PHANTOM_DROP.item)
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)

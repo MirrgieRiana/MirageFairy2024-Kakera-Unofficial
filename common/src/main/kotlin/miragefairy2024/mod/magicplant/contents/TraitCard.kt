@@ -89,7 +89,7 @@ class TraitCard(
             "rare_production", "Rare Production", "希少品生成",
             "This trait does not actually exist as a single gene, but is instead a collection of various genetic characteristics responsible for the formation of certain parts, such as the crystallization of phytoliths in the fruit, which humans deem rare or valuable.",
             "この特性は、実際には遺伝子上には存在せず、果実部におけるプラントオパールの結晶化など、人間が希少と判断するいくつかの部位を形成する遺伝的形質をまとめたものである。",
-            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1 * 0.03),
+            listOf(), listOf(TraitEffectKeyCard.RARE_PRODUCTION to 0.1),
         )
         val EXPERIENCE_PRODUCTION = !TraitCard(
             "experience_production", "Xp Production", "経験値生成",
@@ -269,7 +269,7 @@ class TraitCard(
             "treasure_of_xarpa", "Treasure of Xarpa", "シャルパの秘宝",
             "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
-            listOf(), listOf(TraitEffectKeyCard.SPECIAL_PRODUCTION to 0.03 * 0.03),
+            listOf(), listOf(TraitEffectKeyCard.SPECIAL_PRODUCTION to 0.001),
         ) // TODO ルミナリアのシナリオ
 
         // Creative Only

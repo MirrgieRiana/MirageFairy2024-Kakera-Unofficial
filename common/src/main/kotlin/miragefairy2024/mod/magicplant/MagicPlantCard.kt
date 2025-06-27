@@ -61,7 +61,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     open val defaultTraitBits: Map<Trait, Int> = mapOf()
     open val randomTraitChances: Map<Trait, Double> = mapOf()
 
-    open val baseGrowth = 1.0
+    open val baseGrowth = 0.05
     abstract val drops: List<() -> Item>
 
     open fun createAdvancement(identifier: ResourceLocation): AdvancementCard? = null

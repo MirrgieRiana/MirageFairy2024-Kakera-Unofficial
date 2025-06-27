@@ -46,10 +46,10 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
 
     abstract val outlineShapes: List<VoxelShape>
 
-    open val baseSeedGeneration = 1.0
+    open val baseSeedGeneration = 0.2
     open val baseFruitGeneration = 1.0
     open val baseLeafGeneration = 1.0
-    open val baseRareGeneration = 1.0
+    open val baseRareGeneration = 0.03
     open val baseSpecialGeneration = 1.0
 
     open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()

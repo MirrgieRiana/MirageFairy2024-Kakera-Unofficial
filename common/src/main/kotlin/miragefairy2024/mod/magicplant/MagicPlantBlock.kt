@@ -118,7 +118,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
                 val growthBoost = traitEffects[TraitEffectKeyCard.GROWTH_BOOST.traitEffectKey]
                 nutrition * temperature * humidity * (1 + growthBoost)
             }
-            val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * 0.2 * traitGrowth * speed)
+            val actualGrowthAmount = world.random.randomInt(configuration.baseGrowth * traitGrowth * speed)
             val newBlockState = getBlockStateAfterGrowth(blockState, actualGrowthAmount)
             if (newBlockState != blockState) {
                 world.setBlock(blockPos, newBlockState, UPDATE_CLIENTS)
