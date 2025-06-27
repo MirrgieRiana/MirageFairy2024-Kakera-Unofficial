@@ -313,7 +313,7 @@ class TraitCard(
 
 }
 
-private fun getTraitPower(level: Int): Int {
+fun getTraitPower(level: Int): Int {
     var a = level
     var power = 0
     var i = 1

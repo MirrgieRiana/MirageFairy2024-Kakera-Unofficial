@@ -22,6 +22,7 @@ import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
+import miragefairy2024.mod.magicplant.contents.getTraitPower
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
@@ -146,8 +147,8 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * traitStack.level * allFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
-                            val tooltip = text { it.first.name + " ("() + (it.second * traitStack.level * 100.0 formatAs "%.1f%%")() + " x "() + (allFactor * 100.0 formatAs "%.1f%%")() + ")"() }
+                            val text = text { (it.second * getTraitPower(traitStack.level) * allFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
+                            val tooltip = text { it.first.name + " ("() + (it.second * getTraitPower(traitStack.level) * 100.0 formatAs "%.1f%%")() + " x "() + (allFactor * 100.0 formatAs "%.1f%%")() + ")"() }
                             child(Components.label(text).tooltip(tooltip))
                         }
                     })
