@@ -55,6 +55,7 @@ loom {
             vmArg("-Dfabric-api.datagen")
             vmArg("-Dfabric-api.datagen.output-dir=${rootProject.file("common/src/generated/resources")}")
             vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
+            vmArg("-Dmiragefairy2024.datagen.platform=common")
 
             runDir("build/datagen")
         }

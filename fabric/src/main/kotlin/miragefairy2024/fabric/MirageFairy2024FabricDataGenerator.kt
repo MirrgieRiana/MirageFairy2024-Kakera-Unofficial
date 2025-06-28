@@ -58,6 +58,13 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         DataGenerationEvents.onInitializeDataGenerator.fire { it() }
 
         val pack = fabricDataGenerator.createPack()
+        when (val platform = System.getProperty("miragefairy2024.datagen.platform")) {
+            "common" -> common(pack)
+            else -> throw IllegalArgumentException("Unknown platform: $platform")
+        }
+    }
+
+    private fun common(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
                 override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) = DataGenerationEvents.onGenerateBlockStateModel.fire { it(blockStateModelGenerator) }
