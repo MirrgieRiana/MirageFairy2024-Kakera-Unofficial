@@ -38,6 +38,7 @@ object DataGenerationEvents {
     val onGenerateItemModel = InitializationEventRegistry<(ItemModelGenerators) -> Unit>()
     val onGenerateBlockTag = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
     val onGenerateItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
+    val onGenerateNeoForgeItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
     val onGenerateBiomeTag = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
     val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
     val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()

@@ -266,6 +266,11 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
 
     private fun neoForge(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateNeoForgeItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+            }
+        }
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : DataProvider {
                 private val pathResolver = output.createPathProvider(DataOutput.Target.DATA_PACK, "data_maps")
                 override fun getName() = "Data Maps"
