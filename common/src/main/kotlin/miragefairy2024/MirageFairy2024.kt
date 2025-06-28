@@ -55,10 +55,15 @@ object DataGenerationEvents {
     val onGenerateSound = InitializationEventRegistry<((path: String, subtitle: String?, sounds: List<ResourceLocation>) -> Unit) -> Unit>()
     val onGenerateParticles = InitializationEventRegistry<((identifier: ResourceLocation, jsonElement: JsonElement) -> Unit) -> Unit>()
     val onGenerateAdvancement = InitializationEventRegistry<suspend (HolderLookup.Provider, Consumer<AdvancementHolder>) -> Unit>()
+    val onGenerateDataMap = InitializationEventRegistry<(DataMapConsumer, HolderLookup.Provider) -> Unit>()
 
     val onBuildRegistry = InitializationEventRegistry<(RegistrySetBuilder) -> Unit>()
 
     val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
+}
+
+interface DataMapConsumer {
+    fun <T> accept(registry: ResourceKey<Registry<T>>, type: ResourceLocation, target: ResourceKey<T>, data: JsonElement)
 }
 
 object MirageFairy2024 {

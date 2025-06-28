@@ -4,11 +4,13 @@ import com.google.gson.JsonElement
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import miragefairy2024.DataGenerationEvents
+import miragefairy2024.DataMapConsumer
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
 import miragefairy2024.platformProxy
 import miragefairy2024.util.string
+import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
@@ -25,6 +27,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
 import net.minecraft.data.advancements.AdvancementProvider
@@ -262,7 +265,37 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     }
 
     private fun neoForge(pack: FabricDataGenerator.Pack) {
-
+        pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            object : DataProvider {
+                private val pathResolver = output.createPathProvider(DataOutput.Target.DATA_PACK, "data_maps")
+                override fun getName() = "Data Maps"
+                override fun run(writer: DataWriter): CompletableFuture<*> {
+                    val registries = registriesFuture.join()
+                    val registryMap = mutableMapOf<ResourceKey<out Registry<*>>, MutableMap<ResourceLocation, MutableMap<ResourceLocation, JsonElement>>>()
+                    DataGenerationEvents.onGenerateDataMap.fire {
+                        it(object : DataMapConsumer {
+                            override fun <T> accept(registry: ResourceKey<Registry<T>>, type: ResourceLocation, target: ResourceKey<T>, data: JsonElement) {
+                                val typeMap = registryMap.getOrPut(registry) { mutableMapOf() }
+                                val targetMap = typeMap.getOrPut(type) { mutableMapOf() }
+                                if (target.location() in targetMap) throw IllegalArgumentException("Duplicate data map entry for ${target.location()} in registry ${registry.location()}")
+                                targetMap[target.location()] = data
+                            }
+                        }, registries)
+                    }
+                    val futures = mutableListOf<CompletableFuture<*>>()
+                    registryMap.forEach { (registry, typeMap) ->
+                        typeMap.forEach { (type, targetMap) ->
+                            val jsonElement = jsonObject(
+                                "values" to targetMap.mapKeys { it.key.string }.jsonObject,
+                            )
+                            val registryPath = (if (registry.location().namespace == "minecraft") "" else "${registry.location().namespace}/") + registry.location().path
+                            futures += DataProvider.saveStable(writer, jsonElement, pathResolver.json("$registryPath/" * type))
+                        }
+                    }
+                    return CompletableFuture.allOf(*futures.toTypedArray())
+                }
+            }
+        }
     }
 
     override fun buildRegistry(registryBuilder: RegistryBuilder) {
