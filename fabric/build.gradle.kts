@@ -59,6 +59,16 @@ loom {
 
             runDir("build/datagen")
         }
+        register("datagenNeoForge") {
+            inherit(runs["server"])
+            name("NeoForge Data Generation")
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${rootProject.file("neoforge/src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.modid=miragefairy2024")
+            vmArg("-Dmiragefairy2024.datagen.platform=neoforge")
+
+            runDir("build/datagen")
+        }
     }
 }
 

@@ -60,6 +60,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         val pack = fabricDataGenerator.createPack()
         when (val platform = System.getProperty("miragefairy2024.datagen.platform")) {
             "common" -> common(pack)
+            "neoforge" -> neoForge(pack)
             else -> throw IllegalArgumentException("Unknown platform: $platform")
         }
     }
@@ -258,6 +259,10 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 }
             }))
         }
+    }
+
+    private fun neoForge(pack: FabricDataGenerator.Pack) {
+
     }
 
     override fun buildRegistry(registryBuilder: RegistryBuilder) {

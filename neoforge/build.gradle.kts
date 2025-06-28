@@ -15,6 +15,14 @@ loom {
     accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir(file("src/generated/resources"))
+        }
+    }
+}
+
 configurations {
     val common by creating {
         isCanBeResolved = true
