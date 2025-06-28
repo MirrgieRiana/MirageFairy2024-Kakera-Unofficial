@@ -1,0 +1,56 @@
+{
+  "values": [
+    {
+      "id": "#c:gems/xarpite",
+      "required": false
+    },
+    {
+      "id": "#c:gems/miranagite",
+      "required": false
+    },
+    {
+      "id": "#c:gems/chaos_stone",
+      "required": false
+    },
+    {
+      "id": "#c:gems/fairy_crystal",
+      "required": false
+    },
+    {
+      "id": "#c:gems/phantom_drop",
+      "required": false
+    },
+    {
+      "id": "#c:gems/miragidian",
+      "required": false
+    },
+    {
+      "id": "#c:gems/luminite",
+      "required": false
+    },
+    {
+      "id": "#c:gems/prominite",
+      "required": false
+    },
+    {
+      "id": "#c:gems/haimeviska_rosin",
+      "required": false
+    },
+    {
+      "id": "#c:gems/fairy_plastic",
+      "required": false
+    },
+    {
+      "id": "#c:gems/fairy_rubber",
+      "required": false
+    },
+    {
+      "id": "#c:gems/magnetite",
+      "required": false
+    },
+    {
+      "id": "#c:gems/fluorite",
+      "required": false
+    }
+  ]
+}
