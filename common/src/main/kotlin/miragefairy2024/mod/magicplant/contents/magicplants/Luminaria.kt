@@ -72,7 +72,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
 
     override val blockCodec = DiamondLuminariaBlock.CODEC
-    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getWeakLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
 
     override val baseGrowth = super.baseGrowth / 5
 
@@ -136,6 +136,7 @@ class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(Diamon
     override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
 }
 
+private fun getWeakLuminance(age: Int) = if (age == 3) 13 else 0
 private fun getLuminance(age: Int) = if (age == 3) 15 else 0
 
 object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
