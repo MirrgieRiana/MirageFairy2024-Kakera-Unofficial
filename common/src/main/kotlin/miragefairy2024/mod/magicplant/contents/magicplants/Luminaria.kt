@@ -311,7 +311,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override fun getItemPath() = "gold_prominaria_bulb"
     override val itemName = EnJa("Gold Prominaria Bulb", "金炎草ゴールドプロミナリアの球根")
     override val tier = 3
-    override val poem = EnJa("Gold-plated prominence.", "地獄の沙汰も金次第。")
+    override val poem = EnJa("Those who have become livestock of gold.", "地獄の沙汰も金次第。")
 
     override val blockCodec = GoldProminariaBlock.CODEC
     override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
