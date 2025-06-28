@@ -11,6 +11,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.register
+import miragefairy2024.util.string
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.network.chat.Component
@@ -62,6 +63,7 @@ enum class TraitEffectKeyCard(
 
             override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
             override fun getDefaultValue() = 0.0
+            override fun toString() = identifier.string
         }
     } else {
         object : TraitEffectKey<Double>() {
@@ -79,6 +81,7 @@ enum class TraitEffectKeyCard(
 
             override fun plus(a: Double, b: Double) = a + b
             override fun getDefaultValue() = 0.0
+            override fun toString() = identifier.string
         }
     }
 }
