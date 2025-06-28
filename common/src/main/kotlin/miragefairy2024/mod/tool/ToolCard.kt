@@ -311,7 +311,7 @@ class ToolCard(
         val LILAGIUM_SCYTHE = !ToolCard(
             "lilagium_scythe", EnJa("Lilagium Scythe", "リラジウムの大鎌"),
             PoemList(3).poem(EnJa("Wish upon the grass", "葉っぱが吸い込まれてくる")),
-            FairyScytheConfiguration(ToolMaterialCard.LILAGIUM, range = 2).soulStreamContainable(),
+            FairyScytheConfiguration(ToolMaterialCard.LILAGIUM, range = 2).enchantment(EnchantmentCard.STICKY_MINING.key).soulStreamContainable(),
         ) { registerScytheRecipeGeneration(item, MaterialCard.LILAGIUM_INGOT.item) }
         val LUMINITE_PICKAXE = !ToolCard(
             "luminite_pickaxe", EnJa("Luminite Pickaxe", "ルミナイトのつるはし"),
