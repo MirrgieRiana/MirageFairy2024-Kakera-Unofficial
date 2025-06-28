@@ -4,6 +4,8 @@ import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.PlatformProxy
 import miragefairy2024.fabric.mixins.api.ItemEnchantmentsCallback
 import net.minecraft.core.registries.Registries
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.ComposterBlock
 
 class FabricPlatformProxy : PlatformProxy {
     override fun registerModifyItemEnchantmentsHandler(handler: ModifyItemEnchantmentsHandler) {
@@ -11,5 +13,9 @@ class FabricPlatformProxy : PlatformProxy {
             val server = currentServer ?: return@register
             handler.modifyItemEnchantments(itemStack, mutableItemEnchantments, server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT))
         }
+    }
+
+    override fun registerComposterInput(item: Item, chance: Float) {
+        ComposterBlock.COMPOSTABLES.put(item, chance)
     }
 }
