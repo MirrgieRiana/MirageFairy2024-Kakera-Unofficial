@@ -506,14 +506,14 @@ class MaterialCard(
         }
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月のしずく",
-            PoemList(4)
+            PoemList(3)
                 .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
                 FoodComponent.Builder()
                     .nutrition(2)
                     .saturationModifier(0.3F)
-                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 120), 1.0F)
+                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 30), 1.0F)
                     .alwaysEdible()
                     .build()
             },
