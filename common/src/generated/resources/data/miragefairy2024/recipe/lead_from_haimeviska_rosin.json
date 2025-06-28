@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "minecraft:lead",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:haimeviska_rosin"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "ss ",
+    "s# ",
+    "  s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:lead"
+  }
+}

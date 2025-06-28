@@ -574,6 +574,14 @@ class MaterialCard(
                 define('P', Blocks.PISTON)
                 define('S', item())
             } on item modId MirageFairy2024.MOD_ID from item
+            // →リード
+            registerShapedRecipeGeneration({ Items.LEAD }) {
+                pattern("ss ")
+                pattern("s# ")
+                pattern("  s")
+                define('#', item())
+                define('s', Items.STRING)
+            } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC: MaterialCard = !MaterialCard(
             // TODO add recipe
