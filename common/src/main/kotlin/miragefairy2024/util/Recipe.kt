@@ -5,6 +5,9 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.recipeGroupRegistry
+import miragefairy2024.platformProxy
+import mirrg.kotlin.gson.hydrogen.jsonElement
+import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.registry.FuelRegistry
 import net.minecraft.advancements.critereon.EnchantmentPredicate
@@ -34,7 +37,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
@@ -305,8 +307,20 @@ fun (() -> Item).registerChestLoot(
 }
 
 context(ModContext)
-fun (() -> Item).registerComposterInput(chance: Float) = ModEvents.onInitialize {
-    ComposterBlock.COMPOSTABLES.put(this(), chance)
+fun (() -> Item).registerComposterInput(chance: Float) {
+    ModEvents.onInitialize {
+        platformProxy!!.registerComposterInput(this(), chance)
+    }
+    DataGenerationEvents.onGenerateDataMap { it, _ ->
+        it.accept(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath("neoforge", "compostables"),
+            BuiltInRegistries.ITEM.getResourceKey(this()).get(),
+            jsonObject(
+                "chance" to chance.jsonElement,
+            ),
+        )
+    }
 }
 
 /** @param ticks coal is `200 * 8 = 1600` */
