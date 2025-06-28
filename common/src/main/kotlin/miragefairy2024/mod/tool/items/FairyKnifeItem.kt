@@ -1,8 +1,10 @@
 package miragefairy2024.mod.tool.items
 
 import miragefairy2024.ModifyItemEnchantmentsHandler
+import miragefairy2024.mod.EnchantmentCard
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
+import miragefairy2024.mod.tool.effects.enchantment
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.tags.BlockTags
@@ -33,6 +35,7 @@ open class FairyKnifeConfiguration(
         this.tags += ItemTags.SWORDS
         this.superEffectiveBlocks += Blocks.COBWEB
         this.effectiveBlockTags += BlockTags.SWORD_EFFICIENT
+        this.enchantment(EnchantmentCard.STICKY_MINING.key)
     }
 }
 
