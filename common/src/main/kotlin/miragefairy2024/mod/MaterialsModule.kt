@@ -474,7 +474,7 @@ class MaterialCard(
                     identifier = it,
                     context = AdvancementCard.Sub { ProminariaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
-                    name = EnJa("Equality under Physical Law", "物理法則の下の平等"),
+                    name = EnJa("Equality before Physical Law", "物理法則の下の平等"),
                     description = EnJa("Harvest Prominite from Prominaria", "ネザーのプロミナリアからプロミナイトを収穫する"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
