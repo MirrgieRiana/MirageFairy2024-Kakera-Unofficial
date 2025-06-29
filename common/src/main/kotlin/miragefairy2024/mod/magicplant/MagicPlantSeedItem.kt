@@ -46,27 +46,48 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
         tooltipComponents += text { GUI_TRANSLATION().yellow }
 
         // プレイヤーのメインハンドの種子の特性を得る
-        val otherTraitStacks = if (player.mainHandItem.item == this) player.mainHandItem.getTraitStacks() else null
+        val otherTraitStacks = if (player.mainHandItem.item is MagicPlantSeedItem) player.mainHandItem.getTraitStacks() else null
 
         // ヘッダー行
         run {
-            val countText = when {
-                otherTraitStacks == null -> text { "${traitStacks.traitStackList.size}"() }
-                traitStacks.traitStackList.size > otherTraitStacks.traitStackList.size -> text { "${traitStacks.traitStackList.size}"().green }
-                traitStacks.traitStackList.size == otherTraitStacks.traitStackList.size -> text { "${traitStacks.traitStackList.size}"().darkGray }
-                else -> text { "${traitStacks.traitStackList.size}"().darkRed }
-            }
-            val bitCountText = when {
-                otherTraitStacks == null -> text { "${traitStacks.bitCount}"() }
-                traitStacks.bitCount > otherTraitStacks.bitCount -> text { "${traitStacks.bitCount}"().green }
-                traitStacks.bitCount == otherTraitStacks.bitCount -> text { "${traitStacks.bitCount}"().darkGray }
-                else -> text { "${traitStacks.bitCount}"().darkRed }
-            }
-            tooltipComponents += text { TRAIT_TRANSLATION() + ": x"() + countText + " ("() + bitCountText + "b)"() }
+            val sections = mutableListOf<Component>()
+
+            // ラベル
+            sections += text { TRAIT_TRANSLATION() + ":"() } // Trait:
+
+            // 特性の個数
+            val traitCount = traitStacks.traitStackList.size
+            sections += text { "x$traitCount"().let { if (otherTraitStacks != null) it.signColor(traitCount - otherTraitStacks.traitStackList.size) else it } } // x99
+
+            // 特性の増減
+            val plusTraitCount = if (otherTraitStacks != null) (traitStacks.traitStackMap.keys - otherTraitStacks.traitStackMap.keys).size else null
+            val minusTraitCount = if (otherTraitStacks != null) (otherTraitStacks.traitStackMap.keys - traitStacks.traitStackMap.keys).size else null
+            sections += listOfNotNull(
+                if (plusTraitCount != null && plusTraitCount > 0) text { "+$plusTraitCount"().signColor(1) } else null, // +9
+                if (minusTraitCount != null && minusTraitCount > 0) text { "-$minusTraitCount"().signColor(-1) } else null, // -9
+            ).let { if (it.isNotEmpty()) listOf(text { "("() + it.join(" "()) + ")"() }) else listOf() } // (+9 -9)  (+9)  null
+
+            // 区切り
+            sections += text { "/"() } // /
+
+            // 特性ビットの個数
+            val bitCount = traitStacks.bitCount
+            sections += text { "${bitCount}b"().let { if (otherTraitStacks != null) it.signColor(bitCount - otherTraitStacks.bitCount) else it } } // 99b
+
+            // 特性ビットの増減
+            val plusBitCount = if (otherTraitStacks != null) (traitStacks - otherTraitStacks).bitCount else null
+            val minusBitCount = if (otherTraitStacks != null) (otherTraitStacks - traitStacks).bitCount else null
+            sections += listOfNotNull(
+                if (plusBitCount != null && plusBitCount > 0) text { "+${plusBitCount}b"().signColor(1) } else null, // +9b
+                if (minusBitCount != null && minusBitCount > 0) text { "-${minusBitCount}b"().signColor(-1) } else null, // -9b
+            ).let { if (it.isNotEmpty()) listOf(text { "("() + it.join(" "()) + ")"() }) else listOf() } // (+9b -9b)  (+9b)  null
+
+            tooltipComponents += sections.join(text { " "() }) // Trait: x99 (+9 -9) / 99b (+9 -9)
         }
 
         // 特性行
-        traitStacks.traitStackMap.entries
+        val traitStackMap = if (otherTraitStacks != null) otherTraitStacks.traitStackMap.mapValues { 0 } + traitStacks.traitStackMap else traitStacks.traitStackMap // 比較対象がある場合は空特性も表示
+        traitStackMap.entries
             .sortedBy { it.key }
             .forEach { (trait, level) ->
                 val levelText = when {
@@ -140,6 +161,14 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
             return TypedActionResult.consume(itemStack)
         }
         return super.use(world, user, hand)
+    }
+}
+
+private fun Component.signColor(number: Int): Component {
+    return when {
+        number > 0 -> this.green
+        number < 0 -> this.darkRed
+        else -> this.darkGray
     }
 }
 
