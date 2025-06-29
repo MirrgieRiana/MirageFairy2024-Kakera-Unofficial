@@ -88,7 +88,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                     }
                 }
 
-                val traitEffects = trait.getTraitEffects(world, player.blockPosition(), level)
+                val traitEffects = trait.getTraitEffects(world, player.blockPosition(), world.getMagicPlantBlockEntity(player.blockPosition()), level)
                 tooltipComponents += if (traitEffects != null) {
                     val description = text {
                         traitEffects.effects

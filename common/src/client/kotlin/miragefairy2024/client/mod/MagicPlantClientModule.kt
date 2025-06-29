@@ -23,6 +23,7 @@ import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.contents.getTraitPower
+import miragefairy2024.mod.magicplant.getMagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
@@ -121,7 +122,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                     val player = MinecraftClient.getInstance().player
                     val allFactor = if (player != null) {
                         traitStack.trait.conditions
-                            .map { it.getFactor(player.level(), player.blockPosition()) }
+                            .map { it.getFactor(player.level(), player.blockPosition(), player.level().getMagicPlantBlockEntity(player.blockPosition())) }
                             .fold(1.0) { a, b -> a * b }
                     } else {
                         1.0
@@ -131,7 +132,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.conditions.forEach { condition ->
-                            val factor = if (player != null) condition.getFactor(player.level(), player.blockPosition()) else 1.0
+                            val factor = if (player != null) condition.getFactor(player.level(), player.blockPosition(), player.level().getMagicPlantBlockEntity(player.blockPosition())) else 1.0
                             val text = text { condition.emoji + " "() + (factor * 100.0 formatAs "%.1f%%")() }
                             child(Components.label(text).tooltip(condition.name))
                         }

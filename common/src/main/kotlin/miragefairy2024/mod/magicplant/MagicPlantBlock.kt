@@ -66,10 +66,10 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun canCross(world: Level, blockPos: BlockPos, blockState: BlockState): Boolean
 
     /** あるワールド上の地点における特性の効果を計算する。 */
-    protected fun calculateTraitEffects(world: Level, blockPos: BlockPos, traitStacks: TraitStacks): MutableTraitEffects {
+    protected fun calculateTraitEffects(world: Level, blockPos: BlockPos, blockEntity: MagicPlantBlockEntity?, traitStacks: TraitStacks): MutableTraitEffects {
         val allTraitEffects = MutableTraitEffects()
         traitStacks.traitStackMap.forEach { (trait, level) ->
-            val traitEffects = trait.getTraitEffects(world, blockPos, level)
+            val traitEffects = trait.getTraitEffects(world, blockPos, blockEntity, level)
             if (traitEffects != null) allTraitEffects += traitEffects
         }
         return allTraitEffects
@@ -99,14 +99,15 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
 
     /** 時間経過や骨粉などによって呼び出される成長と自動収穫などのためのイベントを処理します。 */
     protected open fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
-        val traitStacks = world.getMagicPlantBlockEntity(blockPos)?.getTraitStacks() ?: return
-        val mainTraitEffects = calculateTraitEffects(world, blockPos, traitStacks)
+        val blockEntity = world.getMagicPlantBlockEntity(blockPos)
+        val traitStacks = blockEntity?.getTraitStacks() ?: return
+        val mainTraitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
         val traitEffectsListForGrowth = listOf(
             mainTraitEffects,
-            calculateTraitEffects(world, blockPos.offset(-1, 0, 0), traitStacks),
-            calculateTraitEffects(world, blockPos.offset(+1, 0, 0), traitStacks),
-            calculateTraitEffects(world, blockPos.offset(0, 0, -1), traitStacks),
-            calculateTraitEffects(world, blockPos.offset(0, 0, +1), traitStacks),
+            calculateTraitEffects(world, blockPos.offset(-1, 0, 0), blockEntity, traitStacks),
+            calculateTraitEffects(world, blockPos.offset(+1, 0, 0), blockEntity, traitStacks),
+            calculateTraitEffects(world, blockPos.offset(0, 0, -1), blockEntity, traitStacks),
+            calculateTraitEffects(world, blockPos.offset(0, 0, +1), blockEntity, traitStacks),
         )
 
         // 成長
@@ -224,7 +225,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         val block = blockState.block
         val blockEntity = world.getMagicPlantBlockEntity(blockPos) ?: return
         val traitStacks = blockEntity.getTraitStacks() ?: return
-        val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
+        val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
         val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
         val experience = if (dropExperience) world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey]) else 0
 
@@ -293,7 +294,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
             val block = blockState.block
             val blockEntity = builder.getOptionalParameter(LootContextParameters.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = blockEntity.getTraitStacks() ?: return@run
-            val traitEffects = calculateTraitEffects(world, blockPos, traitStacks)
+            val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
             val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? PlayerEntity
             val tool = builder.getOptionalParameter(LootContextParameters.TOOL)
 
@@ -310,8 +311,9 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         if (!state.`is`(newState.block)) run {
             if (world !is ServerWorld) return@run
             if (!canPick(state)) return@run
-            val traitStacks = world.getMagicPlantBlockEntity(pos)?.getTraitStacks() ?: return@run
-            val traitEffects = calculateTraitEffects(world, pos, traitStacks)
+            val blockEntity = world.getMagicPlantBlockEntity(pos)
+            val traitStacks = blockEntity?.getTraitStacks() ?: return@run
+            val traitEffects = calculateTraitEffects(world, pos, blockEntity, traitStacks)
             val experience = world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey])
             if (experience > 0) popExperience(world, pos, experience)
         }
