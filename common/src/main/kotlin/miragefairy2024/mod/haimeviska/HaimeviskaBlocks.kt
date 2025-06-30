@@ -412,6 +412,8 @@ fun initHaimeviskaBlocks() {
         }
     }
     HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.SLAB.block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(HaimeviskaBlockCard.SLAB.block()) }
+    HaimeviskaBlockCard.STAIRS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ
