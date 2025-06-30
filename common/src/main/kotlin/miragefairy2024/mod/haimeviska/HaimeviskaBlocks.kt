@@ -107,50 +107,51 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 
 class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: suspend () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
-        val LEAVES = Configuration(
+        val entries = mutableListOf<HaimeviskaBlockCard>()
+        private operator fun HaimeviskaBlockCard.not() = apply { entries += this }
+
+        val LEAVES = !Configuration(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
             PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
         ).let { HaimeviskaBlockCard(it, { HaimeviskaLeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock) }
-        val LOG = Configuration(
+        val LOG = !Configuration(
             "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
             PoemList(1)
                 .poem("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。")
                 .description("Can be incised with a sword", "剣を使って傷を付けられる"),
         ).let { HaimeviskaBlockCard(it, { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock) }
-        val INCISED_LOG = Configuration(
+        val INCISED_LOG = !Configuration(
             "incised_haimeviska_log", "Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木",
             PoemList(1)
                 .poem("Do fairy trees have qualia of pain?", "動物を守るということ。")
                 .description("Produces sap over time", "時間経過で樹液を生産")
         ).let { HaimeviskaBlockCard(it, { IncisedHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val DRIPPING_LOG = Configuration(
+        val DRIPPING_LOG = !Configuration(
             "dripping_haimeviska_log", "Dripping Haimeviska Log", "滴るハイメヴィスカの原木",
             PoemList(1)
                 .poem("A spirit named 'glucose'", "霊界より降りしもの。")
                 .description("Harvest sap when used", "使用時、樹液を収穫"),
         ).let { HaimeviskaBlockCard(it, { DrippingHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val HOLLOW_LOG = Configuration(
+        val HOLLOW_LOG = !Configuration(
             "hollow_haimeviska_log", "Hollow Haimeviska Log", "ハイメヴィスカの樹洞",
             PoemList(1).poem("Auric conceptual attractor", "限界巡回アステリア。"),
         ).let { HaimeviskaBlockCard(it, { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock) }
-        val PLANKS = Configuration(
+        val PLANKS = !Configuration(
             "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
             PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
         ).let { HaimeviskaBlockCard(it, { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock) }
-        val SLAB = Configuration(
+        val SLAB = !Configuration(
             "haimeviska_slab", "Haimeviska Slab", "ハイメヴィスカのハーフブロック",
             PoemList(1).poem("Searching for the other personality.", "二重思考の側頭葉。"),
         ).let { HaimeviskaBlockCard(it, { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock) }
-        val STAIRS = Configuration(
+        val STAIRS = !Configuration(
             "haimeviska_stairs", "Haimeviska Stairs", "ハイメヴィスカの階段",
             PoemList(1).poem("Step that pierces the sky", "情緒体を喰らう頂となれ。"),
         ).let { HaimeviskaBlockCard(it, { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock) }
-        val SAPLING = Configuration(
+        val SAPLING = !Configuration(
             "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
             PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
         ).let { HaimeviskaBlockCard(it, { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
-
-        val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SLAB, STAIRS, SAPLING)
     }
 
     class Configuration(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
