@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "miragefairy2024:block/haimeviska_slab"
+    },
+    "type=double": {
+      "model": "miragefairy2024:block/haimeviska_planks"
+    },
+    "type=top": {
+      "model": "miragefairy2024:block/haimeviska_slab_top"
+    }
+  }
+}

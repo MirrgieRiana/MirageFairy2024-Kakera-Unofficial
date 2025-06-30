@@ -56,6 +56,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.BlockFamily
+import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.stats.Stats
@@ -67,6 +69,8 @@ import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.flag.FeatureFlagSet
+import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -77,6 +81,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.SlabBlock
+import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -131,12 +137,20 @@ class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: suspen
             "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
             PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
         ).let { HaimeviskaBlockCard(it, { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock) }
+        val SLAB = Configuration(
+            "haimeviska_slab", "Haimeviska Slab", "ハイメヴィスカのハーフブロック",
+            PoemList(1).poem("Searching for the other personality.", "二重思考の側頭葉。"),
+        ).let { HaimeviskaBlockCard(it, { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock) }
+        val STAIRS = Configuration(
+            "haimeviska_stairs", "Haimeviska Stairs", "ハイメヴィスカの階段",
+            PoemList(1).poem("Step that pierces the sky", "情緒体を喰らう頂となれ。"),
+        ).let { HaimeviskaBlockCard(it, { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock) }
         val SAPLING = Configuration(
             "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
             PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
         ).let { HaimeviskaBlockCard(it, { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock) }
 
-        val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SAPLING)
+        val entries = listOf(LEAVES, LOG, INCISED_LOG, DRIPPING_LOG, HOLLOW_LOG, PLANKS, SLAB, STAIRS, SAPLING)
     }
 
     class Configuration(val path: String, val enName: String, val jaName: String, val poemList: PoemList)
@@ -229,20 +243,36 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 context(ModContext)
 private fun initPlanksHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
-    // レンダリング
-    card.block.registerSingletonBlockStateGeneration()
-    card.block.registerModelGeneration {
-        Models.CUBE_ALL.with(
-            TextureKey.ALL to "block/" * it.getIdentifier(),
-        )
-    }
-
     // 性質
     card.block.registerFlammable(5, 20)
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.PLANKS }
     card.item.registerItemTagGeneration { ItemTags.PLANKS }
+
+}
+
+context(ModContext)
+private fun initPlanksSlabHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // 性質
+    card.block.registerFlammable(5, 20)
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.WOODEN_SLABS }
+    card.item.registerItemTagGeneration { ItemTags.WOODEN_SLABS }
+
+}
+
+context(ModContext)
+private fun initPlanksStairsHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // 性質
+    card.block.registerFlammable(5, 20)
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.WOODEN_STAIRS }
+    card.item.registerItemTagGeneration { ItemTags.WOODEN_STAIRS }
 
 }
 
@@ -293,6 +323,21 @@ fun initHaimeviskaBlocks() {
         card.item.registerPoemGeneration(card.configuration.poemList)
 
         card.initializer(this@ModContext, card)
+    }
+
+    DataGenerationEvents.onGenerateBlockModel {
+        val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
+            .slab(HaimeviskaBlockCard.SLAB.block())
+            .stairs(HaimeviskaBlockCard.STAIRS.block())
+            .family
+        it.family(family.baseBlock).generateFor(family)
+    }
+    DataGenerationEvents.onGenerateRecipe {
+        val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
+            .slab(HaimeviskaBlockCard.SLAB.block())
+            .stairs(HaimeviskaBlockCard.STAIRS.block())
+            .family
+        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
     }
 
     // ドロップ
