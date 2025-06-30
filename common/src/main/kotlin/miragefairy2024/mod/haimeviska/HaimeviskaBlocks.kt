@@ -99,7 +99,7 @@ import net.minecraft.world.level.material.PushReaction as PistonBehavior
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
-class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
+class HaimeviskaBlockCard(val configuration: Configuration, blockCreator: suspend () -> Block, val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit) {
     companion object {
         val LEAVES = Configuration(
             "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
