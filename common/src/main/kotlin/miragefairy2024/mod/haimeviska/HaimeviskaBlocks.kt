@@ -187,7 +187,7 @@ context(ModContext)
 private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
-    DataGenerationEvents.onGenerateBlockStateModel {
+    DataGenerationEvents.onGenerateBlockModel {
         it.woodProvider(card.block()).logWithHorizontal(card.block())
     }
 

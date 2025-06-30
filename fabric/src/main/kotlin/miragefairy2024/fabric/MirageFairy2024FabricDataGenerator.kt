@@ -71,7 +71,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     private fun common(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
-                override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) = DataGenerationEvents.onGenerateBlockStateModel.fire { it(blockStateModelGenerator) }
+                override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) = DataGenerationEvents.onGenerateBlockModel.fire { it(blockStateModelGenerator) }
                 override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }

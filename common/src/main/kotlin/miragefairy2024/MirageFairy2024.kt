@@ -34,7 +34,7 @@ object ModEvents {
 object DataGenerationEvents {
     val onInitializeDataGenerator = InitializationEventRegistry<() -> Unit>()
 
-    val onGenerateBlockStateModel = InitializationEventRegistry<(BlockModelGenerators) -> Unit>()
+    val onGenerateBlockModel = InitializationEventRegistry<(BlockModelGenerators) -> Unit>()
     val onGenerateItemModel = InitializationEventRegistry<(ItemModelGenerators) -> Unit>()
     val onGenerateBlockTag = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
     val onGenerateItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()

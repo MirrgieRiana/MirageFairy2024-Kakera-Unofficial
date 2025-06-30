@@ -123,7 +123,7 @@ fun Model.with(vararg textureEntries: Pair<TextureKey, ResourceLocation>) = this
 // registerModelGeneration
 
 context(ModContext)
-fun registerModelGeneration(identifierGetter: () -> ResourceLocation, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockStateModel {
+fun registerModelGeneration(identifierGetter: () -> ResourceLocation, texturedModelCreator: () -> TexturedModel) = DataGenerationEvents.onGenerateBlockModel {
     val texturedModel = texturedModelCreator()
     texturedModel.template.create(identifierGetter(), texturedModel.mapping, it.modelOutput)
 }
