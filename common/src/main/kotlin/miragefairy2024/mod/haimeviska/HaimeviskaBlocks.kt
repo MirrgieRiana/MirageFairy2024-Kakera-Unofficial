@@ -107,8 +107,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 
 class HaimeviskaBlockCard(
     val path: String,
-    val enName: String,
-    val jaName: String,
+    val name: EnJa,
     val poemList: PoemList,
     blockCreator: suspend () -> Block,
     val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit,
@@ -118,54 +117,54 @@ class HaimeviskaBlockCard(
         private operator fun HaimeviskaBlockCard.not() = apply { entries += this }
 
         val LEAVES = !HaimeviskaBlockCard(
-            "haimeviska_leaves", "Haimeviska Leaves", "ハイメヴィスカの葉",
-            PoemList(1).poem("All original flowers are consumed by ivy", "妖精になれる花、なれない花。"),
+            "haimeviska_leaves", EnJa("Haimeviska Leaves", "ハイメヴィスカの葉"),
+            PoemList(1).poem(EnJa("All original flowers are consumed by ivy", "妖精になれる花、なれない花。")),
             { HaimeviskaLeavesBlock(createLeavesSettings()) }, ::initLeavesHaimeviskaBlock,
         )
         val LOG = !HaimeviskaBlockCard(
-            "haimeviska_log", "Haimeviska Log", "ハイメヴィスカの原木",
+            "haimeviska_log", EnJa("Haimeviska Log", "ハイメヴィスカの原木"),
             PoemList(1)
-                .poem("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。")
-                .description("Can be incised with a sword", "剣を使って傷を付けられる"),
+                .poem(EnJa("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。"))
+                .description(EnJa("Can be incised with a sword", "剣を使って傷を付けられる")),
             { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock,
         )
         val INCISED_LOG = !HaimeviskaBlockCard(
-            "incised_haimeviska_log", "Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木",
+            "incised_haimeviska_log", EnJa("Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木"),
             PoemList(1)
-                .poem("Do fairy trees have qualia of pain?", "動物を守るということ。")
-                .description("Produces sap over time", "時間経過で樹液を生産"),
+                .poem(EnJa("Do fairy trees have qualia of pain?", "動物を守るということ。"))
+                .description(EnJa("Produces sap over time", "時間経過で樹液を生産")),
             { IncisedHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock,
         )
         val DRIPPING_LOG = !HaimeviskaBlockCard(
-            "dripping_haimeviska_log", "Dripping Haimeviska Log", "滴るハイメヴィスカの原木",
+            "dripping_haimeviska_log", EnJa("Dripping Haimeviska Log", "滴るハイメヴィスカの原木"),
             PoemList(1)
-                .poem("A spirit named 'glucose'", "霊界より降りしもの。")
-                .description("Harvest sap when used", "使用時、樹液を収穫"),
+                .poem(EnJa("A spirit named 'glucose'", "霊界より降りしもの。"))
+                .description(EnJa("Harvest sap when used", "使用時、樹液を収穫")),
             { DrippingHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock,
         )
         val HOLLOW_LOG = !HaimeviskaBlockCard(
-            "hollow_haimeviska_log", "Hollow Haimeviska Log", "ハイメヴィスカの樹洞",
-            PoemList(1).poem("Auric conceptual attractor", "限界巡回アステリア。"),
+            "hollow_haimeviska_log", EnJa("Hollow Haimeviska Log", "ハイメヴィスカの樹洞"),
+            PoemList(1).poem(EnJa("Auric conceptual attractor", "限界巡回アステリア。")),
             { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock,
         )
         val PLANKS = !HaimeviskaBlockCard(
-            "haimeviska_planks", "Haimeviska Planks", "ハイメヴィスカの板材",
-            PoemList(1).poem("Flexible and friendly, good for interior", "考える、壁。"),
+            "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
+            PoemList(1).poem(EnJa("Flexible and friendly, good for interior", "考える、壁。")),
             { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock,
         )
         val SLAB = !HaimeviskaBlockCard(
-            "haimeviska_slab", "Haimeviska Slab", "ハイメヴィスカのハーフブロック",
-            PoemList(1).poem("Searching for the other personality.", "二重思考の側頭葉。"),
+            "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
+            PoemList(1).poem(EnJa("Searching for the other personality.", "二重思考の側頭葉。")),
             { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock,
         )
         val STAIRS = !HaimeviskaBlockCard(
-            "haimeviska_stairs", "Haimeviska Stairs", "ハイメヴィスカの階段",
-            PoemList(1).poem("Step that pierces the sky", "情緒体を喰らう頂となれ。"),
+            "haimeviska_stairs", EnJa("Haimeviska Stairs", "ハイメヴィスカの階段"),
+            PoemList(1).poem(EnJa("Step that pierces the sky", "情緒体を喰らう頂となれ。")),
             { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock,
         )
         val SAPLING = !HaimeviskaBlockCard(
-            "haimeviska_sapling", "Haimeviska Sapling", "ハイメヴィスカの苗木",
-            PoemList(1).poem("Assembling molecules with Ergs", "第二の葉緑体。"),
+            "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
+            PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
             { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock,
         )
     }
@@ -333,7 +332,7 @@ fun initHaimeviskaBlocks() {
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
         // テキスト
-        card.block.enJa(EnJa(card.enName, card.jaName))
+        card.block.enJa(card.name)
         card.item.registerPoem(card.poemList)
         card.item.registerPoemGeneration(card.poemList)
 
