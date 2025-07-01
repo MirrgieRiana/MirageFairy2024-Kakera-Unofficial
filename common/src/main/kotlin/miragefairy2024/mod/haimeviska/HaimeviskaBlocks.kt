@@ -52,6 +52,8 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
+import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
+import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
@@ -79,13 +81,17 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FenceBlock
+import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.SaplingBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import java.util.Optional
@@ -104,6 +110,9 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as I
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
+
+lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType
+lateinit var HAIMEVISKA_WOOD_TYPE: WoodType
 
 class HaimeviskaBlockCard(
     val path: String,
@@ -162,6 +171,16 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Step that pierces the sky", "情緒体を喰らう頂となれ。")),
             { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock,
         )
+        val FENCE = !HaimeviskaBlockCard(
+            "haimeviska_fence", EnJa("Haimeviska Fence", "ハイメヴィスカのフェンス"),
+            PoemList(1).poem(EnJa("Personality flowing through the xylem", "樹のなかに住む。")),
+            { FenceBlock(createPlankSettings()) }, ::initPlanksFenceHaimeviskaBlock,
+        )
+        val FENCE_GATE = !HaimeviskaBlockCard(
+            "haimeviska_fence_gate", EnJa("Haimeviska Fence Gate", "ハイメヴィスカのフェンスゲート"),
+            PoemList(1).poem(EnJa("It chose this path of its own will", "知性の邂逅。")),
+            { FenceGateBlock(HAIMEVISKA_WOOD_TYPE, createPlankSettings(sound = false).forceSolidOn()) }, ::initPlanksFenceGateHaimeviskaBlock,
+        )
         val SAPLING = !HaimeviskaBlockCard(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
@@ -175,10 +194,10 @@ class HaimeviskaBlockCard(
 }
 
 private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
-private fun createBaseWoodSetting() = AbstractBlock.Properties.of().instrument(Instrument.BASS).sound(BlockSoundGroup.WOOD).ignitedByLava()
+private fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
 private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
-private fun createPlankSettings() = createBaseWoodSetting().strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
+private fun createPlankSettings(sound: Boolean = true) = createBaseWoodSetting(sound = sound).strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
 
 private fun createTreeGrower(identifier: ResourceLocation) = TreeGrower(identifier.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty())
@@ -291,6 +310,32 @@ private fun initPlanksStairsHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 context(ModContext)
+private fun initPlanksFenceHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // 性質
+    card.block.registerFlammable(5, 20)
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.WOODEN_FENCES }
+    card.item.registerItemTagGeneration { ItemTags.WOODEN_FENCES }
+
+}
+
+context(ModContext)
+private fun initPlanksFenceGateHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // 性質
+    card.block.registerFlammable(5, 20)
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.FENCE_GATES }
+    card.item.registerItemTagGeneration { ItemTags.FENCE_GATES }
+    card.block.registerBlockTagGeneration { TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden")) }
+    card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden")) }
+
+}
+
+context(ModContext)
 private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
@@ -321,6 +366,8 @@ fun initHaimeviskaBlocks() {
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("dripping_haimeviska_log")) { DrippingHaimeviskaLogBlock.CODEC }.register()
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log")) { HollowHaimeviskaLogBlock.CODEC }.register()
 
+    HAIMEVISKA_BLOCK_SET_TYPE = BlockSetTypeBuilder().register(MirageFairy2024.identifier("haimeviska"))
+    HAIMEVISKA_WOOD_TYPE = WoodTypeBuilder().register(MirageFairy2024.identifier("haimeviska"), HAIMEVISKA_BLOCK_SET_TYPE)
 
     HaimeviskaBlockCard.entries.forEach { card ->
 
@@ -343,6 +390,8 @@ fun initHaimeviskaBlocks() {
         val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
             .slab(HaimeviskaBlockCard.SLAB.block())
             .stairs(HaimeviskaBlockCard.STAIRS.block())
+            .fence(HaimeviskaBlockCard.FENCE.block())
+            .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
             .family
         it.family(family.baseBlock).generateFor(family)
     }
@@ -350,6 +399,8 @@ fun initHaimeviskaBlocks() {
         val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
             .slab(HaimeviskaBlockCard.SLAB.block())
             .stairs(HaimeviskaBlockCard.STAIRS.block())
+            .fence(HaimeviskaBlockCard.FENCE.block())
+            .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
             .family
         RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
     }
@@ -414,6 +465,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SLAB.block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(HaimeviskaBlockCard.SLAB.block()) }
     HaimeviskaBlockCard.STAIRS.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.FENCE.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.FENCE_GATE.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ
