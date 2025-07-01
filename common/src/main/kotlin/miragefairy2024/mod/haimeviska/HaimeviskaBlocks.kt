@@ -154,7 +154,7 @@ class HaimeviskaBlockCard(
         )
         val SLAB = !HaimeviskaBlockCard(
             "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
-            PoemList(1).poem(EnJa("Searching for the other personality.", "二重思考の側頭葉。")),
+            PoemList(1).poem(EnJa("Searching for another personality.", "二重思考の側頭葉。")),
             { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock,
         )
         val STAIRS = !HaimeviskaBlockCard(
