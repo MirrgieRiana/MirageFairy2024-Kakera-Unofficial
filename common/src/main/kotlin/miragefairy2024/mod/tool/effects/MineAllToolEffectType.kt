@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
@@ -17,13 +18,9 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun <T : ToolConfiguration> T.mineAll() = this.also {
-    this.merge(MineAllToolEffectType, true) { enabled ->
-        MineAllToolEffectType.apply(this, enabled)
-    }
-}
+fun <T : ToolConfiguration> T.mineAll() = this.merge(MineAllToolEffectType, true)
 
-object MineAllToolEffectType : BooleanToolEffectType() {
+object MineAllToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.mine_all" }, "Mine the entire ore", "鉱石全体を採掘")
 
     context(ModContext)
@@ -31,7 +28,7 @@ object MineAllToolEffectType : BooleanToolEffectType() {
         TRANSLATION.enJa()
     }
 
-    fun apply(configuration: ToolConfiguration, enabled: Boolean) {
+    override fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->

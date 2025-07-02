@@ -7,18 +7,15 @@ import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.mod.tool.items.FairyHoeConfiguration
 import miragefairy2024.mod.tool.items.TillingRecipe
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 
-fun <T : FairyHoeConfiguration> T.tillingRecipe(tillingRecipe: TillingRecipe) = this.also {
-    this.merge(TillingRecipeHoeToolEffectType, tillingRecipe) { tillingRecipe ->
-        TillingRecipeHoeToolEffectType.apply(this, tillingRecipe)
-    }
-}
+fun <T : FairyHoeConfiguration> T.tillingRecipe(tillingRecipe: TillingRecipe) = this.merge(TillingRecipeHoeToolEffectType, tillingRecipe)
 
-object TillingRecipeHoeToolEffectType : ToolEffectType<TillingRecipe> {
+object TillingRecipeHoeToolEffectType : ToolEffectType<FairyHoeConfiguration, TillingRecipe> {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_hoe").toLanguageKey()}.tilling_recipe" }, "Special tilling effects", "特殊な耕作効果")
 
     context(ModContext)
@@ -26,7 +23,7 @@ object TillingRecipeHoeToolEffectType : ToolEffectType<TillingRecipe> {
         TRANSLATION.enJa()
     }
 
-    fun apply(configuration: FairyHoeConfiguration, tillingRecipe: TillingRecipe) {
+    override fun apply(configuration: FairyHoeConfiguration, tillingRecipe: TillingRecipe) {
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.tillingRecipe = tillingRecipe
     }

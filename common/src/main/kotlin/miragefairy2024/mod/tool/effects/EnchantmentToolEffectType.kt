@@ -5,6 +5,7 @@ import miragefairy2024.mod.DynamicPoem
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
@@ -19,19 +20,15 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.enchantment.Enchantment
 
-fun <T : ToolConfiguration> T.enchantment(enchantment: ResourceKey<Enchantment>, level: Int = 1) = this.also {
-    this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level))) { map ->
-        EnchantmentToolEffectType.apply(this, map)
-    }
-}
+fun <T : ToolConfiguration> T.enchantment(enchantment: ResourceKey<Enchantment>, level: Int = 1) = this.merge(EnchantmentToolEffectType, EnchantmentToolEffectType.Value(mapOf(enchantment to level)))
 
-object EnchantmentToolEffectType : ToolEffectType<EnchantmentToolEffectType.Value> {
+object EnchantmentToolEffectType : ToolEffectType<ToolConfiguration, EnchantmentToolEffectType.Value> {
     class Value(val map: Map<ResourceKey<Enchantment>, Int>)
 
     override fun castOrThrow(value: Any?) = value as Value
     override fun merge(a: Value, b: Value) = Value((a.map.keys + b.map.keys).associateWith { key -> (a.map[key] ?: 0) max (b.map[key] ?: 0) })
 
-    fun apply(configuration: ToolConfiguration, value: Value) {
+    override fun apply(configuration: ToolConfiguration, value: Value) {
         if (value.map.isEmpty()) return
         value.map.forEach { (enchantment, level) ->
             configuration.descriptions += DynamicPoem(PoemType.DESCRIPTION) { context ->

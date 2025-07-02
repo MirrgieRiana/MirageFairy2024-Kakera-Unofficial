@@ -42,19 +42,20 @@ fun initToolConfiguration() {
 
 }
 
-interface ToolEffectType<T> {
+interface ToolEffectType<in C : ToolConfiguration, T> {
     fun castOrThrow(value: Any?): T
     fun merge(a: T, b: T): T
+    fun apply(configuration: C, value: T)
 }
 
 abstract class ToolConfiguration {
 
     private var initialized = false
-    private val effects = mutableMapOf<ToolEffectType<*>, ToolEffectEntry<*>>()
+    private val effects = mutableMapOf<ToolEffectType<*, *>, ToolEffectEntry<*>>()
 
-    class ToolEffectEntry<T>(val type: ToolEffectType<T>, val value: T, val delegate: (T) -> Unit)
+    class ToolEffectEntry<T>(val type: ToolEffectType<*, T>, val value: T, val delegate: (T) -> Unit)
 
-    fun <T> merge(type: ToolEffectType<T>, value: T, delegate: (T) -> Unit) {
+    fun <T> mergeImpl(type: ToolEffectType<*, T>, value: T, delegate: (T) -> Unit) {
         if (initialized) throw IllegalStateException("ToolConfiguration is already initialized.")
         val entry = effects[type]
         val newValue = if (entry == null) value else type.merge(type.castOrThrow(entry.value), value)
@@ -105,6 +106,13 @@ abstract class ToolConfiguration {
         return descriptions.fold(poemList) { it, description -> it + description }
     }
 
+}
+
+fun <C : ToolConfiguration, T> C.merge(type: ToolEffectType<C, T>, value: T): C {
+    this.mergeImpl(type, value) {
+        type.apply(this, it)
+    }
+    return this
 }
 
 abstract class FairyMiningToolConfiguration : ToolConfiguration() {

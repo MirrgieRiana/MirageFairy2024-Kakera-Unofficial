@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.Translation
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
@@ -16,13 +17,9 @@ import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun <T : ToolConfiguration> T.areaMining(level: Int = 1) = this.also {
-    this.merge(AreaMiningToolEffectType, level) { level ->
-        AreaMiningToolEffectType.apply(this, level)
-    }
-}
+fun <T : ToolConfiguration> T.areaMining(level: Int = 1) = this.merge(AreaMiningToolEffectType, level)
 
-object AreaMiningToolEffectType : IntMaxToolEffectType() {
+object AreaMiningToolEffectType : IntMaxToolEffectType<ToolConfiguration>() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.area_mining" }, "Area mining %s", "範囲採掘 %s")
 
     context(ModContext)
@@ -30,7 +27,7 @@ object AreaMiningToolEffectType : IntMaxToolEffectType() {
         TRANSLATION.enJa()
     }
 
-    fun apply(configuration: ToolConfiguration, level: Int) {
+    override fun apply(configuration: ToolConfiguration, level: Int) {
         if (level <= 0) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(level.toRomanText()) })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->

@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -13,13 +14,9 @@ import miragefairy2024.util.repair
 import miragefairy2024.util.text
 import net.minecraft.world.entity.player.Player as PlayerEntity
 
-fun <T : ToolConfiguration> T.selfMending(speed: Int) = this.also {
-    this.merge(SelfMendingToolEffectType, speed) { speed ->
-        SelfMendingToolEffectType.apply(this, speed)
-    }
-}
+fun <T : ToolConfiguration> T.selfMending(speed: Int) = this.merge(SelfMendingToolEffectType, speed)
 
-object SelfMendingToolEffectType : IntAddToolEffectType() {
+object SelfMendingToolEffectType : IntAddToolEffectType<ToolConfiguration>() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
 
     context(ModContext)
@@ -27,7 +24,7 @@ object SelfMendingToolEffectType : IntAddToolEffectType() {
         TRANSLATION.enJa()
     }
 
-    fun apply(configuration: ToolConfiguration, speed: Int) {
+    override fun apply(configuration: ToolConfiguration, speed: Int) {
         if (speed <= 0) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onInventoryTickListeners += fail@{ _, stack, world, entity, _, _ ->

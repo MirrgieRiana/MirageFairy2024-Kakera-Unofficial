@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
+import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.Translation
 import miragefairy2024.util.blockVisitor
@@ -19,13 +20,9 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
-fun <T : ToolConfiguration> T.cutAll() = this.also {
-    this.merge(CutAllToolEffectType, true) { enabled ->
-        CutAllToolEffectType.apply(this, enabled)
-    }
-}
+fun <T : ToolConfiguration> T.cutAll() = this.merge(CutAllToolEffectType, true)
 
-object CutAllToolEffectType : BooleanToolEffectType() {
+object CutAllToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
     private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.cut_all" }, "Cut down the entire tree", "木全体を伐採")
 
     context(ModContext)
@@ -33,7 +30,7 @@ object CutAllToolEffectType : BooleanToolEffectType() {
         TRANSLATION.enJa()
     }
 
-    fun apply(configuration: ToolConfiguration, enabled: Boolean) {
+    override fun apply(configuration: ToolConfiguration, enabled: Boolean) {
         if (!enabled) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
