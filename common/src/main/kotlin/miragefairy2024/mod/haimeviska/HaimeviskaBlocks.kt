@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
@@ -54,6 +55,7 @@ import miragefairy2024.util.withHorizontalRotation
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
@@ -156,6 +158,11 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Auric conceptual attractor", "限界巡回アステリア。")),
             { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock,
         )
+        val STRIPPED_LOG = !HaimeviskaBlockCard(
+            "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
+            PoemList(1).poem(EnJa("Something lacking the essence", "ぬぐわれたペルソナ。")),
+            { PillarBlock(createLogSettings(stripped = true)) }, ::initStrippedLogHaimeviskaBlock,
+        )
         val PLANKS = !HaimeviskaBlockCard(
             "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
             PoemList(1).poem(EnJa("Flexible and friendly, good for interior", "考える、壁。")),
@@ -195,7 +202,7 @@ class HaimeviskaBlockCard(
 
 private fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
 private fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
-private fun createLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
+private fun createLogSettings(stripped: Boolean = false) = createBaseWoodSetting().strength(2.0F).mapColor { if (stripped || it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
 private fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 private fun createPlankSettings(sound: Boolean = true) = createBaseWoodSetting(sound = sound).strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 private fun createSaplingSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(BlockSoundGroup.GRASS).pushReaction(PistonBehavior.DESTROY)
@@ -245,6 +252,25 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
     card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
     card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+
+}
+
+context(ModContext)
+private fun initStrippedLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // レンダリング
+    DataGenerationEvents.onGenerateBlockModel {
+        it.woodProvider(card.block()).logWithHorizontal(card.block())
+    }
+
+    // 性質
+    card.block.registerFlammable(5, 5)
+
+    // タグ
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+    card.block.registerBlockTagGeneration { TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
+    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+    card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
 
 }
 
@@ -461,6 +487,7 @@ fun initHaimeviskaBlocks() {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block(), this)
         }
     }
+    HaimeviskaBlockCard.STRIPPED_LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SLAB.block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(HaimeviskaBlockCard.SLAB.block()) }
     HaimeviskaBlockCard.STAIRS.block.registerDefaultLootTableGeneration()
@@ -476,6 +503,9 @@ fun initHaimeviskaBlocks() {
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
+    ModEvents.onInitialize {
+        StrippableBlockRegistry.register(HaimeviskaBlockCard.LOG.block(), HaimeviskaBlockCard.STRIPPED_LOG.block())
+    }
 
     // タグ
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
