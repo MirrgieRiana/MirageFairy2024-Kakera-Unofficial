@@ -23,8 +23,8 @@ object CollectionToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: ToolConfiguration, enabled: Boolean) {
-        if (!enabled) return
+    override fun apply(configuration: ToolConfiguration, value: Boolean) {
+        if (!value) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ -> // TODO エンチャントにする
             if (attacker.level() != entity.level()) return@fail

@@ -28,8 +28,8 @@ object MineAllToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: ToolConfiguration, enabled: Boolean) {
-        if (!enabled) return
+    override fun apply(configuration: ToolConfiguration, value: Boolean) {
+        if (!value) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail

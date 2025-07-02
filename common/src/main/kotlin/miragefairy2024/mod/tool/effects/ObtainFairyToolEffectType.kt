@@ -28,8 +28,8 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: ToolConfiguration, appearanceRateBonus: Double) {
-        if (appearanceRateBonus <= 0.0) return
+    override fun apply(configuration: ToolConfiguration, value: Double) {
+        if (value <= 0.0) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, state, _, _ ->
             if (player !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
@@ -38,7 +38,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
             val motifSet = FairyDreamRecipes.BLOCK.test(state.block)
 
             // 抽選
-            val result = getRandomFairy(world.random, motifSet, appearanceRateBonus) ?: return@fail
+            val result = getRandomFairy(world.random, motifSet, value) ?: return@fail
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)
@@ -55,7 +55,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
             val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(entity.type)
 
             // 抽選
-            val result = getRandomFairy(entity.level().random, motifSet, appearanceRateBonus) ?: return@fail
+            val result = getRandomFairy(entity.level().random, motifSet, value) ?: return@fail
 
             // 入手
             val fairyItemStack = result.motif.createFairyItemStack(condensation = result.condensation, count = result.count)

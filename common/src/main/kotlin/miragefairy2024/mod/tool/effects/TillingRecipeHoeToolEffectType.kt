@@ -23,9 +23,9 @@ object TillingRecipeHoeToolEffectType : ToolEffectType<FairyHoeConfiguration, Ti
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: FairyHoeConfiguration, tillingRecipe: TillingRecipe) {
+    override fun apply(configuration: FairyHoeConfiguration, value: TillingRecipe) {
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
-        configuration.tillingRecipe = tillingRecipe
+        configuration.tillingRecipe = value
     }
 
     override fun castOrThrow(value: Any?) = value as TillingRecipe

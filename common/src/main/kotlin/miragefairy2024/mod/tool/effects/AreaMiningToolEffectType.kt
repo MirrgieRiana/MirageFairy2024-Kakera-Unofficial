@@ -27,9 +27,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType<ToolConfiguration>() {
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: ToolConfiguration, level: Int) {
-        if (level <= 0) return
-        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(level.toRomanText()) })
+    override fun apply(configuration: ToolConfiguration, value: Int) {
+        if (value <= 0) return
+        configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(value.toRomanText()) })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
 
@@ -42,9 +42,9 @@ object AreaMiningToolEffectType : IntMaxToolEffectType<ToolConfiguration>() {
             val baseHardness = state.getDestroySpeed(world, pos)
 
             // TODO 貫通抑制
-            (-level..level).forEach { x ->
-                (-level..level).forEach { y ->
-                    (-level..level).forEach { z ->
+            (-value..value).forEach { x ->
+                (-value..value).forEach { y ->
+                    (-value..value).forEach { z ->
                         if (x != 0 || y != 0 || z != 0) {
                             val targetBlockPos = pos.offset(x, y, z)
                             if (item.isCorrectToolForDrops(stack, world.getBlockState(targetBlockPos))) run skip@{

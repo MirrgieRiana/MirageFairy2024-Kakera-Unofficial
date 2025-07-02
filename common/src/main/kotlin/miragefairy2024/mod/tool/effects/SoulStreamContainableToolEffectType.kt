@@ -22,8 +22,8 @@ object SoulStreamContainableToolEffectType : BooleanToolEffectType<ToolConfigura
         TRANSLATION.enJa()
     }
 
-    override fun apply(configuration: ToolConfiguration, enabled: Boolean) {
-        if (!enabled) return
+    override fun apply(configuration: ToolConfiguration, value: Boolean) {
+        if (!value) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.tags += SOUL_STREAM_CONTAINABLE_TAG
     }
