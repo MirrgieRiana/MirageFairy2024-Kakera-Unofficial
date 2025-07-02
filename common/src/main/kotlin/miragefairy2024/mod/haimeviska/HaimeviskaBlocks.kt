@@ -243,9 +243,8 @@ private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
-    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
 
 }
 
@@ -267,9 +266,8 @@ private fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // タグ
     card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
-    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS }
-    card.item.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
+    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
 
 }
 
@@ -355,7 +353,8 @@ private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 
-val HAIMEVISKA_LOGS: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
+val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
+val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("haimeviska_logs"))
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
@@ -477,6 +476,10 @@ fun initHaimeviskaBlocks() {
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
+
+    // タグ
+    HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
+    HAIMEVISKA_LOGS_ITEM_TAG.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
 }
 

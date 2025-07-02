@@ -6,7 +6,7 @@ import miragefairy2024.mod.fairy.Motif
 import miragefairy2024.mod.fairy.contains
 import miragefairy2024.mod.fairy.getFairyCondensation
 import miragefairy2024.mod.fairy.getFairyMotif
-import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS
+import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_BLOCK_TAG
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaLeavesBlock
 import miragefairy2024.util.NeighborType
@@ -122,7 +122,7 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
 
         // 最大200ブロックのハイメヴィスカの原木を探す
         val logs = blockVisitor(listOf(worldPosition), maxCount = 200, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
-            world.getBlockState(toBlockPos).`is`(HAIMEVISKA_LOGS)
+            world.getBlockState(toBlockPos).`is`(HAIMEVISKA_LOGS_BLOCK_TAG)
         }.map { it.second }.toList()
 
         // 最大距離6までの葉をすべて探す
