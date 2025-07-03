@@ -111,7 +111,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         craftingInventory.reset()
         nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it, registries) }
         waitingInventory.reset()
-        nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))
+        nbt.wrapper["WaitingInventory"].compound.get()?.let { waitingInventory.readFromNbt(it, registries) }
         progressMax = nbt.wrapper["ProgressMax"].int.get() ?: 0
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
