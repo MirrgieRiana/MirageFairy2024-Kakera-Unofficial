@@ -5,6 +5,7 @@ import mirrg.kotlin.hydrogen.atMost
 import mirrg.kotlin.hydrogen.unit
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
@@ -258,9 +259,9 @@ fun List<ItemStack>.writeToNbt(nbt: NbtCompound, registries: HolderLookup.Provid
     val nbtList = NbtList()
     this.forEachIndexed { slotIndex, itemStack ->
         if (itemStack.isNotEmpty) {
-            val itemCompound = NbtCompound()
+            var itemCompound = NbtCompound()
             itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
-            itemStack.save(registries, itemCompound)
+            itemCompound = itemStack.save(registries, itemCompound) as CompoundTag
             nbtList.add(itemCompound)
         }
     }
