@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/pressure_plate_down",
+  "textures": {
+    "texture": "miragefairy2024:block/haimeviska_planks"
+  }
+}

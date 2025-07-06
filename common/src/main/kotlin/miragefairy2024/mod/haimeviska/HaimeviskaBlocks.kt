@@ -84,9 +84,11 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ButtonBlock
 import net.minecraft.world.level.block.FenceBlock
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.PressurePlateBlock
 import net.minecraft.world.level.block.SaplingBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.StairBlock
@@ -199,6 +201,18 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("It chose this path of its own will", "知性の邂逅。")),
             { FenceGateBlock(HAIMEVISKA_WOOD_TYPE, createPlankSettings(sound = false).forceSolidOn()) }, ::initPlanksFenceGateHaimeviskaBlock,
         )
+        val BUTTON = !HaimeviskaBlockCard(
+            "haimeviska_button", EnJa("Haimeviska Button", "ハイメヴィスカのボタン"),
+            PoemList(1).poem(EnJa("What is this soft and warm thing?", "指先の感触。")),
+            { ButtonBlock(HAIMEVISKA_BLOCK_SET_TYPE, 30, AbstractBlock.Properties.of().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) }, ::initPlanksButtonHaimeviskaBlock,
+
+            )
+        val PRESSURE_PLATE = !HaimeviskaBlockCard(
+            "haimeviska_pressure_plate", EnJa("Haimeviska Pressure Plate", "ハイメヴィスカの感圧板"),
+            PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
+            { PressurePlateBlock(HAIMEVISKA_BLOCK_SET_TYPE, createBaseWoodSetting(sound = false).forceSolidOn().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) }, ::initPlanksPressurePlateHaimeviskaBlock,
+
+            )
         val SAPLING = !HaimeviskaBlockCard(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
@@ -359,6 +373,24 @@ private fun initPlanksFenceGateHaimeviskaBlock(card: HaimeviskaBlockCard) {
 }
 
 context(ModContext)
+private fun initPlanksButtonHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.WOODEN_BUTTONS }
+    card.item.registerItemTagGeneration { ItemTags.WOODEN_BUTTONS }
+
+}
+
+context(ModContext)
+private fun initPlanksPressurePlateHaimeviskaBlock(card: HaimeviskaBlockCard) {
+
+    // タグ
+    card.block.registerBlockTagGeneration { BlockTags.WOODEN_PRESSURE_PLATES }
+    card.item.registerItemTagGeneration { ItemTags.WOODEN_PRESSURE_PLATES }
+
+}
+
+context(ModContext)
 private fun initSaplingHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
     // レンダリング
@@ -416,6 +448,8 @@ fun initHaimeviskaBlocks() {
             .stairs(HaimeviskaBlockCard.STAIRS.block())
             .fence(HaimeviskaBlockCard.FENCE.block())
             .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
+            .button(HaimeviskaBlockCard.BUTTON.block())
+            .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
             .family
         it.family(family.baseBlock).generateFor(family)
     }
@@ -425,6 +459,8 @@ fun initHaimeviskaBlocks() {
             .stairs(HaimeviskaBlockCard.STAIRS.block())
             .fence(HaimeviskaBlockCard.FENCE.block())
             .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
+            .button(HaimeviskaBlockCard.BUTTON.block())
+            .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
             .family
         RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
     }
@@ -494,6 +530,8 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.STAIRS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.FENCE.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.FENCE_GATE.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.BUTTON.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.PRESSURE_PLATE.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ

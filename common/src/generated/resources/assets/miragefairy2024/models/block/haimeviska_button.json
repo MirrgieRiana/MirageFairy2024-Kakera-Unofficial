@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "miragefairy2024:block/haimeviska_planks"
+  }
+}
