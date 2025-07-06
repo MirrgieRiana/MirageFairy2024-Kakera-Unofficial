@@ -213,6 +213,21 @@ class HaimeviskaBlockCard(
             { PressurePlateBlock(HAIMEVISKA_BLOCK_SET_TYPE, createBaseWoodSetting(sound = false).forceSolidOn().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) }, ::initPlanksPressurePlateHaimeviskaBlock,
 
             )
+        val BRICKS = !HaimeviskaBlockCard(
+            "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
+            PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
+            { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock,
+        )
+        val BRICKS_SLAB = !HaimeviskaBlockCard(
+            "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
+            PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
+            { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock,
+        )
+        val BRICKS_STAIRS = !HaimeviskaBlockCard(
+            "haimeviska_bricks_stairs", EnJa("Haimeviska Bricks Stairs", "ハイメヴィスカレンガの階段"),
+            PoemList(1).poem(EnJa("Forgotten paths of the technology", "生体工学の歩み。")),
+            { StairBlock(BRICKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock,
+        )
         val SAPLING = !HaimeviskaBlockCard(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
@@ -460,6 +475,20 @@ fun initHaimeviskaBlocks() {
             RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
         }
     }
+    run {
+        val family by lazy {
+            BlockFamily.Builder(HaimeviskaBlockCard.BRICKS.block())
+                .slab(HaimeviskaBlockCard.BRICKS_SLAB.block())
+                .stairs(HaimeviskaBlockCard.BRICKS_STAIRS.block())
+                .family
+        }
+        DataGenerationEvents.onGenerateBlockModel {
+            it.family(family.baseBlock).generateFor(family)
+        }
+        DataGenerationEvents.onGenerateRecipe {
+            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+        }
+    }
 
     // ドロップ
     HaimeviskaBlockCard.LEAVES.block.registerLootTableGeneration { it, _ ->
@@ -528,6 +557,9 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.FENCE_GATE.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.BUTTON.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.PRESSURE_PLATE.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.BRICKS.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.BRICKS_SLAB.block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(HaimeviskaBlockCard.BRICKS_SLAB.block()) }
+    HaimeviskaBlockCard.BRICKS_STAIRS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SAPLING.block.registerDefaultLootTableGeneration()
 
     // レシピ
@@ -535,6 +567,11 @@ fun initHaimeviskaBlocks() {
     HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
     registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
         requires(HaimeviskaBlockCard.LOG.item())
+    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
+    registerShapedRecipeGeneration(HaimeviskaBlockCard.BRICKS.item, 4) {
+        pattern("##")
+        pattern("##")
+        define('#', HaimeviskaBlockCard.PLANKS.item())
     } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
