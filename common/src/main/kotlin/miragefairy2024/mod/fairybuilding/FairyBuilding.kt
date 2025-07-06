@@ -8,7 +8,6 @@ import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.PoemList
-import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_BLOCK_TAG
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -133,7 +132,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         item.registerPoemGeneration(poemList)
 
         block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
-        block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+        block.registerBlockTagGeneration { FAIRY_BUILDING_BLOCK_TAG }
 
         block.registerDefaultLootTableGeneration()
 
