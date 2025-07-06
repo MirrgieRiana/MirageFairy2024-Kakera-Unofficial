@@ -442,27 +442,23 @@ fun initHaimeviskaBlocks() {
         card.initializer(this@ModContext, card)
     }
 
-    DataGenerationEvents.onGenerateBlockModel {
-        val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
-            .slab(HaimeviskaBlockCard.SLAB.block())
-            .stairs(HaimeviskaBlockCard.STAIRS.block())
-            .fence(HaimeviskaBlockCard.FENCE.block())
-            .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
-            .button(HaimeviskaBlockCard.BUTTON.block())
-            .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
-            .family
-        it.family(family.baseBlock).generateFor(family)
-    }
-    DataGenerationEvents.onGenerateRecipe {
-        val family = BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
-            .slab(HaimeviskaBlockCard.SLAB.block())
-            .stairs(HaimeviskaBlockCard.STAIRS.block())
-            .fence(HaimeviskaBlockCard.FENCE.block())
-            .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
-            .button(HaimeviskaBlockCard.BUTTON.block())
-            .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
-            .family
-        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+    run {
+        val family by lazy {
+            BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
+                .slab(HaimeviskaBlockCard.SLAB.block())
+                .stairs(HaimeviskaBlockCard.STAIRS.block())
+                .fence(HaimeviskaBlockCard.FENCE.block())
+                .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
+                .button(HaimeviskaBlockCard.BUTTON.block())
+                .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
+                .family
+        }
+        DataGenerationEvents.onGenerateBlockModel {
+            it.family(family.baseBlock).generateFor(family)
+        }
+        DataGenerationEvents.onGenerateRecipe {
+            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+        }
     }
 
     // ドロップ
