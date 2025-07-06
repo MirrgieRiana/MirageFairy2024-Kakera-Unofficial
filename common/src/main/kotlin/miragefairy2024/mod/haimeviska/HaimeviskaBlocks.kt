@@ -139,6 +139,11 @@ class HaimeviskaBlockCard(
                 .description(EnJa("Can be incised with a sword", "剣を使って傷を付けられる")),
             { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock,
         )
+        val STRIPPED_LOG = !HaimeviskaBlockCard(
+            "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
+            PoemList(1).poem(EnJa("Something lacking the essence", "ぬぐわれたペルソナ。")),
+            { PillarBlock(createLogSettings(stripped = true)) }, ::initStrippedLogHaimeviskaBlock,
+        )
         val INCISED_LOG = !HaimeviskaBlockCard(
             "incised_haimeviska_log", EnJa("Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木"),
             PoemList(1)
@@ -157,11 +162,6 @@ class HaimeviskaBlockCard(
             "hollow_haimeviska_log", EnJa("Hollow Haimeviska Log", "ハイメヴィスカの樹洞"),
             PoemList(1).poem(EnJa("Auric conceptual attractor", "限界巡回アステリア。")),
             { HollowHaimeviskaLogBlock(createSpecialLogSettings()) }, ::initHorizontalFacingLogHaimeviskaBlock,
-        )
-        val STRIPPED_LOG = !HaimeviskaBlockCard(
-            "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
-            PoemList(1).poem(EnJa("Something lacking the essence", "ぬぐわれたペルソナ。")),
-            { PillarBlock(createLogSettings(stripped = true)) }, ::initStrippedLogHaimeviskaBlock,
         )
         val PLANKS = !HaimeviskaBlockCard(
             "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
@@ -435,6 +435,7 @@ fun initHaimeviskaBlocks() {
         it.createLeavesDrops(HaimeviskaBlockCard.LEAVES.block(), HaimeviskaBlockCard.SAPLING.block(), 0.05F / 4F, 0.0625F / 4F, 0.083333336F / 4F, 0.1F / 4F)
     }
     HaimeviskaBlockCard.LOG.block.registerDefaultLootTableGeneration()
+    HaimeviskaBlockCard.STRIPPED_LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.INCISED_LOG.block.registerLootTableGeneration { provider, _ ->
         LootTable(
             LootPool(ItemLootPoolEntry(HaimeviskaBlockCard.INCISED_LOG.item())) {
@@ -487,7 +488,6 @@ fun initHaimeviskaBlocks() {
             provider.applyExplosionDecay(HaimeviskaBlockCard.HOLLOW_LOG.block(), this)
         }
     }
-    HaimeviskaBlockCard.STRIPPED_LOG.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.PLANKS.block.registerDefaultLootTableGeneration()
     HaimeviskaBlockCard.SLAB.block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(HaimeviskaBlockCard.SLAB.block()) }
     HaimeviskaBlockCard.STAIRS.block.registerDefaultLootTableGeneration()
