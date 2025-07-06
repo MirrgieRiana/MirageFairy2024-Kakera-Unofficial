@@ -137,12 +137,12 @@ class HaimeviskaBlockCard(
             PoemList(1)
                 .poem(EnJa("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。"))
                 .description(EnJa("Can be incised with a sword", "剣を使って傷を付けられる")),
-            { HaimeviskaLogBlock(createLogSettings()) }, ::initLogHaimeviskaBlock,
+            { HaimeviskaLogBlock(createLogSettings()) }, initLogHaimeviskaBlock(null),
         )
         val STRIPPED_LOG = !HaimeviskaBlockCard(
             "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
             PoemList(1).poem(EnJa("Something lacking the essence", "ぬぐわれたペルソナ。")),
-            { PillarBlock(createLogSettings(stripped = true)) }, ::initStrippedLogHaimeviskaBlock,
+            { PillarBlock(createLogSettings(stripped = true)) }, initLogHaimeviskaBlock(null, stripped = true),
         )
         val INCISED_LOG = !HaimeviskaBlockCard(
             "incised_haimeviska_log", EnJa("Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木"),
@@ -237,41 +237,25 @@ private fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
 
 }
 
-context(ModContext)
-private fun initLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
+private fun initLogHaimeviskaBlock(logCard: (() -> HaimeviskaBlockCard)?, stripped: Boolean = false): context(ModContext) (card: HaimeviskaBlockCard) -> Unit {
+    return { card ->
 
-    // レンダリング
-    DataGenerationEvents.onGenerateBlockModel {
-        it.woodProvider(card.block()).logWithHorizontal(card.block())
+        // レンダリング
+        DataGenerationEvents.onGenerateBlockModel {
+            it.woodProvider((if (logCard != null) logCard() else card).block()).logWithHorizontal(card.block())
+        }
+
+        // 性質
+        card.block.registerFlammable(5, 5)
+
+        // タグ
+        if (!stripped) card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+        card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+        if (stripped) card.block.registerBlockTagGeneration { TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
+        card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+        if (stripped) card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
+
     }
-
-    // 性質
-    card.block.registerFlammable(5, 5)
-
-    // タグ
-    card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
-    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
-
-}
-
-context(ModContext)
-private fun initStrippedLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
-
-    // レンダリング
-    DataGenerationEvents.onGenerateBlockModel {
-        it.woodProvider(card.block()).logWithHorizontal(card.block())
-    }
-
-    // 性質
-    card.block.registerFlammable(5, 5)
-
-    // タグ
-    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
-    card.block.registerBlockTagGeneration { TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
-    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
-    card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs")) }
-
 }
 
 context(ModContext)
