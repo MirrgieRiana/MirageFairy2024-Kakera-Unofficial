@@ -311,6 +311,26 @@ class HaimeviskaBlockCard(
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { blockCreator() }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+
+    context(ModContext)
+    fun init() {
+
+        // 登録
+        block.register()
+        item.register()
+
+        // カテゴリ
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+
+        // テキスト
+        block.enJa(name)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
+
+        initializer(this@ModContext, this)
+        extraInitializer(this@ModContext, this)
+
+    }
 }
 
 fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
@@ -335,21 +355,7 @@ fun initHaimeviskaBlocks() {
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("hollow_haimeviska_log")) { HollowHaimeviskaLogBlock.CODEC }.register()
 
     HaimeviskaBlockCard.entries.forEach { card ->
-
-        // 登録
-        card.block.register()
-        card.item.register()
-
-        // カテゴリ
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-        // テキスト
-        card.block.enJa(card.name)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
-
-        card.initializer(this@ModContext, card)
-        card.extraInitializer(this@ModContext, card)
+        card.init()
     }
 
     HAIMEVISKA_BLOCK_SET_TYPE = BlockSetTypeBuilder().register(MirageFairy2024.identifier("haimeviska"))
