@@ -46,7 +46,7 @@ import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
-enum class BlockMaterialCard(
+class BlockMaterialCard(
     path: String,
     val enName: String,
     val jaName: String,
@@ -68,96 +68,100 @@ enum class BlockMaterialCard(
     val isCutoutRenderLayer: Boolean = false,
     val isTranslucentRenderLayer: Boolean = false,
 ) {
-    NEPHRITE_BLOCK(
-        "nephrite_block", "Nephrite Block", "ネフライトブロック",
-        PoemList(null),
-        MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-    ),
-    XARPITE_BLOCK(
-        "xarpite_block", "Xarpite Block", "紅天石ブロック",
-        PoemList(2).poem("Loss and reconstruction of perception", "夢の世界の如き紅。"),
-        MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-    ),
-    MIRANAGITE_BLOCK(
-        "miranagite_block", "Miranagite Block", "蒼天石ブロック",
-        PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、神域との接合点。"),
-        MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-    ),
-    CHAOS_STONE_BLOCK(
-        "chaos_stone_block", "Chaos Stone Block", "混沌の石ブロック",
-        PoemList(4).poem("The eye of entropy.", "無秩序の目。"),
-        MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-    ),
-    MIRAGIDIAN_BLOCK(
-        "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
-        PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
-        MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true, fireResistant = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-    ),
-    LUMINITE_BLOCK(
-        "luminite_block", "Luminite Block", "ルミナイトブロック",
-        PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
-        MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
-        blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
-    ),
-    DRYWALL(
-        "drywall", "Drywall", "石膏ボード",
-        PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
-        MapColor.SAND, 3.0F, 3.0F,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE),
-    ),
-    LOCAL_VACUUM_DECAY(
-        "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
-        PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
-        MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
-        tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-        texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
-    ),
-    AURA_STONE(
-        "aura_stone", "Aura Stone", "霊氣石",
-        PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
-        MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
-        blockSoundGroup = BlockSoundGroup.METAL,
-    ),
-    FAIRY_CRYSTAL_GLASS(
-        "fairy_crystal_glass", "Fairy Crystal Glass", "フェアリークリスタルガラス",
-        PoemList(2).poem("It is displaying the scene behind it.", "家の外を映し出す鏡。"),
-        MapColor.DIAMOND, 1.5F, 1.5F, requiresTool = true, restrictsSpawning = true,
-        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE),
-        isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
-        blockStateFactory = {
-            fun createPart(direction: String, x: Int, y: Int) = jsonObject(
-                "when" to jsonObject(
-                    direction to "false".jsonElement,
-                ),
-                "apply" to jsonObject(
-                    "model" to "${"block/" * identifier * "_frame"}".jsonElement,
-                    "x" to x.jsonElement,
-                    "y" to y.jsonElement,
-                ),
-            )
-            jsonObject(
-                "multipart" to jsonArray(
-                    createPart("north", 90, 0),
-                    createPart("east", 90, 90),
-                    createPart("south", -90, 0),
-                    createPart("west", 90, -90),
-                    createPart("up", 0, 0),
-                    createPart("down", 180, 0),
-                ),
-            )
-        },
-        noModelGeneration = true,
-        blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
-    ),
-    ;
+    companion object {
+        val entries = mutableListOf<BlockMaterialCard>()
+        private operator fun BlockMaterialCard.not() = this.apply { entries.add(this) }
+
+        val NEPHRITE_BLOCK = !BlockMaterialCard(
+            "nephrite_block", "Nephrite Block", "ネフライトブロック",
+            PoemList(null),
+            MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        )
+        val XARPITE_BLOCK = !BlockMaterialCard(
+            "xarpite_block", "Xarpite Block", "紅天石ブロック",
+            PoemList(2).poem("Loss and reconstruction of perception", "夢の世界の如き紅。"),
+            MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        )
+        val MIRANAGITE_BLOCK = !BlockMaterialCard(
+            "miranagite_block", "Miranagite Block", "蒼天石ブロック",
+            PoemList(2).poem("Passivation confines discontinuous space", "虚空に導かれし、神域との接合点。"),
+            MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        )
+        val CHAOS_STONE_BLOCK = !BlockMaterialCard(
+            "chaos_stone_block", "Chaos Stone Block", "混沌の石ブロック",
+            PoemList(4).poem("The eye of entropy.", "無秩序の目。"),
+            MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        )
+        val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
+            "miragidian_block", "Miragidian Block", "ミラジディアンブロック",
+            PoemList(4).poem("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。"),
+            MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true, fireResistant = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+        )
+        val LUMINITE_BLOCK = !BlockMaterialCard(
+            "luminite_block", "Luminite Block", "ルミナイトブロック",
+            PoemList(4).poem("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。"),
+            MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
+            isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+            blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
+        )
+        val DRYWALL = !BlockMaterialCard(
+            "drywall", "Drywall", "石膏ボード",
+            PoemList(1).poem("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。"),
+            MapColor.SAND, 3.0F, 3.0F,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE),
+        )
+        val LOCAL_VACUUM_DECAY = !BlockMaterialCard(
+            "local_vacuum_decay", "Local Vacuum Decay", "局所真空崩壊",
+            PoemList(99).poem("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？"),
+            MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
+            tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
+            texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
+        )
+        val AURA_STONE = !BlockMaterialCard(
+            "aura_stone", "Aura Stone", "霊氣石",
+            PoemList(3).poem("It absorbs auras and seals them away", "呼吸する石。"),
+            MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
+            blockSoundGroup = BlockSoundGroup.METAL,
+        )
+        val FAIRY_CRYSTAL_GLASS = !BlockMaterialCard(
+            "fairy_crystal_glass", "Fairy Crystal Glass", "フェアリークリスタルガラス",
+            PoemList(2).poem("It is displaying the scene behind it.", "家の外を映し出す鏡。"),
+            MapColor.DIAMOND, 1.5F, 1.5F, requiresTool = true, restrictsSpawning = true,
+            tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE),
+            isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+            blockStateFactory = {
+                fun createPart(direction: String, x: Int, y: Int) = jsonObject(
+                    "when" to jsonObject(
+                        direction to "false".jsonElement,
+                    ),
+                    "apply" to jsonObject(
+                        "model" to "${"block/" * identifier * "_frame"}".jsonElement,
+                        "x" to x.jsonElement,
+                        "y" to y.jsonElement,
+                    ),
+                )
+                jsonObject(
+                    "multipart" to jsonArray(
+                        createPart("north", 90, 0),
+                        createPart("east", 90, 90),
+                        createPart("south", -90, 0),
+                        createPart("west", 90, -90),
+                        createPart("up", 0, 0),
+                        createPart("down", 180, 0),
+                    ),
+                )
+            },
+            noModelGeneration = true,
+            blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
+        )
+    }
 
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
