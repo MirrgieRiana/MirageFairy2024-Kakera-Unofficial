@@ -1,7 +1,6 @@
 package miragefairy2024.mod.materials.block
 
 import com.google.gson.JsonElement
-import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
@@ -13,17 +12,9 @@ import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Model
-import miragefairy2024.util.ModelData
-import miragefairy2024.util.ModelElementData
-import miragefairy2024.util.ModelElementsData
-import miragefairy2024.util.ModelFaceData
-import miragefairy2024.util.ModelFacesData
-import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
-import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockStateGeneration
@@ -35,39 +26,23 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
-import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.PipeBlock
-import net.minecraft.world.level.block.TransparentBlock
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
@@ -268,183 +243,4 @@ fun initBlockMaterialsModule() {
 
     }
 
-}
-
-private val localVacuumDecayTexturedModelFactory = TexturedModel.Provider { block ->
-    Model { textureMap ->
-        ModelData(
-            parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
-            textures = ModelTexturesData(
-                TextureKey.PARTICLE.id to textureMap.get(TextureKey.BACK).string,
-                TextureKey.BACK.id to textureMap.get(TextureKey.BACK).string,
-                TextureKey.FRONT.id to textureMap.get(TextureKey.FRONT).string,
-            ),
-            elements = ModelElementsData(
-                ModelElementData(
-                    from = listOf(0, 0, 0),
-                    to = listOf(16, 16, 16),
-                    faces = ModelFacesData(
-                        down = ModelFaceData(texture = TextureKey.BACK.string, cullface = "down"),
-                        up = ModelFaceData(texture = TextureKey.BACK.string, cullface = "up"),
-                        north = ModelFaceData(texture = TextureKey.BACK.string, cullface = "north"),
-                        south = ModelFaceData(texture = TextureKey.BACK.string, cullface = "south"),
-                        west = ModelFaceData(texture = TextureKey.BACK.string, cullface = "west"),
-                        east = ModelFaceData(texture = TextureKey.BACK.string, cullface = "east"),
-                    ),
-                ),
-                ModelElementData(
-                    from = listOf(0, 0, 0),
-                    to = listOf(16, 16, 16),
-                    faces = ModelFacesData(
-                        down = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "down"),
-                        up = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "up"),
-                        north = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "north"),
-                        south = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "south"),
-                        west = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "west"),
-                        east = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "east"),
-                    ),
-                ),
-            ),
-        )
-    }.with(
-        TextureKey.BACK to "block/" * block.getIdentifier() * "_base",
-        TextureKey.FRONT to "block/" * block.getIdentifier() * "_spark",
-    )
-}
-
-@Suppress("OVERRIDE_DEPRECATION")
-class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
-    companion object {
-        val CODEC: MapCodec<LocalVacuumDecayBlock> = simpleCodec(::LocalVacuumDecayBlock)
-    }
-
-    override fun codec() = CODEC
-
-    override fun isRandomlyTicking(state: BlockState) = true
-
-    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
-        @Suppress("DEPRECATION")
-        super.randomTick(state, world, pos, random)
-
-        val direction = Direction.getRandom(random)
-        val targetBlockPos = pos.relative(direction)
-        val targetBlockState = world.getBlockState(targetBlockPos)
-        if (targetBlockState.isAir) return
-        if (targetBlockState.getDestroySpeed(world, targetBlockPos) < 0) return
-        if (targetBlockState.`is`(state.block)) return
-        world.setBlockAndUpdate(targetBlockPos, state)
-    }
-
-    override fun stepOn(world: Level, pos: BlockPos, state: BlockState, entity: Entity) {
-        if (!entity.isSteppingCarefully) {
-            entity.hurt(world.damageSources().magic(), 1.0f)
-        }
-        super.stepOn(world, pos, state, entity)
-    }
-}
-
-class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settings) {
-    companion object {
-        val CODEC: MapCodec<SemiOpaqueTransparentBlock> = simpleCodec(::SemiOpaqueTransparentBlock)
-    }
-
-    override fun codec() = CODEC
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
-}
-
-class FairyCrystalGlassBlock(properties: Properties) : TransparentBlock(properties) {
-    companion object {
-        val CODEC: MapCodec<FairyCrystalGlassBlock> = simpleCodec(::FairyCrystalGlassBlock)
-    }
-
-    override fun codec() = CODEC
-
-    init {
-        registerDefaultState(
-            defaultBlockState()
-                .setValue(BlockStateProperties.NORTH, false)
-                .setValue(BlockStateProperties.EAST, false)
-                .setValue(BlockStateProperties.SOUTH, false)
-                .setValue(BlockStateProperties.WEST, false)
-                .setValue(BlockStateProperties.UP, false)
-                .setValue(BlockStateProperties.DOWN, false)
-        )
-    }
-
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(
-            BlockStateProperties.NORTH,
-            BlockStateProperties.EAST,
-            BlockStateProperties.SOUTH,
-            BlockStateProperties.WEST,
-            BlockStateProperties.UP,
-            BlockStateProperties.DOWN,
-        )
-    }
-
-    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
-        return defaultBlockState()
-            .setValue(BlockStateProperties.NORTH, ctx.level.getBlockState(ctx.clickedPos.north()).`is`(this))
-            .setValue(BlockStateProperties.EAST, ctx.level.getBlockState(ctx.clickedPos.east()).`is`(this))
-            .setValue(BlockStateProperties.SOUTH, ctx.level.getBlockState(ctx.clickedPos.south()).`is`(this))
-            .setValue(BlockStateProperties.WEST, ctx.level.getBlockState(ctx.clickedPos.west()).`is`(this))
-            .setValue(BlockStateProperties.UP, ctx.level.getBlockState(ctx.clickedPos.above()).`is`(this))
-            .setValue(BlockStateProperties.DOWN, ctx.level.getBlockState(ctx.clickedPos.below()).`is`(this))
-    }
-
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION[direction]!!, neighborState.`is`(this))
-    }
-}
-
-val fairyCrystalGlassFrameBlockModel = Model { textureMap ->
-    ModelData(
-        parent = ResourceLocation.withDefaultNamespace("block/block"),
-        textures = ModelTexturesData(
-            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
-            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
-        ),
-        elements = ModelElementsData(
-            ModelElementData(
-                from = listOf(0, 0, 0),
-                to = listOf(16, 16, 16),
-                faces = ModelFacesData(
-                    north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north"),
-                    south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south"),
-                    west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west"),
-                    east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east"),
-                ),
-            ),
-        ),
-    )
-}
-
-val fairyCrystalGlassBlockModel = Model { textureMap ->
-    fun createPart(rotation: Int) = ModelElementData(
-        from = listOf(0, 0, 0),
-        to = listOf(16, 16, 16),
-        faces = ModelFacesData(
-            north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north", rotation = rotation),
-            south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south", rotation = rotation),
-            west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west", rotation = rotation),
-            east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east", rotation = rotation),
-            up = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "up", rotation = rotation),
-            down = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "down", rotation = rotation),
-        ),
-    )
-    ModelData(
-        parent = ResourceLocation.withDefaultNamespace("block/block"),
-        textures = ModelTexturesData(
-            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
-            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
-        ),
-        elements = ModelElementsData(
-            createPart(0),
-            createPart(90),
-            createPart(180),
-            createPart(270),
-        ),
-    )
 }
