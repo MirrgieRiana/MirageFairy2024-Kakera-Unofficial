@@ -69,7 +69,9 @@ enum class BlockMaterialCard(
     blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
+    val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
     val texturedModelFactory: TexturedModel.Provider? = null,
+    val noModelGeneration: Boolean = false,
     val isCutoutRenderLayer: Boolean = false,
     val isTranslucentRenderLayer: Boolean = false,
 ) {
@@ -159,11 +161,17 @@ fun initBlockMaterialsModule() {
 
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        card.block.registerSingletonBlockStateGeneration()
-        if (card.texturedModelFactory != null) {
-            card.block.registerModelGeneration(card.texturedModelFactory)
+        if (card.blockStateFactory != null) {
+            card.block.registerBlockStateGeneration { (card.blockStateFactory)(card) }
         } else {
-            card.block.registerModelGeneration(TexturedModel.CUBE)
+            card.block.registerSingletonBlockStateGeneration()
+        }
+        if (!card.noModelGeneration) {
+            if (card.texturedModelFactory != null) {
+                card.block.registerModelGeneration(card.texturedModelFactory)
+            } else {
+                card.block.registerModelGeneration(TexturedModel.CUBE)
+            }
         }
         if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
         if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
