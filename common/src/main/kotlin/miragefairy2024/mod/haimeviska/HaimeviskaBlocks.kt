@@ -52,7 +52,6 @@ import net.minecraft.world.level.block.ButtonBlock
 import net.minecraft.world.level.block.FenceBlock
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.PressurePlateBlock
-import net.minecraft.world.level.block.SaplingBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.grower.TreeGrower
@@ -76,7 +75,7 @@ class HaimeviskaBlockConfiguration(
 
 open class HaimeviskaBlockCard(
     val configuration: HaimeviskaBlockConfiguration,
-    blockCreator: suspend () -> Block,
+    val blockCreator: suspend () -> Block,
     val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit,
     val extraInitializer: context(ModContext) HaimeviskaBlockCard.() -> Unit,
 ) {
@@ -169,11 +168,12 @@ open class HaimeviskaBlockCard(
     }
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    val block = Registration(BuiltInRegistries.BLOCK, identifier) { blockCreator() }
+    open suspend fun createBlock() = blockCreator()
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 
     context(ModContext)
-    fun init() {
+    open fun init() {
 
         // 登録
         block.register()
@@ -191,6 +191,10 @@ open class HaimeviskaBlockCard(
         extraInitializer(this@ModContext, this)
 
     }
+}
+
+abstract class AbstractHaimeviskaBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration, { throw AssertionError() }, { }, { }) {
+    abstract override suspend fun createBlock(): Block
 }
 
 fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
@@ -498,15 +502,5 @@ class HaimeviskaBricksStairsBlockCard(configuration: HaimeviskaBlockConfiguratio
     {
         registerBlockFamily(BRICKS.block) { it.stairs(block()) }
         block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) },
-    ::initSaplingHaimeviskaBlock,
-    {
-        block.registerDefaultLootTableGeneration()
-        item.registerComposterInput(0.3F)
     },
 )
