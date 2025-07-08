@@ -345,6 +345,8 @@ lateinit var HAIMEVISKA_WOOD_TYPE: WoodType
 val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("haimeviska_logs"))
 
+private val familyRegistry = mutableListOf<Pair<() -> Block, (BlockFamily.Builder) -> BlockFamily.Builder>>()
+
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
@@ -366,15 +368,26 @@ fun initHaimeviskaBlocks() {
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     HAIMEVISKA_LOGS_ITEM_TAG.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
+    val families by lazy {
+        familyRegistry
+            .map { Pair(it.first(), it.second) }
+            .groupBy { it.first }
+            .map { it.value.fold(BlockFamily.Builder(it.key)) { a, b -> b.second(a) }.family }
+    }
+    DataGenerationEvents.onGenerateBlockModel {
+        families.forEach { family ->
+            it.family(family.baseBlock).generateFor(family)
+        }
+    }
+    DataGenerationEvents.onGenerateRecipe {
+        families.forEach { family ->
+            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+        }
+    }
+
 }
 
 context(ModContext)
 private fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
-    val family by lazy { initializer(BlockFamily.Builder(baseBlock())).family }
-    DataGenerationEvents.onGenerateBlockModel {
-        it.family(family.baseBlock).generateFor(family)
-    }
-    DataGenerationEvents.onGenerateRecipe {
-        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
-    }
+    familyRegistry += Pair(baseBlock, initializer)
 }
