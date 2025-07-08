@@ -32,7 +32,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
-import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
@@ -156,7 +155,6 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
 }
 
 fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
-fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 
 
 lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType

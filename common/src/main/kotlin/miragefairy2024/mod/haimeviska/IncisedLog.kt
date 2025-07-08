@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.RandomSource as Random
 
 class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = IncisedHaimeviskaLogBlock(createSpecialLogSettings())
+    override suspend fun createBlock() = IncisedHaimeviskaLogBlock(createHorizontalFacingLogSettings())
 
     context(ModContext)
     override fun init() {

@@ -12,9 +12,12 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
+
+fun createHorizontalFacingLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 
 context(ModContext)
 fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {

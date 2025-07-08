@@ -36,7 +36,7 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as Apply
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
 class HaimeviskaDrippingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = DrippingHaimeviskaLogBlock(createSpecialLogSettings())
+    override suspend fun createBlock() = DrippingHaimeviskaLogBlock(createHorizontalFacingLogSettings())
 
     context(ModContext)
     override fun init() {
