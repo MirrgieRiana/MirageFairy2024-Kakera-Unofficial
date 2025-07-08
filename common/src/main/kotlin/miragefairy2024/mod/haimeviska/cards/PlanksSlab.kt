@@ -1,6 +1,9 @@
-package miragefairy2024.mod.haimeviska
+package miragefairy2024.mod.haimeviska.cards
 
 import miragefairy2024.ModContext
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
+import miragefairy2024.mod.haimeviska.registerBlockFamily
 import miragefairy2024.util.Registration
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerFlammable

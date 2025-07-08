@@ -1,6 +1,9 @@
-package miragefairy2024.mod.haimeviska
+package miragefairy2024.mod.haimeviska.cards
 
 import miragefairy2024.ModContext
+import miragefairy2024.mod.haimeviska.HAIMEVISKA_CONFIGURED_FEATURE_KEY
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.registerBlockGeneratedModelGeneration
 import miragefairy2024.util.registerBlockTagGeneration

@@ -1,6 +1,9 @@
-package miragefairy2024.mod.haimeviska
+package miragefairy2024.mod.haimeviska.cards
 
 import miragefairy2024.ModContext
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
+import miragefairy2024.mod.haimeviska.createBaseWoodSetting
 import miragefairy2024.util.from
 import miragefairy2024.util.on
 import miragefairy2024.util.registerBlockTagGeneration
