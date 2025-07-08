@@ -380,7 +380,7 @@ fun initHaimeviskaBlocks() {
         pattern("##")
         pattern("##")
         define('#', HaimeviskaBlockCard.STRIPPED_LOG.item())
-    } on HaimeviskaBlockCard.LOG.item
+    } on HaimeviskaBlockCard.STRIPPED_LOG.item
 
     // タグ
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }

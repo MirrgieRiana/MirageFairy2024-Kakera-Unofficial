@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_haimeviska_log": {
+    "has_stripped_haimeviska_log": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:haimeviska_log"
+            "items": "miragefairy2024:stripped_haimeviska_log"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_haimeviska_log"
+      "has_stripped_haimeviska_log"
     ]
   ],
   "rewards": {
