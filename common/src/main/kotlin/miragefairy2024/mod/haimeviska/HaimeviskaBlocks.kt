@@ -43,8 +43,6 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.FenceBlock
-import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
@@ -124,11 +122,11 @@ open class HaimeviskaBlockCard(
         val FENCE = !HaimeviskaBlockConfiguration(
             "haimeviska_fence", EnJa("Haimeviska Fence", "ハイメヴィスカのフェンス"),
             PoemList(1).poem(EnJa("Personality flowing through the xylem", "樹のなかに住む。")),
-        ).let { HaimeviskaFenceBlockCard(it) }
+        ).let { HaimeviskaPlanksFenceBlockCard(it, PLANKS.block) }
         val FENCE_GATE = !HaimeviskaBlockConfiguration(
             "haimeviska_fence_gate", EnJa("Haimeviska Fence Gate", "ハイメヴィスカのフェンスゲート"),
             PoemList(1).poem(EnJa("It chose this path of its own will", "知性の邂逅。")),
-        ).let { HaimeviskaFenceGateBlockCard(it) }
+        ).let { HaimeviskaPlanksFenceGateBlockCard(it, { HAIMEVISKA_WOOD_TYPE }, PLANKS.block) }
         val BUTTON = !HaimeviskaBlockConfiguration(
             "haimeviska_button", EnJa("Haimeviska Button", "ハイメヴィスカのボタン"),
             PoemList(1).poem(EnJa("What is this soft and warm thing?", "指先の感触。")),
@@ -370,25 +368,5 @@ class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) 
             }
         }
         item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
-    },
-)
-
-class HaimeviskaFenceBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { FenceBlock(createPlankSettings()) },
-    ::initPlanksFenceHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.fence(block()) }
-        block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { FenceGateBlock(HAIMEVISKA_WOOD_TYPE, createPlankSettings(sound = false).forceSolidOn()) },
-    ::initPlanksFenceGateHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.fenceGate(block()) }
-        block.registerDefaultLootTableGeneration()
     },
 )
