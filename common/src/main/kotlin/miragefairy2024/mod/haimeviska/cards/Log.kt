@@ -34,6 +34,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
@@ -42,6 +43,8 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalF
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 
 abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
+    override fun createSettings(): BlockBehaviour.Properties = createBaseWoodSetting().strength(2.0F)
+
     context(ModContext)
     override fun init() {
         super.init()
@@ -57,8 +60,6 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
         item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
 
     }
-
-    protected fun createSettings() = createBaseWoodSetting().strength(2.0F)
 
     context(ModContext)
     protected fun registerModelGeneration(parent: () -> Block, initializer: (WoodProvider) -> WoodProvider) = DataGenerationEvents.onGenerateBlockModel {
@@ -85,9 +86,8 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
 }
 
 class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
-    override suspend fun createBlock() = createSettings()
-        .mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
-        .let { HaimeviskaLogBlock(it) }
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = HaimeviskaLogBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -98,9 +98,8 @@ class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : Abst
 }
 
 class HaimeviskaStrippedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
-    override suspend fun createBlock() = createSettings()
-        .mapColor { MapColor.RAW_IRON }
-        .let { PillarBlock(it) }
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.RAW_IRON }
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -111,9 +110,8 @@ class HaimeviskaStrippedLogBlockCard(configuration: HaimeviskaBlockConfiguration
 }
 
 class HaimeviskaWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
-    override suspend fun createBlock() = createSettings()
-        .mapColor { MapColor.TERRACOTTA_ORANGE }
-        .let { PillarBlock(it) }
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.TERRACOTTA_ORANGE }
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -124,9 +122,8 @@ class HaimeviskaWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : Abs
 }
 
 class HaimeviskaStrippedWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
-    override suspend fun createBlock() = createSettings()
-        .mapColor { MapColor.RAW_IRON }
-        .let { PillarBlock(it) }
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.RAW_IRON }
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
 
     context(ModContext)
     override fun init() {

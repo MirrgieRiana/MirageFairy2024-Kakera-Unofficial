@@ -13,9 +13,11 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.StairBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 
 class HaimeviskaPlanksStairsBlockCard(configuration: HaimeviskaBlockConfiguration, private val baseBlock: () -> Registration<*, out Block>) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = StairBlock(baseBlock().await().defaultBlockState(), createPlankSettings())
+    override fun createSettings() = createPlankSettings()
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = StairBlock(baseBlock().await().defaultBlockState(), properties)
 
     context(ModContext)
     override fun init() {

@@ -11,19 +11,17 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.ButtonBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaPlanksButtonBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = ButtonBlock(
-        blockSetType(),
-        30,
-        AbstractBlock.Properties.of()
-            .noCollission()
-            .strength(0.5F)
-            .pushReaction(PistonBehavior.DESTROY),
-    )
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
+        .noCollission()
+        .strength(0.5F)
+        .pushReaction(PistonBehavior.DESTROY)
+
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = ButtonBlock(blockSetType(), 30, properties)
 
     context(ModContext)
     override fun init() {

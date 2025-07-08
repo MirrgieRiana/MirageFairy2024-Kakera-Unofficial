@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
@@ -39,12 +40,11 @@ import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.ParticleUtils as ParticleUtil
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = AbstractBlock.Properties.of()
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
         .mapColor(MapColor.PLANT)
         .strength(0.2F)
         .randomTicks()
@@ -56,7 +56,8 @@ class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : H
         .ignitedByLava()
         .pushReaction(PistonBehavior.DESTROY)
         .isRedstoneConductor(Blocks::never)
-        .let { HaimeviskaLeavesBlock(it) }
+
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = HaimeviskaLeavesBlock(properties)
 
     context(ModContext)
     override fun init() {

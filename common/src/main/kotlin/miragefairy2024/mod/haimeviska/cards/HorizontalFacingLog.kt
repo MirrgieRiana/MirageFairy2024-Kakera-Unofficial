@@ -17,12 +17,15 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
 abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
+    override fun createSettings(): BlockBehaviour.Properties = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
+
     context(ModContext)
     override fun init() {
         super.init()
@@ -46,6 +49,4 @@ abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaB
         item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
 
     }
-
-    protected fun createSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 }

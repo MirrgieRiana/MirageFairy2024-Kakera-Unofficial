@@ -15,10 +15,12 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.FenceGateBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.WoodType
 
 class HaimeviskaPlanksFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration, private val woodType: () -> WoodType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = FenceGateBlock(woodType(), createPlankSettings(sound = false).forceSolidOn())
+    override fun createSettings(): BlockBehaviour.Properties = createPlankSettings(sound = false).forceSolidOn()
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = FenceGateBlock(woodType(), properties)
 
     context(ModContext)
     override fun init() {

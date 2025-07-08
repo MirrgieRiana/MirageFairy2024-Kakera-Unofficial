@@ -12,18 +12,18 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.PressurePlateBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = PressurePlateBlock(
-        blockSetType(),
-        createBaseWoodSetting(sound = false)
-            .forceSolidOn()
-            .noCollission()
-            .strength(0.5F)
-            .pushReaction(PistonBehavior.DESTROY),
-    )
+    override fun createSettings(): BlockBehaviour.Properties = createBaseWoodSetting(sound = false)
+        .forceSolidOn()
+        .noCollission()
+        .strength(0.5F)
+        .pushReaction(PistonBehavior.DESTROY)
+
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PressurePlateBlock(blockSetType(), properties)
 
     context(ModContext)
     override fun init() {

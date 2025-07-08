@@ -21,24 +21,26 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.SaplingBlock
 import net.minecraft.world.level.block.grower.TreeGrower
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
 import java.util.Optional
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = SaplingBlock(
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
+        .mapColor(MapColor.PLANT)
+        .noCollission()
+        .randomTicks()
+        .instabreak()
+        .sound(BlockSoundGroup.GRASS)
+        .pushReaction(PistonBehavior.DESTROY)
+
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = SaplingBlock(
         TreeGrower(treeGrowerName.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty()),
-        AbstractBlock.Properties.of()
-            .mapColor(MapColor.PLANT)
-            .noCollission()
-            .randomTicks()
-            .instabreak()
-            .sound(BlockSoundGroup.GRASS)
-            .pushReaction(PistonBehavior.DESTROY),
+        properties,
     )
 
     context(ModContext)

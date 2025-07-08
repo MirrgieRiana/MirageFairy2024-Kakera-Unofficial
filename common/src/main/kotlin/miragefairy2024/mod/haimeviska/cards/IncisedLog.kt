@@ -11,12 +11,13 @@ import miragefairy2024.util.LootTable
 import miragefairy2024.util.registerLootTableGeneration
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.RandomSource as Random
 
 class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
-    override suspend fun createBlock() = IncisedHaimeviskaLogBlock(createSettings())
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = IncisedHaimeviskaLogBlock(properties)
 
     context(ModContext)
     override fun init() {

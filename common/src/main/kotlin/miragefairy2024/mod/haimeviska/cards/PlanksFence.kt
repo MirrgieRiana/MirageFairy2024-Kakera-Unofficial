@@ -12,9 +12,11 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.FenceBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 
 class HaimeviskaPlanksFenceBlockCard(configuration: HaimeviskaBlockConfiguration, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = FenceBlock(createPlankSettings())
+    override fun createSettings() = createPlankSettings()
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = FenceBlock(properties)
 
     context(ModContext)
     override fun init() {

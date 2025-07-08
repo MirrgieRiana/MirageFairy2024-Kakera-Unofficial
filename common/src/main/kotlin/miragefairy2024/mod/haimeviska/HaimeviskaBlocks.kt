@@ -52,6 +52,7 @@ import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
@@ -154,8 +155,9 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
     }
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    abstract suspend fun createBlock(): Block
-    val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
+    open fun createSettings(): BlockBehaviour.Properties = AbstractBlock.Properties.of()
+    abstract suspend fun createBlock(properties: BlockBehaviour.Properties): Block
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock(createSettings()) }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 
     context(ModContext)
