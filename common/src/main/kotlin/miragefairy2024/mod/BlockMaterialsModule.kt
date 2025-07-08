@@ -1,5 +1,6 @@
 package miragefairy2024.mod
 
+import com.google.gson.JsonElement
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -19,6 +20,7 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockStateGeneration
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
@@ -30,6 +32,9 @@ import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import mirrg.kotlin.gson.hydrogen.jsonArray
+import mirrg.kotlin.gson.hydrogen.jsonElement
+import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
@@ -40,10 +45,18 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.PipeBlock
+import net.minecraft.world.level.block.TransparentBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
@@ -132,6 +145,37 @@ enum class BlockMaterialCard(
         tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
         blockSoundGroup = BlockSoundGroup.METAL,
     ),
+    FAIRY_CRYSTAL_GLASS(
+        "fairy_crystal_glass", "Fairy Crystal Glass", "フェアリークリスタルガラス",
+        PoemList(2).poem("It is displaying the scene behind it.", "家の外を映し出す鏡。"),
+        MapColor.DIAMOND, 1.5F, 1.5F, requiresTool = true, restrictsSpawning = true,
+        tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE),
+        isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+        blockStateFactory = {
+            fun createPart(direction: String, x: Int, y: Int) = jsonObject(
+                "when" to jsonObject(
+                    direction to "false".jsonElement,
+                ),
+                "apply" to jsonObject(
+                    "model" to "${"block/" * identifier * "_frame"}".jsonElement,
+                    "x" to x.jsonElement,
+                    "y" to y.jsonElement,
+                ),
+            )
+            jsonObject(
+                "multipart" to jsonArray(
+                    createPart("north", 90, 0),
+                    createPart("east", 90, 90),
+                    createPart("south", -90, 0),
+                    createPart("west", 90, -90),
+                    createPart("up", 0, 0),
+                    createPart("down", 180, 0),
+                ),
+            )
+        },
+        noModelGeneration = true,
+        blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
+    ),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
@@ -153,6 +197,7 @@ context(ModContext)
 fun initBlockMaterialsModule() {
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("local_vacuum_decay")) { LocalVacuumDecayBlock.CODEC }.register()
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("semi_opaque_transparent_block")) { SemiOpaqueTransparentBlock.CODEC }.register()
+    Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_crystal_glass")) { FairyCrystalGlassBlock.CODEC }.register()
 
     BlockMaterialCard.entries.forEach { card ->
         card.block.register()
@@ -192,6 +237,7 @@ fun initBlockMaterialsModule() {
     registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
     registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
+    registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, BlockMaterialCard.FAIRY_CRYSTAL_GLASS.item)
 
     // 霊氣石
     registerSimpleMachineRecipeGeneration(
@@ -204,6 +250,17 @@ fun initBlockMaterialsModule() {
         output = { BlockMaterialCard.AURA_STONE.item().createItemStack() },
         duration = 20 * 60,
     ) on MaterialCard.FAIRY_CRYSTAL.item
+
+    // フェアリークリスタルガラス
+    BlockMaterialCard.FAIRY_CRYSTAL_GLASS.let { card ->
+
+        // インベントリ内のモデル
+        registerModelGeneration({ "block/" * card.identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * card.identifier * "_frame") }
+
+        // 枠パーツモデル
+        registerModelGeneration({ "block/" * card.identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * card.identifier * "_frame") }
+
+    }
 
 }
 
@@ -289,4 +346,99 @@ class SemiOpaqueTransparentBlock(settings: Properties) : TransparentBlock(settin
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 1
+}
+
+class FairyCrystalGlassBlock(properties: Properties) : TransparentBlock(properties) {
+    companion object {
+        val CODEC: MapCodec<FairyCrystalGlassBlock> = simpleCodec(::FairyCrystalGlassBlock)
+    }
+
+    override fun codec() = CODEC
+
+    init {
+        registerDefaultState(
+            defaultBlockState()
+                .setValue(BlockStateProperties.NORTH, false)
+                .setValue(BlockStateProperties.EAST, false)
+                .setValue(BlockStateProperties.SOUTH, false)
+                .setValue(BlockStateProperties.WEST, false)
+                .setValue(BlockStateProperties.UP, false)
+                .setValue(BlockStateProperties.DOWN, false)
+        )
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        builder.add(
+            BlockStateProperties.NORTH,
+            BlockStateProperties.EAST,
+            BlockStateProperties.SOUTH,
+            BlockStateProperties.WEST,
+            BlockStateProperties.UP,
+            BlockStateProperties.DOWN,
+        )
+    }
+
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
+        return defaultBlockState()
+            .setValue(BlockStateProperties.NORTH, ctx.level.getBlockState(ctx.clickedPos.north()).`is`(this))
+            .setValue(BlockStateProperties.EAST, ctx.level.getBlockState(ctx.clickedPos.east()).`is`(this))
+            .setValue(BlockStateProperties.SOUTH, ctx.level.getBlockState(ctx.clickedPos.south()).`is`(this))
+            .setValue(BlockStateProperties.WEST, ctx.level.getBlockState(ctx.clickedPos.west()).`is`(this))
+            .setValue(BlockStateProperties.UP, ctx.level.getBlockState(ctx.clickedPos.above()).`is`(this))
+            .setValue(BlockStateProperties.DOWN, ctx.level.getBlockState(ctx.clickedPos.below()).`is`(this))
+    }
+
+    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION[direction]!!, neighborState.`is`(this))
+    }
+}
+
+val fairyCrystalGlassFrameBlockModel = Model { textureMap ->
+    ModelData(
+        parent = ResourceLocation.withDefaultNamespace("block/block"),
+        textures = ModelTexturesData(
+            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
+            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
+        ),
+        elements = ModelElementsData(
+            ModelElementData(
+                from = listOf(0, 0, 0),
+                to = listOf(16, 16, 16),
+                faces = ModelFacesData(
+                    north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east"),
+                ),
+            ),
+        ),
+    )
+}
+
+val fairyCrystalGlassBlockModel = Model { textureMap ->
+    fun createPart(rotation: Int) = ModelElementData(
+        from = listOf(0, 0, 0),
+        to = listOf(16, 16, 16),
+        faces = ModelFacesData(
+            north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north", rotation = rotation),
+            south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south", rotation = rotation),
+            west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west", rotation = rotation),
+            east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east", rotation = rotation),
+            up = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "up", rotation = rotation),
+            down = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "down", rotation = rotation),
+        ),
+    )
+    ModelData(
+        parent = ResourceLocation.withDefaultNamespace("block/block"),
+        textures = ModelTexturesData(
+            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
+            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
+        ),
+        elements = ModelElementsData(
+            createPart(0),
+            createPart(90),
+            createPart(180),
+            createPart(270),
+        ),
+    )
 }
