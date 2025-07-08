@@ -46,7 +46,7 @@ import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
-class BlockMaterialCard(
+open class BlockMaterialCard(
     path: String,
     val name: EnJa,
     val poemList: PoemList,
@@ -175,6 +175,41 @@ class BlockMaterialCard(
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties().let { if (fireResistant) it.fireResistant() else it }) }
+
+    context(ModContext)
+    open fun init() {
+
+        block.register()
+        item.register()
+
+        item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
+
+        if (blockStateFactory != null) {
+            block.registerBlockStateGeneration { (blockStateFactory)(this) }
+        } else {
+            block.registerSingletonBlockStateGeneration()
+        }
+        if (!noModelGeneration) {
+            if (texturedModelFactory != null) {
+                block.registerModelGeneration(texturedModelFactory)
+            } else {
+                block.registerModelGeneration(TexturedModel.CUBE)
+            }
+        }
+        if (isCutoutRenderLayer) block.registerCutoutRenderLayer()
+        if (isTranslucentRenderLayer) block.registerTranslucentRenderLayer()
+
+        block.enJa(name)
+        item.registerPoem(poemList)
+        item.registerPoemGeneration(poemList)
+
+        block.registerDefaultLootTableGeneration()
+
+        tags.forEach {
+            block.registerBlockTagGeneration { it }
+        }
+
+    }
 }
 
 context(ModContext)
@@ -184,35 +219,7 @@ fun initBlockMaterialsModule() {
     Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_crystal_glass")) { FairyCrystalGlassBlock.CODEC }.register()
 
     BlockMaterialCard.entries.forEach { card ->
-        card.block.register()
-        card.item.register()
-
-        card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
-
-        if (card.blockStateFactory != null) {
-            card.block.registerBlockStateGeneration { (card.blockStateFactory)(card) }
-        } else {
-            card.block.registerSingletonBlockStateGeneration()
-        }
-        if (!card.noModelGeneration) {
-            if (card.texturedModelFactory != null) {
-                card.block.registerModelGeneration(card.texturedModelFactory)
-            } else {
-                card.block.registerModelGeneration(TexturedModel.CUBE)
-            }
-        }
-        if (card.isCutoutRenderLayer) card.block.registerCutoutRenderLayer()
-        if (card.isTranslucentRenderLayer) card.block.registerTranslucentRenderLayer()
-
-        card.block.enJa(card.name)
-        card.item.registerPoem(card.poemList)
-        card.item.registerPoemGeneration(card.poemList)
-
-        card.block.registerDefaultLootTableGeneration()
-
-        card.tags.forEach {
-            card.block.registerBlockTagGeneration { it }
-        }
+        card.init()
     }
 
     // 圧縮
