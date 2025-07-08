@@ -118,11 +118,11 @@ open class HaimeviskaBlockCard(
         val SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
             PoemList(1).poem(EnJa("Searching for another personality.", "半人前の側頭葉。")),
-        ).let { HaimeviskaSlabBlockCard(it) }
+        ).let { HaimeviskaPlanksSlabBlockCard(it) { PLANKS.block } }
         val STAIRS = !HaimeviskaBlockConfiguration(
             "haimeviska_stairs", EnJa("Haimeviska Stairs", "ハイメヴィスカの階段"),
             PoemList(1).poem(EnJa("Step that pierces the sky", "情緒体を喰らう頂となれ。")),
-        ).let { HaimeviskaStairsBlockCard(it) }
+        ).let { HaimeviskaPlanksStairsBlockCard(it) { PLANKS.block } }
         val FENCE = !HaimeviskaBlockConfiguration(
             "haimeviska_fence", EnJa("Haimeviska Fence", "ハイメヴィスカのフェンス"),
             PoemList(1).poem(EnJa("Personality flowing through the xylem", "樹のなかに住む。")),
@@ -146,11 +146,11 @@ open class HaimeviskaBlockCard(
         val BRICKS_SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
             PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
-        ).let { HaimeviskaBricksSlabBlockCard(it) }
+        ).let { HaimeviskaPlanksSlabBlockCard(it) { BRICKS.block } }
         val BRICKS_STAIRS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_stairs", EnJa("Haimeviska Bricks Stairs", "ハイメヴィスカレンガの階段"),
             PoemList(1).poem(EnJa("Forgotten paths of the technology", "生体工学の歩み。")),
-        ).let { HaimeviskaBricksStairsBlockCard(it) }
+        ).let { HaimeviskaPlanksStairsBlockCard(it) { BRICKS.block } }
         val SAPLING = !HaimeviskaBlockConfiguration(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
