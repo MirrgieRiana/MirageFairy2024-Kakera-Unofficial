@@ -23,7 +23,6 @@ import miragefairy2024.util.get
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
-import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
@@ -46,10 +45,8 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.ButtonBlock
 import net.minecraft.world.level.block.FenceBlock
 import net.minecraft.world.level.block.FenceGateBlock
-import net.minecraft.world.level.block.PressurePlateBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.state.properties.BlockSetType
@@ -59,7 +56,6 @@ import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
@@ -246,7 +242,7 @@ fun initHaimeviskaBlocks() {
 }
 
 context(ModContext)
-private fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
+fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
     familyRegistry += Pair(baseBlock, initializer)
 }
 
@@ -429,26 +425,6 @@ class HaimeviskaFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration) 
     ::initPlanksFenceGateHaimeviskaBlock,
     {
         registerBlockFamily(PLANKS.block) { it.fenceGate(block()) }
-        block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaButtonBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { ButtonBlock(HAIMEVISKA_BLOCK_SET_TYPE, 30, AbstractBlock.Properties.of().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) },
-    ::initPlanksButtonHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.button(block()) }
-        block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { PressurePlateBlock(HAIMEVISKA_BLOCK_SET_TYPE, createBaseWoodSetting(sound = false).forceSolidOn().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) },
-    ::initPlanksPressurePlateHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.pressurePlate(block()) }
         block.registerDefaultLootTableGeneration()
     },
 )
