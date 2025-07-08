@@ -88,81 +88,81 @@ open class HaimeviskaBlockCard(
             "haimeviska_leaves", EnJa("Haimeviska Leaves", "ハイメヴィスカの葉"),
             PoemList(1).poem(EnJa("All original flowers are consumed by ivy", "妖精になれる花、なれない花。")),
         ).let { HaimeviskaLeavesBlockCard(it) }
-        val LOG = HaimeviskaBlockConfiguration(
+        val LOG = !HaimeviskaBlockConfiguration(
             "haimeviska_log", EnJa("Haimeviska Log", "ハイメヴィスカの原木"),
             PoemList(1)
                 .poem(EnJa("Symbiosis with parasitic Mirages", "妖精の滲み込んだ樹。"))
                 .description(EnJa("Can be incised with a sword", "剣を使って傷を付けられる")),
         ).let { HaimeviskaLogBlockCard(it) }
-        val WOOD = HaimeviskaBlockConfiguration(
+        val WOOD = !HaimeviskaBlockConfiguration(
             "haimeviska_wood", EnJa("Haimeviska Wood", "ハイメヴィスカの木"),
             PoemList(1).poem(EnJa("Hydraulic communication system", "ウィスプたちの集合知。")),
         ).let { HaimeviskaWoodBlockCard(it) }
-        val STRIPPED_LOG = HaimeviskaBlockConfiguration(
+        val STRIPPED_LOG = !HaimeviskaBlockConfiguration(
             "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
             PoemList(1).poem(EnJa("Something lacking the essence", "ぬぐわれたペルソナ。")),
         ).let { HaimeviskaStrippedLogBlockCard(it) }
-        val STRIPPED_WOOD = HaimeviskaBlockConfiguration(
+        val STRIPPED_WOOD = !HaimeviskaBlockConfiguration(
             "stripped_haimeviska_wood", EnJa("Stripped Haimeviska Wood", "樹皮を剥いだハイメヴィスカの木"),
             PoemList(1).poem(EnJa("Loss of self", "寄生蔦からの解放。")),
         ).let { HaimeviskaStrippedWoodBlockCard(it) }
-        val INCISED_LOG = HaimeviskaBlockConfiguration(
+        val INCISED_LOG = !HaimeviskaBlockConfiguration(
             "incised_haimeviska_log", EnJa("Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木"),
             PoemList(1)
                 .poem(EnJa("Do fairy trees have qualia of pain?", "動物を守るということ。"))
                 .description(EnJa("Produces sap over time", "時間経過で樹液を生産")),
         ).let { HaimeviskaIncisedLogBlockCard(it) }
-        val DRIPPING_LOG = HaimeviskaBlockConfiguration(
+        val DRIPPING_LOG = !HaimeviskaBlockConfiguration(
             "dripping_haimeviska_log", EnJa("Dripping Haimeviska Log", "滴るハイメヴィスカの原木"),
             PoemList(1)
                 .poem(EnJa("A spirit named 'glucose'", "霊界より降りしもの。"))
                 .description(EnJa("Harvest sap when used", "使用時、樹液を収穫")),
         ).let { HaimeviskaDrippingLogBlockCard(it) }
-        val HOLLOW_LOG = HaimeviskaBlockConfiguration(
+        val HOLLOW_LOG = !HaimeviskaBlockConfiguration(
             "hollow_haimeviska_log", EnJa("Hollow Haimeviska Log", "ハイメヴィスカの樹洞"),
             PoemList(1).poem(EnJa("Auric conceptual attractor", "限界巡回アステリア。")),
         ).let { HaimeviskaHollowLogBlockCard(it) }
-        val PLANKS = HaimeviskaBlockConfiguration(
+        val PLANKS = !HaimeviskaBlockConfiguration(
             "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
             PoemList(1).poem(EnJa("Flexible and friendly, good for interior", "考える、壁。")),
         ).let { HaimeviskaPlanksBlockCard(it) }
-        val SLAB = HaimeviskaBlockConfiguration(
+        val SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
             PoemList(1).poem(EnJa("Searching for another personality.", "半人前の側頭葉。")),
         ).let { HaimeviskaSlabBlockCard(it) }
-        val STAIRS = HaimeviskaBlockConfiguration(
+        val STAIRS = !HaimeviskaBlockConfiguration(
             "haimeviska_stairs", EnJa("Haimeviska Stairs", "ハイメヴィスカの階段"),
             PoemList(1).poem(EnJa("Step that pierces the sky", "情緒体を喰らう頂となれ。")),
         ).let { HaimeviskaStairsBlockCard(it) }
-        val FENCE = HaimeviskaBlockConfiguration(
+        val FENCE = !HaimeviskaBlockConfiguration(
             "haimeviska_fence", EnJa("Haimeviska Fence", "ハイメヴィスカのフェンス"),
             PoemList(1).poem(EnJa("Personality flowing through the xylem", "樹のなかに住む。")),
         ).let { HaimeviskaFenceBlockCard(it) }
-        val FENCE_GATE = HaimeviskaBlockConfiguration(
+        val FENCE_GATE = !HaimeviskaBlockConfiguration(
             "haimeviska_fence_gate", EnJa("Haimeviska Fence Gate", "ハイメヴィスカのフェンスゲート"),
             PoemList(1).poem(EnJa("It chose this path of its own will", "知性の邂逅。")),
         ).let { HaimeviskaFenceGateBlockCard(it) }
-        val BUTTON = HaimeviskaBlockConfiguration(
+        val BUTTON = !HaimeviskaBlockConfiguration(
             "haimeviska_button", EnJa("Haimeviska Button", "ハイメヴィスカのボタン"),
             PoemList(1).poem(EnJa("What is this soft and warm thing?", "指先の感触。")),
         ).let { HaimeviskaButtonBlockCard(it) }
-        val PRESSURE_PLATE = HaimeviskaBlockConfiguration(
+        val PRESSURE_PLATE = !HaimeviskaBlockConfiguration(
             "haimeviska_pressure_plate", EnJa("Haimeviska Pressure Plate", "ハイメヴィスカの感圧板"),
             PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
         ).let { HaimeviskaPressurePlateBlockCard(it) }
-        val BRICKS = HaimeviskaBlockConfiguration(
+        val BRICKS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
             PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
         ).let { HaimeviskaBricksBlockCard(it) }
-        val BRICKS_SLAB = HaimeviskaBlockConfiguration(
+        val BRICKS_SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
             PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
         ).let { HaimeviskaBricksSlabBlockCard(it) }
-        val BRICKS_STAIRS = HaimeviskaBlockConfiguration(
+        val BRICKS_STAIRS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_stairs", EnJa("Haimeviska Bricks Stairs", "ハイメヴィスカレンガの階段"),
             PoemList(1).poem(EnJa("Forgotten paths of the technology", "生体工学の歩み。")),
         ).let { HaimeviskaBricksStairsBlockCard(it) }
-        val SAPLING = HaimeviskaBlockConfiguration(
+        val SAPLING = !HaimeviskaBlockConfiguration(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
         ).let { HaimeviskaSaplingBlockCard(it) }
