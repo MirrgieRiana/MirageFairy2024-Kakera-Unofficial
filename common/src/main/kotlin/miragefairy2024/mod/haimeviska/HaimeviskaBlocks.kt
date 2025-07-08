@@ -227,6 +227,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Searching for another personality.", "半人前の側頭葉。")),
             { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.slab(block()) }
             block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
         }
         val STAIRS = !HaimeviskaBlockCard(
@@ -234,6 +235,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Step that pierces the sky", "情緒体を喰らう頂となれ。")),
             { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.stairs(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val FENCE = !HaimeviskaBlockCard(
@@ -241,6 +243,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Personality flowing through the xylem", "樹のなかに住む。")),
             { FenceBlock(createPlankSettings()) }, ::initPlanksFenceHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.fence(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val FENCE_GATE = !HaimeviskaBlockCard(
@@ -248,6 +251,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("It chose this path of its own will", "知性の邂逅。")),
             { FenceGateBlock(HAIMEVISKA_WOOD_TYPE, createPlankSettings(sound = false).forceSolidOn()) }, ::initPlanksFenceGateHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.fenceGate(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val BUTTON = !HaimeviskaBlockCard(
@@ -255,6 +259,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("What is this soft and warm thing?", "指先の感触。")),
             { ButtonBlock(HAIMEVISKA_BLOCK_SET_TYPE, 30, AbstractBlock.Properties.of().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) }, ::initPlanksButtonHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.button(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val PRESSURE_PLATE = !HaimeviskaBlockCard(
@@ -262,6 +267,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
             { PressurePlateBlock(HAIMEVISKA_BLOCK_SET_TYPE, createBaseWoodSetting(sound = false).forceSolidOn().noCollission().strength(0.5F).pushReaction(PistonBehavior.DESTROY)) }, ::initPlanksPressurePlateHaimeviskaBlock,
         ) {
+            registerBlockFamily(PLANKS.block) { it.pressurePlate(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val BRICKS = !HaimeviskaBlockCard(
@@ -281,6 +287,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
             { SlabBlock(createPlankSettings()) }, ::initPlanksSlabHaimeviskaBlock,
         ) {
+            registerBlockFamily(BRICKS.block) { it.slab(block()) }
             block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
         }
         val BRICKS_STAIRS = !HaimeviskaBlockCard(
@@ -288,6 +295,7 @@ class HaimeviskaBlockCard(
             PoemList(1).poem(EnJa("Forgotten paths of the technology", "生体工学の歩み。")),
             { StairBlock(BRICKS.block.await().defaultBlockState(), createPlankSettings()) }, ::initPlanksStairsHaimeviskaBlock,
         ) {
+            registerBlockFamily(BRICKS.block) { it.stairs(block()) }
             block.registerDefaultLootTableGeneration()
         }
         val SAPLING = !HaimeviskaBlockCard(
@@ -343,15 +351,6 @@ fun initHaimeviskaBlocks() {
         card.initializer(this@ModContext, card)
         card.extraInitializer(this@ModContext, card)
     }
-
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.slab(HaimeviskaBlockCard.SLAB.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.stairs(HaimeviskaBlockCard.STAIRS.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.fence(HaimeviskaBlockCard.FENCE.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.fenceGate(HaimeviskaBlockCard.FENCE_GATE.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.button(HaimeviskaBlockCard.BUTTON.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.BRICKS.block) { it.slab(HaimeviskaBlockCard.BRICKS_SLAB.block()) }
-    registerBlockFamily(HaimeviskaBlockCard.BRICKS.block) { it.stairs(HaimeviskaBlockCard.BRICKS_STAIRS.block()) }
 
     HAIMEVISKA_BLOCK_SET_TYPE = BlockSetTypeBuilder().register(MirageFairy2024.identifier("haimeviska"))
     HAIMEVISKA_WOOD_TYPE = WoodTypeBuilder().register(MirageFairy2024.identifier("haimeviska"), HAIMEVISKA_BLOCK_SET_TYPE)
