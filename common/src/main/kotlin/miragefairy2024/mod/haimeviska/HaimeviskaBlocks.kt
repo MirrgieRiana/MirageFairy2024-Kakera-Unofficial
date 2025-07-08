@@ -3,7 +3,6 @@ package miragefairy2024.mod.haimeviska
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.ModEvents
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
@@ -13,16 +12,12 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
-import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
-import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
-import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.BlockFamily
@@ -38,7 +33,6 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
@@ -229,56 +223,3 @@ context(ModContext)
 fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
     familyRegistry += Pair(baseBlock, initializer)
 }
-
-
-class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { HaimeviskaLogBlock(createLogSettings()) },
-    initLogHaimeviskaBlock(null),
-    {
-        block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { PillarBlock(createLogSettings(wood = true)) },
-    initLogHaimeviskaBlock({ LOG }, wood = true),
-    {
-        block.registerDefaultLootTableGeneration()
-        registerShapedRecipeGeneration(item, 3) {
-            pattern("##")
-            pattern("##")
-            define('#', LOG.item())
-        } on LOG.item
-    },
-)
-
-class HaimeviskaStrippedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { PillarBlock(createLogSettings(stripped = true)) },
-    initLogHaimeviskaBlock(null, stripped = true),
-    {
-        block.registerDefaultLootTableGeneration()
-        ModEvents.onInitialize {
-            StrippableBlockRegistry.register(LOG.block(), block())
-        }
-    },
-)
-
-class HaimeviskaStrippedWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { PillarBlock(createLogSettings(stripped = true, wood = true)) },
-    initLogHaimeviskaBlock({ STRIPPED_LOG }, stripped = true, wood = true),
-    {
-        block.registerDefaultLootTableGeneration()
-        registerShapedRecipeGeneration(item, 3) {
-            pattern("##")
-            pattern("##")
-            define('#', STRIPPED_LOG.item())
-        } on STRIPPED_LOG.item
-        ModEvents.onInitialize {
-            StrippableBlockRegistry.register(WOOD.block(), block())
-        }
-    },
-)
