@@ -6,12 +6,14 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemTagGeneration
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.PressurePlateBlock
+import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : AbstractHaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = PressurePlateBlock(
-        HAIMEVISKA_BLOCK_SET_TYPE,
+        blockSetType(),
         createBaseWoodSetting(sound = false)
             .forceSolidOn()
             .noCollission()
@@ -23,7 +25,7 @@ class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfi
     override fun init() {
         super.init()
 
-        registerBlockFamily(PLANKS.block) { it.pressurePlate(block()) }
+        registerBlockFamily(parent) { it.pressurePlate(block()) }
         block.registerDefaultLootTableGeneration()
 
         // タグ
