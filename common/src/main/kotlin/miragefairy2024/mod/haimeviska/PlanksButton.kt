@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaPlanksButtonBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksButtonBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = ButtonBlock(
         blockSetType(),
         30,

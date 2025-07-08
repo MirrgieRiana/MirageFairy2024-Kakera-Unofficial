@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = SaplingBlock(
         TreeGrower(treeGrowerName.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty()),
         AbstractBlock.Properties.of()

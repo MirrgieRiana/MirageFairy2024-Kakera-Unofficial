@@ -39,7 +39,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = AbstractBlock.Properties.of()
         .mapColor(MapColor.PLANT)
         .strength(0.2F)

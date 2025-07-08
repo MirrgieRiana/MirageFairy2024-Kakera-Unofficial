@@ -11,7 +11,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SlabBlock
 
-class HaimeviskaPlanksSlabBlockCard(configuration: HaimeviskaBlockConfiguration, private val baseBlock: () -> Registration<*, out Block>) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksSlabBlockCard(configuration: HaimeviskaBlockConfiguration, private val baseBlock: () -> Registration<*, out Block>) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = SlabBlock(createPlankSettings())
 
     context(ModContext)

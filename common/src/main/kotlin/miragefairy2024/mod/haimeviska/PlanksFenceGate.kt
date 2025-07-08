@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.state.properties.WoodType
 
-class HaimeviskaPlanksFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration, private val woodType: () -> WoodType, private val parent: () -> Block) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration, private val woodType: () -> WoodType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = FenceGateBlock(woodType(), createPlankSettings(sound = false).forceSolidOn())
 
     context(ModContext)

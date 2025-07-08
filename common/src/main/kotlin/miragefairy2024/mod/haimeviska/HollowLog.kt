@@ -14,7 +14,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 
-class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = HollowHaimeviskaLogBlock(createSpecialLogSettings())
 
     context(ModContext)

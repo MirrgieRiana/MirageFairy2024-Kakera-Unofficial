@@ -11,7 +11,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.StairBlock
 
-class HaimeviskaPlanksStairsBlockCard(configuration: HaimeviskaBlockConfiguration, private val baseBlock: () -> Registration<*, out Block>) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksStairsBlockCard(configuration: HaimeviskaBlockConfiguration, private val baseBlock: () -> Registration<*, out Block>) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = StairBlock(baseBlock().await().defaultBlockState(), createPlankSettings())
 
     context(ModContext)

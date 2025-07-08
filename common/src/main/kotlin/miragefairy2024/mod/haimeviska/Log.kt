@@ -36,7 +36,7 @@ import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 
-abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     context(ModContext)
     override fun init() {
         super.init()

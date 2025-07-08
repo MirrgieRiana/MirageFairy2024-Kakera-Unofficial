@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.PressurePlateBlock
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = PressurePlateBlock(
         blockSetType(),
         createBaseWoodSetting(sound = false)

@@ -43,12 +43,7 @@ class HaimeviskaBlockConfiguration(
     val poemList: PoemList,
 )
 
-open class HaimeviskaBlockCard(
-    val configuration: HaimeviskaBlockConfiguration,
-    val blockCreator: suspend () -> Block,
-    val initializer: context(ModContext)(HaimeviskaBlockCard) -> Unit,
-    val extraInitializer: context(ModContext) HaimeviskaBlockCard.() -> Unit,
-) {
+abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfiguration) {
     companion object {
         val entries = mutableListOf<HaimeviskaBlockCard>()
         private operator fun HaimeviskaBlockCard.not() = apply { entries += this }
@@ -138,7 +133,7 @@ open class HaimeviskaBlockCard(
     }
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    open suspend fun createBlock() = blockCreator()
+    abstract suspend fun createBlock(): Block
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock() }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
 
@@ -157,14 +152,7 @@ open class HaimeviskaBlockCard(
         item.registerPoem(configuration.poemList)
         item.registerPoemGeneration(configuration.poemList)
 
-        initializer(this@ModContext, this)
-        extraInitializer(this@ModContext, this)
-
     }
-}
-
-abstract class AbstractHaimeviskaBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration, { throw AssertionError() }, { }, { }) {
-    abstract override suspend fun createBlock(): Block
 }
 
 fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()

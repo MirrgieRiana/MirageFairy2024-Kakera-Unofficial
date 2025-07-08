@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.MapColor
 
 fun createPlankSettings(sound: Boolean = true) = createBaseWoodSetting(sound = sound).strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 
-open class AbstractHaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+open class AbstractHaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = createBaseWoodSetting()
         .strength(2.0F, 3.0F)
         .mapColor(MapColor.RAW_IRON)
