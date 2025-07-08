@@ -344,38 +344,14 @@ fun initHaimeviskaBlocks() {
         card.extraInitializer(this@ModContext, card)
     }
 
-    run {
-        val family by lazy {
-            BlockFamily.Builder(HaimeviskaBlockCard.PLANKS.block())
-                .slab(HaimeviskaBlockCard.SLAB.block())
-                .stairs(HaimeviskaBlockCard.STAIRS.block())
-                .fence(HaimeviskaBlockCard.FENCE.block())
-                .fenceGate(HaimeviskaBlockCard.FENCE_GATE.block())
-                .button(HaimeviskaBlockCard.BUTTON.block())
-                .pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block())
-                .family
-        }
-        DataGenerationEvents.onGenerateBlockModel {
-            it.family(family.baseBlock).generateFor(family)
-        }
-        DataGenerationEvents.onGenerateRecipe {
-            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
-        }
-    }
-    run {
-        val family by lazy {
-            BlockFamily.Builder(HaimeviskaBlockCard.BRICKS.block())
-                .slab(HaimeviskaBlockCard.BRICKS_SLAB.block())
-                .stairs(HaimeviskaBlockCard.BRICKS_STAIRS.block())
-                .family
-        }
-        DataGenerationEvents.onGenerateBlockModel {
-            it.family(family.baseBlock).generateFor(family)
-        }
-        DataGenerationEvents.onGenerateRecipe {
-            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
-        }
-    }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.slab(HaimeviskaBlockCard.SLAB.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.stairs(HaimeviskaBlockCard.STAIRS.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.fence(HaimeviskaBlockCard.FENCE.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.fenceGate(HaimeviskaBlockCard.FENCE_GATE.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.button(HaimeviskaBlockCard.BUTTON.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.PLANKS.block) { it.pressurePlate(HaimeviskaBlockCard.PRESSURE_PLATE.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.BRICKS.block) { it.slab(HaimeviskaBlockCard.BRICKS_SLAB.block()) }
+    registerBlockFamily(HaimeviskaBlockCard.BRICKS.block) { it.stairs(HaimeviskaBlockCard.BRICKS_STAIRS.block()) }
 
     HAIMEVISKA_BLOCK_SET_TYPE = BlockSetTypeBuilder().register(MirageFairy2024.identifier("haimeviska"))
     HAIMEVISKA_WOOD_TYPE = WoodTypeBuilder().register(MirageFairy2024.identifier("haimeviska"), HAIMEVISKA_BLOCK_SET_TYPE)
@@ -384,4 +360,15 @@ fun initHaimeviskaBlocks() {
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     HAIMEVISKA_LOGS_ITEM_TAG.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
+}
+
+context(ModContext)
+private fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
+    val family by lazy { initializer(BlockFamily.Builder(baseBlock())).family }
+    DataGenerationEvents.onGenerateBlockModel {
+        it.family(family.baseBlock).generateFor(family)
+    }
+    DataGenerationEvents.onGenerateRecipe {
+        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+    }
 }
