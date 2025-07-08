@@ -82,25 +82,33 @@ open class BlockMaterialCard(
             PoemList(2).poem(EnJa("Loss and reconstruction of perception", "夢の世界の如き紅。")),
             MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        )
+        ).init {
+            registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, item)
+        }
         val MIRANAGITE_BLOCK = !BlockMaterialCard(
             "miranagite_block", EnJa("Miranagite Block", "蒼天石ブロック"),
             PoemList(2).poem(EnJa("Passivation confines discontinuous space", "虚空に導かれし、神域との接合点。")),
             MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        )
+        ).init {
+            registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, item)
+        }
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),
             PoemList(4).poem(EnJa("The eye of entropy.", "無秩序の目。")),
             MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        )
+        ).init {
+            registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, item)
+        }
         val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
             PoemList(4).poem(EnJa("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。")),
             MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true, fireResistant = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        )
+        ).init {
+            registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
+        }
         val LUMINITE_BLOCK = !BlockMaterialCard(
             "luminite_block", EnJa("Luminite Block", "ルミナイトブロック"),
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
@@ -108,7 +116,9 @@ open class BlockMaterialCard(
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
             isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
             blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
-        )
+        ).init {
+            registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
+        }
         val DRYWALL = !BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
@@ -128,7 +138,18 @@ open class BlockMaterialCard(
             MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
             blockSoundGroup = BlockSoundGroup.METAL,
-        )
+        ).init {
+            registerSimpleMachineRecipeGeneration(
+                AuraReflectorFurnaceRecipeCard,
+                inputs = listOf(
+                    Pair({ Ingredient.of(MaterialCard.FAIRY_CRYSTAL.item()) }, 1),
+                    Pair({ Ingredient.of(MaterialCard.XARPITE.item()) }, 4),
+                    Pair({ Ingredient.of(MaterialCard.MIRANAGITE.item()) }, 4),
+                ),
+                output = { item().createItemStack() },
+                duration = 20 * 60,
+            ) on MaterialCard.FAIRY_CRYSTAL.item
+        }
         val FAIRY_CRYSTAL_GLASS = !BlockMaterialCard(
             "fairy_crystal_glass", EnJa("Fairy Crystal Glass", "フェアリークリスタルガラス"),
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
@@ -159,7 +180,12 @@ open class BlockMaterialCard(
             },
             noModelGeneration = true,
             blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
-        )
+        ).init {
+            registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
+            registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
+
+            registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
+        }
     }
 
     val identifier = MirageFairy2024.identifier(path)
@@ -227,38 +253,6 @@ fun initBlockMaterialsModule() {
     BlockMaterialCard.entries.forEach { card ->
         card.init()
     }
-
-    // 圧縮
-    registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, BlockMaterialCard.XARPITE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, BlockMaterialCard.MIRANAGITE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, BlockMaterialCard.CHAOS_STONE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, BlockMaterialCard.MIRAGIDIAN_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, BlockMaterialCard.LUMINITE_BLOCK.item)
-    registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, BlockMaterialCard.FAIRY_CRYSTAL_GLASS.item)
-
-    // 霊氣石
-    registerSimpleMachineRecipeGeneration(
-        AuraReflectorFurnaceRecipeCard,
-        inputs = listOf(
-            Pair({ Ingredient.of(MaterialCard.FAIRY_CRYSTAL.item()) }, 1),
-            Pair({ Ingredient.of(MaterialCard.XARPITE.item()) }, 4),
-            Pair({ Ingredient.of(MaterialCard.MIRANAGITE.item()) }, 4),
-        ),
-        output = { BlockMaterialCard.AURA_STONE.item().createItemStack() },
-        duration = 20 * 60,
-    ) on MaterialCard.FAIRY_CRYSTAL.item
-
-    // フェアリークリスタルガラス
-    BlockMaterialCard.FAIRY_CRYSTAL_GLASS.let { card ->
-
-        // インベントリ内のモデル
-        registerModelGeneration({ "block/" * card.identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * card.identifier * "_frame") }
-
-        // 枠パーツモデル
-        registerModelGeneration({ "block/" * card.identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * card.identifier * "_frame") }
-
-    }
-
 }
 
 private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.() -> Unit) = this.also {
