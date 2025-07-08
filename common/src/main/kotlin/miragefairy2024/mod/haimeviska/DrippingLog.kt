@@ -1,12 +1,18 @@
 package miragefairy2024.mod.haimeviska
 
 import com.mojang.serialization.MapCodec
+import miragefairy2024.ModContext
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.particle.ParticleTypeCard
+import miragefairy2024.mod.registerHarvestNotation
+import miragefairy2024.util.ItemLootPoolEntry
+import miragefairy2024.util.LootPool
+import miragefairy2024.util.LootTable
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.get
 import miragefairy2024.util.randomInt
+import miragefairy2024.util.registerLootTableGeneration
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -26,6 +32,45 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
+
+class HaimeviskaDrippingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+    override suspend fun createBlock() = DrippingHaimeviskaLogBlock(createSpecialLogSettings())
+
+    context(ModContext)
+    override fun init() {
+        super.init()
+
+        initHorizontalFacingLogHaimeviskaBlock(this)
+
+        block.registerLootTableGeneration { provider, registries ->
+            LootTable(
+                LootPool(ItemLootPoolEntry(item())) {
+                    `when`(provider.hasSilkTouch())
+                },
+                LootPool(ItemLootPoolEntry(LOG.item())) {
+                    `when`(provider.doesNotHaveSilkTouch())
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
+                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
+                }) {
+                    `when`(provider.doesNotHaveSilkTouch())
+                },
+                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item()) {
+                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
+                }) {
+                    `when`(provider.doesNotHaveSilkTouch())
+                    `when`(RandomChanceLootCondition.randomChance(0.01F))
+                },
+            ) {
+                provider.applyExplosionDecay(block(), this)
+            }
+        }
+        item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
+
+    }
+}
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBlock(settings) {

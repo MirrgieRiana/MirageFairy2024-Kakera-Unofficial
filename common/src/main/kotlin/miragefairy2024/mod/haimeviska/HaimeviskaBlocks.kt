@@ -6,26 +6,19 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
-import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
-import miragefairy2024.mod.registerHarvestNotation
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.ItemLootPoolEntry
-import miragefairy2024.util.LootPool
-import miragefairy2024.util.LootTable
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
-import miragefairy2024.util.get
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
-import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
@@ -41,7 +34,6 @@ import net.minecraft.world.flag.FeatureFlagSet
 import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
@@ -50,8 +42,6 @@ import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
 class HaimeviskaBlockConfiguration(
     val path: String,
@@ -290,83 +280,5 @@ class HaimeviskaStrippedWoodBlockCard(configuration: HaimeviskaBlockConfiguratio
         ModEvents.onInitialize {
             StrippableBlockRegistry.register(WOOD.block(), block())
         }
-    },
-)
-
-class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { IncisedHaimeviskaLogBlock(createSpecialLogSettings()) },
-    ::initHorizontalFacingLogHaimeviskaBlock,
-    {
-        block.registerLootTableGeneration { provider, _ ->
-            LootTable(
-                LootPool(ItemLootPoolEntry(item())) {
-                    `when`(provider.hasSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(LOG.item())) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                },
-            ) {
-                provider.applyExplosionDecay(block(), this)
-            }
-        }
-    },
-)
-
-class HaimeviskaDrippingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { DrippingHaimeviskaLogBlock(createSpecialLogSettings()) },
-    ::initHorizontalFacingLogHaimeviskaBlock,
-    {
-        block.registerLootTableGeneration { provider, registries ->
-            LootTable(
-                LootPool(ItemLootPoolEntry(item())) {
-                    `when`(provider.hasSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(LOG.item())) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
-                }) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
-                }) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                    `when`(RandomChanceLootCondition.randomChance(0.01F))
-                },
-            ) {
-                provider.applyExplosionDecay(block(), this)
-            }
-        }
-        item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-    },
-)
-
-class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { HollowHaimeviskaLogBlock(createSpecialLogSettings()) },
-    ::initHorizontalFacingLogHaimeviskaBlock,
-    {
-        block.registerLootTableGeneration { provider, registries ->
-            LootTable(
-                LootPool(ItemLootPoolEntry(item())) {
-                    `when`(provider.hasSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(LOG.item())) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                },
-                LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
-                }) {
-                    `when`(provider.doesNotHaveSilkTouch())
-                },
-            ) {
-                provider.applyExplosionDecay(block(), this)
-            }
-        }
-        item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
     },
 )
