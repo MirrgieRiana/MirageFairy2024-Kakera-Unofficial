@@ -13,14 +13,12 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.RandomSource as Random
 
-class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = IncisedHaimeviskaLogBlock(createHorizontalFacingLogSettings())
+class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
+    override suspend fun createBlock() = IncisedHaimeviskaLogBlock(createSettings())
 
     context(ModContext)
     override fun init() {
         super.init()
-
-        initHorizontalFacingLogHaimeviskaBlock(this)
 
         block.registerLootTableGeneration { provider, _ ->
             LootTable(

@@ -17,27 +17,30 @@ import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
-fun createHorizontalFacingLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
+abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
+    context(ModContext)
+    override fun init() {
+        super.init()
 
-context(ModContext)
-fun initHorizontalFacingLogHaimeviskaBlock(card: HaimeviskaBlockCard) {
+        // レンダリング
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        block.registerModelGeneration {
+            Models.CUBE_ORIENTABLE.with(
+                TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier() * "_top",
+                TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier(),
+                TextureKey.FRONT to "block/" * it.getIdentifier(),
+            )
+        }
 
-    // レンダリング
-    card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
-    card.block.registerModelGeneration {
-        Models.CUBE_ORIENTABLE.with(
-            TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier() * "_top",
-            TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier(),
-            TextureKey.FRONT to "block/" * it.getIdentifier(),
-        )
+        // 性質
+        block.registerFlammable(5, 5)
+
+        // タグ
+        block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+        block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+        item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+
     }
 
-    // 性質
-    card.block.registerFlammable(5, 5)
-
-    // タグ
-    card.block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-    card.block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
-    card.item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
-
+    protected fun createSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
 }

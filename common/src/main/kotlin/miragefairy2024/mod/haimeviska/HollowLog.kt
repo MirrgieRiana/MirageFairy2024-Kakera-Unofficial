@@ -14,14 +14,12 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
 
-class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = HollowHaimeviskaLogBlock(createHorizontalFacingLogSettings())
+class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
+    override suspend fun createBlock() = HollowHaimeviskaLogBlock(createSettings())
 
     context(ModContext)
     override fun init() {
         super.init()
-
-        initHorizontalFacingLogHaimeviskaBlock(this)
 
         block.registerLootTableGeneration { provider, registries ->
             LootTable(
