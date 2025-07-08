@@ -9,7 +9,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.PressurePlateBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = PressurePlateBlock(
         HAIMEVISKA_BLOCK_SET_TYPE,
         createBaseWoodSetting(sound = false)

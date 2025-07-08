@@ -134,11 +134,11 @@ open class HaimeviskaBlockCard(
         val BUTTON = !HaimeviskaBlockConfiguration(
             "haimeviska_button", EnJa("Haimeviska Button", "ハイメヴィスカのボタン"),
             PoemList(1).poem(EnJa("What is this soft and warm thing?", "指先の感触。")),
-        ).let { HaimeviskaButtonBlockCard(it) }
+        ).let { HaimeviskaPlanksButtonBlockCard(it) }
         val PRESSURE_PLATE = !HaimeviskaBlockConfiguration(
             "haimeviska_pressure_plate", EnJa("Haimeviska Pressure Plate", "ハイメヴィスカの感圧板"),
             PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
-        ).let { HaimeviskaPressurePlateBlockCard(it) }
+        ).let { HaimeviskaPlanksPressurePlateBlockCard(it) }
         val BRICKS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
             PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
