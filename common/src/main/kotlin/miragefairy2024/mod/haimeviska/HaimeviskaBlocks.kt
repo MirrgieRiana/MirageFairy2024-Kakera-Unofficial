@@ -47,8 +47,6 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.FenceBlock
 import net.minecraft.world.level.block.FenceGateBlock
-import net.minecraft.world.level.block.SlabBlock
-import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
@@ -389,26 +387,6 @@ class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : H
     },
 )
 
-class HaimeviskaSlabBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { SlabBlock(createPlankSettings()) },
-    ::initPlanksSlabHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.slab(block()) }
-        block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
-    },
-)
-
-class HaimeviskaStairsBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { StairBlock(PLANKS.block.await().defaultBlockState(), createPlankSettings()) },
-    ::initPlanksStairsHaimeviskaBlock,
-    {
-        registerBlockFamily(PLANKS.block) { it.stairs(block()) }
-        block.registerDefaultLootTableGeneration()
-    },
-)
-
 class HaimeviskaFenceBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
     configuration,
     { FenceBlock(createPlankSettings()) },
@@ -440,25 +418,5 @@ class HaimeviskaBricksBlockCard(configuration: HaimeviskaBlockConfiguration) : H
             pattern("##")
             define('#', PLANKS.item())
         } on PLANKS.item from PLANKS.item
-    },
-)
-
-class HaimeviskaBricksSlabBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { SlabBlock(createPlankSettings()) },
-    ::initPlanksSlabHaimeviskaBlock,
-    {
-        registerBlockFamily(BRICKS.block) { it.slab(block()) }
-        block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
-    },
-)
-
-class HaimeviskaBricksStairsBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { StairBlock(BRICKS.block.await().defaultBlockState(), createPlankSettings()) },
-    ::initPlanksStairsHaimeviskaBlock,
-    {
-        registerBlockFamily(BRICKS.block) { it.stairs(block()) }
-        block.registerDefaultLootTableGeneration()
     },
 )
