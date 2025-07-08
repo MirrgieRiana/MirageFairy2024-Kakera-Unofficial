@@ -91,6 +91,7 @@ class HaimeviskaBlockCard(
             block.registerLootTableGeneration { it, _ ->
                 it.createLeavesDrops(block(), SAPLING.block(), 0.05F / 4F, 0.0625F / 4F, 0.083333336F / 4F, 0.1F / 4F)
             }
+            item.registerComposterInput(0.3F)
         }
         val LOG = !HaimeviskaBlockCard(
             "haimeviska_log", EnJa("Haimeviska Log", "ハイメヴィスカの原木"),
@@ -107,6 +108,11 @@ class HaimeviskaBlockCard(
             { PillarBlock(createLogSettings(wood = true)) }, initLogHaimeviskaBlock({ LOG }, wood = true),
         ) {
             block.registerDefaultLootTableGeneration()
+            registerShapedRecipeGeneration(item, 3) {
+                pattern("##")
+                pattern("##")
+                define('#', LOG.item())
+            } on LOG.item
         }
         val STRIPPED_LOG = !HaimeviskaBlockCard(
             "stripped_haimeviska_log", EnJa("Stripped Haimeviska Log", "樹皮を剥いだハイメヴィスカの原木"),
@@ -114,6 +120,9 @@ class HaimeviskaBlockCard(
             { PillarBlock(createLogSettings(stripped = true)) }, initLogHaimeviskaBlock(null, stripped = true),
         ) {
             block.registerDefaultLootTableGeneration()
+            ModEvents.onInitialize {
+                StrippableBlockRegistry.register(LOG.block(), block())
+            }
         }
         val STRIPPED_WOOD = !HaimeviskaBlockCard(
             "stripped_haimeviska_wood", EnJa("Stripped Haimeviska Wood", "樹皮を剥いだハイメヴィスカの木"),
@@ -121,6 +130,14 @@ class HaimeviskaBlockCard(
             { PillarBlock(createLogSettings(stripped = true, wood = true)) }, initLogHaimeviskaBlock({ STRIPPED_LOG }, stripped = true, wood = true),
         ) {
             block.registerDefaultLootTableGeneration()
+            registerShapedRecipeGeneration(item, 3) {
+                pattern("##")
+                pattern("##")
+                define('#', STRIPPED_LOG.item())
+            } on STRIPPED_LOG.item
+            ModEvents.onInitialize {
+                StrippableBlockRegistry.register(WOOD.block(), block())
+            }
         }
         val INCISED_LOG = !HaimeviskaBlockCard(
             "incised_haimeviska_log", EnJa("Incised Haimeviska Log", "傷の付いたハイメヴィスカの原木"),
@@ -172,6 +189,7 @@ class HaimeviskaBlockCard(
                     provider.applyExplosionDecay(block(), this)
                 }
             }
+            item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
         }
         val HOLLOW_LOG = !HaimeviskaBlockCard(
             "hollow_haimeviska_log", EnJa("Hollow Haimeviska Log", "ハイメヴィスカの樹洞"),
@@ -195,6 +213,7 @@ class HaimeviskaBlockCard(
                     provider.applyExplosionDecay(block(), this)
                 }
             }
+            item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
         }
         val PLANKS = !HaimeviskaBlockCard(
             "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
@@ -202,6 +221,9 @@ class HaimeviskaBlockCard(
             { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock,
         ) {
             block.registerDefaultLootTableGeneration()
+            registerShapelessRecipeGeneration(item, 4) {
+                requires(LOG.item())
+            } on LOG.item from LOG.item
         }
         val SLAB = !HaimeviskaBlockCard(
             "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
@@ -251,6 +273,11 @@ class HaimeviskaBlockCard(
             { Block(createPlankSettings()) }, ::initPlanksHaimeviskaBlock,
         ) {
             block.registerDefaultLootTableGeneration()
+            registerShapedRecipeGeneration(item, 4) {
+                pattern("##")
+                pattern("##")
+                define('#', PLANKS.item())
+            } on PLANKS.item from PLANKS.item
         }
         val BRICKS_SLAB = !HaimeviskaBlockCard(
             "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
@@ -272,6 +299,7 @@ class HaimeviskaBlockCard(
             { SaplingBlock(createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")), createSaplingSettings()) }, ::initSaplingHaimeviskaBlock,
         ) {
             block.registerDefaultLootTableGeneration()
+            item.registerComposterInput(0.3F)
         }
     }
 
@@ -351,36 +379,6 @@ fun initHaimeviskaBlocks() {
             RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
         }
     }
-
-    // レシピ
-    HaimeviskaBlockCard.LEAVES.item.registerComposterInput(0.3F)
-    HaimeviskaBlockCard.SAPLING.item.registerComposterInput(0.3F)
-    registerShapelessRecipeGeneration(HaimeviskaBlockCard.PLANKS.item, 4) {
-        requires(HaimeviskaBlockCard.LOG.item())
-    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
-    registerShapedRecipeGeneration(HaimeviskaBlockCard.BRICKS.item, 4) {
-        pattern("##")
-        pattern("##")
-        define('#', HaimeviskaBlockCard.PLANKS.item())
-    } on HaimeviskaBlockCard.PLANKS.item from HaimeviskaBlockCard.PLANKS.item
-    HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
-    HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
-    ModEvents.onInitialize {
-        StrippableBlockRegistry.register(HaimeviskaBlockCard.LOG.block(), HaimeviskaBlockCard.STRIPPED_LOG.block())
-    }
-    ModEvents.onInitialize {
-        StrippableBlockRegistry.register(HaimeviskaBlockCard.WOOD.block(), HaimeviskaBlockCard.STRIPPED_WOOD.block())
-    }
-    registerShapedRecipeGeneration(HaimeviskaBlockCard.WOOD.item, 3) {
-        pattern("##")
-        pattern("##")
-        define('#', HaimeviskaBlockCard.LOG.item())
-    } on HaimeviskaBlockCard.LOG.item
-    registerShapedRecipeGeneration(HaimeviskaBlockCard.STRIPPED_WOOD.item, 3) {
-        pattern("##")
-        pattern("##")
-        define('#', HaimeviskaBlockCard.STRIPPED_LOG.item())
-    } on HaimeviskaBlockCard.STRIPPED_LOG.item
 
     // タグ
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
