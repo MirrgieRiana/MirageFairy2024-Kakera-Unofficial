@@ -251,18 +251,6 @@ private fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamil
 }
 
 
-class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { HaimeviskaLeavesBlock(createLeavesSettings()) },
-    ::initLeavesHaimeviskaBlock,
-    {
-        block.registerLootTableGeneration { it, _ ->
-            it.createLeavesDrops(block(), SAPLING.block(), 0.05F / 4F, 0.0625F / 4F, 0.083333336F / 4F, 0.1F / 4F)
-        }
-        item.registerComposterInput(0.3F)
-    },
-)
-
 class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
     configuration,
     { HaimeviskaLogBlock(createLogSettings()) },

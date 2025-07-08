@@ -9,10 +9,12 @@ import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomBoolean
 import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerFlammable
 import miragefairy2024.util.registerFoliageColorProvider
 import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRedirectColorProvider
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -37,7 +39,56 @@ import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-fun createLeavesSettings() = AbstractBlock.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(BlockSoundGroup.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PistonBehavior.DESTROY).isRedstoneConductor(Blocks::never)
+class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+    override suspend fun createBlock() = AbstractBlock.Properties.of()
+        .mapColor(MapColor.PLANT)
+        .strength(0.2F)
+        .randomTicks()
+        .sound(BlockSoundGroup.GRASS)
+        .noOcclusion()
+        .isValidSpawn(Blocks::ocelotOrParrot)
+        .isSuffocating(Blocks::never)
+        .isViewBlocking(Blocks::never)
+        .ignitedByLava()
+        .pushReaction(PistonBehavior.DESTROY)
+        .isRedstoneConductor(Blocks::never)
+        .let { HaimeviskaLeavesBlock(it) }
+
+    context(ModContext)
+    override fun init() {
+        super.init()
+
+        // レンダリング
+        block.registerVariantsBlockStateGeneration {
+            val normal = BlockStateVariant(model = "block/" * block().getIdentifier())
+            listOf(
+                propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) with normal.with(model = "block/charged_" * block().getIdentifier()),
+                propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) with normal.with(model = "block/uncharged_" * block().getIdentifier()),
+            )
+        }
+        registerModelGeneration({ "block/charged_" * block().getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(block()) })
+        registerModelGeneration({ "block/uncharged_" * block().getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(block()) })
+        item.registerModelGeneration(Model("block/charged_" * identifier))
+        block.registerCutoutRenderLayer()
+        block.registerFoliageColorProvider()
+        item.registerRedirectColorProvider()
+
+        // レシピ
+        block.registerLootTableGeneration { it, _ ->
+            it.createLeavesDrops(block(), SAPLING.block(), 0.05F / 4F, 0.0625F / 4F, 0.083333336F / 4F, 0.1F / 4F)
+        }
+        item.registerComposterInput(0.3F)
+
+        // 性質
+        block.registerFlammable(30, 30)
+
+        // タグ
+        block.registerBlockTagGeneration { BlockTags.LEAVES }
+        item.registerItemTagGeneration { ItemTags.LEAVES }
+        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
+
+    }
+}
 
 class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     companion object {
@@ -77,32 +128,4 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
             }
         }
     }
-}
-
-context(ModContext)
-fun initLeavesHaimeviskaBlock(card: HaimeviskaBlockCard) {
-
-    // レンダリング
-    card.block.registerVariantsBlockStateGeneration {
-        val normal = BlockStateVariant(model = "block/" * card.block().getIdentifier())
-        listOf(
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with true) with normal.with(model = "block/charged_" * card.block().getIdentifier()),
-            propertiesOf(HaimeviskaLeavesBlock.CHARGED with false) with normal.with(model = "block/uncharged_" * card.block().getIdentifier()),
-        )
-    }
-    registerModelGeneration({ "block/charged_" * card.block().getIdentifier() }, { chargedHaimeviskaLeavesTexturedModelFactory.get(card.block()) })
-    registerModelGeneration({ "block/uncharged_" * card.block().getIdentifier() }, { unchargedHaimeviskaLeavesTexturedModelFactory.get(card.block()) })
-    card.item.registerModelGeneration(Model("block/charged_" * card.identifier))
-    card.block.registerCutoutRenderLayer()
-    card.block.registerFoliageColorProvider()
-    card.item.registerRedirectColorProvider()
-
-    // 性質
-    card.block.registerFlammable(30, 30)
-
-    // タグ
-    card.block.registerBlockTagGeneration { BlockTags.LEAVES }
-    card.item.registerItemTagGeneration { ItemTags.LEAVES }
-    card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
-
 }
