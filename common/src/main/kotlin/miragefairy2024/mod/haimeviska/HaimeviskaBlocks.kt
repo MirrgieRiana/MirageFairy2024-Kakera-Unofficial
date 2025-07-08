@@ -18,7 +18,6 @@ import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
-import miragefairy2024.util.from
 import miragefairy2024.util.get
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -28,7 +27,6 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
-import miragefairy2024.util.registerShapelessRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
@@ -142,7 +140,7 @@ open class HaimeviskaBlockCard(
         val BRICKS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
             PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
-        ).let { HaimeviskaBricksBlockCard(it) }
+        ).let { HaimeviskaBricksBlockCard(it, PLANKS.item) }
         val BRICKS_SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
             PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
@@ -375,18 +373,6 @@ class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) 
     },
 )
 
-class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { Block(createPlankSettings()) },
-    ::initPlanksHaimeviskaBlock,
-    {
-        block.registerDefaultLootTableGeneration()
-        registerShapelessRecipeGeneration(item, 4) {
-            requires(LOG.item())
-        } on LOG.item from LOG.item
-    },
-)
-
 class HaimeviskaFenceBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
     configuration,
     { FenceBlock(createPlankSettings()) },
@@ -404,19 +390,5 @@ class HaimeviskaFenceGateBlockCard(configuration: HaimeviskaBlockConfiguration) 
     {
         registerBlockFamily(PLANKS.block) { it.fenceGate(block()) }
         block.registerDefaultLootTableGeneration()
-    },
-)
-
-class HaimeviskaBricksBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(
-    configuration,
-    { Block(createPlankSettings()) },
-    ::initPlanksHaimeviskaBlock,
-    {
-        block.registerDefaultLootTableGeneration()
-        registerShapedRecipeGeneration(item, 4) {
-            pattern("##")
-            pattern("##")
-            define('#', PLANKS.item())
-        } on PLANKS.item from PLANKS.item
     },
 )
