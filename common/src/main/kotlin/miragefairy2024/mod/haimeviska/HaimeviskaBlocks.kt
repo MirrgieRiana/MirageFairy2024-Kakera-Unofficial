@@ -362,7 +362,7 @@ fun initHaimeviskaBlocks() {
         pattern("##")
         pattern("##")
         define('#', HaimeviskaBlockCard.PLANKS.item())
-    } on HaimeviskaBlockCard.LOG.item from HaimeviskaBlockCard.LOG.item
+    } on HaimeviskaBlockCard.PLANKS.item from HaimeviskaBlockCard.PLANKS.item
     HaimeviskaBlockCard.DRIPPING_LOG.item.registerHarvestNotation(MaterialCard.HAIMEVISKA_SAP.item, MaterialCard.HAIMEVISKA_ROSIN.item)
     HaimeviskaBlockCard.HOLLOW_LOG.item.registerHarvestNotation(MaterialCard.FRACTAL_WISP.item)
     ModEvents.onInitialize {
