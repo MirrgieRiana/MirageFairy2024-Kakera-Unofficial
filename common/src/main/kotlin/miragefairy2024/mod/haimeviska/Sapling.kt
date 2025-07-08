@@ -1,6 +1,5 @@
 package miragefairy2024.mod.haimeviska
 
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.registerBlockGeneratedModelGeneration
@@ -11,21 +10,25 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
+import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.material.MapColor
+import java.util.Optional
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
-class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : AbstractHaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = SaplingBlock(
-        createTreeGrower(MirageFairy2024.identifier("haimeviska_sapling")),
+        TreeGrower(treeGrowerName.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty()),
         AbstractBlock.Properties.of()
             .mapColor(MapColor.PLANT)
             .noCollission()

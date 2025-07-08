@@ -30,7 +30,6 @@ import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
-import miragefairy2024.util.string
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
@@ -38,7 +37,6 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.BlockFamily
 import net.minecraft.data.recipes.RecipeProvider
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -54,11 +52,9 @@ import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.PressurePlateBlock
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.StairBlock
-import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
-import java.util.Optional
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
@@ -164,7 +160,7 @@ open class HaimeviskaBlockCard(
         val SAPLING = !HaimeviskaBlockConfiguration(
             "haimeviska_sapling", EnJa("Haimeviska Sapling", "ハイメヴィスカの苗木"),
             PoemList(1).poem(EnJa("Assembling molecules with Ergs", "第二の葉緑体。")),
-        ).let { HaimeviskaSaplingBlockCard(it) }
+        ).let { HaimeviskaSaplingBlockCard(it, MirageFairy2024.identifier("haimeviska")) }
     }
 
     val identifier = MirageFairy2024.identifier(configuration.path)
@@ -199,8 +195,6 @@ abstract class AbstractHaimeviskaBlockCard(configuration: HaimeviskaBlockConfigu
 
 fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
 fun createSpecialLogSettings() = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
-
-fun createTreeGrower(identifier: ResourceLocation) = TreeGrower(identifier.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty())
 
 
 lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType
