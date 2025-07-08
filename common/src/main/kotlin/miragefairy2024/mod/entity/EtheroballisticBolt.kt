@@ -2,8 +2,8 @@ package miragefairy2024.mod.entity
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.SoundEventCard
+import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.tool.PhysicalMagicDamageTypeCard
 import miragefairy2024.util.Registration
 import miragefairy2024.util.getValue

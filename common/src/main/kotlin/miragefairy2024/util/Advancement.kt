@@ -4,7 +4,7 @@ import kotlinx.coroutines.CompletableDeferred
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.materials.item.MaterialCard
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.AdvancementRewards

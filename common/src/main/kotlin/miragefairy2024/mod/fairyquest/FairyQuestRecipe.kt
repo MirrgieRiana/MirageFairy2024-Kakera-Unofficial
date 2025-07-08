@@ -6,9 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.PlacedItemFeature
-import miragefairy2024.mod.BlockMaterialCard
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.materials.block.BlockMaterialCard
+import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.util.Chance
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation

@@ -8,8 +8,8 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.entry.EntryIngredient
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.harvestNotations
+import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.rei.HarvestReiCategoryCard
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.invoke

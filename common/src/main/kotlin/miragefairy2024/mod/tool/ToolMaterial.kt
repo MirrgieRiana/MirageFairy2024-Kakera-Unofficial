@@ -2,7 +2,7 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.MaterialCard
+import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration

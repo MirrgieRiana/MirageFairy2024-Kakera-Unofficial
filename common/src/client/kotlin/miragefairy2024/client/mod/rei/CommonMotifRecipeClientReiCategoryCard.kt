@@ -7,13 +7,13 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget
 import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import miragefairy2024.mod.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.fairy.AlwaysCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeCommonMotifRecipe
 import miragefairy2024.mod.fairy.BiomeTagCommonMotifRecipe
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
+import miragefairy2024.mod.materials.item.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.rei.COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION
 import miragefairy2024.mod.rei.CommonMotifRecipeReiCategoryCard
 import miragefairy2024.util.invoke

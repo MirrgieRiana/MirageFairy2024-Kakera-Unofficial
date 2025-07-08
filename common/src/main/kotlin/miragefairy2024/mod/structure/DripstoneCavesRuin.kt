@@ -2,9 +2,9 @@ package miragefairy2024.mod.structure
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.BlockMaterialCard
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.magicplant.contents.magicplants.DiamondLuminariaCard
+import miragefairy2024.mod.materials.block.BlockMaterialCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa

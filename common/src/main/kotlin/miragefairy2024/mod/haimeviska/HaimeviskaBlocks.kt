@@ -6,9 +6,9 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
-import miragefairy2024.mod.MaterialCard
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
+import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.mod.poem

@@ -9,11 +9,11 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
-import miragefairy2024.mod.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.fairy.FairyDreamRecipes
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.fairyDreamContainer
+import miragefairy2024.mod.materials.item.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.rei.BlockFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.EntityTypeFairyDreamRecipeReiCategoryCard
 import miragefairy2024.mod.rei.ItemFairyDreamRecipeReiCategoryCard

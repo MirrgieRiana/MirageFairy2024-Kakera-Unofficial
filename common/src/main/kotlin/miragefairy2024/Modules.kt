@@ -8,14 +8,12 @@ import miragefairy2024.mod.fairyquest.initFairyQuestModule
 import miragefairy2024.mod.haimeviska.initHaimeviskaModule
 import miragefairy2024.mod.initBagModule
 import miragefairy2024.mod.initBiomeModule
-import miragefairy2024.mod.initBlockMaterialsModule
 import miragefairy2024.mod.initCommonModule
 import miragefairy2024.mod.initDebrisModule
 import miragefairy2024.mod.initEnchantmentModule
 import miragefairy2024.mod.initFairyFountainModule
 import miragefairy2024.mod.initFoodIngredientsModule
 import miragefairy2024.mod.initLastFoodModule
-import miragefairy2024.mod.initMaterialsModule
 import miragefairy2024.mod.initNinePatchTextureModule
 import miragefairy2024.mod.initOresModule
 import miragefairy2024.mod.initPoemModule
@@ -26,6 +24,8 @@ import miragefairy2024.mod.initTelescopeModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.machine.initMachineModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
+import miragefairy2024.mod.materials.block.initBlockMaterialsModule
+import miragefairy2024.mod.materials.item.initMaterialsModule
 import miragefairy2024.mod.particle.initParticleModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule
