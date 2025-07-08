@@ -49,7 +49,6 @@ import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.HalfTransparentBlock as TransparentBlock
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
