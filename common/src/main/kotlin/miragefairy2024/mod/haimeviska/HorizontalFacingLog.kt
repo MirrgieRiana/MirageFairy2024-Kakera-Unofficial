@@ -26,8 +26,8 @@ abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaB
         block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
         block.registerModelGeneration {
             Models.CUBE_ORIENTABLE.with(
-                TextureKey.TOP to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier() * "_top",
-                TextureKey.SIDE to "block/" * HaimeviskaBlockCard.LOG.block().getIdentifier(),
+                TextureKey.TOP to "block/" * LOG.block().getIdentifier() * "_top",
+                TextureKey.SIDE to "block/" * LOG.block().getIdentifier(),
                 TextureKey.FRONT to "block/" * it.getIdentifier(),
             )
         }
