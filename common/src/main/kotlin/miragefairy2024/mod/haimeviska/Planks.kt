@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.MapColor
 
 fun createPlankSettings(sound: Boolean = true) = createBaseWoodSetting(sound = sound).strength(2.0F, 3.0F).mapColor(MapColor.RAW_IRON)
 
-class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
+open class AbstractHaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaBlockCard(configuration) {
     override suspend fun createBlock() = createBaseWoodSetting()
         .strength(2.0F, 3.0F)
         .mapColor(MapColor.RAW_IRON)
@@ -28,9 +28,6 @@ class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : A
         super.init()
 
         block.registerDefaultLootTableGeneration()
-        registerShapelessRecipeGeneration(item, 4) {
-            requires(LOG.item())
-        } on LOG.item from LOG.item
 
         // 性質
         block.registerFlammable(5, 20)
@@ -42,29 +39,24 @@ class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration) : A
     }
 }
 
-class HaimeviskaBricksBlockCard(configuration: HaimeviskaBlockConfiguration, private val input: () -> Item) : AbstractHaimeviskaBlockCard(configuration) {
-    override suspend fun createBlock() = createBaseWoodSetting()
-        .strength(2.0F, 3.0F)
-        .mapColor(MapColor.RAW_IRON)
-        .let { Block(it) }
-
+class HaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfiguration, private val input: () -> Item) : AbstractHaimeviskaPlanksBlockCard(configuration) {
     context(ModContext)
     override fun init() {
         super.init()
+        registerShapelessRecipeGeneration(item, 4) {
+            requires(input())
+        } on input from input
+    }
+}
 
-        block.registerDefaultLootTableGeneration()
+class HaimeviskaBricksBlockCard(configuration: HaimeviskaBlockConfiguration, private val input: () -> Item) : AbstractHaimeviskaPlanksBlockCard(configuration) {
+    context(ModContext)
+    override fun init() {
+        super.init()
         registerShapedRecipeGeneration(item, 4) {
             pattern("##")
             pattern("##")
             define('#', input())
         } on input from input
-
-        // 性質
-        block.registerFlammable(5, 20)
-
-        // タグ
-        block.registerBlockTagGeneration { BlockTags.PLANKS }
-        item.registerItemTagGeneration { ItemTags.PLANKS }
-
     }
 }

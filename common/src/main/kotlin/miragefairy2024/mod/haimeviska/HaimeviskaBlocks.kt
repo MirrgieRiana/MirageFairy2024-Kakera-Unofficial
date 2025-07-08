@@ -112,7 +112,7 @@ open class HaimeviskaBlockCard(
         val PLANKS = !HaimeviskaBlockConfiguration(
             "haimeviska_planks", EnJa("Haimeviska Planks", "ハイメヴィスカの板材"),
             PoemList(1).poem(EnJa("Flexible and friendly, good for interior", "考える、壁。")),
-        ).let { HaimeviskaPlanksBlockCard(it) }
+        ).let { HaimeviskaPlanksBlockCard(it, LOG.item) }
         val SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_slab", EnJa("Haimeviska Slab", "ハイメヴィスカのハーフブロック"),
             PoemList(1).poem(EnJa("Searching for another personality.", "半人前の側頭葉。")),
