@@ -2,8 +2,12 @@
   <dictionary name="project_dic">
     <words>
       <w>andesite</w>
+      <w>architectury</w>
+      <w>berryllium</w>
       <w>biome</w>
       <w>blockbench</w>
+      <w>cidre</w>
+      <w>compostables</w>
       <w>continentalness</w>
       <w>cookingtime</w>
       <w>cooldown</w>
@@ -17,47 +21,64 @@
       <w>enchantability</w>
       <w>enderman</w>
       <w>entrypoints</w>
+      <w>etheroballistic</w>
+      <w>etheroluminescence</w>
       <w>fabricloader</w>
       <w>folia</w>
+      <w>forgified</w>
       <w>frametime</w>
       <w>golem</w>
       <w>haimeviska</w>
       <w>hanning</w>
       <w>ifft</w>
+      <w>kotlinforforge</w>
       <w>lapis</w>
       <w>lateinit</w>
+      <w>lilagium</w>
       <w>luminariaceae</w>
+      <w>luminite</w>
       <w>magicplant</w>
+      <w>merrrria</w>
+      <w>merrrriaceae</w>
       <w>mesic</w>
       <w>minia</w>
       <w>miragaceae</w>
       <w>miragales</w>
       <w>miragefairy</w>
+      <w>miragidian</w>
       <w>miragium</w>
       <w>miranagi</w>
       <w>miranagite</w>
+      <w>mirrg</w>
       <w>modrinth</w>
       <w>mycelium</w>
       <w>netherite</w>
       <w>netherrack</w>
       <w>noded</w>
+      <w>nylium</w>
       <w>overworld</w>
       <w>phaeosynthesis</w>
       <w>piglin</w>
+      <w>prominaria</w>
+      <w>prominite</w>
       <w>purpur</w>
       <w>qualia</w>
       <w>raycast</w>
       <w>redstone</w>
       <w>replaceables</w>
+      <w>resonite</w>
       <w>sculk</w>
       <w>seagrass</w>
       <w>terrablender</w>
+      <w>tertia</w>
       <w>thiccness</w>
       <w>tintindex</w>
       <w>tuff</w>
       <w>uvlock</w>
       <w>veropeda</w>
       <w>veropedaceae</w>
+      <w>veropedeliquora</w>
+      <w>viska</w>
       <w>waterlogging</w>
       <w>xarpa</w>
       <w>xarpite</w>
