@@ -114,9 +114,9 @@ open class BlockMaterialCard(
             MapColor.DIAMOND, 6.0F, 6.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
             blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
-        ).needTool().init {
+        ).translucent().sound(SoundType.GLASS).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
-        }.translucent().sound(SoundType.GLASS)
+        }
         val DRYWALL = !BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
@@ -176,12 +176,12 @@ open class BlockMaterialCard(
             },
             noModelGeneration = true,
             blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
-        ).init {
+        ).cutout().sound(SoundType.GLASS).needTool().noSpawn().init {
             registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
-        }.cutout().sound(SoundType.GLASS).needTool().noSpawn()
+        }
     }
 
     val identifier = MirageFairy2024.identifier(path)
