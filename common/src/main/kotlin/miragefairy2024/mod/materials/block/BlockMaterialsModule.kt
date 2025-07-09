@@ -61,8 +61,6 @@ open class BlockMaterialCard(
     resistance: Float,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
-    val texturedModelFactory: TexturedModel.Provider? = null,
-    val noModelGeneration: Boolean = false,
 ) {
     companion object {
         val entries = mutableListOf<BlockMaterialCard>()
@@ -114,12 +112,13 @@ open class BlockMaterialCard(
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
             MapColor.SAND, 3.0F, 3.0F,
         ).tag(BlockTags.MINEABLE_WITH_PICKAXE)
-        val LOCAL_VACUUM_DECAY = !BlockMaterialCard(
+        val LOCAL_VACUUM_DECAY = !object : BlockMaterialCard(
             "local_vacuum_decay", EnJa("Local Vacuum Decay", "局所真空崩壊"),
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
             MapColor.COLOR_BLACK, -1.0F, 3600000.0F, blockCreator = ::LocalVacuumDecayBlock,
-            texturedModelFactory = localVacuumDecayTexturedModelFactory,
-        ).cutout().sound(SoundType.SLIME_BLOCK).noDrop().noSpawn().speed(0.5F).tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
+        ) {
+            context(ModContext) override fun initModelGeneration() = block.registerModelGeneration(localVacuumDecayTexturedModelFactory)
+        }.cutout().sound(SoundType.SLIME_BLOCK).noDrop().noSpawn().speed(0.5F).tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
         val AURA_STONE = !BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
@@ -136,7 +135,7 @@ open class BlockMaterialCard(
                 duration = 20 * 60,
             ) on MaterialCard.FAIRY_CRYSTAL.item
         }
-        val FAIRY_CRYSTAL_GLASS = !BlockMaterialCard(
+        val FAIRY_CRYSTAL_GLASS = !object : BlockMaterialCard(
             "fairy_crystal_glass", EnJa("Fairy Crystal Glass", "フェアリークリスタルガラス"),
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F,
@@ -162,9 +161,10 @@ open class BlockMaterialCard(
                     ),
                 )
             },
-            noModelGeneration = true,
             blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
-        ).cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).init {
+        ) {
+            context(ModContext) override fun initModelGeneration() = Unit
+        }.cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).init {
             registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
@@ -214,13 +214,7 @@ open class BlockMaterialCard(
 
     context(ModContext)
     open fun initModelGeneration() {
-        if (!noModelGeneration) {
-            if (texturedModelFactory != null) {
-                block.registerModelGeneration(texturedModelFactory)
-            } else {
-                block.registerModelGeneration(TexturedModel.CUBE)
-            }
-        }
+        block.registerModelGeneration(TexturedModel.CUBE)
     }
 }
 
