@@ -39,7 +39,7 @@ fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builde
     DataGenerationEvents.onGenerateBlockModel {
         val texturedModel = TexturedModel.CUBE[baseBlock()]
         val blockFamilyProvider = it.BlockFamilyProvider(texturedModel.mapping)
-        platformProxy!!.setFullBlock(blockFamilyProvider, baseBlock().getIdentifier())
+        platformProxy!!.setFullBlock(blockFamilyProvider, "block/" * baseBlock().getIdentifier())
         blockFamilyProvider.generateFor(family)
     }
     DataGenerationEvents.onGenerateRecipe {
