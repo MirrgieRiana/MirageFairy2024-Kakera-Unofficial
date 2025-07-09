@@ -195,24 +195,28 @@ open class BlockMaterialCard(
     }
 
     val identifier = MirageFairy2024.identifier(path)
-    val block = Registration(BuiltInRegistries.BLOCK, identifier) {
-        val properties = blockPropertiesConverters.fold(createBlockProperties()) { properties, converter -> converter(properties) }
-        createBlock(properties)
-    }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) {
-        val properties = itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }
-        BlockItem(block.await(), properties)
-    }
-
-    val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
-    val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
-    val initializers = mutableListOf<(ModContext) -> Unit>()
 
     open fun createBlockProperties(): AbstractBlock.Properties = AbstractBlock.Properties.of()
         .mapColor(mapColor)
         .strength(hardness, resistance)
 
+    val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
+
     open suspend fun createBlock(properties: AbstractBlock.Properties) = Block(properties)
+
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) {
+        val properties = blockPropertiesConverters.fold(createBlockProperties()) { properties, converter -> converter(properties) }
+        createBlock(properties)
+    }
+
+    val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
+
+    val item = Registration(BuiltInRegistries.ITEM, identifier) {
+        val properties = itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }
+        BlockItem(block.await(), properties)
+    }
+
+    val initializers = mutableListOf<(ModContext) -> Unit>()
 
     context(ModContext)
     open fun init() {
