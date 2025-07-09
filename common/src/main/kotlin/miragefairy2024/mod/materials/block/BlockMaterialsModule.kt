@@ -114,7 +114,7 @@ open class BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
             MapColor.SAND, 3.0F, 3.0F,
-        ).tag(BlockTags.MINEABLE_WITH_PICKAXE)
+        ).tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
         val LOCAL_VACUUM_DECAY = !object : BlockMaterialCard(
             "local_vacuum_decay", EnJa("Local Vacuum Decay", "局所真空崩壊"),
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
@@ -315,4 +315,5 @@ private fun <T : BlockMaterialCard> T.invincible() = this
         BlockTags.WITHER_IMMUNE,
         BlockTags.FEATURES_CANNOT_REPLACE,
         BlockTags.GEODE_INVALID_BLOCKS,
+        BlockTags.BLOCKS_WIND_CHARGE_EXPLOSIONS,
     )
