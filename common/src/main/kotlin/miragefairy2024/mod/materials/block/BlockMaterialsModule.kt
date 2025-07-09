@@ -181,8 +181,14 @@ open class BlockMaterialCard(
 
             context(ModContext) override fun initModelGeneration() = Unit
         }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).noSpawn().tag(BlockTags.IMPERMEABLE).init {
-            registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
-            registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
+            // インベントリ内のモデル
+            registerModelGeneration({ "block/" * identifier }) {
+                fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
+            }
+            // 枠パーツモデル
+            registerModelGeneration({ "block/" * identifier * "_frame" }) {
+                fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
+            }
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
         }
@@ -202,7 +208,10 @@ open class BlockMaterialCard(
     val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
     val initializers = mutableListOf<(ModContext) -> Unit>()
 
-    open fun createBlockProperties(): AbstractBlock.Properties = AbstractBlock.Properties.of().mapColor(mapColor).strength(hardness, resistance)
+    open fun createBlockProperties(): AbstractBlock.Properties = AbstractBlock.Properties.of()
+        .mapColor(mapColor)
+        .strength(hardness, resistance)
+
     open suspend fun createBlock(properties: AbstractBlock.Properties) = Block(properties)
 
     context(ModContext)
