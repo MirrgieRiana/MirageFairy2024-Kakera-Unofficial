@@ -31,9 +31,11 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
+import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerItemGroup
@@ -213,11 +215,12 @@ fun initHaimeviskaBlocks() {
 
 context(ModContext)
 fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
-    val family by lazy {
-        initializer(BlockFamily.Builder(baseBlock())).family
-    }
+    val family by lazy { initializer(BlockFamily.Builder(baseBlock())).family }
     DataGenerationEvents.onGenerateBlockModel {
-        it.BlockFamilyProvider(TexturedModel.CUBE[family.baseBlock].mapping).generateFor(family)
+        val texturedModel = TexturedModel.CUBE[baseBlock()]
+        val blockFamilyProvider = it.BlockFamilyProvider(texturedModel.mapping)
+        platformProxy!!.setFullBlock(blockFamilyProvider, baseBlock().getIdentifier())
+        blockFamilyProvider.generateFor(family)
     }
     DataGenerationEvents.onGenerateRecipe {
         RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
