@@ -307,4 +307,12 @@ private fun <T : BlockMaterialCard> T.needTool(type: ToolType, level: ToolLevel)
 
 private fun <T : BlockMaterialCard> T.beaconBase() = this.tag(BlockTags.BEACON_BASE_BLOCKS)
 
-private fun <T : BlockMaterialCard> T.invincible() = this.noDrop().noSpawn().tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
+private fun <T : BlockMaterialCard> T.invincible() = this
+    .noDrop()
+    .noSpawn()
+    .tag(
+        BlockTags.DRAGON_IMMUNE,
+        BlockTags.WITHER_IMMUNE,
+        BlockTags.FEATURES_CANNOT_REPLACE,
+        BlockTags.GEODE_INVALID_BLOCKS,
+    )
