@@ -28,6 +28,7 @@ import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
@@ -39,6 +40,7 @@ import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -288,9 +290,17 @@ private fun <T : BlockMaterialCard> T.translucent() = this.init {
     block.registerTranslucentRenderLayer()
 }
 
+@JvmName("blockTag")
 private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Block>) = this.init {
     tags.forEach {
         block.registerBlockTagGeneration { it }
+    }
+}
+
+@JvmName("itemTag")
+private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Item>) = this.init {
+    tags.forEach {
+        item.registerItemTagGeneration { it }
     }
 }
 
