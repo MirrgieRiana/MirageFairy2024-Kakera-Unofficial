@@ -1,8 +1,16 @@
 package miragefairy2024.mod.materials.block
 
+<<<<<<< HEAD
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
+=======
+import miragefairy2024.DataGenerationEvents
+import miragefairy2024.MirageFairy2024
+import miragefairy2024.ModContext
+import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.haimeviska.registerBlockFamily
+>>>>>>> ad626cac (a)
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.materials.block.cards.FairyCrystalGlassBlock
@@ -20,6 +28,10 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+<<<<<<< HEAD
+=======
+import miragefairy2024.util.from
+>>>>>>> ad626cac (a)
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockStateGeneration
@@ -28,7 +40,14 @@ import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
+<<<<<<< HEAD
 import miragefairy2024.util.registerModelGeneration
+=======
+import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.registerLootTableGeneration
+import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.registerShapedRecipeGeneration
+>>>>>>> ad626cac (a)
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.times
@@ -37,9 +56,20 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.core.registries.BuiltInRegistries
+<<<<<<< HEAD
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
+=======
+import net.minecraft.data.BlockFamily
+import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.data.recipes.RecipeProvider
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.ItemTags
+import net.minecraft.tags.TagKey
+import net.minecraft.world.flag.FeatureFlagSet
+import net.minecraft.world.flag.FeatureFlags
+>>>>>>> ad626cac (a)
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
@@ -82,6 +112,31 @@ open class BlockMaterialCard(
         ).needTool(ToolType.PICKAXE, ToolLevel.STONE).beaconBase().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, item)
         }
+<<<<<<< HEAD
+=======
+        val MIRANAGITE_TILES = !BlockMaterialCard(
+            "miranagite_tiles", EnJa("Miranagite Tiles", "蒼天石タイル"),
+            PoemList(2).poem(EnJa("Negative time evolution zone", "因果を遡行する、開闢の手。")),
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).init {
+            registerShapedRecipeGeneration(item, 4) {
+                pattern("##")
+                pattern("##")
+                define('#', MaterialCard.MIRANAGITE.item())
+            } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+        }
+        val MIRANAGITE_TILE_SLAB = !object : BlockMaterialCard(
+            "miranagite_tile_slab", EnJa("Miranagite Tile Slab", "蒼天石タイルのハーフブロック"),
+            PoemList(2).poem(EnJa("TODO", "TODO")), // TODO
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ) {
+            context(ModContext) override fun initBlockStateGeneration() = Unit
+            context(ModContext) override fun initModelGeneration() = Unit
+            context(ModContext) override fun initLootTableGeneration() = block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
+        }.needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.SLABS).tag(ItemTags.SLABS).init {
+            registerBlockFamily(MIRANAGITE_TILES.block) { it.slab(block()) }
+        }
+>>>>>>> ad626cac (a)
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),
             PoemList(4).poem(EnJa("The eye of entropy.", "無秩序の目。")),
@@ -233,7 +288,11 @@ open class BlockMaterialCard(
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
+<<<<<<< HEAD
         block.registerDefaultLootTableGeneration()
+=======
+        initLootTableGeneration()
+>>>>>>> ad626cac (a)
 
         initializers.forEach {
             it(this@ModContext)
@@ -250,6 +309,15 @@ open class BlockMaterialCard(
     open fun initModelGeneration() {
         block.registerModelGeneration(TexturedModel.CUBE)
     }
+<<<<<<< HEAD
+=======
+
+    context(ModContext)
+    open fun initLootTableGeneration() {
+        block.registerDefaultLootTableGeneration()
+    }
+
+>>>>>>> ad626cac (a)
 }
 
 context(ModContext)
@@ -288,12 +356,26 @@ private fun <T : BlockMaterialCard> T.translucent() = this.init {
     block.registerTranslucentRenderLayer()
 }
 
+<<<<<<< HEAD
+=======
+@JvmName("blockTag")
+>>>>>>> ad626cac (a)
 private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Block>) = this.init {
     tags.forEach {
         block.registerBlockTagGeneration { it }
     }
 }
 
+<<<<<<< HEAD
+=======
+@JvmName("itemTag")
+private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Item>) = this.init {
+    tags.forEach {
+        item.registerItemTagGeneration { it }
+    }
+}
+
+>>>>>>> ad626cac (a)
 enum class ToolType(val tag: TagKey<Block>) {
     AXE(BlockTags.MINEABLE_WITH_AXE),
     HOE(BlockTags.MINEABLE_WITH_HOE),

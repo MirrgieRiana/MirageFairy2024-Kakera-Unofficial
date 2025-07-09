@@ -217,7 +217,11 @@ fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builde
         initializer(BlockFamily.Builder(baseBlock())).family
     }
     DataGenerationEvents.onGenerateBlockModel {
+<<<<<<< HEAD
         it.BlockFamilyProvider(TexturedModel.CUBE[family.baseBlock].mapping).generateFor(family)
+=======
+        it.BlockFamilyProvider(TexturedModel.CUBE[family.baseBlock].mapping).slab().generateFor(family)
+>>>>>>> ad626cac (a)
     }
     DataGenerationEvents.onGenerateRecipe {
         RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
