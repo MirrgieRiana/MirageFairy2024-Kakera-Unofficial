@@ -46,10 +46,10 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
 open class BlockMaterialCard(
@@ -59,12 +59,7 @@ open class BlockMaterialCard(
     mapColor: MapColor,
     hardness: Float,
     resistance: Float,
-    requiresTool: Boolean = false,
-    dropsNothing: Boolean = false,
-    restrictsSpawning: Boolean = false,
     fireResistant: Boolean = false,
-    velocityMultiplier: Float? = null,
-    blockSoundGroup: BlockSoundGroup? = null,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
     val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
@@ -78,51 +73,50 @@ open class BlockMaterialCard(
         val NEPHRITE_BLOCK = !BlockMaterialCard(
             "nephrite_block", EnJa("Nephrite Block", "ネフライトブロック"),
             PoemList(null),
-            MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F, requiresTool = true,
+            MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        )
+        ).needTool()
         val XARPITE_BLOCK = !BlockMaterialCard(
             "xarpite_block", EnJa("Xarpite Block", "紅天石ブロック"),
             PoemList(2).poem(EnJa("Loss and reconstruction of perception", "夢の世界の如き紅。")),
-            MapColor.NETHER, 3.0F, 3.0F, requiresTool = true,
+            MapColor.NETHER, 3.0F, 3.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        ).init {
+        ).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, item)
         }
         val MIRANAGITE_BLOCK = !BlockMaterialCard(
             "miranagite_block", EnJa("Miranagite Block", "蒼天石ブロック"),
             PoemList(2).poem(EnJa("Passivation confines discontinuous space", "虚空に導かれし、神域との接合点。")),
-            MapColor.LAPIS, 3.0F, 3.0F, requiresTool = true,
+            MapColor.LAPIS, 3.0F, 3.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        ).init {
+        ).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, item)
         }
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),
             PoemList(4).poem(EnJa("The eye of entropy.", "無秩序の目。")),
-            MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F, requiresTool = true,
+            MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        ).init {
+        ).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, item)
         }
         val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
             PoemList(4).poem(EnJa("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。")),
-            MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, requiresTool = true, fireResistant = true,
+            MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, fireResistant = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        ).init {
+        ).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
         }
         val LUMINITE_BLOCK = !BlockMaterialCard(
             "luminite_block", EnJa("Luminite Block", "ルミナイトブロック"),
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
-            MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
+            MapColor.DIAMOND, 6.0F, 6.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-            blockSoundGroup = BlockSoundGroup.GLASS,
             blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
-        ).init {
+        ).needTool().init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
-        }.translucent()
+        }.translucent().sound(SoundType.GLASS)
         val DRYWALL = !BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
@@ -132,17 +126,16 @@ open class BlockMaterialCard(
         val LOCAL_VACUUM_DECAY = !BlockMaterialCard(
             "local_vacuum_decay", EnJa("Local Vacuum Decay", "局所真空崩壊"),
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
-            MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
+            MapColor.COLOR_BLACK, -1.0F, 3600000.0F, blockCreator = ::LocalVacuumDecayBlock,
             tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-            texturedModelFactory = localVacuumDecayTexturedModelFactory, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
-        ).cutout()
+            texturedModelFactory = localVacuumDecayTexturedModelFactory,
+        ).cutout().sound(SoundType.SLIME_BLOCK).noDrop().noSpawn().speed(0.5F)
         val AURA_STONE = !BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
-            MapColor.DIAMOND, 5.0F, 6.0F, requiresTool = true,
+            MapColor.DIAMOND, 5.0F, 6.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL),
-            blockSoundGroup = BlockSoundGroup.METAL,
-        ).init {
+        ).sound(SoundType.METAL).needTool().init {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
@@ -157,9 +150,8 @@ open class BlockMaterialCard(
         val FAIRY_CRYSTAL_GLASS = !BlockMaterialCard(
             "fairy_crystal_glass", EnJa("Fairy Crystal Glass", "フェアリークリスタルガラス"),
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
-            MapColor.DIAMOND, 1.5F, 1.5F, requiresTool = true, restrictsSpawning = true,
+            MapColor.DIAMOND, 1.5F, 1.5F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE),
-            blockSoundGroup = BlockSoundGroup.GLASS,
             blockStateFactory = {
                 fun createPart(direction: String, x: Int, y: Int) = jsonObject(
                     "when" to jsonObject(
@@ -189,19 +181,14 @@ open class BlockMaterialCard(
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
-        }.cutout()
+        }.cutout().sound(SoundType.GLASS).needTool().noSpawn()
     }
 
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
         val settings = propertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
         settings.mapColor(mapColor)
-        if (requiresTool) settings.requiresCorrectToolForDrops()
-        if (dropsNothing) settings.noLootTable()
-        if (restrictsSpawning) settings.isValidSpawn { _, _, _, _ -> false }
-        if (velocityMultiplier != null) settings.speedFactor(velocityMultiplier)
         settings.strength(hardness, resistance)
-        if (blockSoundGroup != null) settings.sound(blockSoundGroup)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties().let { if (fireResistant) it.fireResistant() else it }) }
@@ -257,6 +244,14 @@ fun initBlockMaterialsModule() {
         card.init()
     }
 }
+
+private fun <T : BlockMaterialCard> T.property(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.propertiesConverters += converter }
+
+private fun <T : BlockMaterialCard> T.needTool() = this.property { it.requiresCorrectToolForDrops() }
+private fun <T : BlockMaterialCard> T.noDrop() = this.property { it.noLootTable() }
+private fun <T : BlockMaterialCard> T.noSpawn() = this.property { it.isValidSpawn(Blocks::never) }
+private fun <T : BlockMaterialCard> T.speed(speedFactor: Float) = this.property { it.speedFactor(speedFactor) }
+private fun <T : BlockMaterialCard> T.sound(blockSoundGroup: SoundType) = this.property { it.sound(blockSoundGroup) }
 
 private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.() -> Unit) = this.also {
     this.initializers += { modContext ->
