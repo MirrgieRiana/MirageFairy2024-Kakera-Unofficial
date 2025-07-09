@@ -122,7 +122,7 @@ open class BlockMaterialCard(
         ) {
             override suspend fun createBlock(properties: AbstractBlock.Properties) = LocalVacuumDecayBlock(properties)
             context(ModContext) override fun initModelGeneration() = block.registerModelGeneration(localVacuumDecayTexturedModelFactory)
-        }.cutout().sound(SoundType.SLIME_BLOCK).noDrop().noSpawn().speed(0.5F).tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
+        }.cutout().sound(SoundType.SLIME_BLOCK).invincible().speed(0.5F)
         val AURA_STONE = !BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
@@ -306,3 +306,5 @@ enum class ToolLevel(val tag: TagKey<Block>) {
 private fun <T : BlockMaterialCard> T.needTool(type: ToolType, level: ToolLevel) = this.blockProperty { it.requiresCorrectToolForDrops() }.tag(type.tag, level.tag)
 
 private fun <T : BlockMaterialCard> T.beaconBase() = this.tag(BlockTags.BEACON_BASE_BLOCKS)
+
+private fun <T : BlockMaterialCard> T.invincible() = this.noDrop().noSpawn().tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
