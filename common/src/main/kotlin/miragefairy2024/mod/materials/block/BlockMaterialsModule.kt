@@ -180,7 +180,7 @@ open class BlockMaterialCard(
             }
 
             context(ModContext) override fun initModelGeneration() = Unit
-        }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).noSpawn().tag(BlockTags.IMPERMEABLE).init {
+        }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).beaconBase().noSpawn().tag(BlockTags.IMPERMEABLE).init {
             // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier }) {
                 fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
