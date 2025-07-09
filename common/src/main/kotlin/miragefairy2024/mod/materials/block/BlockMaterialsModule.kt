@@ -122,7 +122,7 @@ open class BlockMaterialCard(
             blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
         ).init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
-        }.translucentRenderLayer()
+        }.translucent()
         val DRYWALL = !BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
@@ -135,7 +135,7 @@ open class BlockMaterialCard(
             MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
             tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
             texturedModelFactory = localVacuumDecayTexturedModelFactory, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
-        ).cutoutRenderLayer()
+        ).cutout()
         val AURA_STONE = !BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
@@ -189,7 +189,7 @@ open class BlockMaterialCard(
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
-        }.cutoutRenderLayer()
+        }.cutout()
     }
 
     val identifier = MirageFairy2024.identifier(path)
@@ -264,10 +264,10 @@ private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.()
     }
 }
 
-private fun <T : BlockMaterialCard> T.cutoutRenderLayer() = this.init {
+private fun <T : BlockMaterialCard> T.cutout() = this.init {
     block.registerCutoutRenderLayer()
 }
 
-private fun <T : BlockMaterialCard> T.translucentRenderLayer() = this.init {
+private fun <T : BlockMaterialCard> T.translucent() = this.init {
     block.registerTranslucentRenderLayer()
 }
