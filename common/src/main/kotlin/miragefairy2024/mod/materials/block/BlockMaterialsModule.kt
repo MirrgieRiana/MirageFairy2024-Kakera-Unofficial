@@ -70,8 +70,6 @@ open class BlockMaterialCard(
     val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
     val texturedModelFactory: TexturedModel.Provider? = null,
     val noModelGeneration: Boolean = false,
-    val isCutoutRenderLayer: Boolean = false,
-    val isTranslucentRenderLayer: Boolean = false,
 ) {
     companion object {
         val entries = mutableListOf<BlockMaterialCard>()
@@ -120,11 +118,11 @@ open class BlockMaterialCard(
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
             MapColor.DIAMOND, 6.0F, 6.0F, requiresTool = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-            isTranslucentRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+            blockSoundGroup = BlockSoundGroup.GLASS,
             blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
         ).init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
-        }
+        }.translucentRenderLayer()
         val DRYWALL = !BlockMaterialCard(
             "drywall", EnJa("Drywall", "石膏ボード"),
             PoemList(1).poem(EnJa("Please use on the office ceiling, etc.", "オフィスの天井等にどうぞ。")),
@@ -136,8 +134,8 @@ open class BlockMaterialCard(
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
             MapColor.COLOR_BLACK, -1.0F, 3600000.0F, dropsNothing = true, restrictsSpawning = true, blockCreator = ::LocalVacuumDecayBlock, velocityMultiplier = 0.5F,
             tags = listOf(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
-            texturedModelFactory = localVacuumDecayTexturedModelFactory, isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
-        )
+            texturedModelFactory = localVacuumDecayTexturedModelFactory, blockSoundGroup = BlockSoundGroup.SLIME_BLOCK,
+        ).cutoutRenderLayer()
         val AURA_STONE = !BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
@@ -161,7 +159,7 @@ open class BlockMaterialCard(
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F, requiresTool = true, restrictsSpawning = true,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE),
-            isCutoutRenderLayer = true, blockSoundGroup = BlockSoundGroup.GLASS,
+            blockSoundGroup = BlockSoundGroup.GLASS,
             blockStateFactory = {
                 fun createPart(direction: String, x: Int, y: Int) = jsonObject(
                     "when" to jsonObject(
@@ -191,7 +189,7 @@ open class BlockMaterialCard(
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
-        }
+        }.cutoutRenderLayer()
     }
 
     val identifier = MirageFairy2024.identifier(path)
@@ -230,8 +228,6 @@ open class BlockMaterialCard(
                 block.registerModelGeneration(TexturedModel.CUBE)
             }
         }
-        if (isCutoutRenderLayer) block.registerCutoutRenderLayer()
-        if (isTranslucentRenderLayer) block.registerTranslucentRenderLayer()
 
         block.enJa(name)
         item.registerPoem(poemList)
@@ -265,4 +261,12 @@ private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.()
     this.initializers += { modContext ->
         initializer(modContext, this)
     }
+}
+
+private fun <T : BlockMaterialCard> T.cutoutRenderLayer() = this.init {
+    block.registerCutoutRenderLayer()
+}
+
+private fun <T : BlockMaterialCard> T.translucentRenderLayer() = this.init {
+    block.registerTranslucentRenderLayer()
 }
