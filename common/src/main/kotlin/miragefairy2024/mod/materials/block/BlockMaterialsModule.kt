@@ -58,7 +58,6 @@ open class BlockMaterialCard(
     mapColor: MapColor,
     hardness: Float,
     resistance: Float,
-    blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
 ) {
     companion object {
         val entries = mutableListOf<BlockMaterialCard>()
@@ -97,12 +96,13 @@ open class BlockMaterialCard(
         ).needTool().noBurn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
         }
-        val LUMINITE_BLOCK = !BlockMaterialCard(
+        val LUMINITE_BLOCK = !object : BlockMaterialCard(
             "luminite_block", EnJa("Luminite Block", "ルミナイトブロック"),
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
             MapColor.DIAMOND, 6.0F, 6.0F,
-            blockCreator = { SemiOpaqueTransparentBlock(it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }) },
-        ).translucent().sound(SoundType.GLASS).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+        ) {
+            override suspend fun createBlock(properties: AbstractBlock.Properties) = SemiOpaqueTransparentBlock(properties.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false })
+        }.translucent().sound(SoundType.GLASS).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
         }
         val DRYWALL = !BlockMaterialCard(
@@ -113,8 +113,9 @@ open class BlockMaterialCard(
         val LOCAL_VACUUM_DECAY = !object : BlockMaterialCard(
             "local_vacuum_decay", EnJa("Local Vacuum Decay", "局所真空崩壊"),
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
-            MapColor.COLOR_BLACK, -1.0F, 3600000.0F, blockCreator = ::LocalVacuumDecayBlock,
+            MapColor.COLOR_BLACK, -1.0F, 3600000.0F,
         ) {
+            override suspend fun createBlock(properties: AbstractBlock.Properties) = LocalVacuumDecayBlock(properties)
             context(ModContext) override fun initModelGeneration() = block.registerModelGeneration(localVacuumDecayTexturedModelFactory)
         }.cutout().sound(SoundType.SLIME_BLOCK).noDrop().noSpawn().speed(0.5F).tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS)
         val AURA_STONE = !BlockMaterialCard(
@@ -137,8 +138,9 @@ open class BlockMaterialCard(
             "fairy_crystal_glass", EnJa("Fairy Crystal Glass", "フェアリークリスタルガラス"),
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F,
-            blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
         ) {
+            override suspend fun createBlock(properties: AbstractBlock.Properties) = FairyCrystalGlassBlock(properties.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never))
+
             context(ModContext)
             override fun initBlockStateGeneration() {
                 block.registerBlockStateGeneration {
@@ -179,7 +181,7 @@ open class BlockMaterialCard(
         val properties = blockPropertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
         properties.mapColor(mapColor)
         properties.strength(hardness, resistance)
-        if (blockCreator != null) blockCreator(properties) else Block(properties)
+        createBlock(properties)
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) {
         val properties = itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }
@@ -189,6 +191,8 @@ open class BlockMaterialCard(
     val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
     val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
     val initializers = mutableListOf<(ModContext) -> Unit>()
+
+    open suspend fun createBlock(properties: AbstractBlock.Properties) = Block(properties)
 
     context(ModContext)
     open fun init() {
