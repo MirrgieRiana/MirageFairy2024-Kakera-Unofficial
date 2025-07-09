@@ -55,9 +55,9 @@ open class BlockMaterialCard(
     path: String,
     private val name: EnJa,
     private val poemList: PoemList,
-    mapColor: MapColor,
-    hardness: Float,
-    resistance: Float,
+    private val mapColor: MapColor,
+    private val hardness: Float,
+    private val resistance: Float,
 ) {
     companion object {
         val entries = mutableListOf<BlockMaterialCard>()
@@ -178,9 +178,7 @@ open class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
-        val properties = blockPropertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
-        properties.mapColor(mapColor)
-        properties.strength(hardness, resistance)
+        val properties = blockPropertiesConverters.fold(createBlockProperties()) { properties, converter -> converter(properties) }
         createBlock(properties)
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) {
@@ -192,6 +190,7 @@ open class BlockMaterialCard(
     val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
     val initializers = mutableListOf<(ModContext) -> Unit>()
 
+    open fun createBlockProperties(): AbstractBlock.Properties = AbstractBlock.Properties.of().mapColor(mapColor).strength(hardness, resistance)
     open suspend fun createBlock(properties: AbstractBlock.Properties) = Block(properties)
 
     context(ModContext)
