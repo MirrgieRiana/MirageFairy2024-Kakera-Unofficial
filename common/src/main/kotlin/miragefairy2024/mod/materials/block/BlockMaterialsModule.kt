@@ -208,7 +208,7 @@ open class BlockMaterialCard(
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties().let { if (fireResistant) it.fireResistant() else it }) }
 
-    val initializer = mutableListOf<(ModContext) -> Unit>()
+    val initializers = mutableListOf<(ModContext) -> Unit>()
 
     context(ModContext)
     open fun init() {
@@ -243,7 +243,7 @@ open class BlockMaterialCard(
             block.registerBlockTagGeneration { it }
         }
 
-        initializer.forEach {
+        initializers.forEach {
             it(this@ModContext)
         }
 
@@ -262,7 +262,7 @@ fun initBlockMaterialsModule() {
 }
 
 private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.() -> Unit) = this.also {
-    this.initializer += { modContext ->
+    this.initializers += { modContext ->
         initializer(modContext, this)
     }
 }
