@@ -2,6 +2,7 @@ package miragefairy2024.neoforge
 
 import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.PlatformProxy
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.enchanting.GetEnchantmentLevelEvent
@@ -16,4 +17,6 @@ class NeoForgePlatformProxy : PlatformProxy {
     override fun registerComposterInput(item: Item, chance: Float) {
         // nop
     }
+
+    override fun setFullBlock(blockFamilyProvider: Any, block: ResourceLocation) = throw UnsupportedOperationException()
 }

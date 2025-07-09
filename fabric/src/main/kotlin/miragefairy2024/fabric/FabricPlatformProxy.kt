@@ -4,6 +4,8 @@ import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.PlatformProxy
 import miragefairy2024.fabric.mixins.api.ItemEnchantmentsCallback
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.models.BlockModelGenerators
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.ComposterBlock
 
@@ -17,5 +19,9 @@ class FabricPlatformProxy : PlatformProxy {
 
     override fun registerComposterInput(item: Item, chance: Float) {
         ComposterBlock.COMPOSTABLES.put(item, chance)
+    }
+
+    override fun setFullBlock(blockFamilyProvider: Any, block: ResourceLocation) {
+        (blockFamilyProvider as BlockModelGenerators.BlockFamilyProvider).fullBlock = block
     }
 }
