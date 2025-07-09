@@ -13,6 +13,7 @@ import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
+import miragefairy2024.util.registerSingletonBlockStateGeneration
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -34,6 +35,7 @@ open class AbstractHaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfi
     override fun init() {
         super.init()
 
+        block.registerSingletonBlockStateGeneration()
         block.registerModelGeneration(TexturedModel.CUBE)
         block.registerDefaultLootTableGeneration()
 
