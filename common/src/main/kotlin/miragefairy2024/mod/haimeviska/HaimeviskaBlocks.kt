@@ -1,6 +1,5 @@
 package miragefairy2024.mod.haimeviska
 
-import miragefairy2024.DataGenerationEvents
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
@@ -31,11 +30,9 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
-import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
-import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerItemGroup
@@ -44,14 +41,9 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilde
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.data.BlockFamily
-import net.minecraft.data.models.model.TexturedModel
-import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
-import net.minecraft.world.flag.FeatureFlagSet
-import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -211,18 +203,4 @@ fun initHaimeviskaBlocks() {
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     HAIMEVISKA_LOGS_ITEM_TAG.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
-}
-
-context(ModContext)
-fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
-    val family by lazy { initializer(BlockFamily.Builder(baseBlock())).family }
-    DataGenerationEvents.onGenerateBlockModel {
-        val texturedModel = TexturedModel.CUBE[baseBlock()]
-        val blockFamilyProvider = it.BlockFamilyProvider(texturedModel.mapping)
-        platformProxy!!.setFullBlock(blockFamilyProvider, baseBlock().getIdentifier())
-        blockFamilyProvider.generateFor(family)
-    }
-    DataGenerationEvents.onGenerateRecipe {
-        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
-    }
 }
