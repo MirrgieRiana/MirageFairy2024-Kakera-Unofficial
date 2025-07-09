@@ -245,6 +245,7 @@ fun initBlockMaterialsModule() {
     }
 }
 
+
 private fun <T : BlockMaterialCard> T.property(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.propertiesConverters += converter }
 
 private fun <T : BlockMaterialCard> T.needTool() = this.property { it.requiresCorrectToolForDrops() }
