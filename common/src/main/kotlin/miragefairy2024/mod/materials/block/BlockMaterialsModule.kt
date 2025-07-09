@@ -59,7 +59,6 @@ open class BlockMaterialCard(
     mapColor: MapColor,
     hardness: Float,
     resistance: Float,
-    fireResistant: Boolean = false,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
     val tags: List<TagKey<Block>> = listOf(),
     val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
@@ -103,9 +102,9 @@ open class BlockMaterialCard(
         val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
             PoemList(4).poem(EnJa("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。")),
-            MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F, fireResistant = true,
+            MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F,
             tags = listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS),
-        ).needTool().init {
+        ).needTool().noBurn().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
         }
         val LUMINITE_BLOCK = !BlockMaterialCard(
@@ -191,7 +190,7 @@ open class BlockMaterialCard(
         settings.strength(hardness, resistance)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }.let { if (fireResistant) it.fireResistant() else it }) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }) }
 
     val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
     val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
@@ -255,6 +254,8 @@ private fun <T : BlockMaterialCard> T.noDrop() = this.blockProperty { it.noLootT
 private fun <T : BlockMaterialCard> T.noSpawn() = this.blockProperty { it.isValidSpawn(Blocks::never) }
 private fun <T : BlockMaterialCard> T.speed(speedFactor: Float) = this.blockProperty { it.speedFactor(speedFactor) }
 private fun <T : BlockMaterialCard> T.sound(blockSoundGroup: SoundType) = this.blockProperty { it.sound(blockSoundGroup) }
+
+private fun <T : BlockMaterialCard> T.noBurn() = this.itemProperty { it.fireResistant() }
 
 private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.() -> Unit) = this.also {
     this.initializers += { modContext ->
