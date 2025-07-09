@@ -67,33 +67,33 @@ open class BlockMaterialCard(
             "nephrite_block", EnJa("Nephrite Block", "ネフライトブロック"),
             PoemList(null),
             MapColor.WARPED_WART_BLOCK, 5.0F, 5.0F,
-        ).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS)
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.BEACON_BASE_BLOCKS)
         val XARPITE_BLOCK = !BlockMaterialCard(
             "xarpite_block", EnJa("Xarpite Block", "紅天石ブロック"),
             PoemList(2).poem(EnJa("Loss and reconstruction of perception", "夢の世界の如き紅。")),
             MapColor.NETHER, 3.0F, 3.0F,
-        ).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.XARPITE.item, item)
         }
         val MIRANAGITE_BLOCK = !BlockMaterialCard(
             "miranagite_block", EnJa("Miranagite Block", "蒼天石ブロック"),
             PoemList(2).poem(EnJa("Passivation confines discontinuous space", "虚空に導かれし、神域との接合点。")),
             MapColor.LAPIS, 3.0F, 3.0F,
-        ).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, item)
         }
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),
             PoemList(4).poem(EnJa("The eye of entropy.", "無秩序の目。")),
             MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F,
-        ).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, item)
         }
         val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
             PoemList(4).poem(EnJa("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。")),
             MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F,
-        ).needTool().noBurn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+        ).needTool(ToolType.PICKAXE, ToolLevel.DIAMOND).noBurn().tag(BlockTags.BEACON_BASE_BLOCKS).init {
             registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
         }
         val LUMINITE_BLOCK = !object : BlockMaterialCard(
@@ -102,7 +102,7 @@ open class BlockMaterialCard(
             MapColor.DIAMOND, 6.0F, 6.0F,
         ) {
             override suspend fun createBlock(properties: AbstractBlock.Properties) = SemiOpaqueTransparentBlock(properties)
-        }.translucent().sound(SoundType.GLASS).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS).blockProperty { it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false } }.init {
+        }.translucent().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.IRON).tag(BlockTags.BEACON_BASE_BLOCKS).blockProperty { it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false } }.init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
         }
         val DRYWALL = !BlockMaterialCard(
@@ -122,7 +122,7 @@ open class BlockMaterialCard(
             "aura_stone", EnJa("Aura Stone", "霊氣石"),
             PoemList(3).poem(EnJa("It absorbs auras and seals them away", "呼吸する石。")),
             MapColor.DIAMOND, 5.0F, 6.0F,
-        ).sound(SoundType.METAL).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL).init {
+        ).sound(SoundType.METAL).needTool(ToolType.PICKAXE, ToolLevel.IRON).init {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
@@ -168,7 +168,7 @@ open class BlockMaterialCard(
             }
 
             context(ModContext) override fun initModelGeneration() = Unit
-        }.cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).blockProperty { it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never) }.init {
+        }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).noSpawn().tag(BlockTags.IMPERMEABLE).blockProperty { it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never) }.init {
             registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
@@ -243,7 +243,6 @@ fun initBlockMaterialsModule() {
 private fun <T : BlockMaterialCard> T.blockProperty(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.blockPropertiesConverters += converter }
 private fun <T : BlockMaterialCard> T.itemProperty(converter: (Item.Properties) -> Item.Properties) = this.also { it.itemPropertiesConverters += converter }
 
-private fun <T : BlockMaterialCard> T.needTool() = this.blockProperty { it.requiresCorrectToolForDrops() }
 private fun <T : BlockMaterialCard> T.noDrop() = this.blockProperty { it.noLootTable() }
 private fun <T : BlockMaterialCard> T.noSpawn() = this.blockProperty { it.isValidSpawn(Blocks::never) }
 private fun <T : BlockMaterialCard> T.speed(speedFactor: Float) = this.blockProperty { it.speedFactor(speedFactor) }
@@ -270,3 +269,18 @@ private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Block>) = this.ini
         block.registerBlockTagGeneration { it }
     }
 }
+
+enum class ToolType(val tag: TagKey<Block>) {
+    AXE(BlockTags.MINEABLE_WITH_AXE),
+    HOE(BlockTags.MINEABLE_WITH_HOE),
+    PICKAXE(BlockTags.MINEABLE_WITH_PICKAXE),
+    SHOVEL(BlockTags.MINEABLE_WITH_SHOVEL),
+}
+
+enum class ToolLevel(val tag: TagKey<Block>) {
+    DIAMOND(BlockTags.NEEDS_DIAMOND_TOOL),
+    IRON(BlockTags.NEEDS_IRON_TOOL),
+    STONE(BlockTags.NEEDS_STONE_TOOL),
+}
+
+private fun <T : BlockMaterialCard> T.needTool(type: ToolType, level: ToolLevel) = this.blockProperty { it.requiresCorrectToolForDrops() }.tag(type.tag, level.tag)
