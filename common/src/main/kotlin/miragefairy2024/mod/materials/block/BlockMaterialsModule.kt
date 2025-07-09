@@ -6,6 +6,12 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
+import miragefairy2024.mod.materials.block.cards.FairyCrystalGlassBlock
+import miragefairy2024.mod.materials.block.cards.LocalVacuumDecayBlock
+import miragefairy2024.mod.materials.block.cards.SemiOpaqueTransparentBlock
+import miragefairy2024.mod.materials.block.cards.fairyCrystalGlassBlockModel
+import miragefairy2024.mod.materials.block.cards.fairyCrystalGlassFrameBlockModel
+import miragefairy2024.mod.materials.block.cards.localVacuumDecayTexturedModelFactory
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
