@@ -29,6 +29,7 @@ import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
@@ -235,7 +236,7 @@ open class BlockMaterialCard(
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerDefaultLootTableGeneration()
+        initLootTableGeneration()
 
         initializers.forEach {
             it(this@ModContext)
@@ -251,6 +252,11 @@ open class BlockMaterialCard(
     context(ModContext)
     open fun initModelGeneration() {
         block.registerModelGeneration(TexturedModel.CUBE)
+    }
+
+    context(ModContext)
+    open fun initLootTableGeneration() {
+        block.registerDefaultLootTableGeneration()
     }
 }
 
