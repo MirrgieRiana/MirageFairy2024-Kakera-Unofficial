@@ -198,13 +198,7 @@ open class BlockMaterialCard(
         } else {
             block.registerSingletonBlockStateGeneration()
         }
-        if (!noModelGeneration) {
-            if (texturedModelFactory != null) {
-                block.registerModelGeneration(texturedModelFactory)
-            } else {
-                block.registerModelGeneration(TexturedModel.CUBE)
-            }
-        }
+        initModelGeneration()
 
         block.enJa(name)
         item.registerPoem(poemList)
@@ -216,6 +210,17 @@ open class BlockMaterialCard(
             it(this@ModContext)
         }
 
+    }
+
+    context(ModContext)
+    open fun initModelGeneration() {
+        if (!noModelGeneration) {
+            if (texturedModelFactory != null) {
+                block.registerModelGeneration(texturedModelFactory)
+            } else {
+                block.registerModelGeneration(TexturedModel.CUBE)
+            }
+        }
     }
 }
 
