@@ -186,14 +186,15 @@ open class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
-        val settings = propertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
+        val settings = blockPropertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
         settings.mapColor(mapColor)
         settings.strength(hardness, resistance)
         if (blockCreator != null) blockCreator(settings) else Block(settings)
     }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties().let { if (fireResistant) it.fireResistant() else it }) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }.let { if (fireResistant) it.fireResistant() else it }) }
 
-    val propertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
+    val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
+    val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
     val initializers = mutableListOf<(ModContext) -> Unit>()
 
     context(ModContext)
@@ -246,13 +247,14 @@ fun initBlockMaterialsModule() {
 }
 
 
-private fun <T : BlockMaterialCard> T.property(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.propertiesConverters += converter }
+private fun <T : BlockMaterialCard> T.blockProperty(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.blockPropertiesConverters += converter }
+private fun <T : BlockMaterialCard> T.itemProperty(converter: (Item.Properties) -> Item.Properties) = this.also { it.itemPropertiesConverters += converter }
 
-private fun <T : BlockMaterialCard> T.needTool() = this.property { it.requiresCorrectToolForDrops() }
-private fun <T : BlockMaterialCard> T.noDrop() = this.property { it.noLootTable() }
-private fun <T : BlockMaterialCard> T.noSpawn() = this.property { it.isValidSpawn(Blocks::never) }
-private fun <T : BlockMaterialCard> T.speed(speedFactor: Float) = this.property { it.speedFactor(speedFactor) }
-private fun <T : BlockMaterialCard> T.sound(blockSoundGroup: SoundType) = this.property { it.sound(blockSoundGroup) }
+private fun <T : BlockMaterialCard> T.needTool() = this.blockProperty { it.requiresCorrectToolForDrops() }
+private fun <T : BlockMaterialCard> T.noDrop() = this.blockProperty { it.noLootTable() }
+private fun <T : BlockMaterialCard> T.noSpawn() = this.blockProperty { it.isValidSpawn(Blocks::never) }
+private fun <T : BlockMaterialCard> T.speed(speedFactor: Float) = this.blockProperty { it.speedFactor(speedFactor) }
+private fun <T : BlockMaterialCard> T.sound(blockSoundGroup: SoundType) = this.blockProperty { it.sound(blockSoundGroup) }
 
 private fun <T : BlockMaterialCard> T.init(initializer: context(ModContext) T.() -> Unit) = this.also {
     this.initializers += { modContext ->
