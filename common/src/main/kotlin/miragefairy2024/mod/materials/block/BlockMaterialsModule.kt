@@ -176,12 +176,15 @@ open class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
-        val settings = blockPropertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
-        settings.mapColor(mapColor)
-        settings.strength(hardness, resistance)
-        if (blockCreator != null) blockCreator(settings) else Block(settings)
+        val properties = blockPropertiesConverters.fold(AbstractBlock.Properties.of()) { properties, converter -> converter(properties) }
+        properties.mapColor(mapColor)
+        properties.strength(hardness, resistance)
+        if (blockCreator != null) blockCreator(properties) else Block(properties)
     }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }) }
+    val item = Registration(BuiltInRegistries.ITEM, identifier) {
+        val properties = itemPropertiesConverters.fold(Item.Properties()) { properties, converter -> converter(properties) }
+        BlockItem(block.await(), properties)
+    }
 
     val itemPropertiesConverters = mutableListOf<(Item.Properties) -> Item.Properties>()
     val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
