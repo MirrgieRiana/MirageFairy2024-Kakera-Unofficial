@@ -1,6 +1,5 @@
 package miragefairy2024.mod.materials.block
 
-import com.google.gson.JsonElement
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
@@ -60,7 +59,6 @@ open class BlockMaterialCard(
     hardness: Float,
     resistance: Float,
     blockCreator: ((AbstractBlock.Properties) -> Block)? = null,
-    val blockStateFactory: (BlockMaterialCard.() -> JsonElement)? = null,
 ) {
     companion object {
         val entries = mutableListOf<BlockMaterialCard>()
@@ -139,30 +137,34 @@ open class BlockMaterialCard(
             "fairy_crystal_glass", EnJa("Fairy Crystal Glass", "フェアリークリスタルガラス"),
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F,
-            blockStateFactory = {
-                fun createPart(direction: String, x: Int, y: Int) = jsonObject(
-                    "when" to jsonObject(
-                        direction to "false".jsonElement,
-                    ),
-                    "apply" to jsonObject(
-                        "model" to "${"block/" * identifier * "_frame"}".jsonElement,
-                        "x" to x.jsonElement,
-                        "y" to y.jsonElement,
-                    ),
-                )
-                jsonObject(
-                    "multipart" to jsonArray(
-                        createPart("north", 90, 0),
-                        createPart("east", 90, 90),
-                        createPart("south", -90, 0),
-                        createPart("west", 90, -90),
-                        createPart("up", 0, 0),
-                        createPart("down", 180, 0),
-                    ),
-                )
-            },
             blockCreator = { FairyCrystalGlassBlock(it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)) },
         ) {
+            context(ModContext)
+            override fun initBlockStateGeneration() {
+                block.registerBlockStateGeneration {
+                    fun createPart(direction: String, x: Int, y: Int) = jsonObject(
+                        "when" to jsonObject(
+                            direction to "false".jsonElement,
+                        ),
+                        "apply" to jsonObject(
+                            "model" to "${"block/" * identifier * "_frame"}".jsonElement,
+                            "x" to x.jsonElement,
+                            "y" to y.jsonElement,
+                        ),
+                    )
+                    jsonObject(
+                        "multipart" to jsonArray(
+                            createPart("north", 90, 0),
+                            createPart("east", 90, 90),
+                            createPart("south", -90, 0),
+                            createPart("west", 90, -90),
+                            createPart("up", 0, 0),
+                            createPart("down", 180, 0),
+                        ),
+                    )
+                }
+            }
+
             context(ModContext) override fun initModelGeneration() = Unit
         }.cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).init {
             registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
@@ -193,11 +195,7 @@ open class BlockMaterialCard(
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        if (blockStateFactory != null) {
-            block.registerBlockStateGeneration { (blockStateFactory)(this) }
-        } else {
-            block.registerSingletonBlockStateGeneration()
-        }
+        initBlockStateGeneration()
         initModelGeneration()
 
         block.enJa(name)
@@ -210,6 +208,11 @@ open class BlockMaterialCard(
             it(this@ModContext)
         }
 
+    }
+
+    context(ModContext)
+    open fun initBlockStateGeneration() {
+        block.registerSingletonBlockStateGeneration()
     }
 
     context(ModContext)
