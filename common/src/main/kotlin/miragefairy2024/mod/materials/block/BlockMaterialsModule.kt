@@ -101,8 +101,8 @@ open class BlockMaterialCard(
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
             MapColor.DIAMOND, 6.0F, 6.0F,
         ) {
-            override suspend fun createBlock(properties: AbstractBlock.Properties) = SemiOpaqueTransparentBlock(properties.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false })
-        }.translucent().sound(SoundType.GLASS).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS).init {
+            override suspend fun createBlock(properties: AbstractBlock.Properties) = SemiOpaqueTransparentBlock(properties)
+        }.translucent().sound(SoundType.GLASS).needTool().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL, BlockTags.BEACON_BASE_BLOCKS).blockProperty { it.noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false } }.init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
         }
         val DRYWALL = !BlockMaterialCard(
@@ -139,7 +139,7 @@ open class BlockMaterialCard(
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F,
         ) {
-            override suspend fun createBlock(properties: AbstractBlock.Properties) = FairyCrystalGlassBlock(properties.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never))
+            override suspend fun createBlock(properties: AbstractBlock.Properties) = FairyCrystalGlassBlock(properties)
 
             context(ModContext)
             override fun initBlockStateGeneration() {
@@ -168,7 +168,7 @@ open class BlockMaterialCard(
             }
 
             context(ModContext) override fun initModelGeneration() = Unit
-        }.cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).init {
+        }.cutout().sound(SoundType.GLASS).needTool().noSpawn().tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL, BlockTags.IMPERMEABLE).blockProperty { it.instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never) }.init {
             registerModelGeneration({ "block/" * identifier }) { fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier * "_frame" }) { fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame") } // 枠パーツモデル
 
