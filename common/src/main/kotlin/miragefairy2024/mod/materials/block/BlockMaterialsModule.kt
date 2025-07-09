@@ -53,8 +53,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
 open class BlockMaterialCard(
     path: String,
-    val name: EnJa,
-    val poemList: PoemList,
+    private val name: EnJa,
+    private val poemList: PoemList,
     mapColor: MapColor,
     hardness: Float,
     resistance: Float,
