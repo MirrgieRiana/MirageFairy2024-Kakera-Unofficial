@@ -43,6 +43,7 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.BlockFamily
+import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -187,8 +188,6 @@ lateinit var HAIMEVISKA_WOOD_TYPE: WoodType
 val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("haimeviska_logs"))
 val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("haimeviska_logs"))
 
-private val familyRegistry = mutableListOf<Pair<() -> Block, (BlockFamily.Builder) -> BlockFamily.Builder>>()
-
 context(ModContext)
 fun initHaimeviskaBlocks() {
 
@@ -210,26 +209,17 @@ fun initHaimeviskaBlocks() {
     HAIMEVISKA_LOGS_BLOCK_TAG.registerBlockTagGeneration { BlockTags.LOGS_THAT_BURN }
     HAIMEVISKA_LOGS_ITEM_TAG.registerItemTagGeneration { ItemTags.LOGS_THAT_BURN }
 
-    val families by lazy {
-        familyRegistry
-            .map { Pair(it.first(), it.second) }
-            .groupBy { it.first }
-            .map { it.value.fold(BlockFamily.Builder(it.key)) { a, b -> b.second(a) }.family }
-    }
-    DataGenerationEvents.onGenerateBlockModel {
-        families.forEach { family ->
-            it.family(family.baseBlock).generateFor(family)
-        }
-    }
-    DataGenerationEvents.onGenerateRecipe {
-        families.forEach { family ->
-            RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
-        }
-    }
-
 }
 
 context(ModContext)
 fun registerBlockFamily(baseBlock: () -> Block, initializer: (BlockFamily.Builder) -> BlockFamily.Builder) {
-    familyRegistry += Pair(baseBlock, initializer)
+    val family by lazy {
+        initializer(BlockFamily.Builder(baseBlock())).family
+    }
+    DataGenerationEvents.onGenerateBlockModel {
+        it.BlockFamilyProvider(TexturedModel.CUBE[family.baseBlock].mapping).generateFor(family)
+    }
+    DataGenerationEvents.onGenerateRecipe {
+        RecipeProvider.generateRecipes(it, family, FeatureFlagSet.of(FeatureFlags.VANILLA))
+    }
 }
