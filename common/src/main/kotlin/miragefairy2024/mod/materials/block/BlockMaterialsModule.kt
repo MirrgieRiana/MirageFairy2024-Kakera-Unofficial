@@ -44,6 +44,7 @@ import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.models.model.TexturedModel
+import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -55,6 +56,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.StairBlock
+import net.minecraft.world.level.block.WallBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
@@ -127,6 +129,19 @@ open class BlockMaterialCard(
         }.needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.STAIRS).tag(ItemTags.STAIRS).init {
             registerBlockFamily(MIRANAGITE_TILES.block) { it.stairs(block()) }
             registerStonecutterRecipeGeneration(item, MIRANAGITE_TILES.item)
+        }
+        val MIRANAGITE_TILE_WALL = !object : BlockMaterialCard(
+            "miranagite_tile_wall", EnJa("Miranagite Tile Wall", "蒼天石タイルの塀"),
+            PoemList(2).poem(EnJa("An unreachable domain", "二度と立ち入ることの許されぬ地。")),
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ) {
+            override fun createBlockProperties(): AbstractBlock.Properties = super.createBlockProperties().forceSolidOn()
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = WallBlock(properties)
+            context(ModContext) override fun initBlockStateGeneration() = Unit
+            context(ModContext) override fun initModelGeneration() = Unit
+        }.needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.WALLS).tag(ItemTags.WALLS).init {
+            registerBlockFamily(MIRANAGITE_TILES.block) { it.wall(block()) }
+            registerStonecutterRecipeGeneration(item, MIRANAGITE_TILES.item, category = RecipeCategory.DECORATIONS)
         }
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),

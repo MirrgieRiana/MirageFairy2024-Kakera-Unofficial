@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "miragefairy2024:block/miranagite_tiles"
+  }
+}
