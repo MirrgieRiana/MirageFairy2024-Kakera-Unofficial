@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "miragefairy2024:block/miranagite_tiles",
+    "side": "miragefairy2024:block/miranagite_tiles",
+    "top": "miragefairy2024:block/miranagite_tiles"
+  }
+}

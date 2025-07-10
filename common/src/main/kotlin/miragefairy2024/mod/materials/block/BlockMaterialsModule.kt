@@ -20,8 +20,10 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.from
 import miragefairy2024.util.on
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockFamily
 import miragefairy2024.util.registerBlockStateGeneration
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerCompressionRecipeGeneration
@@ -31,7 +33,9 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
+import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
+import miragefairy2024.util.registerStonecutterRecipeGeneration
 import miragefairy2024.util.registerTranslucentRenderLayer
 import miragefairy2024.util.times
 import miragefairy2024.util.with
@@ -48,7 +52,10 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.StairBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
@@ -84,6 +91,42 @@ open class BlockMaterialCard(
             MapColor.LAPIS, 3.0F, 3.0F,
         ).needTool(ToolType.PICKAXE, ToolLevel.STONE).beaconBase().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRANAGITE.item, item)
+        }
+        val MIRANAGITE_TILES = !BlockMaterialCard(
+            "miranagite_tiles", EnJa("Miranagite Tiles", "蒼天石タイル"),
+            PoemList(2).poem(EnJa("Is time really an absolute entity?", "運命を退ける、蒼神の慈愛。")),
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ).needTool(ToolType.PICKAXE, ToolLevel.STONE).init {
+            registerShapedRecipeGeneration(item) {
+                pattern("##")
+                pattern("##")
+                define('#', MaterialCard.MIRANAGITE.item())
+            } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
+        }
+        val MIRANAGITE_TILE_SLAB = !object : BlockMaterialCard(
+            "miranagite_tile_slab", EnJa("Miranagite Tile Slab", "蒼天石タイルのハーフブロック"),
+            PoemList(2).poem(EnJa("A Turing-complete crystal lattice", "開闢よりすべてが預言された世界。")),
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ) {
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = SlabBlock(properties)
+            context(ModContext) override fun initBlockStateGeneration() = Unit
+            context(ModContext) override fun initModelGeneration() = Unit
+            context(ModContext) override fun initLootTableGeneration() = block.registerLootTableGeneration { it, _ -> it.createSlabItemTable(block()) }
+        }.needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.SLABS).tag(ItemTags.SLABS).init {
+            registerBlockFamily(MIRANAGITE_TILES.block) { it.slab(block()) }
+            registerStonecutterRecipeGeneration(item, MIRANAGITE_TILES.item, 2)
+        }
+        val MIRANAGITE_TILE_STAIRS = !object : BlockMaterialCard(
+            "miranagite_tile_stairs", EnJa("Miranagite Tile Stairs", "蒼天石タイルの階段"),
+            PoemList(2).poem(EnJa("Negative-time-evolution region", "因果の遡上、楽園への道。")),
+            MapColor.LAPIS, 3.0F, 3.0F,
+        ) {
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = StairBlock(MIRANAGITE_TILES.block.await().defaultBlockState(), properties)
+            context(ModContext) override fun initBlockStateGeneration() = Unit
+            context(ModContext) override fun initModelGeneration() = Unit
+        }.needTool(ToolType.PICKAXE, ToolLevel.STONE).tag(BlockTags.STAIRS).tag(ItemTags.STAIRS).init {
+            registerBlockFamily(MIRANAGITE_TILES.block) { it.stairs(block()) }
+            registerStonecutterRecipeGeneration(item, MIRANAGITE_TILES.item)
         }
         val CHAOS_STONE_BLOCK = !BlockMaterialCard(
             "chaos_stone_block", EnJa("Chaos Stone Block", "混沌の石ブロック"),

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_miranagite_tiles": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:miranagite_tiles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:miranagite_tile_slab_from_miranagite_tiles_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_miranagite_tiles"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:miranagite_tile_slab_from_miranagite_tiles_stonecutting"
+    ]
+  }
+}
