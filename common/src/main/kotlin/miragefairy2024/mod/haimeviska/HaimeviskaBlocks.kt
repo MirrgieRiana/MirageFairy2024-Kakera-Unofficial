@@ -153,7 +153,8 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
     open fun createSettings(): BlockBehaviour.Properties = AbstractBlock.Properties.of()
     abstract suspend fun createBlock(properties: BlockBehaviour.Properties): Block
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock(createSettings()) }
-    val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
+    open suspend fun createItem(block: Block, properties: Item.Properties) = BlockItem(block, properties)
+    val item = Registration(BuiltInRegistries.ITEM, identifier) { createItem(block.await(), Item.Properties()) }
 
     context(ModContext)
     open fun init() {
