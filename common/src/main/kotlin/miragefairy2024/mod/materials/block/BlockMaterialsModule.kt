@@ -132,7 +132,7 @@ open class BlockMaterialCard(
         }
         val MIRANAGITE_TILE_WALL = !object : BlockMaterialCard(
             "miranagite_tile_wall", EnJa("Miranagite Tile Wall", "蒼天石タイルの塀"),
-            PoemList(2).poem(EnJa("An unreachable domain", "二度と立ち入ることの許されぬ地。")),
+            PoemList(2).poem(EnJa("An unreachable domain", "二度と踏み入ることの許されぬ地。")),
             MapColor.LAPIS, 3.0F, 3.0F,
         ) {
             override fun createBlockProperties(): AbstractBlock.Properties = super.createBlockProperties().forceSolidOn()
