@@ -173,7 +173,10 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
     }
 }
 
-fun createBaseWoodSetting(sound: Boolean = true) = AbstractBlock.Properties.of().instrument(Instrument.BASS).let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }.ignitedByLava()
+fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = AbstractBlock.Properties.of()
+    .instrument(Instrument.BASS)
+    .let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }
+    .ignitedByLava()
 
 
 lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType
