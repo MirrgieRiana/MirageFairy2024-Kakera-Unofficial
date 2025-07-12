@@ -941,7 +941,7 @@ class MaterialCard(
                 FoodComponent.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 10 * 8), 1.0F)
+                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 10 * 8, 1), 1.0F)
                     .build()
             },
             creator = { DrinkItem(it, flaming = 5) },
