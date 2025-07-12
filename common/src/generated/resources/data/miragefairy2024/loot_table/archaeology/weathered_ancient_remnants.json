@@ -56,6 +56,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "miragefairy2024:lilagium_ingot",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:amethyst_shard",
           "weight": 3
         },

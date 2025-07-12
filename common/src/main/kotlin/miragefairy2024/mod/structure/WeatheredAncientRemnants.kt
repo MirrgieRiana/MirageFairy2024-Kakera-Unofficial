@@ -95,6 +95,7 @@ object WeatheredAncientRemnantsCard {
                     ItemLootPoolEntry(ToolCard.AMETHYST_HOE.item()).setWeight(1),
                     ItemLootPoolEntry(ToolCard.AMETHYST_SWORD.item()).setWeight(1),
                     ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item()).setWeight(3),
+                    ItemLootPoolEntry(MaterialCard.LILAGIUM_INGOT.item()).setWeight(3),
                     ItemLootPoolEntry(Items.AMETHYST_SHARD).setWeight(3),
                     ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
                     ItemLootPoolEntry(MaterialCard.JEWEL_100.item()).setWeight(3),
