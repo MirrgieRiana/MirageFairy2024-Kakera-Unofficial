@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "bottom": "miragefairy2024:block/haimeviska_door_bottom",
+    "top": "miragefairy2024:block/haimeviska_door_top"
+  }
+}

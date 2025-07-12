@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_orientable_trapdoor_bottom",
+  "textures": {
+    "texture": "miragefairy2024:block/haimeviska_trapdoor"
+  }
+}

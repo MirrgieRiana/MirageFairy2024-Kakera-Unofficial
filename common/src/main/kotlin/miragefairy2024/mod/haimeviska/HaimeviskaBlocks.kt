@@ -6,6 +6,7 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.description
 import miragefairy2024.mod.haimeviska.cards.DrippingHaimeviskaLogBlock
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaBricksBlockCard
+import miragefairy2024.mod.haimeviska.cards.HaimeviskaDoorBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaDrippingLogBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaHollowLogBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaIncisedLogBlockCard
@@ -23,6 +24,7 @@ import miragefairy2024.mod.haimeviska.cards.HaimeviskaPlanksStairsBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaSaplingBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaStrippedLogBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaStrippedWoodBlockCard
+import miragefairy2024.mod.haimeviska.cards.HaimeviskaTrapdoorBlockCard
 import miragefairy2024.mod.haimeviska.cards.HaimeviskaWoodBlockCard
 import miragefairy2024.mod.haimeviska.cards.HollowHaimeviskaLogBlock
 import miragefairy2024.mod.haimeviska.cards.IncisedHaimeviskaLogBlock
@@ -131,6 +133,14 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
             "haimeviska_pressure_plate", EnJa("Haimeviska Pressure Plate", "ハイメヴィスカの感圧板"),
             PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
         ).let { HaimeviskaPlanksPressurePlateBlockCard(it, { HAIMEVISKA_BLOCK_SET_TYPE }, PLANKS.block) }
+        val DOOR = !HaimeviskaBlockConfiguration(
+            "haimeviska_door", EnJa("Haimeviska Door", "ハイメヴィスカのドア"),
+            PoemList(1).poem(EnJa("Astral read-only vortex", "遺伝子の水平伝播。")),
+        ).let { HaimeviskaDoorBlockCard(it, { HAIMEVISKA_BLOCK_SET_TYPE }, PLANKS.block) }
+        val TRAPDOOR = !HaimeviskaBlockConfiguration(
+            "haimeviska_trapdoor", EnJa("Haimeviska Trapdoor", "ハイメヴィスカのトラップドア"),
+            PoemList(1).poem(EnJa("Intermingling astral vortices", "自己認識の防衛線。")),
+        ).let { HaimeviskaTrapdoorBlockCard(it, { HAIMEVISKA_BLOCK_SET_TYPE }, PLANKS.block) }
         val BRICKS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
             PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
