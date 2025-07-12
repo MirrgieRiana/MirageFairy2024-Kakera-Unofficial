@@ -264,6 +264,7 @@ object DeepFairyForestBiomeCard : BiomeCard(
 
                 DefaultBiomeFeatures.addMossyStoneBlock(lookupBackedBuilder)
                 DefaultBiomeFeatures.addFerns(lookupBackedBuilder)
+                DefaultBiomeFeatures.addForestFlowers(lookupBackedBuilder)
 
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultSoftDisks(lookupBackedBuilder)
