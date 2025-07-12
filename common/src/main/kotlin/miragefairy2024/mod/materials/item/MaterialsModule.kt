@@ -738,7 +738,7 @@ class MaterialCard(
 
         val MINA_1: MaterialCard = !MaterialCard(
             "mina_1", "1 Mina", "1ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -746,7 +746,7 @@ class MaterialCard(
         )
         val MINA_5: MaterialCard = !MaterialCard(
             "mina_5", "5 Mina", "5ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Fairy snack", "ご縁があるよ")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -754,7 +754,7 @@ class MaterialCard(
         )
         val MINA_10: MaterialCard = !MaterialCard(
             "mina_10", "10 Mina", "10ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -762,7 +762,7 @@ class MaterialCard(
         )
         val MINA_50: MaterialCard = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("The Society failed to replicate this.", "形而上学的有機結晶")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -770,7 +770,7 @@ class MaterialCard(
         )
         val MINA_100: MaterialCard = !MaterialCard(
             "mina_100", "100 Mina", "100ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -778,7 +778,7 @@ class MaterialCard(
         )
         val MINA_500: MaterialCard = !MaterialCard(
             "mina_500", "500 Mina", "500ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -786,7 +786,7 @@ class MaterialCard(
         )
         val MINA_1000: MaterialCard = !MaterialCard(
             "mina_1000", "1000 Mina", "1000ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -794,7 +794,7 @@ class MaterialCard(
         )
         val MINA_5000: MaterialCard = !MaterialCard(
             "mina_5000", "5000 Mina", "5000ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("The price of a soul.", "魂の値段。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
@@ -802,7 +802,7 @@ class MaterialCard(
         )
         val MINA_10000: MaterialCard = !MaterialCard(
             "mina_10000", "10000 Mina", "10000ミナ",
-            PoemList(0)
+            PoemList(null)
                 .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
