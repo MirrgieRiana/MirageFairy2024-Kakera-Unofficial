@@ -131,7 +131,7 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
         ).let { HaimeviskaPlanksButtonBlockCard(it, { HAIMEVISKA_BLOCK_SET_TYPE }, PLANKS.block) }
         val PRESSURE_PLATE = !HaimeviskaBlockConfiguration(
             "haimeviska_pressure_plate", EnJa("Haimeviska Pressure Plate", "ハイメヴィスカの感圧板"),
-            PoemList(1).poem(EnJa("Creature with the name of a machine", "感応と感覚の違い。")),
+            PoemList(1).poem(EnJa("Creature with the name of a machine", "反応と感覚の違い。")),
         ).let { HaimeviskaPlanksPressurePlateBlockCard(it, { HAIMEVISKA_BLOCK_SET_TYPE }, PLANKS.block) }
         val DOOR = !HaimeviskaBlockConfiguration(
             "haimeviska_door", EnJa("Haimeviska Door", "ハイメヴィスカのドア"),
