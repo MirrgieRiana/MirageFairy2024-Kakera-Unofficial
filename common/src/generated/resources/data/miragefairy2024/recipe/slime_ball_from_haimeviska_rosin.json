@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "minecraft:slime_ball",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:haimeviska_rosin"
+    },
+    "s": {
+      "item": "miragefairy2024:haimeviska_sap"
+    }
+  },
+  "pattern": [
+    "sss",
+    "s#s",
+    "sss"
+  ],
+  "result": {
+    "count": 8,
+    "id": "minecraft:slime_ball"
+  }
+}
