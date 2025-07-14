@@ -6,6 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.FairyForestBiomeCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.materials.block.cards.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
@@ -25,6 +26,7 @@ import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.randomInt
 import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
 import miragefairy2024.util.times
@@ -223,6 +225,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
+        block.registerBlockTagGeneration { LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG }
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
                 placedFeature("cluster", { per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }
