@@ -4,15 +4,15 @@
   "group": "miragefairy2024:haimeviska_bricks",
   "key": {
     "#": {
-      "item": "miragefairy2024:haimeviska_planks"
+      "item": "miragefairy2024:haimeviska_slab"
     }
   },
   "pattern": [
-    "##",
-    "##"
+    "#",
+    "#"
   ],
   "result": {
-    "count": 4,
+    "count": 1,
     "id": "miragefairy2024:haimeviska_bricks"
   }
 }

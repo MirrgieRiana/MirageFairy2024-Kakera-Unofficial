@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_haimeviska_planks": {
+    "has_haimeviska_slab": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:haimeviska_planks"
+            "items": "miragefairy2024:haimeviska_slab"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "miragefairy2024:haimeviska_bricks_from_haimeviska_planks"
+        "recipe": "miragefairy2024:haimeviska_bricks_from_haimeviska_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_haimeviska_planks"
+      "has_haimeviska_slab"
     ]
   ],
   "rewards": {
     "recipes": [
-      "miragefairy2024:haimeviska_bricks_from_haimeviska_planks"
+      "miragefairy2024:haimeviska_bricks_from_haimeviska_slab"
     ]
   }
 }

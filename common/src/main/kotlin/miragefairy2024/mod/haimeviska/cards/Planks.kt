@@ -65,9 +65,9 @@ class HaimeviskaBricksBlockCard(configuration: HaimeviskaBlockConfiguration, pri
     context(ModContext)
     override fun init() {
         super.init()
-        registerShapedRecipeGeneration(item, 4) {
-            pattern("##")
-            pattern("##")
+        registerShapedRecipeGeneration(item) {
+            pattern("#")
+            pattern("#")
             define('#', input())
         } on input from input
     }

@@ -144,7 +144,7 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
         val BRICKS = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks", EnJa("Haimeviska Bricks", "ハイメヴィスカレンガ"),
             PoemList(1).poem(EnJa("An ecosystem called 'civilization'", "人がもたらした原生林。")),
-        ).let { HaimeviskaBricksBlockCard(it, PLANKS.item) }
+        ).let { HaimeviskaBricksBlockCard(it, SLAB.item) }
         val BRICKS_SLAB = !HaimeviskaBlockConfiguration(
             "haimeviska_bricks_slab", EnJa("Haimeviska Bricks Slab", "ハイメヴィスカレンガのハーフブロック"),
             PoemList(1).poem(EnJa("Extremely modularized memory", "ひとまわり細かくなった私。")),
