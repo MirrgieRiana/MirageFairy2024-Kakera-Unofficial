@@ -160,27 +160,27 @@ class ToolCard(
         val GLASS_PICKAXE = !ToolCard(
             "glass_pickaxe", EnJa("Glass Pickaxe", "ガラスのつるはし"),
             PoemList(null),
-            FairyPickaxeConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2),
+            FairyPickaxeConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1),
         ) { registerPickaxeRecipeGeneration(item) { Items.GLASS } }
         val GLASS_AXE = !ToolCard(
             "glass_axe", EnJa("Glass Axe", "ガラスの斧"),
             PoemList(null),
-            FairyAxeConfiguration(ToolMaterialCard.GLASS, 5.5F, -3.2F).enchantment(Enchantments.SHARPNESS, 2),
+            FairyAxeConfiguration(ToolMaterialCard.GLASS, 5.5F, -3.2F).enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1),
         ) { registerAxeRecipeGeneration(item) { Items.GLASS } }
         val GLASS_SHOVEL = !ToolCard(
             "glass_shovel", EnJa("Glass Shovel", "ガラスのシャベル"),
             PoemList(null),
-            FairyShovelConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2),
+            FairyShovelConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1),
         ) { registerShovelRecipeGeneration(item) { Items.GLASS } }
         val GLASS_HOE = !ToolCard(
             "glass_hoe", EnJa("Glass Hoe", "ガラスのクワ"),
             PoemList(null),
-            FairyHoeConfiguration(ToolMaterialCard.GLASS, -1, -2.0F).enchantment(Enchantments.SHARPNESS, 2),
+            FairyHoeConfiguration(ToolMaterialCard.GLASS, -1, -2.0F).enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1),
         ) { registerHoeRecipeGeneration(item) { Items.GLASS } }
         val GLASS_SWORD = !ToolCard(
             "glass_sword", EnJa("Glass Sword", "ガラスの剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2),
+            FairySwordConfiguration(ToolMaterialCard.GLASS).enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1),
         ) { registerSwordRecipeGeneration(item) { Items.GLASS } }
         val FLUORITE_PICKAXE = !ToolCard(
             "fluorite_pickaxe", EnJa("Fluorite Pickaxe", "蛍石のつるはし"),
