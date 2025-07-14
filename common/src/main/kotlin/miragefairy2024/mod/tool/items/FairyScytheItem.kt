@@ -147,9 +147,9 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
     override fun postTryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
         if (world.isClientSide) return
         if (player?.isShiftKeyDown == true) return
-        (-1..1).forEach { x ->
-            (-1..1).forEach { y ->
-                (-1..1).forEach { z ->
+        (-range..range).forEach { x ->
+            (-range..range).forEach { y ->
+                (-range..range).forEach { z ->
                     if (x != 0 || y != 0 || z != 0) {
                         val targetBlockPos = blockPos.offset(x, y, z)
                         val targetBlockState = world.getBlockState(targetBlockPos)
