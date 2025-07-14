@@ -1,6 +1,7 @@
 package miragefairy2024.mod.materials.block.cards
 
 import com.mojang.serialization.MapCodec
+import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Model
 import miragefairy2024.util.ModelData
 import miragefairy2024.util.ModelElementData
@@ -14,8 +15,10 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -23,6 +26,8 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.RandomSource as Random
+
+val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("local_vacuum_decay_resistant"))
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
@@ -44,6 +49,7 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
         if (targetBlockState.isAir) return
         if (targetBlockState.getDestroySpeed(world, targetBlockPos) < 0) return
         if (targetBlockState.`is`(state.block)) return
+        if (targetBlockState.`is`(LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG)) return
         world.setBlockAndUpdate(targetBlockPos, state)
     }
 
