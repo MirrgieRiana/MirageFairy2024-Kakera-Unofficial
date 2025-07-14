@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:glass_axe",
+  "key": {
+    "#": {
+      "item": "minecraft:glass"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "##",
+    "#R",
+    " R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:glass_axe"
+  }
+}
