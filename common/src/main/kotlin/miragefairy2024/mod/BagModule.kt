@@ -171,18 +171,20 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         val inventory = stack.getBagInventory() ?: return
         var first = true
         var itemCount = 0
-        inventory.itemStacks.forEach { itemStack ->
-            if (itemStack.isNotEmpty) {
+        inventory.itemStacks
+            .filter { it.isNotEmpty }
+            .groupBy { it.hoverName }
+            .map { Pair(it.key, it.value.sumOf { itemStack -> itemStack.count }) }
+            .forEach { (name, count) ->
                 itemCount++
                 if (itemCount <= 10) {
                     if (first) {
                         first = false
                         tooltipComponents += text { ""() }
                     }
-                    tooltipComponents += text { itemStack.hoverName + (if (itemStack.count > 1) " x ${itemStack.count}"() else ""()) }
+                    tooltipComponents += text { name + (if (count > 1) " x ${count}"() else ""()) }
                 }
             }
-        }
         if (itemCount > 10) tooltipComponents += text { "... ${itemCount - 10}"() }
     }
 
