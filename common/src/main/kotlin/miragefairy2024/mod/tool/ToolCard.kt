@@ -31,8 +31,11 @@ import miragefairy2024.mod.tool.items.FairyShootingStaffConfiguration
 import miragefairy2024.mod.tool.items.FairyShovelConfiguration
 import miragefairy2024.mod.tool.items.FairySwordConfiguration
 import miragefairy2024.mod.tool.items.FairyToolProperties
+import miragefairy2024.util.AdvancementCard
+import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
+import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.on
 import miragefairy2024.util.register
@@ -40,6 +43,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
@@ -59,6 +63,7 @@ class ToolCard(
     private val name: EnJa,
     private val poemList: PoemList,
     private val configuration: ToolConfiguration,
+    private val advancementCreator: (ToolCard.(ResourceLocation) -> AdvancementCard)? = null,
     private val initializer: context(ModContext)ToolCard.() -> Unit = {},
 ) {
     @Suppress("unused", "MemberVisibilityCanBePrivate")
@@ -446,6 +451,17 @@ class ToolCard(
             "miranagi_staff", EnJa("Staff of Miranagi", "みらなぎの杖"),
             PoemList(3).poem(EnJa("Risk of vacuum decay due to anti-entropy", "創世の神光は混沌をも翻す。")),
             FairyShootingStaffConfiguration(ToolMaterialCard.MIRANAGITE, 7F, 16F).enchantment(Enchantments.SILK_TOUCH),
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { MaterialCard.MIRANAGITE.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Innocent Dogma", "盲目のドグマ"),
+                    description = EnJa("Craft the Staff of Miranagi", "みらなぎの杖を作成する"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern(" IG")
@@ -534,6 +550,8 @@ class ToolCard(
         })
     }
 
+    val advancement = advancementCreator?.invoke(this, identifier)
+
     context(ModContext)
     fun init() {
         item.register()
@@ -547,6 +565,8 @@ class ToolCard(
         val poemList2 = configuration.appendPoems(poemList)
         item.registerPoem(poemList2)
         item.registerPoemGeneration(poemList2)
+
+        if (advancement != null) advancement.init()
 
         configuration.init(this)
         initializer(this@ModContext, this)
