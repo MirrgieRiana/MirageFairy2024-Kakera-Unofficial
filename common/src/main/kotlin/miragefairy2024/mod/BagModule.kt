@@ -143,7 +143,7 @@ fun initBagModule() {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
+        define('S', MaterialCard.MIRAGE_STEM.item())
         define('L', MaterialCard.MIRAGE_LEAVES.item())
     } on MaterialCard.MIRAGE_LEAVES.item
 
@@ -151,7 +151,7 @@ fun initBagModule() {
         pattern(" S ")
         pattern("L L")
         pattern("LLL")
-        define('S', MaterialCard.FAIRY_GLASS_FIBER.item())
+        define('S', MaterialCard.MIRAGE_STEM.item())
         define('L', MaterialCard.PHANTOM_LEAVES.item())
     } on MaterialCard.PHANTOM_LEAVES.item
 }
