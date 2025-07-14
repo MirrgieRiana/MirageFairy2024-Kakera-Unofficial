@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player as PlayerEntity
 fun <T : ToolConfiguration> T.selfMending(speed: Int) = this.merge(SelfMendingToolEffectType, speed)
 
 object SelfMendingToolEffectType : IntAddToolEffectType<ToolConfiguration>() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.self_mending" }, "Self-mending while in the main hand", "メインハンドにある間、自己修繕")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.self_mending" }, "Self-mending while held", "手に持っている間、自己修繕")
 
     context(ModContext)
     fun init() {
@@ -30,7 +30,7 @@ object SelfMendingToolEffectType : IntAddToolEffectType<ToolConfiguration>() {
         configuration.onInventoryTickListeners += fail@{ _, stack, world, entity, _, _ ->
             if (world.isClientSide) return@fail
             if (entity !is PlayerEntity) return@fail // プレイヤーじゃない
-            if (stack !== entity.mainHandItem) return@fail // メインハンドに持っていない
+            if (stack !== entity.mainHandItem && stack !== entity.offhandItem) return@fail // 手に持っていない
             stack.repair(world.random.randomInt(1.0 / 60.0 / 20.0) * value)
         }
     }
