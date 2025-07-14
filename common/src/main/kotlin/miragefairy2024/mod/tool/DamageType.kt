@@ -56,8 +56,16 @@ object PhysicalMagicDamageTypeCard : DamageTypeCard() {
     override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE)
 }
 
+object ToolBreakDamageTypeCard : DamageTypeCard() {
+    override fun getPath() = "tool_break"
+    override fun getKillMessage() = EnJa("%1\$s injured their hand", "%1\$sは手を怪我した")
+    override fun getPlayerKillMessage() = EnJa("%1\$s injured their hand whilst trying to escape %2\$s", "%1\$sは%2\$sとの戦闘中に手を怪我した")
+    override fun getTags() = listOf(DamageTypeTags.NO_KNOCKBACK)
+}
+
 context(ModContext)
 fun initDamageType() {
     MagicDamageTypeCard.init()
     PhysicalMagicDamageTypeCard.init()
+    ToolBreakDamageTypeCard.init()
 }
