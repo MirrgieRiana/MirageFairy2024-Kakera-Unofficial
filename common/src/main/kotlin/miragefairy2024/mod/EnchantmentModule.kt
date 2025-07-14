@@ -3,6 +3,8 @@ package miragefairy2024.mod
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mixins.api.BlockCallback
+import miragefairy2024.mixins.api.EquippedItemBrokenCallback
+import miragefairy2024.mod.tool.ToolBreakDamageTypeCard
 import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
@@ -86,6 +88,12 @@ enum class EnchantmentCard(
         ItemTags.MINING_LOOT_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
         1, 25, 25, 50,
         tags = listOf(EnchantmentTags.TREASURE),
+    ),
+    CURSE_OF_SHATTERING(
+        "curse_of_shattering", EnJa("Curse of Shattering", "破断の呪い"),
+        ItemTags.DURABILITY_ENCHANTABLE, NONE_ITEM_TAG, EnchantmentRarity.VERY_RARE,
+        5, 25, 25, 50,
+        tags = listOf(EnchantmentTags.TREASURE, EnchantmentTags.CURSE),
     ),
     ;
 
@@ -174,6 +182,17 @@ fun initEnchantmentModule() {
                 listener.remove()
             }
         }
+    }
+
+    EquippedItemBrokenCallback.EVENT.register { entity, _, slot ->
+        if (entity.level().isClientSide) return@register
+        val itemStack = entity.getItemBySlot(slot)
+        itemStack.grow(1)
+        val originalItemStack = itemStack.copy()
+        itemStack.shrink(1)
+        val enchantLevel = EnchantmentHelper.getItemEnchantmentLevel(entity.level().registryAccess()[Registries.ENCHANTMENT, EnchantmentCard.CURSE_OF_SHATTERING.key], originalItemStack)
+        if (enchantLevel == 0) return@register
+        entity.hurt(entity.level().damageSources().source(ToolBreakDamageTypeCard.registryKey), 2F * enchantLevel.toFloat())
     }
 
     SCYTHE_ITEM_TAG.registerItemTagGeneration { ItemTags.MINING_LOOT_ENCHANTABLE }
