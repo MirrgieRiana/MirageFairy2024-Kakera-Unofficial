@@ -320,7 +320,7 @@
   "item.miragefairy2024.fairy_hoe.tilling_recipe": "Special tilling effects",
   "item.miragefairy2024.fairy_liqueur": "Fairy Liqueur",
   "item.miragefairy2024.fairy_liqueur.poem": "Fairies get high, humans get burned",
-  "item.miragefairy2024.fairy_mining_tool.area_mining": "Area mining %s",
+  "item.miragefairy2024.fairy_mining_tool.area_mining": "Area mining %s %s %s",
   "item.miragefairy2024.fairy_mining_tool.collection": "Collect drop items when killed",
   "item.miragefairy2024.fairy_mining_tool.cut_all": "Cut down the entire tree",
   "item.miragefairy2024.fairy_mining_tool.mine_all": "Mine the entire ore",

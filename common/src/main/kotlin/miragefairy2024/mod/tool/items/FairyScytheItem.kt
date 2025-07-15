@@ -50,7 +50,7 @@ open class FairyScytheConfiguration(
         this.attackDamage = 4.0F
         this.attackSpeed = -3.2F
         this.magicMiningDamage = 0.2
-        this.areaMining(range)
+        this.areaMining(range, range, range)
         this.tags += ItemTags.SWORDS
         this.tags += SCYTHE_ITEM_TAG
         this.superEffectiveBlocks += Blocks.COBWEB
