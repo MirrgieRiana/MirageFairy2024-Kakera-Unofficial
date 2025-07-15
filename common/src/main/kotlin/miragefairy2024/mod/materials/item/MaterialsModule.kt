@@ -574,7 +574,7 @@ class MaterialCard(
                 define('s', Items.STRING)
             } on item modId MirageFairy2024.MOD_ID from item
             // →スライムボール
-            registerShapedRecipeGeneration({ Items.SLIME_BALL }, 8) {
+            registerShapedRecipeGeneration({ Items.SLIME_BALL }) {
                 pattern("sss")
                 pattern("s#s")
                 pattern("sss")
