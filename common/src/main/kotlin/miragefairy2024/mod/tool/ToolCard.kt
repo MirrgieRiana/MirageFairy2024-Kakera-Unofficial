@@ -526,7 +526,7 @@ class ToolCard(
         val CHAOS_STONE_PICKAXE = !ToolCard(
             "chaos_stone_pickaxe", EnJa("Chaos Stone Pickaxe", "混沌のつるはし"),
             PoemList(4).poem(EnJa("Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.MINEABLE_WITH_SHOVEL }.areaMining(1, 0, 2),
+            FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.MINEABLE_WITH_SHOVEL }.areaMining(1, 2, 0),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.CHAOS_STONE.item) }
         val PHANTOM_PICKAXE = !ToolCard(
             "phantom_pickaxe", EnJa("Phantom Pickaxe", "幻想のつるはし"),
