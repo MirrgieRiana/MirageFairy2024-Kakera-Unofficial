@@ -31,7 +31,7 @@ fun initPlacedItemModule() {
 
             if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
 
-            val hitResult = player.pick(5.0, 0F, false)
+            val hitResult = player.pick(player.blockInteractionRange(), 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
 
@@ -80,7 +80,7 @@ fun initPlacedItemModule() {
 
             if (player.isSpectator) return@registerServerPacketReceiver // スペクテイターモード
 
-            val hitResult = player.pick(5.0, 0F, false)
+            val hitResult = player.pick(player.blockInteractionRange(), 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@registerServerPacketReceiver // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@registerServerPacketReceiver // ブロックをターゲットにしていない
 

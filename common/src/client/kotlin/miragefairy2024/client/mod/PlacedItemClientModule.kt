@@ -9,7 +9,6 @@ import miragefairy2024.mod.placeditem.PlacedItemCard
 import miragefairy2024.mod.placeditem.RemovePlacedItemChannel
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
-import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.BlockHitResult
@@ -32,8 +31,7 @@ fun initPlacedItemClientModule() {
 
             if (player.isSpectator) return@run // スペクテイターモード
 
-            val d = player.blockInteractionRange() max player.entityInteractionRange()
-            val hitResult = player.pick(d, 0F, false)
+            val hitResult = player.pick(player.blockInteractionRange(), 0F, false)
             if (hitResult.type != HitResult.Type.BLOCK) return@run // ブロックをターゲットにしていない
             if (hitResult !is BlockHitResult) return@run // ブロックをターゲットにしていない
 
