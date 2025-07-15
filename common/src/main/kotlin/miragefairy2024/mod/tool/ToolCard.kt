@@ -313,6 +313,21 @@ class ToolCard(
             PoemList(2).poem(EnJa("A brain frozen in crystal", "闇を打ち砕く、透き通る心。")),
             FairyPickaxeConfiguration(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0).soulStreamContainable(),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
+        val FAIRY_CRYSTAL_AXE = !ToolCard(
+            "fairy_crystal_axe", EnJa("Fairy Crystal Axe", "フェアリークリスタルの斧"),
+            PoemList(2).poem(EnJa("A tree that raised many fairies", "年輪が語る、自然の姿。")),
+            FairyAxeConfiguration(ToolMaterialCard.FAIRY_CRYSTAL, 6.0F, -3.1F).selfMending(10).obtainFairy(9.0).soulStreamContainable(),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
+        val FAIRY_CRYSTAL_SHOVEL = !ToolCard(
+            "fairy_crystal_shovel", EnJa("Fairy Crystal Shovel", "フェアリークリスタルのシャベル"),
+            PoemList(2).poem(EnJa("Spiritual cycle of carbon", "いつか妖精になるものたち。")),
+            FairyShovelConfiguration(ToolMaterialCard.FAIRY_CRYSTAL).selfMending(10).obtainFairy(9.0).soulStreamContainable(),
+        ) { registerShovelRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
+        val FAIRY_CRYSTAL_HOE = !ToolCard(
+            "fairy_crystal_hoe", EnJa("Fairy Crystal Hoe", "フェアリークリスタルのクワ"),
+            PoemList(2).poem(EnJa("Essence of life within the soul stream", "ソウルストリームに宿る、生命の息吹。")),
+            FairyHoeConfiguration(ToolMaterialCard.FAIRY_CRYSTAL, -2, -1.0F).selfMending(10).obtainFairy(9.0).soulStreamContainable(),
+        ) { registerHoeRecipeGeneration(item, MaterialCard.FAIRY_CRYSTAL.item) }
         val FAIRY_CRYSTAL_SCYTHE = !ToolCard(
             "fairy_crystal_scythe", EnJa("Fairy Crystal Scythe", "フェアリークリスタルの大鎌"),
             PoemList(2).poem(EnJa("What color is fairy blood?", "妖精を刈り取るための道具。")),
