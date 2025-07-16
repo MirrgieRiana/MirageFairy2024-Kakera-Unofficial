@@ -85,27 +85,27 @@ class ToolCard(
         val MAGNETITE_PICKAXE = !ToolCard(
             "magnetite_pickaxe", EnJa("Magnetite Pickaxe", "磁鉄鉱のつるはし"),
             PoemList(null),
-            FairyPickaxeConfiguration(ToolMaterialCard.MAGNETITE).collection().enchantment(EnchantmentCard.STICKY_MINING.key),
+            FairyPickaxeConfiguration(ToolMaterialCard.MAGNETITE).enchantment(EnchantmentCard.STICKY_MINING.key),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val MAGNETITE_AXE = !ToolCard(
             "magnetite_axe", EnJa("Magnetite Axe", "磁鉄鉱の斧"),
             PoemList(null),
-            FairyAxeConfiguration(ToolMaterialCard.MAGNETITE, 6.5F, -3.2F).collection().enchantment(EnchantmentCard.STICKY_MINING.key),
+            FairyAxeConfiguration(ToolMaterialCard.MAGNETITE, 6.5F, -3.2F).enchantment(EnchantmentCard.STICKY_MINING.key),
         ) { registerAxeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val MAGNETITE_SHOVEL = !ToolCard(
             "magnetite_shovel", EnJa("Magnetite Shovel", "磁鉄鉱のシャベル"),
             PoemList(null),
-            FairyShovelConfiguration(ToolMaterialCard.MAGNETITE).collection().enchantment(EnchantmentCard.STICKY_MINING.key),
+            FairyShovelConfiguration(ToolMaterialCard.MAGNETITE).enchantment(EnchantmentCard.STICKY_MINING.key),
         ) { registerShovelRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val MAGNETITE_HOE = !ToolCard(
             "magnetite_hoe", EnJa("Magnetite Hoe", "磁鉄鉱のクワ"),
             PoemList(null),
-            FairyHoeConfiguration(ToolMaterialCard.MAGNETITE, -1, -2.0F).collection().enchantment(EnchantmentCard.STICKY_MINING.key),
+            FairyHoeConfiguration(ToolMaterialCard.MAGNETITE, -1, -2.0F).enchantment(EnchantmentCard.STICKY_MINING.key),
         ) { registerHoeRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val MAGNETITE_SWORD = !ToolCard(
             "magnetite_sword", EnJa("Magnetite Sword", "磁鉄鉱の剣"),
             PoemList(null),
-            FairySwordConfiguration(ToolMaterialCard.MAGNETITE).collection().enchantment(EnchantmentCard.STICKY_MINING.key),
+            FairySwordConfiguration(ToolMaterialCard.MAGNETITE).collection(),
         ) { registerSwordRecipeGeneration(item, MaterialCard.MAGNETITE.item) }
         val BISMUTH_PICKAXE = !ToolCard(
             "bismuth_pickaxe", EnJa("Bismuth Pickaxe", "ビスマスのつるはし"),
