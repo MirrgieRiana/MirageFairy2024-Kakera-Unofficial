@@ -546,17 +546,17 @@ class ToolCard(
         val HAIMEVISKA_ROSIN_PICKAXE = !ToolCard(
             "haimeviska_rosin_pickaxe", EnJa("Rosin Pickaxe", "涙のつるはし"),
             PoemList(2).poem(EnJa("A pickaxe looking for companions", "きみも一緒だよ――")),
-            FairyPickaxeConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining(1, 0, 0).collection().enchantment(EnchantmentCard.STICKY_MINING.key).enchantment(Enchantments.UNBREAKING, 2),
+            FairyPickaxeConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining(1, 0, 0).enchantment(EnchantmentCard.STICKY_MINING.key).enchantment(Enchantments.UNBREAKING, 2),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
         val HAIMEVISKA_ROSIN_SHOVEL = !ToolCard(
             "haimeviska_rosin_shovel", EnJa("Rosin Shovel", "涙のシャベル"),
             PoemList(2).poem(EnJa("The oppressed Viska spirit's desire", "傷つけられた樹の声")),
-            FairyShovelConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining(1, 0, 0).collection().enchantment(EnchantmentCard.STICKY_MINING.key).enchantment(Enchantments.UNBREAKING, 2),
+            FairyShovelConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining(1, 0, 0).enchantment(EnchantmentCard.STICKY_MINING.key).enchantment(Enchantments.UNBREAKING, 2),
         ) { registerShovelRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
         val HAIMEVISKA_ROSIN_SWORD = !ToolCard(
             "haimeviska_rosin_sword", EnJa("Rosin Sword", "涙の剣"),
             PoemList(2).poem(EnJa("The story of the lonely tree", "涙の中に消えた友――")),
-            FairySwordConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).areaMining(1, 0, 0).collection().enchantment(EnchantmentCard.STICKY_MINING.key).enchantment(Enchantments.UNBREAKING, 2),
+            FairySwordConfiguration(ToolMaterialCard.HAIMEVISKA_ROSIN).enchantment(Enchantments.SWEEPING_EDGE, 3).collection().enchantment(Enchantments.UNBREAKING, 2),
         ) { registerSwordRecipeGeneration(item, MaterialCard.HAIMEVISKA_ROSIN.item) }
 
         val CREATIVE_HOE = !ToolCard(
