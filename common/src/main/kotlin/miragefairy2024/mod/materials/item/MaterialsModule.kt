@@ -108,7 +108,7 @@ class MaterialCard(
         val XARPITE: MaterialCard = !MaterialCard(
             "xarpite", "Xarpite", "紅天石",
             PoemList(2).poem("Binds astral flux with magnetic force", "黒鉄の鎖は繋がれる。血腥い魂の檻へ。"),
-            fuelValue = 200 * 16, ore = Ore.GEM,
+            fuelValue = 200 * 16, ore = Ore(Shape.GEM, Material.XARPITE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -128,7 +128,7 @@ class MaterialCard(
         val MIRANAGITE: MaterialCard = !MaterialCard(
             "miranagite", "Miranagite", "蒼天石",
             PoemList(2).poem("Astral body crystallized by anti-entropy", "秩序の叛乱、天地創造の逆光。"),
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.MIRANAGITE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -145,7 +145,7 @@ class MaterialCard(
         val MIRANAGITE_ROD: MaterialCard = !MaterialCard(
             "miranagite_rod", "Miranagite Rod", "蒼天石の棒",
             PoemList(2).poem("Mana flows well through the core", "蒼天に従える光条は、魔力の祝福を示す。"),
-            ore = Ore.ROD,
+            ore = Ore(Shape.ROD, Material.MIRANAGITE),
         ) {
             registerShapedRecipeGeneration(item) {
                 pattern("  #")
@@ -157,7 +157,7 @@ class MaterialCard(
         val CHAOS_STONE: MaterialCard = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.CHAOS_STONE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -221,7 +221,7 @@ class MaterialCard(
         val FAIRY_CRYSTAL: MaterialCard = !MaterialCard(
             "fairy_crystal", "Fairy Crystal", "フェアリークリスタル",
             PoemList(2).poem("Crystallized soul", "生物を生物たらしめるもの"),
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.FAIRY_CRYSTAL),
             soulStreamContainable = true,
             advancementCreator = {
                 AdvancementCard(
@@ -243,7 +243,7 @@ class MaterialCard(
         val PHANTOM_DROP: MaterialCard = !MaterialCard(
             "phantom_drop", "Phantom Drop", "幻想の雫",
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
-            soulStreamContainable = true, ore = Ore.GEM,
+            soulStreamContainable = true, ore = Ore(Shape.GEM, Material.PHANTOM_DROP),
             foodComponentCreator = {
                 FoodComponent.Builder()
                     .nutrition(2)
@@ -267,7 +267,7 @@ class MaterialCard(
         val MIRAGIUM_NUGGET: MaterialCard = !MaterialCard(
             "miragium_nugget", "Miragium Nugget", "ミラジウムナゲット",
             PoemList(3).poem("Dismembered metallic body", "小分けにされた妖精のインゴット。"),
-            soulStreamContainable = true, ore = Ore.NUGGET,
+            soulStreamContainable = true, ore = Ore(Shape.NUGGET, Material.MIRAGIUM),
         ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
@@ -281,7 +281,7 @@ class MaterialCard(
         val MIRAGIUM_INGOT: MaterialCard = !MaterialCard(
             "miragium_ingot", "Miragium Ingot", "ミラジウムインゴット",
             PoemList(3).poem("Metallic body", "妖精インゴット。"),
-            soulStreamContainable = true, ore = Ore.INGOT,
+            soulStreamContainable = true, ore = Ore(Shape.INGOT, Material.MIRAGIUM),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -297,7 +297,7 @@ class MaterialCard(
         val LILAGIUM_INGOT: MaterialCard = !MaterialCard(
             "lilagium_ingot", "Lilagium Ingot", "リラジウムインゴット",
             PoemList(3).poem("Ethereal plant-attractant polysaccharide", "セルロースの精霊よ、エーテルの道を開け。"),
-            soulStreamContainable = true, ore = Ore.INGOT,
+            soulStreamContainable = true, ore = Ore(Shape.INGOT, Material.LILAGIUM),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -338,7 +338,7 @@ class MaterialCard(
         val MIRAGIDIAN: MaterialCard = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
             PoemList(4).poem("A fantasy world told by tungsten", "タングステンが語る幻想世界。"),
-            soulStreamContainable = true, fireResistant = true, ore = Ore.GEM,
+            soulStreamContainable = true, fireResistant = true, ore = Ore(Shape.GEM, Material.MIRAGIDIAN),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -398,7 +398,7 @@ class MaterialCard(
         val LUMINITE: MaterialCard = !MaterialCard(
             "luminite", "Luminite", "ルミナイト",
             PoemList(4).poem("An end point of reincarnation", "彷徨える魂の行方。"),
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.LUMINITE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -414,7 +414,7 @@ class MaterialCard(
         val RESONITE_INGOT: MaterialCard = !MaterialCard(
             "resonite_ingot", "Resonite", "共鳴石",
             PoemList(5).poem("Synchronized sound and light", "同調する魂の波動。"),
-            soulStreamContainable = true, ore = Ore.INGOT,
+            soulStreamContainable = true, ore = Ore(Shape.INGOT, Material.RESONITE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -459,7 +459,7 @@ class MaterialCard(
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
             PoemList(4).poem("Arbitrament of randomness.", "炎になる魂、光になる魂。"), // TODO 何かで使う：熱情
-            fireResistant = true, fuelValue = 200 * 16, ore = Ore.GEM,
+            fireResistant = true, fuelValue = 200 * 16, ore = Ore(Shape.GEM, Material.PROMINITE),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -545,7 +545,7 @@ class MaterialCard(
         val HAIMEVISKA_ROSIN: MaterialCard = !MaterialCard(
             "haimeviska_rosin", "Haimeviska Rosin", "妖精の木の涙",
             PoemList(2).poem("High-friction material", "琥珀の月が昇るとき、妖精の木は静かに泣く"),
-            fuelValue = 200, ore = Ore.GEM,
+            fuelValue = 200, ore = Ore(Shape.GEM, Material.HAIMEVISKA_ROSIN),
             advancementCreator = {
                 AdvancementCard(
                     identifier = it,
@@ -587,7 +587,7 @@ class MaterialCard(
             // TODO add purpose
             "fairy_plastic", "Fairy Plastic", "妖精のプラスチック",
             PoemList(4).poem("Thermoplastic organic polymer", "凍てつく記憶の宿る石。"),
-            fuelValue = 200 * 8, ore = Ore.GEM,
+            fuelValue = 200 * 8, ore = Ore(Shape.GEM, Material.FAIRY_PLASTIC),
             // TODO advancement
             // 琥珀色の～～
         )
@@ -595,7 +595,7 @@ class MaterialCard(
             // TODO add purpose
             "fairy_rubber", "Fairy Rubber", "夜のかけら",
             PoemList(3).poem("Minimize the risk of losing belongings", "空は怯える夜精に一握りの温かい闇を与えた"),
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.FAIRY_RUBBER),
         )
 
         val TINY_MIRAGE_FLOUR: MaterialCard = !MaterialCard(
@@ -698,7 +698,7 @@ class MaterialCard(
         val MAGNETITE: MaterialCard = !MaterialCard(
             "magnetite", "Magnetite", "磁鉄鉱",
             null,
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.MAGNETITE),
         ) {
             registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.7) on item modId MirageFairy2024.MOD_ID from item
         }
@@ -706,7 +706,7 @@ class MaterialCard(
         val FLUORITE: MaterialCard = !MaterialCard(
             "fluorite", "Fluorite", "蛍石",
             null,
-            ore = Ore.GEM,
+            ore = Ore(Shape.GEM, Material.FLUORITE),
         )
         val SPHERE_BASE: MaterialCard = !MaterialCard(
             "sphere_base", "Sphere Base", "スフィアベース",
@@ -726,7 +726,7 @@ class MaterialCard(
         val TINY_BISMUTH_DUST: MaterialCard = !MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
             null,
-            ore = Ore.TINY_DUST,
+            ore = Ore(Shape.TINY_DUST, Material.BISMUTH),
         ) {
             item.registerExtraOreDrop(Blocks.COPPER_ORE, fortuneMultiplier = 1)
             item.registerExtraOreDrop(Blocks.DEEPSLATE_COPPER_ORE, fortuneMultiplier = 1)
@@ -734,12 +734,12 @@ class MaterialCard(
         val BISMUTH_DUST: MaterialCard = !MaterialCard(
             "bismuth_dust", "Bismuth Dust", "ビスマスの粉",
             null,
-            ore = Ore.DUST,
+            ore = Ore(Shape.DUST, Material.BISMUTH),
         )
         val BISMUTH_INGOT: MaterialCard = !MaterialCard(
             "bismuth_ingot", "Bismuth Ingot", "ビスマスインゴット",
             null,
-            ore = Ore.INGOT,
+            ore = Ore(Shape.INGOT, Material.BISMUTH),
         ) {
             registerSmeltingRecipeGeneration(BISMUTH_DUST.item, item) on BISMUTH_DUST.item from BISMUTH_DUST.item
         }
@@ -1091,9 +1091,9 @@ fun initMaterialsModule() {
             }
         }
         if (card.ore != null) {
-            card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.tagNameFunction(card.identifier.path))) }
-            card.item.registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.neoForgeTagNameFunction(card.identifier.path))) }
-            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.neoForgeTagNameFunction(card.identifier.path))).registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.neoForgeTag)) }
+            card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.tagNameFunction(card.ore.material.path))) }
+            card.item.registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagNameFunction(card.ore.material.path))) }
+            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagNameFunction(card.ore.material.path))).registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTag)) }
         }
         card.initializer(this@ModContext, card)
     }
@@ -1172,11 +1172,33 @@ fun initMaterialsModule() {
 
 }
 
-enum class Ore(val tagNameFunction: (String) -> String, val neoForgeTag: String, val neoForgeTagNameFunction: (String) -> String) {
+data class Ore(val shape: Shape, val material: Material)
+
+enum class Shape(val tagNameFunction: (String) -> String, val neoForgeTag: String, val neoForgeTagNameFunction: (String) -> String) {
     TINY_DUST({ "${it}_tiny_dusts" }, "tiny_dusts", { "tiny_dusts/$it" }),
     DUST({ "${it}_dusts" }, "dusts", { "dusts/$it" }),
     NUGGET({ "${it}_nuggets" }, "nuggets", { "nuggets/$it" }),
     INGOT({ "${it}_ingots" }, "ingots", { "ingots/$it" }),
     ROD({ "${it}_rods" }, "rods", { "rods/$it" }),
     GEM({ "${it}_gems" }, "gems", { "gems/$it" }),
+}
+
+enum class Material(val path: String) {
+    XARPITE("xarpite"),
+    MIRANAGITE("miranagite"),
+    CHAOS_STONE("chaos_stone"),
+    FAIRY_CRYSTAL("fairy_crystal"),
+    PHANTOM_DROP("phantom_drop"),
+    MIRAGIUM("miragium"),
+    LILAGIUM("lilagium"),
+    MIRAGIDIAN("miragidian"),
+    LUMINITE("luminite"),
+    RESONITE("resonite"),
+    PROMINITE("prominite"),
+    HAIMEVISKA_ROSIN("haimeviska_rosin"),
+    FAIRY_PLASTIC("fairy_plastic"),
+    FAIRY_RUBBER("fairy_rubber"),
+    MAGNETITE("magnetite"),
+    FLUORITE("fluorite"),
+    BISMUTH("bismuth"),
 }
