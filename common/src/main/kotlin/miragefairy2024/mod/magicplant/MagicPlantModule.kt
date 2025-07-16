@@ -106,8 +106,9 @@ fun initMagicPlantModule() {
             lines += "|CENTER:湿度|CENTER:湿潤|${f(0, 0)}|${f(1, 0)}|${f(2, 0)}|"
             lines += "|~|CENTER:中湿|${f(0, 1)}|${f(1, 1)}|${f(2, 1)}|"
             lines += "|~|CENTER:乾燥|${f(0, 2)}|${f(1, 2)}|${f(2, 2)}|"
+            lines += ""
         }
-        writeAction(player, "magic_plant_environments.txt", lines.toString().trimEnd())
+        writeAction(player, "magic_plant_environments.txt", lines.join("") { "$it\n" })
     }
 
 }
