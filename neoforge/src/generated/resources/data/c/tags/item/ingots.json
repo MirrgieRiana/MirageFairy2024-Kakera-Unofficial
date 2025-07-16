@@ -1,19 +1,19 @@
 {
   "values": [
     {
-      "id": "#c:ingots/miragium_ingot",
+      "id": "#c:ingots/miragium",
       "required": false
     },
     {
-      "id": "#c:ingots/lilagium_ingot",
+      "id": "#c:ingots/lilagium",
       "required": false
     },
     {
-      "id": "#c:ingots/resonite_ingot",
+      "id": "#c:ingots/resonite",
       "required": false
     },
     {
-      "id": "#c:ingots/bismuth_ingot",
+      "id": "#c:ingots/bismuth",
       "required": false
     }
   ]
