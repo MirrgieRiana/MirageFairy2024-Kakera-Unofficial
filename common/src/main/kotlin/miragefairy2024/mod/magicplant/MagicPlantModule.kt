@@ -111,4 +111,27 @@ fun initMagicPlantModule() {
         writeAction(player, "magic_plant_environments.txt", lines.join("") { "$it\n" })
     }
 
+    registerClientDebugItem("dump_magic_plant_traits", Blocks.OAK_SAPLING.toTextureSource(), 0xFFFFFF00.toInt()) { _, player, _, _ ->
+        val lines = mutableListOf<String>()
+
+        lines += "|${(listOf("特性", "条件", "効果") + magicPlantCards.map { it.blockName.ja.chunked(1).join("&br;") }).join("|")}|h"
+
+        TraitCard.entries.forEach { traitCard ->
+            val row = mutableListOf<String>()
+            row += traitCard.jaName
+            row += traitCard.trait.conditions.join("&br;") { it.name.string }
+            row += traitCard.trait.effectStacks.join("&br;") { it.first.name.string }
+            row += magicPlantCards.map { magicPlantCard ->
+                when (traitCard.trait) {
+                    in magicPlantCard.defaultTraitBits -> "○"
+                    in magicPlantCard.randomTraitChances -> "△"
+                    else -> ""
+                }
+            }
+            lines += "|${row.join("|")}|"
+        }
+
+        writeAction(player, "magic_plant_traits.txt", lines.join("") { "$it\n" })
+    }
+
 }
