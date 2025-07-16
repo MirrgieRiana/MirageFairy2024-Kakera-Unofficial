@@ -2,6 +2,7 @@ package miragefairy2024.mod.magicplant
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
@@ -18,10 +19,15 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
+import miragefairy2024.util.registerClientDebugItem
+import miragefairy2024.util.toTextureSource
+import miragefairy2024.util.writeAction
+import mirrg.kotlin.hydrogen.join
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.util.ExtraCodecs
+import net.minecraft.world.level.block.Blocks
 
 val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     MirageFlowerCard,
@@ -72,6 +78,36 @@ fun initMagicPlantModule() {
 
     magicPlantCards.forEach { card ->
         card.init()
+    }
+
+    registerClientDebugItem("dump_magic_plant_environments", Blocks.OAK_SAPLING.toTextureSource(), 0xFF00FF00.toInt()) { _, player, _, _ ->
+        val lines = mutableListOf<String>()
+        magicPlantCards.groupBy { it.family }.forEach { (_, cards) ->
+            val temperatureTraits = listOf(TraitCard.COLD_ADAPTATION.trait, TraitCard.WARM_ADAPTATION.trait, TraitCard.HOT_ADAPTATION.trait)
+            val humidityTraits = listOf(TraitCard.HUMID_ADAPTATION.trait, TraitCard.MESIC_ADAPTATION.trait, TraitCard.ARID_ADAPTATION.trait)
+
+            fun f(t: Int, h: Int): String {
+                val temperatureTrait = temperatureTraits[t]
+                val humidityTrait = humidityTraits[h]
+                return cards
+                    .filter {
+                        val temperatureMatched = temperatureTrait in it.defaultTraitBits || temperatureTrait in it.randomTraitChances
+                        val humidityMatched = humidityTrait in it.defaultTraitBits || humidityTrait in it.randomTraitChances
+                        temperatureMatched && humidityMatched
+                    }
+                    .join("&br;") { it.blockName.ja }
+            }
+
+            lines += "** ${cards.first().classification.ja}"
+            lines += ""
+            lines += "|BGCOLOR(#f8edff):|BGCOLOR(#f8edff):||||c"
+            lines += "|>||>|>|CENTER:温度|h"
+            lines += "|>|~|CENTER:低温|CENTER:中温|CENTER:高温|h"
+            lines += "|CENTER:湿度|CENTER:湿潤|${f(0, 0)}|${f(1, 0)}|${f(2, 0)}|"
+            lines += "|~|CENTER:中湿|${f(0, 1)}|${f(1, 1)}|${f(2, 1)}|"
+            lines += "|~|CENTER:乾燥|${f(0, 2)}|${f(1, 2)}|${f(2, 2)}|"
+        }
+        writeAction(player, "magic_plant_environments.txt", lines.toString().trimEnd())
     }
 
 }
