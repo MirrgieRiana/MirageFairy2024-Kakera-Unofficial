@@ -5,15 +5,15 @@ import net.minecraft.util.RandomSource as Random
 
 const val MAX_TRAIT_COUNT = 15
 
-fun crossTraitStacks(random: Random, a: TraitStacks, b: TraitStacks): TraitStacks {
+fun crossTraitStacks(a: Map<Trait, Int>, b: Map<Trait, Int>, random: Random): Map<Trait, Int> {
 
     class Entry(val trait: Trait, val level: Int, val isDecided: Boolean)
 
     // 両親から、一旦枠数制限を無視して交配する
-    val traits = a.traitStackMap.keys + b.traitStackMap.keys
+    val traits = a.keys + b.keys
     val entries = traits.map { trait ->
-        val aLevel = a.traitStackMap[trait] ?: 0
-        val bLevel = b.traitStackMap[trait] ?: 0
+        val aLevel = a[trait] ?: 0
+        val bLevel = b[trait] ?: 0
         val bits = (aLevel max bLevel).toString(2).length
 
         var level = 0
@@ -43,12 +43,12 @@ fun crossTraitStacks(random: Random, a: TraitStacks, b: TraitStacks): TraitStack
     val entries2 = entries.filter { it.level != 0 }
 
     // 枠数を超えていて不確定特性を持っている限り、不確定特性をランダムに消していく
-    val decidedTraitStackList = entries2.filter { it.isDecided }.map { TraitStack(it.trait, it.level) }
-    val undecidedTraitStackList = entries2.filter { !it.isDecided }.map { TraitStack(it.trait, it.level) }.toMutableList()
+    val decidedTraitStackList = entries2.filter { it.isDecided }.map { Pair(it.trait, it.level) }
+    val undecidedTraitStackList = entries2.filter { !it.isDecided }.map { Pair(it.trait, it.level) }.toMutableList()
     while (decidedTraitStackList.size + undecidedTraitStackList.size > MAX_TRAIT_COUNT) {
         if (undecidedTraitStackList.isEmpty()) break
         undecidedTraitStackList.removeAt(random.nextInt(undecidedTraitStackList.size))
     }
 
-    return TraitStacks.of(decidedTraitStackList + undecidedTraitStackList)
+    return (decidedTraitStackList + undecidedTraitStackList).toMap()
 }

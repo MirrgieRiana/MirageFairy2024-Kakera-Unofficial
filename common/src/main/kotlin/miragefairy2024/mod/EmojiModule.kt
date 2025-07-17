@@ -39,6 +39,7 @@ enum class Emoji(val string: String, val charCode: String) {
     NATURAL_ABSCISSION("自然落果", "\uE627"),
 
     CROSSBREEDING("交雑", "\uE628"),
+    MUTATION("突然変異", "\uE629"),
     ;
 
     override fun toString() = charCode
