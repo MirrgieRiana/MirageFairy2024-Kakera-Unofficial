@@ -43,30 +43,32 @@ class PanelSliderField(private val min: Int, private val max: Int, private val c
         })
 
         // 入力欄
-        add(ParsingTextField(
-            min,
-            { it.trim().toIntOrNull()?.takeIf { a -> a in min..max } },
-            { "$it" },
-        ).also { c ->
-            c.columns = 5
-            c.value.register { _, it, _ ->
-                if (value.modifying) return@register
-                value.set(it, c)
-            }
-            c.addMouseWheelListener(object : MouseAdapter() {
-                override fun mouseWheelMoved(e: MouseWheelEvent) {
-                    value.set((value.get() + -e.preciseWheelRotation.toInt()).coerceIn(min, max))
+        add(
+            ParsingTextField(
+                min,
+                { it.trim().toIntOrNull()?.takeIf { a -> a in min..max } },
+                { "$it" },
+            ).also { c ->
+                c.columns = 5
+                c.value.register { _, it, _ ->
+                    if (value.modifying) return@register
+                    value.set(it, c)
                 }
-            })
-            value.register { _, it, source ->
-                if (source == c) return@register
-                c.value.set(it)
+                c.addMouseWheelListener(object : MouseAdapter() {
+                    override fun mouseWheelMoved(e: MouseWheelEvent) {
+                        value.set((value.get() + -e.preciseWheelRotation.toInt()).coerceIn(min, max))
+                    }
+                })
+                value.register { _, it, source ->
+                    if (source == c) return@register
+                    c.value.set(it)
+                }
+            }, GridBagConstraints().also {
+                it.fill = GridBagConstraints.HORIZONTAL
+                it.gridx = 1
+                it.gridy = 0
             }
-        }, GridBagConstraints().also {
-            it.fill = GridBagConstraints.HORIZONTAL
-            it.gridx = 1
-            it.gridy = 0
-        })
+        )
 
         value.register { _, _, _ ->
             repaintGradientEvent.fire()

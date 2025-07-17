@@ -106,40 +106,46 @@ class WindowColorMaker(
                     }
 
                     // 右側スライダーコンポーネント
-                    rightPane.add(createPanelTitledBorder("Background",
-                        PanelColorSlider().also { c ->
-                            c.value.register { _, it, _ ->
-                                if (backgroundColor.modifying) return@register
-                                backgroundColor.set(it.color, c)
-                            }
-                            backgroundColor.register { _, it, source ->
-                                if (source == c) return@register
-                                c.value.set(Rgb(it))
-                            }
-                        }), GridBagConstraints().also {
-                        it.fill = GridBagConstraints.HORIZONTAL
-                        it.insets = Insets(0, 0, 5, 0)
-                        it.gridx = 0
-                        it.gridy = 0
-                    })
-                    sliderNames.forEachIndexed { i, name ->
-                        rightPane.add(createPanelTitledBorder(name,
+                    rightPane.add(
+                        createPanelTitledBorder(
+                            "Background",
                             PanelColorSlider().also { c ->
-                                c.value.register { _, _, _ ->
-                                    if (colors.modifying) return@register
-                                    colors.set(panelColorSliders.map { it.value.get().color }, c)
+                                c.value.register { _, it, _ ->
+                                    if (backgroundColor.modifying) return@register
+                                    backgroundColor.set(it.color, c)
                                 }
-                                colors.register { _, _, source ->
+                                backgroundColor.register { _, it, source ->
                                     if (source == c) return@register
-                                    c.value.set(Rgb(colors.get()[i]))
+                                    c.value.set(Rgb(it))
                                 }
-                                panelColorSliders += c
                             }), GridBagConstraints().also {
                             it.fill = GridBagConstraints.HORIZONTAL
                             it.insets = Insets(0, 0, 5, 0)
                             it.gridx = 0
-                            it.gridy = 1 + i
-                        })
+                            it.gridy = 0
+                        }
+                    )
+                    sliderNames.forEachIndexed { i, name ->
+                        rightPane.add(
+                            createPanelTitledBorder(
+                                name,
+                                PanelColorSlider().also { c ->
+                                    c.value.register { _, _, _ ->
+                                        if (colors.modifying) return@register
+                                        colors.set(panelColorSliders.map { it.value.get().color }, c)
+                                    }
+                                    colors.register { _, _, source ->
+                                        if (source == c) return@register
+                                        c.value.set(Rgb(colors.get()[i]))
+                                    }
+                                    panelColorSliders += c
+                                }), GridBagConstraints().also {
+                                it.fill = GridBagConstraints.HORIZONTAL
+                                it.insets = Insets(0, 0, 5, 0)
+                                it.gridx = 0
+                                it.gridy = 1 + i
+                            }
+                        )
                     }
 
                     // 右側色構文
