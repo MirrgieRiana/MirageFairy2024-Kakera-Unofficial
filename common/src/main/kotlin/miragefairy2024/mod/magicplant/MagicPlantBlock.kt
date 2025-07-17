@@ -200,7 +200,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         if (targetTraitStacksList.isEmpty()) return createSeed(traitStacks)
         val targetTraitStacks = targetTraitStacksList[world.random.nextInt(targetTraitStacksList.size)]
 
-        return createSeed(crossTraitStacks(world.random, traitStacks, targetTraitStacks))
+        return createSeed(TraitStacks.of(crossTraitStacks(traitStacks.traitStackMap, targetTraitStacks.traitStackMap, world.random)))
     }
 
     fun tryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
