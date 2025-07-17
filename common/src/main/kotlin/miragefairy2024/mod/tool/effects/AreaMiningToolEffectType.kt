@@ -8,6 +8,7 @@ import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.mod.tool.merge
 import miragefairy2024.util.Translation
+import miragefairy2024.util.blockVisitor
 import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
@@ -15,6 +16,8 @@ import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.ceilToInt
 import mirrg.kotlin.hydrogen.max
+import net.minecraft.core.BlockBox
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
@@ -61,34 +64,38 @@ object AreaMiningToolEffectType : ToolEffectType<ToolConfiguration, AreaMiningTo
                 Direction.EAST -> Triple(-f..b, -h..h, -h..h)
             }
 
-            // TODO 貫通抑制
-            xRange.forEach { x ->
-                yRange.forEach { y ->
-                    zRange.forEach { z ->
-                        if (x != 0 || y != 0 || z != 0) {
-                            val targetBlockPos = pos.offset(x, y, z)
-                            if (item.isCorrectToolForDrops(stack, world.getBlockState(targetBlockPos))) run skip@{
-                                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
+            val region = BlockBox.of(
+                BlockPos(pos.x + xRange.first, pos.y + yRange.first, pos.z + zRange.first),
+                BlockPos(pos.x + xRange.last, pos.y + yRange.last, pos.z + zRange.last),
+            )
+            blockVisitor(listOf(pos), visitOrigins = false) { _, _, toBlockPos ->
+                if (toBlockPos !in region) return@blockVisitor false // 範囲外
+                val blockState = world.getBlockState(toBlockPos)
+                if (!item.isCorrectToolForDrops(stack, blockState)) return@blockVisitor false // 非対応ツール
+                val destroySpeed = blockState.getDestroySpeed(world, toBlockPos)
+                if (destroySpeed < 0) return@blockVisitor false // 破壊不能な硬度
+                true
+            }.forEach skip@{ (_, targetBlockPos) ->
+                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
+                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
 
-                                // 採掘を続行
+                // 採掘を続行
 
-                                val targetBlockState = world.getBlockState(targetBlockPos)
-                                val targetHardness = targetBlockState.getDestroySpeed(world, targetBlockPos)
-                                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                                    if (targetHardness > 0) {
-                                        val damage = world.random.randomInt(configuration.magicMiningDamage)
-                                        if (damage > 0) {
-                                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
-                                        }
-                                    }
-                                }
-                            }
+                val targetBlockState = world.getBlockState(targetBlockPos)
+                if (!item.isCorrectToolForDrops(stack, targetBlockState)) return@skip // 非対応ツール
+                val targetHardness = targetBlockState.getDestroySpeed(world, targetBlockPos)
+                if (targetHardness < 0) return@skip // 破壊不能な硬度
+                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
+                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
+                    if (targetHardness > 0) {
+                        val damage = world.random.randomInt(configuration.magicMiningDamage)
+                        if (damage > 0) {
+                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
                         }
                     }
                 }
             }
+
         }
     }
 }
