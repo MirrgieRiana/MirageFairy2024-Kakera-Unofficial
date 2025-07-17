@@ -132,7 +132,7 @@ fun initMagicPlantModule() {
         writeAction(player, "magic_plant_environments.txt", lines.join("") { "$it\n" })
     }
 
-    registerClientDebugItem("dump_magic_plant_traits", Blocks.OAK_SAPLING.toTextureSource(), 0xFFFFFF00.toInt()) { _, player, _, _ ->
+    registerClientDebugItem("dump_magic_plant_traits", Blocks.OAK_SAPLING.toTextureSource(), 0xFF00FFFF.toInt()) { _, player, _, _ ->
         val lines = mutableListOf<String>()
 
         lines += "|${(listOf("特性", "条件", "効果") + magicPlantCards.map { it.blockName.ja.chunked(1).join("&br;") }).join("|")}|h"
