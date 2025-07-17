@@ -47,13 +47,14 @@ object CommonMotifRecipeClientReiCategoryCard : ClientReiCategoryCard<CommonMoti
         override fun getDisplayHeight() = 3 + 2 + 18 + 2 + 3
         override fun setupDisplay(display: CommonMotifRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
+            val recipeText = when (val recipe = display.recipe) {
+                is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
+                is BiomeCommonMotifRecipe -> text { translate(recipe.biome.location().toLanguageKey("biome")) }
+                is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.location().path() }
+            }
             return listOf(
                 Widgets.createRecipeBase(bounds),
-                Widgets.createLabel(p + Point(0, 5), when (val recipe = display.recipe) {
-                    is AlwaysCommonMotifRecipe -> text { COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION() }
-                    is BiomeCommonMotifRecipe -> text { translate(recipe.biome.location().toLanguageKey("biome")) }
-                    is BiomeTagCommonMotifRecipe -> text { recipe.biomeTag.location().path() }
-                })
+                Widgets.createLabel(p + Point(0, 5), recipeText)
                     .color(0xFF404040.toInt(), 0xFFBBBBBB.toInt())
                     .let {
                         when (val recipe = display.recipe) {
