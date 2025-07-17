@@ -54,9 +54,9 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
     override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {
-            val result = spawnTraitStacks(card, world.random)
-            setTraitStacks(result.first)
-            setRare(result.second)
+            val (bits, rare) = applyMutation(card.defaultTraitBits, card.randomTraitChances, world.random)
+            setTraitStacks(TraitStacks.of(bits))
+            setRare(rare)
             setNatural(true)
         }
     }
@@ -89,14 +89,14 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<TraitStacks, Boolean> {
+fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: Random): Pair<Map<Trait, Int>, Boolean> {
 
     // 特性数上限を加味した抽選リスト
-    val defaultTraits = card.defaultTraitBits.keys
+    val defaultTraits = bits.keys
     val actualRandomTraitChances = if (defaultTraits.size >= MAX_TRAIT_COUNT) {
-        card.randomTraitChances.entries.filter { (trait, _) -> trait in defaultTraits }
+        chances.entries.filter { (trait, _) -> trait in defaultTraits }
     } else {
-        card.randomTraitChances.entries
+        chances.entries
     }.map { Chance(it.value, it.key) }
 
     // 確率があふれていた場合に凝縮率に還元し、ハズレを加味した特性の提供割合
@@ -108,7 +108,7 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
     // 抽選
     val selectedCondensedTraitResult = actualCondensedTraitChances.weightedRandom(random)!!
     val selectedCondensedTrait = selectedCondensedTraitResult.first
-    if (selectedCondensedTrait == null) return Pair(TraitStacks.of(card.defaultTraitBits), false)
+    if (selectedCondensedTrait == null) return Pair(bits, false)
 
     // 凝縮率を加味したビット番号の抽選リスト
     val bitNumberChances = (1..10).map { bitNumber ->
@@ -128,13 +128,13 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
     // ビット番号の抽選
     val selectedCondensedBitNumberResult = actualCondensedBitNumberChances.weightedRandom(random)!!
     val selectedCondensedBitNumber = selectedCondensedBitNumberResult.first
-    if (selectedCondensedBitNumber == null) return Pair(TraitStacks.of(card.defaultTraitBits), false)
+    if (selectedCondensedBitNumber == null) return Pair(bits, false)
 
     // 抽選結果を加味した特性リストの生成
     // ビット番号の凝縮数があふれた分は、単に無視する
     val selectedTrait = selectedCondensedTrait.item
     val selectedBits = 1 shl (selectedCondensedBitNumber.item - 1)
-    val actualTraitBits = card.defaultTraitBits.toMutableMap()
+    val actualTraitBits = bits.toMutableMap()
     val newBits = (actualTraitBits[selectedTrait] ?: 0) xor selectedBits
     if (newBits == 0) {
         actualTraitBits.remove(selectedTrait)
@@ -142,5 +142,5 @@ private fun spawnTraitStacks(card: MagicPlantCard<*>, random: Random): Pair<Trai
         actualTraitBits[selectedTrait] = newBits
     }
 
-    return Pair(TraitStacks.of(actualTraitBits), true/* TODO このアルゴリズムでレアをどう判定するのか？ */)
+    return Pair(actualTraitBits, true/* TODO このアルゴリズムでレアをどう判定するのか？ */)
 }
