@@ -6,19 +6,15 @@ import miragefairy2024.mod.PoemType
 import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.merge
+import miragefairy2024.util.MultiMine
 import miragefairy2024.util.NeighborType
 import miragefairy2024.util.Translation
-import miragefairy2024.util.blockVisitor
-import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
-import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
-import mirrg.kotlin.hydrogen.ceilToInt
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.BlockTags
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun <T : ToolConfiguration> T.cutAll() = this.merge(CutAllToolEffectType, true)
 
@@ -35,60 +31,30 @@ object CutAllToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
-
-            if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
-            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
-            if (!state.`is`(BlockTags.LOGS)) return@fail // 掘ったブロックが原木ではない
-
-            // 発動
-
-            val baseHardness = state.getDestroySpeed(world, pos)
-
-            val logBlockPosList = mutableListOf<BlockPos>()
-            blockVisitor(listOf(pos), visitOrigins = false, maxDistance = 19, maxCount = 19, neighborType = NeighborType.VERTICES) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).`is`(BlockTags.LOGS)
-            }.forEach skip@{ (_, blockPos) ->
-                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
-
-                // 採掘を続行
-
-                val targetBlockState = world.getBlockState(blockPos)
-                val targetHardness = targetBlockState.getDestroySpeed(world, blockPos)
-                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                if (breakBlockByMagic(stack, world, blockPos, miner)) {
-                    if (targetHardness > 0) {
-                        val damage = world.random.randomInt(configuration.magicMiningDamage)
-                        if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
-                        }
-                    }
-                    logBlockPosList += blockPos
+            if (miner !is ServerPlayer) return@fail
+            object : MultiMine(world, pos, state, miner, item, stack) {
+                override fun isValidBaseBlockState() = blockState.`is`(BlockTags.LOGS)
+                override fun executeImpl() {
+                    val logBlockPosList = mutableListOf<BlockPos>()
+                    visit(
+                        listOf(pos),
+                        configuration.magicMiningDamage,
+                        maxDistance = 19,
+                        maxCount = 19,
+                        neighborType = NeighborType.VERTICES,
+                        canContinue = { _, blockState -> blockState.`is`(BlockTags.LOGS) },
+                        onMine = { blockPos ->
+                            logBlockPosList += blockPos
+                        },
+                    ).let { if (!it) return }
+                    visit(
+                        logBlockPosList,
+                        configuration.magicMiningDamage * 0.1F,
+                        maxDistance = 8,
+                        canContinue = { _, blockState -> blockState.`is`(BlockTags.LEAVES) },
+                    )
                 }
-            }
-            blockVisitor(logBlockPosList, visitOrigins = false, maxDistance = 8) { _, _, toBlockPos ->
-                world.getBlockState(toBlockPos).`is`(BlockTags.LEAVES)
-            }.forEach skip@{ (_, blockPos) ->
-                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
-
-                // 採掘を続行
-
-                val targetBlockState = world.getBlockState(blockPos)
-                val targetHardness = targetBlockState.getDestroySpeed(world, blockPos)
-                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                if (breakBlockByMagic(stack, world, blockPos, miner)) {
-                    if (targetHardness > 0) {
-                        if (miner.random.nextFloat() < 0.1F) {
-                            val damage = world.random.randomInt(configuration.magicMiningDamage)
-                            if (damage > 0) {
-                                stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
-                            }
-                        }
-                    }
-                }
-            }
+            }.execute()
         }
     }
 }

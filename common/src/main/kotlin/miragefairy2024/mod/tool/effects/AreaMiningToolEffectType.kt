@@ -7,20 +7,16 @@ import miragefairy2024.mod.TextPoem
 import miragefairy2024.mod.tool.ToolConfiguration
 import miragefairy2024.mod.tool.ToolEffectType
 import miragefairy2024.mod.tool.merge
+import miragefairy2024.util.MultiMine
 import miragefairy2024.util.Translation
-import miragefairy2024.util.blockVisitor
-import miragefairy2024.util.breakBlockByMagic
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
-import miragefairy2024.util.randomInt
 import miragefairy2024.util.text
-import mirrg.kotlin.hydrogen.ceilToInt
 import mirrg.kotlin.hydrogen.max
 import net.minecraft.core.BlockBox
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
+import net.minecraft.server.level.ServerPlayer
 
 fun <T : ToolConfiguration> T.areaMining(horizontal: Int, front: Int, back: Int) = this.merge(AreaMiningToolEffectType, AreaMiningToolEffectType.Value(horizontal, front, back))
 
@@ -42,60 +38,34 @@ object AreaMiningToolEffectType : ToolEffectType<ToolConfiguration, AreaMiningTo
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION(value.horizontal, value.front, value.back) })
         configuration.onPostMineListeners += fail@{ item, stack, world, state, pos, miner ->
             if (world.isClientSide) return@fail
-
-            if (miner.isShiftKeyDown) return@fail // 使用者がスニーク中
-            if (miner !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
-            if (!item.isCorrectToolForDrops(stack, state)) return@fail // 掘ったブロックに対して特効でない
-            val breakDirection = breakDirectionCache[miner.uuid] ?: return@fail // 向きの判定が不正
-
-            // 発動
-
-            val baseHardness = state.getDestroySpeed(world, pos)
-
-            val h = value.horizontal
-            val f = value.front
-            val b = value.back
-            val (xRange, yRange, zRange) = when (breakDirection) {
-                Direction.DOWN -> Triple(-h..h, -b..f, -h..h)
-                Direction.UP -> Triple(-h..h, -f..b, -h..h)
-                Direction.NORTH -> Triple(-h..h, -h..h, -b..f)
-                Direction.SOUTH -> Triple(-h..h, -h..h, -f..b)
-                Direction.WEST -> Triple(-b..f, -h..h, -h..h)
-                Direction.EAST -> Triple(-f..b, -h..h, -h..h)
-            }
-
-            val region = BlockBox.of(
-                BlockPos(pos.x + xRange.first, pos.y + yRange.first, pos.z + zRange.first),
-                BlockPos(pos.x + xRange.last, pos.y + yRange.last, pos.z + zRange.last),
-            )
-            blockVisitor(listOf(pos), visitOrigins = false) { _, _, toBlockPos ->
-                if (toBlockPos !in region) return@blockVisitor false // 範囲外
-                val blockState = world.getBlockState(toBlockPos)
-                if (!item.isCorrectToolForDrops(stack, blockState)) return@blockVisitor false // 非対応ツール
-                val destroySpeed = blockState.getDestroySpeed(world, toBlockPos)
-                if (destroySpeed < 0) return@blockVisitor false // 破壊不能な硬度
-                true
-            }.forEach skip@{ (_, targetBlockPos) ->
-                if (stack.isEmpty) return@fail // ツールの耐久値が枯渇した
-                if (stack.maxDamage - stack.damageValue <= configuration.magicMiningDamage.ceilToInt()) return@fail // ツールの耐久値が残り僅か
-
-                // 採掘を続行
-
-                val targetBlockState = world.getBlockState(targetBlockPos)
-                if (!item.isCorrectToolForDrops(stack, targetBlockState)) return@skip // 非対応ツール
-                val targetHardness = targetBlockState.getDestroySpeed(world, targetBlockPos)
-                if (targetHardness < 0) return@skip // 破壊不能な硬度
-                if (targetHardness > baseHardness) return@skip // 起点のブロックよりも硬いものは掘れない
-                if (breakBlockByMagic(stack, world, targetBlockPos, miner)) {
-                    if (targetHardness > 0) {
-                        val damage = world.random.randomInt(configuration.magicMiningDamage)
-                        if (damage > 0) {
-                            stack.hurtAndBreak(damage, miner, EquipmentSlot.MAINHAND)
-                        }
-                    }
+            if (miner !is ServerPlayer) return@fail
+            object : MultiMine(world, pos, state, miner, item, stack) {
+                override fun executeImpl() {
+                    visit(
+                        listOf(pos),
+                        configuration.magicMiningDamage,
+                        region = run {
+                            val breakDirection = breakDirectionCache[miner.uuid] ?: return // 向きの判定が不正
+                            val h = value.horizontal
+                            val f = value.front
+                            val b = value.back
+                            val (xRange, yRange, zRange) = when (breakDirection) {
+                                Direction.DOWN -> Triple(-h..h, -b..f, -h..h)
+                                Direction.UP -> Triple(-h..h, -f..b, -h..h)
+                                Direction.NORTH -> Triple(-h..h, -h..h, -b..f)
+                                Direction.SOUTH -> Triple(-h..h, -h..h, -f..b)
+                                Direction.WEST -> Triple(-b..f, -h..h, -h..h)
+                                Direction.EAST -> Triple(-f..b, -h..h, -h..h)
+                            }
+                            BlockBox.of(
+                                BlockPos(pos.x + xRange.first, pos.y + yRange.first, pos.z + zRange.first),
+                                BlockPos(pos.x + xRange.last, pos.y + yRange.last, pos.z + zRange.last),
+                            )
+                        },
+                        canContinue = { blockPos, blockState -> item.isCorrectToolForDrops(stack, blockState) },
+                    )
                 }
-            }
-
+            }.execute()
         }
     }
 }
