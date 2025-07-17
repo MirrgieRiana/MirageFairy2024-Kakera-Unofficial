@@ -51,6 +51,9 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
     }
 
 
+    fun getRandomTraitChances() = card.randomTraitChances
+
+
     override fun setLevel(world: Level) {
         super.setLevel(world)
         if (traitStacks == null) {

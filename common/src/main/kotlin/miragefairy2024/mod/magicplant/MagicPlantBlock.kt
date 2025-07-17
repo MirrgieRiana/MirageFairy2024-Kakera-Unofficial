@@ -159,7 +159,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun getBlockStateAfterPicking(blockState: BlockState): BlockState
 
     /** 確定で戻って来る本来の種子以外の追加種子及び生産物を計算する。 */
-    protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
+    protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
 
     /** この植物本来の種子を返す。 */
     protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean): ItemStack {
@@ -170,7 +170,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     }
 
     /** 交配が可能であれば交配された種子、そうでなければこの植物本来の種子を返す。 */
-    protected fun calculateCrossedSeed(world: Level, blockPos: BlockPos, traitStacks: TraitStacks, crossbreedingRate: Double): ItemStack {
+    protected fun calculateCrossedSeed(world: Level, blockPos: BlockPos, traitStacks: TraitStacks, randomTraitChances: Map<Trait, Double>, crossbreedingRate: Double, mutation: Double): ItemStack {
         val targetTraitStacksList = mutableListOf<TraitStacks>()
         fun check(targetBlockPos: BlockPos) {
             val targetBlockState = world.getBlockState(targetBlockPos)
@@ -226,7 +226,8 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         val blockEntity = world.getMagicPlantBlockEntity(blockPos) ?: return
         val traitStacks = blockEntity.getTraitStacks() ?: return
         val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
-        val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
+        val randomTraitChances = blockEntity.getRandomTraitChances()
+        val drops = getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, randomTraitChances, player, tool)
         val experience = if (dropExperience) world.random.randomInt(traitEffects[TraitEffectKeyCard.EXPERIENCE_PRODUCTION.traitEffectKey]) else 0
 
         // アイテムを生成
@@ -295,11 +296,12 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
             val blockEntity = builder.getOptionalParameter(LootContextParameters.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = blockEntity.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
+            val randomTraitChances = blockEntity.getRandomTraitChances()
             val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? PlayerEntity
             val tool = builder.getOptionalParameter(LootContextParameters.TOOL)
 
             itemStacks += createSeed(traitStacks, isRare = blockEntity.isRare())
-            itemStacks += getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, player, tool)
+            itemStacks += getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, randomTraitChances, player, tool)
         }
         return itemStacks
     }

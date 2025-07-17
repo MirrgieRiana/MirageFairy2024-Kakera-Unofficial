@@ -4,6 +4,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlock
 import miragefairy2024.mod.magicplant.MagicPlantCard
 import miragefairy2024.mod.magicplant.MutableTraitEffects
+import miragefairy2024.mod.magicplant.Trait
 import miragefairy2024.mod.magicplant.TraitStacks
 import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.util.Registration
@@ -120,7 +121,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
     override fun canPick(blockState: BlockState) = isMaxAge(blockState)
     override fun getBlockStateAfterPicking(blockState: BlockState) = withAge(0)
 
-    override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
+    override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
         val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], tool).toDouble() else 0.0
@@ -134,11 +135,12 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         val generationBoost = traitEffects[TraitEffectKeyCard.PRODUCTION_BOOST.traitEffectKey]
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
+        val mutation = traitEffects[TraitEffectKeyCard.MUTATION.traitEffectKey]
 
         if (isMaxAge(blockState)) {
             val count = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
             repeat(count) {
-                drops += calculateCrossedSeed(world, blockPos, traitStacks, crossbreeding)
+                drops += calculateCrossedSeed(world, blockPos, traitStacks, randomTraitChances, crossbreeding, mutation)
             }
         }
 
