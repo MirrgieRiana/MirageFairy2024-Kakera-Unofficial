@@ -162,7 +162,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
 
     /** この植物本来の種子を返す。 */
-    protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean = false): ItemStack {
+    protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean): ItemStack {
         val itemStack = this.asItem().createItemStack()
         itemStack.setTraitStacks(traitStacks)
         itemStack.setRare(isRare)
@@ -197,10 +197,10 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         check(blockPos.west())
         check(blockPos.east())
 
-        if (targetTraitStacksList.isEmpty()) return createSeed(traitStacks)
+        if (targetTraitStacksList.isEmpty()) return createSeed(traitStacks, false)
         val targetTraitStacks = targetTraitStacksList[world.random.nextInt(targetTraitStacksList.size)]
 
-        return createSeed(TraitStacks.of(crossTraitStacks(traitStacks.traitStackMap, targetTraitStacks.traitStackMap, world.random)))
+        return createSeed(TraitStacks.of(crossTraitStacks(traitStacks.traitStackMap, targetTraitStacks.traitStackMap, world.random)), false)
     }
 
     fun tryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
