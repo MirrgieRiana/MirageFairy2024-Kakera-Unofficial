@@ -203,7 +203,8 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
             val targetTraitStacks = targetTraitStacksList[world.random.nextInt(targetTraitStacksList.size)]
             crossTraitStacks(traitStacks.traitStackMap, targetTraitStacks.traitStackMap, world.random)
         }
-        return createSeed(TraitStacks.of(crossedBits), false)
+        val (mutatedBits, rare) = applyMutation(crossedBits, randomTraitChances.mapValues { it.value * mutation }, world.random)
+        return createSeed(TraitStacks.of(mutatedBits), rare)
     }
 
     fun tryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
