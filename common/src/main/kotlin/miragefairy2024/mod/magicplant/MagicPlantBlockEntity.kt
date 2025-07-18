@@ -145,5 +145,5 @@ fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: Ra
         actualTraitBits[selectedTrait] = newBits
     }
 
-    return Pair(actualTraitBits, true/* TODO このアルゴリズムでレアをどう判定するのか？ */)
+    return Pair(actualTraitBits, true)
 }
