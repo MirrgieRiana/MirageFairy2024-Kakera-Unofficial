@@ -154,6 +154,8 @@ class MaterialCard(
                 define('#', MIRANAGITE.item())
             } on MIRANAGITE.item from MIRANAGITE.item
         }
+
+        // TODO ポエム: エントロピーの極小点
         val CHAOS_STONE: MaterialCard = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
