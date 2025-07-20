@@ -232,6 +232,31 @@ class ToolCard(
             PoemList(null),
             FairySwordConfiguration(ToolMaterialCard.AMETHYST).enchantment(Enchantments.LOOTING, 2),
         ) { registerSwordRecipeGeneration(item) { Items.AMETHYST_SHARD } }
+        val OBSIDIAN_PICKAXE = !ToolCard(
+            "obsidian_pickaxe", EnJa("Obsidian Pickaxe", "黒曜石のつるはし"),
+            PoemList(null),
+            FairyPickaxeConfiguration(ToolMaterialCard.OBSIDIAN).enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3),
+        ) { registerPickaxeRecipeGeneration(item) { Items.OBSIDIAN } }
+        val OBSIDIAN_AXE = !ToolCard(
+            "obsidian_axe", EnJa("Obsidian Axe", "黒曜石の斧"),
+            PoemList(null),
+            FairyAxeConfiguration(ToolMaterialCard.OBSIDIAN, 5.0F, -3.1F).enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3),
+        ) { registerAxeRecipeGeneration(item) { Items.OBSIDIAN } }
+        val OBSIDIAN_SHOVEL = !ToolCard(
+            "obsidian_shovel", EnJa("Obsidian Shovel", "黒曜石のシャベル"),
+            PoemList(null),
+            FairyShovelConfiguration(ToolMaterialCard.OBSIDIAN).enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3),
+        ) { registerShovelRecipeGeneration(item) { Items.OBSIDIAN } }
+        val OBSIDIAN_HOE = !ToolCard(
+            "obsidian_hoe", EnJa("Obsidian Hoe", "黒曜石のクワ"),
+            PoemList(null),
+            FairyHoeConfiguration(ToolMaterialCard.OBSIDIAN, -2, -1.0F).enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3),
+        ) { registerHoeRecipeGeneration(item) { Items.OBSIDIAN } }
+        val OBSIDIAN_SWORD = !ToolCard(
+            "obsidian_sword", EnJa("Obsidian Sword", "黒曜石の剣"),
+            PoemList(null),
+            FairySwordConfiguration(ToolMaterialCard.OBSIDIAN).enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3),
+        ) { registerSwordRecipeGeneration(item) { Items.OBSIDIAN } }
         val EMERALD_PICKAXE = !ToolCard(
             "emerald_pickaxe", EnJa("Emerald Pickaxe", "エメラルドのつるはし"),
             PoemList(null),
