@@ -150,13 +150,6 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                 child(verticalSpace(5))
                 child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
                     val player = MinecraftClient.getInstance().player
-                    val allFactor = if (player != null) {
-                        traitStack.trait.conditions
-                            .map { it.getFactor(player.level(), player.blockPosition(), player.level().getMagicPlantBlockEntity(player.blockPosition())) }
-                            .fold(1.0) { a, b -> a * b }
-                    } else {
-                        1.0
-                    }
                     child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 条件
                         horizontalAlignment(HorizontalAlignment.LEFT)
                         verticalAlignment(VerticalAlignment.BOTTOM)
@@ -177,9 +170,17 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                         horizontalAlignment(HorizontalAlignment.RIGHT)
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
+                        val totalConditionFactor = if (player != null) {
+                            traitStack.trait.conditions
+                                .map { it.getFactor(player.level(), player.blockPosition(), player.level().getMagicPlantBlockEntity(player.blockPosition())) }
+                                .fold(1.0) { a, b -> a * b }
+                        } else {
+                            1.0
+                        }
+
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * getTraitPower(traitStack.level) * allFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
-                            val tooltip = text { it.first.name + " ("() + (it.second * getTraitPower(traitStack.level) * 100.0 formatAs "%.1f%%")() + " x "() + (allFactor * 100.0 formatAs "%.1f%%")() + ")"() }
+                            val text = text { (it.second * getTraitPower(traitStack.level) * totalConditionFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
+                            val tooltip = text { it.first.name + " ("() + (it.second * getTraitPower(traitStack.level) * 100.0 formatAs "%.1f%%")() + " x "() + (totalConditionFactor * 100.0 formatAs "%.1f%%")() + ")"() }
                             child(Components.label(text).tooltip(tooltip))
                         }
                     })
