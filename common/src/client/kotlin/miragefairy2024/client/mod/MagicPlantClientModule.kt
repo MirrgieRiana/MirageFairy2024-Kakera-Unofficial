@@ -148,7 +148,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                     horizontalTextAlignment(HorizontalAlignment.CENTER)
                 })
                 child(verticalSpace(5))
-                child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
+                child(Containers.horizontalFlow(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
                     val player = MinecraftClient.getInstance().player!!
                     val level = player.level()
                     val blockEntity = level.getMagicPlantBlockEntity(menu.blockPos)
