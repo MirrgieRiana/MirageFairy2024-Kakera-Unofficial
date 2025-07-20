@@ -22,6 +22,7 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.NinePatchTextureCard
 import miragefairy2024.mod.magicplant.MagicPlantSeedItem
+import miragefairy2024.mod.magicplant.TraitEffectKey
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
 import miragefairy2024.mod.magicplant.bitCount
@@ -174,9 +175,12 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                             .fold(1.0) { a, b -> a * b }
 
                         traitStack.trait.effectStacks.forEach {
-                            val text = text { (it.second * getTraitPower(traitStack.level) * totalConditionFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
-                            val tooltip = text { it.first.name + " ("() + (it.second * getTraitPower(traitStack.level) * 100.0 formatAs "%.1f%%")() + " x "() + (totalConditionFactor * 100.0 formatAs "%.1f%%")() + ")"() }
-                            child(Components.label(text).tooltip(tooltip))
+                            fun <T : Any> render(traitEffectKey: TraitEffectKey<T>, traitEffectFactor: Double) {
+                                val value = traitEffectKey.getValue(traitEffectFactor * getTraitPower(traitStack.level) * totalConditionFactor)
+                                val text = text { traitEffectKey.renderValue(value) + " "() + traitEffectKey.emoji.style(traitEffectKey.style) }
+                                child(Components.label(text).tooltip(traitEffectKey.name))
+                            }
+                            render(it.first, it.second)
                         }
                     })
                 })
