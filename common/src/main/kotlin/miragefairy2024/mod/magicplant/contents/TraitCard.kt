@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.MutableTraitEffects
 import miragefairy2024.mod.magicplant.Trait
+import miragefairy2024.mod.magicplant.TraitEffectKeyEntry
 import miragefairy2024.mod.magicplant.enJa
 import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.traitRegistry
@@ -298,7 +299,7 @@ class TraitCard(
     val trait: Trait = object : Trait(traitEffectKeyCardStacks.first().first.traitEffectKey.style, text { poemTranslation() }) {
         override val conditions = traitConditionCards.map { it.traitCondition }
         override val primaryEffect = traitEffectKeyCardStacks.first().first.traitEffectKey
-        override val effectStacks = traitEffectKeyCardStacks.map { Pair(it.first.traitEffectKey, it.second) }
+        override val effectStacks = traitEffectKeyCardStacks.map { TraitEffectKeyEntry(it.first.traitEffectKey, it.second) }
 
         override fun getTraitEffects(world: Level, blockPos: BlockPos, blockEntity: MagicPlantBlockEntity?, level: Int): MutableTraitEffects? {
             val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos, blockEntity) }.fold(1.0) { a, b -> a * b }

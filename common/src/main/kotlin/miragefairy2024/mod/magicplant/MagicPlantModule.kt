@@ -100,7 +100,7 @@ fun initMagicPlantModule() {
             fun getEffects(traits: Set<Trait>, environment: Set<TraitCondition>): Set<TraitEffectKey<*>> {
                 return traits.toList()
                     .filter { isAvailableIn(it.conditions.toSet(), environment) }
-                    .flatMap { it.effectStacks.map { effectStack -> effectStack.first } }
+                    .flatMap { it.effectStacks.map { effectStack -> effectStack.traitEffectKey } }
                     .toSet()
             }
 
@@ -141,7 +141,7 @@ fun initMagicPlantModule() {
             val row = mutableListOf<String>()
             row += traitCard.jaName
             row += traitCard.trait.conditions.join("&br;") { it.name.string }
-            row += traitCard.trait.effectStacks.join("&br;") { it.first.name.string }
+            row += traitCard.trait.effectStacks.join("&br;") { it.traitEffectKey.name.string }
             row += magicPlantCards.map { magicPlantCard ->
                 when (traitCard.trait) {
                     in magicPlantCard.defaultTraitBits -> "○"

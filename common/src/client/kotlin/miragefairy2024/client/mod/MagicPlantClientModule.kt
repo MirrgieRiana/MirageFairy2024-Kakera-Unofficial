@@ -123,7 +123,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                                             texts += traitStack.trait.getName().style(traitStack.trait.style)
                                             texts += traitStack.level.toString(2)().style(traitStack.trait.style)
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()
-                                            if (traitStack.trait.effectStacks.isNotEmpty()) texts += traitStack.trait.effectStacks.map { it.first.emoji.style(it.first.style) }.join()
+                                            if (traitStack.trait.effectStacks.isNotEmpty()) texts += traitStack.trait.effectStacks.map { it.traitEffectKey.emoji.style(it.traitEffectKey.style) }.join()
                                             texts.join(" "())
                                         })
                                     })
@@ -180,7 +180,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                                 val text = text { traitEffectKey.renderValue(value) + " "() + traitEffectKey.emoji.style(traitEffectKey.style) }
                                 child(Components.label(text).tooltip(traitEffectKey.name))
                             }
-                            render(it.first, it.second)
+                            render(it.traitEffectKey, it.factor)
                         }
                     })
                 })
