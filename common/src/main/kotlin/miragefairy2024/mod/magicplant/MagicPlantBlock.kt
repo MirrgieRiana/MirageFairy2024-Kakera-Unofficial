@@ -262,14 +262,14 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
                     val blockEntity = level.getMagicPlantBlockEntity(pos) ?: return@run TraitStacks.EMPTY
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
-                player.openMenu(object : ExtendedScreenHandlerFactory<TraitStacks> {
+                player.openMenu(object : ExtendedScreenHandlerFactory<Pair<TraitStacks, BlockPos>> {
                     override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
-                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks)
+                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks, pos)
                     }
 
                     override fun getDisplayName() = text { traitListScreenTranslation() }
 
-                    override fun getScreenOpeningData(player: ServerPlayer) = traitStacks
+                    override fun getScreenOpeningData(player: ServerPlayer) = Pair(traitStacks, pos)
                 })
                 return InteractionResult.CONSUME
             }

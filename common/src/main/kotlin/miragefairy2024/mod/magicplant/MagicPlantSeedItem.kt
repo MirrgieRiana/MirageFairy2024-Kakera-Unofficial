@@ -9,10 +9,12 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.style
 import miragefairy2024.util.text
+import miragefairy2024.util.toBlockPos
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.max
 import mirrg.kotlin.hydrogen.unit
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
@@ -149,14 +151,14 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
             val itemStack = user.getItemInHand(hand)
             if (world.isClientSide) return TypedActionResult.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
-            user.openMenu(object : ExtendedScreenHandlerFactory<TraitStacks> {
+            user.openMenu(object : ExtendedScreenHandlerFactory<Pair<TraitStacks, BlockPos>> {
                 override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks)
+                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks, player.position().add(0.0, 0.5, 0.0).toBlockPos())
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
 
-                override fun getScreenOpeningData(player: ServerPlayer) = traitStacks
+                override fun getScreenOpeningData(player: ServerPlayer) = Pair(traitStacks, player.position().add(0.0, 0.5, 0.0).toBlockPos())
             })
             return TypedActionResult.consume(itemStack)
         }

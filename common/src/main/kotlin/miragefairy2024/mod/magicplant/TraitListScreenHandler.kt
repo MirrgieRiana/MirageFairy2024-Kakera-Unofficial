@@ -5,26 +5,21 @@ import miragefairy2024.ModContext
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import miragefairy2024.util.get
-import miragefairy2024.util.list
 import miragefairy2024.util.register
-import miragefairy2024.util.wrapper
-import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag as NbtCompound
-import net.minecraft.nbt.ListTag as NbtList
 import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val traitListScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("trait_list")) {
     ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-        TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, buf)
+        TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, buf.first, buf.second)
     }, TraitListScreenHandler.STREAM_CODEC)
 }
 
@@ -36,20 +31,15 @@ fun initTraitListScreenHandler() {
     traitListScreenTranslation.enJa()
 }
 
-class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks) : ScreenHandler(traitListScreenHandlerType(), syncId) {
+class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks, val blockPos: BlockPos) : ScreenHandler(traitListScreenHandlerType(), syncId) {
     companion object {
-        val STREAM_CODEC = object : StreamCodec<FriendlyByteBuf, TraitStacks> {
-            override fun encode(`object`: FriendlyByteBuf, object2: TraitStacks) {
-                val nbt = NbtCompound()
-                nbt.wrapper["TraitStacks"].list.set(object2.toNbt())
-                `object`.writeNbt(nbt)
-            }
-
-            override fun decode(`object`: FriendlyByteBuf): TraitStacks {
-                val nbt = `object`.readNbt() ?: NbtCompound()
-                return nbt.wrapper["TraitStacks"].list.get().or { NbtList() }.toTraitStacks()
-            }
-        }
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Pair<TraitStacks, BlockPos>> = StreamCodec.composite(
+            TraitStacks.STREAM_CODEC,
+            { it.first },
+            BlockPos.STREAM_CODEC,
+            { it.second },
+            ::Pair,
+        )
     }
 
     override fun stillValid(player: PlayerEntity) = true
