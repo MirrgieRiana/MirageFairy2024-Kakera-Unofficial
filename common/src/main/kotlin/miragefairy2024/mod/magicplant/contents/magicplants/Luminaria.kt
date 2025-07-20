@@ -96,6 +96,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
         TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
         TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.MUTATION.trait to 0.05, // 突然変異
         TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
         TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
@@ -173,6 +174,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
         TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
         TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.MUTATION.trait to 0.05, // 突然変異
         TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
         TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
@@ -248,6 +250,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
         TraitCard.FRUITS_PRODUCTION.trait to 0.05, // 果実生成
         TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.MUTATION.trait to 0.05, // 突然変異
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
         TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
@@ -342,6 +345,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
         TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
+        TraitCard.MUTATION.trait to 0.05, // 突然変異
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
         TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
         TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
