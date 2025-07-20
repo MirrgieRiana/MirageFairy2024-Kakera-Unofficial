@@ -150,8 +150,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                 child(verticalSpace(5))
                 child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
                     val player = MinecraftClient.getInstance().player
-                    child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 条件
-                        horizontalAlignment(HorizontalAlignment.LEFT)
+                    child(Containers.verticalFlow(Sizing.expand(50), Sizing.fill(100)).apply { // 条件
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.conditions.forEach { condition ->
@@ -160,13 +159,10 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                             child(Components.label(text).tooltip(condition.name))
                         }
                     })
-                    child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 特性アイコン
-                        horizontalAlignment(HorizontalAlignment.CENTER)
-                        verticalAlignment(VerticalAlignment.CENTER)
-
+                    child(Containers.verticalFlow(Sizing.content(), Sizing.fill(100)).apply { // 特性アイコン
                         child(Components.texture(traitStack.trait.texture, 0, 0, 32, 32, 32, 32))
                     })
-                    child(Containers.verticalFlow(Sizing.fill(100), Sizing.fill(100)).apply { // 効果
+                    child(Containers.verticalFlow(Sizing.expand(50), Sizing.fill(100)).apply { // 効果
                         horizontalAlignment(HorizontalAlignment.RIGHT)
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
