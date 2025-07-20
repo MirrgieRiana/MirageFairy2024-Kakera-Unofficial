@@ -149,12 +149,15 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                 })
                 child(verticalSpace(5))
                 child(Containers.stack(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
-                    val player = MinecraftClient.getInstance().player
+                    val player = MinecraftClient.getInstance().player!!
+                    val level = player.level()
+                    val blockEntity = level.getMagicPlantBlockEntity(menu.blockPos)
+
                     child(Containers.verticalFlow(Sizing.expand(50), Sizing.fill(100)).apply { // 条件
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
                         traitStack.trait.conditions.forEach { condition ->
-                            val factor = if (player != null) condition.getFactor(player.level(), menu.blockPos, player.level().getMagicPlantBlockEntity(menu.blockPos)) else 1.0
+                            val factor = condition.getFactor(level, menu.blockPos, blockEntity)
                             val text = text { condition.emoji + " "() + (factor * 100.0 formatAs "%.1f%%")() }
                             child(Components.label(text).tooltip(condition.name))
                         }
@@ -166,13 +169,9 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                         horizontalAlignment(HorizontalAlignment.RIGHT)
                         verticalAlignment(VerticalAlignment.BOTTOM)
 
-                        val totalConditionFactor = if (player != null) {
-                            traitStack.trait.conditions
-                                .map { it.getFactor(player.level(), menu.blockPos, player.level().getMagicPlantBlockEntity(menu.blockPos)) }
-                                .fold(1.0) { a, b -> a * b }
-                        } else {
-                            1.0
-                        }
+                        val totalConditionFactor = traitStack.trait.conditions
+                            .map { it.getFactor(level, menu.blockPos, blockEntity) }
+                            .fold(1.0) { a, b -> a * b }
 
                         traitStack.trait.effectStacks.forEach {
                             val text = text { (it.second * getTraitPower(traitStack.level) * totalConditionFactor * 100.0 formatAs "%.1f%%")() + " "() + it.first.emoji.style(it.first.style) }
