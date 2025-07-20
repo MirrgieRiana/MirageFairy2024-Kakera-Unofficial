@@ -299,14 +299,14 @@ class TraitCard(
     val poemTranslation = Translation({ identifier.toLanguageKey("${MirageFairy2024.MOD_ID}.trait", "poem") }, enPoem, jaPoem)
     val trait: Trait = object : Trait(traitEffectKeyEntries.first().traitEffectKey.style, text { poemTranslation() }) {
         override val conditions = traitConditionCards.map { it.traitCondition }
-        override val primaryEffect = traitEffectKeyEntries.first().traitEffectKey
-        override val effectStacks = traitEffectKeyEntries
+        override val primaryEffect = this@TraitCard.traitEffectKeyEntries.first().traitEffectKey
+        override val traitEffectKeyEntries = this@TraitCard.traitEffectKeyEntries
 
         override fun getTraitEffects(world: Level, blockPos: BlockPos, blockEntity: MagicPlantBlockEntity?, level: Int): MutableTraitEffects? {
             val factor = traitConditionCards.map { it.traitCondition.getFactor(world, blockPos, blockEntity) }.fold(1.0) { a, b -> a * b }
             return if (factor != 0.0) {
                 val traitEffects = MutableTraitEffects()
-                traitEffectKeyEntries.forEach {
+                this@TraitCard.traitEffectKeyEntries.forEach {
                     fun <T : Any> f(traitEffectKey: TraitEffectKey<T>) {
                         traitEffects[traitEffectKey] = traitEffectKey.getValue(it.factor * getTraitPower(level) * factor)
                     }

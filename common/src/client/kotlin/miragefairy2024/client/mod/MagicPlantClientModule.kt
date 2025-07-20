@@ -123,7 +123,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                                             texts += traitStack.trait.getName().style(traitStack.trait.style)
                                             texts += traitStack.level.toString(2)().style(traitStack.trait.style)
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()
-                                            if (traitStack.trait.effectStacks.isNotEmpty()) texts += traitStack.trait.effectStacks.map { it.traitEffectKey.emoji.style(it.traitEffectKey.style) }.join()
+                                            if (traitStack.trait.traitEffectKeyEntries.isNotEmpty()) texts += traitStack.trait.traitEffectKeyEntries.map { it.traitEffectKey.emoji.style(it.traitEffectKey.style) }.join()
                                             texts.join(" "())
                                         })
                                     })
@@ -174,7 +174,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                             .map { it.getFactor(level, menu.blockPos, blockEntity) }
                             .fold(1.0) { a, b -> a * b }
 
-                        traitStack.trait.effectStacks.forEach {
+                        traitStack.trait.traitEffectKeyEntries.forEach {
                             fun <T : Any> render(traitEffectKey: TraitEffectKey<T>, traitEffectFactor: Double) {
                                 val value = traitEffectKey.getValue(traitEffectFactor * getTraitPower(traitStack.level) * totalConditionFactor)
                                 val text = text { traitEffectKey.renderValue(value) + " "() + traitEffectKey.emoji.style(traitEffectKey.style) }

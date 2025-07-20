@@ -35,7 +35,7 @@ abstract class Trait(val style: Style, val poem: Component) : Comparable<Trait> 
 
     abstract val conditions: List<TraitCondition>
     abstract val primaryEffect: TraitEffectKey<*>
-    abstract val effectStacks: List<TraitEffectKeyEntry>
+    abstract val traitEffectKeyEntries: List<TraitEffectKeyEntry>
 
     /** 呼び出された時点でそこにブロックの実体が存在しない場合があります。 */
     abstract fun getTraitEffects(world: Level, blockPos: BlockPos, blockEntity: MagicPlantBlockEntity?, level: Int): MutableTraitEffects?

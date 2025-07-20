@@ -134,7 +134,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
                                                 horizontalAlignment(HorizontalAlignment.RIGHT)
                                                 verticalAlignment(VerticalAlignment.BOTTOM)
 
-                                                display.trait.effectStacks.forEach {
+                                                display.trait.traitEffectKeyEntries.forEach {
                                                     val text = text { it.traitEffectKey.emoji.style(it.traitEffectKey.style) }
                                                     val tooltip = text { it.traitEffectKey.name + " "() + (it.factor * 100.0 formatAs "%.1f%%")() }
                                                     child(Components.label(text).tooltip(tooltip))
@@ -232,7 +232,7 @@ object TraitEncyclopediaClientReiCategoryCard : ClientReiCategoryCard<TraitEncyc
                                             horizontalAlignment(HorizontalAlignment.RIGHT)
                                             verticalAlignment(VerticalAlignment.BOTTOM)
 
-                                            display.trait.effectStacks.forEach {
+                                            display.trait.traitEffectKeyEntries.forEach {
                                                 val text = text { (it.factor * 100.0 formatAs "%.1f%%")() + " "() + it.traitEffectKey.emoji.style(it.traitEffectKey.style) }
                                                 val tooltip = text { it.traitEffectKey.name }
                                                 child(Components.label(text).tooltip(tooltip))
