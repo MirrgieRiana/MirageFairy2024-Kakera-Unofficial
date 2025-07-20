@@ -6,6 +6,7 @@ import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
+import miragefairy2024.util.lightProxy
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
@@ -14,7 +15,7 @@ import net.minecraft.network.chat.Component
 
 class IntComparisonPassiveSkillCondition(private val term: Term, private val isGreaterOrEquals: Boolean, private val threshold: Int) : PassiveSkillCondition {
     companion object {
-        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _, _ -> context.player.level().getMaxLocalRawBrightness(context.player.eyeBlockPos) }
+        val LIGHT_LEVEL_TERM = Term(Emoji.LIGHT) { context, _, _ -> context.player.level().lightProxy.getLightLevel(context.player.eyeBlockPos) }
         val FOOD_LEVEL_TERM = Term(Emoji.FOOD, 2) { context, _, _ -> context.player.foodData.foodLevel }
         val LEVEL_TERM = Term(Emoji.LEVEL) { context, _, _ -> context.player.experienceLevel }
     }

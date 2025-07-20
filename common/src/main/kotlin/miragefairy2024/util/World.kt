@@ -1,12 +1,14 @@
 package miragefairy2024.util
 
 import miragefairy2024.mod.SoundEventCard
+import mirrg.kotlin.hydrogen.max
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
@@ -251,3 +253,31 @@ fun collectItem(
     }
 
 }
+
+class LightProxy(val level: Level) {
+
+    fun getLightLevel(blockPos: BlockPos): Int {
+        if (level.isClientSide) level.updateSkyBrightness()
+        return level.getMaxLocalRawBrightness(blockPos)
+    }
+
+    fun getPermanentLightLevel(blockPos: BlockPos): Int {
+        return getBlockLightLevel(blockPos) max getPermanentSkyLightLevel(blockPos)
+    }
+
+    fun getBlockLightLevel(blockPos: BlockPos): Int {
+        return level.getBrightness(LightLayer.BLOCK, blockPos)
+    }
+
+    fun getPermanentSkyLightLevel(blockPos: BlockPos): Int {
+        return level.getBrightness(LightLayer.SKY, blockPos)
+    }
+
+    fun getSkyDarken(): Int {
+        if (level.isClientSide) level.updateSkyBrightness()
+        return level.skyDarken
+    }
+
+}
+
+val Level.lightProxy get() = LightProxy(this)

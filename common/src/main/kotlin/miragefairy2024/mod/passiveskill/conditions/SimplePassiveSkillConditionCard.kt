@@ -8,6 +8,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
 import miragefairy2024.util.invoke
+import miragefairy2024.util.lightProxy
 import miragefairy2024.util.text
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.tags.FluidTags
@@ -18,10 +19,7 @@ import net.minecraft.world.level.levelgen.Heightmap
 private fun isOutdoor(context: PassiveSkillContext) = context.blockPos.y >= context.world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, context.blockPos).y
 private fun biomeHasNoPrecipitation(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitationAt(context.blockPos) == Biome.Precipitation.NONE
 private fun biomeHasRain(context: PassiveSkillContext) = context.world.getBiome(context.blockPos).value().getPrecipitationAt(context.blockPos) == Biome.Precipitation.RAIN
-private fun isDaytime(context: PassiveSkillContext): Boolean {
-    context.world.updateSkyBrightness()
-    return context.world.skyDarken < 4
-}
+private fun isDaytime(context: PassiveSkillContext) = context.world.lightProxy.getSkyDarken() < 4
 
 enum class SimplePassiveSkillConditionCard(path: String, enName: String, jaName: String, private val function: (context: PassiveSkillContext) -> Boolean) : PassiveSkillCondition {
     OVERWORLD("overworld", "Overworld", "地上世界", { it.world.dimensionType().natural }),
