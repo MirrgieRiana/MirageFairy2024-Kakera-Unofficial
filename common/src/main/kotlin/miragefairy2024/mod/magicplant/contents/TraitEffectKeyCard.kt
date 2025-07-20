@@ -54,7 +54,7 @@ enum class TraitEffectKeyCard(
             override val name = text { translation() }
             override val sortValue = sortValue
             override val color = color
-            override fun getValue(level: Double) = 1 - 0.5.pow(level)
+            override fun getValue(power: Double) = 1 - 0.5.pow(power)
             override fun renderValue(value: Double): Component {
                 return when {
                     value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
@@ -72,7 +72,7 @@ enum class TraitEffectKeyCard(
             override val name = text { translation() }
             override val sortValue = sortValue
             override val color = color
-            override fun getValue(level: Double) = level
+            override fun getValue(power: Double) = power
             override fun renderValue(value: Double): Component {
                 return when {
                     value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }

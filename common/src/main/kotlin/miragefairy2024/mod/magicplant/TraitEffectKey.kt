@@ -19,7 +19,7 @@ abstract class TraitEffectKey<T : Any> {
     abstract val name: Component
     abstract val sortValue: Double
     abstract val color: Int
-    abstract fun getValue(level: Double): T
+    abstract fun getValue(power: Double): T
     abstract fun renderValue(value: T): Component
     abstract fun plus(a: T, b: T): T
     abstract fun getDefaultValue(): T

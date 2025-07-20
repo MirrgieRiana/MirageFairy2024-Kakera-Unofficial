@@ -305,7 +305,7 @@ class TraitCard(
             return if (factor != 0.0) {
                 val traitEffects = MutableTraitEffects()
                 traitEffectKeyCardStacks.forEach {
-                    traitEffects[it.first.traitEffectKey] = it.first.traitEffectKey.getValue(it.second * getTraitPower(level)) * factor
+                    traitEffects[it.first.traitEffectKey] = it.first.traitEffectKey.getValue(it.second * getTraitPower(level) * factor)
                 }
                 traitEffects
             } else {
