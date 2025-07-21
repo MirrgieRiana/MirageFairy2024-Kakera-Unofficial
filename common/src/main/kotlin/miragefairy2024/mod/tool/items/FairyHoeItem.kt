@@ -3,6 +3,7 @@ package miragefairy2024.mod.tool.items
 import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
+import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.sounds.SoundEvents
@@ -31,22 +32,16 @@ import net.minecraft.world.level.gameevent.GameEvent
 import java.util.function.Consumer
 import java.util.function.Predicate
 
-/**
- * @param attackDamage wood: 0, stone: -1, gold: 0, iron: -2, diamond: -3, netherite: -4
- * @param attackSpeed wood: -3.0, stone: -2.0, gold: -3.0, iron: -1.0, diamond: 0.0, netherite: 0.0
- */
 open class FairyHoeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
-    attackDamage: Int,
-    attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairyHoeItem(this, properties)
 
     var tillingRecipe: TillingRecipe? = null
 
     init {
-        this.attackDamage = attackDamage.toFloat()
-        this.attackSpeed = attackSpeed
+        this.attackDamage = -toolMaterialCard.toolMaterial.attackDamageBonus
+        this.attackSpeed = -4F + (toolMaterialCard.toolMaterial.attackDamageBonus + 1F) atMost 0F
         this.tags += ItemTags.HOES
         this.effectiveBlockTags += BlockTags.MINEABLE_WITH_HOE
     }
