@@ -112,56 +112,28 @@ class ToolCard(
             FairySwordConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerSwordRecipeGeneration(item, itemGetter) }
 
-        val MAGNETITE_PICKAXE = pickaxe("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.enchantment(EnchantmentCard.STICKY_MINING.key) }
-        val MAGNETITE_AXE = axe("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.enchantment(EnchantmentCard.STICKY_MINING.key) }
-        val MAGNETITE_SHOVEL = shovel("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.enchantment(EnchantmentCard.STICKY_MINING.key) }
-        val MAGNETITE_HOE = hoe("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.enchantment(EnchantmentCard.STICKY_MINING.key) }
-        val MAGNETITE_SWORD = sword("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.collection() }
-        val BISMUTH_PICKAXE = pickaxe("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
-        val BISMUTH_AXE = axe("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
-        val BISMUTH_SHOVEL = shovel("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
-        val BISMUTH_HOE = hoe("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
-        val BISMUTH_SWORD = sword("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
-        val COPPER_PICKAXE = pickaxe("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
-        val COPPER_AXE = axe("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
-        val COPPER_SHOVEL = shovel("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
-        val COPPER_HOE = hoe("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
-        val COPPER_SWORD = sword("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
-        val GLASS_PICKAXE = pickaxe("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val GLASS_AXE = axe("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val GLASS_SHOVEL = shovel("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val GLASS_HOE = hoe("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val GLASS_SWORD = sword("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val FLUORITE_PICKAXE = pickaxe("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { it.enchantment(Enchantments.FORTUNE, 1) }
-        val FLUORITE_AXE = axe("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { it.enchantment(Enchantments.FORTUNE, 1) }
-        val FLUORITE_SHOVEL = shovel("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { it.enchantment(Enchantments.FORTUNE, 1) }
-        val FLUORITE_HOE = hoe("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { it.enchantment(Enchantments.FORTUNE, 1) }
-        val FLUORITE_SWORD = sword("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { it.enchantment(Enchantments.LOOTING, 1) }
-        val AMETHYST_PICKAXE = pickaxe("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val AMETHYST_AXE = axe("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val AMETHYST_SHOVEL = shovel("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val AMETHYST_HOE = hoe("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val AMETHYST_SWORD = sword("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { it.enchantment(Enchantments.LOOTING, 2) }
-        val OBSIDIAN_PICKAXE = pickaxe("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val OBSIDIAN_AXE = axe("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val OBSIDIAN_SHOVEL = shovel("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val OBSIDIAN_HOE = hoe("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val OBSIDIAN_SWORD = sword("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val EMERALD_PICKAXE = pickaxe("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val EMERALD_AXE = axe("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val EMERALD_SHOVEL = shovel("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val EMERALD_HOE = hoe("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { it.enchantment(Enchantments.FORTUNE, 2) }
-        val EMERALD_SWORD = sword("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { it.enchantment(Enchantments.LOOTING, 2) }
-        val ECHO_SHARD_PICKAXE = pickaxe("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { it.enchantment(Enchantments.EFFICIENCY, 5) }
-        val ECHO_SHARD_AXE = axe("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { it.enchantment(Enchantments.EFFICIENCY, 5) }
-        val ECHO_SHARD_SHOVEL = shovel("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { it.enchantment(Enchantments.EFFICIENCY, 5) }
-        val ECHO_SHARD_HOE = hoe("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { it.enchantment(Enchantments.EFFICIENCY, 5) }
-        val ECHO_SHARD_SWORD = sword("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { it.enchantment(Enchantments.SHARPNESS, 5) }
-        val NETHER_STAR_PICKAXE = pickaxe("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { it.enchantment(Enchantments.FORTUNE, 4).glint() }
-        val NETHER_STAR_AXE = axe("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { it.enchantment(Enchantments.FORTUNE, 4).glint() }
-        val NETHER_STAR_SHOVEL = shovel("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { it.enchantment(Enchantments.FORTUNE, 4).glint() }
-        val NETHER_STAR_HOE = hoe("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { it.enchantment(Enchantments.FORTUNE, 4).glint() }
-        val NETHER_STAR_SWORD = sword("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { it.enchantment(Enchantments.LOOTING, 4).glint() }
+        class ToolSet(val pickaxe: ToolCard, val axe: ToolCard, val shovel: ToolCard, val hoe: ToolCard, val sword: ToolCard)
+
+        private fun toolSet(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairyMiningToolConfiguration>): ToolSet {
+            return ToolSet(
+                pickaxe(path, jaName, toolMaterialCard, itemGetter, configurator),
+                axe(path, jaName, toolMaterialCard, itemGetter, configurator),
+                shovel(path, jaName, toolMaterialCard, itemGetter, configurator),
+                hoe(path, jaName, toolMaterialCard, itemGetter, configurator),
+                sword(path, jaName, toolMaterialCard, itemGetter, configurator),
+            )
+        }
+
+        val MAGNETITE = toolSet("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { if (it is FairySwordConfiguration) it.collection() else it.enchantment(EnchantmentCard.STICKY_MINING.key) }
+        val BISMUTH = toolSet("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
+        val COPPER = toolSet("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
+        val GLASS = toolSet("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
+        val FLUORITE = toolSet("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 1) else it.enchantment(Enchantments.FORTUNE, 1) }
+        val AMETHYST = toolSet("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
+        val OBSIDIAN = toolSet("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
+        val EMERALD = toolSet("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
+        val ECHO_SHARD = toolSet("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.SHARPNESS, 5) else it.enchantment(Enchantments.EFFICIENCY, 5) }
+        val NETHER_STAR = toolSet("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 4).glint() else it.enchantment(Enchantments.FORTUNE, 4).glint() }
 
         val FAIRY_CRYSTAL_PICKAXE = !ToolCard(
             "fairy_crystal_pickaxe", EnJa("Fairy Crystal Pickaxe", "フェアリークリスタルのつるはし"),
