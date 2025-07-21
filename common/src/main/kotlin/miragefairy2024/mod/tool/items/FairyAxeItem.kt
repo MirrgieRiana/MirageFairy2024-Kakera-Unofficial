@@ -3,6 +3,9 @@ package miragefairy2024.mod.tool.items
 import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mod.tool.FairyMiningToolConfiguration
 import miragefairy2024.mod.tool.ToolMaterialCard
+import miragefairy2024.mod.tool.axeAttackDamageBonus
+import mirrg.kotlin.hydrogen.atLeast
+import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.tags.BlockTags
@@ -23,14 +26,15 @@ import net.minecraft.world.level.block.state.BlockState
  */
 open class FairyAxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
-    attackDamage: Float,
-    attackSpeed: Float,
 ) : FairyMiningToolConfiguration() {
     override fun createItem(properties: Item.Properties) = FairyAxeItem(this, properties)
 
     init {
-        this.attackDamage = attackDamage
-        this.attackSpeed = attackSpeed
+        this.attackDamage = -toolMaterialCard.toolMaterial.attackDamageBonus + 6F + toolMaterialCard.toolMaterial.axeAttackDamageBonus
+        // 素材の採掘速度が4のとき-3.2、8のとき-3.0で線形補間
+        // それ以外は平坦
+        val a = ((toolMaterialCard.toolMaterial.speed atLeast 4F atMost 8F) - 4F) / 4F
+        this.attackSpeed = -3.2F + 0.2F * a
         this.tags += ItemTags.AXES
         this.effectiveBlockTags += BlockTags.MINEABLE_WITH_AXE
     }

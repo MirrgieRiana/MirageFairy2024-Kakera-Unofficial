@@ -22,36 +22,37 @@ enum class FairyToolMaterials(
     private val durability: Int,
     private val miningSpeedMultiplier: Float,
     private val attackDamage: Float,
+    val axeAttackDamage: Float,
     private val enchantability: Int,
     private val repairIngredient: () -> Ingredient,
 ) : ToolMaterial {
-    COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 18, { Items.COPPER_INGOT.toIngredient() }),
-    GLASS(Tiers.STONE, 27, 6.0F, 4.0F, 14, { Items.GLASS.toIngredient() }),
-    AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 23, { Items.AMETHYST_SHARD.toIngredient() }),
-    OBSIDIAN(Tiers.IRON, 804, 5.0F, 4.5F, 20, { Items.OBSIDIAN.toIngredient() }),
-    EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 16, { Items.EMERALD.toIngredient() }),
-    ECHO_SHARD(Tiers.NETHERITE, 1366, 12.0F, 4.0F, 12, { Items.ECHO_SHARD.toIngredient() }),
-    NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 25, { Items.NETHER_STAR.toIngredient() }),
+    COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 2.0F, 18, { Items.COPPER_INGOT.toIngredient() }),
+    GLASS(Tiers.STONE, 27, 6.0F, 4.0F, 3.5F, 14, { Items.GLASS.toIngredient() }),
+    AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 2.5F, 23, { Items.AMETHYST_SHARD.toIngredient() }),
+    OBSIDIAN(Tiers.IRON, 804, 5.0F, 4.5F, 3.0F, 20, { Items.OBSIDIAN.toIngredient() }),
+    EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 2.0F, 16, { Items.EMERALD.toIngredient() }),
+    ECHO_SHARD(Tiers.NETHERITE, 1366, 12.0F, 4.0F, 3.0F, 12, { Items.ECHO_SHARD.toIngredient() }),
+    NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 3.5F, 25, { Items.NETHER_STAR.toIngredient() }),
 
-    MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 3, { MaterialCard.MAGNETITE.item().toIngredient() }),
-    BISMUTH(Tiers.IRON, 16, 4.0F, 1.0F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
-    FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 20, { MaterialCard.FLUORITE.item().toIngredient() }),
+    MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 2.0F, 3, { MaterialCard.MAGNETITE.item().toIngredient() }),
+    BISMUTH(Tiers.IRON, 16, 4.0F, 1.0F, 1.5F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
+    FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 1.5F, 20, { MaterialCard.FLUORITE.item().toIngredient() }),
 
-    MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 17, { MaterialCard.MIRAGE_STEM.item().toIngredient() }),
-    MIRAGIUM(Tiers.IRON, 87, 0.5F, 0.5F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
-    LILAGIUM(Tiers.IRON, 122, 0.5F, 0.5F, 19, { MaterialCard.LILAGIUM_INGOT.item().toIngredient() }),
-    MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 2, { MaterialCard.MIRAGIDIAN.item().toIngredient() }),
-    FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 7, { MaterialCard.FAIRY_CRYSTAL.item().toIngredient() }),
-    PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 12, { MaterialCard.PHANTOM_DROP.item().toIngredient() }),
-    LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 21, { MaterialCard.LUMINITE.item().toIngredient() }),
-    RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 19, { MaterialCard.RESONITE_INGOT.item().toIngredient() }),
-    PROMINITE(Tiers.DIAMOND, 925, 7.0F, 2.0F, 13, { MaterialCard.PROMINITE.item().toIngredient() }),
-    XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 20, { MaterialCard.XARPITE.item().toIngredient() }),
-    MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 24, { MaterialCard.MIRANAGITE.item().toIngredient() }),
-    CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 15, { MaterialCard.CHAOS_STONE.item().toIngredient() }),
-    HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 11, { MaterialCard.HAIMEVISKA_ROSIN.item().toIngredient() }),
+    MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 0.0F, 17, { MaterialCard.MIRAGE_STEM.item().toIngredient() }),
+    MIRAGIUM(Tiers.IRON, 87, 0.5F, 0.5F, -0.5F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
+    LILAGIUM(Tiers.IRON, 122, 0.5F, 0.5F, 1.0F, 19, { MaterialCard.LILAGIUM_INGOT.item().toIngredient() }),
+    MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 1.5F, 2, { MaterialCard.MIRAGIDIAN.item().toIngredient() }),
+    FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 1.5F, 7, { MaterialCard.FAIRY_CRYSTAL.item().toIngredient() }),
+    PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 1.0F, 12, { MaterialCard.PHANTOM_DROP.item().toIngredient() }),
+    LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 3.0F, 21, { MaterialCard.LUMINITE.item().toIngredient() }),
+    RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 7.0F, 19, { MaterialCard.RESONITE_INGOT.item().toIngredient() }),
+    PROMINITE(Tiers.DIAMOND, 925, 7.0F, 2.0F, 0.0F, 13, { MaterialCard.PROMINITE.item().toIngredient() }),
+    XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 2.0F, 20, { MaterialCard.XARPITE.item().toIngredient() }),
+    MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 2.5F, 24, { MaterialCard.MIRANAGITE.item().toIngredient() }),
+    CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 2.0F, 15, { MaterialCard.CHAOS_STONE.item().toIngredient() }),
+    HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 0.0F, 11, { MaterialCard.HAIMEVISKA_ROSIN.item().toIngredient() }),
 
-    NEUTRONIUM(Tiers.NETHERITE, Int.MAX_VALUE - 100, 8.0F, 3.0F, 10, { Items.BEDROCK.toIngredient() }),
+    NEUTRONIUM(Tiers.NETHERITE, Int.MAX_VALUE - 100, 8.0F, 3.0F, 3.0F, 10, { Items.BEDROCK.toIngredient() }),
     ;
 
     override fun getUses() = durability
@@ -61,6 +62,18 @@ enum class FairyToolMaterials(
     override fun getEnchantmentValue() = enchantability
     override fun getRepairIngredient() = repairIngredient()
 }
+
+val ToolMaterial.axeAttackDamageBonus
+    get() = when (this) {
+        ToolMaterials.WOOD -> 0.0F
+        ToolMaterials.STONE -> 2.0F
+        ToolMaterials.IRON -> 2.0F
+        ToolMaterials.DIAMOND -> 2.0F
+        ToolMaterials.GOLD -> 0.0F
+        ToolMaterials.NETHERITE -> 3.0F
+        is FairyToolMaterials -> this.axeAttackDamage
+        else -> throw IllegalArgumentException("Unsupported tool material: $this")
+    }
 
 enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName: String, jaName: String) {
     WOOD(ToolMaterials.WOOD, "wooden_tool", "Wooden Tool", "木ツール"),
