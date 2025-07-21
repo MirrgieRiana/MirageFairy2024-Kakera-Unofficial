@@ -83,29 +83,33 @@ class ToolCard(
             FairyScytheConfiguration(ToolMaterialCard.DIAMOND),
         ) { registerScytheRecipeGeneration(item) { Items.DIAMOND } }
 
-        private fun pickaxe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: (FairyPickaxeConfiguration) -> FairyPickaxeConfiguration) = !ToolCard(
+        private fun interface Configurator<in T : ToolConfiguration> {
+            fun configure(configuration: T)
+        }
+
+        private fun pickaxe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairyPickaxeConfiguration>) = !ToolCard(
             "${path}_pickaxe", EnJa("${path.toUpperCamelCase("_", " ")} Pickaxe", "${jaName}のつるはし"),
-            configurator(FairyPickaxeConfiguration(toolMaterialCard))
+            FairyPickaxeConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerPickaxeRecipeGeneration(item, itemGetter) }
 
-        private fun axe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: (FairyAxeConfiguration) -> FairyAxeConfiguration) = !ToolCard(
+        private fun axe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairyAxeConfiguration>) = !ToolCard(
             "${path}_axe", EnJa("${path.toUpperCamelCase("_", " ")} Axe", "${jaName}の斧"),
-            configurator(FairyAxeConfiguration(toolMaterialCard))
+            FairyAxeConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerAxeRecipeGeneration(item, itemGetter) }
 
-        private fun shovel(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: (FairyShovelConfiguration) -> FairyShovelConfiguration) = !ToolCard(
+        private fun shovel(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairyShovelConfiguration>) = !ToolCard(
             "${path}_shovel", EnJa("${path.toUpperCamelCase("_", " ")} Shovel", "${jaName}のシャベル"),
-            configurator(FairyShovelConfiguration(toolMaterialCard))
+            FairyShovelConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerShovelRecipeGeneration(item, itemGetter) }
 
-        private fun hoe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: (FairyHoeConfiguration) -> FairyHoeConfiguration) = !ToolCard(
+        private fun hoe(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairyHoeConfiguration>) = !ToolCard(
             "${path}_hoe", EnJa("${path.toUpperCamelCase("_", " ")} Hoe", "${jaName}のクワ"),
-            configurator(FairyHoeConfiguration(toolMaterialCard))
+            FairyHoeConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerHoeRecipeGeneration(item, itemGetter) }
 
-        private fun sword(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: (FairySwordConfiguration) -> FairySwordConfiguration) = !ToolCard(
+        private fun sword(path: String, jaName: String, toolMaterialCard: ToolMaterialCard, itemGetter: () -> Item, configurator: Configurator<FairySwordConfiguration>) = !ToolCard(
             "${path}_sword", EnJa("${path.toUpperCamelCase("_", " ")} Sword", "${jaName}の剣"),
-            configurator(FairySwordConfiguration(toolMaterialCard))
+            FairySwordConfiguration(toolMaterialCard).also { configurator.configure(it) }
         ) { registerSwordRecipeGeneration(item, itemGetter) }
 
         val MAGNETITE_PICKAXE = pickaxe("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { it.enchantment(EnchantmentCard.STICKY_MINING.key) }
