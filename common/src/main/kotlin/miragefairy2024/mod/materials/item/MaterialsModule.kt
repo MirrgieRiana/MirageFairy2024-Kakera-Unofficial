@@ -156,6 +156,7 @@ class MaterialCard(
         }
 
         // TODO ポエム: エントロピーの極小点
+        // TODO ポエム: 予定調和の予定調和
         val CHAOS_STONE: MaterialCard = !MaterialCard(
             "chaos_stone", "Chaos Stone", "混沌の石",
             PoemList(4).poem("Chemical promoting catalyst", "魔力の暴走、加速する無秩序の流れ。"),
