@@ -37,6 +37,7 @@ enum class FairyToolMaterials(
     MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 2.0F, 3, { MaterialCard.MAGNETITE.item().toIngredient() }),
     BISMUTH(Tiers.IRON, 16, 4.0F, 1.0F, 1.5F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
     FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 1.5F, 20, { MaterialCard.FLUORITE.item().toIngredient() }),
+    FLINT(Tiers.STONE, 150, 3.5F, 1.5F, 1.0F, 6, { Items.FLINT.toIngredient() }),
 
     MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 0.0F, 17, { MaterialCard.MIRAGE_STEM.item().toIngredient() }),
     MIRAGIUM(Tiers.IRON, 87, 0.5F, 0.5F, -0.5F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
@@ -94,6 +95,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     MAGNETITE(FairyToolMaterials.MAGNETITE, "magnetite_tool", "Magnetite Tool", "磁鉄鉱ツール"),
     BISMUTH(FairyToolMaterials.BISMUTH, "bismuth_tool", "Bismuth Tool", "ビスマスツール"),
     FLUORITE(FairyToolMaterials.FLUORITE, "fluorite_tool", "Fluorite Tool", "蛍石ツール"),
+    FLINT(FairyToolMaterials.FLINT, "flint_tool", "Flint Tool", "火打石ツール"),
 
     MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途
     MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", "Miragium Tool", "ミラジウムツール"),

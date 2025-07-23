@@ -128,6 +128,7 @@ class ToolCard(
         val BISMUTH = toolSet("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
         val COPPER = toolSet("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
         val GLASS = toolSet("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
+        val FLINT = toolSet("flint", "火打石", ToolMaterialCard.FLINT, { Items.FLINT }) { it.enchantment(Enchantments.FIRE_ASPECT) }
         val FLUORITE = toolSet("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.item) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 1) else it.enchantment(Enchantments.FORTUNE, 1) }
         val AMETHYST = toolSet("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
         val OBSIDIAN = toolSet("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
