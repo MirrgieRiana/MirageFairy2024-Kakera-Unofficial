@@ -279,7 +279,7 @@ class TraitCard(
             "Since ancient times, people have revered what lies beyond their understanding, calling it mysterious or sacred. The formation of crystals is a natural ability in plants of the Miragales order, and it is easy to destroy the genes that prevent this. Humanity has transcended the mysterious.",
             "人々は昔から、理解を超えた対象を神秘と呼び、神聖視してきた。結晶の生成は妖花目の植物における生来の能力であり、これを妨げる遺伝子を破壊することは容易だ。人類は神秘を超越したのだ。",
             listOf(), traitEffectKeyEntriesOf(TraitEffectKeyCard.SPECIAL_PRODUCTION to 0.001),
-        ) // TODO ルミナリアのシナリオ
+        )
 
         // Creative Only
         val CREATIVE_GROWTH = !TraitCard(

@@ -47,6 +47,9 @@
     },
     "miragefairy2024:veropeda_leaf": {
       "chance": 0.5
+    },
+    "miragefairy2024:xarpa_luminaria_bulb": {
+      "chance": 0.3
     }
   }
 }

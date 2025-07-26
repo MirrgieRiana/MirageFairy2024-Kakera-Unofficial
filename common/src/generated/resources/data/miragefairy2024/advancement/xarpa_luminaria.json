@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:dripstone_caves_ruin",
+  "criteria": {
+    "has_xarpa_luminaria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:xarpa_luminaria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.xarpa_luminaria.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:xarpa_luminaria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.xarpa_luminaria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_xarpa_luminaria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

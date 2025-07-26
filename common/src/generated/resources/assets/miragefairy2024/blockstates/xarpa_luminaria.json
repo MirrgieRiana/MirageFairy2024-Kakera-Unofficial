@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "miragefairy2024:block/xarpa_luminaria_age0"
+    },
+    "age=1": {
+      "model": "miragefairy2024:block/xarpa_luminaria_age1"
+    },
+    "age=2": {
+      "model": "miragefairy2024:block/xarpa_luminaria_age2"
+    },
+    "age=3": {
+      "model": "miragefairy2024:block/xarpa_luminaria_age3"
+    }
+  }
+}

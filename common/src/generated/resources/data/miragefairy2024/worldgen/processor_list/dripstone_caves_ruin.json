@@ -39,7 +39,7 @@
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "miragefairy2024:diamond_luminaria",
+            "Name": "miragefairy2024:xarpa_luminaria",
             "Properties": {
               "age": "3"
             }
