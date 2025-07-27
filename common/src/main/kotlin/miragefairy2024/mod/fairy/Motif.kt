@@ -604,7 +604,7 @@ enum class MotifCard(
         MotifCardRecipes().R.overworld + EntityType.SKELETON,
     ),
     WITHER_SKELETON(
-        "wither_skeleton", 7, "Withere Dkeletonia", "枯骸骨精ウィテーレスケレトーニャ", 0x505252, 0x1C1C1C, 0x1C1C1C, 0x060606,
+        "wither_skeleton", 7, "Withere Skeletonia", "枯骸骨精ウィテーレスケレトーニャ", 0x505252, 0x1C1C1C, 0x1C1C1C, 0x060606,
         ParentMotifs() + { SKELETON },
         PassiveSkillBuilder()
             + speed(0.4) * food.atMost(6)
