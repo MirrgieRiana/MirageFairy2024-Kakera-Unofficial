@@ -33,7 +33,6 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
@@ -230,7 +229,9 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
 
     override val baseGrowth = super.baseGrowth / 5
 
-    override val drops = listOf<() -> Item>()
+    override val drops = listOf(MaterialCard.LUMINITE.item, MaterialCard.CALCULITE.item)
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getSpecialDrops(count: Int, random: Random) = listOf(MaterialCard.CALCULITE.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応
