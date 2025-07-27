@@ -223,7 +223,7 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
     override fun getItemPath() = "xarpa_luminaria_bulb"
     override val itemName = EnJa("Xarpie Luminara Bulb", "紅天輝草シャルピエ・ルミナーラの球根")
     override val tier = 4
-    override val poem = EnJa("The essence of a gene is matter.", "遺伝子のすべては、形而下に属する。") // TODO ポエム: The Superphysical Society of Xarpa
+    override val poem = EnJa("The essence of a gene is matter.", "遺伝子のすべては、形而下に属する。")
 
     override val blockCodec = XarpaLuminariaBlock.CODEC
     override fun createBlock() = XarpaLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.TERRACOTTA_ORANGE).sound(BlockSoundGroup.CROP))

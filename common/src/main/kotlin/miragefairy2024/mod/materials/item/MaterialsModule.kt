@@ -31,6 +31,7 @@ import miragefairy2024.mod.magicplant.contents.magicplants.MerrrriaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.XarpaLuminariaCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.plus
 import miragefairy2024.mod.poem
@@ -441,6 +442,22 @@ class MaterialCard(
                 duration = 20 * 60,
             ) on LUMINITE.item
         }
+        val CALCULITE: MaterialCard = !MaterialCard(
+            "calculite", "Calculite", "理晶石", // TODO ポエム: An of The Superphysical Society of Xarpa
+            PoemList(4).poem("Neutralization of anti-entropy", "時の模様を刻む石。"),
+            ore = Ore(Shape.GEM, Material.CALCULITE),
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { XarpaLuminariaCard.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("Edge of Chaos", "混沌の縁"),
+                    description = EnJa("Obtain Calculite from the special drop of Xarpie Luminara", "シャルピエ・ルミナーラの特殊品ドロップから理晶石を手に入れる"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.NORMAL,
+                )
+            },
+        )
         val PROMINARIA_BERRY: MaterialCard = !MaterialCard(
             "prominaria_berry", "Prominaria Berry", "プロミナリアの実",
             PoemList(3)
@@ -1196,6 +1213,7 @@ enum class Material(val path: String) {
     LILAGIUM("lilagium"),
     MIRAGIDIAN("miragidian"),
     LUMINITE("luminite"),
+    CALCULITE("calculite"),
     RESONITE("resonite"),
     PROMINITE("prominite"),
     HAIMEVISKA_ROSIN("haimeviska_rosin"),

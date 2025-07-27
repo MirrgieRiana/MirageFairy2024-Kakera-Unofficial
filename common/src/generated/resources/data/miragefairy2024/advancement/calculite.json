@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:xarpa_luminaria",
+  "criteria": {
+    "has_calculite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:calculite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.calculite.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:calculite"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.calculite.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_calculite"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -29,6 +29,10 @@
       "required": false
     },
     {
+      "id": "#c:gems/calculite",
+      "required": false
+    },
+    {
       "id": "#c:gems/prominite",
       "required": false
     },
