@@ -444,7 +444,7 @@ class MaterialCard(
         }
         val CALCULITE: MaterialCard = !MaterialCard(
             "calculite", "Calculite", "理晶石", // TODO ポエム: An of The Superphysical Society of Xarpa
-            PoemList(4).poem("Neutralization of anti-entropy", "時の模様を刻む石。"),
+            PoemList(5).poem("Class 4 time evolution rule", "時の模様を刻む石。"), // TODO ポエム: Neutralization of anti-entropy
             ore = Ore(Shape.GEM, Material.CALCULITE),
             advancementCreator = {
                 AdvancementCard(
