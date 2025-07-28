@@ -6,9 +6,9 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.randomInt
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
 abstract class AbstractMirageFlowerCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
@@ -26,7 +26,7 @@ abstract class AbstractMirageFlowerCard<B : SimpleMagicPlantBlock> : SimpleMagic
     override val family = MirageFairy2024.identifier("mirage")
 }
 
-fun getMirageFlour(count: Int, random: Random): List<ItemStack> {
+fun getMirageFlour(count: Int, random: RandomSource): List<ItemStack> {
     var count2 = count.toDouble()
     if (count2 < 3) return listOf(MaterialCard.MIRAGE_FLOUR.item().createItemStack(random.randomInt(count2)))
     count2 /= 9.0

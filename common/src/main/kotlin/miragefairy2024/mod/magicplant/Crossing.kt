@@ -1,11 +1,11 @@
 package miragefairy2024.mod.magicplant
 
 import mirrg.kotlin.hydrogen.max
-import net.minecraft.util.RandomSource as Random
+import net.minecraft.util.RandomSource
 
 const val MAX_TRAIT_COUNT = 15
 
-fun crossTraitStacks(a: Map<Trait, Int>, b: Map<Trait, Int>, random: Random): Map<Trait, Int> {
+fun crossTraitStacks(a: Map<Trait, Int>, b: Map<Trait, Int>, random: RandomSource): Map<Trait, Int> {
 
     class Entry(val trait: Trait, val level: Int, val isDecided: Boolean)
 

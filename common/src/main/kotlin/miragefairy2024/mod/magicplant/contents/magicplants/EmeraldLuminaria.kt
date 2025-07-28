@@ -19,13 +19,13 @@ import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.underground
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
@@ -45,8 +45,8 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.EMERALD })
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
-    override fun getSpecialDrops(count: Int, random: Random) = listOf(Items.EMERALD.createItemStack(count))
+    override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getSpecialDrops(count: Int, random: RandomSource) = listOf(Items.EMERALD.createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応

@@ -33,6 +33,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -43,7 +44,6 @@ import net.minecraft.world.level.Level
 import kotlin.math.pow
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.item.UseAnim as UseAction
@@ -190,7 +190,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
 
 class RandomFairyResult(val motif: Motif, val condensation: Int, val count: Int)
 
-fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
+fun getRandomFairy(random: RandomSource, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
 
     // 提供割合の生成
     val chanceTable = motifSet.toChanceTable(appearanceRateBonus)

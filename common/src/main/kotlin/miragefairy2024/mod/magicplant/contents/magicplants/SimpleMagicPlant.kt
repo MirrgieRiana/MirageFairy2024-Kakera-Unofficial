@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TextureSlot
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -36,7 +37,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
@@ -53,10 +53,10 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
     open val baseRareGeneration = 0.03
     open val baseSpecialGeneration = 1.0
 
-    open fun getFruitDrops(count: Int, random: Random): List<ItemStack> = listOf()
-    open fun getLeafDrops(count: Int, random: Random): List<ItemStack> = listOf()
-    open fun getRareDrops(count: Int, random: Random): List<ItemStack> = listOf()
-    open fun getSpecialDrops(count: Int, random: Random): List<ItemStack> = listOf()
+    open fun getFruitDrops(count: Int, random: RandomSource): List<ItemStack> = listOf()
+    open fun getLeafDrops(count: Int, random: RandomSource): List<ItemStack> = listOf()
+    open fun getRareDrops(count: Int, random: RandomSource): List<ItemStack> = listOf()
+    open fun getSpecialDrops(count: Int, random: RandomSource): List<ItemStack> = listOf()
 
     val iconItem = Registration(BuiltInRegistries.ITEM, blockIdentifier * "_icon") { Item(Item.Properties()) }
 

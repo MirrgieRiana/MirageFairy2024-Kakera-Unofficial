@@ -34,7 +34,6 @@ import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
@@ -54,7 +53,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
+    override fun getFruitDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINARIA_BERRY.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(

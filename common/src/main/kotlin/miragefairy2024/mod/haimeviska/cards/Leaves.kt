@@ -29,6 +29,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -39,7 +40,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.ParticleUtils as ParticleUtil
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
@@ -116,7 +116,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     override fun isRandomlyTicking(state: BlockState) = super.isRandomlyTicking(state) || !state.getValue(CHARGED)
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) {
         super.randomTick(state, world, pos, random)
         if (!state.getValue(CHARGED)) {
             if (random.randomBoolean(15, world.lightProxy.getLightLevel(pos))) {
@@ -125,7 +125,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         }
     }
 
-    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: RandomSource) {
         super.animateTick(state, world, pos, random)
         if (random.nextInt(20) == 0) {
             val blockPos = pos.below()

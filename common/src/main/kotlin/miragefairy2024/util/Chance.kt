@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.util.RandomSource as Random
+import net.minecraft.util.RandomSource
 
 class Chance<out T : Any>(val weight: Double, val item: T) {
     override fun toString() = "${weight formatAs "%8.4f"}: $item"
@@ -34,7 +34,7 @@ fun <T : Any> List<Chance<T>>.weightedRandom(randomValue: Double): T? {
     return this.last().item
 }
 
-fun <T : Any> List<Chance<T>>.weightedRandom(random: Random) = weightedRandom(random.nextDouble())
+fun <T : Any> List<Chance<T>>.weightedRandom(random: RandomSource) = weightedRandom(random.nextDouble())
 
 
 /** 同一キーのエントリの重みを加算することによってキーをユニークにします。 */

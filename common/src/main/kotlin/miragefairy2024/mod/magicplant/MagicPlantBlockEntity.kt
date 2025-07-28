@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -16,7 +17,6 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.BlockGetter as BlockView
 
 class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, state: BlockState) : BlockEntity(card.blockEntityType(), pos, state) {
@@ -92,7 +92,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: Random): Pair<Map<Trait, Int>, Boolean> {
+fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: RandomSource): Pair<Map<Trait, Int>, Boolean> {
 
     // 特性数上限を加味した抽選リスト
     val defaultTraits = bits.keys

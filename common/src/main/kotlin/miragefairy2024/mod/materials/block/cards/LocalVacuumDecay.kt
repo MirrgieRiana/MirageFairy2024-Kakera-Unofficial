@@ -19,13 +19,13 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.util.RandomSource as Random
 
 val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("local_vacuum_decay_resistant"))
 
@@ -39,7 +39,7 @@ class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {
 
     override fun isRandomlyTicking(state: BlockState) = true
 
-    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) {
         @Suppress("DEPRECATION")
         super.randomTick(state, world, pos, random)
 

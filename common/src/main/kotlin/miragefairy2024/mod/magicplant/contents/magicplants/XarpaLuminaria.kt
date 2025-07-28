@@ -10,9 +10,9 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getOr
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
@@ -30,8 +30,8 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
     override val baseGrowth = super.baseGrowth / 5
 
     override val drops = listOf(MaterialCard.LUMINITE.item, MaterialCard.CALCULITE.item)
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
-    override fun getSpecialDrops(count: Int, random: Random) = listOf(MaterialCard.CALCULITE.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
+    override fun getSpecialDrops(count: Int, random: RandomSource) = listOf(MaterialCard.CALCULITE.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応

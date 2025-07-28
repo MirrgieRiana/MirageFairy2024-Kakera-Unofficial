@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
@@ -31,7 +30,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val baseSeedGeneration = 0.0
 
     override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)
-    override fun getFruitDrops(count: Int, random: Random) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))
+    override fun getFruitDrops(count: Int, random: RandomSource) = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item().createItemStack(count))
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.PROMINITE.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(

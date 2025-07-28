@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -139,11 +139,11 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     final override fun isRandomlyTicking(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) = move(world, pos, state, autoPick = true)
+    final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) = move(world, pos, state, autoPick = true)
 
     final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState) = canGrow(state)
-    final override fun isBonemealSuccess(world: Level, random: Random, pos: BlockPos, state: BlockState) = true
-    final override fun performBonemeal(world: ServerWorld, random: Random, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
+    final override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
+    final override fun performBonemeal(world: ServerWorld, random: RandomSource, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
 
 
     // Drop

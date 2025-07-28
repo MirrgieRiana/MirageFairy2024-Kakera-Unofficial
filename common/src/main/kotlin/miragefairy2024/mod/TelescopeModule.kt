@@ -59,6 +59,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
@@ -81,7 +82,6 @@ import java.time.ZoneOffset
 import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
@@ -235,7 +235,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
         return InteractionResult.CONSUME
     }
 
-    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: Random) {
+    override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: RandomSource) {
         val player = clientProxy!!.getClientPlayer() ?: return
 
         val now = Instant.now()
