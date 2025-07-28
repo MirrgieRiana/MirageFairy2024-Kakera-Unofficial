@@ -12,7 +12,7 @@ import miragefairy2024.util.toNbt
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.castOrThrow
-import net.minecraft.nbt.CompoundTag as NbtCompound
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag as NbtList
 
 object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>("harvest", "Harvest", "収穫") {
@@ -21,7 +21,7 @@ object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>(
             Display(
                 HarvestNotation(
                     tag.wrapper["Seed"].compound.get()!!.toItemStack(BasicDisplay.registryAccess())!!,
-                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<NbtCompound>().toItemStack(BasicDisplay.registryAccess())!! },
+                    tag.wrapper["Crops"].list.get()!!.map { it.castOrThrow<CompoundTag>().toItemStack(BasicDisplay.registryAccess())!! },
                 )
             )
         }, { display, tag ->

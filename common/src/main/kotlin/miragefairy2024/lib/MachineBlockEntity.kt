@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.Container
@@ -20,7 +21,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
 import net.minecraft.world.ContainerHelper as Inventories
@@ -46,18 +46,18 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Data
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         inventory.reset()
         inventory.readFromNbt(nbt, registries)
     }
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         inventory.writeToNbt(nbt, registries)
     }
 
-    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registries) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 

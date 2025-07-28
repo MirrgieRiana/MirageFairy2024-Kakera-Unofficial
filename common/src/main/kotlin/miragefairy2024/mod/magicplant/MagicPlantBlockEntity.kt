@@ -7,13 +7,13 @@ import miragefairy2024.util.weightedRandom
 import mirrg.kotlin.hydrogen.Single
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.math.pow
 import kotlin.math.sqrt
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
 import net.minecraft.util.RandomSource as Random
@@ -64,21 +64,21 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
         }
     }
 
-    public override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    public override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)
         if (isNatural) nbt.putBoolean("Natural", true)
     }
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         traitStacks = TraitStacks.readFromNbt(nbt)
         isRare = nbt.getBoolean("Rare")
         isNatural = nbt.getBoolean("Natural")
     }
 
-    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound {
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag {
         val nbt = super.getUpdateTag(registries)
         traitStacks?.let { nbt.put("TraitStacks", it.toNbt()) }
         if (isRare) nbt.putBoolean("Rare", true)

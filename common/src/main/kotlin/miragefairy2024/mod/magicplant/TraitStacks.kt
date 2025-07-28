@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec
 import miragefairy2024.util.bitCount
 import miragefairy2024.util.list
 import miragefairy2024.util.toNbtList
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import java.util.SortedMap
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.nbt.ListTag as NbtList
 import net.minecraft.nbt.Tag as NbtElement
 
@@ -37,7 +37,7 @@ class TraitStacks private constructor(val traitStackMap: SortedMap<Trait, Int>) 
 
         val EMPTY = of()
 
-        fun readFromNbt(parent: NbtCompound, key: String = "TraitStacks"): TraitStacks? {
+        fun readFromNbt(parent: CompoundTag, key: String = "TraitStacks"): TraitStacks? {
             if (!parent.contains(key, NbtElement.TAG_LIST.toInt())) return null
             return parent.getList(key, NbtElement.TAG_COMPOUND.toInt()).toTraitStacks()
         }

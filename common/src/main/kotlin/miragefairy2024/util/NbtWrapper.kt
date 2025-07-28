@@ -1,9 +1,9 @@
 package miragefairy2024.util
 
 import mirrg.kotlin.hydrogen.castOrNull
+import net.minecraft.nbt.CompoundTag
 import kotlin.reflect.KProperty
 import net.minecraft.nbt.ByteTag as NbtByte
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.nbt.DoubleTag as NbtDouble
 import net.minecraft.nbt.FloatTag as NbtFloat
 import net.minecraft.nbt.IntTag as NbtInt
@@ -40,10 +40,10 @@ class InstanceNbtWrapper<N : NbtElement>(private val element: N) : NbtWrapper<N>
 }
 
 /**
- * [NbtCompound]の子要素にアクセスする[NbtProperty]を生成します。
+ * [CompoundTag]の子要素にアクセスする[NbtProperty]を生成します。
  * この[NbtProperty]はnullをセット可能であり、その場合はそのキーを削除します。
  */
-operator fun NbtWrapper<NbtCompound>.get(key: String): NbtProperty<NbtElement?, NbtElement?> {
+operator fun NbtWrapper<CompoundTag>.get(key: String): NbtProperty<NbtElement?, NbtElement?> {
     val parent = this
     return object : NbtProperty<NbtElement?, NbtElement?> {
         override fun get() = parent.getOrNull()?.get(key)
@@ -91,14 +91,14 @@ inline fun <G, S> NbtProperty(crossinline getter: () -> G, crossinline setter: (
 }
 
 /**
- * 親[NbtProperty]を[NbtCompound]と仮定し、その子要素への[NbtProperty]を返します。
- * 親NBT要素が[NbtCompound]でなかった場合、取得アクセスではnullが返却され、設定アクセスでは親NBT要素に新しい[NbtCompound]を割り当てます。
+ * 親[NbtProperty]を[CompoundTag]と仮定し、その子要素への[NbtProperty]を返します。
+ * 親NBT要素が[CompoundTag]でなかった場合、取得アクセスではnullが返却され、設定アクセスでは親NBT要素に新しい[CompoundTag]を割り当てます。
  */
 operator fun NbtProperty<NbtElement?, NbtElement>.get(key: String): NbtProperty<NbtElement?, NbtElement?> {
     val parent = this
-    val nbtWrapper = object : NbtWrapper<NbtCompound> {
-        override fun getOrNull() = parent.get() as? NbtCompound
-        override fun getOrCreate() = getOrNull() ?: NbtCompound().also { parent.set(it) }
+    val nbtWrapper = object : NbtWrapper<CompoundTag> {
+        override fun getOrNull() = parent.get() as? CompoundTag
+        override fun getOrCreate() = getOrNull() ?: CompoundTag().also { parent.set(it) }
     }
     return nbtWrapper[key]
 }
@@ -120,7 +120,7 @@ operator fun NbtProperty<NbtElement?, NbtElement>.get(index: Int): NbtProperty<N
 // utilities
 
 val NbtProperty<NbtElement?, NbtElement?>.list get() = NbtProperty<NbtList?, NbtList?>({ this.get()?.castOrNull() }, { this.set(it) })
-val NbtProperty<NbtElement?, NbtElement?>.compound get() = NbtProperty<NbtCompound?, NbtCompound?>({ this.get()?.castOrNull() }, { this.set(it) })
+val NbtProperty<NbtElement?, NbtElement?>.compound get() = NbtProperty<CompoundTag?, CompoundTag?>({ this.get()?.castOrNull() }, { this.set(it) })
 
 val NbtProperty<NbtElement?, NbtElement?>.byte get() = NbtProperty<Byte?, Byte?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.asByte }, { this.set(it?.let { a -> NbtByte.valueOf(a) }) })
 val NbtProperty<NbtElement?, NbtElement?>.short get() = NbtProperty<Short?, Short?>({ this.get()?.castOrNull<AbstractNbtNumber>()?.asShort }, { this.set(it?.let { a -> NbtShort.valueOf(a) }) })
@@ -136,7 +136,7 @@ val NbtProperty<NbtElement?, NbtElement?>.boolean get() = NbtProperty<Boolean?, 
 val NbtProperty<NbtElement, Nothing>.list get() = NbtProperty<NbtList?, Nothing>({ this.get().castOrNull() }, {})
 
 @get:JvmName("compoundGetter")
-val NbtProperty<NbtElement, Nothing>.compound get() = NbtProperty<NbtCompound?, Nothing>({ this.get().castOrNull() }, {})
+val NbtProperty<NbtElement, Nothing>.compound get() = NbtProperty<CompoundTag?, Nothing>({ this.get().castOrNull() }, {})
 
 @get:JvmName("byteGetter")
 val NbtProperty<NbtElement, Nothing>.byte get() = NbtProperty<Byte?, Nothing>({ this.get().castOrNull<AbstractNbtNumber>()?.asByte }, {})
@@ -167,11 +167,11 @@ val NbtProperty<NbtElement, Nothing>.boolean get() = NbtProperty<Boolean?, Nothi
 
 val NbtProperty<NbtElement?, NbtElement?>.map
     get() = NbtProperty<Map<String, NbtElement>?, Map<String, NbtElement>?>({
-        val nbt = this.get()?.castOrNull<NbtCompound>() ?: return@NbtProperty null
+        val nbt = this.get()?.castOrNull<CompoundTag>() ?: return@NbtProperty null
         nbt.allKeys.associate { key -> key!! to nbt[key]!! }
     }, {
         this.set(it?.let { a ->
-            NbtCompound().also { nbt ->
+            CompoundTag().also { nbt ->
                 a.forEach { entry ->
                     nbt.put(entry.key, entry.value)
                 }

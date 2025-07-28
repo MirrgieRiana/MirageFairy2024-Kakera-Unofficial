@@ -27,10 +27,10 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
@@ -125,14 +125,14 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
     override fun getThis() = this
 
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         collectionProgress = nbt.wrapper["CollectionProgress"].int.get() ?: 0
         sortProgress = nbt.wrapper["SortProgress"].int.get() ?: 0
         updateCache()
     }
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         nbt.wrapper["CollectionProgress"].int.set(collectionProgress)
         nbt.wrapper["SortProgress"].int.set(sortProgress)

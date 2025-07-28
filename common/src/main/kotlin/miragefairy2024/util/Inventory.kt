@@ -10,7 +10,6 @@ import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import kotlin.experimental.and
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.WorldlyContainer as SidedInventory
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
@@ -244,7 +243,7 @@ fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<I
 
 fun MutableList<ItemStack>.reset() = this.replaceAll { EMPTY_ITEM_STACK }
 
-fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound, registries: HolderLookup.Provider) {
+fun MutableList<ItemStack>.readFromNbt(nbt: CompoundTag, registries: HolderLookup.Provider) {
     nbt.wrapper["Items"].list.get()?.let { items ->
         items.forEach { item ->
             item.wrapper.compound.get()?.let { itemCompound ->
@@ -255,11 +254,11 @@ fun MutableList<ItemStack>.readFromNbt(nbt: NbtCompound, registries: HolderLooku
     }
 }
 
-fun List<ItemStack>.writeToNbt(nbt: NbtCompound, registries: HolderLookup.Provider) {
+fun List<ItemStack>.writeToNbt(nbt: CompoundTag, registries: HolderLookup.Provider) {
     val nbtList = NbtList()
     this.forEachIndexed { slotIndex, itemStack ->
         if (itemStack.isNotEmpty) {
-            var itemCompound = NbtCompound()
+            var itemCompound = CompoundTag()
             itemCompound.wrapper["Slot"].byte.set(slotIndex.toByte())
             itemCompound = itemStack.save(registries, itemCompound) as CompoundTag
             nbtList.add(itemCompound)
@@ -268,4 +267,4 @@ fun List<ItemStack>.writeToNbt(nbt: NbtCompound, registries: HolderLookup.Provid
     nbt.put("Items", nbtList)
 }
 
-fun List<ItemStack>.writeToNbt(registries: HolderLookup.Provider) = NbtCompound().also { this.writeToNbt(it, registries) }
+fun List<ItemStack>.writeToNbt(registries: HolderLookup.Provider) = CompoundTag().also { this.writeToNbt(it, registries) }

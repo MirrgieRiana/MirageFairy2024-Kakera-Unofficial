@@ -16,13 +16,13 @@ import miragefairy2024.util.wrapper
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import kotlin.math.log
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.util.StringRepresentable as StringIdentifiable
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
@@ -88,13 +88,13 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
     }
 
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         folia = nbt.wrapper["Folia"].int.get() ?: 0
         foliaCollectionCooldown = nbt.wrapper["FoliaCollectionCooldown"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         nbt.wrapper["Folia"].int.set(folia)
         nbt.wrapper["FoliaCollectionCooldown"].int.set(foliaCollectionCooldown)

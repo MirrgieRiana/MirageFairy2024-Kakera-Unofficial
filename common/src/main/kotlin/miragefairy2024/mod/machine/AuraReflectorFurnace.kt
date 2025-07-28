@@ -32,6 +32,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -43,7 +44,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
@@ -139,13 +139,13 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
 class AuraReflectorFurnaceBlockEntity(private val card: AuraReflectorFurnaceCard, pos: BlockPos, state: BlockState) : SimpleMachineBlockEntity<AuraReflectorFurnaceBlockEntity>(card, pos, state) {
     override fun getThis() = this
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         fuelMax = nbt.wrapper["FuelMax"].int.get() ?: 0
         fuel = nbt.wrapper["Fuel"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         nbt.wrapper["FuelMax"].int.set(fuelMax)
         nbt.wrapper["Fuel"].int.set(fuel)

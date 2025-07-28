@@ -33,6 +33,7 @@ import mirrg.kotlin.hydrogen.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
@@ -45,7 +46,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
 import net.minecraft.util.Mth as MathHelper
@@ -142,7 +142,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var shapeCache: VoxelShape? = null
 
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         nbt.wrapper["ItemStack"].set(itemStack.toNbt(registries))
         nbt.wrapper["ItemX"].double.set(itemX)
@@ -152,7 +152,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         nbt.wrapper["ItemRotateY"].double.set(itemRotateY)
     }
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         itemStack = nbt.wrapper["ItemStack"].compound.get()?.toItemStack(registries) ?: EMPTY_ITEM_STACK
         itemX = nbt.wrapper["ItemX"].double.get() ?: 0.0
@@ -220,7 +220,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
         }
     }
 
-    override fun getUpdateTag(registries: HolderLookup.Provider): NbtCompound = saveWithoutMetadata(registries)
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registries)
     override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
 
 

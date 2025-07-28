@@ -32,12 +32,12 @@ import miragefairy2024.util.writeToNbt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
@@ -106,7 +106,7 @@ abstract class SimpleMachineBlock(card: SimpleMachineCard<*, *, *, *>) : Horizon
 
 abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private val card: SimpleMachineCard<*, E, *, *>, pos: BlockPos, state: BlockState) : MachineBlockEntity<E>(card, pos, state) {
 
-    override fun loadAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(nbt, registries)
         craftingInventory.reset()
         nbt.wrapper["CraftingInventory"].compound.get()?.let { craftingInventory.readFromNbt(it, registries) }
@@ -116,7 +116,7 @@ abstract class SimpleMachineBlockEntity<E : SimpleMachineBlockEntity<E>>(private
         progress = nbt.wrapper["Progress"].int.get() ?: 0
     }
 
-    override fun saveAdditional(nbt: NbtCompound, registries: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(nbt, registries)
         nbt.wrapper["CraftingInventory"].compound.set(craftingInventory.writeToNbt(registries))
         nbt.wrapper["WaitingInventory"].compound.set(waitingInventory.writeToNbt(registries))

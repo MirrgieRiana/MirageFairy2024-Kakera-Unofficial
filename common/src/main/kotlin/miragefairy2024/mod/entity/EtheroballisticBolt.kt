@@ -13,6 +13,7 @@ import miragefairy2024.util.registerEntityTypeTagGeneration
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.entity.EntityDimensions
@@ -22,7 +23,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
-import net.minecraft.nbt.CompoundTag as NbtCompound
 import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
 import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
 import net.minecraft.network.syncher.SynchedEntityData as DataTracker
@@ -67,12 +67,12 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
         builder.define(MAX_DISTANCE, 0F)
     }
 
-    override fun addAdditionalSaveData(nbt: NbtCompound) {
+    override fun addAdditionalSaveData(nbt: CompoundTag) {
         nbt.putFloat("Damage", damage)
         nbt.putFloat("MaxDistance", maxDistance)
     }
 
-    override fun readAdditionalSaveData(nbt: NbtCompound) {
+    override fun readAdditionalSaveData(nbt: CompoundTag) {
         damage = nbt.getFloat("Damage")
         maxDistance = nbt.getFloat("MaxDistance")
     }
