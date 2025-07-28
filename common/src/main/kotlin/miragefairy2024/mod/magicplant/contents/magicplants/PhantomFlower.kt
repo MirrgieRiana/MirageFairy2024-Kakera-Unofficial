@@ -1,59 +1,51 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
 import com.mojang.serialization.MapCodec
-import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
+import miragefairy2024.mod.FairyForestBiomeCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
+import miragefairy2024.mod.materials.block.cards.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
 import miragefairy2024.mod.materials.item.MaterialCard
-import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
-import miragefairy2024.util.Registration
-import miragefairy2024.util.center
-import miragefairy2024.util.count
 import miragefairy2024.util.createItemStack
-import miragefairy2024.util.end
 import miragefairy2024.util.flower
-import miragefairy2024.util.nether
-import miragefairy2024.util.not
-import miragefairy2024.util.overworld
 import miragefairy2024.util.per
-import miragefairy2024.util.plus
-import miragefairy2024.util.register
+import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
-import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
-object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
-    override fun getBlockPath() = "mirage_flower"
-    override val blockName = EnJa("Mirage Flower", "妖花ミラージュ")
-    override fun getItemPath() = "mirage_bulb"
-    override val itemName = EnJa("Mirage Bulb", "妖花ミラージュの球根")
-    override val tier = 1
-    override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
+object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
+    override fun getBlockPath() = "phantom_flower"
+    override val blockName = EnJa("Phantom Flower", "幻花ファントム")
+    override fun getItemPath() = "phantom_bulb"
+    override val itemName = EnJa("Phantom Bulb", "幻花ファントムの球根")
+    override val tier = 3
+    override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
 
-    override val blockCodec = MirageFlowerBlock.CODEC
-    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
+    override val blockCodec = PhantomFlowerBlock.CODEC
+    override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
 
-    override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
+    override val baseGrowth = super.baseGrowth / 8.0
+    override val baseFruitGeneration = super.baseFruitGeneration * 9.0
+
+    override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.PHANTOM_LEAVES.item, MaterialCard.PHANTOM_DROP.item)
     override fun getFruitDrops(count: Int, random: Random) = getMirageFlour(count, random)
-    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.MIRAGE_LEAVES.item().createItemStack(count))
-    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.FAIRY_CRYSTAL.item().createItemStack(count))
+    override fun getLeafDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_LEAVES.item().createItemStack(count))
+    override fun getRareDrops(count: Int, random: Random) = listOf(MaterialCard.PHANTOM_DROP.item().createItemStack(count))
 
     override val defaultTraitBits = super.defaultTraitBits + mapOf(
         TraitCard.WARM_ADAPTATION.trait to 0b00101000, // 中温適応
@@ -67,9 +59,11 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
         TraitCard.AIR_ADAPTATION.trait to 0b00101000, // 空間適応
         TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
+        TraitCard.PHANTOM_FLOWER.trait to 0b00101000, // 幻の花
         TraitCard.PLANTS_WITH_SELF_AWARENESS.trait to 0b00101000, // 自我を持つ植物
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
+        TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
         TraitCard.WARM_ADAPTATION.trait to 0.05, // 中温適応
         TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
         TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
@@ -79,55 +73,44 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
         TraitCard.MUTATION.trait to 0.05, // 突然変異
-        TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
         TraitCard.ETHER_RESPIRATION.trait to 0.05, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成
+        TraitCard.PHAEOSYNTHESIS.trait to 0.05, // 闇合成
         TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
-        TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
         TraitCard.AIR_ADAPTATION.trait to 0.05, // 空間適応
         TraitCard.FAIRY_BLESSING.trait to 0.05, // 妖精の祝福
-        TraitCard.FOUR_LEAFED.trait to 0.05, // 四つ葉
         TraitCard.SPINY_LEAVES.trait to 0.05, // 棘のある葉
         TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
-        TraitCard.PROSPERITY_OF_SPECIES.trait to 0.05, // 種の繁栄
+        TraitCard.PHANTOM_FLOWER.trait to 0.05, // 幻の花
         TraitCard.PLANTS_WITH_SELF_AWARENESS.trait to 0.05, // 自我を持つ植物
+        TraitCard.FLOWER_OF_THE_END.trait to 0.05, // 終焉の花
     )
-
-    private val FAIRY_RING_FEATURE = FairyRingFeature(FairyRingFeatureConfig.CODEC)
 
     override fun createAdvancement(identifier: ResourceLocation) = AdvancementCard(
         identifier = identifier,
-        context = AdvancementCard.Sub { rootAdvancement.await() },
+        context = AdvancementCard.Sub { FairyForestBiomeCard.advancement.await() },
         icon = { iconItem().createItemStack() },
-        name = EnJa("A World Ruled by Plants", "植物の支配する世界"),
-        //name = EnJa("Terraformer of the Fantasy World", "幻想世界のテラフォーマー"), // TODO どこかで使う
-        description = EnJa("Find the Mirage flower", "妖花ミラージュを摘もう"),
+        name = EnJa("Selective Pressure of Cuteness", "かわいいの淘汰圧"),
+        description = EnJa("Search for the Phantom Flower hidden in the Fairy Forest", "妖精の森に隠れている幻花ファントムを探す"),
         criterion = AdvancementCard.hasItem { item() },
-        type = AdvancementCardType.NORMAL,
+        type = AdvancementCardType.GOAL,
     )
 
     context(ModContext)
     override fun init() {
         super.init()
-        Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
+        block.registerBlockTagGeneration { LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG }
         Feature.FLOWER {
-            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
-                placedFeature("cluster", { per(16) + flower(square, surface) }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
-                placedFeature("nether_cluster", { per(64) + flower(square, nether) }) { nether } // ネザーにネザー用クラスタ
-                placedFeature("fairy_forest_cluster", { count(4) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
-            }
-        }
-        FAIRY_RING_FEATURE {
-            configuredFeature("fairy_ring", { FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // Fairy Ring
-                placedFeature("fairy_ring", { per(600) + flower(center, surface) }) { overworld }  // 地上にFairy Ring
+            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }
             }
         }
     }
 }
 
-class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlowerCard, settings) {
+class PhantomFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(PhantomFlowerCard, settings) {
     companion object {
-        val CODEC: MapCodec<MirageFlowerBlock> = simpleCodec(::MirageFlowerBlock)
+        val CODEC: MapCodec<PhantomFlowerBlock> = simpleCodec(::PhantomFlowerBlock)
     }
 
     override fun codec() = CODEC
