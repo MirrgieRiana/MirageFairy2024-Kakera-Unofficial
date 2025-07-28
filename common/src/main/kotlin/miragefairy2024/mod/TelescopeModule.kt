@@ -82,7 +82,6 @@ import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
@@ -273,7 +272,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
             }
         }
 
-    private fun calculateTelescopeActions(now: Instant, player: PlayerEntity): TelescopeActions {
+    private fun calculateTelescopeActions(now: Instant, player: Player): TelescopeActions {
         val texts = mutableListOf<Component>()
         val actions = mutableListOf<() -> Unit>()
 

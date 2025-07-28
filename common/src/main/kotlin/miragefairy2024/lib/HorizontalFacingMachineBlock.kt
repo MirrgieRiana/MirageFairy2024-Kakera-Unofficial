@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.MenuProvider as NamedScreenHandlerFactory
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
 
 abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
@@ -79,7 +78,7 @@ abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, 
         if (level.isClientSide) return InteractionResult.SUCCESS
         val blockEntity = card.blockEntityAccessor.castOrNull(level.getBlockEntity(pos)) ?: return InteractionResult.CONSUME
         player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
-            override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = blockEntity.createMenu(syncId, playerInventory, player)
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player) = blockEntity.createMenu(syncId, playerInventory, player)
             override fun getDisplayName() = blockEntity.displayName
             override fun getScreenOpeningData(player: ServerPlayer) = Unit
         })

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.BiomeColors
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
@@ -25,7 +26,6 @@ import net.minecraft.client.renderer.RenderType as RenderLayer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider as BlockEntityRendererFactory
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers as BlockEntityRendererFactories
 import net.minecraft.client.resources.model.ModelResourceLocation as ModelIdentifier
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 import net.minecraft.world.level.BlockAndTintGetter as BlockRenderView
 import net.minecraft.world.level.FoliageColor as FoliageColors
@@ -45,7 +45,7 @@ class ClientProxyImpl : ClientProxy {
         RenderTypeRegistry.register(RenderLayer.translucent(), block())
     }
 
-    override fun getClientPlayer(): PlayerEntity? = MinecraftClient.getInstance().player
+    override fun getClientPlayer(): Player? = MinecraftClient.getInstance().player
 
     override fun getBlockColorProvider(block: Block): BlockColorProvider {
         return BlockColorProvider { blockState, world, blockPos, tintIndex ->

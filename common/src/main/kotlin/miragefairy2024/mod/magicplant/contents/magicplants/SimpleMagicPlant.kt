@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TextureSlot
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
@@ -37,7 +38,6 @@ import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
@@ -121,7 +121,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
     override fun canPick(blockState: BlockState) = isMaxAge(blockState)
     override fun getBlockStateAfterPicking(blockState: BlockState) = withAge(0)
 
-    override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: PlayerEntity?, tool: ItemStack?): List<ItemStack> {
+    override fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: Player?, tool: ItemStack?): List<ItemStack> {
         val drops = mutableListOf<ItemStack>()
 
         val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], tool).toDouble() else 0.0

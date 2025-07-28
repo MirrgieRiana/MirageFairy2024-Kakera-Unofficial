@@ -12,8 +12,8 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
@@ -42,6 +42,6 @@ class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val co
         )
     }
 
-    override fun stillValid(player: PlayerEntity) = true
-    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack = slots[slot].item
+    override fun stillValid(player: Player) = true
+    override fun quickMoveStack(player: Player, slot: Int): ItemStack = slots[slot].item
 }

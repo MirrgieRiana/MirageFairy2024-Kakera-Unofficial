@@ -64,7 +64,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.sounds.SoundSource as SoundCategory
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
@@ -222,7 +221,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
             }
 
             player.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
-                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = name
                 override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })

@@ -45,6 +45,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -57,7 +58,6 @@ import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.entity.SlotAccess as StackReference
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ClickAction as ClickType
 
@@ -206,7 +206,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val slotIndex = if (hand == Hand.MAIN_HAND) {
@@ -217,7 +217,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
             -1
         }
         user.openMenu(object : ExtendedScreenHandlerFactory<Int> {
-            override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
@@ -231,7 +231,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     // カバンを持って種子のスロットを右クリックした場合の処理
     // slot = 種子のスロット（操作後、マージが完了した場合は除去、そうでない場合は部分的除去が行われる）
     // カバンは常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun overrideStackedOnOther(stack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity): Boolean {
+    override fun overrideStackedOnOther(stack: ItemStack, slot: Slot, clickType: ClickType, player: Player): Boolean {
         if (clickType != ClickType.SECONDARY) return false
 
         if (!slot.mayPickup(player)) return false // そもそもスロットからアイテムを回収できない場合はキャンセル
@@ -262,7 +262,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     // 種子を持ってカバンに突っ込んだ場合の処理
     // slot = カバンのスロット（操作後、変更が行われる）
     // 種子は常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun overrideOtherStackedOnMe(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickType, player: PlayerEntity, cursorStackReference: StackReference): Boolean {
+    override fun overrideOtherStackedOnMe(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickType, player: Player, cursorStackReference: StackReference): Boolean {
         if (clickType != ClickType.SECONDARY) return false
 
         if (!slot.allowModification(player)) return false // そもそもカバンのスロットが変更を受け付けない場合はキャンセル
@@ -339,9 +339,9 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
             expectedItemStack = itemStackInstance.copy()
         }
 
-        override fun stillValid(player: PlayerEntity) = bagInventory.stillValid(player)
-        override fun startOpen(player: PlayerEntity) = bagInventory.startOpen(player)
-        override fun stopOpen(player: PlayerEntity) = bagInventory.stopOpen(player)
+        override fun stillValid(player: Player) = bagInventory.stillValid(player)
+        override fun startOpen(player: Player) = bagInventory.startOpen(player)
+        override fun stopOpen(player: Player) = bagInventory.stopOpen(player)
         override fun canPlaceItem(slot: Int, stack: ItemStack) = bagInventory.canPlaceItem(slot, stack)
         override fun canTakeItem(hopperInventory: Container, slot: Int, stack: ItemStack) = bagInventory.canTakeItem(hopperInventory, slot, stack)
     }
@@ -361,12 +361,12 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
             }
         }
 
-        override fun stillValid(player: PlayerEntity): Boolean {
+        override fun stillValid(player: Player): Boolean {
             val itemStack = if (slotIndex >= 0) playerInventory.items[slotIndex] else playerInventory.offhand[0]
             return itemStack === itemStackInstance && itemStack hasSameItemAndComponentsAndCount expectedItemStack
         }
 
-        override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
+        override fun quickMoveStack(player: Player, slot: Int): ItemStack {
             val playerIndices = 9 * 4 - 1 downTo 0
             val utilityIndices = 9 * 4 until slots.size
             val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
@@ -378,7 +378,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
 }
 
 open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType(), syncId) {
-    override fun stillValid(player: PlayerEntity) = false
-    override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    override fun stillValid(player: Player) = false
+    override fun quickMoveStack(player: Player, slot: Int) = EMPTY_ITEM_STACK
     open val card: BagCard? = null
 }

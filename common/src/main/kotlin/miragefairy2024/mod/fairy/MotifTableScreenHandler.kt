@@ -13,8 +13,8 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 val MOTIF_TABLE_STREAM_CODEC = object : StreamCodec<RegistryFriendlyByteBuf, List<CondensedMotifChance>> {
@@ -54,6 +54,6 @@ fun initMotifTableScreenHandler() {
 }
 
 class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType(), syncId) {
-    override fun stillValid(player: PlayerEntity) = true
-    override fun quickMoveStack(player: PlayerEntity, slot: Int) = EMPTY_ITEM_STACK
+    override fun stillValid(player: Player) = true
+    override fun quickMoveStack(player: Player, slot: Int) = EMPTY_ITEM_STACK
 }

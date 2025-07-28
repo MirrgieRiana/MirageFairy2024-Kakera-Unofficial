@@ -17,11 +17,11 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
@@ -84,9 +84,9 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
         addDataSlots(propertyDelegate)
     }
 
-    override fun stillValid(player: PlayerEntity) = true
+    override fun stillValid(player: Player) = true
 
-    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: Player, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until 9 * 4 + 4 // TODO 出力スロットを含めると、出力スロットに既存アイテムがある場合にそこにスタックしてしまう
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices
@@ -166,7 +166,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
 
     }
 
-    override fun removed(player: PlayerEntity) {
+    override fun removed(player: Player) {
         super.removed(player)
         context.execute { _, _ ->
             clearContainer(player, inputInventory)

@@ -20,7 +20,7 @@ import net.minecraft.tags.DamageTypeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
-import net.minecraft.world.entity.player.Player as PlayerEntity
+import net.minecraft.world.entity.player.Player
 
 object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkillEffect.Value>("element") {
     class Value(val attackMap: Map<Element, Double>, val defenceMap: Map<Element, Double>)
@@ -90,7 +90,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
             var damage = amount
 
             val attacker = source.entity
-            if (attacker is PlayerEntity) {
+            if (attacker is Player) {
                 var attackBonus = 0.0
                 attacker.passiveSkillResult.getOrCreate()[ElementPassiveSkillEffect].attackMap.forEach { (element, value) ->
                     if (element.test(source)) {
@@ -100,7 +100,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
                 damage *= (1.0 + attackBonus).toFloat()
             }
 
-            if (entity is PlayerEntity) {
+            if (entity is Player) {
                 var defenceBonus = 0.0
                 entity.passiveSkillResult.getOrCreate()[ElementPassiveSkillEffect].defenceMap.forEach { (element, value) ->
                     if (element.test(source)) {

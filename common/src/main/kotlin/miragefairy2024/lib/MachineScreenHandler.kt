@@ -4,9 +4,9 @@ import miragefairy2024.util.quickMove
 import net.minecraft.network.chat.Component
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
@@ -67,9 +67,9 @@ open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private 
         return slot.configuration.getTooltip()
     }
 
-    override fun stillValid(player: PlayerEntity) = arguments.inventory.stillValid(player)
+    override fun stillValid(player: Player) = arguments.inventory.stillValid(player)
 
-    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
+    override fun quickMoveStack(player: Player, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 until slots.size
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

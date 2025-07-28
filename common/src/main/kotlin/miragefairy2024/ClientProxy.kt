@@ -3,13 +3,13 @@ package miragefairy2024
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 
 var clientProxy: ClientProxy? = null
@@ -19,7 +19,7 @@ interface ClientProxy {
     fun registerItemTooltipCallback(block: (stack: ItemStack, context: Item.TooltipContext, lines: MutableList<Component>) -> Unit)
     fun registerCutoutRenderLayer(block: () -> Block)
     fun registerTranslucentRenderLayer(block: () -> Block)
-    fun getClientPlayer(): PlayerEntity?
+    fun getClientPlayer(): Player?
     fun getBlockColorProvider(block: Block): BlockColorProvider?
     fun registerBlockColorProvider(block: () -> Block, provider: BlockColorProvider)
     fun getFoliageBlockColorProvider(): BlockColorProvider

@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -25,7 +26,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as B
 import net.minecraft.world.ContainerHelper as Inventories
 import net.minecraft.world.Containers as ItemScatterer
 import net.minecraft.world.WorldlyContainer as SidedInventory
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerData as PropertyDelegate
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
@@ -175,7 +175,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
         override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
     }
 
-    override fun stillValid(player: PlayerEntity) = Container.stillValidBlockEntity(this, player)
+    override fun stillValid(player: Player) = Container.stillValidBlockEntity(this, player)
 
     override fun getDefaultName(): Component = card.block().name
 

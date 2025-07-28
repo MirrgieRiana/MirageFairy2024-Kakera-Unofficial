@@ -7,9 +7,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
 interface PassiveSkillProvider {
     fun getPassiveSkill(itemStack: ItemStack): PassiveSkill?
@@ -35,4 +35,4 @@ interface PassiveSkillEffect<T : Any> {
     fun update(context: PassiveSkillContext, oldValue: T, newValue: T)
 }
 
-class PassiveSkillContext(val world: Level, val blockPos: BlockPos, val player: PlayerEntity)
+class PassiveSkillContext(val world: Level, val blockPos: BlockPos, val player: Player)

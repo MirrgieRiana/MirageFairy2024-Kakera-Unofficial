@@ -29,7 +29,6 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -159,7 +158,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun getBlockStateAfterPicking(blockState: BlockState): BlockState
 
     /** 確定で戻って来る本来の種子以外の追加種子及び生産物を計算する。 */
-    protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: PlayerEntity?, tool: ItemStack?): List<ItemStack>
+    protected abstract fun getAdditionalDrops(world: Level, blockPos: BlockPos, block: Block, blockState: BlockState, traitStacks: TraitStacks, traitEffects: MutableTraitEffects, randomTraitChances: Map<Trait, Double>, player: Player?, tool: ItemStack?): List<ItemStack>
 
     /** この植物本来の種子を返す。 */
     protected fun createSeed(traitStacks: TraitStacks, isRare: Boolean): ItemStack {
@@ -207,7 +206,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         return createSeed(TraitStacks.of(mutatedBits), rare)
     }
 
-    fun tryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
+    fun tryPick(world: Level, blockPos: BlockPos, player: Player?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
         val result = canPick(world.getBlockState(blockPos))
         if (result && world.isServer) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
         if (causingEvent) {
@@ -222,7 +221,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     }
 
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
-    private fun pick(world: ServerWorld, blockPos: BlockPos, player: PlayerEntity?, tool: ItemStack?, dropExperience: Boolean) {
+    private fun pick(world: ServerWorld, blockPos: BlockPos, player: Player?, tool: ItemStack?, dropExperience: Boolean) {
 
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
@@ -263,7 +262,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
                 player.openMenu(object : ExtendedScreenHandlerFactory<Pair<TraitStacks, BlockPos>> {
-                    override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
+                    override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
                         return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks, pos)
                     }
 
@@ -301,7 +300,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
             val traitStacks = blockEntity.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
             val randomTraitChances = blockEntity.getRandomTraitChances()
-            val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? PlayerEntity
+            val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? Player
             val tool = builder.getOptionalParameter(LootContextParameters.TOOL)
 
             itemStacks += createSeed(traitStacks, isRare = blockEntity.isRare())
@@ -335,5 +334,5 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
 }
 
 interface PostTryPickHandlerItem {
-    fun postTryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean)
+    fun postTryPick(world: Level, blockPos: BlockPos, player: Player?, itemStack: ItemStack, succeed: Boolean)
 }

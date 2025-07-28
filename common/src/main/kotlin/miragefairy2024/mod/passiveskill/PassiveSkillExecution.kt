@@ -25,9 +25,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import kotlin.math.log
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
 private val identifier = MirageFairy2024.identifier("passive_skill")
 val PASSIVE_SKILL_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}" }, "Passive Skills", "パッシブスキル")
@@ -99,9 +99,9 @@ val PassiveSkillStatus.description
 class PassiveSkillProviders(val providers: List<Triple<ItemStack, PassiveSkillStatus, PassiveSkill>>, val passiveSkills: List<PassiveSkill>)
 
 @Suppress("UnusedReceiverParameter")
-fun PlayerEntity.getPassiveSkillCount() = 9
+fun Player.getPassiveSkillCount() = 9
 
-fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
+fun Player.findPassiveSkillProviders(): PassiveSkillProviders {
     val passiveSkillCount = this.getPassiveSkillCount()
 
     val providers = mutableListOf<Triple<ItemStack, PassiveSkillStatus, Slot<PassiveSkill>>>()
@@ -165,7 +165,7 @@ fun PlayerEntity.findPassiveSkillProviders(): PassiveSkillProviders {
     return PassiveSkillProviders(actualProviders, passiveSkills)
 }
 
-fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: PlayerEntity, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
+fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Player, manaBoostValue: ManaBoostPassiveSkillEffect.Value, isPreprocessing: Boolean) {
     val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     passiveSkills.forEach { passiveSkill ->
@@ -185,7 +185,7 @@ fun PassiveSkillResult.collect(passiveSkills: Iterable<PassiveSkill>, player: Pl
     }
 }
 
-fun PassiveSkillResult.update(player: PlayerEntity) {
+fun PassiveSkillResult.update(player: Player) {
     val context = PassiveSkillContext(player.level(), player.eyeBlockPos, player)
 
     val oldResult = player.passiveSkillResult.getOrCreate()

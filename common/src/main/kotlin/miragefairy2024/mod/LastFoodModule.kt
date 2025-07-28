@@ -19,18 +19,18 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import java.time.Instant
 import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initLastFoodModule() {
     LAST_FOOD_ATTACHMENT_TYPE.register()
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register
-        if (entity !is PlayerEntity) return@register
+        if (entity !is Player) return@register
         entity as ServerPlayerEntity
         entity.lastFood.set(LastFood(stack.copy(), Instant.now()))
     }

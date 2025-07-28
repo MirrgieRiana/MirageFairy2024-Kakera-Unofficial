@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.stats.Stats
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -26,7 +27,6 @@ import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.util.StringUtil as StringHelper
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.ItemUtils as ItemUsage
 import net.minecraft.world.item.UseAnim as UseAction
 
@@ -56,7 +56,7 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         super.finishUsingItem(stack, world, user)
         if (user is ServerPlayerEntity) Criteria.CONSUME_ITEM.trigger(user, stack)
-        if (user is PlayerEntity) user.awardStat(Stats.ITEM_USED.get(this))
+        if (user is Player) user.awardStat(Stats.ITEM_USED.get(this))
         user.gameEvent(GameEvent.DRINK)
         if (!world.isClientSide) {
             if (flaming != null) user.igniteForSeconds(flaming.toFloat())
@@ -64,12 +64,12 @@ class DrinkItem(settings: Properties, private val flaming: Int? = null) : Item(s
         return if (stack.isEmpty) {
             Items.GLASS_BOTTLE.createItemStack()
         } else {
-            if (user !is PlayerEntity || !user.abilities.instabuild) user.obtain(Items.GLASS_BOTTLE.createItemStack())
+            if (user !is Player || !user.abilities.instabuild) user.obtain(Items.GLASS_BOTTLE.createItemStack())
             stack
         }
     }
 
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 32
     override fun getUseAnimation(stack: ItemStack) = UseAction.DRINK
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> = ItemUsage.startUsingInstantly(world, user, hand)
 }

@@ -26,6 +26,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -36,7 +37,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.item.TieredItem as ToolItem
 
@@ -94,7 +94,7 @@ open class ShootingStaffItem(toolMaterial: ToolMaterial, private val basePower: 
         tooltipComponents += text { DESCRIPTION_TRANSLATION().yellow }
     }
 
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
 

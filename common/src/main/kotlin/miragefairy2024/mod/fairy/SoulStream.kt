@@ -35,11 +35,11 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
@@ -57,7 +57,7 @@ fun initSoulStream() {
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
             player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
-                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity): ScreenHandler {
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream.getOrCreate())
                 }
 
@@ -139,8 +139,8 @@ class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val s
         }
     }
 
-    override fun stillValid(player: PlayerEntity) = true
-    override fun quickMoveStack(player: PlayerEntity, slot: Int): ItemStack {
+    override fun stillValid(player: Player) = true
+    override fun quickMoveStack(player: Player, slot: Int): ItemStack {
         val playerIndices = 9 * 4 - 1 downTo 0
         val utilityIndices = 9 * 4 + 9 until 9 * 4 + SoulStream.SLOT_COUNT
         val destinationIndices = if (slot in playerIndices) utilityIndices else playerIndices

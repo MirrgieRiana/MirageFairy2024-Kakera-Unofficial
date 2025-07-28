@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.Tool
@@ -18,7 +19,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initFairyToolItem() {
@@ -49,7 +49,7 @@ fun <I> I.postMineImpl(stack: ItemStack, world: Level, state: BlockState, pos: B
     }
 }
 
-fun <I> I.onAfterBreakBlock(world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) where I : Item, I : FairyToolItem {
+fun <I> I.onAfterBreakBlock(world: Level, player: Player, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) where I : Item, I : FairyToolItem {
     configuration.onAfterBreakBlockListeners.forEach {
         it(this, world, player, pos, state, blockEntity, tool)
     }

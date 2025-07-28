@@ -31,13 +31,13 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
@@ -106,7 +106,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return InteractionResult.CONSUME
     }
 
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (world.isClientSide) return TypedActionResult.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY

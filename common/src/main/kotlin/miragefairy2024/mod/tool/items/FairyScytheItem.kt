@@ -22,6 +22,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.SwordItem
@@ -36,7 +37,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.Tier as ToolMaterial
 import net.minecraft.world.level.ClipContext as RaycastContext
 
@@ -96,7 +96,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         tooltipComponents += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }
 
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
 
         if (!user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
@@ -144,7 +144,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         return true
     }
 
-    override fun postTryPick(world: Level, blockPos: BlockPos, player: PlayerEntity?, itemStack: ItemStack, succeed: Boolean) {
+    override fun postTryPick(world: Level, blockPos: BlockPos, player: Player?, itemStack: ItemStack, succeed: Boolean) {
         if (world.isClientSide) return
         if (player?.isShiftKeyDown == true) return
         (-range..range).forEach { x ->

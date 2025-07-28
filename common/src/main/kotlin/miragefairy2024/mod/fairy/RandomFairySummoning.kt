@@ -35,6 +35,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -45,7 +46,6 @@ import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.RandomSource as Random
 import net.minecraft.world.InteractionHand as Hand
 import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.item.UseAnim as UseAction
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
@@ -70,7 +70,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 72000 // 1時間
 
-    override fun use(world: Level, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (!user.isShiftKeyDown) {
 
@@ -88,7 +88,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                 .sortedWith(CondensedMotifChanceComparator.reversed())
 
             user.openMenu(object : ExtendedScreenHandlerFactory<List<CondensedMotifChance>> {
-                override fun createMenu(syncId: Int, playerInventory: Inventory, player: PlayerEntity) = MotifTableScreenHandler(syncId, chanceTable)
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player) = MotifTableScreenHandler(syncId, chanceTable)
                 override fun getDisplayName() = itemStack.hoverName
                 override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
@@ -216,7 +216,7 @@ fun getRandomFairy(random: Random, motifSet: Set<Motif>, appearanceRateBonus: Do
     )
 }
 
-fun getCommonMotifSet(player: PlayerEntity): Set<Motif> {
+fun getCommonMotifSet(player: Player): Set<Motif> {
     val biome = player.level().getBiome(player.blockPosition())
     return COMMON_MOTIF_RECIPES.filter {
         when (it) {

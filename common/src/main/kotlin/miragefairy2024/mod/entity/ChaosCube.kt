@@ -45,6 +45,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.Level
@@ -66,7 +67,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal as Wande
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal as RevengeGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal as ActiveTargetGoal
 import net.minecraft.world.entity.monster.Monster as HostileEntity
-import net.minecraft.world.entity.player.Player as PlayerEntity
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
@@ -227,7 +227,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
         goalSelector.addGoal(5, GoToWalkTargetGoal(this, 1.0))
         goalSelector.addGoal(7, WanderAroundFarGoal(this, 0.5, 0.0F))
         targetSelector.addGoal(1, RevengeGoal(this, ChaosCubeEntity::class.java).setAlertOthers())
-        targetSelector.addGoal(2, TargetGoal(this, PlayerEntity::class.java))
+        targetSelector.addGoal(2, TargetGoal(this, Player::class.java))
     }
 
 

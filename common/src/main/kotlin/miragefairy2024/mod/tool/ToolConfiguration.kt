@@ -16,13 +16,13 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.entity.player.Player as PlayerEntity
 
 context(ModContext)
 fun initToolConfiguration() {
@@ -88,7 +88,7 @@ abstract class ToolConfiguration {
     val modifyItemEnchantmentsHandlers = mutableListOf<ModifyItemEnchantmentsHandler>()
 
     val onPostMineListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, state: BlockState, pos: BlockPos, miner: LivingEntity) -> Unit>()
-    val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: Level, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
+    val onAfterBreakBlockListeners = mutableListOf<(item: Item, world: Level, player: Player, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?, tool: ItemStack) -> Unit>()
     val onKilledListeners = mutableListOf<(item: Item, entity: LivingEntity, attacker: LivingEntity, damageSource: DamageSource) -> Unit>()
     val onInventoryTickListeners = mutableListOf<(item: Item, stack: ItemStack, world: Level, entity: Entity, slot: Int, selected: Boolean) -> Unit>()
 
