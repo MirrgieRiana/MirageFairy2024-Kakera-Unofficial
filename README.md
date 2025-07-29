@@ -51,6 +51,8 @@ The following files are part of MirageFairy2019 and are licensed under the **[CC
 - `common/src/main/resources/assets/miragefairy2024/textures/item/fairy_liqueur.png`
 - `common/src/main/resources/assets/miragefairy2024/textures/item/bottle3.pdn`
 - `common/src/main/resources/assets/miragefairy2024/textures/item/bottle4.pdn`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/topaz_gem.pdn`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/topaz.png`
 
 For further details, please refer to [the original repository](https://github.com/MirageFairy/MirageFairy2019).
 
