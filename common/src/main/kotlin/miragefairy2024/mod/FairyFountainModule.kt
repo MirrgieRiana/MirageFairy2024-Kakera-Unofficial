@@ -47,6 +47,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -63,7 +64,6 @@ import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
@@ -182,7 +182,7 @@ class FairyStatueFountainBlock(settings: Properties) : SimpleHorizontalFacingBlo
         }
 
         // エフェクト
-        if (level.isServer) level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (level.random.nextFloat() - level.random.nextFloat()) * 0.35F + 0.9F)
+        if (level.isServer) level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.1F, (level.random.nextFloat() - level.random.nextFloat()) * 0.35F + 0.9F)
         if (level.isClientSide) {
             // TODO サーバーサイドで発火して、全プレイヤーの画面に表示する
             repeat(3) {

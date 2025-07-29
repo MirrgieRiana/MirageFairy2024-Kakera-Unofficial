@@ -38,6 +38,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityDimensions
@@ -56,7 +57,6 @@ import org.joml.Quaternionf
 import java.util.EnumSet
 import kotlin.math.sqrt
 import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.entity.Mob as MobEntity
 import net.minecraft.world.entity.MobCategory as SpawnGroup
@@ -323,7 +323,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
                         val soundEventPacket = SoundEventPacket(
                             SoundEventCard.ENTITY_CHAOS_CUBE_ATTACK.soundEvent,
                             entity.blockPosition(),
-                            SoundCategory.HOSTILE,
+                            SoundSource.HOSTILE,
                             2.0F,
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
@@ -382,7 +382,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
                             val soundEventPacket = SoundEventPacket(
                                 SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_SHOOT.soundEvent,
                                 entity.blockPosition(),
-                                SoundCategory.HOSTILE,
+                                SoundSource.HOSTILE,
                                 2.0F,
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,

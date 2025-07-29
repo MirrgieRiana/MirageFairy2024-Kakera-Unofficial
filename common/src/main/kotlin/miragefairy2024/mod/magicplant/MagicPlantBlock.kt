@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 import net.minecraft.world.level.BlockGetter as BlockView
@@ -246,7 +246,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
         blockEntity.setNatural(false)
 
         // エフェクト
-        world.playSound(null, blockPos, soundType.breakSound, SoundCategory.BLOCKS, (soundType.volume + 1.0F) / 2.0F * 0.5F, soundType.pitch * 0.8F)
+        world.playSound(null, blockPos, soundType.breakSound, SoundSource.BLOCKS, (soundType.volume + 1.0F) / 2.0F * 0.5F, soundType.pitch * 0.8F)
 
     }
 

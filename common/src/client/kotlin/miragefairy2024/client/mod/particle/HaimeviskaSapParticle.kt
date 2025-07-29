@@ -1,12 +1,12 @@
 package miragefairy2024.client.mod.particle
 
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
 import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
 import net.minecraft.client.particle.SpriteSet as SpriteProvider
 import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
 import net.minecraft.core.particles.ParticleOptions as ParticleEffect
-import net.minecraft.sounds.SoundSource as SoundCategory
 
 @Suppress("LeakingThis")
 open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Double) : SpriteBillboardParticle(world, x, y, z) {
@@ -77,7 +77,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
             if (onGround) {
                 remove()
                 level.addParticle(particleEffect, x, y, z, 0.0, 0.0, 0.0)
-                level.playLocalSound(x, y, z, SoundEvents.BEEHIVE_DRIP, SoundCategory.BLOCKS, 0.3F + 0.7F * level.random.nextFloat(), 1.0F, false)
+                level.playLocalSound(x, y, z, SoundEvents.BEEHIVE_DRIP, SoundSource.BLOCKS, 0.3F + 0.7F * level.random.nextFloat(), 1.0F, false)
             }
         }
     }

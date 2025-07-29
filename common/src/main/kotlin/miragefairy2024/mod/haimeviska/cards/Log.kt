@@ -22,6 +22,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.BlockModelGenerators.WoodProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.stats.Stats
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -38,7 +39,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 
@@ -154,7 +154,7 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
         player.awardStat(Stats.ITEM_USED.get(stack.item))
 
         // エフェクト
-        level.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+        level.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F)
 
         return ItemInteractionResult.CONSUME
     }

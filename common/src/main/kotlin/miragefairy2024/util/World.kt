@@ -4,6 +4,7 @@ import miragefairy2024.mod.SoundEventCard
 import mirrg.kotlin.hydrogen.max
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
@@ -12,7 +13,6 @@ import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
 import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
@@ -248,7 +248,7 @@ fun collectItem(
 
         // Effect
         val pos = originalBlockPos.center
-        world.playSound(null, pos.x, pos.y, pos.z, SoundEventCard.COLLECT.soundEvent, SoundCategory.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
+        world.playSound(null, pos.x, pos.y, pos.z, SoundEventCard.COLLECT.soundEvent, SoundSource.PLAYERS, 0.15F, 0.8F + (world.random.nextFloat() - 0.5F) * 0.5F)
 
     }
 

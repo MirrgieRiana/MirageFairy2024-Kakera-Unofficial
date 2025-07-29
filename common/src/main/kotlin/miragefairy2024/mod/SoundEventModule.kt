@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundSource as SoundCategory
+import net.minecraft.sounds.SoundSource
 
 enum class SoundEventCard(val path: String, en: String, ja: String, soundPaths: List<String>) {
     MAGIC1("magic1", "Magic fired", "魔法が発射される", listOf("magic1")),
@@ -49,7 +49,7 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
     override fun readFromBuf(buf: RegistryFriendlyByteBuf): SoundEventPacket {
         val soundEvent = BuiltInRegistries.SOUND_EVENT.get(buf.readResourceLocation())!!
         val pos = buf.readBlockPos()
-        val category = buf.readUtf().let { name -> SoundCategory.entries.first { it.name == name } }
+        val category = buf.readUtf().let { name -> SoundSource.entries.first { it.name == name } }
         val volume = buf.readFloat()
         val pitch = buf.readFloat()
         val useDistance = buf.readBoolean()
@@ -60,7 +60,7 @@ object SoundEventChannel : Channel<SoundEventPacket>(MirageFairy2024.identifier(
 class SoundEventPacket(
     val soundEvent: SoundEvent,
     val pos: BlockPos,
-    val category: SoundCategory,
+    val category: SoundSource,
     val volume: Float,
     val pitch: Float,
     val useDistance: Boolean,

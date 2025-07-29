@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilde
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
@@ -26,7 +27,6 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
 import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
 import net.minecraft.network.syncher.SynchedEntityData as DataTracker
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.util.Mth as MathHelper
 import net.minecraft.world.entity.EntityEvent as EntityStatuses
 import net.minecraft.world.entity.MobCategory as SpawnGroup
@@ -146,7 +146,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
     override fun handleEntityEvent(status: Byte) {
         super.handleEntityEvent(status)
         if (status == EntityStatuses.DEATH) {
-            level().playLocalSound(x, y, z, SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_HIT.soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.90F + (level().random.nextFloat() - 0.5F) * 0.3F, true)
+            level().playLocalSound(x, y, z, SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_HIT.soundEvent, SoundSource.NEUTRAL, 0.5F, 0.90F + (level().random.nextFloat() - 0.5F) * 0.3F, true)
             // TODO パーティクル
         }
     }

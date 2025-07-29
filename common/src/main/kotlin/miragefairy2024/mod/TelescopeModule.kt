@@ -58,6 +58,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
@@ -82,7 +83,6 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Optional
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
@@ -228,7 +228,7 @@ class TelescopeBlock(settings: Properties) : SimpleHorizontalFacingBlock(setting
             it()
         }
 
-        level.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.5F, 1.0F)
+        level.playSound(null, player.x, player.y, player.z, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 1.0F)
 
         player.telescopeMission.mutate { it.lastUsedTime = now }
 
