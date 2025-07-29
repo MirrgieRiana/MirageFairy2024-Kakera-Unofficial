@@ -28,13 +28,13 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -48,7 +48,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override val poem = EnJa("Cleansing of tainted souls.", "死霊を貪り、命に変える。")
 
     override val blockCodec = ProminariaBlock.CODEC
-    override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = ProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.CRIMSON_HYPHAE).sound(SoundType.CROP))
 
     override val baseGrowth = super.baseGrowth / 5
 

@@ -20,13 +20,13 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.SaplingBlock
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
 import java.util.Optional
 import net.minecraft.data.models.model.ModelTemplates as Models
 import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : HaimeviskaBlockCard(configuration) {
@@ -35,7 +35,7 @@ class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, pr
         .noCollission()
         .randomTicks()
         .instabreak()
-        .sound(BlockSoundGroup.GRASS)
+        .sound(SoundType.GRASS)
         .pushReaction(PistonBehavior.DESTROY)
 
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = SaplingBlock(

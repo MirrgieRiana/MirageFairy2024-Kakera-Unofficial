@@ -39,13 +39,13 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
 import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration as OreFeatureConfig
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
@@ -111,7 +111,7 @@ enum class OreCard(
                 .instrument(Instrument.BASEDRUM)
                 .requiresTool()
                 .strength(4.5F, 3.0F)
-                .sound(BlockSoundGroup.DEEPSLATE)
+                .sound(SoundType.DEEPSLATE)
         }
         ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
     }

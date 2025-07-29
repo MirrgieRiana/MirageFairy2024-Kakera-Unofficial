@@ -34,13 +34,13 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.server.level.ServerLevel as ServerWorld
 import net.minecraft.util.ParticleUtils as ParticleUtil
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.StateDefinition as StateManager
 import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
@@ -49,7 +49,7 @@ class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : H
         .mapColor(MapColor.PLANT)
         .strength(0.2F)
         .randomTicks()
-        .sound(BlockSoundGroup.GRASS)
+        .sound(SoundType.GRASS)
         .noOcclusion()
         .isValidSpawn(Blocks::ocelotOrParrot)
         .isSuffocating(Blocks::never)

@@ -29,12 +29,12 @@ import miragefairy2024.util.unaryPlus
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
 import net.minecraft.world.level.biome.Biomes as BiomeKeys
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -48,7 +48,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     override val poem = EnJa("Evolution to escape extermination", "可憐にして人畜無害たる魔物。")
 
     override val blockCodec = MirageFlowerBlock.CODEC
-    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.GLASS))
+    override fun createBlock() = MirageFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.DIAMOND).sound(SoundType.GLASS))
 
     override val drops = listOf(MaterialCard.MIRAGE_FLOUR.item, MaterialCard.MIRAGE_LEAVES.item, MaterialCard.FAIRY_CRYSTAL.item)
     override fun getFruitDrops(count: Int, random: RandomSource) = getMirageFlour(count, random)

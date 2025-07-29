@@ -10,9 +10,9 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getOr
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
 object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
@@ -24,7 +24,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val poem = EnJa("Those who have become livestock of gold.", "地獄の沙汰も金次第。")
 
     override val blockCodec = GoldProminariaBlock.CODEC
-    override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(SoundType.CROP))
 
     override val baseGrowth = super.baseGrowth / 5 / 4
     override val baseSeedGeneration = 0.0

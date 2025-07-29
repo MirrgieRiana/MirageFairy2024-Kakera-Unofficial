@@ -20,11 +20,11 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -38,7 +38,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override val poem = EnJa("Fruits the crystallized carbon", "表土を飾る、凍てつく星。")
 
     override val blockCodec = DiamondLuminariaBlock.CODEC
-    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getWeakLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getWeakLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(SoundType.CROP))
 
     override val baseGrowth = super.baseGrowth / 5
 

@@ -24,11 +24,11 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 // TODO WIP
@@ -39,7 +39,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
     override val poem = EnJa("Fairies' Delivery Service", "落ち込んだりもしたけれど、私は元気です。")
     override val description = EnJa("Accepts and delivers orders", "注文を受け付けて配達する")
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.COLOR_PINK).sounds(BlockSoundGroup.WOOD)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.COLOR_PINK).sounds(SoundType.WOOD)
     override fun createBlock() = FairyPassiveSupplierBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyPassiveSupplierBlockEntity)

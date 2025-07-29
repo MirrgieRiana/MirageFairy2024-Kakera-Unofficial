@@ -11,9 +11,9 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.getOr
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
 object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
@@ -25,7 +25,7 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
     override val poem = EnJa("The essence of a gene is matter.", "遺伝子のすべては、形而下に属する。")
 
     override val blockCodec = XarpaLuminariaBlock.CODEC
-    override fun createBlock() = XarpaLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.TERRACOTTA_ORANGE).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = XarpaLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.TERRACOTTA_ORANGE).sound(SoundType.CROP))
 
     override val baseGrowth = super.baseGrowth / 5
 

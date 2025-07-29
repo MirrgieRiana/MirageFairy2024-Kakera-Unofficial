@@ -19,11 +19,11 @@ import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -37,7 +37,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     override val poem = EnJa("Illusory telepathy", "――おいでよ、僕たちのところへ")
 
     override val blockCodec = PhantomFlowerBlock.CODEC
-    override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(BlockSoundGroup.GLASS))
+    override fun createBlock() = PhantomFlowerBlock(createCommonSettings().breakInstantly().mapColor(MapColor.COLOR_PINK).sound(SoundType.GLASS))
 
     override val baseGrowth = super.baseGrowth / 8.0
     override val baseFruitGeneration = super.baseFruitGeneration * 9.0

@@ -22,11 +22,11 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biomes
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -40,7 +40,7 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
     override val poem = EnJa("Makes Berryllium by unknown means", "幸福もたらす、栄光の樹。")
 
     override val blockCodec = EmeraldLuminariaBlock.CODEC
-    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = EmeraldLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.EMERALD).sound(SoundType.CROP))
 
     override val baseGrowth = super.baseGrowth / 5
 

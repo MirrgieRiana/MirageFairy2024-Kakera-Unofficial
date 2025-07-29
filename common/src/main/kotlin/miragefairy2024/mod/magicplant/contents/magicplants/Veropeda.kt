@@ -20,11 +20,11 @@ import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
@@ -38,7 +38,7 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     override val poem = EnJa("Contains strong acids made from insects", "毒を喰らい、毒と化す。")
 
     override val blockCodec = VeropedaBlock.CODEC
-    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(BlockSoundGroup.CROP))
+    override fun createBlock() = VeropedaBlock(createCommonSettings().breakInstantly().mapColor(MapColor.NETHER).sound(SoundType.CROP))
 
     override val drops = listOf(MaterialCard.VEROPEDA_BERRIES.item, MaterialCard.VEROPEDA_LEAF.item)
     override fun getFruitDrops(count: Int, random: RandomSource) = listOf(MaterialCard.VEROPEDA_BERRIES.item().createItemStack(count))

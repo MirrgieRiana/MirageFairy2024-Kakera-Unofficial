@@ -24,6 +24,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.HitResult
@@ -32,7 +33,6 @@ import net.minecraft.core.SectionPos as ChunkSectionPos
 import net.minecraft.world.entity.projectile.Arrow as ArrowEntity
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 // TODO WIP
@@ -43,7 +43,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
     override val poem = EnJa("Tonight, I'll Be Eating...", "焼き鯖だよ――")
     override val description = EnJa("The ordered items are delivered", "注文したアイテムが搬入される")
 
-    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.ICE).sounds(BlockSoundGroup.METAL)
+    override fun createBlockSettings(): FabricBlockSettings = super.createBlockSettings().mapColor(MapColor.ICE).sounds(SoundType.METAL)
     override fun createBlock() = FairyActiveConsumerBlock(this)
 
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FairyActiveConsumerBlockEntity)

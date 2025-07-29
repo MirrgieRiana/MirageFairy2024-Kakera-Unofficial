@@ -69,6 +69,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
@@ -85,12 +86,11 @@ import net.minecraft.sounds.SoundSource as SoundCategory
 import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
 import net.minecraft.world.level.BlockGetter as BlockView
 import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object TelescopeCard {
     val identifier = MirageFairy2024.identifier("telescope")
-    val block = Registration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(BlockSoundGroup.COPPER).strength(0.5F).nonOpaque()) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { TelescopeBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_ORANGE).sounds(SoundType.COPPER).strength(0.5F).nonOpaque()) }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
     val advancement = AdvancementCard(
         identifier = identifier,

@@ -49,10 +49,10 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.block.state.properties.WoodType
-import net.minecraft.world.level.block.SoundType as BlockSoundGroup
 import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 
@@ -186,7 +186,7 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
 
 fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = AbstractBlock.Properties.of()
     .instrument(Instrument.BASS)
-    .let { if (sound) it.sound(BlockSoundGroup.WOOD) else it }
+    .let { if (sound) it.sound(SoundType.WOOD) else it }
     .ignitedByLava()
 
 
