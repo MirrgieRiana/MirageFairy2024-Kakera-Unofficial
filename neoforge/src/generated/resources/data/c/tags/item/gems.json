@@ -55,6 +55,10 @@
     {
       "id": "#c:gems/fluorite",
       "required": false
+    },
+    {
+      "id": "#c:gems/topaz",
+      "required": false
     }
   ]
 }

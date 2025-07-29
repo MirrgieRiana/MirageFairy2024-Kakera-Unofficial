@@ -742,6 +742,11 @@ class MaterialCard(
                 define('S', FAIRY_SCALES.item())
             } on FLUORITE.item from FLUORITE.item
         }
+        val TOPAZ: MaterialCard = !MaterialCard(
+            "topaz", "Topaz", "トパーズ",
+            null,
+            ore = Ore(Shape.GEM, Material.TOPAZ),
+        )
 
         val TINY_BISMUTH_DUST: MaterialCard = !MaterialCard(
             "tiny_bismuth_dust", "Tiny Pile of Bismuth Dust", "小さなビスマスの粉",
@@ -1221,5 +1226,6 @@ enum class Material(val path: String) {
     FAIRY_RUBBER("fairy_rubber"),
     MAGNETITE("magnetite"),
     FLUORITE("fluorite"),
+    TOPAZ("topaz"),
     BISMUTH("bismuth"),
 }
