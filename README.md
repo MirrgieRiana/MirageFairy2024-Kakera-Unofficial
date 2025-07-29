@@ -42,15 +42,15 @@ The copyright for all texture data derived from Minecraft, including any found i
 
 The following files are part of MirageFairy2019 and are licensed under the **[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)** license from MirageFairy Server:
 
-- `src/main/resources/assets/miragefairy2024/textures/block/nephrite_block.pdn`
-- `src/main/resources/assets/miragefairy2024/textures/block/nephrite_block.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/rum.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/poison.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/veropedeliquora.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/cidre.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/fairy_liqueur.png`
-- `src/main/resources/assets/miragefairy2024/textures/item/bottle3.pdn`
-- `src/main/resources/assets/miragefairy2024/textures/item/bottle4.pdn`
+- `common/src/main/resources/assets/miragefairy2024/textures/block/nephrite_block.pdn`
+- `common/src/main/resources/assets/miragefairy2024/textures/block/nephrite_block.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/rum.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/poison.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/veropedeliquora.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/cidre.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/fairy_liqueur.png`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/bottle3.pdn`
+- `common/src/main/resources/assets/miragefairy2024/textures/item/bottle4.pdn`
 
 For further details, please refer to [the original repository](https://github.com/MirageFairy/MirageFairy2019).
 
