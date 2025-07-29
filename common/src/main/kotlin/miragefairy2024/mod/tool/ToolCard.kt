@@ -133,6 +133,7 @@ class ToolCard(
         val AMETHYST = toolSet("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, { Items.AMETHYST_SHARD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
         val OBSIDIAN = toolSet("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, { Items.OBSIDIAN }) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
         val EMERALD = toolSet("emerald", "エメラルド", ToolMaterialCard.EMERALD, { Items.EMERALD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
+        val TOPAZ = toolSet("topaz", "トパーズ", ToolMaterialCard.TOPAZ, MaterialCard.TOPAZ.item) { it.enchantment(Enchantments.FIRE_ASPECT).enchantment(Enchantments.SHARPNESS, 3) }
         val ECHO_SHARD = toolSet("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, { Items.ECHO_SHARD }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.SHARPNESS, 5) else it.enchantment(Enchantments.EFFICIENCY, 5) }
         val NETHER_STAR = toolSet("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, { Items.NETHER_STAR }) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 4).glint() else it.enchantment(Enchantments.FORTUNE, 4).glint() }
 

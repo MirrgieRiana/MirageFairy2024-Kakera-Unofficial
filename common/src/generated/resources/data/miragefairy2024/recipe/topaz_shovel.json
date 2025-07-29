@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "miragefairy2024:topaz_shovel",
+  "key": {
+    "#": {
+      "item": "miragefairy2024:topaz"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#",
+    "R",
+    "R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "miragefairy2024:topaz_shovel"
+  }
+}
