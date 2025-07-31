@@ -41,8 +41,8 @@ enum class FairyToolMaterials(
     FLINT(Tiers.STONE, 150, 3.5F, 1.5F, 1.0F, 6, { Items.FLINT.toIngredient() }),
 
     MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 0.0F, 17, { MaterialCard.MIRAGE_STEM.item().toIngredient() }),
-    MIRAGIUM(Tiers.IRON, 87, 0.5F, 0.5F, -0.5F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
-    LILAGIUM(Tiers.IRON, 122, 0.5F, 0.5F, 1.0F, 19, { MaterialCard.LILAGIUM_INGOT.item().toIngredient() }),
+    MIRAGIUM(Tiers.IRON, 478, 1.0F, 2.0F, 0.0F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
+    LILAGIUM(Tiers.IRON, 505, 1.0F, 2.0F, 0.0F, 19, { MaterialCard.LILAGIUM_INGOT.item().toIngredient() }),
     MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 1.5F, 2, { MaterialCard.MIRAGIDIAN.item().toIngredient() }),
     FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 1.5F, 7, { MaterialCard.FAIRY_CRYSTAL.item().toIngredient() }),
     PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 1.0F, 12, { MaterialCard.PHANTOM_DROP.item().toIngredient() }),
