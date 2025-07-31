@@ -32,6 +32,10 @@ import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeInput
+import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
@@ -178,7 +182,7 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     class SpecialCraftingRecipeImpl(category: CraftingBookCategory) : CustomRecipe(category) {
         override fun matches(input: CraftingInput, world: Level) = matcher(input) != null
         override fun assemble(input: CraftingInput, registries: HolderLookup.Provider) = matcher(input)?.craft() ?: EMPTY_ITEM_STACK
-        override fun getRemainingItems(input: CraftingInput) = matcher(input)?.getRemainder() ?: super.getRemainingItems(input)
+        override fun getRemainingItems(input: CraftingInput) = matcher(input)?.getRemainder() ?: getDefaultRemainingItems(input) // interfaceのsuperを呼び出そうとするとNoSuchMethodErrorになる
         override fun canCraftInDimensions(width: Int, height: Int) = width * height >= minSlots
         override fun getSerializer() = serializer
     }
@@ -188,6 +192,18 @@ fun registerSpecialRecipe(path: String, minSlots: Int, matcher: (CraftingInput) 
     DataGenerationEvents.onGenerateRecipe {
         ComplexRecipeJsonBuilder.special(::SpecialCraftingRecipeImpl).save(it, identifier.string)
     }
+}
+
+private fun <T : RecipeInput> getDefaultRemainingItems(input: T): DefaultedList<ItemStack> {
+    val recipe = object : Recipe<T> {
+        override fun matches(input: T, level: Level): Boolean = throw AssertionError()
+        override fun assemble(input: T, registries: HolderLookup.Provider): ItemStack? = throw AssertionError()
+        override fun canCraftInDimensions(width: Int, height: Int): Boolean = throw AssertionError()
+        override fun getResultItem(registries: HolderLookup.Provider): ItemStack? = throw AssertionError()
+        override fun getSerializer(): RecipeSerializer<*> = throw AssertionError()
+        override fun getType(): RecipeType<*> = throw AssertionError()
+    }
+    return recipe.getRemainingItems(input)
 }
 
 interface SpecialRecipeResult {
