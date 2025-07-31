@@ -57,6 +57,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     )
     override val randomTraitChances = super.randomTraitChances + mapOf(
         TraitCard.COLD_ADAPTATION.trait to 0.05, // 低温適応
+        TraitCard.ARID_ADAPTATION.trait to 0.05, // 乾燥適応
         TraitCard.MESIC_ADAPTATION.trait to 0.05, // 中湿適応
         TraitCard.HUMID_ADAPTATION.trait to 0.05, // 湿潤適応
         TraitCard.SEEDS_PRODUCTION.trait to 0.05, // 種子生成
