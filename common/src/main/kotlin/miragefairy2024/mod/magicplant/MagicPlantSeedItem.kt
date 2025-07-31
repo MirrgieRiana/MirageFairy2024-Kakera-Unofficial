@@ -116,7 +116,7 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                     val description = text {
                         traitEffects.effects
                             .map {
-                                fun <T : Any> TraitEffect<T>.render() = text { this@render.key.emoji + this@render.key.renderValue(this@render.value) }
+                                fun <T : Any> TraitEffect<T>.render() = text { (this@render.key.emoji + this@render.key.renderValue(this@render.value)).style(this@render.key.style) }
                                 it.render()
                             }
                             .reduce { a, b -> a + " "() + b }
