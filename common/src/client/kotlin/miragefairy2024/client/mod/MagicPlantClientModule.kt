@@ -35,6 +35,7 @@ import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
 import miragefairy2024.mod.magicplant.traitListScreenHandlerType
 import miragefairy2024.mod.magicplant.traitListScreenTranslation
+import miragefairy2024.util.darkGray
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
@@ -113,15 +114,24 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 
                             child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
+                                val player = MinecraftClient.getInstance().player!!
+                                val level = player.level()
+                                val blockEntity = level.getMagicPlantBlockEntity(menu.blockPos)
+
                                 menu.traitStacks.traitStackList.forEach { traitStack ->
+                                    val totalConditionFactor = traitStack.trait.conditions
+                                        .map { it.getFactor(level, menu.blockPos, blockEntity) }
+                                        .fold(1.0) { a, b -> a * b }
+
                                     child(ClickableContainer(Sizing.fill(100), Sizing.content(), { // 特性
                                         setTraitCardContent(createTraitCardContent(traitStack))
                                         true
                                     }) {
                                         Components.label(text {
                                             val texts = mutableListOf<Component>()
-                                            texts += traitStack.trait.getName().style(traitStack.trait.style)
-                                            texts += traitStack.level.toString(2)().style(traitStack.trait.style)
+                                            val styleFunction: (Component) -> Component = { if (totalConditionFactor == 0.0) it.darkGray else it.style(traitStack.trait.style) }
+                                            texts += styleFunction(traitStack.trait.getName())
+                                            texts += styleFunction(traitStack.level.toString(2)())
                                             if (traitStack.trait.conditions.isNotEmpty()) texts += traitStack.trait.conditions.map { it.emoji }.join() + " →"()
                                             if (traitStack.trait.traitEffectKeyEntries.isNotEmpty()) texts += traitStack.trait.traitEffectKeyEntries.map { it.traitEffectKey.emoji.style(it.traitEffectKey.style) }.join()
                                             texts.join(" "())
