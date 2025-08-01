@@ -127,7 +127,7 @@ class ToolCard(
         }
 
         val MAGNETITE = toolSet("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.item) { if (it is FairySwordConfiguration) it.collection() else it.enchantment(EnchantmentCard.STICKY_MINING.key) }
-        val BISMUTH = toolSet("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1) }
+        val BISMUTH = toolSet("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.item) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1).enchantment(Enchantments.UNBREAKING, 3) }
         val COPPER = toolSet("copper", "銅", ToolMaterialCard.COPPER, { Items.COPPER_INGOT }) { it }
         val GLASS = toolSet("glass", "ガラス", ToolMaterialCard.GLASS, { Items.GLASS }) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
         val FLINT = toolSet("flint", "火打石", ToolMaterialCard.FLINT, { Items.FLINT }) { it.enchantment(Enchantments.FIRE_ASPECT) }

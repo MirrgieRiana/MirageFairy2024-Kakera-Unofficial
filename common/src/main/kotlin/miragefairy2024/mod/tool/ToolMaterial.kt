@@ -35,7 +35,7 @@ enum class FairyToolMaterials(
     NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 3.5F, 25, { Items.NETHER_STAR.toIngredient() }),
 
     MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 2.0F, 3, { MaterialCard.MAGNETITE.item().toIngredient() }),
-    BISMUTH(Tiers.IRON, 16, 4.0F, 1.0F, 1.5F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
+    BISMUTH(Tiers.IRON, 4, 4.0F, 1.0F, 1.5F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
     FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 1.5F, 20, { MaterialCard.FLUORITE.item().toIngredient() }),
     TOPAZ(Tiers.DIAMOND, 1285, 6.5F, 4.0F, 1.5F, 12, { MaterialCard.TOPAZ.item().toIngredient() }),
     FLINT(Tiers.STONE, 150, 3.5F, 1.5F, 1.0F, 6, { Items.FLINT.toIngredient() }),
