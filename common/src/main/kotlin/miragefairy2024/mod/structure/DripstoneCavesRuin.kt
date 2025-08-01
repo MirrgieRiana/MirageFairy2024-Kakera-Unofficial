@@ -24,32 +24,32 @@ import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerStructureTagGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import net.minecraft.core.HolderSet
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.worldgen.Pools
+import net.minecraft.util.random.WeightedRandomList
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.biome.Biomes
+import net.minecraft.world.level.biome.MobSpawnSettings
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.VerticalAnchor
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement
-import net.minecraft.core.HolderSet as RegistryEntryList
-import net.minecraft.data.worldgen.Pools as StructurePools
-import net.minecraft.util.random.WeightedRandomList as Pool
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
-import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
-import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
-import net.minecraft.world.level.levelgen.heightproviders.UniformHeight as UniformHeightProvider
-import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride as StructureSpawns
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType as SpreadType
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest as AlwaysTrueRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest as BlockMatchRuleTest
-import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
-import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest as RandomBlockMatchRuleTest
-import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction as EnchantRandomlyLootFunction
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool
+import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.RandomBlockMatchTest
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 
 object DripstoneCavesRuinCard {
     val identifier = MirageFairy2024.identifier("dripstone_caves_ruin")
@@ -76,10 +76,10 @@ object DripstoneCavesRuinCard {
         registerChestLootTableGeneration(Registries.LOOT_TABLE with "chests/" * identifier * "/chest_books") { registries ->
             LootTable(
                 LootPool(
-                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyLootFunction.randomApplicableEnchantment(registries)),
-                    ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(1.0F, 10.0F))),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(10).apply(EnchantRandomlyFunction.randomApplicableEnchantment(registries)),
+                    ItemLootPoolEntry(Items.BOOK).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 10.0F))),
                 ) {
-                    setRolls(UniformLootNumberProvider.between(5.0F, 15.0F))
+                    setRolls(UniformGenerator.between(5.0F, 15.0F))
                 },
             )
         }
@@ -115,113 +115,113 @@ object DripstoneCavesRuinCard {
         val processorListKey = registerDynamicGeneration(Registries.PROCESSOR_LIST, identifier) {
             StructureProcessorList(
                 RuleStructureProcessor(
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.GRANITE.defaultBlockState()),
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.LANTERN, 0.8F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()),
-                    StructureProcessorRule(RandomBlockMatchRuleTest(Blocks.REDSTONE_TORCH, 0.05F), AlwaysTrueRuleTest.INSTANCE, XarpaLuminariaCard.block().withAge(3)),
-                    StructureProcessorRule(BlockMatchRuleTest(Blocks.REDSTONE_TORCH), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()),
+                    ProcessorRule(RandomBlockMatchTest(Blocks.POLISHED_GRANITE, 0.1F), AlwaysTrueTest.INSTANCE, Blocks.GRANITE.defaultBlockState()),
+                    ProcessorRule(RandomBlockMatchTest(Blocks.LANTERN, 0.8F), AlwaysTrueTest.INSTANCE, Blocks.AIR.defaultBlockState()),
+                    ProcessorRule(RandomBlockMatchTest(Blocks.REDSTONE_TORCH, 0.05F), AlwaysTrueTest.INSTANCE, XarpaLuminariaCard.block().withAge(3)),
+                    ProcessorRule(BlockMatchTest(Blocks.REDSTONE_TORCH), AlwaysTrueTest.INSTANCE, Blocks.AIR.defaultBlockState()),
                 ),
                 RuleStructureProcessor(
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.AIR), Blocks.AIR.defaultBlockState()),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultBlockState()),
-                    StructureProcessorRule(AlwaysTrueRuleTest.INSTANCE, BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()),
+                    ProcessorRule(AlwaysTrueTest.INSTANCE, BlockMatchTest(Blocks.AIR), Blocks.AIR.defaultBlockState()),
+                    ProcessorRule(AlwaysTrueTest.INSTANCE, BlockMatchTest(Blocks.WATER), Blocks.WATER.defaultBlockState()),
+                    ProcessorRule(AlwaysTrueTest.INSTANCE, BlockMatchTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()),
                 ),
             )
         }
 
         val mainTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/main") {
             StructurePool(
-                StructurePools.EMPTY,
-                SinglePoolElement(mainElement, processorListKey, StructurePool.Projection.RIGID) to 1,
+                Pools.EMPTY,
+                SinglePoolElement(mainElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
             )
         }
 
         val roadEndTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/road_end") {
             StructurePool(
-                StructurePools.EMPTY,
-                SinglePoolElement(roadEndElement, processorListKey, StructurePool.Projection.RIGID) to 1,
+                Pools.EMPTY,
+                SinglePoolElement(roadEndElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
             )
         }
-        val roadTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/road") {
+        registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/road") {
             StructurePool(
                 roadEndTemplatePoolKey,
-                SinglePoolElement(roadStraightElement, processorListKey, StructurePool.Projection.RIGID) to 40,
-                SinglePoolElement(roadStraight2Element, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(roadStraight3Element, processorListKey, StructurePool.Projection.RIGID) to 5,
-                SinglePoolElement(roadRoomsElement, processorListKey, StructurePool.Projection.RIGID) to 40,
-                SinglePoolElement(roadCrossElement, processorListKey, StructurePool.Projection.RIGID) to 1,
-                SinglePoolElement(roadStairsElement, processorListKey, StructurePool.Projection.RIGID) to 3,
-                SinglePoolElement(roadEndElement, processorListKey, StructurePool.Projection.RIGID) to 5,
-                SinglePoolElement(roadMobs, processorListKey, StructurePool.Projection.RIGID) to 10,
+                SinglePoolElement(roadStraightElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 40,
+                SinglePoolElement(roadStraight2Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(roadStraight3Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 5,
+                SinglePoolElement(roadRoomsElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 40,
+                SinglePoolElement(roadCrossElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
+                SinglePoolElement(roadStairsElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 3,
+                SinglePoolElement(roadEndElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 5,
+                SinglePoolElement(roadMobs, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
             )
         }
-        val stairsTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/stairs") {
+        registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/stairs") {
             StructurePool(
-                StructurePools.EMPTY,
-                SinglePoolElement(stairsTopElement, processorListKey, StructurePool.Projection.RIGID) to 1,
-                SinglePoolElement(stairsMiddleElement, processorListKey, StructurePool.Projection.RIGID) to 2,
-                SinglePoolElement(stairsBottomElement, processorListKey, StructurePool.Projection.RIGID) to 1,
+                Pools.EMPTY,
+                SinglePoolElement(stairsTopElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
+                SinglePoolElement(stairsMiddleElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 2,
+                SinglePoolElement(stairsBottomElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
             )
         }
         val roomEndTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/room_end") {
             StructurePool(
-                StructurePools.EMPTY,
-                SinglePoolElement(roomEndElement, processorListKey, StructurePool.Projection.RIGID) to 1,
+                Pools.EMPTY,
+                SinglePoolElement(roomEndElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
             )
         }
-        val roomTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/room") {
+        registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/room") {
             StructurePool(
                 roomEndTemplatePoolKey,
-                SinglePoolElement(roomConferenceElement, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(roomConference2Element, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(roomResidenceElement, processorListKey, StructurePool.Projection.RIGID) to 20,
-                SinglePoolElement(roomSpawnerElement, processorListKey, StructurePool.Projection.RIGID) to 2,
-                SinglePoolElement(roomPrisonElement, processorListKey, StructurePool.Projection.RIGID) to 5,
-                SinglePoolElement(roomPrison2Element, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(roomPrison3Element, processorListKey, StructurePool.Projection.RIGID) to 2,
-                SinglePoolElement(roomLibraryElement, processorListKey, StructurePool.Projection.RIGID) to 2,
-                SinglePoolElement(roomLaboratoryElement, processorListKey, StructurePool.Projection.RIGID) to 5,
-                SinglePoolElement(roomFarmElement, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(roomFarm2Element, processorListKey, StructurePool.Projection.RIGID) to 5,
-                SinglePoolElement(roomEmptyElement, processorListKey, StructurePool.Projection.RIGID) to 1,
-                SinglePoolElement(roomEndElement, processorListKey, StructurePool.Projection.RIGID) to 2,
+                SinglePoolElement(roomConferenceElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(roomConference2Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(roomResidenceElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 20,
+                SinglePoolElement(roomSpawnerElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 2,
+                SinglePoolElement(roomPrisonElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 5,
+                SinglePoolElement(roomPrison2Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(roomPrison3Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 2,
+                SinglePoolElement(roomLibraryElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 2,
+                SinglePoolElement(roomLaboratoryElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 5,
+                SinglePoolElement(roomFarmElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(roomFarm2Element, processorListKey, StructureTemplatePool.Projection.RIGID) to 5,
+                SinglePoolElement(roomEmptyElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 1,
+                SinglePoolElement(roomEndElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 2,
             )
         }
-        val mobTemplatePoolKey = registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/mob") {
+        registerDynamicGeneration(Registries.TEMPLATE_POOL, identifier * "/mob") {
             StructurePool(
-                StructurePools.EMPTY,
-                SinglePoolElement(mobElement, processorListKey, StructurePool.Projection.RIGID) to 10,
-                SinglePoolElement(mobEmptyElement, processorListKey, StructurePool.Projection.RIGID) to 3,
+                Pools.EMPTY,
+                SinglePoolElement(mobElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 10,
+                SinglePoolElement(mobEmptyElement, processorListKey, StructureTemplatePool.Projection.RIGID) to 3,
             )
         }
 
         val structureKey = registerDynamicGeneration(Registries.STRUCTURE, identifier) {
             UnlimitedJigsawStructure(
                 config = Structure.StructureSettings(
-                    RegistryEntryList.direct(Registries.BIOME[BiomeKeys.DRIPSTONE_CAVES]),
+                    HolderSet.direct(Registries.BIOME[Biomes.DRIPSTONE_CAVES]),
                     mapOf(
-                        SpawnGroup.MONSTER to StructureSpawns(
-                            StructureSpawns.BoundingBoxType.PIECE,
-                            Pool.create(
-                                SpawnSettings.SpawnerData(ChaosCubeCard.entityType(), 10, 1, 4),
+                        MobCategory.MONSTER to StructureSpawnOverride(
+                            StructureSpawnOverride.BoundingBoxType.PIECE,
+                            WeightedRandomList.create(
+                                MobSpawnSettings.SpawnerData(ChaosCubeCard.entityType(), 10, 1, 4),
                             )
                         ),
                     ),
                     GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
-                    StructureTerrainAdaptation.BURY,
+                    TerrainAdjustment.BURY,
                 ),
                 startPool = Registries.TEMPLATE_POOL[mainTemplatePoolKey],
                 size = 12,
-                startHeight = UniformHeightProvider.of(YOffset.absolute(-40), YOffset.absolute(20)),
+                startHeight = UniformHeight.of(VerticalAnchor.absolute(-40), VerticalAnchor.absolute(20)),
                 useExpansionHack = false,
             )
         }
 
-        val structureSetKey = registerDynamicGeneration(Registries.STRUCTURE_SET, identifier) {
+        registerDynamicGeneration(Registries.STRUCTURE_SET, identifier) {
             StructureSet(
                 listOf(
                     StructureSet.StructureSelectionEntry(Registries.STRUCTURE[structureKey], 1),
                 ),
-                RandomSpreadStructurePlacement(42, 12, SpreadType.LINEAR, 645172983),
+                RandomSpreadStructurePlacement(42, 12, RandomSpreadType.LINEAR, 645172983),
             )
         }
 

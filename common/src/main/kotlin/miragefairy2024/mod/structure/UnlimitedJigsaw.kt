@@ -9,23 +9,23 @@ import miragefairy2024.ModContext
 import miragefairy2024.util.Registration
 import miragefairy2024.util.register
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.levelgen.WorldGenerationContext
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureType
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings
 import java.util.Optional
-import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.world.level.levelgen.WorldGenerationContext as HeightContext
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment as StructureTerrainAdaptation
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement as StructurePoolBasedGenerator
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
 
 context(ModContext)
 fun initUnlimitedJigsaw() {
@@ -41,7 +41,7 @@ object UnlimitedJigsawCard {
 
 class UnlimitedJigsawStructure(
     config: StructureSettings,
-    private val startPool: RegistryEntry<StructurePool>,
+    private val startPool: Holder<StructureTemplatePool>,
     private val startJigsawName: Optional<ResourceLocation> = Optional.empty(),
     private val size: Int,
     private val startHeight: HeightProvider,
@@ -56,7 +56,7 @@ class UnlimitedJigsawStructure(
         val CODEC: MapCodec<UnlimitedJigsawStructure> = RecordCodecBuilder.mapCodec<UnlimitedJigsawStructure> { instance ->
             instance.group(
                 settingsCodec(instance),
-                StructurePool.CODEC.fieldOf("start_pool").forGetter { it.startPool },
+                StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter { it.startPool },
                 ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter { it.startJigsawName },
                 Codec.intRange(0, 256).fieldOf("size").forGetter { it.size },
                 HeightProvider.CODEC.fieldOf("start_height").forGetter { it.startHeight },
@@ -71,8 +71,8 @@ class UnlimitedJigsawStructure(
 
         private fun validate(structure: UnlimitedJigsawStructure): DataResult<UnlimitedJigsawStructure> {
             val var10000 = when (structure.terrainAdaptation()) {
-                StructureTerrainAdaptation.NONE -> 0
-                StructureTerrainAdaptation.BURY, StructureTerrainAdaptation.BEARD_THIN, StructureTerrainAdaptation.BEARD_BOX -> 12
+                TerrainAdjustment.NONE -> 0
+                TerrainAdjustment.BURY, TerrainAdjustment.BEARD_THIN, TerrainAdjustment.BEARD_BOX -> 12
                 else -> throw IncompatibleClassChangeError()
             }
             return if (structure.maxDistanceFromCenter + var10000 > 128) {
@@ -85,9 +85,9 @@ class UnlimitedJigsawStructure(
 
     override fun findGenerationPoint(context: GenerationContext): Optional<GenerationStub> {
         val chunkPos = context.chunkPos()
-        val i = startHeight.sample(context.random(), HeightContext(context.chunkGenerator(), context.heightAccessor()))
+        val i = startHeight.sample(context.random(), WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()))
         val blockPos = BlockPos(chunkPos.minBlockX, i, chunkPos.minBlockZ)
-        return StructurePoolBasedGenerator.addPieces(
+        return JigsawPlacement.addPieces(
             context,
             startPool,
             startJigsawName,
