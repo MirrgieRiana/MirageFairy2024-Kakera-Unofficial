@@ -8,62 +8,62 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
+import net.minecraft.core.HolderSet
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.util.random.SimpleWeightedRandomList
+import net.minecraft.util.valueproviders.ConstantInt
 import net.minecraft.util.valueproviders.IntProvider
+import net.minecraft.util.valueproviders.WeightedListInt
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.VerticalAnchor
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
+import net.minecraft.world.level.levelgen.placement.BiomeFilter
+import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement
+import net.minecraft.world.level.levelgen.placement.CountPlacement
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
 import net.minecraft.world.level.levelgen.placement.PlacementModifier
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement
+import net.minecraft.world.level.levelgen.placement.RarityFilter
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
 import java.util.function.Predicate
 import kotlin.math.roundToInt
-import net.minecraft.core.Holder as RegistryEntry
-import net.minecraft.core.HolderSet as RegistryEntryList
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.util.random.SimpleWeightedRandomList as DataPool
-import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
-import net.minecraft.util.valueproviders.WeightedListInt as WeightedListIntProvider
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.level.levelgen.VerticalAnchor as YOffset
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
-import net.minecraft.world.level.levelgen.placement.BiomeFilter as BiomePlacementModifier
-import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement as CountMultilayerPlacementModifier
-import net.minecraft.world.level.levelgen.placement.CountPlacement as CountPlacementModifier
-import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement as EnvironmentScanPlacementModifier
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement as HeightRangePlacementModifier
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement as SquarePlacementModifier
-import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement as RandomOffsetPlacementModifier
-import net.minecraft.world.level.levelgen.placement.RarityFilter as RarityFilterPlacementModifier
-import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter as SurfaceWaterDepthFilterPlacementModifier
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool as StructurePool
-import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule as StructureProcessorRule
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor as RuleStructureProcessor
 
-infix fun <C : FeatureConfig, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
-infix fun RegistryEntry<ConfiguredFeature<*, *>>.with(placementModifiers: List<PlacementModifier>) = PlacedFeature(this, placementModifiers)
+infix fun <C : FeatureConfiguration, F : Feature<C>> F.with(config: C): ConfiguredFeature<C, F> = ConfiguredFeature(this, config)
+infix fun Holder<ConfiguredFeature<*, *>>.with(placementModifiers: List<PlacementModifier>) = PlacedFeature(this, placementModifiers)
 
 
 // Init
 
 context(BootstrapContext<*>)
-operator fun <T> ResourceKey<Registry<T>>.get(key: ResourceKey<T>): RegistryEntry<T> {
+operator fun <T> ResourceKey<Registry<T>>.get(key: ResourceKey<T>): Holder<T> {
     return this@BootstrapContext.lookup(this).getOrThrow(key)
 }
 
 context(BootstrapContext<*>)
-operator fun <T> ResourceKey<Registry<T>>.get(key: TagKey<T>): RegistryEntryList.Named<T> {
+operator fun <T> ResourceKey<Registry<T>>.get(key: TagKey<T>): HolderSet.Named<T> {
     return this@BootstrapContext.lookup(this).getOrThrow(key)
 }
 
@@ -93,7 +93,7 @@ fun ResourceKey<PlacedFeature>.registerFeature(step: GenerationStep.Decoration, 
 }
 
 context(ModContext)
-fun (() -> EntityType<*>).registerSpawn(spawnGroup: SpawnGroup, weight: Int, minGroupSize: Int, maxGroupSize: Int, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
+fun (() -> EntityType<*>).registerSpawn(spawnGroup: MobCategory, weight: Int, minGroupSize: Int, maxGroupSize: Int, biomeSelectorCreator: BiomeSelectorScope.() -> Predicate<BiomeSelectionContext>) = ModEvents.onInitialize {
     BiomeModifications.addSpawn(biomeSelectorCreator(BiomeSelectorScope), spawnGroup, this(), weight, minGroupSize, maxGroupSize)
 }
 
@@ -125,34 +125,34 @@ fun randomIntCount(count: Double): List<PlacementModifier> {
     val rate = ((count - min.toDouble()) * 100).roundToInt()
     if (rate == 0) return count(min)
     if (rate == 100) return count(min + 1)
-    val dataPool = DataPool.builder<IntProvider>()
-        .add(ConstantIntProvider.of(min), 100 - rate)
-        .add(ConstantIntProvider.of(min + 1), rate)
+    val dataPool = SimpleWeightedRandomList.builder<IntProvider>()
+        .add(ConstantInt.of(min), 100 - rate)
+        .add(ConstantInt.of(min + 1), rate)
         .build()
-    val intProvider = WeightedListIntProvider(dataPool)
-    return listOf(CountPlacementModifier.of(intProvider))
+    val intProvider = WeightedListInt(dataPool)
+    return listOf(CountPlacement.of(intProvider))
 }
 
 context(PlacementModifiersScope)
-fun count(count: Int): List<PlacementModifier> = listOf(CountPlacementModifier.of(count))
+fun count(count: Int): List<PlacementModifier> = listOf(CountPlacement.of(count))
 
 context(PlacementModifiersScope)
-fun per(chance: Int): List<PlacementModifier> = listOf(RarityFilterPlacementModifier.onAverageOnceEvery(chance))
+fun per(chance: Int): List<PlacementModifier> = listOf(RarityFilter.onAverageOnceEvery(chance))
 
 context(PlacementModifiersScope)
 fun tree(saplingBlock: Block): List<PlacementModifier> = listOf(
-    SquarePlacementModifier.spread(),
-    SurfaceWaterDepthFilterPlacementModifier.forMaxDepth(0),
-    PlacedFeatures.HEIGHTMAP_OCEAN_FLOOR,
-    BiomePlacementModifier.biome(),
-    PlacedFeatures.filteredByBlockSurvival(saplingBlock),
+    InSquarePlacement.spread(),
+    SurfaceWaterDepthFilter.forMaxDepth(0),
+    PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
+    BiomeFilter.biome(),
+    PlacementUtils.filteredByBlockSurvival(saplingBlock),
 )
 
 context(PlacementModifiersScope)
 fun uniformOre(minOffset: Int, maxOffset: Int): List<PlacementModifier> = listOf(
-    SquarePlacementModifier.spread(),
-    HeightRangePlacementModifier.uniform(YOffset.absolute(minOffset), YOffset.absolute(maxOffset)),
-    BiomePlacementModifier.biome(),
+    InSquarePlacement.spread(),
+    HeightRangePlacement.uniform(VerticalAnchor.absolute(minOffset), VerticalAnchor.absolute(maxOffset)),
+    BiomeFilter.biome(),
 )
 
 fun interface HorizontalPlacementType {
@@ -167,12 +167,12 @@ val none
 /** 半径8未満のFeatureまで可能。 */
 context(PlacementModifiersScope)
 val square
-    get() = HorizontalPlacementType { listOf(SquarePlacementModifier.spread()) }
+    get() = HorizontalPlacementType { listOf(InSquarePlacement.spread()) }
 
 /** 半径16未満のFeatureまで可能。 */
 context(PlacementModifiersScope)
 val center
-    get() = HorizontalPlacementType { listOf(RandomOffsetPlacementModifier.horizontal(ConstantIntProvider.of(8))) }
+    get() = HorizontalPlacementType { listOf(RandomOffsetPlacement.horizontal(ConstantInt.of(8))) }
 
 fun interface VerticalPlacementType {
     fun getPlacementModifiers(): List<PlacementModifier>
@@ -180,28 +180,28 @@ fun interface VerticalPlacementType {
 
 context(PlacementModifiersScope)
 val surface
-    get() = VerticalPlacementType { listOf(PlacedFeatures.HEIGHTMAP) }
+    get() = VerticalPlacementType { listOf(PlacementUtils.HEIGHTMAP) }
 
 context(PlacementModifiersScope)
 val nether
-    get() = VerticalPlacementType { listOf(CountMultilayerPlacementModifier.of(1)) }
+    get() = VerticalPlacementType { listOf(CountOnEveryLayerPlacement.of(1)) }
 
 context(PlacementModifiersScope)
 val underground
     get() = VerticalPlacementType {
         listOf(
-            PlacedFeatures.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-            EnvironmentScanPlacementModifier.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-            RandomOffsetPlacementModifier.vertical(ConstantIntProvider.of(1)),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
         )
     }
 
 context(PlacementModifiersScope)
 fun rangedNether(minY: Int, maxY: Int) = VerticalPlacementType {
     listOf(
-        HeightRangePlacementModifier.uniform(YOffset.absolute(minY), YOffset.absolute(maxY)),
-        EnvironmentScanPlacementModifier.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-        RandomOffsetPlacementModifier.vertical(ConstantIntProvider.of(1)),
+        HeightRangePlacement.uniform(VerticalAnchor.absolute(minY), VerticalAnchor.absolute(maxY)),
+        EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+        RandomOffsetPlacement.vertical(ConstantInt.of(1)),
     )
 }
 
@@ -210,7 +210,7 @@ fun flower(horizontal: HorizontalPlacementType, vertical: VerticalPlacementType)
     return listOf(
         *horizontal.getPlacementModifiers().toTypedArray(),
         *vertical.getPlacementModifiers().toTypedArray(),
-        BiomePlacementModifier.biome(),
+        BiomeFilter.biome(),
     )
 }
 
@@ -218,8 +218,8 @@ fun flower(horizontal: HorizontalPlacementType, vertical: VerticalPlacementType)
 // Structure
 
 context(BootstrapContext<*>)
-fun RuleStructureProcessor(vararg rules: StructureProcessorRule): RuleStructureProcessor {
-    return RuleStructureProcessor(rules.toList())
+fun RuleStructureProcessor(vararg rules: ProcessorRule): RuleProcessor {
+    return RuleProcessor(rules.toList())
 }
 
 context(BootstrapContext<*>)
@@ -228,11 +228,11 @@ fun StructureProcessorList(vararg processors: StructureProcessor): StructureProc
 }
 
 context(BootstrapContext<*>)
-fun SinglePoolElement(location: ResourceLocation, processorsKey: ResourceKey<StructureProcessorList>, projection: StructurePool.Projection): StructurePoolElement {
+fun SinglePoolElement(location: ResourceLocation, processorsKey: ResourceKey<StructureProcessorList>, projection: StructureTemplatePool.Projection): StructurePoolElement {
     return StructurePoolElement.single(location.string, Registries.PROCESSOR_LIST[processorsKey]).apply(projection)
 }
 
 context(BootstrapContext<*>)
-fun StructurePool(fallbackKey: ResourceKey<StructurePool>, vararg elements: Pair<StructurePoolElement, Int>): StructurePool {
-    return StructurePool(Registries.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
+fun StructurePool(fallbackKey: ResourceKey<StructureTemplatePool>, vararg elements: Pair<StructurePoolElement, Int>): StructureTemplatePool {
+    return StructureTemplatePool(Registries.TEMPLATE_POOL[fallbackKey], elements.map { com.mojang.datafixers.util.Pair.of(it.first, it.second) })
 }
