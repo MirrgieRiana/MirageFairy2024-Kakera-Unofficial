@@ -50,7 +50,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
     override fun isRandomlyTicking(state: BlockState) = true
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) {
         if (random.nextInt(100) == 0) {
-            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(FACING, state.getValue(FACING)), Block.UPDATE_ALL)
+            world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(FACING, state.getValue(FACING)), UPDATE_ALL)
         }
     }
 }

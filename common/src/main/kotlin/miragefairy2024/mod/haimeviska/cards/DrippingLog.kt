@@ -86,7 +86,7 @@ class DrippingHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingB
         val direction = state.getValue(FACING)
 
         // 消費
-        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL or Block.UPDATE_IMMEDIATE)
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
 
         fun drop(item: Item, count: Double) {
             val actualCount = level.random.randomInt(count) atMost item.defaultMaxStackSize

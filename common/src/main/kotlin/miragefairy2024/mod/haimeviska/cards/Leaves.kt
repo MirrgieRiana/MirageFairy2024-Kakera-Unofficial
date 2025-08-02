@@ -120,7 +120,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         super.randomTick(state, world, pos, random)
         if (!state.getValue(CHARGED)) {
             if (random.randomBoolean(15, world.lightProxy.getLightLevel(pos))) {
-                world.setBlock(pos, state.setValue(CHARGED, true), Block.UPDATE_CLIENTS)
+                world.setBlock(pos, state.setValue(CHARGED, true), UPDATE_CLIENTS)
             }
         }
     }
