@@ -1,0 +1,38 @@
+{
+  "parent": "miragefairy2024:diamond_luminaria",
+  "criteria": {
+    "has_topaz_luminaria_bulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:topaz_luminaria_bulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.topaz_luminaria.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:topaz_luminaria_icon"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.topaz_luminaria.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_topaz_luminaria_bulb"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_100"
+    ]
+  },
+  "sends_telemetry_event": true
+}

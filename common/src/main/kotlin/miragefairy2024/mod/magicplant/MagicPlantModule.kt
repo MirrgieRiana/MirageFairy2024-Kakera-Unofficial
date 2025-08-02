@@ -16,6 +16,7 @@ import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.SarraceniaCard
+import miragefairy2024.mod.magicplant.contents.magicplants.TopazLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.XarpaLuminariaCard
 import miragefairy2024.util.Registration
@@ -38,6 +39,7 @@ val magicPlantCards: List<MagicPlantCard<*>> = listOf(
     VeropedaCard,
     SarraceniaCard,
     DiamondLuminariaCard,
+    TopazLuminariaCard,
     EmeraldLuminariaCard,
     XarpaLuminariaCard,
     ProminariaCard,
