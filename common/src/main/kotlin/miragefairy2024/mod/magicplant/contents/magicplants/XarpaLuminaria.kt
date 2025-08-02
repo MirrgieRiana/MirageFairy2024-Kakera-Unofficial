@@ -40,6 +40,7 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
         TraitCard.SEEDS_PRODUCTION.trait to 0b00101000, // 種子生成
         TraitCard.RARE_PRODUCTION.trait to 0b00101000, // 希少品生成
         TraitCard.EXPERIENCE_PRODUCTION.trait to 0b00101000, // 経験値生成
+        TraitCard.CROSSBREEDING.trait to 0b00101000, // 交雑
         TraitCard.OSMOTIC_ABSORPTION.trait to 0b00101000, // 養分吸収
         TraitCard.ETHER_PREDATION.trait to 0b00101000, // エーテル捕食
         TraitCard.TREASURE_OF_XARPA.trait to 0b00101000, // シャルパの秘宝
