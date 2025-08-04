@@ -1118,7 +1118,7 @@ fun initMaterialsModule() {
         if (card.ore != null) {
             card.item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.tagNameFunction(card.ore.material.path))) }
             card.item.registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagNameFunction(card.ore.material.path))) }
-            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagNameFunction(card.ore.material.path))).registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTag)) }
+            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagNameFunction(card.ore.material.path))).registerNeoForgeItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", card.ore.shape.neoForgeTagName)) }
         }
         card.initializer(this@ModContext, card)
     }
@@ -1199,7 +1199,7 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
-enum class Shape(val tagNameFunction: (String) -> String, val neoForgeTag: String, val neoForgeTagNameFunction: (String) -> String) {
+enum class Shape(val tagNameFunction: (String) -> String, val neoForgeTagName: String, val neoForgeTagNameFunction: (String) -> String) {
     TINY_DUST({ "${it}_tiny_dusts" }, "tiny_dusts", { "tiny_dusts/$it" }),
     DUST({ "${it}_dusts" }, "dusts", { "dusts/$it" }),
     NUGGET({ "${it}_nuggets" }, "nuggets", { "nuggets/$it" }),
