@@ -443,7 +443,7 @@ class MaterialCard(
             ) on LUMINITE.item
         }
         val CALCULITE: MaterialCard = !MaterialCard(
-            "calculite", "Calculite", "理晶石", // TODO ポエム: An of The Superphysical Society of Xarpa
+            "calculite", "Calculite", "理天石", // TODO ポエム: An of The Superphysical Society of Xarpa
             PoemList(5).poem("Class 4 time evolution rule", "時の模様を刻む石。"), // TODO ポエム: Neutralization of anti-entropy
             ore = Ore(Shape.GEM, Material.CALCULITE),
             advancementCreator = {
@@ -452,7 +452,7 @@ class MaterialCard(
                     context = AdvancementCard.Sub { XarpaLuminariaCard.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("Edge of Chaos", "混沌の縁"),
-                    description = EnJa("Obtain Calculite from the special drop of Xarpie Luminara", "シャルピエ・ルミナーラの特殊品ドロップから理晶石を手に入れる"),
+                    description = EnJa("Obtain Calculite from the special drop of Xarpie Luminara", "シャルピエ・ルミナーラの特殊品ドロップから理天石を手に入れる"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.NORMAL,
                 )
