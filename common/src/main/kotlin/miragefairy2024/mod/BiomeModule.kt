@@ -48,7 +48,7 @@ import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
 import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
 
-val FAIRY_BIOME_TAG: TagKey<Biome> = MirageFairy2024.identifier("fairy").toBiomeTag()
+val FAIRY_BIOME_TAG = MirageFairy2024.identifier("fairy").toBiomeTag()
 
 @Suppress("unused")
 object BiomeCards {

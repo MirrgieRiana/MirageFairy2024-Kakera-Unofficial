@@ -46,7 +46,6 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.tags.TagKey
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -194,8 +193,8 @@ fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = Ab
 lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType
 lateinit var HAIMEVISKA_WOOD_TYPE: WoodType
 
-val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("haimeviska_logs").toBlockTag()
-val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("haimeviska_logs").toItemTag()
+val HAIMEVISKA_LOGS_BLOCK_TAG = MirageFairy2024.identifier("haimeviska_logs").toBlockTag()
+val HAIMEVISKA_LOGS_ITEM_TAG = MirageFairy2024.identifier("haimeviska_logs").toItemTag()
 
 context(ModContext)
 fun initHaimeviskaBlocks() {

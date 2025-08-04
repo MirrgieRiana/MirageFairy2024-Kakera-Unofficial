@@ -8,9 +8,7 @@ import miragefairy2024.util.toBlockTag
 import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import net.minecraft.core.registries.Registries
-import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrElse
 
@@ -19,7 +17,7 @@ enum class BlockTagCard(path: String) {
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Block> = identifier.toBlockTag()
+    val tag = identifier.toBlockTag()
 }
 
 context(ModContext)

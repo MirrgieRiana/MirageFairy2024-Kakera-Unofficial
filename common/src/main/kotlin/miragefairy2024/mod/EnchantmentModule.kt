@@ -31,9 +31,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.phys.AABB
 
-val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("magic_weapon").toItemTag()
-val SCYTHE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("scythe").toItemTag()
-val NONE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("none").toItemTag()
+val MAGIC_WEAPON_ITEM_TAG = MirageFairy2024.identifier("magic_weapon").toItemTag()
+val SCYTHE_ITEM_TAG = MirageFairy2024.identifier("scythe").toItemTag()
+val NONE_ITEM_TAG = MirageFairy2024.identifier("none").toItemTag()
 
 enum class EnchantmentRarity(val weight: Int, val anvilCost: Int) {
     COMMON(10, 1),

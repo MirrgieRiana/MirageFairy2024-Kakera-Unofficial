@@ -18,7 +18,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
@@ -27,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
 
-val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("local_vacuum_decay_resistant").toBlockTag()
+val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG = MirageFairy2024.identifier("local_vacuum_decay_resistant").toBlockTag()
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {

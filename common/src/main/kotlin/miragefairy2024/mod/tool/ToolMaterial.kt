@@ -117,7 +117,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Item> = identifier.toItemTag()
+    val tag = identifier.toItemTag()
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.tool_material.$path" }, enName, jaName)
 }
 

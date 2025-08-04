@@ -30,7 +30,6 @@ import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.Pools
-import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.levelgen.GenerationStep
@@ -62,7 +61,7 @@ object WeatheredAncientRemnantsCard {
     val key = Registries.STRUCTURE with identifier
     val translation = Translation({ identifier.toLanguageKey("structure") }, "Weathered Ancient Remnants", "風化した旧世代の遺構")
 
-    val onMapsTag: TagKey<Structure> = MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps").toStructureTag()
+    val onMapsTag = MirageFairy2024.identifier("on_weathered_ancient_remnants_archaeology_maps").toStructureTag()
 
     val advancement = AdvancementCard(
         identifier = identifier,

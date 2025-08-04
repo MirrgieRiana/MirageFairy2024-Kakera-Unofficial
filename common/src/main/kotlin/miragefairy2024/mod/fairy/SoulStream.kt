@@ -31,13 +31,11 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.SimpleContainer as SimpleInventory
 import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
@@ -45,7 +43,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = MirageFairy2024.identifier("soul_stream_containable").toItemTag()
+val SOUL_STREAM_CONTAINABLE_TAG = MirageFairy2024.identifier("soul_stream_containable").toItemTag()
 
 context(ModContext)
 fun initSoulStream() {
