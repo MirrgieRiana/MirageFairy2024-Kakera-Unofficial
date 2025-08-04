@@ -6,8 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
 import miragefairy2024.util.Channel
-import miragefairy2024.util.ITEMS_CODEC
-import miragefairy2024.util.ITEMS_STREAM_CODEC
+import miragefairy2024.util.ItemStacks
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.dummyUnitStreamCodec
@@ -92,8 +91,11 @@ class SoulStream() : SimpleInventory(SLOT_COUNT) {
         const val SLOT_COUNT = 9 * 31
         const val PASSIVE_SKILL_SLOT_COUNT = 9
 
-        val CODEC: Codec<SoulStream> = ITEMS_CODEC.xmap(::SoulStream, SoulStream::items)
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SoulStream> = ITEMS_STREAM_CODEC.map(::SoulStream, SoulStream::items)
+        val CODEC: Codec<SoulStream> = ItemStacks.CODEC.xmap(::fromItemStacks, ::toItemStacks)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SoulStream> = ItemStacks.STREAM_CODEC.map(::fromItemStacks, ::toItemStacks)
+
+        fun fromItemStacks(itemStacks: ItemStacks) = SoulStream(itemStacks.itemStacks)
+        fun toItemStacks(soulStream: SoulStream) = ItemStacks(soulStream.items)
     }
 
     constructor(items: List<ItemStack>) : this() {
