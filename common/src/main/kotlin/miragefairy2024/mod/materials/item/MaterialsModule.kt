@@ -1198,18 +1198,18 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
-val Ore.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.shape.orePathFunction(this.material.path)).toItemTag()
+val Ore.tag get() = ResourceLocation.fromNamespaceAndPath("c", "${this.shape.path}/${this.material.path}").toItemTag()
 val Ore.ingredient get() = this.tag.toIngredient()
 fun Tag(shape: Shape, material: Material) = Ore(shape, material).tag
 fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
 
-enum class Shape(val path: String, val orePathFunction: (String) -> String) {
-    TINY_DUST("tiny_dusts", { "tiny_dusts/$it" }),
-    DUST("dusts", { "dusts/$it" }),
-    NUGGET("nuggets", { "nuggets/$it" }),
-    INGOT("ingots", { "ingots/$it" }),
-    ROD("rods", { "rods/$it" }),
-    GEM("gems", { "gems/$it" }),
+enum class Shape(val path: String) {
+    TINY_DUST("tiny_dusts"),
+    DUST("dusts"),
+    NUGGET("nuggets"),
+    INGOT("ingots"),
+    ROD("rods"),
+    GEM("gems"),
 }
 
 val Shape.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toItemTag()
