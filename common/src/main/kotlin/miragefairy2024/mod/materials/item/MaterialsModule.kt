@@ -1214,6 +1214,22 @@ enum class Shape(val tagNameFunction: (String) -> String, val neoForgeTagName: S
 val Shape.neoForgeTag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.neoForgeTagName))
 
 enum class Material(val path: String) {
+    COPPER("copper"),
+    IRON("iron"),
+    GOLD("gold"),
+    NETHERITE("netherite"),
+
+    AMETHYST("amethyst"),
+    QUARTZ("quartz"),
+    DIAMOND("diamond"),
+    EMERALD("emerald"),
+
+    COAL("coal"),
+    LAPIS("lapis"),
+    PRISMARINE("prismarine"),
+    REDSTONE("redstone"),
+    GLOWSTONE("glowstone"),
+
     XARPITE("xarpite"),
     MIRANAGITE("miranagite"),
     CHAOS_STONE("chaos_stone"),
