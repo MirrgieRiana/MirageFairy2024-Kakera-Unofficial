@@ -106,6 +106,11 @@ enum class BagCard(
         )
     }
 
+    init {
+        /** @see ItemContainerContents.CODEC */
+        check(inventoryWidth * inventoryHeight <= 256) { "see ItemContainerContents.CODEC" }
+    }
+
     val identifier = MirageFairy2024.identifier(path)
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BagItem(this, Item.Properties().stacksTo(1)) }
     val inventorySize = inventoryWidth * inventoryHeight
