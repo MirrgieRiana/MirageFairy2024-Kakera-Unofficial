@@ -12,6 +12,7 @@ import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.string
 import miragefairy2024.util.times
+import miragefairy2024.util.toTag
 import miragefairy2024.util.with
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -27,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.data.models.model.TextureSlot as TextureKey
 import net.minecraft.server.level.ServerLevel as ServerWorld
 
-val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG: TagKey<Block> = TagKey.create(Registries.BLOCK, MirageFairy2024.identifier("local_vacuum_decay_resistant"))
+val LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("local_vacuum_decay_resistant").toTag(Registries.BLOCK)
 
 @Suppress("OVERRIDE_DEPRECATION")
 class LocalVacuumDecayBlock(settings: Properties) : Block(settings) {

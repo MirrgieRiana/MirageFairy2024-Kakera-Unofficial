@@ -21,6 +21,7 @@ import miragefairy2024.util.registerServerPacketReceiver
 import miragefairy2024.util.set
 import miragefairy2024.util.size
 import miragefairy2024.util.text
+import miragefairy2024.util.toTag
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
@@ -45,7 +46,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
 
-val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("soul_stream_containable"))
+val SOUL_STREAM_CONTAINABLE_TAG: TagKey<Item> = MirageFairy2024.identifier("soul_stream_containable").toTag(Registries.ITEM)
 
 context(ModContext)
 fun initSoulStream() {

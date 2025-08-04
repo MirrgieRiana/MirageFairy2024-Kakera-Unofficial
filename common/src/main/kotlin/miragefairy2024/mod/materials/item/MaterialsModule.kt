@@ -70,6 +70,8 @@ import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
 import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.toIngredient
+import miragefairy2024.util.toItemTag
+import miragefairy2024.util.toTag
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -1091,7 +1093,7 @@ class MaterialCard(
     val advancement = advancementCreator?.invoke(this, identifier)
 }
 
-val MIRAGE_FLOUR_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("mirage_flour"))
+val MIRAGE_FLOUR_TAG: TagKey<Item> = MirageFairy2024.identifier("mirage_flour").toTag(Registries.ITEM)
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toLanguageKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toLanguageKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
@@ -1198,7 +1200,7 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
-val Ore.tag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.shape.orePathFunction(this.material.path)))
+val Ore.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.shape.orePathFunction(this.material.path)).toItemTag()
 val Ore.ingredient get() = this.tag.toIngredient()
 fun Tag(shape: Shape, material: Material) = Ore(shape, material).tag
 fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
@@ -1212,7 +1214,7 @@ enum class Shape(val path: String, val orePathFunction: (String) -> String) {
     GEM("gems", { "gems/$it" }),
 }
 
-val Shape.tag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.path))
+val Shape.tag: TagKey<Item> get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toTag(Registries.ITEM)
 
 enum class Material(val path: String) {
     COPPER("copper"),

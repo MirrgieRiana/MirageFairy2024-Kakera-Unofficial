@@ -16,6 +16,7 @@ import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBiomeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.toTag
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.Registry
@@ -47,7 +48,7 @@ import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
 import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
 
-val FAIRY_BIOME_TAG: TagKey<Biome> = TagKey.create(Registries.BIOME, MirageFairy2024.identifier("fairy"))
+val FAIRY_BIOME_TAG: TagKey<Biome> = MirageFairy2024.identifier("fairy").toTag(Registries.BIOME)
 
 @Suppress("unused")
 object BiomeCards {

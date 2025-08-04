@@ -13,11 +13,11 @@ import miragefairy2024.util.string
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIdentifier
+import miragefairy2024.util.toTag
 import miragefairy2024.util.with
 import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
 import net.minecraft.core.registries.Registries
-import net.minecraft.tags.TagKey
 
 object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCategoryCard.Display>("common_motif_recipe", "Common Fairy", "コモン妖精") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
@@ -27,7 +27,7 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
                 when (val type = tag.wrapper["Type"].string.get()) {
                     "always" -> AlwaysCommonMotifRecipe(motif)
                     "biome" -> BiomeCommonMotifRecipe(motif, tag.wrapper["Biome"].string.get()!!.let { Registries.BIOME with it.toIdentifier() })
-                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.let { TagKey.create(Registries.BIOME, it.toIdentifier()) })
+                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.let { it.toIdentifier().toTag(Registries.BIOME) })
                     else -> throw IllegalArgumentException(type)
                 }
             })

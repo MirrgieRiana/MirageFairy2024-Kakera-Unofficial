@@ -8,11 +8,11 @@ import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
 import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.toTag
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
-import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -35,8 +35,8 @@ class HaimeviskaPlanksFenceGateBlockCard(configuration: HaimeviskaBlockConfigura
         // タグ
         block.registerBlockTagGeneration { BlockTags.FENCE_GATES }
         item.registerItemTagGeneration { ItemTags.FENCE_GATES }
-        block.registerBlockTagGeneration { TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden")) }
-        item.registerItemTagGeneration { TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden")) }
+        block.registerBlockTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toTag(Registries.BLOCK) }
+        item.registerItemTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toTag(Registries.ITEM) }
 
     }
 }

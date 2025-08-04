@@ -30,6 +30,7 @@ import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
+import miragefairy2024.util.toTag
 import mirrg.kotlin.hydrogen.castOrNull
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
@@ -41,7 +42,6 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
-import net.minecraft.tags.TagKey
 import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
@@ -94,7 +94,7 @@ enum class BagCard(
         val DESCRIPTION1_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description1") }, "Display GUI when used", "使用時、GUIを表示")
         val DESCRIPTION2_TRANSLATION = Translation({ MirageFairy2024.identifier("bag").toLanguageKey("item", "description2") }, "Store to inventory when right-clicked", "インベントリ上で右クリックで収納")
 
-        val BAG_ITEM_TAG = TagKey.create(Registries.ITEM, MirageFairy2024.identifier("bag"))
+        val BAG_ITEM_TAG = MirageFairy2024.identifier("bag").toTag(Registries.ITEM)
 
         val bagAdvancement = AdvancementCard(
             identifier = MirageFairy2024.identifier("bag"),

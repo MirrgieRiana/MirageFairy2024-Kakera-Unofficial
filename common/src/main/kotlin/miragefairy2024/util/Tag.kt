@@ -2,6 +2,8 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
@@ -12,6 +14,9 @@ import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
+
+fun <T> ResourceLocation.toTag(registry: ResourceKey<Registry<T>>): TagKey<T> = TagKey.create(registry, this)
+
 
 context(ModContext)
 fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
