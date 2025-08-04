@@ -70,6 +70,7 @@ import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
 import miragefairy2024.util.registerSpecialRecipe
+import miragefairy2024.util.toIngredient
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -1116,8 +1117,8 @@ fun initMaterialsModule() {
             }
         }
         if (card.ore != null) {
-            card.item.registerNeoForgeItemTagGeneration { card.ore.neoForgeTag }
-            card.ore.neoForgeTag.registerNeoForgeItemTagGeneration { card.ore.shape.neoForgeTag }
+            card.item.registerNeoForgeItemTagGeneration { card.ore.tag }
+            card.ore.tag.registerNeoForgeItemTagGeneration { card.ore.shape.tag }
         }
         card.initializer(this@ModContext, card)
     }
@@ -1198,12 +1199,12 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
-val Ore.neoForgeTag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.shape.neoForgeTagNameFunction(this.material.path)))
-val Ore.ingredient: Ingredient get() = Ingredient.of(this.neoForgeTag)
-fun Tag(shape: Shape, material: Material) = Ore(shape, material).neoForgeTag
+val Ore.tag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.shape.orePathFunction(this.material.path)))
+val Ore.ingredient get() = this.tag.toIngredient()
+fun Tag(shape: Shape, material: Material) = Ore(shape, material).tag
 fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
 
-enum class Shape(val neoForgeTagName: String, val neoForgeTagNameFunction: (String) -> String) {
+enum class Shape(val path: String, val orePathFunction: (String) -> String) {
     TINY_DUST("tiny_dusts", { "tiny_dusts/$it" }),
     DUST("dusts", { "dusts/$it" }),
     NUGGET("nuggets", { "nuggets/$it" }),
@@ -1212,7 +1213,7 @@ enum class Shape(val neoForgeTagName: String, val neoForgeTagNameFunction: (Stri
     GEM("gems", { "gems/$it" }),
 }
 
-val Shape.neoForgeTag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.neoForgeTagName))
+val Shape.tag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.path))
 
 enum class Material(val path: String) {
     COPPER("copper"),
