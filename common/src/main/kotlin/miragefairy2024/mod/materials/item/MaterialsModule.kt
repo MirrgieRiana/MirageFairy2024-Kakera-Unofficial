@@ -65,7 +65,6 @@ import miragefairy2024.util.registerGrassDrop
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerMobDrop
-import miragefairy2024.util.registerNeoForgeItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
 import miragefairy2024.util.registerSmeltingRecipeGeneration
@@ -1117,8 +1116,8 @@ fun initMaterialsModule() {
             }
         }
         if (card.ore != null) {
-            card.item.registerNeoForgeItemTagGeneration { card.ore.tag }
-            card.ore.tag.registerNeoForgeItemTagGeneration { card.ore.shape.tag }
+            card.item.registerItemTagGeneration { card.ore.tag }
+            card.ore.tag.registerItemTagGeneration { card.ore.shape.tag }
         }
         card.initializer(this@ModContext, card)
     }
