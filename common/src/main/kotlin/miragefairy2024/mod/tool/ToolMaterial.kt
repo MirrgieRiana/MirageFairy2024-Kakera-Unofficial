@@ -7,8 +7,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toIngredient
-import miragefairy2024.util.toTag
-import net.minecraft.core.registries.Registries
+import miragefairy2024.util.toItemTag
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
@@ -118,7 +117,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Item> = identifier.toTag(Registries.ITEM)
+    val tag: TagKey<Item> = identifier.toItemTag()
     val translation = Translation({ "${MirageFairy2024.MOD_ID}.tool_material.$path" }, enName, jaName)
 }
 

@@ -15,11 +15,11 @@ import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
 import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
-import miragefairy2024.util.toTag
+import miragefairy2024.util.toBlockTag
+import miragefairy2024.util.toItemTag
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.BlockModelGenerators.WoodProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
@@ -77,8 +77,8 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
 
     context(ModContext)
     protected fun initStripped(input: () -> Block) {
-        block.registerBlockTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toTag(Registries.BLOCK) }
-        item.registerItemTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toTag(Registries.ITEM) }
+        block.registerBlockTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toBlockTag() }
+        item.registerItemTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toItemTag() }
         ModEvents.onInitialize {
             StrippableBlockRegistry.register(input(), block())
         }

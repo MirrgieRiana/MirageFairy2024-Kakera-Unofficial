@@ -6,8 +6,7 @@ import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_BLOCK_TAG
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.registerBlockTagGeneration
-import miragefairy2024.util.toTag
-import net.minecraft.core.registries.Registries
+import miragefairy2024.util.toBlockTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
@@ -26,7 +25,7 @@ private val identifier = MirageFairy2024.identifier("fairy_building")
 val FOLIA_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.folia" }, "Folia", "フォリア")
 val SPECIFIED_FAIRY_SLOT_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.specified_fairy_slot" }, "Only %s Family", "%s系統のみ")
 
-val FAIRY_BUILDING_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("fairy_building").toTag(Registries.BLOCK)
+val FAIRY_BUILDING_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("fairy_building").toBlockTag()
 
 context(ModContext)
 fun initFairyBuildingModule() {

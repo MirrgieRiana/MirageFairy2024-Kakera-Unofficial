@@ -71,9 +71,7 @@ import miragefairy2024.util.registerSmeltingRecipeGeneration
 import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.toItemTag
-import miragefairy2024.util.toTag
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -1093,7 +1091,7 @@ class MaterialCard(
     val advancement = advancementCreator?.invoke(this, identifier)
 }
 
-val MIRAGE_FLOUR_TAG: TagKey<Item> = MirageFairy2024.identifier("mirage_flour").toTag(Registries.ITEM)
+val MIRAGE_FLOUR_TAG: TagKey<Item> = MirageFairy2024.identifier("mirage_flour").toItemTag()
 
 val APPEARANCE_RATE_BONUS_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mirage_flour").toLanguageKey()}.appearance_rate_bonus" }, "Appearance Rate Bonus", "出現率ボーナス")
 val MINA_DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("mina").toLanguageKey()}.description" }, "Can exchange for Minia with apostle's wand", "使徒のステッキでミーニャと両替可能")
@@ -1214,7 +1212,7 @@ enum class Shape(val path: String, val orePathFunction: (String) -> String) {
     GEM("gems", { "gems/$it" }),
 }
 
-val Shape.tag: TagKey<Item> get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toTag(Registries.ITEM)
+val Shape.tag: TagKey<Item> get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toItemTag()
 
 enum class Material(val path: String) {
     COPPER("copper"),

@@ -13,7 +13,7 @@ import miragefairy2024.util.ja
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerEnchantmentTagGeneration
 import miragefairy2024.util.registerItemTagGeneration
-import miragefairy2024.util.toTag
+import miragefairy2024.util.toItemTag
 import mirrg.kotlin.java.hydrogen.orNull
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -31,9 +31,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.phys.AABB
 
-val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("magic_weapon").toTag(Registries.ITEM)
-val SCYTHE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("scythe").toTag(Registries.ITEM)
-val NONE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("none").toTag(Registries.ITEM)
+val MAGIC_WEAPON_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("magic_weapon").toItemTag()
+val SCYTHE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("scythe").toItemTag()
+val NONE_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("none").toItemTag()
 
 enum class EnchantmentRarity(val weight: Int, val anvilCost: Int) {
     COMMON(10, 1),

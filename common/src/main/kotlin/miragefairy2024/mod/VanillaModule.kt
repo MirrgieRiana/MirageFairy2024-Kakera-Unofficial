@@ -4,7 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
-import miragefairy2024.util.toTag
+import miragefairy2024.util.toBlockTag
 import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import net.minecraft.core.registries.Registries
@@ -19,7 +19,7 @@ enum class BlockTagCard(path: String) {
     ;
 
     val identifier = MirageFairy2024.identifier(path)
-    val tag: TagKey<Block> = identifier.toTag(Registries.BLOCK)
+    val tag: TagKey<Block> = identifier.toBlockTag()
 }
 
 context(ModContext)

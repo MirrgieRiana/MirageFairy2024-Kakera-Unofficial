@@ -16,6 +16,11 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 
 fun <T> ResourceLocation.toTag(registry: ResourceKey<Registry<T>>): TagKey<T> = TagKey.create(registry, this)
+fun ResourceLocation.toItemTag(): TagKey<Item> = this.toTag(Registries.ITEM)
+fun ResourceLocation.toBlockTag(): TagKey<Block> = this.toTag(Registries.BLOCK)
+fun ResourceLocation.toBiomeTag(): TagKey<Biome> = this.toTag(Registries.BIOME)
+fun ResourceLocation.toDamageTypeTag(): TagKey<DamageType> = this.toTag(Registries.DAMAGE_TYPE)
+fun ResourceLocation.toStructureTag(): TagKey<Structure> = this.toTag(Registries.STRUCTURE)
 
 
 context(ModContext)

@@ -13,9 +13,8 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.text
-import miragefairy2024.util.toTag
+import miragefairy2024.util.toDamageTypeTag
 import mirrg.kotlin.hydrogen.formatAs
-import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.world.damagesource.DamageSource
@@ -45,7 +44,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
         override fun test(damageSource: DamageSource) = predicate(damageSource)
     }
 
-    private val SPINE_DAMAGE_TYPE_TAG = MirageFairy2024.identifier("spine").toTag(Registries.DAMAGE_TYPE)
+    private val SPINE_DAMAGE_TYPE_TAG = MirageFairy2024.identifier("spine").toDamageTypeTag()
 
     private val attackTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.attack" }, "%s Attack", "%s攻撃力")
     private val defenceTranslation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}.defence" }, "%s Defence", "%s防御力")

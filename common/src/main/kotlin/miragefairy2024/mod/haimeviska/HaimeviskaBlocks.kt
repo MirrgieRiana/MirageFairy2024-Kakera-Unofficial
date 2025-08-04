@@ -39,11 +39,11 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerItemTagGeneration
-import miragefairy2024.util.toTag
+import miragefairy2024.util.toBlockTag
+import miragefairy2024.util.toItemTag
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.BlockSetTypeBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.type.WoodTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -194,8 +194,8 @@ fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = Ab
 lateinit var HAIMEVISKA_BLOCK_SET_TYPE: BlockSetType
 lateinit var HAIMEVISKA_WOOD_TYPE: WoodType
 
-val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("haimeviska_logs").toTag(Registries.BLOCK)
-val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("haimeviska_logs").toTag(Registries.ITEM)
+val HAIMEVISKA_LOGS_BLOCK_TAG: TagKey<Block> = MirageFairy2024.identifier("haimeviska_logs").toBlockTag()
+val HAIMEVISKA_LOGS_ITEM_TAG: TagKey<Item> = MirageFairy2024.identifier("haimeviska_logs").toItemTag()
 
 context(ModContext)
 fun initHaimeviskaBlocks() {
