@@ -1116,7 +1116,6 @@ fun initMaterialsModule() {
             }
         }
         if (card.ore != null) {
-            card.item.registerItemTagGeneration { card.ore.tag }
             card.item.registerNeoForgeItemTagGeneration { card.ore.neoForgeTag }
             card.ore.neoForgeTag.registerNeoForgeItemTagGeneration { card.ore.shape.neoForgeTag }
         }
@@ -1199,19 +1198,18 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
-val Ore.tag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.shape.tagNameFunction(this.material.path)))
 val Ore.neoForgeTag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.shape.neoForgeTagNameFunction(this.material.path)))
 val Ore.ingredient: Ingredient get() = Ingredient.of(this.neoForgeTag)
 fun Tag(shape: Shape, material: Material) = Ore(shape, material).neoForgeTag
 fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
 
-enum class Shape(val tagNameFunction: (String) -> String, val neoForgeTagName: String, val neoForgeTagNameFunction: (String) -> String) {
-    TINY_DUST({ "${it}_tiny_dusts" }, "tiny_dusts", { "tiny_dusts/$it" }),
-    DUST({ "${it}_dusts" }, "dusts", { "dusts/$it" }),
-    NUGGET({ "${it}_nuggets" }, "nuggets", { "nuggets/$it" }),
-    INGOT({ "${it}_ingots" }, "ingots", { "ingots/$it" }),
-    ROD({ "${it}_rods" }, "rods", { "rods/$it" }),
-    GEM({ "${it}_gems" }, "gems", { "gems/$it" }),
+enum class Shape(val neoForgeTagName: String, val neoForgeTagNameFunction: (String) -> String) {
+    TINY_DUST("tiny_dusts", { "tiny_dusts/$it" }),
+    DUST("dusts", { "dusts/$it" }),
+    NUGGET("nuggets", { "nuggets/$it" }),
+    INGOT("ingots", { "ingots/$it" }),
+    ROD("rods", { "rods/$it" }),
+    GEM("gems", { "gems/$it" }),
 }
 
 val Shape.neoForgeTag: TagKey<Item> get() = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", this.neoForgeTagName))
