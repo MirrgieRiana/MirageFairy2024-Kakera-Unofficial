@@ -1222,6 +1222,8 @@ enum class Shape(val path: String) {
 val Shape.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toItemTag()
 
 enum class Material(val path: String) {
+    WOOD("wooden"),
+
     COPPER("copper"),
     IRON("iron"),
     GOLD("gold"),
