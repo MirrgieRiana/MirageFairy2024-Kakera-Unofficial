@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.HolderSet
 import net.minecraft.core.Registry
@@ -22,6 +23,47 @@ val INSTANT_STREAM_CODEC: StreamCodec<ByteBuf, Instant> = ByteBufCodecs.VAR_LONG
 
 val ITEMS_CODEC: Codec<List<ItemStack>> = ItemContainerContents.CODEC.xmap({ it.stream().toList() }, { ItemContainerContents.fromItems(it) })
 val ITEMS_STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, List<ItemStack>> = ItemContainerContents.STREAM_CODEC.map({ it.stream().toList() }, { ItemContainerContents.fromItems(it) })
+
+data class ItemStacks(val itemStacks: List<ItemStack>) {
+    companion object {
+        val EMPTY = ItemStacks(listOf())
+
+        val CODEC: Codec<ItemStacks> = Slot.CODEC.listOf().xmap(::fromSlots, ::toSlots)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ItemStacks> = Slot.STREAM_CODEC.list().map(::fromSlots, ::toSlots)
+
+        fun fromSlots(slots: List<Slot>): ItemStacks {
+            val maxSlot = slots.maxOfOrNull { it.slot } ?: return EMPTY
+            val table = slots.associateBy { it.slot }
+            val list = (0..maxSlot).map { table[it]?.item ?: EMPTY_ITEM_STACK }
+            return ItemStacks(list)
+        }
+
+        fun toSlots(itemStacks: ItemStacks): List<Slot> {
+            return itemStacks.itemStacks
+                .withIndex()
+                .filter { it.value.isNotEmpty }
+                .map { Slot(it.value, it.index) }
+        }
+    }
+
+    data class Slot(val item: ItemStack, val slot: Int) {
+        companion object {
+            val CODEC: Codec<Slot> = RecordCodecBuilder.create { instance ->
+                instance.group(
+                    ItemStack.CODEC.fieldOf("item").forGetter { it.item },
+                    Codec.INT.fieldOf("slot").forGetter { it.slot }
+                ).apply(instance, ::Slot)
+            }
+            val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Slot> = StreamCodec.composite(
+                ItemStack.STREAM_CODEC,
+                { it.item },
+                ByteBufCodecs.INT,
+                { it.slot },
+                ::Slot
+            )
+        }
+    }
+}
 
 /**
  * ダミーのペイロードを追加するStreamCodecです。
