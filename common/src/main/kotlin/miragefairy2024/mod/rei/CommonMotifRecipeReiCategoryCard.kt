@@ -27,7 +27,7 @@ object CommonMotifRecipeReiCategoryCard : ReiCategoryCard<CommonMotifRecipeReiCa
                 when (val type = tag.wrapper["Type"].string.get()) {
                     "always" -> AlwaysCommonMotifRecipe(motif)
                     "biome" -> BiomeCommonMotifRecipe(motif, tag.wrapper["Biome"].string.get()!!.let { Registries.BIOME with it.toIdentifier() })
-                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.let { it.toIdentifier().toBiomeTag() })
+                    "biome_tag" -> BiomeTagCommonMotifRecipe(motif, tag.wrapper["BiomeTag"].string.get()!!.toIdentifier().toBiomeTag())
                     else -> throw IllegalArgumentException(type)
                 }
             })
