@@ -1210,6 +1210,13 @@ enum class Shape(val path: String) {
     INGOT("ingots"),
     ROD("rods"),
     GEM("gems"),
+    ORE("ores"),
+
+    /** 原石 */
+    RAW_MATERIAL("raw_materials"),
+
+    /** ブロック */
+    STORAGE_BLOCK("storage_blocks"),
 }
 
 val Shape.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toItemTag()
