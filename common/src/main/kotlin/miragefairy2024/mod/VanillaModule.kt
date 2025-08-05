@@ -8,15 +8,15 @@ import miragefairy2024.util.toBlockTag
 import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrElse
 
-enum class BlockTagCard(path: String) {
-    CONCRETE("concrete"),
+enum class BlockTagCard(identifier: ResourceLocation) {
+    CONCRETE(MirageFairy2024.identifier("concrete")),
     ;
 
-    val identifier = MirageFairy2024.identifier(path)
     val tag = identifier.toBlockTag()
 }
 
