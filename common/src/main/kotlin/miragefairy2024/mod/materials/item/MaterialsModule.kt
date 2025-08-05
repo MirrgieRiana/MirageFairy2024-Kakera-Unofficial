@@ -328,7 +328,7 @@ class MaterialCard(
         val MIRAGIDIAN_SHARD: MaterialCard = !MaterialCard(
             "miragidian_shard", "Miragidian Shard", "ミラジディアンの欠片",
             PoemList(4).poem("The great collapse 30,000 years ago", "遥か三万年前のミラジウムが見た夢。"),
-            soulStreamContainable = true, fireResistant = true,
+            soulStreamContainable = true, fireResistant = true, ore = Ore(Shape.SHARD, Material.MIRAGIDIAN),
         ) {
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
