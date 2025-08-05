@@ -76,8 +76,14 @@ class RecipeGenerationSettings<T> {
     var noGroup = false
 }
 
+@JvmName("onItem")
 infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(item: () -> Item) = this.apply {
     this.listeners += { it.criterion(item()) }
+}
+
+@JvmName("onTag")
+infix fun <T : CraftingRecipeJsonBuilder> RecipeGenerationSettings<T>.on(tag: TagKey<Item>) = this.apply {
+    this.listeners += { it.criterion(tag) }
 }
 
 infix fun <T> RecipeGenerationSettings<T>.modId(modId: String) = this.apply {
