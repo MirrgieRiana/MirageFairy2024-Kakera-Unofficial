@@ -1211,6 +1211,7 @@ enum class Shape(val path: String) {
     ROD("rods"),
     GEM("gems"),
     ORE("ores"),
+    SHARD("shards"),
 
     /** 原石 */
     RAW_MATERIAL("raw_materials"),
@@ -1234,6 +1235,7 @@ enum class Material(val path: String) {
     DIAMOND("diamond"),
     EMERALD("emerald"),
 
+    FLINT("flint"),
     COAL("coal"),
     LAPIS("lapis"),
     PRISMARINE("prismarine"),
