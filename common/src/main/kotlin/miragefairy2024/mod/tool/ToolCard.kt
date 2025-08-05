@@ -56,7 +56,6 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.data.models.model.ModelTemplates as Models
@@ -321,7 +320,7 @@ class ToolCard(
                 pattern(" RI")
                 pattern("I  ")
                 define('R', Tag(Shape.ROD, Material.MIRANAGITE))
-                define('G', Items.GLASS)
+                define('G', ConventionalItemTags.GLASS_BLOCKS)
                 define('I', Tag(Shape.INGOT, Material.COPPER))
             } on MaterialCard.MIRANAGITE.ore!!.tag
         }
