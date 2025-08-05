@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_miragidian_shard": {
+    "has_shards/miragidian": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian_shard"
+            "items": "#c:shards/miragidian"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_miragidian_shard"
+      "has_shards/miragidian"
     ]
   ],
   "rewards": {

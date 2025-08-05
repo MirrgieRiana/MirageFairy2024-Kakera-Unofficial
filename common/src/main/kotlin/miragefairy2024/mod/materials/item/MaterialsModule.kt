@@ -153,7 +153,7 @@ class MaterialCard(
                 pattern(" # ")
                 pattern("#  ")
                 define('#', MIRANAGITE.ore!!.tag)
-            } on MIRANAGITE.item from MIRANAGITE.item
+            } on MIRANAGITE.ore!!.tag from MIRANAGITE.item
         }
 
         // TODO ポエム: エントロピーの極小点
@@ -337,7 +337,7 @@ class MaterialCard(
                 ),
                 output = { MIRAGIDIAN.item().createItemStack() },
                 duration = 20 * 60,
-            ) on item from item
+            ) on ore!!.tag from item
         }
         val MIRAGIDIAN: MaterialCard = !MaterialCard(
             "miragidian", "Miragidian", "ミラジディアン",
@@ -440,7 +440,7 @@ class MaterialCard(
                 ),
                 output = { item().createItemStack() },
                 duration = 20 * 60,
-            ) on LUMINITE.item
+            ) on LUMINITE.ore!!.tag
         }
         val CALCULITE: MaterialCard = !MaterialCard(
             "calculite", "Calculite", "理天石", // TODO ポエム: An of The Superphysical Society of Xarpa
@@ -584,7 +584,7 @@ class MaterialCard(
                 pattern("P")
                 define('P', Blocks.PISTON)
                 define('S', ore!!.tag)
-            } on item modId MirageFairy2024.MOD_ID from item
+            } on ore!!.tag modId MirageFairy2024.MOD_ID from item
             // →リード
             registerShapedRecipeGeneration({ Items.LEAD }) {
                 pattern("ss ")
@@ -592,7 +592,7 @@ class MaterialCard(
                 pattern("  s")
                 define('#', ore!!.tag)
                 define('s', Items.STRING)
-            } on item modId MirageFairy2024.MOD_ID from item
+            } on ore!!.tag modId MirageFairy2024.MOD_ID from item
             // →スライムボール
             registerShapedRecipeGeneration({ Items.SLIME_BALL }) {
                 pattern("sss")
@@ -600,7 +600,7 @@ class MaterialCard(
                 pattern("sss")
                 define('s', HAIMEVISKA_SAP.item())
                 define('#', ore!!.tag)
-            } on item modId MirageFairy2024.MOD_ID from item
+            } on ore!!.tag modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC: MaterialCard = !MaterialCard(
             // TODO add recipe
@@ -720,7 +720,7 @@ class MaterialCard(
             null,
             ore = Ore(Shape.GEM, Material.MAGNETITE),
         ) {
-            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.7) on item modId MirageFairy2024.MOD_ID from item
+            registerSmeltingRecipeGeneration(item, { Items.IRON_NUGGET }, 0.7) on ore!!.tag modId MirageFairy2024.MOD_ID from item
         }
 
         val FLUORITE: MaterialCard = !MaterialCard(
@@ -740,7 +740,7 @@ class MaterialCard(
                 pattern(" S ")
                 define('F', FLUORITE.ore!!.tag)
                 define('S', FAIRY_SCALES.item())
-            } on FLUORITE.item from FLUORITE.item
+            } on FLUORITE.ore!!.tag from FLUORITE.item
         }
         val TOPAZ: MaterialCard = !MaterialCard(
             "topaz", "Topaz", "トパーズ",

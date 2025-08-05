@@ -11,6 +11,7 @@ import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
 import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tag
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -146,7 +147,7 @@ fun initTelescopeModule() {
         define('S', Tag(Shape.ROD, Material.WOOD))
         define('I', Tag(Shape.INGOT, Material.COPPER))
         define('G', Tag(Shape.GEM, Material.FAIRY_CRYSTAL))
-    } on MaterialCard.FAIRY_CRYSTAL.item
+    } on MaterialCard.FAIRY_CRYSTAL.ore!!.tag
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()
     TelescopeBlock.FIRST_GAIN_TRANSLATION.enJa()

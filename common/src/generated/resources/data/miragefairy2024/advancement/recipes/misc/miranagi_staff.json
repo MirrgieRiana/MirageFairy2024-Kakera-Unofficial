@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_miranagite": {
+    "has_gems/miranagite": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miranagite"
+            "items": "#c:gems/miranagite"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_miranagite"
+      "has_gems/miranagite"
     ]
   ],
   "rewards": {

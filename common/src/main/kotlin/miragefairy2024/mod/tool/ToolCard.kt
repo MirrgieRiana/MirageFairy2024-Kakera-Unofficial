@@ -323,7 +323,7 @@ class ToolCard(
                 define('R', Tag(Shape.ROD, Material.MIRANAGITE))
                 define('G', Items.GLASS)
                 define('I', Tag(Shape.INGOT, Material.COPPER))
-            } on MaterialCard.MIRANAGITE.item
+            } on MaterialCard.MIRANAGITE.ore!!.tag
         }
         val MIRANAGI_STAFF = !ToolCard(
             "miranagi_staff", EnJa("Staff of Miranagi", "みらなぎの杖"),
@@ -349,7 +349,7 @@ class ToolCard(
                 define('G', Tag(Shape.GEM, Material.DIAMOND))
                 define('I', Tag(Shape.INGOT, Material.IRON))
                 define('N', Tag(Shape.NUGGET, Material.IRON))
-            } on MaterialCard.MIRANAGITE.item
+            } on MaterialCard.MIRANAGITE.ore!!.tag
         }
         val XARPITE_PICKAXE = !ToolCard(
             "xarpite_pickaxe", EnJa("Xarpite Pickaxe", "紅天石のつるはし"),
