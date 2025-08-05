@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bismuth_ingot": {
+    "has_ingots/bismuth": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:bismuth_ingot"
+            "items": "#c:ingots/bismuth"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_bismuth_ingot"
+      "has_ingots/bismuth"
     ]
   ],
   "rewards": {

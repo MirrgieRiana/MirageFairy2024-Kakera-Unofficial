@@ -7,10 +7,10 @@
       "item": "minecraft:glass"
     },
     "I": {
-      "item": "minecraft:copper_ingot"
+      "tag": "c:ingots/copper"
     },
     "R": {
-      "item": "miragefairy2024:miranagite_rod"
+      "tag": "c:rods/miranagite"
     }
   },
   "pattern": [

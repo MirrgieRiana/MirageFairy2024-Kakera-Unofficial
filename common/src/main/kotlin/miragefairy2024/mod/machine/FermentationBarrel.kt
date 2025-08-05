@@ -5,7 +5,10 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
+import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.item.Shape
+import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
@@ -20,7 +23,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
@@ -75,8 +77,8 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
             pattern("LRL")
             pattern("ILI")
             define('L', HaimeviskaBlockCard.LOG.item())
-            define('R', MaterialCard.HAIMEVISKA_ROSIN.item())
-            define('I', Items.IRON_NUGGET)
+            define('R', Tag(Shape.GEM, Material.HAIMEVISKA_ROSIN))
+            define('I', Tag(Shape.NUGGET, Material.IRON))
         } on MaterialCard.HAIMEVISKA_ROSIN.item
     }
 }

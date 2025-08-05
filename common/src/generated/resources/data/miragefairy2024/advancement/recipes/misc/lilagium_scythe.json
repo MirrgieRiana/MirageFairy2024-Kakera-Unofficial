@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_lilagium_ingot": {
+    "has_ingots/lilagium": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:lilagium_ingot"
+            "items": "#c:ingots/lilagium"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_lilagium_ingot"
+      "has_ingots/lilagium"
     ]
   ],
   "rewards": {

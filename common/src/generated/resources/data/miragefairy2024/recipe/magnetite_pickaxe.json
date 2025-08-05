@@ -4,10 +4,10 @@
   "group": "miragefairy2024:magnetite_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:magnetite"
+      "tag": "c:gems/magnetite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

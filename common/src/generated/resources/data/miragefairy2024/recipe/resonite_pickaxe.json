@@ -4,10 +4,10 @@
   "group": "miragefairy2024:resonite_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:resonite_ingot"
+      "tag": "c:ingots/resonite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

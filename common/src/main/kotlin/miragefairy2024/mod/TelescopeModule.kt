@@ -7,7 +7,10 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.clientProxy
 import miragefairy2024.lib.SimpleHorizontalFacingBlock
+import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.item.Shape
+import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
@@ -140,9 +143,9 @@ fun initTelescopeModule() {
         pattern("IIG")
         pattern(" S ")
         pattern("S S")
-        define('S', Items.STICK)
-        define('I', Items.COPPER_INGOT)
-        define('G', MaterialCard.FAIRY_CRYSTAL.item())
+        define('S', Tag(Shape.ROD, Material.WOOD))
+        define('I', Tag(Shape.INGOT, Material.COPPER))
+        define('G', Tag(Shape.GEM, Material.FAIRY_CRYSTAL))
     } on MaterialCard.FAIRY_CRYSTAL.item
 
     TelescopeBlock.FIRST_TRANSLATION.enJa()

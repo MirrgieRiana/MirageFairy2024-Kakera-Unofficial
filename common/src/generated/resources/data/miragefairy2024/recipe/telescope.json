@@ -4,13 +4,13 @@
   "group": "miragefairy2024:telescope",
   "key": {
     "G": {
-      "item": "miragefairy2024:fairy_crystal"
+      "tag": "c:gems/fairy_crystal"
     },
     "I": {
-      "item": "minecraft:copper_ingot"
+      "tag": "c:ingots/copper"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

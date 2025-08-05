@@ -4,10 +4,10 @@
   "group": "miragefairy2024:fluorite_sword",
   "key": {
     "#": {
-      "item": "miragefairy2024:fluorite"
+      "tag": "c:gems/fluorite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

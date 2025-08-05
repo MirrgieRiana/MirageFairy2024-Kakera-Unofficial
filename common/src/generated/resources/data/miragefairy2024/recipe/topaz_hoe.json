@@ -4,10 +4,10 @@
   "group": "miragefairy2024:topaz_hoe",
   "key": {
     "#": {
-      "item": "miragefairy2024:topaz"
+      "tag": "c:gems/topaz"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

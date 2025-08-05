@@ -4,13 +4,13 @@
   "group": "miragefairy2024:fermentation_barrel",
   "key": {
     "I": {
-      "item": "minecraft:iron_nugget"
+      "tag": "c:nuggets/iron"
     },
     "L": {
       "item": "miragefairy2024:haimeviska_log"
     },
     "R": {
-      "item": "miragefairy2024:haimeviska_rosin"
+      "tag": "c:gems/haimeviska_rosin"
     }
   },
   "pattern": [

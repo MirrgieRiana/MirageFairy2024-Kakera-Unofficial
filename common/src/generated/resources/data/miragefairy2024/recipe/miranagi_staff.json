@@ -7,13 +7,13 @@
       "item": "miragefairy2024:miranagi_staff_0"
     },
     "G": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "I": {
-      "item": "minecraft:iron_ingot"
+      "tag": "c:ingots/iron"
     },
     "N": {
-      "item": "minecraft:iron_nugget"
+      "tag": "c:nuggets/iron"
     }
   },
   "pattern": [

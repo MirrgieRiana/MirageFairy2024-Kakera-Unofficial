@@ -7,7 +7,7 @@
       "item": "minecraft:furnace"
     },
     "X": {
-      "item": "miragefairy2024:xarpite"
+      "tag": "c:gems/xarpite"
     }
   },
   "pattern": [

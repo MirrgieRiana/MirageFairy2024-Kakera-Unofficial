@@ -4,10 +4,10 @@
   "group": "miragefairy2024:obsidian_shovel",
   "key": {
     "#": {
-      "item": "minecraft:obsidian"
+      "tag": "c:obsidians"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

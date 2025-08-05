@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_chaos_stone": {
+    "has_gems/chaos_stone": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:chaos_stone"
+            "items": "#c:gems/chaos_stone"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_chaos_stone"
+      "has_gems/chaos_stone"
     ]
   ],
   "rewards": {

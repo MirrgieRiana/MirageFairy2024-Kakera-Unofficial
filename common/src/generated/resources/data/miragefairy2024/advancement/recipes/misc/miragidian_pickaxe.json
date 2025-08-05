@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_miragidian": {
+    "has_gems/miragidian": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragidian"
+            "items": "#c:gems/miragidian"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_miragidian"
+      "has_gems/miragidian"
     ]
   ],
   "rewards": {

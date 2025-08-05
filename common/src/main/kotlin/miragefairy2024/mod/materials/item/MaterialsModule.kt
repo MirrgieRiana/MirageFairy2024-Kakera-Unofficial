@@ -152,7 +152,7 @@ class MaterialCard(
                 pattern("  #")
                 pattern(" # ")
                 pattern("#  ")
-                define('#', MIRANAGITE.item())
+                define('#', MIRANAGITE.ore!!.tag)
             } on MIRANAGITE.item from MIRANAGITE.item
         }
 
@@ -559,7 +559,7 @@ class MaterialCard(
                 pattern("#")
                 pattern("S")
                 define('#', item())
-                define('S', Items.STICK)
+                define('S', Tag(Shape.ROD, Material.WOOD))
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val HAIMEVISKA_ROSIN: MaterialCard = !MaterialCard(
@@ -583,14 +583,14 @@ class MaterialCard(
                 pattern("S")
                 pattern("P")
                 define('P', Blocks.PISTON)
-                define('S', item())
+                define('S', ore!!.tag)
             } on item modId MirageFairy2024.MOD_ID from item
             // →リード
             registerShapedRecipeGeneration({ Items.LEAD }) {
                 pattern("ss ")
                 pattern("s# ")
                 pattern("  s")
-                define('#', item())
+                define('#', ore!!.tag)
                 define('s', Items.STRING)
             } on item modId MirageFairy2024.MOD_ID from item
             // →スライムボール
@@ -599,7 +599,7 @@ class MaterialCard(
                 pattern("s#s")
                 pattern("sss")
                 define('s', HAIMEVISKA_SAP.item())
-                define('#', item())
+                define('#', ore!!.tag)
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val FAIRY_PLASTIC: MaterialCard = !MaterialCard(
@@ -738,7 +738,7 @@ class MaterialCard(
                 pattern(" S ")
                 pattern("SFS")
                 pattern(" S ")
-                define('F', FLUORITE.item())
+                define('F', FLUORITE.ore!!.tag)
                 define('S', FAIRY_SCALES.item())
             } on FLUORITE.item from FLUORITE.item
         }
@@ -906,7 +906,7 @@ class MaterialCard(
                 pattern(" G")
                 pattern("S ")
                 define('S', MIRAGE_STEM.item())
-                define('G', Items.GOLD_INGOT)
+                define('G', Tag(Shape.INGOT, Material.GOLD))
             } on MIRAGE_STEM.item
         }
 

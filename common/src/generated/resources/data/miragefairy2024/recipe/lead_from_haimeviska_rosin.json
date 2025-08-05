@@ -4,7 +4,7 @@
   "group": "minecraft:lead",
   "key": {
     "#": {
-      "item": "miragefairy2024:haimeviska_rosin"
+      "tag": "c:gems/haimeviska_rosin"
     },
     "s": {
       "item": "minecraft:string"

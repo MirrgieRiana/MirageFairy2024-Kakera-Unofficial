@@ -4,10 +4,10 @@
   "group": "miragefairy2024:fairy_crystal_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:fairy_crystal"
+      "tag": "c:gems/fairy_crystal"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

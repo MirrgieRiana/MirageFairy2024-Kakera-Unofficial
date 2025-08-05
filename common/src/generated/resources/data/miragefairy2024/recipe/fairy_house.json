@@ -7,7 +7,7 @@
       "item": "miragefairy2024:haimeviska_log"
     },
     "*": {
-      "item": "miragefairy2024:fairy_crystal"
+      "tag": "c:gems/fairy_crystal"
     },
     "D": {
       "tag": "minecraft:wool_carpets"

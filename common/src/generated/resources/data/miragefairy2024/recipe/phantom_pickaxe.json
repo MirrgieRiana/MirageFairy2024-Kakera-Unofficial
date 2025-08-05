@@ -4,10 +4,10 @@
   "group": "miragefairy2024:phantom_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:phantom_drop"
+      "tag": "c:gems/phantom_drop"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

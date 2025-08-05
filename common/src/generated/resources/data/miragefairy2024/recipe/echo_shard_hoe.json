@@ -4,10 +4,10 @@
   "group": "miragefairy2024:echo_shard_hoe",
   "key": {
     "#": {
-      "item": "minecraft:echo_shard"
+      "tag": "c:echo_shards"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

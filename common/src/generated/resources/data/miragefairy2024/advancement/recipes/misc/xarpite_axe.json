@@ -1,27 +1,27 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
+    "has_gems/xarpite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/xarpite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "has_the_recipe": {
       "conditions": {
         "recipe": "miragefairy2024:xarpite_axe"
       },
       "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_xarpite": {
-      "conditions": {
-        "items": [
-          {
-            "items": "miragefairy2024:xarpite"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_xarpite"
+      "has_gems/xarpite"
     ]
   ],
   "rewards": {

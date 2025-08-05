@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_phantom_drop": {
+    "has_gems/phantom_drop": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:phantom_drop"
+            "items": "#c:gems/phantom_drop"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_phantom_drop"
+      "has_gems/phantom_drop"
     ]
   ],
   "rewards": {

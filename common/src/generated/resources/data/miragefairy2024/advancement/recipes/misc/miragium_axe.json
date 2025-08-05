@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_miragium_ingot": {
+    "has_ingots/miragium": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:miragium_ingot"
+            "items": "#c:ingots/miragium"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_miragium_ingot"
+      "has_ingots/miragium"
     ]
   ],
   "rewards": {

@@ -4,10 +4,10 @@
   "group": "miragefairy2024:luminite_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:luminite"
+      "tag": "c:gems/luminite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

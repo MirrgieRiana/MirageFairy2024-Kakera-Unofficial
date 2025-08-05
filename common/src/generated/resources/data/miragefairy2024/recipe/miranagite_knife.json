@@ -4,10 +4,10 @@
   "group": "miragefairy2024:miranagite_knife",
   "key": {
     "#": {
-      "item": "miragefairy2024:miranagite"
+      "tag": "c:gems/miranagite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

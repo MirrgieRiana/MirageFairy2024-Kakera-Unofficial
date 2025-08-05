@@ -4,10 +4,10 @@
   "group": "miragefairy2024:diamond_scythe",
   "key": {
     "#": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

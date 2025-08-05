@@ -4,10 +4,10 @@
   "group": "miragefairy2024:glass_axe",
   "key": {
     "#": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

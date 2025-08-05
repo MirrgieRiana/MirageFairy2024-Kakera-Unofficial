@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_prominite": {
+    "has_gems/prominite": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:prominite"
+            "items": "#c:gems/prominite"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_prominite"
+      "has_gems/prominite"
     ]
   ],
   "rewards": {

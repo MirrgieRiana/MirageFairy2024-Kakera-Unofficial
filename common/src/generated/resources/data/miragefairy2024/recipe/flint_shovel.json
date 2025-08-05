@@ -4,10 +4,10 @@
   "group": "miragefairy2024:flint_shovel",
   "key": {
     "#": {
-      "item": "minecraft:flint"
+      "tag": "c:gems/flint"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

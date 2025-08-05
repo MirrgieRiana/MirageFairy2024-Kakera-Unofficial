@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_resonite_ingot": {
+    "has_ingots/resonite": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:resonite_ingot"
+            "items": "#c:ingots/resonite"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_resonite_ingot"
+      "has_ingots/resonite"
     ]
   ],
   "rewards": {

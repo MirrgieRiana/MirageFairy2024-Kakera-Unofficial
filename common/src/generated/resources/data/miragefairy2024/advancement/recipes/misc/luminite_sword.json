@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_luminite": {
+    "has_gems/luminite": {
       "conditions": {
         "items": [
           {
-            "items": "miragefairy2024:luminite"
+            "items": "#c:gems/luminite"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_luminite"
+      "has_gems/luminite"
     ]
   ],
   "rewards": {

@@ -4,7 +4,7 @@
   "group": "miragefairy2024:miranagite_rod",
   "key": {
     "#": {
-      "item": "miragefairy2024:miranagite"
+      "tag": "c:gems/miranagite"
     }
   },
   "pattern": [

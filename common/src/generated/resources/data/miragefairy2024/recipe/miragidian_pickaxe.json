@@ -4,10 +4,10 @@
   "group": "miragefairy2024:miragidian_pickaxe",
   "key": {
     "#": {
-      "item": "miragefairy2024:miragidian"
+      "tag": "c:gems/miragidian"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

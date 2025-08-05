@@ -4,10 +4,10 @@
   "group": "miragefairy2024:nether_star_hoe",
   "key": {
     "#": {
-      "item": "minecraft:nether_star"
+      "tag": "c:nether_stars"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

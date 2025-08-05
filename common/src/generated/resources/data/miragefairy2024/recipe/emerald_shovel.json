@@ -4,10 +4,10 @@
   "group": "miragefairy2024:emerald_shovel",
   "key": {
     "#": {
-      "item": "minecraft:emerald"
+      "tag": "c:gems/emerald"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

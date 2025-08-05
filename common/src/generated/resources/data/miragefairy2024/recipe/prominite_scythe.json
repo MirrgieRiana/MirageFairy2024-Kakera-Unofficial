@@ -4,10 +4,10 @@
   "group": "miragefairy2024:prominite_scythe",
   "key": {
     "#": {
-      "item": "miragefairy2024:prominite"
+      "tag": "c:gems/prominite"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [

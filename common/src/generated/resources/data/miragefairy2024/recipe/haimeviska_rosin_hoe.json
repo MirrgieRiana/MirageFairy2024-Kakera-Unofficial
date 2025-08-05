@@ -4,10 +4,10 @@
   "group": "miragefairy2024:haimeviska_rosin_hoe",
   "key": {
     "#": {
-      "item": "miragefairy2024:haimeviska_rosin"
+      "tag": "c:gems/haimeviska_rosin"
     },
     "R": {
-      "item": "minecraft:stick"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
