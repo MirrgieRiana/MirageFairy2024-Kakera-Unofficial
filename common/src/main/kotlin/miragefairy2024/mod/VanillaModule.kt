@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.Shape
 import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tag
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
 import miragefairy2024.util.registerItemTagGeneration
@@ -40,6 +41,9 @@ fun initVanillaModule() {
     ({ Items.ECHO_SHARD }).registerItemTagGeneration { ItemTagCard.ECHO_SHARDS.tag }
     ({ Items.AMETHYST_SHARD }).registerItemTagGeneration { Tag(Shape.SHARD, Material.AMETHYST) }
     ({ Items.PRISMARINE_SHARD }).registerItemTagGeneration { ItemTagCard.PRISMARINE_SHARDS.tag }
+
+    Tag(Shape.GEM, Material.FLINT).registerItemTagGeneration { Shape.GEM.tag }
+    Tag(Shape.SHARD, Material.AMETHYST).registerItemTagGeneration { Shape.SHARD.tag }
 
     ({ Blocks.WHITE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
     ({ Blocks.ORANGE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }

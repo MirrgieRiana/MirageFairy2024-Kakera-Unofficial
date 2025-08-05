@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "#c:shards/amethyst",
+      "required": false
+    },
+    {
       "id": "#c:shards/miragidian",
       "required": false
     }

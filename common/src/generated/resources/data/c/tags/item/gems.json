@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "#c:gems/flint",
+      "required": false
+    },
+    {
       "id": "#c:gems/xarpite",
       "required": false
     },
