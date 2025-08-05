@@ -2,9 +2,14 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.materials.item.Material
+import miragefairy2024.mod.materials.item.Shape
+import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.util.registerBlockTagGeneration
 import miragefairy2024.util.registerClientDebugItem
+import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toBlockTag
+import miragefairy2024.util.toItemTag
 import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
 import net.minecraft.core.registries.Registries
@@ -12,6 +17,14 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrElse
+
+enum class ItemTagCard(identifier: ResourceLocation) {
+    ECHO_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "echo_shards")),
+    PRISMARINE_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "prismarine_shards")),
+    ;
+
+    val tag = identifier.toItemTag()
+}
 
 enum class BlockTagCard(identifier: ResourceLocation) {
     CONCRETE(MirageFairy2024.identifier("concrete")),
@@ -22,6 +35,11 @@ enum class BlockTagCard(identifier: ResourceLocation) {
 
 context(ModContext)
 fun initVanillaModule() {
+
+    ({ Items.FLINT }).registerItemTagGeneration { Tag(Shape.GEM, Material.FLINT) }
+    ({ Items.ECHO_SHARD }).registerItemTagGeneration { ItemTagCard.ECHO_SHARDS.tag }
+    ({ Items.AMETHYST_SHARD }).registerItemTagGeneration { Tag(Shape.SHARD, Material.AMETHYST) }
+    ({ Items.PRISMARINE_SHARD }).registerItemTagGeneration { ItemTagCard.PRISMARINE_SHARDS.tag }
 
     ({ Blocks.WHITE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
     ({ Blocks.ORANGE_CONCRETE }).registerBlockTagGeneration { BlockTagCard.CONCRETE.tag }
