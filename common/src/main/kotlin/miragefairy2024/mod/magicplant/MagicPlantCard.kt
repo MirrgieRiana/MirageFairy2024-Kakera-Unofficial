@@ -95,7 +95,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
         // 性質
         //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
         block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
-        block.registerBlockTagGeneration { BlockTags.SWORD_EFFICIENT }
+        block.registerBlockTagGeneration { BlockTags.CROPS }
 
         // レシピ
         item.registerComposterInput(0.3F) // 種はコンポスターに投入可能
