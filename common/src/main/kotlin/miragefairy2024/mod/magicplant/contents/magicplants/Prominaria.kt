@@ -76,6 +76,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
         TraitCard.MUTATION.trait to 0.05, // 突然変異
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
+        TraitCard.GOLDEN_APPLE.trait to 0.05, // 金のリンゴ
         TraitCard.ETHER_PREDATION.trait to 0.05, // エーテル捕食
         TraitCard.PAVEMENT_FLOWERS.trait to 0.05, // アスファルトに咲く花
     )
