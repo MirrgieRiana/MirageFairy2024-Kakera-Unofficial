@@ -47,6 +47,8 @@ repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
     maven("https://maven.wispforest.io/releases/") // owo-lib
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-neoforge
+    maven("https://maven.blamejared.com") // JEI
+    maven("https://maven.terraformersmc.com/releases") // EMI
 }
 
 dependencies {
@@ -72,6 +74,13 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.799")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.799")
     modCompileOnly("me.shedaniel.cloth:basic-math:0.6.1")
+
+    modCompileOnly("mezz.jei:jei-1.21.1-common-api:19.21.2.313")
+    modCompileOnly("mezz.jei:jei-1.21.1-neoforge-api:19.21.2.313")
+    modRuntimeOnly("mezz.jei:jei-1.21.1-neoforge:19.21.2.313")
+
+    modCompileOnly("dev.emi:emi-neoforge:1.1.22+1.21.1:api")
+    modRuntimeOnly("dev.emi:emi-neoforge:1.1.22+1.21.1")
 
     modImplementation("io.wispforest:owo-lib-neoforge:0.12.15.1-beta.3+1.21")// { isTransitive = true }
     forgeRuntimeLibrary(include(api("io.wispforest:endec:0.1.5.1")!!)!!)
