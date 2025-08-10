@@ -243,7 +243,9 @@ class MaterialCard(
             "phantom_leaves", "Phantom Leaves", "ファントムの葉",
             PoemList(3).poem("The eroding reality", "析出する空想。"),
             fuelValue = 100,
-        )
+        ) {
+            item.registerComposterInput(0.5F)
+        }
         val PHANTOM_DROP: MaterialCard = !MaterialCard(
             "phantom_drop", "Phantom Drop", "幻想の雫",
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
@@ -475,6 +477,7 @@ class MaterialCard(
             },
         ) {
             AuraReflectorFurnaceRecipe.FUELS[item.key] = 20 * 5
+            item.registerComposterInput(0.3F)
         }
         val PROMINITE: MaterialCard = !MaterialCard(
             "prominite", "Prominite", "プロミナイト",
@@ -514,6 +517,7 @@ class MaterialCard(
             AuraReflectorFurnaceRecipe.FUELS[item.key] = 20 * 5
             registerSmeltingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
             registerBlastingRecipeGeneration(item, { Items.GOLD_NUGGET }, 0.1) on item modId MirageFairy2024.MOD_ID from item
+            item.registerComposterInput(0.3F)
         }
         val MERRRRIA_DROP: MaterialCard = !MaterialCard(
             "merrrria_drop", "Merrrria Drop", "月のしずく",
