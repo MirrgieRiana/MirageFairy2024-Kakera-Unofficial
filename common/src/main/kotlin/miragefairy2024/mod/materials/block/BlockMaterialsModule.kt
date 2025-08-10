@@ -3,6 +3,7 @@ package miragefairy2024.mod.materials.block
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
 import miragefairy2024.mod.materials.block.cards.FairyCrystalGlassBlock
@@ -387,6 +388,8 @@ enum class ToolLevel(val tag: TagKey<Block>) {
 private fun <T : BlockMaterialCard> T.needTool(type: ToolType, level: ToolLevel) = this.blockProperty { it.requiresCorrectToolForDrops() }.tag(type.tag, level.tag)
 
 private fun <T : BlockMaterialCard> T.beaconBase() = this.tag(BlockTags.BEACON_BASE_BLOCKS)
+
+private fun <T : BlockMaterialCard> T.soulStream() = this.tag(SOUL_STREAM_CONTAINABLE_TAG)
 
 private fun <T : BlockMaterialCard> T.invincible() = this
     .noDrop()
