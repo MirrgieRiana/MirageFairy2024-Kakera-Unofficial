@@ -5,6 +5,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.mixins.api.DamageCallback
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.passiveSkillResult
+import miragefairy2024.mod.tool.IS_MAGIC_DAMAGE_TYPE_TAG
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.getOrCreate
@@ -32,8 +33,8 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
     enum class Elements(path: String, enName: String, jaName: String, private val predicate: (DamageSource) -> Boolean) : Element {
         OVERALL("overall", "Overall", "全体", { true }),
         MELEE("melee", "Melee", "近接", { it.`is`(DamageTypes.PLAYER_ATTACK) || it.`is`(DamageTypes.MOB_ATTACK) || it.`is`(DamageTypes.MOB_ATTACK_NO_AGGRO) }),
-        SHOOTING("shooting", "Shooting", "射撃", { it.`is`(DamageTypeTags.IS_PROJECTILE) && !it.`is`(DamageTypeTags.BYPASSES_ARMOR) }),
-        MAGIC("magic", "Magic", "魔法", { it.`is`(DamageTypeTags.BYPASSES_ARMOR) }),
+        SHOOTING("shooting", "Shooting", "射撃", { it.`is`(DamageTypeTags.IS_PROJECTILE) && !it.`is`(IS_MAGIC_DAMAGE_TYPE_TAG) }),
+        MAGIC("magic", "Magic", "魔法", { it.`is`(IS_MAGIC_DAMAGE_TYPE_TAG) }),
         FIRE("fire", "Fire", "火属性", { it.`is`(DamageTypeTags.IS_FIRE) }),
         FALL("fall", "Fall", "落下", { it.`is`(DamageTypeTags.IS_FALL) }),
         SPINE("spine", "Spine", "棘", { it.`is`(SPINE_DAMAGE_TYPE_TAG) }),
