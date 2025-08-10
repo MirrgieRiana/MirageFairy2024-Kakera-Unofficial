@@ -67,10 +67,15 @@ object ToolBreakDamageTypeCard : DamageTypeCard() {
 
 val C_IS_MAGIC_DAMAGE_TYPE_TAG = ResourceLocation.fromNamespaceAndPath("c", "is_magic").toDamageTypeTag()
 val NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG = ResourceLocation.fromNamespaceAndPath("neoforge", "is_magic").toDamageTypeTag()
+val IS_MAGIC_DAMAGE_TYPE_TAG = MirageFairy2024.identifier("is_magic").toDamageTypeTag()
 
 context(ModContext)
 fun initDamageType() {
     MagicDamageTypeCard.init()
     PhysicalMagicDamageTypeCard.init()
     ToolBreakDamageTypeCard.init()
+
+    DamageTypeTags.BYPASSES_ARMOR.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
+    C_IS_MAGIC_DAMAGE_TYPE_TAG.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
+    NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
 }

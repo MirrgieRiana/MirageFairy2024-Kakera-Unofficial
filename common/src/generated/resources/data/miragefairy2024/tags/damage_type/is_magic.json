@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:bypasses_armor",
+      "required": false
+    },
+    {
+      "id": "#c:is_magic",
+      "required": false
+    },
+    {
+      "id": "#neoforge:is_magic",
+      "required": false
+    }
+  ]
+}
