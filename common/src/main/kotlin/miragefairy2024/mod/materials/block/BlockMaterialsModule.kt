@@ -158,7 +158,7 @@ open class BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
             PoemList(4).poem(EnJa("The wall feels like it's protecting us", "その身に宿る、黒曜石の魂。")),
             MapColor.TERRACOTTA_BLUE, 120.0F, 1200.0F,
-        ).needTool(ToolType.PICKAXE, ToolLevel.DIAMOND).noBurn().beaconBase().init {
+        ).needTool(ToolType.PICKAXE, ToolLevel.DIAMOND).noBurn().soulStream().beaconBase().init {
             registerCompressionRecipeGeneration(MaterialCard.MIRAGIDIAN.item, item)
         }
         val LUMINITE_BLOCK = !object : BlockMaterialCard(
@@ -245,7 +245,7 @@ open class BlockMaterialCard(
             }
 
             context(ModContext) override fun initModelGeneration() = Unit
-        }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).beaconBase().noSpawn().tag(BlockTags.IMPERMEABLE).init {
+        }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).soulStream().beaconBase().noSpawn().tag(BlockTags.IMPERMEABLE).init {
             // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier }) {
                 fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
