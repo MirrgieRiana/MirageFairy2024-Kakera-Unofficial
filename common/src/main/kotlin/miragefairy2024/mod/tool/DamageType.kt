@@ -7,8 +7,10 @@ import miragefairy2024.util.en
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerDamageTypeTagGeneration
 import miragefairy2024.util.registerDynamicGeneration
+import miragefairy2024.util.toDamageTypeTag
 import miragefairy2024.util.with
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageType
@@ -46,14 +48,14 @@ object MagicDamageTypeCard : DamageTypeCard() {
     override fun getPath() = "magic"
     override fun getKillMessage() = EnJa("%1\$s was killed by magic", "%1\$sは魔法で殺された")
     override fun getPlayerKillMessage() = EnJa("%1\$s was killed by magic whilst trying to escape %2\$s", "%1\$sは%2\$sとの戦闘中に魔法で殺された")
-    override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.BYPASSES_ARMOR)
+    override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.BYPASSES_ARMOR, C_IS_MAGIC_DAMAGE_TYPE_TAG, NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG)
 }
 
 object PhysicalMagicDamageTypeCard : DamageTypeCard() {
     override fun getPath() = "physical_magic"
     override fun getKillMessage() = EnJa("%1\$s was killed by magic", "%1\$sは魔法で殺された")
     override fun getPlayerKillMessage() = EnJa("%1\$s was killed by magic whilst trying to escape %2\$s", "%1\$sは%2\$sとの戦闘中に魔法で殺された")
-    override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE)
+    override fun getTags() = listOf(DamageTypeTags.IS_PROJECTILE, C_IS_MAGIC_DAMAGE_TYPE_TAG, NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG)
 }
 
 object ToolBreakDamageTypeCard : DamageTypeCard() {
@@ -62,6 +64,9 @@ object ToolBreakDamageTypeCard : DamageTypeCard() {
     override fun getPlayerKillMessage() = EnJa("%1\$s injured their hand whilst trying to escape %2\$s", "%1\$sは%2\$sとの戦闘中に手を怪我した")
     override fun getTags() = listOf(DamageTypeTags.NO_KNOCKBACK)
 }
+
+val C_IS_MAGIC_DAMAGE_TYPE_TAG = ResourceLocation.fromNamespaceAndPath("c", "is_magic").toDamageTypeTag()
+val NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG = ResourceLocation.fromNamespaceAndPath("neoforge", "is_magic").toDamageTypeTag()
 
 context(ModContext)
 fun initDamageType() {
