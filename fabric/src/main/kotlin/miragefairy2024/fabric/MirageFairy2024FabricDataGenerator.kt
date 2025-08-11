@@ -69,6 +69,14 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
+    private class SimpleTagGenerator<T>(private val registryKey: ResourceKey<out Registry<T>>) : TagGenerator<T> {
+        override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
+            return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+            }
+        }
+    }
+
     private fun common(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
@@ -99,11 +107,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         fun <T> f(registryKey: ResourceKey<out Registry<T>>, eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
-            f2(eventRegistry) { output, registriesFuture, adder ->
-                object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
-            }
+            f2(eventRegistry, SimpleTagGenerator(registryKey))
         }
         f(Registries.BIOME, DataGenerationEvents.onGenerateBiomeTag)
         f(Registries.STRUCTURE, DataGenerationEvents.onGenerateStructureTag)
