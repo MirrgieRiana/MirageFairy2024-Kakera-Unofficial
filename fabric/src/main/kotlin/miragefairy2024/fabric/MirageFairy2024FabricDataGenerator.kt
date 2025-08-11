@@ -68,12 +68,19 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     }
 
     private abstract class TagGenerator<T> {
-        abstract fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
+        fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>): FabricTagProvider<T> {
+            val adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit = { builderFactory ->
+                eventRegistry.fire { listener -> listener(builderFactory) }
+            }
+            return createProviderImpl(output, registriesFuture, adder)
+        }
+
+        abstract fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
     private fun <T> SimpleTagGenerator(registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
         return object : TagGenerator<T>() {
-            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
                 return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
                     override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
@@ -90,21 +97,18 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         fun <T> f2(eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>, tagGenerator: TagGenerator<T>) {
             pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                val adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit = { builderFactory ->
-                    eventRegistry.fire { listener -> listener(builderFactory) }
-                }
-                tagGenerator.createProvider(output, registriesFuture, adder)
+                tagGenerator.createProvider(output, registriesFuture, eventRegistry)
             }
         }
         f2(DataGenerationEvents.onGenerateBlockTag, object : TagGenerator<Block>() {
-            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
                 return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
                     override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
             }
         })
         f2(DataGenerationEvents.onGenerateItemTag, object : TagGenerator<Item>() {
-            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
                 return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
                     override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
