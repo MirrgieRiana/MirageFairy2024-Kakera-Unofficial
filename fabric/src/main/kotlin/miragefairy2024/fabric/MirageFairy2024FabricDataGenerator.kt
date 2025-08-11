@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.DataMapConsumer
-import miragefairy2024.InitializationEventRegistry
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
@@ -24,19 +23,16 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
-import net.minecraft.core.registries.Registries
 import net.minecraft.data.DataProvider
 import net.minecraft.data.advancements.AdvancementProvider
 import net.minecraft.data.advancements.AdvancementSubProvider
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.TagKey
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
@@ -63,56 +59,6 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             "neoforge" -> neoForge(pack)
             else -> throw IllegalArgumentException("Unknown platform: $platform")
         }
-    }
-
-    private abstract class TagGenerator<T>(private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
-        fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
-            val adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit = { builderFactory ->
-                eventRegistry.fire { listener -> listener(builderFactory) }
-            }
-            return createProviderImpl(output, registriesFuture, adder)
-        }
-
-        abstract fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
-    }
-
-    private fun <T> TagGenerator(
-        eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
-        factory: (FabricDataOutput, CompletableFuture<HolderLookup.Provider>, ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit) -> FabricTagProvider<T>,
-    ): TagGenerator<T> {
-        return object : TagGenerator<T>(eventRegistry) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-                return factory(output, registriesFuture, adder)
-            }
-        }
-    }
-
-    private fun <T> SimpleTagGenerator(eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>, registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
-        return object : TagGenerator<T>(eventRegistry) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-                return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
-            }
-        }
-    }
-
-    private enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
-        BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-            }
-        }),
-        ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-            }
-        }),
-        BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
-        STRUCTURE(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
-        ENTITY_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
-        DAMAGE_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
-        ENCHANTMENT(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
     }
 
     private fun common(pack: FabricDataGenerator.Pack) {
