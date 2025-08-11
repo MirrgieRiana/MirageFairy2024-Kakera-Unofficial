@@ -92,28 +92,21 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 tagGenerator.createProvider(output, registriesFuture, adder)
             }
         }
-        run {
-            f2(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
-                object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
+        f2(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
             }
         }
-        run {
-            f2(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
-                object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
+        f2(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
             }
         }
-        fun <T> f(registryKey: ResourceKey<out Registry<T>>, eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
-            f2(eventRegistry, SimpleTagGenerator(registryKey))
-        }
-        f(Registries.BIOME, DataGenerationEvents.onGenerateBiomeTag)
-        f(Registries.STRUCTURE, DataGenerationEvents.onGenerateStructureTag)
-        f(Registries.ENTITY_TYPE, DataGenerationEvents.onGenerateEntityTypeTag)
-        f(Registries.DAMAGE_TYPE, DataGenerationEvents.onGenerateDamageTypeTag)
-        f(Registries.ENCHANTMENT, DataGenerationEvents.onGenerateEnchantmentTag)
+        f2(DataGenerationEvents.onGenerateBiomeTag, SimpleTagGenerator(Registries.BIOME))
+        f2(DataGenerationEvents.onGenerateStructureTag, SimpleTagGenerator(Registries.STRUCTURE))
+        f2(DataGenerationEvents.onGenerateEntityTypeTag, SimpleTagGenerator(Registries.ENTITY_TYPE))
+        f2(DataGenerationEvents.onGenerateDamageTypeTag, SimpleTagGenerator(Registries.DAMAGE_TYPE))
+        f2(DataGenerationEvents.onGenerateEnchantmentTag, SimpleTagGenerator(Registries.ENCHANTMENT))
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
             object : FabricBlockLootTableProvider(output, registriesFuture) {
