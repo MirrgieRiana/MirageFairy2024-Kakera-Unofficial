@@ -79,6 +79,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         run {
+            val eventRegistry = DataGenerationEvents.onGenerateBlockTag
             val tagGenerator = object : TagGenerator<Block> {
                 override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
                     return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
@@ -87,7 +88,6 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 }
             }
             pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                val eventRegistry = DataGenerationEvents.onGenerateBlockTag
                 val adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit = { builderFactory ->
                     eventRegistry.fire { listener -> listener(builderFactory) }
                 }
@@ -95,6 +95,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         run {
+            val eventRegistry = DataGenerationEvents.onGenerateItemTag
             val tagGenerator = object : TagGenerator<Item> {
                 override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
                     return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
@@ -103,7 +104,6 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 }
             }
             pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                val eventRegistry = DataGenerationEvents.onGenerateItemTag
                 val adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit = { builderFactory ->
                     eventRegistry.fire { listener -> listener(builderFactory) }
                 }
