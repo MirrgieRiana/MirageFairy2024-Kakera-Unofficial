@@ -8,7 +8,7 @@ import miragefairy2024.DataMapConsumer
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
-import miragefairy2024.TagGeneratorCard
+import miragefairy2024.TagGenerator
 import miragefairy2024.platformProxy
 import miragefairy2024.util.string
 import miragefairy2024.util.times
@@ -69,9 +69,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }
-        TagGeneratorCard.entries.forEach {
+        TagGenerator.entries.forEach {
             pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                it.tagGenerator.createProvider(output, registriesFuture)
+                it.createProvider(output, registriesFuture)
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->

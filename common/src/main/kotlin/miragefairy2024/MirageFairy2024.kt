@@ -52,25 +52,23 @@ object DataGenerationEvents {
     val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
 }
 
-class TagGeneratorCard<T>(val tagGenerator: TagGenerator<T>) {
-    companion object {
-        val entries = mutableListOf<TagGeneratorCard<*>>()
-        private operator fun <T> TagGeneratorCard<T>.not() = this.also { entries.add(it) }
-
-        val BLOCK = !TagGeneratorCard(TagGenerator(Registries.BLOCK) { element -> element.builtInRegistryHolder().key() })
-        val ITEM = !TagGeneratorCard(TagGenerator(Registries.ITEM) { element -> element.builtInRegistryHolder().key() })
-        val BIOME = !TagGeneratorCard(TagGenerator(Registries.BIOME))
-        val STRUCTURE = !TagGeneratorCard(TagGenerator(Registries.STRUCTURE))
-        val ENTITY_TYPE = !TagGeneratorCard(TagGenerator(Registries.ENTITY_TYPE))
-        val DAMAGE_TYPE = !TagGeneratorCard(TagGenerator(Registries.DAMAGE_TYPE))
-        val ENCHANTMENT = !TagGeneratorCard(TagGenerator(Registries.ENCHANTMENT))
-    }
-}
-
 class TagGenerator<T>(
     private val registryKey: ResourceKey<out Registry<T>>,
     private val reverseLookupFunction: ((T) -> ResourceKey<T>)? = null,
 ) {
+    companion object {
+        val entries = mutableListOf<TagGenerator<*>>()
+        private operator fun <T> TagGenerator<T>.not() = this.also { entries.add(it) }
+
+        val BLOCK = !TagGenerator(Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }
+        val ITEM = !TagGenerator(Registries.ITEM) { element -> element.builtInRegistryHolder().key() }
+        val BIOME = !TagGenerator(Registries.BIOME)
+        val STRUCTURE = !TagGenerator(Registries.STRUCTURE)
+        val ENTITY_TYPE = !TagGenerator(Registries.ENTITY_TYPE)
+        val DAMAGE_TYPE = !TagGenerator(Registries.DAMAGE_TYPE)
+        val ENCHANTMENT = !TagGenerator(Registries.ENCHANTMENT)
+    }
+
     val eventRegistry = InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>()
 
     fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
