@@ -69,9 +69,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
-    private class SimpleTagGenerator<T>(private val registryKey: ResourceKey<out Registry<T>>) : TagGenerator<T> {
-        override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-            return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+    private fun <T> SimpleTagGenerator(registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
+        return TagGenerator { output, registriesFuture, adder ->
+            object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
                 override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
             }
         }
