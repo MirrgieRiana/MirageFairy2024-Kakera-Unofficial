@@ -12,46 +12,24 @@ import net.minecraft.tags.TagKey
 import java.util.concurrent.CompletableFuture
 
 enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
-    BLOCK(SimpleTagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }),
-    ITEM(SimpleTagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }),
-    BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
-    STRUCTURE(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
-    ENTITY_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
-    DAMAGE_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
-    ENCHANTMENT(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
+    BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }),
+    ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }),
+    BIOME(TagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
+    STRUCTURE(TagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
+    ENTITY_TYPE(TagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
+    DAMAGE_TYPE(TagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
+    ENCHANTMENT(TagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
 }
 
-abstract class TagGenerator<T>(private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
+class TagGenerator<T>(
+    private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
+    private val registryKey: ResourceKey<out Registry<T>>,
+    private val reverseLookupFunction: ((T) -> ResourceKey<T>)? = null,
+) {
     fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
-        val adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit = { builderFactory ->
-            eventRegistry.fire { listener -> listener(builderFactory) }
-        }
-        return createProviderImpl(output, registriesFuture, adder)
-    }
-
-    abstract fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
-}
-
-private fun <T> TagGenerator(
-    eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
-    factory: (FabricDataOutput, CompletableFuture<HolderLookup.Provider>, ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit) -> FabricTagProvider<T>,
-): TagGenerator<T> {
-    return object : TagGenerator<T>(eventRegistry) {
-        override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-            return factory(output, registriesFuture, adder)
-        }
-    }
-}
-
-private fun <T> SimpleTagGenerator(
-    eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
-    registryKey: ResourceKey<out Registry<T>>,
-    reverseLookup: ((T) -> ResourceKey<T>)? = null,
-): TagGenerator<T> {
-    return TagGenerator(eventRegistry) { output, registriesFuture, adder ->
-        object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-            override fun reverseLookup(element: T) = if (reverseLookup == null) super.reverseLookup(element) else reverseLookup(element)
-            override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+        return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+            override fun reverseLookup(element: T) = if (reverseLookupFunction == null) super.reverseLookup(element) else reverseLookupFunction(element)
+            override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
         }
     }
 }
