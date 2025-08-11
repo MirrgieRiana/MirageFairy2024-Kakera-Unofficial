@@ -17,13 +17,7 @@ import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.enchantment.Enchantment
-import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -39,13 +33,6 @@ object DataGenerationEvents {
 
     val onGenerateBlockModel = InitializationEventRegistry<(BlockModelGenerators) -> Unit>()
     val onGenerateItemModel = InitializationEventRegistry<(ItemModelGenerators) -> Unit>()
-    val onGenerateBlockTag = InitializationEventRegistry<((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit>()
-    val onGenerateItemTag = InitializationEventRegistry<((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit>()
-    val onGenerateBiomeTag = InitializationEventRegistry<((TagKey<Biome>) -> FabricTagProvider<Biome>.FabricTagBuilder) -> Unit>()
-    val onGenerateStructureTag = InitializationEventRegistry<((TagKey<Structure>) -> FabricTagProvider<Structure>.FabricTagBuilder) -> Unit>()
-    val onGenerateEntityTypeTag = InitializationEventRegistry<((TagKey<EntityType<*>>) -> FabricTagProvider<EntityType<*>>.FabricTagBuilder) -> Unit>()
-    val onGenerateDamageTypeTag = InitializationEventRegistry<((TagKey<DamageType>) -> FabricTagProvider<DamageType>.FabricTagBuilder) -> Unit>()
-    val onGenerateEnchantmentTag = InitializationEventRegistry<((TagKey<Enchantment>) -> FabricTagProvider<Enchantment>.FabricTagBuilder) -> Unit>()
     val onGenerateBlockLootTable = InitializationEventRegistry<(FabricBlockLootTableProvider, HolderLookup.Provider) -> Unit>()
     val onGenerateChestLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
     val onGenerateArchaeologyLootTable = InitializationEventRegistry<((ResourceKey<LootTable>, LootTable.Builder) -> Unit, HolderLookup.Provider) -> Unit>()
@@ -65,21 +52,27 @@ object DataGenerationEvents {
     val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
 }
 
-enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
-    BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }),
-    ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }),
-    BIOME(TagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
-    STRUCTURE(TagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
-    ENTITY_TYPE(TagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
-    DAMAGE_TYPE(TagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
-    ENCHANTMENT(TagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
+class TagGeneratorCard<T>(val tagGenerator: TagGenerator<T>) {
+    companion object {
+        val entries = mutableListOf<TagGeneratorCard<*>>()
+        private operator fun <T> TagGeneratorCard<T>.not() = this.also { entries.add(it) }
+
+        val BLOCK = !TagGeneratorCard(TagGenerator(Registries.BLOCK) { element -> element.builtInRegistryHolder().key() })
+        val ITEM = !TagGeneratorCard(TagGenerator(Registries.ITEM) { element -> element.builtInRegistryHolder().key() })
+        val BIOME = !TagGeneratorCard(TagGenerator(Registries.BIOME))
+        val STRUCTURE = !TagGeneratorCard(TagGenerator(Registries.STRUCTURE))
+        val ENTITY_TYPE = !TagGeneratorCard(TagGenerator(Registries.ENTITY_TYPE))
+        val DAMAGE_TYPE = !TagGeneratorCard(TagGenerator(Registries.DAMAGE_TYPE))
+        val ENCHANTMENT = !TagGeneratorCard(TagGenerator(Registries.ENCHANTMENT))
+    }
 }
 
 class TagGenerator<T>(
-    private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
     private val registryKey: ResourceKey<out Registry<T>>,
     private val reverseLookupFunction: ((T) -> ResourceKey<T>)? = null,
 ) {
+    val eventRegistry = InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>()
+
     fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
         return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
             override fun reverseLookup(element: T) = if (reverseLookupFunction == null) super.reverseLookup(element) else reverseLookupFunction(element)

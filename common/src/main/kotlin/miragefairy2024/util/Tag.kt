@@ -1,7 +1,7 @@
 package miragefairy2024.util
 
-import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
+import miragefairy2024.TagGeneratorCard
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -24,66 +24,66 @@ fun ResourceLocation.toStructureTag(): TagKey<Structure> = this.toTag(Registries
 
 
 context(ModContext)
-fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
+fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = TagGeneratorCard.BLOCK.tagGenerator.eventRegistry {
     it(tagProvider()).add(this())
 }
 
 context(ModContext)
-fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = DataGenerationEvents.onGenerateBlockTag {
+fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = TagGeneratorCard.BLOCK.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
 
 context(ModContext)
-fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
+fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = TagGeneratorCard.ITEM.tagGenerator.eventRegistry {
     it(tagProvider()).add(this())
 }
 
 context(ModContext)
-fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateItemTag {
+fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = TagGeneratorCard.ITEM.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
 
 context(ModContext)
-fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
+fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = TagGeneratorCard.BIOME.tagGenerator.eventRegistry {
     it(tagProvider()).add(this)
 }
 
 context(ModContext)
-fun ResourceLocation.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = DataGenerationEvents.onGenerateStructureTag {
+fun ResourceLocation.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = TagGeneratorCard.STRUCTURE.tagGenerator.eventRegistry {
     it(tagProvider()).add(this)
 }
 
 context(ModContext)
-fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
+fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = TagGeneratorCard.BIOME.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
 
 context(ModContext)
-fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
+fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = TagGeneratorCard.ENTITY_TYPE.tagGenerator.eventRegistry {
     it(tagProvider()).add(this())
 }
 
 context(ModContext)
-fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = DataGenerationEvents.onGenerateEntityTypeTag {
+fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = TagGeneratorCard.ENTITY_TYPE.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
 
 context(ModContext)
-fun ResourceLocation.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
+fun ResourceLocation.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = TagGeneratorCard.DAMAGE_TYPE.tagGenerator.eventRegistry {
     it(tagProvider()).add(this)
 }
 
 context(ModContext)
-fun TagKey<DamageType>.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = DataGenerationEvents.onGenerateDamageTypeTag {
+fun TagKey<DamageType>.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = TagGeneratorCard.DAMAGE_TYPE.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
 
 context(ModContext)
-fun ResourceKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = DataGenerationEvents.onGenerateEnchantmentTag {
+fun ResourceKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = TagGeneratorCard.ENCHANTMENT.tagGenerator.eventRegistry {
     it(tagProvider()).add(this)
 }
 
 context(ModContext)
-fun TagKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = DataGenerationEvents.onGenerateEnchantmentTag {
+fun TagKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = TagGeneratorCard.ENCHANTMENT.tagGenerator.eventRegistry {
     it(tagProvider()).addOptionalTag(this)
 }
