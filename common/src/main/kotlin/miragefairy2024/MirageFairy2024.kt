@@ -2,6 +2,7 @@ package miragefairy2024
 
 import com.google.gson.JsonElement
 import miragefairy2024.mod.NinePatchTextureCard
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
@@ -9,6 +10,7 @@ import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistrySetBuilder
+import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.BlockModelGenerators
 import net.minecraft.data.models.ItemModelGenerators
 import net.minecraft.data.recipes.RecipeOutput
@@ -23,6 +25,7 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.storage.loot.LootTable
+import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 object ModEvents {
@@ -60,6 +63,29 @@ object DataGenerationEvents {
     val onBuildRegistry = InitializationEventRegistry<(RegistrySetBuilder) -> Unit>()
 
     val dynamicGenerationRegistries = mutableSetOf<ResourceKey<out Registry<*>>>()
+}
+
+enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
+    BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }),
+    ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }),
+    BIOME(TagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
+    STRUCTURE(TagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
+    ENTITY_TYPE(TagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
+    DAMAGE_TYPE(TagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
+    ENCHANTMENT(TagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
+}
+
+class TagGenerator<T>(
+    private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
+    private val registryKey: ResourceKey<out Registry<T>>,
+    private val reverseLookupFunction: ((T) -> ResourceKey<T>)? = null,
+) {
+    fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
+        return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+            override fun reverseLookup(element: T) = if (reverseLookupFunction == null) super.reverseLookup(element) else reverseLookupFunction(element)
+            override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+        }
+    }
 }
 
 interface DataMapConsumer {
