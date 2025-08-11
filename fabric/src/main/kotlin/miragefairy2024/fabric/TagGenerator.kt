@@ -9,8 +9,6 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
 import java.util.concurrent.CompletableFuture
 
 enum class TagGeneratorCard {
@@ -25,20 +23,8 @@ enum class TagGeneratorCard {
 
 fun TagGeneratorCard.createTagGenerator(): TagGenerator<*> {
     return when (this) {
-        TagGeneratorCard.BLOCK -> TagGenerator(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider<Block>(output, Registries.BLOCK, registriesFuture) {
-                override fun reverseLookup(element: Block) = element.builtInRegistryHolder().key()
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-            }
-        }
-
-        TagGeneratorCard.ITEM -> TagGenerator(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider<Item>(output, Registries.ITEM, registriesFuture) {
-                override fun reverseLookup(element: Item) = element.builtInRegistryHolder().key()
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-            }
-        }
-
+        TagGeneratorCard.BLOCK -> SimpleTagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }
+        TagGeneratorCard.ITEM -> SimpleTagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }
         TagGeneratorCard.BIOME -> SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)
         TagGeneratorCard.STRUCTURE -> SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)
         TagGeneratorCard.ENTITY_TYPE -> SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)
