@@ -70,11 +70,9 @@ private fun <T> TagGenerator(
 }
 
 private fun <T> SimpleTagGenerator(eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>, registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
-    return object : TagGenerator<T>(eventRegistry) {
-        override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-            return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-            }
+    return TagGenerator(eventRegistry) { output, registriesFuture, adder ->
+        object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+            override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
         }
     }
 }
