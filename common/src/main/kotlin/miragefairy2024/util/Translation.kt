@@ -2,6 +2,7 @@ package miragefairy2024.util
 
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -37,6 +38,13 @@ context(ModContext)
 fun (() -> EntityType<*>).enJa(name: EnJa) {
     en { this().descriptionId to name.en }
     ja { this().descriptionId to name.ja }
+}
+
+context(ModContext)
+@JvmName("enJaTagKey")
+fun <T> TagKey<T>.enJa(name: EnJa) {
+    en { this.translationKey to name.en }
+    ja { this.translationKey to name.ja }
 }
 
 
