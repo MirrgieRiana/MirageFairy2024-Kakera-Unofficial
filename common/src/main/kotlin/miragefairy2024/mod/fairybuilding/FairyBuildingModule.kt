@@ -5,7 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_BLOCK_TAG
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.generator
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.toBlockTag
 import net.minecraft.resources.ResourceLocation
 
@@ -34,5 +35,5 @@ fun initFairyBuildingModule() {
     FOLIA_TRANSLATION.enJa()
     SPECIFIED_FAIRY_SLOT_TRANSLATION.enJa()
 
-    FAIRY_BUILDING_BLOCK_TAG.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
+    HAIMEVISKA_LOGS_BLOCK_TAG.generator.registerChild(FAIRY_BUILDING_BLOCK_TAG)
 }

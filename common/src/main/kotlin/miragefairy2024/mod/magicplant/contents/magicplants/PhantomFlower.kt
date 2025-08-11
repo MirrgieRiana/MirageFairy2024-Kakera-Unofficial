@@ -12,8 +12,9 @@ import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.flower
+import miragefairy2024.util.generator
 import miragefairy2024.util.per
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
 import miragefairy2024.util.unaryPlus
@@ -99,7 +100,7 @@ object PhantomFlowerCard : AbstractMirageFlowerCard<PhantomFlowerBlock>() {
     context(ModContext)
     override fun init() {
         super.init()
-        block.registerBlockTagGeneration { LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG }
+        LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG.generator.registerChild(block)
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
                 placedFeature("cluster", { per(16) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey }

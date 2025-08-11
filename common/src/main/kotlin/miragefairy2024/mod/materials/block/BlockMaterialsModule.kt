@@ -25,16 +25,16 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.generator
 import miragefairy2024.util.on
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlockFamily
 import miragefairy2024.util.registerBlockStateGeneration
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
@@ -361,14 +361,14 @@ private fun <T : BlockMaterialCard> T.translucent() = this.init {
 @JvmName("blockTag")
 private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Block>) = this.init {
     tags.forEach {
-        block.registerBlockTagGeneration { it }
+        it.generator.registerChild(block)
     }
 }
 
 @JvmName("itemTag")
 private fun <T : BlockMaterialCard> T.tag(vararg tags: TagKey<Item>) = this.init {
     tags.forEach {
-        item.registerItemTagGeneration { it }
+        it.generator.registerChild(item)
     }
 }
 

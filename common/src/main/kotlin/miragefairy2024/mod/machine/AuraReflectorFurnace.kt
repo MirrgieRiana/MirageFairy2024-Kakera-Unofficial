@@ -16,13 +16,14 @@ import miragefairy2024.util.Model
 import miragefairy2024.util.Registration
 import miragefairy2024.util.TextureMap
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.int
 import miragefairy2024.util.normal
 import miragefairy2024.util.on
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
@@ -100,7 +101,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
 
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
+        BlockTags.MINEABLE_WITH_PICKAXE.generator.registerChild(block)
 
         registerShapedRecipeGeneration(item) {
             pattern("XXX")

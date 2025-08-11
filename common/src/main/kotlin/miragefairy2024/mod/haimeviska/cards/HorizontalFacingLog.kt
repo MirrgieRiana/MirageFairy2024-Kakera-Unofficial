@@ -6,11 +6,11 @@ import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_ITEM_TAG
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.mod.haimeviska.createBaseWoodSetting
+import miragefairy2024.util.generator
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.normal
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
@@ -44,9 +44,9 @@ abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaB
         block.registerFlammable(5, 5)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
-        block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
-        item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+        BlockTags.OVERWORLD_NATURAL_LOGS.generator.registerChild(block)
+        HAIMEVISKA_LOGS_BLOCK_TAG.generator.registerChild(block)
+        HAIMEVISKA_LOGS_ITEM_TAG.generator.registerChild(item)
 
     }
 }

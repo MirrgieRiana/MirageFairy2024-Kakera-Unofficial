@@ -4,13 +4,13 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_CONFIGURED_FEATURE_KEY
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
+import miragefairy2024.util.generator
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.registerBlockGeneratedModelGeneration
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
@@ -62,8 +62,8 @@ class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, pr
         item.registerComposterInput(0.3F)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.SAPLINGS }
-        item.registerItemTagGeneration { ItemTags.SAPLINGS }
+        BlockTags.SAPLINGS.generator.registerChild(block)
+        ItemTags.SAPLINGS.generator.registerChild(item)
 
     }
 }

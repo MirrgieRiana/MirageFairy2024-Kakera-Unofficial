@@ -14,7 +14,8 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
-import miragefairy2024.util.registerBiomeTagGeneration
+import miragefairy2024.util.generator
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.toBiomeTag
 import miragefairy2024.util.with
@@ -94,7 +95,7 @@ fun initBiomeModule() {
 
         // このバイオームをタグに登録
         card.tags.forEach { tag ->
-            card.identifier.registerBiomeTagGeneration { tag }
+            tag.generator.registerChild(card.identifier)
         }
 
         // 翻訳生成

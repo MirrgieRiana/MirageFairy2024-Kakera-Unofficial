@@ -4,8 +4,9 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
+import miragefairy2024.util.generator
 import miragefairy2024.util.ja
-import miragefairy2024.util.registerDamageTypeTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.toDamageTypeTag
 import miragefairy2024.util.with
@@ -39,7 +40,7 @@ abstract class DamageTypeCard {
         en { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().en }
         ja { identifier.toLanguageKey("death.attack", "player") to getPlayerKillMessage().ja }
         getTags().forEach {
-            identifier.registerDamageTypeTagGeneration { it }
+            it.generator.registerChild(identifier)
         }
     }
 }
@@ -75,7 +76,7 @@ fun initDamageType() {
     PhysicalMagicDamageTypeCard.init()
     ToolBreakDamageTypeCard.init()
 
-    DamageTypeTags.BYPASSES_ARMOR.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
-    C_IS_MAGIC_DAMAGE_TYPE_TAG.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
-    NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG.registerDamageTypeTagGeneration { IS_MAGIC_DAMAGE_TYPE_TAG }
+    IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypeTags.BYPASSES_ARMOR)
+    IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(C_IS_MAGIC_DAMAGE_TYPE_TAG)
+    IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG)
 }

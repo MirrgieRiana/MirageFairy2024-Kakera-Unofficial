@@ -17,9 +17,10 @@ import miragefairy2024.util.BlockStateVariantEntry
 import miragefairy2024.util.BlockStateVariantRotation
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.propertiesOf
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
@@ -95,7 +96,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
+        BlockTags.MINEABLE_WITH_PICKAXE.generator.registerChild(block)
 
         block.registerDefaultLootTableGeneration()
 

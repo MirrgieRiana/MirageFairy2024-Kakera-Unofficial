@@ -14,9 +14,10 @@ import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.generator
 import miragefairy2024.util.on
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerShapedRecipeGeneration
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
@@ -70,7 +71,7 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fermentation_barrel")) { FermentationBarrelBlock.CODEC }.register()
 
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
+        BlockTags.MINEABLE_WITH_AXE.generator.registerChild(block)
 
         registerShapedRecipeGeneration(item) {
             pattern("ILI")

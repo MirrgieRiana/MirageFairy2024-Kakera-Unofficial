@@ -6,10 +6,11 @@ import miragefairy2024.mod.SoundEventCard
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.mod.tool.MagicDamageTypeCard
 import miragefairy2024.util.Registration
+import miragefairy2024.util.generator
 import miragefairy2024.util.getValue
 import miragefairy2024.util.isServer
 import miragefairy2024.util.register
-import miragefairy2024.util.registerEntityTypeTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
@@ -47,7 +48,7 @@ object AntimatterBoltCard {
     context(ModContext)
     fun init() {
         entityType.register()
-        entityType.registerEntityTypeTagGeneration { EntityTypeTags.IMPACT_PROJECTILES }
+        EntityTypeTags.IMPACT_PROJECTILES.generator.registerChild(entityType)
     }
 }
 

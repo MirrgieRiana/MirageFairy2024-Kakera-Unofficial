@@ -10,9 +10,10 @@ import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
 import miragefairy2024.mod.materials.block.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
+import miragefairy2024.util.generator
 import miragefairy2024.util.on
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerShapedRecipeGeneration
 import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -70,7 +71,7 @@ object FairyPassiveSupplierCard : FairyLogisticsCard<FairyPassiveSupplierBlock, 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("fairy_passive_supplier")) { FairyPassiveSupplierBlock.CODEC }.register()
 
 
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
+        BlockTags.MINEABLE_WITH_AXE.generator.registerChild(block)
 
 
         inventorySlotConfigurations += FAIRY_SLOT

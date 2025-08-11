@@ -9,11 +9,11 @@ import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_ITEM_TAG
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.mod.haimeviska.createBaseWoodSetting
+import miragefairy2024.util.generator
 import miragefairy2024.util.on
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.toBlockTag
 import miragefairy2024.util.toItemTag
@@ -56,8 +56,8 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
         block.registerFlammable(5, 5)
 
         // タグ
-        block.registerBlockTagGeneration { HAIMEVISKA_LOGS_BLOCK_TAG }
-        item.registerItemTagGeneration { HAIMEVISKA_LOGS_ITEM_TAG }
+        HAIMEVISKA_LOGS_BLOCK_TAG.generator.registerChild(block)
+        HAIMEVISKA_LOGS_ITEM_TAG.generator.registerChild(item)
 
     }
 
@@ -77,8 +77,8 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
 
     context(ModContext)
     protected fun initStripped(input: () -> Block) {
-        block.registerBlockTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toBlockTag() }
-        item.registerItemTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toItemTag() }
+        ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toBlockTag().generator.registerChild(block)
+        ResourceLocation.fromNamespaceAndPath("c", "stripped_logs").toItemTag().generator.registerChild(item)
         ModEvents.onInitialize {
             StrippableBlockRegistry.register(input(), block())
         }
@@ -93,7 +93,7 @@ class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : Abst
     override fun init() {
         super.init()
         registerModelGeneration(block) { it.logWithHorizontal(block()) }
-        block.registerBlockTagGeneration { BlockTags.OVERWORLD_NATURAL_LOGS }
+        BlockTags.OVERWORLD_NATURAL_LOGS.generator.registerChild(block)
     }
 }
 

@@ -22,6 +22,7 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrDefault
@@ -35,7 +36,7 @@ import miragefairy2024.util.on
 import miragefairy2024.util.optional
 import miragefairy2024.util.plus
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
@@ -132,7 +133,7 @@ fun initTelescopeModule() {
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
 
-        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
+        BlockTags.MINEABLE_WITH_PICKAXE.generator.registerChild(card.block)
 
         card.block.registerDefaultLootTableGeneration()
 

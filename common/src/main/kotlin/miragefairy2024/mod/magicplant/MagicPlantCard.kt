@@ -13,8 +13,9 @@ import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerGeneratedModelGeneration
@@ -94,8 +95,8 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
 
         // 性質
         //block.registerTagGenerate(BlockTags.SMALL_FLOWERS) // これをやるとエンダーマンが勝手に引っこ抜いていく
-        block.registerBlockTagGeneration { BlockTags.MAINTAINS_FARMLAND }
-        block.registerBlockTagGeneration { BlockTags.CROPS }
+        BlockTags.MAINTAINS_FARMLAND.generator.registerChild(block)
+        BlockTags.CROPS.generator.registerChild(block)
 
         // レシピ
         item.registerComposterInput(0.3F) // 種はコンポスターに投入可能

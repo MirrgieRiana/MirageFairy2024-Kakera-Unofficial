@@ -5,7 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
-import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.generator
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.toItemTag
 import net.minecraft.tags.TagKey
@@ -129,7 +130,7 @@ fun initToolMaterial() {
     }
 
 
-    fun register(card: ToolMaterialCard, item: () -> Item) = item.registerItemTagGeneration { card.tag }
+    fun register(card: ToolMaterialCard, item: () -> Item) = card.tag.generator.registerChild(item)
 
     // WOOD
     register(ToolMaterialCard.WOOD) { Items.WOODEN_SWORD }

@@ -34,6 +34,7 @@ import miragefairy2024.util.darkGray
 import miragefairy2024.util.empty
 import miragefairy2024.util.enJa
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.generator
 import miragefairy2024.util.getOrDefault
 import miragefairy2024.util.gold
 import miragefairy2024.util.gray
@@ -43,9 +44,9 @@ import miragefairy2024.util.join
 import miragefairy2024.util.plus
 import miragefairy2024.util.red
 import miragefairy2024.util.register
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerColorProvider
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.sortedEntrySet
 import miragefairy2024.util.string
@@ -140,7 +141,7 @@ fun initFairyItem() {
 
         card.item.enJa(EnJa(card.enName, card.jaName))
 
-        card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+        SOUL_STREAM_CONTAINABLE_TAG.generator.registerChild(card.item)
     }
 
     RARE_TRANSLATION.enJa()

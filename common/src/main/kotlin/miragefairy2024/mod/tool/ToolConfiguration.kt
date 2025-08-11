@@ -9,7 +9,8 @@ import miragefairy2024.mod.plus
 import miragefairy2024.mod.tool.items.FairyToolItem
 import miragefairy2024.mod.tool.items.onAfterBreakBlock
 import miragefairy2024.mod.tool.items.onKilled
-import miragefairy2024.util.registerItemTagGeneration
+import miragefairy2024.util.generator
+import miragefairy2024.util.registerChild
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.TagKey
@@ -97,9 +98,9 @@ abstract class ToolConfiguration {
     context(ModContext)
     fun init(card: ToolCard) {
         tags.forEach {
-            card.item.registerItemTagGeneration { it }
+            it.generator.registerChild(card.item)
         }
-        card.item.registerItemTagGeneration { toolMaterialCard.tag }
+        toolMaterialCard.tag.generator.registerChild(card.item)
     }
 
     fun appendPoems(poemList: PoemList): PoemList {

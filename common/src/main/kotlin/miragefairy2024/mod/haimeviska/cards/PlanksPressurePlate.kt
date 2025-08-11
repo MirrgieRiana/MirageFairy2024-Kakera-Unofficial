@@ -4,10 +4,10 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.mod.haimeviska.createBaseWoodSetting
+import miragefairy2024.util.generator
 import miragefairy2024.util.registerBlockFamily
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDefaultLootTableGeneration
-import miragefairy2024.util.registerItemTagGeneration
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
@@ -33,8 +33,8 @@ class HaimeviskaPlanksPressurePlateBlockCard(configuration: HaimeviskaBlockConfi
         block.registerDefaultLootTableGeneration()
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.WOODEN_PRESSURE_PLATES }
-        item.registerItemTagGeneration { ItemTags.WOODEN_PRESSURE_PLATES }
+        BlockTags.WOODEN_PRESSURE_PLATES.generator.registerChild(block)
+        ItemTags.WOODEN_PRESSURE_PLATES.generator.registerChild(item)
 
     }
 }

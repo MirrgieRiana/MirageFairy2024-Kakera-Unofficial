@@ -3,11 +3,11 @@ package miragefairy2024.mod.haimeviska.cards
 import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
+import miragefairy2024.util.generator
 import miragefairy2024.util.registerBlockFamily
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toBlockTag
 import miragefairy2024.util.toItemTag
 import net.minecraft.resources.ResourceLocation
@@ -33,10 +33,10 @@ class HaimeviskaPlanksFenceGateBlockCard(configuration: HaimeviskaBlockConfigura
         block.registerFlammable(5, 20)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.FENCE_GATES }
-        item.registerItemTagGeneration { ItemTags.FENCE_GATES }
-        block.registerBlockTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toBlockTag() }
-        item.registerItemTagGeneration { ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toItemTag() }
+        BlockTags.FENCE_GATES.generator.registerChild(block)
+        ItemTags.FENCE_GATES.generator.registerChild(item)
+        ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toBlockTag().generator.registerChild(block)
+        ResourceLocation.fromNamespaceAndPath("c", "fence_gates/wooden").toItemTag().generator.registerChild(item)
 
     }
 }

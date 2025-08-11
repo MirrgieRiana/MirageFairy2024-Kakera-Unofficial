@@ -4,11 +4,11 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.util.Registration
+import miragefairy2024.util.generator
 import miragefairy2024.util.registerBlockFamily
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.level.block.Block
@@ -30,8 +30,8 @@ class HaimeviskaPlanksStairsBlockCard(configuration: HaimeviskaBlockConfiguratio
         block.registerFlammable(5, 20)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.WOODEN_STAIRS }
-        item.registerItemTagGeneration { ItemTags.WOODEN_STAIRS }
+        BlockTags.WOODEN_STAIRS.generator.registerChild(block)
+        ItemTags.WOODEN_STAIRS.generator.registerChild(item)
 
     }
 }

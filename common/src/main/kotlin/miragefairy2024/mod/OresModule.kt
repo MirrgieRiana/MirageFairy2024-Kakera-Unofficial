@@ -13,12 +13,13 @@ import miragefairy2024.util.ModelFacesData
 import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.Registration
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.overworld
 import miragefairy2024.util.placementModifiers
 import miragefairy2024.util.randomIntCount
 import miragefairy2024.util.register
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.registerFeature
@@ -158,9 +159,9 @@ fun initOresModule() {
 
         card.block.registerOreLootTableGeneration(card.dropItem)
 
-        card.block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_PICKAXE }
-        card.block.registerBlockTagGeneration { BlockTags.NEEDS_STONE_TOOL }
-        card.block.registerBlockTagGeneration { ConventionalBlockTags.ORES }
+        BlockTags.MINEABLE_WITH_PICKAXE.generator.registerChild(card.block)
+        BlockTags.NEEDS_STONE_TOOL.generator.registerChild(card.block)
+        ConventionalBlockTags.ORES.generator.registerChild(card.block)
 
     }
 

@@ -14,6 +14,7 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.hasSameItemAndComponentsAndCount
 import miragefairy2024.util.invoke
@@ -24,9 +25,9 @@ import miragefairy2024.util.on
 import miragefairy2024.util.plus
 import miragefairy2024.util.quickMove
 import miragefairy2024.util.register
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.set
 import miragefairy2024.util.text
@@ -131,7 +132,7 @@ fun initBagModule() {
             .translation(PoemType.DESCRIPTION, BagCard.DESCRIPTION2_TRANSLATION)
         card.item.registerPoem(poemList)
         card.item.registerPoemGeneration(poemList)
-        card.item.registerItemTagGeneration { BagCard.BAG_ITEM_TAG }
+        BagCard.BAG_ITEM_TAG.generator.registerChild(card.item)
     }
 
 

@@ -14,10 +14,11 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.getOrNull
 import miragefairy2024.util.normal
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerItemGroup
@@ -131,8 +132,8 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
         item.registerPoem(poemList)
         item.registerPoemGeneration(poemList)
 
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_AXE }
-        block.registerBlockTagGeneration { FAIRY_BUILDING_BLOCK_TAG }
+        BlockTags.MINEABLE_WITH_AXE.generator.registerChild(block)
+        FAIRY_BUILDING_BLOCK_TAG.generator.registerChild(block)
 
         block.registerDefaultLootTableGeneration()
 

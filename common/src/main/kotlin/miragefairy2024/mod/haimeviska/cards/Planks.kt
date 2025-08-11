@@ -5,11 +5,11 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.mod.haimeviska.createBaseWoodSetting
 import miragefairy2024.util.from
+import miragefairy2024.util.generator
 import miragefairy2024.util.on
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDefaultLootTableGeneration
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
@@ -45,8 +45,8 @@ open class AbstractHaimeviskaPlanksBlockCard(configuration: HaimeviskaBlockConfi
         block.registerFlammable(5, 20)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.PLANKS }
-        item.registerItemTagGeneration { ItemTags.PLANKS }
+        BlockTags.PLANKS.generator.registerChild(block)
+        ItemTags.PLANKS.generator.registerChild(item)
 
     }
 }

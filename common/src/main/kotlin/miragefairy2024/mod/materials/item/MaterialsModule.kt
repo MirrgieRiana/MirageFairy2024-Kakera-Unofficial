@@ -49,6 +49,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
 import miragefairy2024.util.from
+import miragefairy2024.util.generator
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.modId
 import miragefairy2024.util.on
@@ -56,6 +57,7 @@ import miragefairy2024.util.pull
 import miragefairy2024.util.register
 import miragefairy2024.util.registerBlastingRecipeGeneration
 import miragefairy2024.util.registerChestLoot
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCompressionRecipeGeneration
 import miragefairy2024.util.registerExtraOreDrop
@@ -63,7 +65,6 @@ import miragefairy2024.util.registerFuel
 import miragefairy2024.util.registerGeneratedModelGeneration
 import miragefairy2024.util.registerGrassDrop
 import miragefairy2024.util.registerItemGroup
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerMobDrop
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
@@ -1112,16 +1113,16 @@ fun initMaterialsModule() {
             card.item.registerPoemGeneration(card.poemList)
         }
         if (card.fuelValue != null) card.item.registerFuel(card.fuelValue)
-        if (card.soulStreamContainable) card.item.registerItemTagGeneration { SOUL_STREAM_CONTAINABLE_TAG }
+        if (card.soulStreamContainable) SOUL_STREAM_CONTAINABLE_TAG.generator.registerChild(card.item)
         if (card.advancement != null) card.advancement.init()
         if (card.tags != null) {
             card.tags.forEach { tag ->
-                card.item.registerItemTagGeneration { tag }
+                tag.generator.registerChild(card.item)
             }
         }
         if (card.ore != null) {
-            card.item.registerItemTagGeneration { card.ore.tag }
-            card.ore.tag.registerItemTagGeneration { card.ore.shape.tag }
+            card.ore.tag.generator.registerChild(card.item)
+            card.ore.shape.tag.generator.registerChild(card.ore.tag)
         }
         card.initializer(this@ModContext, card)
     }

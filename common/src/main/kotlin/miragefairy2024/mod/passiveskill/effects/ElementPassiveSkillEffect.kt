@@ -8,11 +8,12 @@ import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.mod.tool.IS_MAGIC_DAMAGE_TYPE_TAG
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
 import miragefairy2024.util.plus
-import miragefairy2024.util.registerDamageTypeTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.text
 import miragefairy2024.util.toDamageTypeTag
 import mirrg.kotlin.hydrogen.formatAs
@@ -113,9 +114,9 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
             damage
         }
 
-        DamageTypes.CACTUS.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.SWEET_BERRY_BUSH.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.STING.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
-        DamageTypes.THORNS.location().registerDamageTypeTagGeneration { SPINE_DAMAGE_TYPE_TAG }
+        SPINE_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypes.CACTUS.location())
+        SPINE_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypes.SWEET_BERRY_BUSH.location())
+        SPINE_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypes.STING.location())
+        SPINE_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypes.THORNS.location())
     }
 }

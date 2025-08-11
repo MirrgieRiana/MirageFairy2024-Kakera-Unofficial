@@ -18,10 +18,11 @@ import miragefairy2024.util.StructureProcessorList
 import miragefairy2024.util.Translation
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.registerChestLootTableGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerStructureTagGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.minecraft.core.HolderSet
@@ -69,7 +70,7 @@ object DripstoneCavesRuinCard {
     context(ModContext)
     fun init() {
 
-        identifier.registerStructureTagGeneration { WeatheredAncientRemnantsCard.onMapsTag }
+        WeatheredAncientRemnantsCard.onMapsTag.generator.registerChild(identifier)
         translation.enJa()
 
 

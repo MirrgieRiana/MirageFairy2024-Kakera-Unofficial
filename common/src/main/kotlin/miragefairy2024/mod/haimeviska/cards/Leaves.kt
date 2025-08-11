@@ -9,16 +9,16 @@ import miragefairy2024.mod.haimeviska.unchargedHaimeviskaLeavesTexturedModelFact
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.BlockStateVariant
 import miragefairy2024.util.Model
+import miragefairy2024.util.generator
 import miragefairy2024.util.getIdentifier
 import miragefairy2024.util.lightProxy
 import miragefairy2024.util.propertiesOf
 import miragefairy2024.util.randomBoolean
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerComposterInput
 import miragefairy2024.util.registerCutoutRenderLayer
 import miragefairy2024.util.registerFlammable
 import miragefairy2024.util.registerFoliageColorProvider
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
 import miragefairy2024.util.registerRedirectColorProvider
@@ -89,9 +89,9 @@ class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : H
         block.registerFlammable(30, 30)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.LEAVES }
-        item.registerItemTagGeneration { ItemTags.LEAVES }
-        block.registerBlockTagGeneration { BlockTags.MINEABLE_WITH_HOE }
+        BlockTags.LEAVES.generator.registerChild(block)
+        ItemTags.LEAVES.generator.registerChild(item)
+        BlockTags.MINEABLE_WITH_HOE.generator.registerChild(block)
 
     }
 }

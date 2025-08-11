@@ -8,11 +8,11 @@ import miragefairy2024.mod.tool.ToolBreakDamageTypeCard
 import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
+import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.ja
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerDynamicGeneration
-import miragefairy2024.util.registerEnchantmentTagGeneration
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.toItemTag
 import mirrg.kotlin.java.hydrogen.orNull
 import net.minecraft.core.registries.Registries
@@ -121,7 +121,7 @@ enum class EnchantmentCard(
         en { identifier.toLanguageKey("enchantment") to description.en }
         ja { identifier.toLanguageKey("enchantment") to description.ja }
         tags.forEach {
-            key.registerEnchantmentTagGeneration { it }
+            it.generator.registerChild(key)
         }
     }
 }
@@ -196,5 +196,5 @@ fun initEnchantmentModule() {
         entity.hurt(entity.level().damageSources().source(ToolBreakDamageTypeCard.registryKey), 2F * enchantLevel.toFloat())
     }
 
-    SCYTHE_ITEM_TAG.registerItemTagGeneration { ItemTags.MINING_LOOT_ENCHANTABLE }
+    ItemTags.MINING_LOOT_ENCHANTABLE.generator.registerChild(SCYTHE_ITEM_TAG)
 }

@@ -4,10 +4,10 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockConfiguration
 import miragefairy2024.util.Registration
+import miragefairy2024.util.generator
 import miragefairy2024.util.registerBlockFamily
-import miragefairy2024.util.registerBlockTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerFlammable
-import miragefairy2024.util.registerItemTagGeneration
 import miragefairy2024.util.registerLootTableGeneration
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -30,8 +30,8 @@ class HaimeviskaPlanksSlabBlockCard(configuration: HaimeviskaBlockConfiguration,
         block.registerFlammable(5, 20)
 
         // タグ
-        block.registerBlockTagGeneration { BlockTags.WOODEN_SLABS }
-        item.registerItemTagGeneration { ItemTags.WOODEN_SLABS }
+        BlockTags.WOODEN_SLABS.generator.registerChild(block)
+        ItemTags.WOODEN_SLABS.generator.registerChild(item)
 
     }
 }

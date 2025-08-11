@@ -23,8 +23,9 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.configure
 import miragefairy2024.util.createItemStack
 import miragefairy2024.util.enJa
+import miragefairy2024.util.generator
 import miragefairy2024.util.register
-import miragefairy2024.util.registerEntityTypeTagGeneration
+import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerLootTableGeneration
 import miragefairy2024.util.registerModelGeneration
@@ -111,7 +112,7 @@ object ChaosCubeCard {
             FabricDefaultAttributeRegistry.register(entityType(), attributes)
         }
         entityType.enJa(name)
-        entityType.registerEntityTypeTagGeneration { EntityTypeTags.FALL_DAMAGE_IMMUNE }
+        EntityTypeTags.FALL_DAMAGE_IMMUNE.generator.registerChild(entityType)
         entityType.registerLootTableGeneration { registries ->
             LootTable(
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item())).configure {
