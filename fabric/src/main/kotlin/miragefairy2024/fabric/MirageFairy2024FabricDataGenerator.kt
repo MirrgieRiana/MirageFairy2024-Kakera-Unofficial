@@ -117,13 +117,10 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }
-        fun <T> f2(tagGenerator: TagGenerator<T>) {
-            pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                tagGenerator.createProvider(output, registriesFuture)
-            }
-        }
         TagGeneratorCard.entries.forEach {
-            f2(it.tagGenerator)
+            pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+                it.tagGenerator.createProvider(output, registriesFuture)
+            }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
