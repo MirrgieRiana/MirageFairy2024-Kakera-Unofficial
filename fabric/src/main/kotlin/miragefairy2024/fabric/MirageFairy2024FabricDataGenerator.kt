@@ -73,13 +73,15 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val eventRegistry = DataGenerationEvents.onGenerateBlockTag
             object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateBlockTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
+            val eventRegistry = DataGenerationEvents.onGenerateItemTag
             object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = DataGenerationEvents.onGenerateItemTag.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+                override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
             }
         }
         fun <T> f(registryKey: ResourceKey<out Registry<T>>, eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
