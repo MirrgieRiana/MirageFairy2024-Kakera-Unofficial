@@ -72,6 +72,7 @@ private fun <T> TagGenerator(
 private fun <T> SimpleTagGenerator(eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>, registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
     return TagGenerator(eventRegistry) { output, registriesFuture, adder ->
         object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+            override fun reverseLookup(element: T) = super.reverseLookup(element)
             override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
         }
     }
