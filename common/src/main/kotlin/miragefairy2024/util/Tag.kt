@@ -44,16 +44,6 @@ fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = Da
 }
 
 context(ModContext)
-fun (() -> Item).registerNeoForgeItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateNeoForgeItemTag {
-    it(tagProvider()).add(this())
-}
-
-context(ModContext)
-fun TagKey<Item>.registerNeoForgeItemTagGeneration(tagProvider: () -> TagKey<Item>) = DataGenerationEvents.onGenerateNeoForgeItemTag {
-    it(tagProvider()).addOptionalTag(this)
-}
-
-context(ModContext)
 fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = DataGenerationEvents.onGenerateBiomeTag {
     it(tagProvider()).add(this)
 }
