@@ -92,7 +92,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
-private val MAX_RANDOM_BIT = 10
+private val MAX_RANDOM_BIT = 15
 
 fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: RandomSource): Pair<Map<Trait, Int>, Boolean> {
 
