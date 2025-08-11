@@ -88,6 +88,28 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
     }
 
+    private enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
+        BLOCK(object : TagGenerator<Block>(DataGenerationEvents.onGenerateBlockTag) {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
+                return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+                }
+            }
+        }),
+        ITEM(object : TagGenerator<Item>(DataGenerationEvents.onGenerateItemTag) {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
+                return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+                }
+            }
+        }),
+        BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
+        STRUCTURE(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
+        ENTITY_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
+        DAMAGE_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
+        ENCHANTMENT(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
+    }
+
     private fun common(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
@@ -100,25 +122,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 tagGenerator.createProvider(output, registriesFuture)
             }
         }
-        f2(object : TagGenerator<Block>(DataGenerationEvents.onGenerateBlockTag) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
-                return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
-            }
-        })
-        f2(object : TagGenerator<Item>(DataGenerationEvents.onGenerateItemTag) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
-                return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
-            }
-        })
-        f2(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME))
-        f2(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE))
-        f2(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE))
-        f2(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE))
-        f2(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT))
+        TagGeneratorCard.entries.forEach {
+            f2(it.tagGenerator)
+        }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
             object : FabricBlockLootTableProvider(output, registriesFuture) {
