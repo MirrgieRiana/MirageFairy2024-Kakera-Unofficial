@@ -8,8 +8,8 @@ import miragefairy2024.DataMapConsumer
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.Modules
-import miragefairy2024.TagGenerator
 import miragefairy2024.platformProxy
+import miragefairy2024.util.TagGenerator
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import mirrg.kotlin.gson.hydrogen.jsonArray
