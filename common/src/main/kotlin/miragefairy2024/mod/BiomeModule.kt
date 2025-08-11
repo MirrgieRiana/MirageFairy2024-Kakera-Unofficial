@@ -264,8 +264,8 @@ object DeepFairyForestBiomeCard : BiomeCard(
                 DefaultBiomeFeatures.addSurfaceFreezing(lookupBackedBuilder)
 
                 DefaultBiomeFeatures.addMossyStoneBlock(lookupBackedBuilder)
-                DefaultBiomeFeatures.addFerns(lookupBackedBuilder)
                 DefaultBiomeFeatures.addForestFlowers(lookupBackedBuilder)
+                DefaultBiomeFeatures.addFerns(lookupBackedBuilder)
 
                 DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
                 DefaultBiomeFeatures.addDefaultSoftDisks(lookupBackedBuilder)
