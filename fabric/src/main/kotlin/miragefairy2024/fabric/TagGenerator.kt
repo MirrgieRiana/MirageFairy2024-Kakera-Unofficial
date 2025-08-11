@@ -11,26 +11,14 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import java.util.concurrent.CompletableFuture
 
-enum class TagGeneratorCard {
-    BLOCK,
-    ITEM,
-    BIOME,
-    STRUCTURE,
-    ENTITY_TYPE,
-    DAMAGE_TYPE,
-    ENCHANTMENT,
-}
-
-fun TagGeneratorCard.createTagGenerator(): TagGenerator<*> {
-    return when (this) {
-        TagGeneratorCard.BLOCK -> SimpleTagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }
-        TagGeneratorCard.ITEM -> SimpleTagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }
-        TagGeneratorCard.BIOME -> SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)
-        TagGeneratorCard.STRUCTURE -> SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)
-        TagGeneratorCard.ENTITY_TYPE -> SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)
-        TagGeneratorCard.DAMAGE_TYPE -> SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)
-        TagGeneratorCard.ENCHANTMENT -> SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)
-    }
+enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
+    BLOCK(SimpleTagGenerator(DataGenerationEvents.onGenerateBlockTag, Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }),
+    ITEM(SimpleTagGenerator(DataGenerationEvents.onGenerateItemTag, Registries.ITEM) { element -> element.builtInRegistryHolder().key() }),
+    BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
+    STRUCTURE(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
+    ENTITY_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
+    DAMAGE_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
+    ENCHANTMENT(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
 }
 
 abstract class TagGenerator<T>(private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
