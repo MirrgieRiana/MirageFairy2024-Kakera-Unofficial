@@ -37,8 +37,6 @@ import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
@@ -78,6 +76,17 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         abstract fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
+    private fun <T> TagGenerator(
+        eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>,
+        factory: (FabricDataOutput, CompletableFuture<HolderLookup.Provider>, ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit) -> FabricTagProvider<T>,
+    ): TagGenerator<T> {
+        return object : TagGenerator<T>(eventRegistry) {
+            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
+                return factory(output, registriesFuture, adder)
+            }
+        }
+    }
+
     private fun <T> SimpleTagGenerator(eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>, registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
         return object : TagGenerator<T>(eventRegistry) {
             override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
@@ -89,18 +98,14 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     }
 
     private enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
-        BLOCK(object : TagGenerator<Block>(DataGenerationEvents.onGenerateBlockTag) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
-                return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
+        BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
             }
         }),
-        ITEM(object : TagGenerator<Item>(DataGenerationEvents.onGenerateItemTag) {
-            override fun createProviderImpl(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
-                return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                }
+        ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
             }
         }),
         BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
