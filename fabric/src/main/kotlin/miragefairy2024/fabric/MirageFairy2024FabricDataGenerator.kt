@@ -37,6 +37,8 @@ import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
@@ -65,14 +67,16 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
     }
 
-    private fun interface TagGenerator<T> {
-        fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
+    private abstract class TagGenerator<T> {
+        abstract fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
     private fun <T> SimpleTagGenerator(registryKey: ResourceKey<out Registry<T>>): TagGenerator<T> {
-        return TagGenerator { output, registriesFuture, adder ->
-            object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+        return object : TagGenerator<T>() {
+            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
+                return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+                }
             }
         }
     }
@@ -92,16 +96,20 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                 tagGenerator.createProvider(output, registriesFuture, adder)
             }
         }
-        f2(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+        f2(DataGenerationEvents.onGenerateBlockTag, object : TagGenerator<Block>() {
+            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
+                return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+                }
             }
-        }
-        f2(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
-            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+        })
+        f2(DataGenerationEvents.onGenerateItemTag, object : TagGenerator<Item>() {
+            override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
+                return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+                }
             }
-        }
+        })
         f2(DataGenerationEvents.onGenerateBiomeTag, SimpleTagGenerator(Registries.BIOME))
         f2(DataGenerationEvents.onGenerateStructureTag, SimpleTagGenerator(Registries.STRUCTURE))
         f2(DataGenerationEvents.onGenerateEntityTypeTag, SimpleTagGenerator(Registries.ENTITY_TYPE))
