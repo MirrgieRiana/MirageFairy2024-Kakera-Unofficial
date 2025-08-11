@@ -92,6 +92,8 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
 fun BlockView.getMagicPlantBlockEntity(blockPos: BlockPos) = this.getBlockEntity(blockPos) as? MagicPlantBlockEntity
 
+private val MAX_RANDOM_BIT = 10
+
 fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: RandomSource): Pair<Map<Trait, Int>, Boolean> {
 
     // 特性数上限を加味した抽選リスト
@@ -114,10 +116,10 @@ fun applyMutation(bits: Map<Trait, Int>, chances: Map<Trait, Double>, random: Ra
     if (selectedCondensedTrait == null) return Pair(bits, false)
 
     // 凝縮率を加味したビット番号の抽選リスト
-    val bitNumberChances = (1..10).map { bitNumber ->
+    val bitNumberChances = (1..MAX_RANDOM_BIT).map { bitNumber ->
         val a = 1.0 - 1.0 / sqrt(10.0) // 0.6837...
         val b = sqrt(0.1) // 0.3162...
-        val c = (bitNumber - 1).toDouble() // 0 .. 9
+        val c = (bitNumber - 1).toDouble() // 0 .. MAX_RANDOM_BIT - 1
         val weight = a * b.pow(c) * selectedCondensedTrait.count // 2左シフトごとに1/10、全部合わせて約1
         Chance(weight, bitNumber)
     }
