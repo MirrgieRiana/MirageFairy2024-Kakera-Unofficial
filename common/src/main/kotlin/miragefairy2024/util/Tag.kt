@@ -36,14 +36,22 @@ val TagKey<Enchantment>.generator @JvmName("getEnchantmentGenerator") get() = Pa
 
 class TagGenerator<T>(
     private val registryKey: ResourceKey<out Registry<T>>,
-    private val reverseLookupFunction: ((T) -> ResourceKey<T>)? = null,
+    private val providerFactory: (TagGenerator<T>.(FabricDataOutput, CompletableFuture<HolderLookup.Provider>) -> FabricTagProvider<T>)? = null,
 ) {
     companion object {
         val entries = mutableListOf<TagGenerator<*>>()
         private operator fun <T> TagGenerator<T>.not() = this.also { entries.add(it) }
 
-        val BLOCK = !TagGenerator(Registries.BLOCK) { element -> element.builtInRegistryHolder().key() }
-        val ITEM = !TagGenerator(Registries.ITEM) { element -> element.builtInRegistryHolder().key() }
+        val BLOCK = !TagGenerator(Registries.BLOCK) { output, registriesFuture ->
+            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+            }
+        }
+        val ITEM = !TagGenerator(Registries.ITEM) { output, registriesFuture ->
+            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
+            }
+        }
         val BIOME = !TagGenerator(Registries.BIOME)
         val STRUCTURE = !TagGenerator(Registries.STRUCTURE)
         val ENTITY_TYPE = !TagGenerator(Registries.ENTITY_TYPE)
@@ -54,8 +62,9 @@ class TagGenerator<T>(
     val eventRegistry = InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>()
 
     fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>): FabricTagProvider<T> {
-        return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-            override fun reverseLookup(element: T) = if (reverseLookupFunction == null) super.reverseLookup(element) else reverseLookupFunction(element)
+        return if (providerFactory != null) {
+            providerFactory(this, output, registriesFuture)
+        } else object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
             override fun addTags(arg: HolderLookup.Provider) = eventRegistry.fire { it { tag -> getOrCreateTagBuilder(tag) } }
         }
     }
