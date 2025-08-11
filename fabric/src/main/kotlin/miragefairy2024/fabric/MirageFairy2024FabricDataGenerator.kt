@@ -70,7 +70,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         TagGeneratorCard.entries.forEach {
             pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
-                it.tagGenerator.createProvider(output, registriesFuture)
+                it.createTagGenerator().createProvider(output, registriesFuture)
             }
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->

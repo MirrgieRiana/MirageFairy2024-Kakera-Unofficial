@@ -11,22 +11,36 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import java.util.concurrent.CompletableFuture
 
-enum class TagGeneratorCard(val tagGenerator: TagGenerator<*>) {
-    BLOCK(TagGenerator(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
-        object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-            override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+enum class TagGeneratorCard {
+    BLOCK,
+    ITEM,
+    BIOME,
+    STRUCTURE,
+    ENTITY_TYPE,
+    DAMAGE_TYPE,
+    ENCHANTMENT,
+}
+
+fun TagGeneratorCard.createTagGenerator(): TagGenerator<*> {
+    return when (this) {
+        TagGeneratorCard.BLOCK -> TagGenerator(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+            }
         }
-    }),
-    ITEM(TagGenerator(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
-        object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-            override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+
+        TagGeneratorCard.ITEM -> TagGenerator(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
+            object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
+            }
         }
-    }),
-    BIOME(SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)),
-    STRUCTURE(SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)),
-    ENTITY_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)),
-    DAMAGE_TYPE(SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)),
-    ENCHANTMENT(SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)),
+
+        TagGeneratorCard.BIOME -> SimpleTagGenerator(DataGenerationEvents.onGenerateBiomeTag, Registries.BIOME)
+        TagGeneratorCard.STRUCTURE -> SimpleTagGenerator(DataGenerationEvents.onGenerateStructureTag, Registries.STRUCTURE)
+        TagGeneratorCard.ENTITY_TYPE -> SimpleTagGenerator(DataGenerationEvents.onGenerateEntityTypeTag, Registries.ENTITY_TYPE)
+        TagGeneratorCard.DAMAGE_TYPE -> SimpleTagGenerator(DataGenerationEvents.onGenerateDamageTypeTag, Registries.DAMAGE_TYPE)
+        TagGeneratorCard.ENCHANTMENT -> SimpleTagGenerator(DataGenerationEvents.onGenerateEnchantmentTag, Registries.ENCHANTMENT)
+    }
 }
 
 abstract class TagGenerator<T>(private val eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
