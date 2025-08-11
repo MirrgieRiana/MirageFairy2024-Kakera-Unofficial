@@ -37,30 +37,30 @@ enum class BlockTagCard(identifier: ResourceLocation) {
 context(ModContext)
 fun initVanillaModule() {
 
-    Tag(Shape.GEM, Material.FLINT).generator.registerChild(({ Items.FLINT }))
-    ItemTagCard.ECHO_SHARDS.tag.generator.registerChild(({ Items.ECHO_SHARD }))
-    Tag(Shape.SHARD, Material.AMETHYST).generator.registerChild(({ Items.AMETHYST_SHARD }))
-    ItemTagCard.PRISMARINE_SHARDS.tag.generator.registerChild(({ Items.PRISMARINE_SHARD }))
+    Tag(Shape.GEM, Material.FLINT).generator.registerChild { Items.FLINT }
+    ItemTagCard.ECHO_SHARDS.tag.generator.registerChild { Items.ECHO_SHARD }
+    Tag(Shape.SHARD, Material.AMETHYST).generator.registerChild { Items.AMETHYST_SHARD }
+    ItemTagCard.PRISMARINE_SHARDS.tag.generator.registerChild { Items.PRISMARINE_SHARD }
 
     Shape.GEM.tag.generator.registerChild(Tag(Shape.GEM, Material.FLINT))
     Shape.SHARD.tag.generator.registerChild(Tag(Shape.SHARD, Material.AMETHYST))
 
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.WHITE_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.ORANGE_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.MAGENTA_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.LIGHT_BLUE_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.YELLOW_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.LIME_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.PINK_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.GRAY_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.LIGHT_GRAY_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.CYAN_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.PURPLE_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.BLUE_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.BROWN_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.GREEN_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.RED_CONCRETE }))
-    BlockTagCard.CONCRETE.tag.generator.registerChild(({ Blocks.BLACK_CONCRETE }))
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.WHITE_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.ORANGE_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.MAGENTA_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.LIGHT_BLUE_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.YELLOW_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.LIME_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.PINK_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.GRAY_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.LIGHT_GRAY_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.CYAN_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.PURPLE_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.BLUE_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.BROWN_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.GREEN_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.RED_CONCRETE }
+    BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.BLACK_CONCRETE }
 
 
     registerClientDebugItem("dump_biome_tags", Items.STRING.toTextureSource(), 0xFF00FF00.toInt()) { world, player, _, _ ->
