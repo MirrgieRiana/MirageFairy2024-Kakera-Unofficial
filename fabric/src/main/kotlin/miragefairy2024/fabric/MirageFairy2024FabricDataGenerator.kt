@@ -37,8 +37,6 @@ import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.storage.loot.LootTable
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
@@ -67,7 +65,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
     }
 
-    private interface TagGenerator<T> {
+    private fun interface TagGenerator<T> {
         fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T>
     }
 
@@ -87,36 +85,25 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             }
         }
         run {
-            val eventRegistry = DataGenerationEvents.onGenerateBlockTag
-            val tagGenerator = object : TagGenerator<Block> {
-                override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Block>) -> FabricTagProvider<Block>.FabricTagBuilder) -> Unit): FabricTagProvider<Block> {
-                    return object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
-                        override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                    }
+            f2(DataGenerationEvents.onGenerateBlockTag) { output, registriesFuture, adder ->
+                object : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
             }
-            f2(eventRegistry, tagGenerator)
         }
         run {
-            val eventRegistry = DataGenerationEvents.onGenerateItemTag
-            val tagGenerator = object : TagGenerator<Item> {
-                override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<Item>) -> FabricTagProvider<Item>.FabricTagBuilder) -> Unit): FabricTagProvider<Item> {
-                    return object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
-                        override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                    }
+            f2(DataGenerationEvents.onGenerateItemTag) { output, registriesFuture, adder ->
+                object : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
             }
-            f2(eventRegistry, tagGenerator)
         }
         fun <T> f(registryKey: ResourceKey<out Registry<T>>, eventRegistry: InitializationEventRegistry<((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit>) {
-            val tagGenerator = object : TagGenerator<T> {
-                override fun createProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>, adder: ((TagKey<T>) -> FabricTagProvider<T>.FabricTagBuilder) -> Unit): FabricTagProvider<T> {
-                    return object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
-                        override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
-                    }
+            f2(eventRegistry) { output, registriesFuture, adder ->
+                object : FabricTagProvider<T>(output, registryKey, registriesFuture) {
+                    override fun addTags(arg: HolderLookup.Provider) = adder { tag -> getOrCreateTagBuilder(tag) }
                 }
             }
-            f2(eventRegistry, tagGenerator)
         }
         f(Registries.BIOME, DataGenerationEvents.onGenerateBiomeTag)
         f(Registries.STRUCTURE, DataGenerationEvents.onGenerateStructureTag)
