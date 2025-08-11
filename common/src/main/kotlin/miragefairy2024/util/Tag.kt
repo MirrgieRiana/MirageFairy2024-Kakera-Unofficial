@@ -26,19 +26,55 @@ fun ResourceLocation.toBiomeTag(): TagKey<Biome> = this.toTag(Registries.BIOME)
 fun ResourceLocation.toDamageTypeTag(): TagKey<DamageType> = this.toTag(Registries.DAMAGE_TYPE)
 fun ResourceLocation.toStructureTag(): TagKey<Structure> = this.toTag(Registries.STRUCTURE)
 
-context(ModContext) fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = TagGenerator.BLOCK.eventRegistry { it(tagProvider()).add(this()) }
-context(ModContext) fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = TagGenerator.BLOCK.eventRegistry { it(tagProvider()).addOptionalTag(this) }
-context(ModContext) fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = TagGenerator.ITEM.eventRegistry { it(tagProvider()).add(this()) }
-context(ModContext) fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = TagGenerator.ITEM.eventRegistry { it(tagProvider()).addOptionalTag(this) }
-context(ModContext) fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = TagGenerator.BIOME.eventRegistry { it(tagProvider()).add(this) }
-context(ModContext) fun ResourceLocation.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = TagGenerator.STRUCTURE.eventRegistry { it(tagProvider()).add(this) }
-context(ModContext) fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = TagGenerator.BIOME.eventRegistry { it(tagProvider()).addOptionalTag(this) }
-context(ModContext) fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = TagGenerator.ENTITY_TYPE.eventRegistry { it(tagProvider()).add(this()) }
-context(ModContext) fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = TagGenerator.ENTITY_TYPE.eventRegistry { it(tagProvider()).addOptionalTag(this) }
-context(ModContext) fun ResourceLocation.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = TagGenerator.DAMAGE_TYPE.eventRegistry { it(tagProvider()).add(this) }
-context(ModContext) fun TagKey<DamageType>.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = TagGenerator.DAMAGE_TYPE.eventRegistry { it(tagProvider()).addOptionalTag(this) }
-context(ModContext) fun ResourceKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = TagGenerator.ENCHANTMENT.eventRegistry { it(tagProvider()).add(this) }
-context(ModContext) fun TagKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = TagGenerator.ENCHANTMENT.eventRegistry { it(tagProvider()).addOptionalTag(this) }
+context(ModContext) fun (() -> Block).registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<Block>.registerBlockTagGeneration(tagProvider: () -> TagKey<Block>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun (() -> Item).registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<Item>.registerItemTagGeneration(tagProvider: () -> TagKey<Item>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun ResourceLocation.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun ResourceLocation.registerStructureTagGeneration(tagProvider: () -> TagKey<Structure>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<Biome>.registerBiomeTagGeneration(tagProvider: () -> TagKey<Biome>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun (() -> EntityType<*>).registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<EntityType<*>>.registerEntityTypeTagGeneration(tagProvider: () -> TagKey<EntityType<*>>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun ResourceLocation.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<DamageType>.registerDamageTypeTagGeneration(tagProvider: () -> TagKey<DamageType>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun ResourceKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = tagProvider().generator.registerChild(this)
+context(ModContext) fun TagKey<Enchantment>.registerEnchantmentTagGeneration(tagProvider: () -> TagKey<Enchantment>) = tagProvider().generator.registerChild(this)
+
+val TagKey<Block>.generator @JvmName("getBlockGenerator") get() = Pair(this, TagGenerator.BLOCK)
+val TagKey<Item>.generator @JvmName("getItemGenerator") get() = Pair(this, TagGenerator.ITEM)
+val TagKey<Biome>.generator @JvmName("getBiomeGenerator") get() = Pair(this, TagGenerator.BIOME)
+val TagKey<Structure>.generator @JvmName("getStructureGenerator") get() = Pair(this, TagGenerator.STRUCTURE)
+val TagKey<EntityType<*>>.generator @JvmName("getEntityTypeGenerator") get() = Pair(this, TagGenerator.ENTITY_TYPE)
+val TagKey<DamageType>.generator @JvmName("getDamageTypeGenerator") get() = Pair(this, TagGenerator.DAMAGE_TYPE)
+val TagKey<Enchantment>.generator @JvmName("getEnchantmentGenerator") get() = Pair(this, TagGenerator.ENCHANTMENT)
+
+context(ModContext)
+fun <T> Pair<TagKey<T>, TagGenerator<T>>.registerChild(elementGetter: () -> T) {
+    this.second.eventRegistry {
+        it(this.first).add(elementGetter())
+    }
+}
+
+context(ModContext)
+fun <T> Pair<TagKey<T>, TagGenerator<T>>.registerChild(resourceLocation: ResourceLocation) {
+    this.second.eventRegistry {
+        it(this.first).add(resourceLocation)
+    }
+}
+
+context(ModContext)
+fun <T> Pair<TagKey<T>, TagGenerator<T>>.registerChild(resourceKey: ResourceKey<T>) {
+    this.second.eventRegistry {
+        it(this.first).add(resourceKey)
+    }
+}
+
+context(ModContext)
+fun <T> Pair<TagKey<T>, TagGenerator<T>>.registerChild(tag: TagKey<T>) {
+    this.second.eventRegistry {
+        it(this.first).addOptionalTag(tag)
+    }
+}
 
 class TagGenerator<T>(
     private val registryKey: ResourceKey<out Registry<T>>,
