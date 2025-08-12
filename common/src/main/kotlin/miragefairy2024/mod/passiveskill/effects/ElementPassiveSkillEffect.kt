@@ -6,6 +6,7 @@ import miragefairy2024.mixins.api.DamageCallback
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.mod.passiveskill.passiveSkillResult
 import miragefairy2024.mod.tool.IS_MAGIC_DAMAGE_TYPE_TAG
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
@@ -82,6 +83,7 @@ object ElementPassiveSkillEffect : AbstractPassiveSkillEffect<ElementPassiveSkil
     context(ModContext)
     override fun init() {
         super.init()
+        SPINE_DAMAGE_TYPE_TAG.enJa(EnJa("Spine", "棘"))
         attackTranslation.enJa()
         defenceTranslation.enJa()
         Elements.entries.forEach {

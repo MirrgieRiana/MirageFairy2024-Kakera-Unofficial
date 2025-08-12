@@ -6,6 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
 import miragefairy2024.clientProxy
 import miragefairy2024.util.Channel
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemStacks
 import miragefairy2024.util.Registration
 import miragefairy2024.util.Translation
@@ -71,6 +72,7 @@ fun initSoulStream() {
     // 翻訳
     SOUL_STREAM_TRANSLATION.enJa()
     OPEN_SOUL_STREAM_KEY_TRANSLATION.enJa()
+    SOUL_STREAM_CONTAINABLE_TAG.enJa(EnJa("Soul Stream Containable", "ソウルストリームに格納可能"))
 
 }
 

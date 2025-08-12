@@ -3,7 +3,7 @@ package miragefairy2024.mod.tool
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.materials.item.MaterialCard
-import miragefairy2024.util.Translation
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.registerChild
@@ -78,55 +78,54 @@ val ToolMaterial.axeAttackDamageBonus
         else -> throw IllegalArgumentException("Unsupported tool material: $this")
     }
 
-enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, enName: String, jaName: String) {
-    WOOD(ToolMaterials.WOOD, "wooden_tool", "Wooden Tool", "木ツール"),
-    STONE(ToolMaterials.STONE, "stone_tool", "Stone Tool", "石ツール"),
-    IRON(ToolMaterials.IRON, "iron_tool", "Iron Tool", "鉄ツール"),
-    GOLD(ToolMaterials.GOLD, "golden_tool", "Golden Tool", "金ツール"),
-    DIAMOND(ToolMaterials.DIAMOND, "diamond_tool", "Diamond Tool", "ダイヤモンドツール"),
-    NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", "Netherite Tool", "ネザライトツール"),
+enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, val title: EnJa) {
+    WOOD(ToolMaterials.WOOD, "wooden_tool", EnJa("Wooden Tool", "木ツール")),
+    STONE(ToolMaterials.STONE, "stone_tool", EnJa("Stone Tool", "石ツール")),
+    IRON(ToolMaterials.IRON, "iron_tool", EnJa("Iron Tool", "鉄ツール")),
+    GOLD(ToolMaterials.GOLD, "golden_tool", EnJa("Golden Tool", "金ツール")),
+    DIAMOND(ToolMaterials.DIAMOND, "diamond_tool", EnJa("Diamond Tool", "ダイヤモンドツール")),
+    NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", EnJa("Netherite Tool", "ネザライトツール")),
 
-    COPPER(FairyToolMaterials.COPPER, "copper_tool", "Copper Tool", "銅ツール"),
-    GLASS(FairyToolMaterials.GLASS, "glass_tool", "Glass Tool", "ガラスツール"),
-    AMETHYST(FairyToolMaterials.AMETHYST, "amethyst_tool", "Amethyst Tool", "アメジストツール"),
-    OBSIDIAN(FairyToolMaterials.OBSIDIAN, "obsidian_tool", "Obsidian Tool", "黒曜石ツール"),
-    EMERALD(FairyToolMaterials.EMERALD, "emerald_tool", "Emerald Tool", "エメラルドツール"),
-    ECHO_SHARD(FairyToolMaterials.ECHO_SHARD, "echo_shard_tool", "Echo Shard Tool", "残響ツール"),
-    NETHER_STAR(FairyToolMaterials.NETHER_STAR, "nether_star_tool", "Nether Star Tool", "ネザースターツール"),
+    COPPER(FairyToolMaterials.COPPER, "copper_tool", EnJa("Copper Tool", "銅ツール")),
+    GLASS(FairyToolMaterials.GLASS, "glass_tool", EnJa("Glass Tool", "ガラスツール")),
+    AMETHYST(FairyToolMaterials.AMETHYST, "amethyst_tool", EnJa("Amethyst Tool", "アメジストツール")),
+    OBSIDIAN(FairyToolMaterials.OBSIDIAN, "obsidian_tool", EnJa("Obsidian Tool", "黒曜石ツール")),
+    EMERALD(FairyToolMaterials.EMERALD, "emerald_tool", EnJa("Emerald Tool", "エメラルドツール")),
+    ECHO_SHARD(FairyToolMaterials.ECHO_SHARD, "echo_shard_tool", EnJa("Echo Shard Tool", "残響ツール")),
+    NETHER_STAR(FairyToolMaterials.NETHER_STAR, "nether_star_tool", EnJa("Nether Star Tool", "ネザースターツール")),
 
-    MAGNETITE(FairyToolMaterials.MAGNETITE, "magnetite_tool", "Magnetite Tool", "磁鉄鉱ツール"),
-    BISMUTH(FairyToolMaterials.BISMUTH, "bismuth_tool", "Bismuth Tool", "ビスマスツール"),
-    FLUORITE(FairyToolMaterials.FLUORITE, "fluorite_tool", "Fluorite Tool", "蛍石ツール"),
-    TOPAZ(FairyToolMaterials.TOPAZ, "topaz_tool", "Topaz Tool", "トパーズツール"),
-    FLINT(FairyToolMaterials.FLINT, "flint_tool", "Flint Tool", "火打石ツール"),
+    MAGNETITE(FairyToolMaterials.MAGNETITE, "magnetite_tool", EnJa("Magnetite Tool", "磁鉄鉱ツール")),
+    BISMUTH(FairyToolMaterials.BISMUTH, "bismuth_tool", EnJa("Bismuth Tool", "ビスマスツール")),
+    FLUORITE(FairyToolMaterials.FLUORITE, "fluorite_tool", EnJa("Fluorite Tool", "蛍石ツール")),
+    TOPAZ(FairyToolMaterials.TOPAZ, "topaz_tool", EnJa("Topaz Tool", "トパーズツール")),
+    FLINT(FairyToolMaterials.FLINT, "flint_tool", EnJa("Flint Tool", "火打石ツール")),
 
-    MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", "Mirage Tool", "ミラージュツール"), // TODO 用途
-    MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", "Miragium Tool", "ミラジウムツール"),
-    LILAGIUM(FairyToolMaterials.LILAGIUM, "lilagium_tool", "Lilagium Tool", "リラジウムツール"),
-    MIRAGIDIAN(FairyToolMaterials.MIRAGIDIAN, "miragidian_tool", "Miragidian Tool", "ミラジディアンツール"),
-    FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", "Fairy Crystal", "フェアリークリスタルツール"),
-    PHANTOM_DROP(FairyToolMaterials.PHANTOM_DROP, "phantom_tool", "Phantom Tool", "幻想ツール"),
-    LUMINITE(FairyToolMaterials.LUMINITE, "luminite_tool", "Luminite Tool", "ルミナイトツール"),
-    RESONITE(FairyToolMaterials.RESONITE, "resonite_tool", "Resonance Tool", "共鳴ツール"),
-    PROMINITE(FairyToolMaterials.PROMINITE, "prominite_tool", "Prominite Tool", "プロミナイトツール"),
-    XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", "Xarpite Tool", "紅天石ツール"),
-    MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", "Miranagite Tool", "蒼天石ツール"),
-    CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", "Chaos Tool", "混沌ツール"),
-    HAIMEVISKA_ROSIN(FairyToolMaterials.HAIMEVISKA_ROSIN, "haimeviska_rosin_tool", "Rosin Tool", "涙ツール"),
+    MIRAGE(FairyToolMaterials.MIRAGE, "mirage_tool", EnJa("Mirage Tool", "ミラージュツール")), // TODO 用途
+    MIRAGIUM(FairyToolMaterials.MIRAGIUM, "miragium_tool", EnJa("Miragium Tool", "ミラジウムツール")),
+    LILAGIUM(FairyToolMaterials.LILAGIUM, "lilagium_tool", EnJa("Lilagium Tool", "リラジウムツール")),
+    MIRAGIDIAN(FairyToolMaterials.MIRAGIDIAN, "miragidian_tool", EnJa("Miragidian Tool", "ミラジディアンツール")),
+    FAIRY_CRYSTAL(FairyToolMaterials.FAIRY_CRYSTAL, "fairy_crystal_tool", EnJa("Fairy Crystal", "フェアリークリスタルツール")),
+    PHANTOM_DROP(FairyToolMaterials.PHANTOM_DROP, "phantom_tool", EnJa("Phantom Tool", "幻想ツール")),
+    LUMINITE(FairyToolMaterials.LUMINITE, "luminite_tool", EnJa("Luminite Tool", "ルミナイトツール")),
+    RESONITE(FairyToolMaterials.RESONITE, "resonite_tool", EnJa("Resonance Tool", "共鳴ツール")),
+    PROMINITE(FairyToolMaterials.PROMINITE, "prominite_tool", EnJa("Prominite Tool", "プロミナイトツール")),
+    XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", EnJa("Xarpite Tool", "紅天石ツール")),
+    MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", EnJa("Miranagite Tool", "蒼天石ツール")),
+    CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", EnJa("Chaos Tool", "混沌ツール")),
+    HAIMEVISKA_ROSIN(FairyToolMaterials.HAIMEVISKA_ROSIN, "haimeviska_rosin_tool", EnJa("Rosin Tool", "涙ツール")),
 
-    NEUTRONIUM(FairyToolMaterials.NEUTRONIUM, "neutronium_tool", "Neutronium Tool", "ニュートロニウムツール")
+    NEUTRONIUM(FairyToolMaterials.NEUTRONIUM, "neutronium_tool", EnJa("Neutronium Tool", "ニュートロニウムツール")),
     ;
 
     val identifier = MirageFairy2024.identifier(path)
     val tag = identifier.toItemTag()
-    val translation = Translation({ "${MirageFairy2024.MOD_ID}.tool_material.$path" }, enName, jaName)
 }
 
 context(ModContext)
 fun initToolMaterial() {
 
     ToolMaterialCard.entries.forEach { card ->
-        card.translation.enJa()
+        card.tag.enJa(card.title)
     }
 
 

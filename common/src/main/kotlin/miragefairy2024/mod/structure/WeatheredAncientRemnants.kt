@@ -77,6 +77,7 @@ object WeatheredAncientRemnantsCard {
     fun init() {
 
         translation.enJa()
+        onMapsTag.enJa(EnJa("On Weathered Ancient Remnants Archaeology Maps", "風化した旧世代の遺構の考古学地図で"))
 
         val archaeologyLootTable = Registries.LOOT_TABLE with "archaeology/" * identifier
         registerArchaeologyLootTableGeneration(archaeologyLootTable) { registries ->

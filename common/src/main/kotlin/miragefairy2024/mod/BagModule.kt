@@ -121,6 +121,8 @@ enum class BagCard(
 
 context(ModContext)
 fun initBagModule() {
+    BagCard.BAG_ITEM_TAG.enJa(EnJa("Bag", "カバン"))
+
     BagCard.entries.forEach { card ->
         card.item.register()
         card.item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)

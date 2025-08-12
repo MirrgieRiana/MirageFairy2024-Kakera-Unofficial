@@ -3,6 +3,7 @@ package miragefairy2024.mod.fairybuilding
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.haimeviska.HAIMEVISKA_LOGS_BLOCK_TAG
+import miragefairy2024.util.EnJa
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
@@ -35,5 +36,6 @@ fun initFairyBuildingModule() {
     FOLIA_TRANSLATION.enJa()
     SPECIFIED_FAIRY_SLOT_TRANSLATION.enJa()
 
+    FAIRY_BUILDING_BLOCK_TAG.enJa(EnJa("Fairy Building", "妖精の建物"))
     HAIMEVISKA_LOGS_BLOCK_TAG.generator.registerChild(FAIRY_BUILDING_BLOCK_TAG)
 }

@@ -86,6 +86,7 @@ abstract class BiomeCard(
 
 context(ModContext)
 fun initBiomeModule() {
+    FAIRY_BIOME_TAG.enJa(EnJa("Fairy", "妖精"))
     BiomeCards.entries.forEach { card ->
 
         // バイオームの生成

@@ -8,6 +8,7 @@ import miragefairy2024.mod.tool.ToolBreakDamageTypeCard
 import miragefairy2024.platformProxy
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
+import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.get
 import miragefairy2024.util.ja
@@ -128,6 +129,10 @@ enum class EnchantmentCard(
 
 context(ModContext)
 fun initEnchantmentModule() {
+    MAGIC_WEAPON_ITEM_TAG.enJa(EnJa("Magic Weapon", "魔法武器"))
+    SCYTHE_ITEM_TAG.enJa(EnJa("Scythe", "大鎌"))
+    NONE_ITEM_TAG.enJa(EnJa("None", "なし"))
+
     EnchantmentCard.entries.forEach { card ->
         card.init()
     }

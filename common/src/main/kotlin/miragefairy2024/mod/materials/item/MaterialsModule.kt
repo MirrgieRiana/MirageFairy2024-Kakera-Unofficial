@@ -1127,9 +1127,17 @@ fun initMaterialsModule() {
         card.initializer(this@ModContext, card)
     }
 
+    MIRAGE_FLOUR_TAG.enJa(EnJa("Mirage Flour", "ミラージュの花粉"))
     APPEARANCE_RATE_BONUS_TRANSLATION.enJa()
     MINA_DESCRIPTION_TRANSLATION.enJa()
     DrinkItem.FLAMING_TRANSLATION.enJa()
+
+    MaterialCard.entries.mapNotNull { it.ore }.distinct().forEach {
+        it.tag.enJa(it.title)
+    }
+    MaterialCard.entries.mapNotNull { it.ore }.distinct().map { it.shape }.distinct().forEach {
+        it.tag.enJa(it.title)
+    }
 
     // ミラジウム圧縮
     registerCompressionRecipeGeneration(MaterialCard.MIRAGIUM_NUGGET.item, MaterialCard.MIRAGIUM_INGOT.item)
@@ -1203,67 +1211,68 @@ fun initMaterialsModule() {
 
 data class Ore(val shape: Shape, val material: Material)
 
+val Ore.title get() = EnJa("${this.material.prefix.en} ${this.shape.title.en}", "${this.material.prefix.ja}の${this.shape.title.ja}")
 val Ore.tag get() = ResourceLocation.fromNamespaceAndPath("c", "${this.shape.path}/${this.material.path}").toItemTag()
 val Ore.ingredient get() = this.tag.toIngredient()
 fun Tag(shape: Shape, material: Material) = Ore(shape, material).tag
 fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
 
-enum class Shape(val path: String) {
-    TINY_DUST("tiny_dusts"),
-    DUST("dusts"),
-    NUGGET("nuggets"),
-    INGOT("ingots"),
-    ROD("rods"),
-    GEM("gems"),
-    ORE("ores"),
-    SHARD("shards"),
+enum class Shape(val path: String, val title: EnJa) {
+    TINY_DUST("tiny_dusts", EnJa("Tiny Dusts", "微粉")),
+    DUST("dusts", EnJa("Dusts", "粉")),
+    NUGGET("nuggets", EnJa("Nuggets", "塊")),
+    INGOT("ingots", EnJa("Ingots", "インゴット")),
+    ROD("rods", EnJa("Rods", "棒")),
+    GEM("gems", EnJa("Gems", "ジェム")),
+    ORE("ores", EnJa("Ores", "鉱石")),
+    SHARD("shards", EnJa("Shards", "欠片")),
 
     /** 原石 */
-    RAW_MATERIAL("raw_materials"),
+    RAW_MATERIAL("raw_materials", EnJa("Raw Materials", "原石")),
 
     /** ブロック */
-    STORAGE_BLOCK("storage_blocks"),
+    STORAGE_BLOCK("storage_blocks", EnJa("Blocks", "ブロック")),
 }
 
 val Shape.tag get() = ResourceLocation.fromNamespaceAndPath("c", this.path).toItemTag()
 
-enum class Material(val path: String) {
-    WOOD("wooden"),
+enum class Material(val path: String, val prefix: EnJa) {
+    WOOD("wooden", EnJa("Wooden", "木")),
 
-    COPPER("copper"),
-    IRON("iron"),
-    GOLD("gold"),
-    NETHERITE("netherite"),
+    COPPER("copper", EnJa("Copper", "銅")),
+    IRON("iron", EnJa("Iron", "鉄")),
+    GOLD("gold", EnJa("Golden", "金")),
+    NETHERITE("netherite", EnJa("Netherite", "ネザライト")),
 
-    AMETHYST("amethyst"),
-    QUARTZ("quartz"),
-    DIAMOND("diamond"),
-    EMERALD("emerald"),
+    AMETHYST("amethyst", EnJa("Amethyst", "アメジスト")),
+    QUARTZ("quartz", EnJa("Quartz", "クォーツ")),
+    DIAMOND("diamond", EnJa("Diamond", "ダイヤモンド")),
+    EMERALD("emerald", EnJa("Emerald", "エメラルド")),
 
-    FLINT("flint"),
-    COAL("coal"),
-    LAPIS("lapis"),
-    PRISMARINE("prismarine"),
-    REDSTONE("redstone"),
-    GLOWSTONE("glowstone"),
+    FLINT("flint", EnJa("Flint", "火打石")),
+    COAL("coal", EnJa("Coal", "石炭")),
+    LAPIS("lapis", EnJa("Lapis Lazuli", "ラピスラズリ")),
+    PRISMARINE("prismarine", EnJa("Prismarine", "プリズマリン")),
+    REDSTONE("redstone", EnJa("Redstone", "レッドストーン")),
+    GLOWSTONE("glowstone", EnJa("Glowstone", "グロウストーン")),
 
-    XARPITE("xarpite"),
-    MIRANAGITE("miranagite"),
-    CHAOS_STONE("chaos_stone"),
-    FAIRY_CRYSTAL("fairy_crystal"),
-    PHANTOM_DROP("phantom_drop"),
-    MIRAGIUM("miragium"),
-    LILAGIUM("lilagium"),
-    MIRAGIDIAN("miragidian"),
-    LUMINITE("luminite"),
-    CALCULITE("calculite"),
-    RESONITE("resonite"),
-    PROMINITE("prominite"),
-    HAIMEVISKA_ROSIN("haimeviska_rosin"),
-    FAIRY_PLASTIC("fairy_plastic"),
-    FAIRY_RUBBER("fairy_rubber"),
-    MAGNETITE("magnetite"),
-    FLUORITE("fluorite"),
-    TOPAZ("topaz"),
-    BISMUTH("bismuth"),
+    XARPITE("xarpite", EnJa("Xarpite", "紅天石")),
+    MIRANAGITE("miranagite", EnJa("Miranagite", "蒼天石")),
+    CHAOS_STONE("chaos_stone", EnJa("Chaos Stone", "混沌の石")),
+    FAIRY_CRYSTAL("fairy_crystal", EnJa("Fairy Crystal", "フェアリークリスタル")),
+    PHANTOM_DROP("phantom_drop", EnJa("Phantom Drop", "幻想の雫")),
+    MIRAGIUM("miragium", EnJa("Miragium", "ミラジウム")),
+    LILAGIUM("lilagium", EnJa("Lilagium", "リラジウム")),
+    MIRAGIDIAN("miragidian", EnJa("Miragidian", "ミラジディアン")),
+    LUMINITE("luminite", EnJa("Luminite", "ルミナイト")),
+    CALCULITE("calculite", EnJa("Calculite", "理天石")),
+    RESONITE("resonite", EnJa("Resonite", "共鳴石")),
+    PROMINITE("prominite", EnJa("Prominite", "プロミナイト")),
+    HAIMEVISKA_ROSIN("haimeviska_rosin", EnJa("Haimeviska Rosin", "ハイメヴィスカの涙")),
+    FAIRY_PLASTIC("fairy_plastic", EnJa("Fairy Plastic", "妖精のプラスチック")),
+    FAIRY_RUBBER("fairy_rubber", EnJa("Fairy Rubber", "夜のかけら")),
+    MAGNETITE("magnetite", EnJa("Magnetite", "磁鉄鉱")),
+    FLUORITE("fluorite", EnJa("Fluorite", "蛍石")),
+    TOPAZ("topaz", EnJa("Topaz", "トパーズ")),
+    BISMUTH("bismuth", EnJa("Bismuth", "ビスマス")),
 }

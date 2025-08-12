@@ -6,6 +6,8 @@ import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.Shape
 import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.mod.materials.item.tag
+import miragefairy2024.util.EnJa
+import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.registerChild
 import miragefairy2024.util.registerClientDebugItem
@@ -19,16 +21,16 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrElse
 
-enum class ItemTagCard(identifier: ResourceLocation) {
-    ECHO_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "echo_shards")),
-    PRISMARINE_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "prismarine_shards")),
+enum class ItemTagCard(identifier: ResourceLocation, val title: EnJa) {
+    ECHO_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "echo_shards"), EnJa("Echo Shards", "残響の欠片")),
+    PRISMARINE_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "prismarine_shards"), EnJa("Prismarine Shards", "プリズマリンの欠片")),
     ;
 
     val tag = identifier.toItemTag()
 }
 
-enum class BlockTagCard(identifier: ResourceLocation) {
-    CONCRETE(MirageFairy2024.identifier("concrete")),
+enum class BlockTagCard(identifier: ResourceLocation, val title: EnJa) {
+    CONCRETE(MirageFairy2024.identifier("concrete"), EnJa("Concrete", "コンクリート")),
     ;
 
     val tag = identifier.toBlockTag()
@@ -36,6 +38,12 @@ enum class BlockTagCard(identifier: ResourceLocation) {
 
 context(ModContext)
 fun initVanillaModule() {
+    ItemTagCard.entries.forEach { card ->
+        card.tag.enJa(card.title)
+    }
+    BlockTagCard.entries.forEach { card ->
+        card.tag.enJa(card.title)
+    }
 
     Tag(Shape.GEM, Material.FLINT).generator.registerChild { Items.FLINT }
     ItemTagCard.ECHO_SHARDS.tag.generator.registerChild { Items.ECHO_SHARD }

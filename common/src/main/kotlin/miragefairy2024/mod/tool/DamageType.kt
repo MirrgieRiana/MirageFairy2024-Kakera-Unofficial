@@ -4,6 +4,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.en
+import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.ja
 import miragefairy2024.util.registerChild
@@ -76,6 +77,9 @@ fun initDamageType() {
     PhysicalMagicDamageTypeCard.init()
     ToolBreakDamageTypeCard.init()
 
+    C_IS_MAGIC_DAMAGE_TYPE_TAG.enJa(EnJa("Magic", "魔法"))
+    NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG.enJa(EnJa("Magic", "魔法"))
+    IS_MAGIC_DAMAGE_TYPE_TAG.enJa(EnJa("Magic", "魔法"))
     IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(DamageTypeTags.BYPASSES_ARMOR)
     IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(C_IS_MAGIC_DAMAGE_TYPE_TAG)
     IS_MAGIC_DAMAGE_TYPE_TAG.generator.registerChild(NEOFORGE_IS_MAGIC_DAMAGE_TYPE_TAG)
