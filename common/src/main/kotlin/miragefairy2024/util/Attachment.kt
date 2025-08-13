@@ -24,7 +24,7 @@ fun <T> AttachmentDelegate<T>.getOrCreate(): T {
 
 fun <T> AttachmentDelegate<T>.set(data: T?) {
     if (data != null) {
-        this.value.setAttached(this.type, data)
+        this.value.setAttached(this.type, data) // ドキュメントに反して data == null で呼び出すと爆死する
     } else {
         this.value.removeAttached(this.type)
     }
