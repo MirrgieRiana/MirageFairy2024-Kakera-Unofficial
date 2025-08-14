@@ -103,10 +103,10 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
-                placedFeature("cluster", { per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+                placedFeature("cluster", { per(8) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
             }
             configuredFeature("large_cluster", { RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
-                placedFeature("large_cluster", { per(128) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+                placedFeature("large_cluster", { per(64) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
             }
         }
     }
