@@ -79,7 +79,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
 import kotlin.math.pow
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
@@ -279,7 +278,7 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(MIRAGE_FLOUR.item()) }, 1),
+                    Pair({ MIRAGE_FLOUR.item().toIngredient() }, 1),
                 ),
                 output = { item().createItemStack() },
                 duration = 20 * 60,
@@ -320,9 +319,9 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(MIRAGIUM_INGOT.item()) }, 1),
-                    Pair({ Ingredient.of(Items.LILAC) }, 4),
-                    Pair({ Ingredient.of(Items.PEONY) }, 4),
+                    Pair({ MIRAGIUM_INGOT.item().toIngredient() }, 1),
+                    Pair({ Items.LILAC.toIngredient() }, 4),
+                    Pair({ Items.PEONY.toIngredient() }, 4),
                 ),
                 output = { item().createItemStack() },
                 duration = 20 * 60,
@@ -336,7 +335,7 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(item()) }, 9),
+                    Pair({ item().toIngredient() }, 9),
                 ),
                 output = { MIRAGIDIAN.item().createItemStack() },
                 duration = 20 * 60,
@@ -437,9 +436,9 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(FAIRY_CRYSTAL.item()) }, 1),
-                    Pair({ Ingredient.of(LUMINITE.item()) }, 1),
-                    Pair({ Ingredient.of(Items.ECHO_SHARD) }, 1),
+                    Pair({ FAIRY_CRYSTAL.item().toIngredient() }, 1),
+                    Pair({ LUMINITE.item().toIngredient() }, 1),
+                    Pair({ Items.ECHO_SHARD.toIngredient() }, 1),
                 ),
                 output = { item().createItemStack() },
                 duration = 20 * 60,
@@ -933,8 +932,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(Items.SUGAR_CANE) }, 16),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ Items.SUGAR_CANE.toIngredient() }, 16),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -960,8 +959,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(Items.APPLE) }, 4),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ Items.APPLE.toIngredient() }, 4),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -988,8 +987,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(HAIMEVISKA_SAP.item()) }, 8),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ HAIMEVISKA_SAP.item().toIngredient() }, 8),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -1016,8 +1015,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(VEROPEDA_BERRIES.item()) }, 8),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ VEROPEDA_BERRIES.item().toIngredient() }, 8),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -1055,8 +1054,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(Items.PUFFERFISH) }, 1),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ Items.PUFFERFISH.toIngredient() }, 1),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -1065,8 +1064,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(Items.POISONOUS_POTATO) }, 4),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ Items.POISONOUS_POTATO.toIngredient() }, 4),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },
@@ -1075,8 +1074,8 @@ class MaterialCard(
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
                 inputs = listOf(
-                    Pair({ Ingredient.of(Items.GLASS_BOTTLE) }, 1),
-                    Pair({ Ingredient.of(Items.SPIDER_EYE) }, 4),
+                    Pair({ Items.GLASS_BOTTLE.toIngredient() }, 1),
+                    Pair({ Items.SPIDER_EYE.toIngredient() }, 4),
                     Pair({ WaterBottleIngredient.toVanilla() }, 1),
                 ),
                 output = { item().createItemStack() },

@@ -31,7 +31,6 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.CustomRecipe
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.item.crafting.RecipeSerializer
@@ -143,7 +142,7 @@ fun registerSmeltingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.smelting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        val builder = CookingRecipeJsonBuilder.smelting(input().toIngredient(), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
         builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
@@ -165,7 +164,7 @@ fun registerBlastingRecipeGeneration(
 ): RecipeGenerationSettings<CookingRecipeJsonBuilder> {
     val settings = RecipeGenerationSettings<CookingRecipeJsonBuilder>()
     DataGenerationEvents.onGenerateRecipe {
-        val builder = CookingRecipeJsonBuilder.blasting(Ingredient.of(input()), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
+        val builder = CookingRecipeJsonBuilder.blasting(input().toIngredient(), RecipeCategory.MISC, output(), experience.toFloat(), cookingTime)
         builder.group(output())
         settings.listeners.forEach { listener ->
             listener(builder)
