@@ -8,7 +8,7 @@ import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.materials.block.BlockMaterialCard
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
@@ -92,7 +92,7 @@ object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, Fa
             pattern("DCD")
             pattern("###")
             define('A', BlockMaterialCard.AURA_STONE.item())
-            define('#', Tag(Shape.INGOT, Material.IRON))
+            define('#', tagOf(Shape.INGOT, Material.IRON))
             define('C', Items.ITEM_FRAME)
             define('D', Items.LIGHT_BLUE_DYE)
         } on BlockMaterialCard.AURA_STONE.item

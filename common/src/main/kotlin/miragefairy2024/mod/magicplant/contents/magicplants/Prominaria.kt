@@ -7,7 +7,7 @@ import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
@@ -114,7 +114,7 @@ class ProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(ProminariaCa
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
         val blockEntity = level.getBlockEntity(pos)
         if (blockEntity !is MagicPlantBlockEntity) return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
-        if (!stack.`is`(Tag(Shape.INGOT, Material.GOLD))) return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
+        if (!stack.`is`(tagOf(Shape.INGOT, Material.GOLD))) return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
         if (level.isClientSide) return ItemInteractionResult.SUCCESS
 
         val age = state.getOr(BlockStateProperties.AGE_3) { 0 }

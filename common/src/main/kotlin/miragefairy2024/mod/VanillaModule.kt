@@ -4,8 +4,8 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.mod.materials.item.tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
@@ -45,13 +45,13 @@ fun initVanillaModule() {
         card.tag.enJa(card.title)
     }
 
-    Tag(Shape.GEM, Material.FLINT).generator.registerChild { Items.FLINT }
+    tagOf(Shape.GEM, Material.FLINT).generator.registerChild { Items.FLINT }
     ItemTagCard.ECHO_SHARDS.tag.generator.registerChild { Items.ECHO_SHARD }
-    Tag(Shape.SHARD, Material.AMETHYST).generator.registerChild { Items.AMETHYST_SHARD }
+    tagOf(Shape.SHARD, Material.AMETHYST).generator.registerChild { Items.AMETHYST_SHARD }
     ItemTagCard.PRISMARINE_SHARDS.tag.generator.registerChild { Items.PRISMARINE_SHARD }
 
-    Shape.GEM.tag.generator.registerChild(Tag(Shape.GEM, Material.FLINT))
-    Shape.SHARD.tag.generator.registerChild(Tag(Shape.SHARD, Material.AMETHYST))
+    Shape.GEM.tag.generator.registerChild(tagOf(Shape.GEM, Material.FLINT))
+    Shape.SHARD.tag.generator.registerChild(tagOf(Shape.SHARD, Material.AMETHYST))
 
     BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.WHITE_CONCRETE }
     BlockTagCard.CONCRETE.tag.generator.registerChild { Blocks.ORANGE_CONCRETE }

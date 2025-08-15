@@ -8,7 +8,7 @@ import miragefairy2024.mod.fairybuilding.FairyBuildingCard
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
@@ -108,7 +108,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
             pattern("XFX")
             pattern("XXX")
             define('F', Items.FURNACE)
-            define('X', Tag(Shape.GEM, Material.XARPITE))
+            define('X', tagOf(Shape.GEM, Material.XARPITE))
         } on MaterialCard.XARPITE.item
     }
 

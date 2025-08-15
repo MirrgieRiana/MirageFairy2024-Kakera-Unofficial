@@ -8,7 +8,7 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
@@ -78,8 +78,8 @@ object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, Ferme
             pattern("LRL")
             pattern("ILI")
             define('L', HaimeviskaBlockCard.LOG.item())
-            define('R', Tag(Shape.GEM, Material.HAIMEVISKA_ROSIN))
-            define('I', Tag(Shape.NUGGET, Material.IRON))
+            define('R', tagOf(Shape.GEM, Material.HAIMEVISKA_ROSIN))
+            define('I', tagOf(Shape.NUGGET, Material.IRON))
         } on MaterialCard.HAIMEVISKA_ROSIN.item
     }
 }

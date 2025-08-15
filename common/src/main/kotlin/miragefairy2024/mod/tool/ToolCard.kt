@@ -8,8 +8,8 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
 import miragefairy2024.mod.materials.item.tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -84,12 +84,12 @@ class ToolCard(
             "iron_scythe", EnJa("Iron Scythe", "鉄の大鎌"),
             PoemList(null),
             FairyScytheConfiguration(ToolMaterialCard.IRON),
-        ) { registerScytheRecipeGeneration(item, Tag(Shape.INGOT, Material.IRON)) }
+        ) { registerScytheRecipeGeneration(item, tagOf(Shape.INGOT, Material.IRON)) }
         val DIAMOND_SCYTHE = !ToolCard(
             "diamond_scythe", EnJa("Diamond Scythe", "ダイヤモンドの大鎌"),
             PoemList(null),
             FairyScytheConfiguration(ToolMaterialCard.DIAMOND),
-        ) { registerScytheRecipeGeneration(item, Tag(Shape.GEM, Material.DIAMOND)) }
+        ) { registerScytheRecipeGeneration(item, tagOf(Shape.GEM, Material.DIAMOND)) }
 
         private fun interface Configurator<in T : ToolConfiguration> {
             fun configure(configuration: T)
@@ -134,13 +134,13 @@ class ToolCard(
 
         val MAGNETITE = toolSet("magnetite", "磁鉄鉱", ToolMaterialCard.MAGNETITE, MaterialCard.MAGNETITE.ore!!.tag) { if (it is FairySwordConfiguration) it.collection() else it.enchantment(EnchantmentCard.STICKY_MINING.key) }
         val BISMUTH = toolSet("bismuth", "ビスマス", ToolMaterialCard.BISMUTH, MaterialCard.BISMUTH_INGOT.ore!!.tag) { it.enchantment(Enchantments.FORTUNE, 1).enchantment(EnchantmentCard.FORTUNE_UP.key, 1).enchantment(Enchantments.UNBREAKING, 3) }
-        val COPPER = toolSet("copper", "銅", ToolMaterialCard.COPPER, Tag(Shape.INGOT, Material.COPPER)) { it }
+        val COPPER = toolSet("copper", "銅", ToolMaterialCard.COPPER, tagOf(Shape.INGOT, Material.COPPER)) { it }
         val GLASS = toolSet("glass", "ガラス", ToolMaterialCard.GLASS, ConventionalItemTags.GLASS_BLOCKS) { it.enchantment(Enchantments.SHARPNESS, 2).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 1) }
-        val FLINT = toolSet("flint", "火打石", ToolMaterialCard.FLINT, Tag(Shape.GEM, Material.FLINT)) { it.enchantment(Enchantments.FIRE_ASPECT) }
+        val FLINT = toolSet("flint", "火打石", ToolMaterialCard.FLINT, tagOf(Shape.GEM, Material.FLINT)) { it.enchantment(Enchantments.FIRE_ASPECT) }
         val FLUORITE = toolSet("fluorite", "蛍石", ToolMaterialCard.FLUORITE, MaterialCard.FLUORITE.ore!!.tag) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 1) else it.enchantment(Enchantments.FORTUNE, 1) }
-        val AMETHYST = toolSet("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, Tag(Shape.SHARD, Material.AMETHYST)) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
+        val AMETHYST = toolSet("amethyst", "アメジスト", ToolMaterialCard.AMETHYST, tagOf(Shape.SHARD, Material.AMETHYST)) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
         val OBSIDIAN = toolSet("obsidian", "黒曜石", ToolMaterialCard.OBSIDIAN, ConventionalItemTags.OBSIDIANS) { it.enchantment(Enchantments.SHARPNESS, 4).enchantment(EnchantmentCard.CURSE_OF_SHATTERING.key, 3) }
-        val EMERALD = toolSet("emerald", "エメラルド", ToolMaterialCard.EMERALD, Tag(Shape.GEM, Material.EMERALD)) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
+        val EMERALD = toolSet("emerald", "エメラルド", ToolMaterialCard.EMERALD, tagOf(Shape.GEM, Material.EMERALD)) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 2) else it.enchantment(Enchantments.FORTUNE, 2) }
         val TOPAZ = toolSet("topaz", "トパーズ", ToolMaterialCard.TOPAZ, MaterialCard.TOPAZ.ore!!.tag) { it.enchantment(Enchantments.SHARPNESS, 3).tag(ItemTags.SHARP_WEAPON_ENCHANTABLE) }
         val ECHO_SHARD = toolSet("echo_shard", "残響", ToolMaterialCard.ECHO_SHARD, ItemTagCard.ECHO_SHARDS.tag) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.SHARPNESS, 5) else it.enchantment(Enchantments.EFFICIENCY, 5) }
         val NETHER_STAR = toolSet("nether_star", "ネザースター", ToolMaterialCard.NETHER_STAR, ConventionalItemTags.NETHER_STARS) { if (it is FairySwordConfiguration) it.enchantment(Enchantments.LOOTING, 4).glint() else it.enchantment(Enchantments.FORTUNE, 4).glint() }
@@ -319,9 +319,9 @@ class ToolCard(
                 pattern(" IG")
                 pattern(" RI")
                 pattern("I  ")
-                define('R', Tag(Shape.ROD, Material.MIRANAGITE))
+                define('R', tagOf(Shape.ROD, Material.MIRANAGITE))
                 define('G', ConventionalItemTags.GLASS_BLOCKS)
-                define('I', Tag(Shape.INGOT, Material.COPPER))
+                define('I', tagOf(Shape.INGOT, Material.COPPER))
             } on MaterialCard.MIRANAGITE.ore!!.tag
         }
         val MIRANAGI_STAFF = !ToolCard(
@@ -345,9 +345,9 @@ class ToolCard(
                 pattern(" #I")
                 pattern("N  ")
                 define('#', MIRANAGI_STAFF_0.item())
-                define('G', Tag(Shape.GEM, Material.DIAMOND))
-                define('I', Tag(Shape.INGOT, Material.IRON))
-                define('N', Tag(Shape.NUGGET, Material.IRON))
+                define('G', tagOf(Shape.GEM, Material.DIAMOND))
+                define('I', tagOf(Shape.INGOT, Material.IRON))
+                define('N', tagOf(Shape.NUGGET, Material.IRON))
             } on MaterialCard.MIRANAGITE.ore!!.tag
         }
         val XARPITE_PICKAXE = !ToolCard(
@@ -475,7 +475,7 @@ private fun registerPickaxeRecipeGeneration(item: () -> Item, input: TagKey<Item
     pattern(" R ")
     pattern(" R ")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -484,7 +484,7 @@ private fun registerAxeRecipeGeneration(item: () -> Item, input: TagKey<Item>) =
     pattern("#R")
     pattern(" R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -493,7 +493,7 @@ private fun registerShovelRecipeGeneration(item: () -> Item, input: TagKey<Item>
     pattern("R")
     pattern("R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -502,7 +502,7 @@ private fun registerHoeRecipeGeneration(item: () -> Item, input: TagKey<Item>) =
     pattern(" R")
     pattern(" R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -510,7 +510,7 @@ private fun registerKnifeRecipeGeneration(item: () -> Item, input: TagKey<Item>)
     pattern("#")
     pattern("R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -519,7 +519,7 @@ private fun registerScytheRecipeGeneration(item: () -> Item, input: TagKey<Item>
     pattern("# R")
     pattern("  R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -528,7 +528,7 @@ private fun registerSwordRecipeGeneration(item: () -> Item, input: TagKey<Item>)
     pattern("#")
     pattern("R")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input
 
 context(ModContext)
@@ -537,5 +537,5 @@ private fun registerBattleAxeRecipeGeneration(item: () -> Item, input: TagKey<It
     pattern("#R#")
     pattern(" R ")
     define('#', input)
-    define('R', Tag(Shape.ROD, Material.WOOD))
+    define('R', tagOf(Shape.ROD, Material.WOOD))
 } on input

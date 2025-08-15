@@ -16,7 +16,7 @@ import miragefairy2024.mod.materials.block.cards.localVacuumDecayTexturedModelFa
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
@@ -107,7 +107,7 @@ open class BlockMaterialCard(
             registerShapedRecipeGeneration(item) {
                 pattern("##")
                 pattern("##")
-                define('#', Tag(Shape.GEM, Material.MIRANAGITE))
+                define('#', tagOf(Shape.GEM, Material.MIRANAGITE))
             } on MaterialCard.MIRANAGITE.item from MaterialCard.MIRANAGITE.item
         }
         val MIRANAGITE_TILE_SLAB = !object : BlockMaterialCard(

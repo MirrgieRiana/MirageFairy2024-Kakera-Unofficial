@@ -9,7 +9,7 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
 import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.Tag
+import miragefairy2024.mod.materials.item.tagOf
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
@@ -96,7 +96,7 @@ object FairyHouseCard : FairyFactoryCard<FairyHouseBlock, FairyHouseBlockEntity,
             define('D', ItemTags.WOOL_CARPETS)
             define('L', ConventionalItemTags.GLASS_PANES)
             define('R', ItemTags.WOODEN_DOORS)
-            define('*', Tag(Shape.GEM, Material.FAIRY_CRYSTAL))
+            define('*', tagOf(Shape.GEM, Material.FAIRY_CRYSTAL))
         } on MaterialCard.FAIRY_CRYSTAL.item
     }
 }

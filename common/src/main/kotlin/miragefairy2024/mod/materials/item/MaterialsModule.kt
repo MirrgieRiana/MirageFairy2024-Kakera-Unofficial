@@ -564,7 +564,7 @@ class MaterialCard(
                 pattern("#")
                 pattern("S")
                 define('#', item())
-                define('S', Tag(Shape.ROD, Material.WOOD))
+                define('S', tagOf(Shape.ROD, Material.WOOD))
             } on item modId MirageFairy2024.MOD_ID from item
         }
         val HAIMEVISKA_ROSIN: MaterialCard = !MaterialCard(
@@ -911,7 +911,7 @@ class MaterialCard(
                 pattern(" G")
                 pattern("S ")
                 define('S', MIRAGE_STEM.item())
-                define('G', Tag(Shape.INGOT, Material.GOLD))
+                define('G', tagOf(Shape.INGOT, Material.GOLD))
             } on MIRAGE_STEM.item
         }
 
@@ -1214,8 +1214,8 @@ data class Ore(val shape: Shape, val material: Material)
 val Ore.title get() = EnJa("${this.material.prefix.en} ${this.shape.title.en}", "${this.material.prefix.ja}の${this.shape.title.ja}")
 val Ore.tag get() = ResourceLocation.fromNamespaceAndPath("c", "${this.shape.path}/${this.material.path}").toItemTag()
 val Ore.ingredient get() = this.tag.toIngredient()
-fun Tag(shape: Shape, material: Material) = Ore(shape, material).tag
-fun Ingredient(shape: Shape, material: Material) = Ore(shape, material).ingredient
+fun tagOf(shape: Shape, material: Material) = Ore(shape, material).tag
+fun ingredientOf(shape: Shape, material: Material) = Ore(shape, material).ingredient
 
 enum class Shape(val path: String, val title: EnJa) {
     TINY_DUST("tiny_dusts", EnJa("Tiny Dusts", "微粉")),
