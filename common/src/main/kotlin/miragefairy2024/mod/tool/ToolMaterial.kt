@@ -2,13 +2,18 @@ package miragefairy2024.mod.tool
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.mod.ItemTagCard
+import miragefairy2024.mod.materials.item.Material
 import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.item.Shape
+import miragefairy2024.mod.materials.item.ingredientOf
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.registerChild
 import miragefairy2024.util.toIngredient
 import miragefairy2024.util.toItemTag
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
@@ -27,33 +32,33 @@ enum class FairyToolMaterials(
     private val enchantability: Int,
     private val repairIngredient: () -> Ingredient,
 ) : ToolMaterial {
-    COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 2.0F, 18, { Items.COPPER_INGOT.toIngredient() }),
-    GLASS(Tiers.STONE, 27, 6.0F, 4.0F, 3.5F, 14, { Items.GLASS.toIngredient() }),
-    AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 2.5F, 23, { Items.AMETHYST_SHARD.toIngredient() }),
-    OBSIDIAN(Tiers.IRON, 804, 5.0F, 4.5F, 3.0F, 20, { Items.OBSIDIAN.toIngredient() }),
-    EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 2.0F, 16, { Items.EMERALD.toIngredient() }),
-    ECHO_SHARD(Tiers.NETHERITE, 1366, 12.0F, 4.0F, 3.0F, 12, { Items.ECHO_SHARD.toIngredient() }),
-    NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 3.5F, 25, { Items.NETHER_STAR.toIngredient() }),
+    COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 2.0F, 18, { ingredientOf(Shape.INGOT, Material.COPPER) }),
+    GLASS(Tiers.STONE, 27, 6.0F, 4.0F, 3.5F, 14, { ConventionalItemTags.GLASS_BLOCKS.toIngredient() }),
+    AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 2.5F, 23, { ingredientOf(Shape.SHARD, Material.AMETHYST) }),
+    OBSIDIAN(Tiers.IRON, 804, 5.0F, 4.5F, 3.0F, 20, { ConventionalItemTags.OBSIDIANS.toIngredient() }),
+    EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 2.0F, 16, { ingredientOf(Shape.GEM, Material.EMERALD) }),
+    ECHO_SHARD(Tiers.NETHERITE, 1366, 12.0F, 4.0F, 3.0F, 12, { ItemTagCard.ECHO_SHARDS.tag.toIngredient() }),
+    NETHER_STAR(Tiers.NETHERITE, 5048, 11.0F, 5.0F, 3.5F, 25, { ConventionalItemTags.NETHER_STARS.toIngredient() }),
 
-    MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 2.0F, 3, { MaterialCard.MAGNETITE.item().toIngredient() }),
-    BISMUTH(Tiers.IRON, 4, 4.0F, 1.0F, 1.5F, 19, { MaterialCard.BISMUTH_INGOT.item().toIngredient() }),
-    FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 1.5F, 20, { MaterialCard.FLUORITE.item().toIngredient() }),
-    TOPAZ(Tiers.DIAMOND, 1285, 6.5F, 4.0F, 1.5F, 12, { MaterialCard.TOPAZ.item().toIngredient() }),
-    FLINT(Tiers.STONE, 150, 3.5F, 1.5F, 1.0F, 6, { Items.FLINT.toIngredient() }),
+    MAGNETITE(Tiers.STONE, 220, 5.0F, 1.5F, 2.0F, 3, { ingredientOf(Shape.GEM, Material.MAGNETITE) }),
+    BISMUTH(Tiers.IRON, 4, 4.0F, 1.0F, 1.5F, 19, { ingredientOf(Shape.INGOT, Material.BISMUTH) }),
+    FLUORITE(Tiers.STONE, 96, 3.0F, 1.0F, 1.5F, 20, { ingredientOf(Shape.GEM, Material.FLUORITE) }),
+    TOPAZ(Tiers.DIAMOND, 1285, 6.5F, 4.0F, 1.5F, 12, { ingredientOf(Shape.GEM, Material.TOPAZ) }),
+    FLINT(Tiers.STONE, 150, 3.5F, 1.5F, 1.0F, 6, { ingredientOf(Shape.GEM, Material.FLINT) }),
 
     MIRAGE(Tiers.WOOD, 48, 1.6F, 0.0F, 0.0F, 17, { MaterialCard.MIRAGE_STEM.item().toIngredient() }),
-    MIRAGIUM(Tiers.IRON, 478, 1.0F, 2.0F, 0.0F, 26, { MaterialCard.MIRAGIUM_INGOT.item().toIngredient() }),
-    LILAGIUM(Tiers.IRON, 505, 1.0F, 2.0F, 0.0F, 19, { MaterialCard.LILAGIUM_INGOT.item().toIngredient() }),
-    MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 1.5F, 2, { MaterialCard.MIRAGIDIAN.item().toIngredient() }),
-    FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 1.5F, 7, { MaterialCard.FAIRY_CRYSTAL.item().toIngredient() }),
-    PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 1.0F, 12, { MaterialCard.PHANTOM_DROP.item().toIngredient() }),
-    LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 3.0F, 21, { MaterialCard.LUMINITE.item().toIngredient() }),
-    RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 7.0F, 19, { MaterialCard.RESONITE_INGOT.item().toIngredient() }),
-    PROMINITE(Tiers.DIAMOND, 925, 7.0F, 2.0F, 0.0F, 13, { MaterialCard.PROMINITE.item().toIngredient() }),
-    XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 2.0F, 20, { MaterialCard.XARPITE.item().toIngredient() }),
-    MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 2.5F, 24, { MaterialCard.MIRANAGITE.item().toIngredient() }),
-    CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 2.0F, 15, { MaterialCard.CHAOS_STONE.item().toIngredient() }),
-    HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 0.0F, 11, { MaterialCard.HAIMEVISKA_ROSIN.item().toIngredient() }),
+    MIRAGIUM(Tiers.IRON, 478, 1.0F, 2.0F, 0.0F, 26, { ingredientOf(Shape.INGOT, Material.MIRAGIUM) }),
+    LILAGIUM(Tiers.IRON, 505, 1.0F, 2.0F, 0.0F, 19, { ingredientOf(Shape.INGOT, Material.LILAGIUM) }),
+    MIRAGIDIAN(Tiers.NETHERITE, 7826, 7.0F, 2.5F, 1.5F, 2, { ingredientOf(Shape.GEM, Material.MIRAGIDIAN) }),
+    FAIRY_CRYSTAL(Tiers.IRON, 235, 5.0F, 1.5F, 1.5F, 7, { ingredientOf(Shape.GEM, Material.FAIRY_CRYSTAL) }),
+    PHANTOM_DROP(Tiers.NETHERITE, 777, 9.0F, 2.0F, 1.0F, 12, { ingredientOf(Shape.GEM, Material.PHANTOM_DROP) }),
+    LUMINITE(Tiers.DIAMOND, 1361, 9.0F, 4.0F, 3.0F, 21, { ingredientOf(Shape.GEM, Material.LUMINITE) }),
+    RESONITE(Tiers.NETHERITE, 2705, 4.0F, 9.0F, 7.0F, 19, { ingredientOf(Shape.INGOT, Material.RESONITE) }),
+    PROMINITE(Tiers.DIAMOND, 925, 7.0F, 2.0F, 0.0F, 13, { ingredientOf(Shape.GEM, Material.PROMINITE) }),
+    XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 2.0F, 20, { ingredientOf(Shape.GEM, Material.XARPITE) }),
+    MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 2.5F, 24, { ingredientOf(Shape.GEM, Material.MIRANAGITE) }),
+    CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 2.0F, 15, { ingredientOf(Shape.GEM, Material.CHAOS_STONE) }),
+    HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 0.0F, 11, { ingredientOf(Shape.GEM, Material.HAIMEVISKA_ROSIN) }),
 
     NEUTRONIUM(Tiers.NETHERITE, Int.MAX_VALUE - 100, 8.0F, 3.0F, 3.0F, 10, { Items.BEDROCK.toIngredient() }),
     ;
