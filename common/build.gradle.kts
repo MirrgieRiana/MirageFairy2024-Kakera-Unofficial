@@ -4,6 +4,10 @@ architectury {
 
 loom {
     splitEnvironmentSourceSets()
+    mixin {
+        add(sourceSets.main.get(), "miragefairy2024-common-main-refmap.json")
+        add(sourceSets.named("client").get(), "miragefairy2024-common-client-refmap.json")
+    }
 }
 
 sourceSets {

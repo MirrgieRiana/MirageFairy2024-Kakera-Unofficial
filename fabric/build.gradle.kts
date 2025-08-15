@@ -1,4 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import dev.architectury.plugin.TransformingTask
+import dev.architectury.transformer.transformers.base.AssetEditTransformer
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
@@ -14,6 +18,10 @@ architectury {
 loom {
     splitEnvironmentSourceSets()
     accessWidenerPath = file("src/main/resources/miragefairy2024.accesswidener")
+    mixin {
+        add(sourceSets.main.get(), "miragefairy2024-fabric-main-refmap.json")
+        add(sourceSets.named("client").get(), "miragefairy2024-fabric-client-refmap.json")
+    }
 }
 
 configurations {
@@ -147,4 +155,34 @@ tasks.named<ShadowJar>("shadowJar") {
 
 tasks.named<RemapJarTask>("remapJar") {
     inputFile.set(tasks.named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
+}
+
+/**
+ * architecturyはsplit sourceをサポートしないためデフォルトrefmapファイル名を想定してjsonを変換する
+ * @see dev.architectury.plugin.transformers.AddRefmapName
+ */
+rootProject.project("common").tasks.named<TransformingTask>("transformProductionFabric") {
+    this(AssetEditTransformer { context, output ->
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val listeners = mutableListOf<() -> Unit>()
+        output.handle { path, bytes ->
+            fun convert(mixinJsonPath: String, refmapFileName: String) {
+                if (path == mixinJsonPath) {
+                    listeners += {
+                        println("Converting `$mixinJsonPath` to use refmap `$refmapFileName`")
+                        output.modifyFile(path) {
+                            val json = gson.fromJson(bytes.decodeToString(), JsonObject::class.java)
+                            json.addProperty("refmap", refmapFileName)
+                            gson.toJson(json).encodeToByteArray()
+                        }
+                    }
+                }
+            }
+            convert("/miragefairy2024.mixins.json", "miragefairy2024-common-main-refmap.json")
+            convert("/miragefairy2024.client.mixins.json", "miragefairy2024-common-client-refmap.json")
+        }
+        listeners.forEach {
+            it()
+        }
+    })
 }

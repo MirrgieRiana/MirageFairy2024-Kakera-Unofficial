@@ -8,6 +8,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "refmap": "MF24KU-fabric-fabric-refmap.json"
+  }
 }

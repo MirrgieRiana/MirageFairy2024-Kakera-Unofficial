@@ -129,6 +129,7 @@ tasks.named<ShadowJar>("shadowJar") {
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
     relocate("mirrg.kotlin", "miragefairy2024.shadow.mirrg.kotlin")
+    exclude("**/*refmap.json")
 }
 
 tasks.named<RemapJarTask>("remapJar") {
