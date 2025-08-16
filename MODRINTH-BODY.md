@@ -1,6 +1,6 @@
 # MF24KU
 
-An unofficial fork of "MirageFairy2024," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
+An unofficial fork of "[MirageFairy2024](https://modrinth.com/mod/miragefairy2024)," a Minecraft mod for the MirageFairy project, created by Yoruno Kakera.
 
 This MOD is compatible with save data from the original MirageFairy2024.
 
