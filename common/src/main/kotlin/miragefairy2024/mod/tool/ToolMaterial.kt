@@ -33,7 +33,7 @@ enum class FairyToolMaterials(
     private val repairIngredient: () -> Ingredient,
 ) : ToolMaterial {
     COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 2.0F, 18, { ingredientOf(Shape.INGOT, Material.COPPER) }),
-    GLASS(Tiers.STONE, 27, 6.0F, 4.0F, 3.5F, 14, { ConventionalItemTags.GLASS_BLOCKS.toIngredient() }),
+    GLASS(Tiers.STONE, 8, 6.0F, 4.0F, 3.5F, 14, { ConventionalItemTags.GLASS_BLOCKS.toIngredient() }),
     AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 2.5F, 23, { ingredientOf(Shape.SHARD, Material.AMETHYST) }),
     OBSIDIAN(Tiers.IRON, 804, 5.0F, 4.5F, 3.0F, 20, { ConventionalItemTags.OBSIDIANS.toIngredient() }),
     EMERALD(Tiers.DIAMOND, 1192, 7.0F, 2.5F, 2.0F, 16, { ingredientOf(Shape.GEM, Material.EMERALD) }),
