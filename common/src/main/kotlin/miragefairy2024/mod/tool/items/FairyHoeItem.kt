@@ -102,6 +102,10 @@ open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: Tillin
                 Blocks.DIRT to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.COARSE_DIRT.defaultBlockState())),
                 Blocks.CRIMSON_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
                 Blocks.WARPED_NYLIUM to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.NETHERRACK.defaultBlockState())),
+                Blocks.MOSSY_COBBLESTONE to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.COBBLESTONE.defaultBlockState())),
+                Blocks.MOSSY_STONE_BRICKS to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.STONE_BRICKS.defaultBlockState())),
+                Blocks.INFESTED_MOSSY_STONE_BRICKS to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoState(Blocks.INFESTED_STONE_BRICKS.defaultBlockState())),
+                Blocks.MUDDY_MANGROVE_ROOTS to com.mojang.datafixers.util.Pair.of(Predicate { true }, changeIntoStateAndDropItem(Blocks.MUD.defaultBlockState(), Items.MANGROVE_ROOTS)),
             )
         )
         val CREATIVE_RECIPE = object : TillingRecipe {
