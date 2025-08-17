@@ -90,22 +90,30 @@ fun initMagicPlantModule() {
         val lines = mutableListOf<String>()
         magicPlantCards.groupBy { it.family }.forEach { (_, cards) ->
 
-            fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
-                val remainingConditions = conditions - environment
-                if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
-                if (TraitConditionCard.MEDIUM_HUMIDITY.traitCondition in remainingConditions) return false
-                if (TraitConditionCard.HIGH_HUMIDITY.traitCondition in remainingConditions) return false
-                if (TraitConditionCard.LOW_TEMPERATURE.traitCondition in remainingConditions) return false
-                if (TraitConditionCard.MEDIUM_TEMPERATURE.traitCondition in remainingConditions) return false
-                if (TraitConditionCard.HIGH_TEMPERATURE.traitCondition in remainingConditions) return false
-                return true
-            }
+            fun MagicPlantCard<*>.hasEnvironmentAdaptation(temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
+                fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
+                    val remainingConditions = conditions - environment
+                    if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
+                    if (TraitConditionCard.MEDIUM_HUMIDITY.traitCondition in remainingConditions) return false
+                    if (TraitConditionCard.HIGH_HUMIDITY.traitCondition in remainingConditions) return false
+                    if (TraitConditionCard.LOW_TEMPERATURE.traitCondition in remainingConditions) return false
+                    if (TraitConditionCard.MEDIUM_TEMPERATURE.traitCondition in remainingConditions) return false
+                    if (TraitConditionCard.HIGH_TEMPERATURE.traitCondition in remainingConditions) return false
+                    return true
+                }
 
-            fun getEffects(traits: Set<Trait>, environment: Set<TraitCondition>): Set<TraitEffectKey<*>> {
-                return traits.toList()
-                    .filter { isAvailableIn(it.conditions.toSet(), environment) }
-                    .flatMap { it.traitEffectKeyEntries.map { effectStack -> effectStack.traitEffectKey } }
-                    .toSet()
+                fun getEffects(traits: Set<Trait>, environment: Set<TraitCondition>): Set<TraitEffectKey<*>> {
+                    return traits.toList()
+                        .filter { isAvailableIn(it.conditions.toSet(), environment) }
+                        .flatMap { it.traitEffectKeyEntries.map { effectStack -> effectStack.traitEffectKey } }
+                        .toSet()
+                }
+
+                val effects = getEffects(
+                    defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet(),
+                    setOf(temperatureTraitCondition, humidityTraitCondition),
+                )
+                return TraitEffectKeyCard.TEMPERATURE.traitEffectKey in effects && TraitEffectKeyCard.HUMIDITY.traitEffectKey in effects
             }
 
             val temperatureTraitConditions = listOf(TraitConditionCard.LOW_TEMPERATURE, TraitConditionCard.MEDIUM_TEMPERATURE, TraitConditionCard.HIGH_TEMPERATURE).map { it.traitCondition }
@@ -114,11 +122,7 @@ fun initMagicPlantModule() {
             fun f(t: Int, h: Int): String {
                 return cards
                     .filter { magicPlantCard ->
-                        val effects = getEffects(
-                            magicPlantCard.defaultTraitBits.map { it.key }.toSet() + magicPlantCard.randomTraitChances.map { it.key }.toSet(),
-                            setOf(temperatureTraitConditions[t], humidityTraitConditions[h]),
-                        )
-                        TraitEffectKeyCard.TEMPERATURE.traitEffectKey in effects && TraitEffectKeyCard.HUMIDITY.traitEffectKey in effects
+                        magicPlantCard.hasEnvironmentAdaptation(temperatureTraitConditions[t], humidityTraitConditions[h])
                     }
                     .join("&br;") { it.blockName.ja }
             }
