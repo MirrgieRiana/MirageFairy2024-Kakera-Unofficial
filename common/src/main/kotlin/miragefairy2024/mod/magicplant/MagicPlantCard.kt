@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.PoemList
+import miragefairy2024.mod.magicplant.contents.TraitConditionCard
+import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerHarvestNotation
@@ -106,4 +108,30 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
         advancement?.init()
 
     }
+}
+
+fun MagicPlantCard<*>.hasEnvironmentAdaptation(temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
+    fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
+        val remainingConditions = conditions - environment
+        if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
+        if (TraitConditionCard.MEDIUM_HUMIDITY.traitCondition in remainingConditions) return false
+        if (TraitConditionCard.HIGH_HUMIDITY.traitCondition in remainingConditions) return false
+        if (TraitConditionCard.LOW_TEMPERATURE.traitCondition in remainingConditions) return false
+        if (TraitConditionCard.MEDIUM_TEMPERATURE.traitCondition in remainingConditions) return false
+        if (TraitConditionCard.HIGH_TEMPERATURE.traitCondition in remainingConditions) return false
+        return true
+    }
+
+    fun getEffects(traits: Set<Trait>, environment: Set<TraitCondition>): Set<TraitEffectKey<*>> {
+        return traits.toList()
+            .filter { isAvailableIn(it.conditions.toSet(), environment) }
+            .flatMap { it.traitEffectKeyEntries.map { effectStack -> effectStack.traitEffectKey } }
+            .toSet()
+    }
+
+    val effects = getEffects(
+        defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet(),
+        setOf(temperatureTraitCondition, humidityTraitCondition),
+    )
+    return TraitEffectKeyCard.TEMPERATURE.traitEffectKey in effects && TraitEffectKeyCard.HUMIDITY.traitEffectKey in effects
 }

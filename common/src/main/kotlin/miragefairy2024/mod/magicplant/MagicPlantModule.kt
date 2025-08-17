@@ -4,7 +4,6 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.TraitCard
 import miragefairy2024.mod.magicplant.contents.TraitConditionCard
-import miragefairy2024.mod.magicplant.contents.TraitEffectKeyCard
 import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
@@ -89,32 +88,6 @@ fun initMagicPlantModule() {
     registerClientDebugItem("dump_magic_plant_environments", Blocks.OAK_SAPLING.toTextureSource(), 0xFF00FF00.toInt()) { _, player, _, _ ->
         val lines = mutableListOf<String>()
         magicPlantCards.groupBy { it.family }.forEach { (_, cards) ->
-
-            fun MagicPlantCard<*>.hasEnvironmentAdaptation(temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
-                fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
-                    val remainingConditions = conditions - environment
-                    if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
-                    if (TraitConditionCard.MEDIUM_HUMIDITY.traitCondition in remainingConditions) return false
-                    if (TraitConditionCard.HIGH_HUMIDITY.traitCondition in remainingConditions) return false
-                    if (TraitConditionCard.LOW_TEMPERATURE.traitCondition in remainingConditions) return false
-                    if (TraitConditionCard.MEDIUM_TEMPERATURE.traitCondition in remainingConditions) return false
-                    if (TraitConditionCard.HIGH_TEMPERATURE.traitCondition in remainingConditions) return false
-                    return true
-                }
-
-                fun getEffects(traits: Set<Trait>, environment: Set<TraitCondition>): Set<TraitEffectKey<*>> {
-                    return traits.toList()
-                        .filter { isAvailableIn(it.conditions.toSet(), environment) }
-                        .flatMap { it.traitEffectKeyEntries.map { effectStack -> effectStack.traitEffectKey } }
-                        .toSet()
-                }
-
-                val effects = getEffects(
-                    defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet(),
-                    setOf(temperatureTraitCondition, humidityTraitCondition),
-                )
-                return TraitEffectKeyCard.TEMPERATURE.traitEffectKey in effects && TraitEffectKeyCard.HUMIDITY.traitEffectKey in effects
-            }
 
             val temperatureTraitConditions = listOf(TraitConditionCard.LOW_TEMPERATURE, TraitConditionCard.MEDIUM_TEMPERATURE, TraitConditionCard.HIGH_TEMPERATURE).map { it.traitCondition }
             val humidityTraitConditions = listOf(TraitConditionCard.HIGH_HUMIDITY, TraitConditionCard.MEDIUM_HUMIDITY, TraitConditionCard.LOW_HUMIDITY).map { it.traitCondition }
