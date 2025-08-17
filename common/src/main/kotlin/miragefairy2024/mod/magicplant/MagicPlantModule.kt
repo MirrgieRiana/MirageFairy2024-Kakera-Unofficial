@@ -94,7 +94,7 @@ fun initMagicPlantModule() {
 
             fun f(t: Int, h: Int): String {
                 return cards
-                    .filter { it.hasEnvironmentAdaptation(temperatureTraitConditions[t], humidityTraitConditions[h]) }
+                    .filter { it.hasEnvironmentAdaptation(true, temperatureTraitConditions[t], humidityTraitConditions[h]) }
                     .join("&br;") { it.blockName.ja }
             }
 

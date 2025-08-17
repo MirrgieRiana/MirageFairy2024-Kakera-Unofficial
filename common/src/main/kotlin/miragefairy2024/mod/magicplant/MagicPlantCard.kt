@@ -110,7 +110,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     }
 }
 
-fun MagicPlantCard<*>.hasEnvironmentAdaptation(temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
+fun MagicPlantCard<*>.hasEnvironmentAdaptation(includeRandomTraits: Boolean, temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
     fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
         val remainingConditions = conditions - environment
         if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
@@ -129,9 +129,12 @@ fun MagicPlantCard<*>.hasEnvironmentAdaptation(temperatureTraitCondition: TraitC
             .toSet()
     }
 
-    val effects = getEffects(
-        defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet(),
-        setOf(temperatureTraitCondition, humidityTraitCondition),
-    )
+    val traits = if (includeRandomTraits) {
+        defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet()
+    } else {
+        defaultTraitBits.map { it.key }.toSet()
+    }
+
+    val effects = getEffects(traits, setOf(temperatureTraitCondition, humidityTraitCondition))
     return TraitEffectKeyCard.TEMPERATURE.traitEffectKey in effects && TraitEffectKeyCard.HUMIDITY.traitEffectKey in effects
 }
