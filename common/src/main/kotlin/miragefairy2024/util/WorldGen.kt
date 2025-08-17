@@ -111,6 +111,14 @@ context(BiomeSelectorScope) operator fun TagKey<Biome>.unaryPlus(): Predicate<Bi
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.not(): Predicate<BiomeSelectionContext> = this.negate()
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.times(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.and(other)
 context(BiomeSelectorScope) operator fun Predicate<BiomeSelectionContext>.plus(other: Predicate<BiomeSelectionContext>): Predicate<BiomeSelectionContext> = this.or(other)
+context(BiomeSelectorScope) operator fun TemperatureCategory.unaryPlus(): Predicate<BiomeSelectionContext> = Predicate { it.biomeRegistryEntry.temperatureCategory == this }
+context(BiomeSelectorScope) operator fun HumidityCategory.unaryPlus(): Predicate<BiomeSelectionContext> = Predicate { it.biomeRegistryEntry.humidityCategory == this }
+context(BiomeSelectorScope) val cold get() = +TemperatureCategory.LOW
+context(BiomeSelectorScope) val warm get() = +TemperatureCategory.MEDIUM
+context(BiomeSelectorScope) val hot get() = +TemperatureCategory.HIGH
+context(BiomeSelectorScope) val arid get() = +HumidityCategory.LOW
+context(BiomeSelectorScope) val mesic get() = +HumidityCategory.MEDIUM
+context(BiomeSelectorScope) val humid get() = +HumidityCategory.HIGH
 
 
 // PlacementModifier
