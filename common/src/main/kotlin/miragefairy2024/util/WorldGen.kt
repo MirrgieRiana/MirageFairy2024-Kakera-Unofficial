@@ -3,6 +3,8 @@ package miragefairy2024.util
 import miragefairy2024.DataGenerationEvents
 import miragefairy2024.ModContext
 import miragefairy2024.ModEvents
+import miragefairy2024.mod.magicplant.MagicPlantCard
+import miragefairy2024.mod.magicplant.hasEnvironmentAdaptation
 import mirrg.kotlin.hydrogen.floorToInt
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
@@ -119,6 +121,7 @@ context(BiomeSelectorScope) val hot get() = +TemperatureCategory.HIGH
 context(BiomeSelectorScope) val arid get() = +HumidityCategory.LOW
 context(BiomeSelectorScope) val mesic get() = +HumidityCategory.MEDIUM
 context(BiomeSelectorScope) val humid get() = +HumidityCategory.HIGH
+context(MagicPlantCard<*>, BiomeSelectorScope) val defaultTraits get(): Predicate<BiomeSelectionContext> = Predicate { this@MagicPlantCard.hasEnvironmentAdaptation(false, it.biomeRegistryEntry.temperatureCategory, it.biomeRegistryEntry.humidityCategory) }
 
 
 // PlacementModifier
