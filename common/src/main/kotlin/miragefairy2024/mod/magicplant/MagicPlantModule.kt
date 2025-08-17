@@ -3,7 +3,6 @@ package miragefairy2024.mod.magicplant
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.magicplant.contents.TraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitCard
 import miragefairy2024.mod.magicplant.contents.initTraitConditionCard
 import miragefairy2024.mod.magicplant.contents.initTraitEffectKeyCard
@@ -18,7 +17,9 @@ import miragefairy2024.mod.magicplant.contents.magicplants.SarraceniaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.TopazLuminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.XarpaLuminariaCard
+import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.Registration
+import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.register
@@ -89,8 +90,8 @@ fun initMagicPlantModule() {
         val lines = mutableListOf<String>()
         magicPlantCards.groupBy { it.family }.forEach { (_, cards) ->
 
-            val temperatureTraitConditions = listOf(TraitConditionCard.LOW_TEMPERATURE, TraitConditionCard.MEDIUM_TEMPERATURE, TraitConditionCard.HIGH_TEMPERATURE).map { it.traitCondition }
-            val humidityTraitConditions = listOf(TraitConditionCard.HIGH_HUMIDITY, TraitConditionCard.MEDIUM_HUMIDITY, TraitConditionCard.LOW_HUMIDITY).map { it.traitCondition }
+            val temperatureTraitConditions = listOf(TemperatureCategory.LOW, TemperatureCategory.MEDIUM, TemperatureCategory.HIGH)
+            val humidityTraitConditions = listOf(HumidityCategory.HIGH, HumidityCategory.MEDIUM, HumidityCategory.LOW)
 
             fun f(t: Int, h: Int): String {
                 return cards

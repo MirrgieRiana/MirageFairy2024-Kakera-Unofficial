@@ -13,7 +13,9 @@ import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.EnJa
+import miragefairy2024.util.HumidityCategory
 import miragefairy2024.util.Registration
+import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator
 import miragefairy2024.util.register
@@ -110,7 +112,7 @@ abstract class MagicPlantCard<B : MagicPlantBlock> {
     }
 }
 
-fun MagicPlantCard<*>.hasEnvironmentAdaptation(includeRandomTraits: Boolean, temperatureTraitCondition: TraitCondition, humidityTraitCondition: TraitCondition): Boolean {
+fun MagicPlantCard<*>.hasEnvironmentAdaptation(includeRandomTraits: Boolean, temperature: TemperatureCategory, humidity: HumidityCategory): Boolean {
     fun isAvailableIn(conditions: Set<TraitCondition>, environment: Set<TraitCondition>): Boolean {
         val remainingConditions = conditions - environment
         if (TraitConditionCard.LOW_HUMIDITY.traitCondition in remainingConditions) return false
@@ -133,6 +135,17 @@ fun MagicPlantCard<*>.hasEnvironmentAdaptation(includeRandomTraits: Boolean, tem
         defaultTraitBits.map { it.key }.toSet() + randomTraitChances.map { it.key }.toSet()
     } else {
         defaultTraitBits.map { it.key }.toSet()
+    }
+
+    val temperatureTraitCondition = when (temperature) {
+        TemperatureCategory.LOW -> TraitConditionCard.LOW_TEMPERATURE.traitCondition
+        TemperatureCategory.MEDIUM -> TraitConditionCard.MEDIUM_TEMPERATURE.traitCondition
+        TemperatureCategory.HIGH -> TraitConditionCard.HIGH_TEMPERATURE.traitCondition
+    }
+    val humidityTraitCondition = when (humidity) {
+        HumidityCategory.LOW -> TraitConditionCard.LOW_HUMIDITY.traitCondition
+        HumidityCategory.MEDIUM -> TraitConditionCard.MEDIUM_HUMIDITY.traitCondition
+        HumidityCategory.HIGH -> TraitConditionCard.HIGH_HUMIDITY.traitCondition
     }
 
     val effects = getEffects(traits, setOf(temperatureTraitCondition, humidityTraitCondition))
