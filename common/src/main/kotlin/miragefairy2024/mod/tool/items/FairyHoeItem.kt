@@ -125,10 +125,11 @@ open class AdvancedHoeItem(toolMaterial: Tier, private val tillingRecipe: Tillin
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
+        val player = context.player
+        if (player?.isShiftKeyDown == true) return super.useOn(context)
         val level = context.level
         val blockPos = context.clickedPos
         val result = tillingRecipe.test(context, level.getBlockState(blockPos)) ?: return InteractionResult.PASS
-        val player = context.player
         level.playSound(player, blockPos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F)
         if (level.isClientSide) return InteractionResult.sidedSuccess(level.isClientSide)
         result.accept(context)
