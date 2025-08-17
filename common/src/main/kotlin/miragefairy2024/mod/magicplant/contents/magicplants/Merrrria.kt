@@ -13,10 +13,12 @@ import miragefairy2024.util.EnJa
 import miragefairy2024.util.center
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.flower
 import miragefairy2024.util.per
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
+import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.BlockPos
@@ -103,10 +105,10 @@ object MerrrriaCard : SimpleMagicPlantCard<MerrrriaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
-                placedFeature("cluster", { per(8) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+                placedFeature("cluster", { per(8) + flower(square, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT * defaultTraits }
             }
             configuredFeature("large_cluster", { RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
-                placedFeature("large_cluster", { per(64) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT }
+                placedFeature("large_cluster", { per(64) + flower(center, surface) }) { +ConventionalBiomeTags.IS_WINDSWEPT * defaultTraits }
             }
         }
     }

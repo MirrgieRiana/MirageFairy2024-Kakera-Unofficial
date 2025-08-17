@@ -8,11 +8,13 @@ import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.flower
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
+import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.resources.ResourceLocation
@@ -84,7 +86,7 @@ object TopazLuminariaCard : AbstractLuminariaCard<TopazLuminariaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
-                placedFeature("cluster", { per(128) + flower(square, surface) }) { +ConventionalBiomeTags.IS_DESERT }
+                placedFeature("cluster", { per(128) + flower(square, surface) }) { +ConventionalBiomeTags.IS_DESERT * defaultTraits }
             }
         }
     }

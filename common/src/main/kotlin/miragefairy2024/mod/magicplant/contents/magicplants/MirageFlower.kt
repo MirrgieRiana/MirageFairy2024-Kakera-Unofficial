@@ -14,6 +14,7 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.center
 import miragefairy2024.util.count
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.end
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
@@ -112,14 +113,14 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
-                placedFeature("cluster", { per(16) + flower(square, surface) }) { overworld + end * !+BiomeKeys.THE_END }  // 地上・エンド外縁の島々に通常クラスタ
-                placedFeature("nether_cluster", { per(64) + flower(square, nether) }) { nether } // ネザーにネザー用クラスタ
-                placedFeature("fairy_forest_cluster", { count(4) + flower(square, surface) }) { +BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey } // 妖精の森
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { (overworld + end * !+BiomeKeys.THE_END) * defaultTraits }  // 地上・エンド外縁の島々に通常クラスタ
+                placedFeature("nether_cluster", { per(64) + flower(square, nether) }) { nether * defaultTraits } // ネザーにネザー用クラスタ
+                placedFeature("fairy_forest_cluster", { count(4) + flower(square, surface) }) { (+BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey) * defaultTraits } // 妖精の森
             }
         }
         FAIRY_RING_FEATURE {
             configuredFeature("fairy_ring", { FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // Fairy Ring
-                placedFeature("fairy_ring", { per(600) + flower(center, surface) }) { overworld }  // 地上にFairy Ring
+                placedFeature("fairy_ring", { per(600) + flower(center, surface) }) { overworld * defaultTraits }  // 地上にFairy Ring
             }
         }
     }

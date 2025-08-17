@@ -10,12 +10,14 @@ import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.center
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.flower
 import miragefairy2024.util.nether
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
+import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.resources.ResourceLocation
@@ -88,10 +90,10 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
-                placedFeature("cluster", { per(16) + flower(square, surface) }) { +ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS } // 地上用クラスタ
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { (+ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS) * defaultTraits } // 地上用クラスタ
             }
             configuredFeature("large_cluster", { RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 大きな塊
-                placedFeature("nether_cluster", { per(8) + flower(center, nether) }) { nether } // ネザー用クラスタ
+                placedFeature("nether_cluster", { per(8) + flower(center, nether) }) { nether * defaultTraits } // ネザー用クラスタ
             }
         }
     }

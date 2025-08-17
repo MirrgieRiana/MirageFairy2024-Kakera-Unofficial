@@ -9,12 +9,14 @@ import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.count
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.flower
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.square
 import miragefairy2024.util.surface
+import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import miragefairy2024.util.underground
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
@@ -89,8 +91,8 @@ object EmeraldLuminariaCard : AbstractLuminariaCard<EmeraldLuminariaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
-                placedFeature("cluster", { per(128) + flower(square, surface) }) { +ConventionalBiomeTags.IS_JUNGLE + +ConventionalBiomeTags.IS_SWAMP }  // 地上
-                placedFeature("underground_cluster", { count(16) + flower(square, underground) }) { +Biomes.LUSH_CAVES } // 地下
+                placedFeature("cluster", { per(128) + flower(square, surface) }) { (+ConventionalBiomeTags.IS_JUNGLE + +ConventionalBiomeTags.IS_SWAMP) * defaultTraits }  // 地上
+                placedFeature("underground_cluster", { count(16) + flower(square, underground) }) { +Biomes.LUSH_CAVES * defaultTraits } // 地下
             }
         }
     }

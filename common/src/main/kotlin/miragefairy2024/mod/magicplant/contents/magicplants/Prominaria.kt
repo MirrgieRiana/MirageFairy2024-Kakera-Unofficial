@@ -12,12 +12,14 @@ import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createItemStack
+import miragefairy2024.util.defaultTraits
 import miragefairy2024.util.flower
 import miragefairy2024.util.getOr
 import miragefairy2024.util.per
 import miragefairy2024.util.plus
 import miragefairy2024.util.rangedNether
 import miragefairy2024.util.square
+import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
@@ -96,7 +98,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
         super.init()
         Feature.FLOWER {
             configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
-                placedFeature("cluster", { per(4) + flower(square, rangedNether(32, 45)) }) { +Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST }
+                placedFeature("cluster", { per(4) + flower(square, rangedNether(32, 45)) }) { (+Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST) * defaultTraits }
             }
         }
     }
