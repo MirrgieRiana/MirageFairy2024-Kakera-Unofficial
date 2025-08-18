@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player
 fun <T : ToolConfiguration> T.selfMending(speed: Int) = this.merge(SelfMendingToolEffectType, speed)
 
 object SelfMendingToolEffectType : IntAddToolEffectType<ToolConfiguration>() {
-    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.self_mending" }, "Self-mending while held", "手に持っている間、自己修繕")
+    private val TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("fairy_mining_tool").toLanguageKey()}.self_mending" }, "Durability regenerates while held", "手に持っている間、耐久値自然回復")
 
     context(ModContext)
     fun init() {

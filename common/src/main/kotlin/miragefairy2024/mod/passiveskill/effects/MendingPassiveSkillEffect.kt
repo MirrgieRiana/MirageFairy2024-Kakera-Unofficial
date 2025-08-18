@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack
 object MendingPassiveSkillEffect : AbstractPassiveSkillEffect<MendingPassiveSkillEffect.Value>("mending") {
     class Value(val map: Map<TagKey<Item>, Double>)
 
-    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Mending: %s/s", "修繕: %s/秒")
+    private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Durability Regeneration: %s/s", "耐久値自然回復: %s/秒")
     override fun getText(value: Value): Component {
         return value.map.map { (tag, value) ->
             text { translation(value formatAs "%+.3f") + " ("() + translate(tag.translationKey) + ")"() }
