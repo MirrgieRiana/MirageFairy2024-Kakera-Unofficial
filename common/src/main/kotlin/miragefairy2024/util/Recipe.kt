@@ -310,20 +310,38 @@ fun (() -> Item).registerMobDrop(
 }
 
 context(ModContext)
-fun (() -> Item).registerChestLoot(
+fun (() -> Item).registerSinglePoolChestLoot(
     lootTableIdGetter: () -> ResourceKey<LootTable>,
-    weight: Int = 10,
+    weight: Int,
     count: IntRange? = null,
     block: LeafEntry.Builder<*>.() -> Unit = {},
 ) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder, registries ->
     tableBuilder.modifyPools { lootPool ->
         lootPool.configure {
-            add(ItemLootPoolEntry(this@registerChestLoot()) {
+            add(ItemLootPoolEntry(this@registerSinglePoolChestLoot()) {
                 setWeight(weight)
                 if (count != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(count.first.toFloat(), count.last.toFloat())))
                 block(this)
             })
         }
+    }
+}
+
+context(ModContext)
+fun (() -> Item).registerChestLoot(
+    lootTableIdGetter: () -> ResourceKey<LootTable>,
+    chance: Float,
+    count: IntRange? = null,
+    block: LeafEntry.Builder<*>.() -> Unit = {},
+) = this.registerLootTableModification(lootTableIdGetter) { tableBuilder, registries ->
+    tableBuilder.configure {
+        withPool(LootPool {
+            add(ItemLootPoolEntry(this@registerChestLoot()) {
+                `when`(RandomChanceLootCondition.randomChance(chance))
+                if (count != null) apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(count.first.toFloat(), count.last.toFloat())))
+                block(this)
+            })
+        })
     }
 }
 

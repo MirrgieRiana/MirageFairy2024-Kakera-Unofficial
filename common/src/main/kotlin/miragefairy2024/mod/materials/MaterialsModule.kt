@@ -71,6 +71,7 @@ import miragefairy2024.util.registerItemGroup
 import miragefairy2024.util.registerMobDrop
 import miragefairy2024.util.registerShapedRecipeGeneration
 import miragefairy2024.util.registerShapelessRecipeGeneration
+import miragefairy2024.util.registerSinglePoolChestLoot
 import miragefairy2024.util.registerSmeltingRecipeGeneration
 import miragefairy2024.util.registerSpecialRecipe
 import miragefairy2024.util.toIngredient
@@ -177,13 +178,13 @@ class MaterialCard(
                 )
             },
         ) {
-            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 10, 3..5)
-            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 5)
-            item.registerChestLoot({ LootTables.ANCIENT_CITY }, 10, 1..5)
-            item.registerChestLoot({ LootTables.DESERT_PYRAMID }, 10)
-            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 3)
-            item.registerChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
-            item.registerChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
+            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 0.1F, 3..5)
+            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 0.1F, 3..5)
+            item.registerChestLoot({ LootTables.ANCIENT_CITY }, 0.2F, 3..5)
+            item.registerChestLoot({ LootTables.DESERT_PYRAMID }, 0.5F, 3..5)
+            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 0.1F, 3..5)
+            item.registerSinglePoolChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
+            item.registerSinglePoolChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
 
         val MIRAGE_LEAVES: MaterialCard = !MaterialCard(
