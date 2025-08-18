@@ -321,8 +321,12 @@ fun ItemStack.getBagInventory(): BagInventory? {
 }
 
 fun ItemStack.setBagInventory(inventory: BagInventory) {
-    val itemContainerContents = ItemContainerContents.fromItems(inventory.items)
-    this.set(DataComponents.CONTAINER, itemContainerContents)
+    if (inventory.isEmpty) {
+        this.set(DataComponents.CONTAINER, null)
+    } else {
+        val itemContainerContents = ItemContainerContents.fromItems(inventory.items)
+        this.set(DataComponents.CONTAINER, itemContainerContents)
+    }
 }
 
 
