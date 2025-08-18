@@ -35,7 +35,7 @@ import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContex
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
-    override fun getName(stack: ItemStack): Component = if (stack.isRare()) text { super.getName(stack) + " "() + Emoji.NATURAL() } else super.getName(stack)
+    override fun getName(stack: ItemStack): Component = if (stack.isRare()) text { super.getName(stack) + " "() + Emoji.MUTATION() } else super.getName(stack)
 
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
