@@ -1,6 +1,8 @@
 package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -23,7 +25,7 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
 
     override fun getText(value: Value): Component {
         return value.map.map { (attribute, value) ->
-            text { translate(attribute.value().descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
+            text { Emoji.HUMAN() + " "() + translate(attribute.value().descriptionId) + " ${FORMATTERS.getOrElse(attribute) { defaultFormatter }(value)}"() }
         }.join(text { ","() })
     }
 

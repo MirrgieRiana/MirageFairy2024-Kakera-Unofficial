@@ -1,5 +1,7 @@
 package miragefairy2024.mod.passiveskill.effects
 
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.empty
 import miragefairy2024.util.invoke
@@ -18,7 +20,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun getText(value: Value): Component {
         return value.map.map { (statusEffect, entry) ->
-            text { statusEffect.value().displayName + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
+            text { Emoji.POTION() + " "() + statusEffect.value().displayName + if (entry.level >= 2) " "() + entry.level.toRomanText() else empty() }
         }.join(text { ","() })
     }
 
