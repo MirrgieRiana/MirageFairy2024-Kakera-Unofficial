@@ -783,7 +783,7 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + mana(1.0)
-            + mending(1.0) * ToolMaterialCard.MIRAGE(),
+            + mending(1.0, ToolMaterialCard.MIRAGE.tag),
         MotifCardRecipes().R.overworld.block(MirageFlowerCard.block),
     ),
     PHANTOM_FLOWER(
@@ -792,18 +792,18 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + regeneration(0.4) * outdoor
             + regeneration(0.8) * food(MaterialCard.PHANTOM_DROP.item)
-            + mending(1.0) * ToolMaterialCard.PHANTOM_DROP(),
+            + mending(1.0, ToolMaterialCard.PHANTOM_DROP.tag),
         MotifCardRecipes().R.common(BiomeCards.FAIRY_FOREST.registryKey).block(PhantomFlowerCard.block),
     ),
     PHANTOM_DROP(
         "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0xF091FF, 0xD834E0, 0x9E34E0, 0x5C09B0,
         ParentMotifs() + { PHANTOM_FLOWER },
         PassiveSkillBuilder()
-            + mending(1.0) * ToolMaterialCard.WOOD()
-            + mending(1.0) * ToolMaterialCard.MIRAGE()
-            + mending(1.0) * ToolMaterialCard.PHANTOM_DROP()
-            + mending(1.0) * ToolMaterialCard.LUMINITE()
-            + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
+            + mending(1.0, ToolMaterialCard.WOOD.tag)
+            + mending(1.0, ToolMaterialCard.MIRAGE.tag)
+            + mending(1.0, ToolMaterialCard.PHANTOM_DROP.tag)
+            + mending(1.0, ToolMaterialCard.LUMINITE.tag)
+            + mending(1.0, ToolMaterialCard.HAIMEVISKA_ROSIN.tag),
         MotifCardRecipes().R.item(MaterialCard.PHANTOM_DROP.item),
     ),
     VELOPEDA(
@@ -857,7 +857,7 @@ enum class MotifCard(
             + shooting.attack(1.0)
             + StatusEffects.MOVEMENT_SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
             + StatusEffects.MOVEMENT_SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
-            + mending(1.0) * ToolMaterialCard.WOOD(),
+            + mending(1.0, ToolMaterialCard.WOOD.tag),
         MotifCardRecipes().SR.overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
     SPRUCE(
@@ -883,7 +883,7 @@ enum class MotifCard(
             + mana(0.6)
             + experience(0.6) * level.atMost(29) * food(MaterialCard.HAIMEVISKA_SAP.item)
             + experience(0.2) * level.atMost(39) * food(MaterialCard.HAIMEVISKA_SAP.item)
-            + mending(1.0) * ToolMaterialCard.HAIMEVISKA_ROSIN(),
+            + mending(1.0, ToolMaterialCard.HAIMEVISKA_ROSIN.tag),
         MotifCardRecipes().R.overworld.block(HaimeviskaBlockCard.SAPLING.block).block(HaimeviskaBlockCard.LOG.block),
     ),
 
@@ -1348,7 +1348,7 @@ private val ignition get() = IgnitionPassiveSkillEffect { true }
 private fun experience(factor: Double) = ExperiencePassiveSkillEffect { it * factor * 0.005 }
 private fun regeneration(factor: Double) = RegenerationPassiveSkillEffect { it * factor * 0.01 }
 private fun hunger(factor: Double) = HungerPassiveSkillEffect { it * factor * 0.1 }
-private fun mending(factor: Double) = MendingPassiveSkillEffect { it * factor * 0.01 }
+private fun mending(factor: Double, tag: TagKey<Item>) = MendingPassiveSkillEffect { MendingPassiveSkillEffect.Value(mapOf(tag to it * factor * 0.01)) }
 private fun collection(factor: Double) = CollectionPassiveSkillEffect { it * factor * 0.1 }
 
 private val overall get() = ElementPassiveSkillEffect.Elements.OVERALL
