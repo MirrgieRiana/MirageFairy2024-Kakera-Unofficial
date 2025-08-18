@@ -54,24 +54,6 @@ enum class TraitEffectKeyCard(
     val identifier = MirageFairy2024.identifier(path)
     val translation = Translation({ identifier.toLanguageKey("${MirageFairy2024.MOD_ID}.trait_effect") }, enName, jaName)
     val traitEffectKey = when (scale) {
-        Scale.LOG -> object : TraitEffectKey<Double>() {
-            override val emoji = emoji()
-            override val name = text { translation() }
-            override val sortValue = sortValue
-            override val color = color
-            override fun getValue(power: Double) = 1 - 0.5.pow(power)
-            override fun renderValue(value: Double): Component {
-                return when {
-                    value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
-                    else -> text { (value * 100.0 formatAs "%.0f%%")() }
-                }
-            }
-
-            override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
-            override fun getDefaultValue() = 0.0
-            override fun toString() = identifier.string
-        }
-
         Scale.NORMAL -> object : TraitEffectKey<Double>() {
             override val emoji = emoji()
             override val name = text { translation() }
@@ -86,6 +68,24 @@ enum class TraitEffectKeyCard(
             }
 
             override fun plus(a: Double, b: Double) = a + b
+            override fun getDefaultValue() = 0.0
+            override fun toString() = identifier.string
+        }
+
+        Scale.LOG -> object : TraitEffectKey<Double>() {
+            override val emoji = emoji()
+            override val name = text { translation() }
+            override val sortValue = sortValue
+            override val color = color
+            override fun getValue(power: Double) = 1 - 0.5.pow(power)
+            override fun renderValue(value: Double): Component {
+                return when {
+                    value < 0.1 -> text { (value * 100.0 formatAs "%.1f%%")() }
+                    else -> text { (value * 100.0 formatAs "%.0f%%")() }
+                }
+            }
+
+            override fun plus(a: Double, b: Double) = 1.0 - (1.0 - a) * (1.0 - b)
             override fun getDefaultValue() = 0.0
             override fun toString() = identifier.string
         }
