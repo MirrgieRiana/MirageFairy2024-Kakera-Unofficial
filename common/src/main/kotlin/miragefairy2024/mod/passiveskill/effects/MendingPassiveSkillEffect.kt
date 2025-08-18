@@ -2,8 +2,10 @@ package miragefairy2024.mod.passiveskill.effects
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.clientProxy
 import miragefairy2024.mod.passiveskill.PassiveSkillContext
 import miragefairy2024.util.Translation
+import miragefairy2024.util.darkGray
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.join
@@ -23,8 +25,25 @@ object MendingPassiveSkillEffect : AbstractPassiveSkillEffect<MendingPassiveSkil
 
     private val translation = Translation({ "${MirageFairy2024.MOD_ID}.passive_skill_type.${identifier.toLanguageKey()}" }, "Durability Regeneration: %s/s", "耐久値自然回復: %s/秒")
     override fun getText(value: Value): Component {
+        val player = clientProxy?.getClientPlayer()
         return value.map.map { (tag, value) ->
-            text { translation(value formatAs "%+.3f") + " ("() + translate(tag.translationKey) + ")"() }
+            val ok = if (player != null) {
+                var ok = false
+                fun f(itemStack: ItemStack) {
+                    if (itemStack.`is`(tag)) {
+                        ok = true
+                    }
+                }
+                f(player.mainHandItem)
+                f(player.offhandItem)
+                player.armorSlots.forEach {
+                    f(it)
+                }
+                ok
+            } else {
+                true
+            }
+            text { (translation(value formatAs "%+.3f") + " ("() + translate(tag.translationKey) + ")"()).let { if (ok) it else it.darkGray } }
         }.join(text { ","() })
     }
 
