@@ -1,6 +1,8 @@
 package miragefairy2024.mod.magicplant
 
 import miragefairy2024.clientProxy
+import miragefairy2024.mod.Emoji
+import miragefairy2024.mod.invoke
 import miragefairy2024.util.darkGray
 import miragefairy2024.util.darkRed
 import miragefairy2024.util.green
@@ -33,6 +35,8 @@ import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContex
 import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
+    override fun getName(stack: ItemStack): Component = if (stack.isRare()) text { super.getName(stack) + " "() + Emoji.NATURAL() } else super.getName(stack)
+
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
         val player = clientProxy?.getClientPlayer() ?: return
