@@ -27,8 +27,6 @@ object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
     override val blockCodec = XarpaLuminariaBlock.CODEC
     override fun createBlock() = XarpaLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.TERRACOTTA_ORANGE).sound(SoundType.CROP))
 
-    override val baseGrowth = super.baseGrowth / 5
-
     override val drops = listOf(MaterialCard.LUMINITE.item, MaterialCard.CALCULITE.item)
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getSpecialDrops(count: Int, random: RandomSource) = listOf(MaterialCard.CALCULITE.item().createItemStack(count))

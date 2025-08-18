@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty as IntPr
 
 abstract class AbstractLuminariaCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
     override val classification = EnJa("Order Miragales, family Luminariaceae", "妖花目ルミナリア科")
+    override val baseGrowth = super.baseGrowth / 5
     override val baseSeedGeneration = 1.0
 
     override val ageProperty: IntProperty = BlockStateProperties.AGE_3

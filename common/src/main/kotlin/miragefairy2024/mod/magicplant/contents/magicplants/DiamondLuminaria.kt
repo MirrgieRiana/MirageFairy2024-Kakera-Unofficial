@@ -42,8 +42,6 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override val blockCodec = DiamondLuminariaBlock.CODEC
     override fun createBlock() = DiamondLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getWeakLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.DIAMOND).sound(SoundType.CROP))
 
-    override val baseGrowth = super.baseGrowth / 5
-
     override val drops = listOf(MaterialCard.LUMINITE.item, { Items.DIAMOND })
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getSpecialDrops(count: Int, random: RandomSource) = listOf(Items.DIAMOND.createItemStack(count))

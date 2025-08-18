@@ -26,7 +26,7 @@ object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override val blockCodec = GoldProminariaBlock.CODEC
     override fun createBlock() = GoldProminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.GOLD).sound(SoundType.CROP))
 
-    override val baseGrowth = super.baseGrowth / 5 / 4
+    override val baseGrowth = super.baseGrowth / 4
     override val baseSeedGeneration = 0.0
 
     override val drops = listOf(MaterialCard.GOLD_PROMINARIA_BERRY.item, MaterialCard.PROMINITE.item)

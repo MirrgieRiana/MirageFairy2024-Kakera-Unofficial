@@ -39,8 +39,6 @@ object TopazLuminariaCard : AbstractLuminariaCard<TopazLuminariaBlock>() {
     override val blockCodec = TopazLuminariaBlock.CODEC
     override fun createBlock() = TopazLuminariaBlock(createCommonSettings().strength(0.2F).lightLevel { getLuminance(it.getOr(BlockStateProperties.AGE_3) { 0 }) }.mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.CROP))
 
-    override val baseGrowth = super.baseGrowth / 5
-
     override val drops = listOf(MaterialCard.LUMINITE.item, MaterialCard.TOPAZ.item)
     override fun getRareDrops(count: Int, random: RandomSource) = listOf(MaterialCard.LUMINITE.item().createItemStack(count))
     override fun getSpecialDrops(count: Int, random: RandomSource) = listOf(MaterialCard.TOPAZ.item().createItemStack(count))
