@@ -253,8 +253,8 @@ fun initFairyQuestRecipe() {
                 LootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
-            fun registerChestLoot(lootTableId: ResourceKey<LootTable>, weight: Int) {
-                FairyQuestCardCard.item.registerChestLoot({ lootTableId }, weight) {
+            fun registerChestLoot(lootTableId: ResourceKey<LootTable>, chance: Float) {
+                FairyQuestCardCard.item.registerChestLoot({ lootTableId }, chance) {
                     apply { SetFairyQuestRecipeLootFunction(listOf(), card.identifier) }
                 }
             }
@@ -264,13 +264,13 @@ fun initFairyQuestRecipe() {
 
                 FairyQuestRecipeCard.LootCategory.COMMON -> {
                     allVillageChests.forEach {
-                        registerChestLoot(it, 3)
+                        registerChestLoot(it, 0.15F)
                     }
                 }
 
                 FairyQuestRecipeCard.LootCategory.RARE -> {
                     allVillageChests.forEach {
-                        registerChestLoot(it, 1)
+                        registerChestLoot(it, 0.05F)
                     }
                 }
             }
