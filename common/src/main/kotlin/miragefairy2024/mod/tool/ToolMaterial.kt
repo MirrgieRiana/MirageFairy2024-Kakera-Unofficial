@@ -190,4 +190,11 @@ fun initToolMaterial() {
     register(ToolMaterialCard.NETHERITE) { Items.NETHERITE_AXE }
     register(ToolMaterialCard.NETHERITE) { Items.NETHERITE_HOE }
 
+    // PLANT_TOOLS
+    ItemTagCard.PLANT_TOOLS.tag.generator.registerChild(ToolMaterialCard.WOOD.tag)
+    ItemTagCard.PLANT_TOOLS.tag.generator.registerChild(ToolMaterialCard.MIRAGE.tag)
+    ItemTagCard.PLANT_TOOLS.tag.generator.registerChild(ToolMaterialCard.PHANTOM_DROP.tag)
+    ItemTagCard.PLANT_TOOLS.tag.generator.registerChild(ToolMaterialCard.LUMINITE.tag)
+    ItemTagCard.PLANT_TOOLS.tag.generator.registerChild(ToolMaterialCard.HAIMEVISKA_ROSIN.tag)
+
 }

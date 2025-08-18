@@ -7,6 +7,7 @@ import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.Emoji
 import miragefairy2024.mod.FairyStatueFountainBlock
 import miragefairy2024.mod.FoodIngredientCategoryCard
+import miragefairy2024.mod.ItemTagCard
 import miragefairy2024.mod.OreCard
 import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
@@ -799,11 +800,7 @@ enum class MotifCard(
         "phantom_drop", 7, "Phantome Dropia", "幻想雫精ファントーメドローピャ", 0xF091FF, 0xD834E0, 0x9E34E0, 0x5C09B0,
         ParentMotifs() + { PHANTOM_FLOWER },
         PassiveSkillBuilder()
-            + mending(1.0, ToolMaterialCard.WOOD.tag)
-            + mending(1.0, ToolMaterialCard.MIRAGE.tag)
-            + mending(1.0, ToolMaterialCard.PHANTOM_DROP.tag)
-            + mending(1.0, ToolMaterialCard.LUMINITE.tag)
-            + mending(1.0, ToolMaterialCard.HAIMEVISKA_ROSIN.tag),
+            + mending(1.0, ItemTagCard.PLANT_TOOLS.tag),
         MotifCardRecipes().R.item(MaterialCard.PHANTOM_DROP.item),
     ),
     VELOPEDA(

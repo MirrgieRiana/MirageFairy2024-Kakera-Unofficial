@@ -24,6 +24,7 @@ import kotlin.jvm.optionals.getOrElse
 enum class ItemTagCard(identifier: ResourceLocation, val title: EnJa) {
     ECHO_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "echo_shards"), EnJa("Echo Shards", "残響の欠片")),
     PRISMARINE_SHARDS(ResourceLocation.fromNamespaceAndPath("c", "prismarine_shards"), EnJa("Prismarine Shards", "プリズマリンの欠片")),
+    PLANT_TOOLS(MirageFairy2024.identifier("plant_tools"), EnJa("Plant Tools", "植物ツール")),
     ;
 
     val tag = identifier.toItemTag()
