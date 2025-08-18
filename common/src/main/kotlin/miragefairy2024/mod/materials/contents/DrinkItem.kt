@@ -1,4 +1,4 @@
-package miragefairy2024.mod.materials.item
+package miragefairy2024.mod.materials.contents
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Translation

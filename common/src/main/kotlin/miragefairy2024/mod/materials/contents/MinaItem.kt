@@ -1,4 +1,4 @@
-package miragefairy2024.mod.materials.item
+package miragefairy2024.mod.materials.contents
 
 import net.minecraft.world.item.Item
 

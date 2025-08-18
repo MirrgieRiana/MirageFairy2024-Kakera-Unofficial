@@ -1,4 +1,4 @@
-package miragefairy2024.mod.materials.block.cards
+package miragefairy2024.mod.materials.contents
 
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024

@@ -7,7 +7,7 @@ import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
 import miragefairy2024.mod.fairy.FairyCard
 import miragefairy2024.mod.fairybuilding.FairyFactoryBlockEntity
-import miragefairy2024.mod.materials.block.BlockMaterialCard
+import miragefairy2024.mod.materials.BlockMaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.generator

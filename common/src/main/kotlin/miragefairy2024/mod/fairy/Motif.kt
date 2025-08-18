@@ -12,8 +12,8 @@ import miragefairy2024.mod.haimeviska.HaimeviskaBlockCard
 import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.VeropedaCard
-import miragefairy2024.mod.materials.block.BlockMaterialCard
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.BlockMaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.mod.passiveskill.PassiveSkillCondition
 import miragefairy2024.mod.passiveskill.PassiveSkillEffect
 import miragefairy2024.mod.passiveskill.PassiveSkillSpecification

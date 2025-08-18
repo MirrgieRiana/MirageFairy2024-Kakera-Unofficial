@@ -5,10 +5,10 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.lib.MachineBlockEntity
 import miragefairy2024.lib.MachineScreenHandler
-import miragefairy2024.mod.materials.block.BlockMaterialCard
-import miragefairy2024.mod.materials.item.Material
-import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.tagOf
+import miragefairy2024.mod.materials.BlockMaterialCard
+import miragefairy2024.mod.materials.Material
+import miragefairy2024.mod.materials.Shape
+import miragefairy2024.mod.materials.tagOf
 import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration

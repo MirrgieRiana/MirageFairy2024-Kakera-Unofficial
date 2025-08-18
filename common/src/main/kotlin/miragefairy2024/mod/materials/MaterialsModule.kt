@@ -1,4 +1,4 @@
-package miragefairy2024.mod.materials.item
+package miragefairy2024.mod.materials
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -32,6 +32,9 @@ import miragefairy2024.mod.magicplant.contents.magicplants.MirageFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.PhantomFlowerCard
 import miragefairy2024.mod.magicplant.contents.magicplants.ProminariaCard
 import miragefairy2024.mod.magicplant.contents.magicplants.XarpaLuminariaCard
+import miragefairy2024.mod.materials.contents.ApostleWandItem
+import miragefairy2024.mod.materials.contents.DrinkItem
+import miragefairy2024.mod.materials.contents.MinaItem
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.plus
 import miragefairy2024.mod.poem

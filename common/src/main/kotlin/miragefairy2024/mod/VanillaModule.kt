@@ -2,10 +2,10 @@ package miragefairy2024.mod
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.materials.item.Material
-import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.tag
-import miragefairy2024.mod.materials.item.tagOf
+import miragefairy2024.mod.materials.Material
+import miragefairy2024.mod.materials.Shape
+import miragefairy2024.mod.materials.tag
+import miragefairy2024.mod.materials.tagOf
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.enJa
 import miragefairy2024.util.generator

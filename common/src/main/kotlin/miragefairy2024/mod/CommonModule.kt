@@ -6,7 +6,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.platformProxy
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType

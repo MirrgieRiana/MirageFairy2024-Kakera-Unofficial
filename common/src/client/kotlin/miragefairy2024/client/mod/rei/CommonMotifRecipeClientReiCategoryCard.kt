@@ -13,7 +13,7 @@ import miragefairy2024.mod.fairy.BiomeTagCommonMotifRecipe
 import miragefairy2024.mod.fairy.COMMON_MOTIF_RECIPES
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
-import miragefairy2024.mod.materials.item.MIRAGE_FLOUR_TAG
+import miragefairy2024.mod.materials.MIRAGE_FLOUR_TAG
 import miragefairy2024.mod.rei.COMMON_MOTIF_RECIPE_ALWAYS_TRANSLATION
 import miragefairy2024.mod.rei.CommonMotifRecipeReiCategoryCard
 import miragefairy2024.util.invoke

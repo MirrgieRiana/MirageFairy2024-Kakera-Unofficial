@@ -11,7 +11,7 @@ import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.MotifTableScreenHandler
 import miragefairy2024.mod.fairy.setFairyMotif
 import miragefairy2024.mod.fairyquest.FairyQuestCardCard
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.mod.particle.ParticleTypeCard
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType

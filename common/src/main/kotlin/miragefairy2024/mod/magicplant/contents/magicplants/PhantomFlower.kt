@@ -5,8 +5,8 @@ import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.FairyForestBiomeCard
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.materials.block.cards.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
+import miragefairy2024.mod.materials.contents.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa

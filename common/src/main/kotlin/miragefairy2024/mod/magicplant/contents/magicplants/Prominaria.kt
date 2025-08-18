@@ -4,10 +4,10 @@ import com.mojang.serialization.MapCodec
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.MagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.materials.item.Material
-import miragefairy2024.mod.materials.item.MaterialCard
-import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.tagOf
+import miragefairy2024.mod.materials.Material
+import miragefairy2024.mod.materials.MaterialCard
+import miragefairy2024.mod.materials.Shape
+import miragefairy2024.mod.materials.tagOf
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
 import miragefairy2024.util.EnJa

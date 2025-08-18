@@ -24,8 +24,8 @@ import miragefairy2024.mod.initTelescopeModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.machine.initMachineModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
-import miragefairy2024.mod.materials.block.initBlockMaterialsModule
-import miragefairy2024.mod.materials.item.initMaterialsModule
+import miragefairy2024.mod.materials.initBlockMaterialsModule
+import miragefairy2024.mod.materials.initMaterialsModule
 import miragefairy2024.mod.particle.initParticleModule
 import miragefairy2024.mod.passiveskill.initPassiveSkillModule
 import miragefairy2024.mod.placeditem.initPlacedItemModule

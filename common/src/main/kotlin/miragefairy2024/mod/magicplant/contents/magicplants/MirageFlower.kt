@@ -5,7 +5,7 @@ import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.BiomeCards
 import miragefairy2024.mod.magicplant.contents.TraitCard
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType

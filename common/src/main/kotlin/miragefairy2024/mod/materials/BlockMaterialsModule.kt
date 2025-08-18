@@ -1,4 +1,4 @@
-package miragefairy2024.mod.materials.block
+package miragefairy2024.mod.materials
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
@@ -6,17 +6,13 @@ import miragefairy2024.mod.PoemList
 import miragefairy2024.mod.fairy.SOUL_STREAM_CONTAINABLE_TAG
 import miragefairy2024.mod.machine.AuraReflectorFurnaceRecipeCard
 import miragefairy2024.mod.machine.registerSimpleMachineRecipeGeneration
-import miragefairy2024.mod.materials.block.cards.FairyCrystalGlassBlock
-import miragefairy2024.mod.materials.block.cards.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
-import miragefairy2024.mod.materials.block.cards.LocalVacuumDecayBlock
-import miragefairy2024.mod.materials.block.cards.SemiOpaqueTransparentBlock
-import miragefairy2024.mod.materials.block.cards.fairyCrystalGlassBlockModel
-import miragefairy2024.mod.materials.block.cards.fairyCrystalGlassFrameBlockModel
-import miragefairy2024.mod.materials.block.cards.localVacuumDecayTexturedModelFactory
-import miragefairy2024.mod.materials.item.Material
-import miragefairy2024.mod.materials.item.MaterialCard
-import miragefairy2024.mod.materials.item.Shape
-import miragefairy2024.mod.materials.item.tagOf
+import miragefairy2024.mod.materials.contents.FairyCrystalGlassBlock
+import miragefairy2024.mod.materials.contents.LOCAL_VACUUM_DECAY_RESISTANT_BLOCK_TAG
+import miragefairy2024.mod.materials.contents.LocalVacuumDecayBlock
+import miragefairy2024.mod.materials.contents.SemiOpaqueTransparentBlock
+import miragefairy2024.mod.materials.contents.fairyCrystalGlassBlockModel
+import miragefairy2024.mod.materials.contents.fairyCrystalGlassFrameBlockModel
+import miragefairy2024.mod.materials.contents.localVacuumDecayTexturedModelFactory
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem

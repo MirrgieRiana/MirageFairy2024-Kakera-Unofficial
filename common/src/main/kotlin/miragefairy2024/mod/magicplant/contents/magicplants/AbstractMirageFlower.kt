@@ -1,7 +1,7 @@
 package miragefairy2024.mod.magicplant.contents.magicplants
 
 import miragefairy2024.MirageFairy2024
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.createCuboidShape
 import miragefairy2024.util.createItemStack

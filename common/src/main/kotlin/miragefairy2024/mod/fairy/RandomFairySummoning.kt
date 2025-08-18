@@ -2,7 +2,7 @@ package miragefairy2024.mod.fairy
 
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.materials.item.APPEARANCE_RATE_BONUS_TRANSLATION
+import miragefairy2024.mod.materials.APPEARANCE_RATE_BONUS_TRANSLATION
 import miragefairy2024.util.Chance
 import miragefairy2024.util.CondensedItem
 import miragefairy2024.util.EMPTY_ITEM_STACK

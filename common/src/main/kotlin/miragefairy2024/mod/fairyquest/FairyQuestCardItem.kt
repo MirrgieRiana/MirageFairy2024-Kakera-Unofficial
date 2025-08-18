@@ -3,7 +3,7 @@ package miragefairy2024.mod.fairyquest
 import com.mojang.serialization.MapCodec
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
-import miragefairy2024.mod.materials.item.MaterialCard
+import miragefairy2024.mod.materials.MaterialCard
 import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.rootAdvancement
 import miragefairy2024.util.AdvancementCard
