@@ -34,7 +34,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 import net.minecraft.world.level.levelgen.placement.BiomeFilter
-import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement
 import net.minecraft.world.level.levelgen.placement.CountPlacement
 import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement
@@ -195,7 +194,13 @@ val surface
 
 context(PlacementModifiersScope)
 val nether
-    get() = VerticalPlacementType { listOf(CountOnEveryLayerPlacement.of(1)) }
+    get() = VerticalPlacementType {
+        listOf(
+            PlacementUtils.FULL_RANGE,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+        )
+    }
 
 context(PlacementModifiersScope)
 val underground
