@@ -25,12 +25,13 @@ import miragefairy2024.mod.magicplant.MagicPlantSeedItem
 import miragefairy2024.mod.magicplant.TraitEffectKey
 import miragefairy2024.mod.magicplant.TraitListScreenHandler
 import miragefairy2024.mod.magicplant.TraitStack
-import miragefairy2024.mod.magicplant.bitCount
 import miragefairy2024.mod.magicplant.contents.getTraitPower
 import miragefairy2024.mod.magicplant.getMagicPlantBlockEntity
 import miragefairy2024.mod.magicplant.getName
 import miragefairy2024.mod.magicplant.getTraitStacks
 import miragefairy2024.mod.magicplant.minus
+import miragefairy2024.mod.magicplant.negativeBitCount
+import miragefairy2024.mod.magicplant.positiveBitCount
 import miragefairy2024.mod.magicplant.style
 import miragefairy2024.mod.magicplant.texture
 import miragefairy2024.mod.magicplant.traitListScreenHandlerType
@@ -62,8 +63,8 @@ fun initMagicPlantClientModule() {
 
         val traitStacks = stack.getTraitStacks() ?: return@register
         val otherTraitStacks = if (otherItemStack.item is MagicPlantSeedItem) otherItemStack.getTraitStacks() ?: return@register else return@register
-        val plusBitCount = (traitStacks - otherTraitStacks).bitCount
-        val minusBitCount = (otherTraitStacks - traitStacks).bitCount
+        val plusBitCount = (traitStacks - otherTraitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount
+        val minusBitCount = (otherTraitStacks - traitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount
 
         graphics.pose().pushPose()
         try {

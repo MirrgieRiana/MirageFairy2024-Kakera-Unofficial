@@ -77,12 +77,13 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
             sections += text { "/"() } // /
 
             // 特性ビットの個数
-            val bitCount = traitStacks.bitCount
-            sections += text { "${bitCount}b"().let { if (otherTraitStacks != null) it.signColor(bitCount - otherTraitStacks.bitCount) else it } } // 99b
+            val bitCount = traitStacks.positiveBitCount + traitStacks.negativeBitCount
+            val otherBitCount = if (otherTraitStacks != null) otherTraitStacks.positiveBitCount + otherTraitStacks.negativeBitCount else null
+            sections += text { "${bitCount}b"().let { if (otherBitCount != null) it.signColor(bitCount - otherBitCount) else it } } // 99b
 
             // 特性ビットの増減
-            val plusBitCount = if (otherTraitStacks != null) (traitStacks - otherTraitStacks).bitCount else null
-            val minusBitCount = if (otherTraitStacks != null) (otherTraitStacks - traitStacks).bitCount else null
+            val plusBitCount = if (otherTraitStacks != null) (traitStacks - otherTraitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount else null
+            val minusBitCount = if (otherTraitStacks != null) (otherTraitStacks - traitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount else null
             sections += listOfNotNull(
                 if (plusBitCount != null && plusBitCount > 0) text { "+${plusBitCount}b"().signColor(1) } else null, // +9b
                 if (minusBitCount != null && minusBitCount > 0) text { "-${minusBitCount}b"().signColor(-1) } else null, // -9b

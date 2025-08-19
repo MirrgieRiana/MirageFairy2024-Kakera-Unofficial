@@ -71,7 +71,25 @@ fun NbtList.toTraitStacks(): TraitStacks {
 
 fun TraitStacks.toNbt() = this.traitStackMap.map { TraitStack(it.key, it.value).toNbt() }.toNbtList()
 
-val TraitStacks.bitCount get() = this.traitStackList.sumOf { it.level.bitCount }
+val TraitStacks.positiveBitCount
+    get() = this.traitStackList.sumOf { traitStack ->
+        val negativeMask = NegativeTraitBitsRegistry.get(traitStack.trait)
+        val positiveBits = when (negativeMask) {
+            null -> 0
+            else -> traitStack.level and negativeMask.inv()
+        }
+        positiveBits.bitCount
+    }
+
+val TraitStacks.negativeBitCount
+    get() = this.traitStackList.sumOf { traitStack ->
+        val negativeMask = NegativeTraitBitsRegistry.get(traitStack.trait)
+        val negativeBits = when (negativeMask) {
+            null -> traitStack.level
+            else -> traitStack.level and negativeMask
+        }
+        negativeBits.bitCount
+    }
 
 operator fun TraitStacks.plus(other: TraitStacks): TraitStacks {
     val map = this.traitStackMap.toMutableMap()
