@@ -80,6 +80,7 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         TraitCard.EXPERIENCE_PRODUCTION.trait to 0.05, // 経験値生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
         TraitCard.MUTATION.trait to 0.05, // 突然変異
+        TraitCard.SEEDS_DILUTION.trait to 0.05, // 種子希釈
         TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
         TraitCard.ETHER_RESPIRATION.trait to 0.05, // エーテル呼吸
         TraitCard.PHOTOSYNTHESIS.trait to 0.05, // 光合成

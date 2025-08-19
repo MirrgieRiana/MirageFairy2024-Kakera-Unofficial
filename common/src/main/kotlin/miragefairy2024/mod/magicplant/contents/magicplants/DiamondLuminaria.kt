@@ -64,6 +64,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
         TraitCard.RARE_PRODUCTION.trait to 0.05, // 希少品生成
         TraitCard.CROSSBREEDING.trait to 0.05, // 交雑
         TraitCard.MUTATION.trait to 0.05, // 突然変異
+        TraitCard.SEEDS_DILUTION.trait to 0.05, // 種子希釈
         TraitCard.NATURAL_ABSCISSION.trait to 0.05, // 自然落果
         TraitCard.OSMOTIC_ABSORPTION.trait to 0.05, // 養分吸収
         TraitCard.CRYSTAL_ABSORPTION.trait to 0.05, // 鉱物吸収
