@@ -124,8 +124,6 @@ class TraitCard(
             "植物の体の一部が欠落し、地面に落ちる。それを風や動物、ときには人間が遠くへ運ぶ。収穫の自動化は、植物にとっては繁殖の手段にすぎないのだ。",
             listOf(), traitEffectKeyEntriesOf(TraitEffectKeyCard.NATURAL_ABSCISSION to 0.1),
         )
-        //"Through the Homology-Based Selection System, seeds carrying genetic sequences that partially match those of the parent plant are selectively eliminated. As a result, by sacrificing a subset of average seeds, resources can be probabilistically reallocated toward seeds with greater genetic variation.",
-        //"相同度選別系により、親植物と部分的に一致する遺伝子配列を持つ種子を選択的に排除する。これにより平均的な種子の一部を犠牲にして、確率的に、より変化に富む種子に資源を再分配できる。",
 
         // 共通栄養系
         val OSMOTIC_ABSORPTION = !TraitCard(
