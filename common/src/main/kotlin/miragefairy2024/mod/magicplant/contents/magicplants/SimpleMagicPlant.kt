@@ -136,13 +136,15 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         val fortuneFactor = traitEffects[TraitEffectKeyCard.FORTUNE_FACTOR.traitEffectKey]
         val crossbreeding = traitEffects[TraitEffectKeyCard.CROSSBREEDING.traitEffectKey]
         val mutation = traitEffects[TraitEffectKeyCard.MUTATION.traitEffectKey]
-        val seedsEnrichment = traitEffects[TraitEffectKeyCard.SEEDS_ENRICHMENT.traitEffectKey]
+        val seedsDilution = traitEffects[TraitEffectKeyCard.SEEDS_DILUTION.traitEffectKey]
 
         if (isMaxAge(blockState)) {
-            val seedsEnrichmentFactor = 1.0 + seedsEnrichment
-            val count = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor) / seedsEnrichmentFactor)
+            val maxSeeds = world.random.randomInt(3.0 + seedsDilution)
+            val rawCount = world.random.randomInt(card.baseSeedGeneration * seedGeneration * (1.0 + generationBoost) * (1.0 + (fortune + luck) * fortuneFactor))
+            val count = rawCount atMost maxSeeds
+            val condensationFactor = rawCount.toDouble() / count.toDouble()
             repeat(count) {
-                drops += calculateCrossedSeed(world, blockPos, traitStacks, randomTraitChances, crossbreeding, mutation * seedsEnrichmentFactor)
+                drops += calculateCrossedSeed(world, blockPos, traitStacks, randomTraitChances, crossbreeding, mutation * condensationFactor)
             }
         }
 

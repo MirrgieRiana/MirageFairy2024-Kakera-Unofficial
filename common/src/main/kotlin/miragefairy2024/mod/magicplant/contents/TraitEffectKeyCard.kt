@@ -44,7 +44,7 @@ enum class TraitEffectKeyCard(
     NATURAL_ABSCISSION("natural_abscission", Emoji.NATURAL_ABSCISSION, "Natural Abscission", "自然落果", 4200.0, 0x5959FF, Scale.LOG),
     CROSSBREEDING("crossbreeding", Emoji.CROSSBREEDING, "Crossbreeding", "交雑", 4300.0, 0xFFA011, Scale.LOG),
     MUTATION("mutation", Emoji.MUTATION, "Mutation", "突然変異", 4400.0, 0xFF668C, Scale.LOG),
-    SEEDS_ENRICHMENT("seeds_enrichment", Emoji.SEEDS_PRODUCTION, "Seeds Enrichment", "種子濃縮", 4500.0, 0xFF8C63, Scale.SQUARED),
+    SEEDS_DILUTION("seeds_dilution", Emoji.SEEDS_PRODUCTION, "Seeds Dilution", "種子希釈", 4500.0, 0xFF8C63, Scale.NORMAL),
     ;
 
     enum class Scale {
