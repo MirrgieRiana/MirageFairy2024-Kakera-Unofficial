@@ -112,6 +112,12 @@ class TraitCard(
             "突然変異とは、狭義には個体のアストラル渦の読み取り専用領域の一部が、自然オーラゆらぎによる内部アトラクタの影響によって不可逆的に錯乱を受けることを指す。通常、この影響は子に受け継がれる。",
             listOf(), traitEffectKeyEntriesOf(TraitEffectKeyCard.MUTATION to 0.01),
         )
+        val SEEDS_DILUTION = !TraitCard(
+            "seeds_dilution", "Seeds Dilution", "種子希釈",
+            "Through the Homology Resonance System, seeds carrying genetic sequences that partially match those of the parent plant are selectively protected. As a result, at the cost of genetic diversity, resources can be reallocated to a larger number of seeds.",
+            "ホモロジー共鳴系により親植物と部分的に一致する遺伝子配列を持つ種子を選択的に保護する。これにより、遺伝的多様性を犠牲にしてより多くの種子に資源を再分配できる。",
+            listOf(), traitEffectKeyEntriesOf(TraitEffectKeyCard.SEEDS_DILUTION to 1.0),
+        )
         val NATURAL_ABSCISSION = !TraitCard(
             "natural_abscission", "Natural Abscission", "自然落果",
             "A part of the plant's body falls off and drops to the ground. The wind, animals, and sometimes even humans carry it far away. For the plant, the automation of harvesting is merely a means of reproduction.",
