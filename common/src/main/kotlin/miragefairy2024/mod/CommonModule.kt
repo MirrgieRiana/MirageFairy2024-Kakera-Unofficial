@@ -1,8 +1,13 @@
 package miragefairy2024.mod
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.serialization.MapCodec
+import dev.architectury.event.events.client.ClientCommandRegistrationEvent
+import dev.architectury.event.events.common.CommandRegistrationEvent
+import miragefairy2024.InitializationEventRegistry
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.ModEvents
 import miragefairy2024.ModifyItemEnchantmentsHandler
 import miragefairy2024.mod.fairy.MotifCard
 import miragefairy2024.mod.fairy.createFairyItemStack
@@ -25,6 +30,8 @@ import miragefairy2024.util.writeAction
 import mirrg.kotlin.hydrogen.join
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -48,6 +55,11 @@ val rootAdvancement = AdvancementCard(
     criterion = AdvancementCard.hasAnyItem(),
     type = AdvancementCardType.SILENT,
 )
+
+object CommandEvents {
+    val onRegisterSubCommand = InitializationEventRegistry<(LiteralArgumentBuilder<CommandSourceStack>) -> LiteralArgumentBuilder<CommandSourceStack>>()
+    val onRegisterClientSubCommand = InitializationEventRegistry<(LiteralArgumentBuilder<ClientCommandRegistrationEvent.ClientCommandSourceStack>) -> LiteralArgumentBuilder<ClientCommandRegistrationEvent.ClientCommandSourceStack>>()
+}
 
 context(ModContext)
 fun initCommonModule() {
@@ -76,6 +88,36 @@ fun initCommonModule() {
             *lines.toTypedArray(),
         )
         writeAction(player, "dump_biome_attributes.csv", table.map { line -> line.join(",") + "\n" }.join(""))
+    }
+
+    // Server
+    ModEvents.onInitialize {
+        val command = Commands.literal("mf24ku")
+            .let { builder ->
+                var builder2 = builder
+                CommandEvents.onRegisterSubCommand.fire { // ワールドロード時に毎回初期化されるため外で呼び出して使いまわす
+                    builder2 = it(builder2)
+                }
+                builder2
+            }
+        CommandRegistrationEvent.EVENT.register { dispatcher, _, _ ->
+            dispatcher.register(command)
+        }
+    }
+
+    // Client
+    ModEvents.onInitialize {
+        val command = ClientCommandRegistrationEvent.literal("mf24kuc")
+            .let { builder ->
+                var builder2 = builder
+                CommandEvents.onRegisterClientSubCommand.fire { // ワールドロード時に毎回初期化されるため外で呼び出して使いまわす
+                    builder2 = it(builder2)
+                }
+                builder2
+            }
+        ClientCommandRegistrationEvent.EVENT.register { dispatcher, _ ->
+            dispatcher.register(command)
+        }
     }
 
 }
