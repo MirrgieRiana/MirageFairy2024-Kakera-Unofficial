@@ -25,3 +25,4 @@ class FabricPlatformProxy : PlatformProxy {
         (blockFamilyProvider as BlockModelGenerators.BlockFamilyProvider).fullBlock = block
     }
 }
+

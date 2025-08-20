@@ -20,3 +20,4 @@ class NeoForgePlatformProxy : PlatformProxy {
 
     override fun setFullBlock(blockFamilyProvider: Any, block: ResourceLocation) = throw UnsupportedOperationException()
 }
+

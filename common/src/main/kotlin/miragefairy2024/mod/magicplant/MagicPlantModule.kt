@@ -1,5 +1,8 @@
 package miragefairy2024.mod.magicplant
 
+import com.mojang.brigadier.arguments.StringArgumentType
+import dev.architectury.event.events.client.ClientCommandRegistrationEvent
+import dev.architectury.event.events.common.CommandRegistrationEvent
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
 import miragefairy2024.mod.magicplant.contents.TraitCard
@@ -22,11 +25,20 @@ import miragefairy2024.util.Registration
 import miragefairy2024.util.TemperatureCategory
 import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
+import miragefairy2024.util.executesThrowable
+import miragefairy2024.util.failure
+import miragefairy2024.util.invoke
 import miragefairy2024.util.register
 import miragefairy2024.util.registerClientDebugItem
+import miragefairy2024.util.string
+import miragefairy2024.util.success
+import miragefairy2024.util.text
 import miragefairy2024.util.toTextureSource
 import miragefairy2024.util.writeAction
+import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.join
+import net.minecraft.commands.Commands
+import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
@@ -86,6 +98,8 @@ fun initMagicPlantModule() {
         card.init()
     }
 
+    registerCommand()
+
     registerClientDebugItem("dump_magic_plant_environments", Blocks.OAK_SAPLING.toTextureSource(), 0xFF00FF00.toInt()) { _, player, _, _ ->
         val lines = mutableListOf<String>()
         magicPlantCards.groupBy { it.family }.forEach { (_, cards) ->
@@ -135,4 +149,55 @@ fun initMagicPlantModule() {
         writeAction(player, "magic_plant_traits.txt", lines.join("") { "$it\n" })
     }
 
+}
+
+private fun registerCommand() {
+    ClientCommandRegistrationEvent.EVENT.register { dispatcher, _ ->
+        dispatcher.register(
+            Commands.literal("mf24ku") // TODO -> common
+                .then(
+                    Commands.literal("trait")
+                        .then(
+                            Commands.literal("negative")
+                                .then(
+                                    Commands.argument("trait", ResourceLocationArgument.id())
+                                        .suggests { _, builder ->
+                                            traitRegistry.keySet().forEach {
+                                                builder.suggest(it.string)
+                                            }
+                                            builder.buildFuture()
+                                        }
+                                        .executesThrowable { context ->
+                                            val player = context.source.playerOrException
+                                            val id = ResourceLocationArgument.getId(context, "trait")
+                                            val trait = traitRegistry.get(id) ?: failure(text { "Unknown trait: $id"() })
+                                            NegativeTraitBitsRegistry.set(trait, null)
+                                            player.sendSystemMessage(text { "Set negative trait bits for ${trait.getIdentifier()} = ALL"().yellow })
+                                            success()
+                                        }
+                                        .then(
+                                            Commands.argument("bits", StringArgumentType.word())
+                                                .suggests { _, builder ->
+                                                    listOf("1111", "0000", "1010", "10110010").forEach {
+                                                        builder.suggest(it)
+                                                    }
+                                                    builder.buildFuture()
+                                                }
+                                                .executesThrowable { context ->
+                                                    val player = context.source.playerOrException
+                                                    val id = ResourceLocationArgument.getId(context, "trait")
+                                                    val trait = traitRegistry.get(id) ?: failure(text { "Unknown trait: $id"() })
+                                                    val rawBits = StringArgumentType.getString(context, "bits")
+                                                    if (!rawBits.matches("""^[01_]{1,32}$""".toRegex())) failure(text { "Invalid bits format"() })
+                                                    val mask = rawBits.replace("_", "").fold(0) { acc, c -> (acc shl 1) or (c - '0') }
+                                                    NegativeTraitBitsRegistry.set(trait, mask)
+                                                    player.sendSystemMessage(text { "Set negative trait bits for ${trait.getIdentifier()} = $rawBits"().yellow })
+                                                    success()
+                                                }
+                                        )
+                                )
+                        )
+                )
+        )
+    }
 }
