@@ -27,7 +27,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
     fun setTraitStacks(traitStacks: TraitStacks?) {
         this.traitStacks = traitStacks
-        setChanged()
+        markUpdated()
     }
 
 
@@ -37,7 +37,7 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
     fun setRare(isRare: Boolean) {
         this.isRare = isRare
-        setChanged()
+        markUpdated()
     }
 
 
@@ -47,7 +47,13 @@ class MagicPlantBlockEntity(private val card: MagicPlantCard<*>, pos: BlockPos, 
 
     fun setNatural(isNatural: Boolean) {
         this.isNatural = isNatural
+        markUpdated()
+    }
+
+
+    private fun markUpdated() {
         setChanged()
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 3)
     }
 
 
