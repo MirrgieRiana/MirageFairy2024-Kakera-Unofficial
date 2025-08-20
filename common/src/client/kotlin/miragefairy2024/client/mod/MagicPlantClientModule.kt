@@ -63,8 +63,8 @@ fun initMagicPlantClientModule() {
 
         val traitStacks = stack.getTraitStacks() ?: return@register
         val otherTraitStacks = if (otherItemStack.item is MagicPlantSeedItem) otherItemStack.getTraitStacks() ?: return@register else return@register
-        val plusBitCount = (traitStacks - otherTraitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount
-        val minusBitCount = (otherTraitStacks - traitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount
+        val plusBitCount = (traitStacks - otherTraitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount
+        val minusBitCount = (otherTraitStacks - traitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount
 
         graphics.pose().pushPose()
         try {

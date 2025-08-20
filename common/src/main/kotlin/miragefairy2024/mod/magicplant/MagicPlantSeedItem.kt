@@ -77,13 +77,13 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
             sections += text { "/"() } // /
 
             // 特性ビットの個数
-            val bitCount = traitStacks.positiveBitCount + traitStacks.negativeBitCount
-            val otherBitCount = if (otherTraitStacks != null) otherTraitStacks.positiveBitCount + otherTraitStacks.negativeBitCount else null
+            val bitCount = traitStacks.positiveBitCount - traitStacks.negativeBitCount
+            val otherBitCount = if (otherTraitStacks != null) otherTraitStacks.positiveBitCount - otherTraitStacks.negativeBitCount else null
             sections += text { "${bitCount}b"().let { if (otherBitCount != null) it.signColor(bitCount - otherBitCount) else it } } // 99b
 
             // 特性ビットの増減
-            val plusBitCount = if (otherTraitStacks != null) (traitStacks - otherTraitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount else null
-            val minusBitCount = if (otherTraitStacks != null) (otherTraitStacks - traitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount else null
+            val plusBitCount = if (otherTraitStacks != null) (traitStacks - otherTraitStacks).positiveBitCount + (otherTraitStacks - traitStacks).negativeBitCount else null
+            val minusBitCount = if (otherTraitStacks != null) (otherTraitStacks - traitStacks).positiveBitCount + (traitStacks - otherTraitStacks).negativeBitCount else null
             sections += listOfNotNull(
                 if (plusBitCount != null && plusBitCount > 0) text { "+${plusBitCount}b"().signColor(1) } else null, // +9b
                 if (minusBitCount != null && minusBitCount > 0) text { "-${minusBitCount}b"().signColor(-1) } else null, // -9b
@@ -105,12 +105,13 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
                         val bits = (level max otherLevel).toString(2).length
                         (bits - 1 downTo 0).map { bit ->
                             val mask = 1 shl bit
+                            val isNegative = NegativeTraitBitsRegistry.get(trait).let { if (it == null) true else it and mask != 0 }
                             val possession = if (level and mask != 0) 1 else 0
                             val otherPossession = if (otherLevel and mask != 0) 1 else 0
                             when {
-                                possession > otherPossession -> text { "$possession"().green }
+                                possession > otherPossession -> text { if (isNegative) "$possession"().darkRed else "$possession"().green }
                                 possession == otherPossession -> text { "$possession"().darkGray }
-                                else -> text { "$possession"().darkRed }
+                                else -> text { if (isNegative) "$possession"().green else "$possession"().darkRed }
                             }
                         }.join()
                     }
