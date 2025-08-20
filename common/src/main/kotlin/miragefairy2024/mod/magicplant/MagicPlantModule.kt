@@ -81,6 +81,7 @@ fun initMagicPlantModule() {
     initTraitEffectKeyCard()
     initTraitCard()
     initCreativeGeneAmpoule()
+    initNegativeTraitBits()
 
     magicPlantCards.forEach { card ->
         card.init()
