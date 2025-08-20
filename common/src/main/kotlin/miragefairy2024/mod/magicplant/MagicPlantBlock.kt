@@ -169,7 +169,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     }
 
     /** 交配が可能であれば交配された種子、そうでなければこの植物本来の種子を返す。 */
-    protected fun calculateCrossedSeed(world: Level, blockPos: BlockPos, traitStacks: TraitStacks, randomTraitChances: Map<Trait, Double>, crossbreedingRate: Double, mutation: Double): ItemStack {
+    protected fun calculateCrossedSeed(world: Level, blockPos: BlockPos, traitStacks: TraitStacks, randomTraitChances: Map<Trait, Double>, crossbreedingRate: Double, mutation: Double, mutationFactor: Double): ItemStack {
         val targetTraitStacksList = mutableListOf<TraitStacks>()
         fun check(targetBlockPos: BlockPos) {
             val targetBlockState = world.getBlockState(targetBlockPos)
@@ -202,7 +202,11 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
             val targetTraitStacks = targetTraitStacksList[world.random.nextInt(targetTraitStacksList.size)]
             crossTraitStacks(traitStacks.traitStackMap, targetTraitStacks.traitStackMap, world.random)
         }
-        val (mutatedBits, rare) = applyMutation(crossedBits, randomTraitChances.mapValues { it.value * mutation }, world.random)
+        val (mutatedBits, rare) = if (world.random.nextDouble() < mutation) {
+            applyMutation(crossedBits, randomTraitChances.mapValues { it.value * mutationFactor }, world.random)
+        } else {
+            Pair(crossedBits, false)
+        }
         return createSeed(TraitStacks.of(mutatedBits), rare)
     }
 

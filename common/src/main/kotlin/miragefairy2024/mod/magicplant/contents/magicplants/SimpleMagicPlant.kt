@@ -144,7 +144,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
             val count = rawCount atMost maxSeeds
             val condensationFactor = rawCount.toDouble() / count.toDouble()
             repeat(count) {
-                drops += calculateCrossedSeed(world, blockPos, traitStacks, randomTraitChances, crossbreeding, mutation * condensationFactor)
+                drops += calculateCrossedSeed(world, blockPos, traitStacks, randomTraitChances, crossbreeding, mutation, condensationFactor)
             }
         }
 
