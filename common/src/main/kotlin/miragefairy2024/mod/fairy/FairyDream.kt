@@ -49,6 +49,9 @@ val GIVE_ALL_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("comma
 val GIVE_ONE_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "give.one.success") }, "Gave %s dream", "%s の夢を付与しました")
 val ALREADY_HAVE_DREAM_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "already_have_dream") }, "You already have %s dream", "すでに %s の夢を持っています")
 val UNKNOWN_MOTIF_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "unknown_motif") }, "Unknown motif: %s", "不明なモチーフ: %s")
+val REMOVE_ALL_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "remove.all.success") }, "Removed %s fairy dreams", "%s 個の妖精の夢を削除しました")
+val REMOVE_ONE_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "remove.one.success") }, "Removed %s dream", "%s の夢を削除しました")
+val DO_NOT_HAVE_DREAM_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "do_not_have_dream") }, "You don't have %s dream", "あなたは %s の夢を持っていません")
 
 context(ModContext)
 fun initFairyDream() {
@@ -226,6 +229,41 @@ fun initFairyDream() {
                                             context.source.sendSuccess({ text { GIVE_ONE_SUCCESS_TRANSLATION(motif.displayName) } }, true)
                                         } else {
                                             failure(text { ALREADY_HAVE_DREAM_TRANSLATION(motif.displayName) })
+                                        }
+                                        success()
+                                    }
+                            )
+                    )
+                    .then(
+                        Commands.literal("remove")
+                            .then(
+                                Commands.literal("all")
+                                    .executesThrowable { context ->
+                                        val player = context.source.playerOrException
+                                        val count = player.fairyDreamContainer.getOrCreate().entries.size
+                                        player.fairyDreamContainer.mutate { it.clear() }
+                                        context.source.sendSuccess({ text { REMOVE_ALL_SUCCESS_TRANSLATION("$count") } }, true)
+                                        success()
+                                    }
+                            )
+                            .then(
+                                Commands.argument("motif", ResourceLocationArgument.id())
+                                    .suggests { _, builder ->
+                                        motifRegistry.keySet().forEach {
+                                            builder.suggest(it.string)
+                                        }
+                                        builder.buildFuture()
+                                    }
+                                    .executesThrowable { context ->
+                                        val player = context.source.playerOrException
+                                        val id = context.getArgument("motif", ResourceLocation::class.java)
+                                        val motif = motifRegistry.get(id) ?: failure(text { UNKNOWN_MOTIF_TRANSLATION(id.string) })
+                                        val have = player.fairyDreamContainer.getOrCreate()[motif]
+                                        if (have) {
+                                            player.fairyDreamContainer.mutate { it[motif] = false }
+                                            context.source.sendSuccess({ text { REMOVE_ONE_SUCCESS_TRANSLATION(motif.displayName) } }, true)
+                                        } else {
+                                            failure(text { DO_NOT_HAVE_DREAM_TRANSLATION(motif.displayName) })
                                         }
                                         success()
                                     }
