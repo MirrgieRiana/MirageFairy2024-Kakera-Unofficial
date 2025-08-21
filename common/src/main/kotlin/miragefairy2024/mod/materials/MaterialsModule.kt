@@ -800,7 +800,7 @@ class MaterialCard(
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(10.toBigInteger(), it) },
+            creator = { MinaItem(BigInteger.TEN, it) },
         )
         val MINA_50: MaterialCard = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
@@ -1187,7 +1187,7 @@ fun initMaterialsModule() {
         val item = when (fairyItemStack.getFairyCondensation()) {
             BigInteger.ONE -> MaterialCard.MINA_1.item()
             5.toBigInteger() -> MaterialCard.MINA_5.item()
-            10.toBigInteger() -> MaterialCard.MINA_10.item()
+            BigInteger.TEN -> MaterialCard.MINA_10.item()
             50.toBigInteger() -> MaterialCard.MINA_50.item()
             100.toBigInteger() -> MaterialCard.MINA_100.item()
             500.toBigInteger() -> MaterialCard.MINA_500.item()
