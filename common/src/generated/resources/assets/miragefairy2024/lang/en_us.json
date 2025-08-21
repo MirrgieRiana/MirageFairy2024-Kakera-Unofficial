@@ -224,6 +224,7 @@
   "category.rei.miragefairy2024.harvest": "Harvest",
   "category.rei.miragefairy2024.item_fairy_dream_recipe": "Fairy Dream: Item",
   "category.rei.miragefairy2024.trait_encyclopedia": "Trait Encyclopedia",
+  "commands.miragefairy2024.fairy_dream.give.all.success": "Gave %s fairy dreams",
   "commands.miragefairy2024.negative_trait_bits.invalid_bits_format": "Invalid bits format: %s",
   "commands.miragefairy2024.negative_trait_bits.success": "Set negative trait bits for %s = %s",
   "commands.miragefairy2024.negative_trait_bits.unknown_trait": "Unknown trait: %s",
