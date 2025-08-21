@@ -7,6 +7,7 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.executesThrowable
 import miragefairy2024.util.eyeBlockPos
+import miragefairy2024.util.failure
 import miragefairy2024.util.getOrCreate
 import miragefairy2024.util.invoke
 import miragefairy2024.util.itemStacks
@@ -16,12 +17,15 @@ import miragefairy2024.util.register
 import miragefairy2024.util.registerServerDebugItem
 import miragefairy2024.util.registerServerToClientPayloadType
 import miragefairy2024.util.sendToClient
+import miragefairy2024.util.string
 import miragefairy2024.util.success
 import miragefairy2024.util.text
 import miragefairy2024.util.toTextureSource
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.commands.Commands
+import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.core.BlockPos
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.Container
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
@@ -42,6 +46,9 @@ private val identifier = MirageFairy2024.identifier("fairy_dream")
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
 val GAIN_FAIRY_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain_fairy" }, "%s found!", "%sを発見した！")
 val GIVE_ALL_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "give.all.success") }, "Gave %s fairy dreams", "%s 個の妖精の夢を付与しました")
+val GIVE_ONE_SUCCESS_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "give.one.success") }, "Gave %s dream", "%s の夢を付与しました")
+val ALREADY_HAVE_DREAM_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "already_have_dream") }, "You already have %s dream", "すでに %s の夢を持っています")
+val UNKNOWN_MOTIF_TRANSLATION = Translation({ identifier.toLanguageKey("commands", "unknown_motif") }, "Unknown motif: %s", "不明なモチーフ: %s")
 
 context(ModContext)
 fun initFairyDream() {
@@ -182,6 +189,9 @@ fun initFairyDream() {
     GAIN_FAIRY_DREAM_TRANSLATION.enJa()
     GAIN_FAIRY_TRANSLATION.enJa()
     GIVE_ALL_SUCCESS_TRANSLATION.enJa()
+    GIVE_ONE_SUCCESS_TRANSLATION.enJa()
+    UNKNOWN_MOTIF_TRANSLATION.enJa()
+    ALREADY_HAVE_DREAM_TRANSLATION.enJa()
 
     CommandEvents.onRegisterSubCommand { builder ->
         builder
@@ -196,6 +206,27 @@ fun initFairyDream() {
                                         val player = context.source.playerOrException
                                         val count = player.fairyDreamContainer.getOrCreate().gain(player, motifRegistry.toSet())
                                         context.source.sendSuccess({ text { GIVE_ALL_SUCCESS_TRANSLATION("$count") } }, true)
+                                        success()
+                                    }
+                            )
+                            .then(
+                                Commands.argument("motif", ResourceLocationArgument.id())
+                                    .suggests { _, builder ->
+                                        motifRegistry.keySet().forEach {
+                                            builder.suggest(it.string)
+                                        }
+                                        builder.buildFuture()
+                                    }
+                                    .executesThrowable { context ->
+                                        val player = context.source.playerOrException
+                                        val id = context.getArgument("motif", ResourceLocation::class.java)
+                                        val motif = motifRegistry.get(id) ?: failure(text { UNKNOWN_MOTIF_TRANSLATION(id.string) })
+                                        val count = player.fairyDreamContainer.getOrCreate().gain(player, setOf(motif))
+                                        if (count == 1) {
+                                            context.source.sendSuccess({ text { GIVE_ONE_SUCCESS_TRANSLATION(motif.displayName) } }, true)
+                                        } else {
+                                            failure(text { ALREADY_HAVE_DREAM_TRANSLATION(motif.displayName) })
+                                        }
                                         success()
                                     }
                             )
