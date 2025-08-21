@@ -80,7 +80,7 @@ class FairyDreamContainer {
         }
     }
 
-    fun gain(player: ServerPlayerEntity, motifs: Iterable<Motif>) {
+    fun gain(player: ServerPlayerEntity, motifs: Set<Motif>): Int {
         val actualAdditionalMotifs = motifs - map
         actualAdditionalMotifs.forEach { motif ->
             set(motif, true)
@@ -91,6 +91,7 @@ class FairyDreamContainer {
             GainFairyDreamChannel.sendToClient(player, motif)
         }
         if (actualAdditionalMotifs.isNotEmpty()) player.fairyDreamContainer.sync()
+        return actualAdditionalMotifs.size
     }
 
     fun clear() = map.clear()
