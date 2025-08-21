@@ -1,6 +1,7 @@
 package miragefairy2024.util
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.HolderSet
@@ -11,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.ItemStack
+import java.math.BigInteger
 import java.time.Instant
 import java.util.Optional
 
@@ -19,6 +21,23 @@ fun <B : ByteBuf, V> StreamCodec<B, V>.list(): StreamCodec<B, List<V>> = this.ap
 
 val INSTANT_CODEC: Codec<Instant> = Codec.LONG.xmap(Instant::ofEpochMilli, Instant::toEpochMilli)
 val INSTANT_STREAM_CODEC: StreamCodec<ByteBuf, Instant> = ByteBufCodecs.VAR_LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli)
+
+val BIG_INTEGER_CODEC: Codec<BigInteger> = Codec.withAlternative(
+    Codec.withAlternative(
+        Codec.STRING.comapFlatMap(
+            a@{
+                val bigInteger = it.toBigIntegerOrNull() ?: return@a DataResult.error { "invalid BigInteger: $it" }
+                DataResult.success(bigInteger)
+            },
+            BigInteger::toString
+        ),
+        Codec.LONG,
+        Long::toBigInteger,
+    ),
+    Codec.INT,
+    Int::toBigInteger,
+)
+val BIG_INTEGER_STREAM_CODEC: StreamCodec<ByteBuf, BigInteger> = ByteBufCodecs.STRING_UTF8.map(String::toBigInteger, BigInteger::toString)
 
 
 data class ItemStacks(val itemStacks: List<ItemStack>) {
