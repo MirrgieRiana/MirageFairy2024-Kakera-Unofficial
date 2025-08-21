@@ -84,6 +84,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
+import java.math.BigInteger
 import kotlin.math.pow
 import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
 import net.minecraft.world.effect.MobEffects as StatusEffects
@@ -783,7 +784,7 @@ class MaterialCard(
                 .poem("Put this money to work until I come back", "私が帰って来るまでこれで商売をしなさい")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(1, it) },
+            creator = { MinaItem(BigInteger.ONE, it) },
         )
         val MINA_5: MaterialCard = !MaterialCard(
             "mina_5", "5 Mina", "5ミナ",
@@ -791,7 +792,7 @@ class MaterialCard(
                 .poem("Fairy snack", "ご縁があるよ")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(5, it) },
+            creator = { MinaItem(5.toBigInteger(), it) },
         )
         val MINA_10: MaterialCard = !MaterialCard(
             "mina_10", "10 Mina", "10ミナ",
@@ -799,7 +800,7 @@ class MaterialCard(
                 .poem("Can purchase the souls of ten fairies.", "10の妖精が宿る石。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(10, it) },
+            creator = { MinaItem(10.toBigInteger(), it) },
         )
         val MINA_50: MaterialCard = !MaterialCard(
             "mina_50", "50 Mina", "50ミナ",
@@ -807,7 +808,7 @@ class MaterialCard(
                 .poem("The Society failed to replicate this.", "形而上学的有機結晶")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(50, it) },
+            creator = { MinaItem(50.toBigInteger(), it) },
         )
         val MINA_100: MaterialCard = !MaterialCard(
             "mina_100", "100 Mina", "100ミナ",
@@ -815,7 +816,7 @@ class MaterialCard(
                 .poem("Place where fairies and humans intersect", "妖精と人間が交差する場所。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(100, it) },
+            creator = { MinaItem(100.toBigInteger(), it) },
         )
         val MINA_500: MaterialCard = !MaterialCard(
             "mina_500", "500 Mina", "500ミナ",
@@ -823,7 +824,7 @@ class MaterialCard(
                 .poem("A brilliance with a hardness of 7.5", "硬度7.5の輝き。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(500, it) },
+            creator = { MinaItem(500.toBigInteger(), it) },
         )
         val MINA_1000: MaterialCard = !MaterialCard(
             "mina_1000", "1000 Mina", "1000ミナ",
@@ -831,7 +832,7 @@ class MaterialCard(
                 .poem("Created by the fairies of commerce.", "妖精の業が磨き上げる。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(1000, it) },
+            creator = { MinaItem(1000.toBigInteger(), it) },
         )
         val MINA_5000: MaterialCard = !MaterialCard(
             "mina_5000", "5000 Mina", "5000ミナ",
@@ -839,7 +840,7 @@ class MaterialCard(
                 .poem("The price of a soul.", "魂の値段。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(5000, it) },
+            creator = { MinaItem(5000.toBigInteger(), it) },
         )
         val MINA_10000: MaterialCard = !MaterialCard(
             "mina_10000", "10000 Mina", "10000ミナ",
@@ -847,7 +848,7 @@ class MaterialCard(
                 .poem("Become an eternal gemstone.", "妖花の蜜よ、永遠の宝石となれ。")
                 .translation(PoemType.DESCRIPTION, MINA_DESCRIPTION_TRANSLATION),
             soulStreamContainable = true, fireResistant = true,
-            creator = { MinaItem(10000, it) },
+            creator = { MinaItem(10000.toBigInteger(), it) },
         )
 
         val JEWEL_1: MaterialCard = !MaterialCard(
@@ -1184,15 +1185,15 @@ fun initMaterialsModule() {
         val fairyItemStack = itemStacks.pull { it.`is`(FairyCard.item()) && it.getFairyMotif() == MotifCard.MINA } ?: return@registerSpecialRecipe null // ミーニャ取得
         if (itemStacks.isNotEmpty()) return@registerSpecialRecipe null // 余計なアイテムが入っている
         val item = when (fairyItemStack.getFairyCondensation()) {
-            1 -> MaterialCard.MINA_1.item()
-            5 -> MaterialCard.MINA_5.item()
-            10 -> MaterialCard.MINA_10.item()
-            50 -> MaterialCard.MINA_50.item()
-            100 -> MaterialCard.MINA_100.item()
-            500 -> MaterialCard.MINA_500.item()
-            1000 -> MaterialCard.MINA_1000.item()
-            5000 -> MaterialCard.MINA_5000.item()
-            10000 -> MaterialCard.MINA_10000.item()
+            BigInteger.ONE -> MaterialCard.MINA_1.item()
+            5.toBigInteger() -> MaterialCard.MINA_5.item()
+            10.toBigInteger() -> MaterialCard.MINA_10.item()
+            50.toBigInteger() -> MaterialCard.MINA_50.item()
+            100.toBigInteger() -> MaterialCard.MINA_100.item()
+            500.toBigInteger() -> MaterialCard.MINA_500.item()
+            1000.toBigInteger() -> MaterialCard.MINA_1000.item()
+            5000.toBigInteger() -> MaterialCard.MINA_5000.item()
+            10000.toBigInteger() -> MaterialCard.MINA_10000.item()
             else -> return@registerSpecialRecipe null
         }
         object : SpecialRecipeResult {

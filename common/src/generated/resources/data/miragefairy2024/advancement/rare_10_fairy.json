@@ -23,7 +23,7 @@
     },
     "icon": {
       "components": {
-        "miragefairy2024:fairy_condensation": 1,
+        "miragefairy2024:fairy_condensation": "1",
         "miragefairy2024:fairy_motif": "miragefairy2024:sun"
       },
       "count": 1,

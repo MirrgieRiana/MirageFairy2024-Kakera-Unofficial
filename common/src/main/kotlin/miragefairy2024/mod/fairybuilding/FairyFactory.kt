@@ -74,8 +74,8 @@ abstract class FairyFactoryBlockEntity<E : FairyFactoryBlockEntity<E>>(private v
         fun getFairyLevel(itemStack: ItemStack): Double {
             if (!itemStack.`is`(FairyCard.item())) return 0.0
             val motif = itemStack.getFairyMotif() ?: return 0.0
-            val count = itemStack.getFairyCondensation() * itemStack.count
-            val level = motif.rare.toDouble() + log(count.toDouble(), 3.0)
+            val count = itemStack.getFairyCondensation().toDouble() * itemStack.count
+            val level = motif.rare.toDouble() + log(count, 3.0)
             return level
         }
     }

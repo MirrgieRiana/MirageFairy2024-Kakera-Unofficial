@@ -6,6 +6,7 @@ import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.registerSpecialRecipe
 import net.minecraft.world.item.ItemStack
+import java.math.BigInteger
 import net.minecraft.core.NonNullList as DefaultedList
 
 context(ModContext)
@@ -30,11 +31,10 @@ fun initFairyCondensationRecipe() {
             if (notEmptyItemStacks[i].getFairyMotif() != motif) return@registerSpecialRecipe null
         }
 
-        val condensation = notEmptyItemStacks.sumOf { it.getFairyCondensation().toLong() }
-        if (condensation > Integer.MAX_VALUE.toLong()) return@registerSpecialRecipe null
+        val condensation = notEmptyItemStacks.sumOf { it.getFairyCondensation() }
 
         object : SpecialRecipeResult {
-            override fun craft() = motif.createFairyItemStack(condensation = condensation.toInt())
+            override fun craft() = motif.createFairyItemStack(condensation = condensation)
         }
     }
     registerSpecialRecipe("fairy_decondensation", 1) { inventory ->
@@ -60,15 +60,15 @@ fun initFairyCondensationRecipe() {
 
         // 入力アイテムの凝縮数は、割る数以上でなければならない
         val condensation = itemStack.getFairyCondensation()
-        if (condensation < division) return@registerSpecialRecipe null
+        if (condensation < division.toBigInteger()) return@registerSpecialRecipe null
 
-        val remainingCondensation = condensation % division
-        val dividedCondensation = condensation / division
+        val remainingCondensation = condensation % division.toBigInteger()
+        val dividedCondensation = condensation / division.toBigInteger()
 
         object : SpecialRecipeResult {
             override fun craft() = motif.createFairyItemStack(condensation = dividedCondensation, count = division)
             override fun getRemainder(): DefaultedList<ItemStack>? {
-                return if (remainingCondensation > 0) {
+                return if (remainingCondensation > BigInteger.ZERO) {
                     val list = DefaultedList.withSize(inventory.size(), EMPTY_ITEM_STACK)
                     list[index] = motif.createFairyItemStack(condensation = remainingCondensation)
                     list

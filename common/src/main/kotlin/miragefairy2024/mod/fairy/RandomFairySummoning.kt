@@ -27,7 +27,6 @@ import miragefairy2024.util.weightedRandom
 import miragefairy2024.util.yellow
 import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.cmp
-import mirrg.kotlin.hydrogen.floorToInt
 import mirrg.kotlin.hydrogen.formatAs
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.network.chat.Component
@@ -42,6 +41,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
+import java.math.BigInteger
+import java.math.RoundingMode
 import kotlin.math.pow
 import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 import net.minecraft.world.InteractionHand as Hand
@@ -180,7 +181,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         player.obtain(result.motif.createFairyItemStack(condensation = result.condensation, count = result.count))
 
         // 妖精召喚履歴に追加
-        player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
+        player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count.toBigInteger() }
 
         // エフェクト
         world.playSound(null, player.x, player.y, player.z, SoundEvents.DEEPSLATE_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F)
@@ -188,7 +189,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
     }
 }
 
-class RandomFairyResult(val motif: Motif, val condensation: Int, val count: Int)
+class RandomFairyResult(val motif: Motif, val condensation: BigInteger, val count: Int)
 
 fun getRandomFairy(random: RandomSource, motifSet: Set<Motif>, appearanceRateBonus: Double): RandomFairyResult? {
 
@@ -206,7 +207,7 @@ fun getRandomFairy(random: RandomSource, motifSet: Set<Motif>, appearanceRateBon
     val actualCondensation = getNiceCondensation(condensedMotif.item.item.count).second
 
     // 上の場合、 count ≒ 1.27
-    val count = condensedMotif.item.item.count / actualCondensation
+    val count = condensedMotif.item.item.count / actualCondensation.toDouble()
     val actualCount = random.randomInt(count)
 
     return RandomFairyResult(
@@ -240,18 +241,17 @@ object CondensedMotifChanceComparator : Comparator<CondensedMotifChance> {
     }
 }
 
-fun getNiceCondensation(value: Double) = getNiceCondensation(value.floorToInt())
+fun getNiceCondensation(value: Double) = getNiceCondensation(value.toBigDecimal().setScale(0, RoundingMode.FLOOR).toBigIntegerExact())
 
 /** (power, niceCondensation) */
-fun getNiceCondensation(value: Int): Pair<Int, Int> {
-    if (value < 1) return Pair(0, 1)
+fun getNiceCondensation(value: BigInteger): Pair<Int, BigInteger> {
+    if (value < BigInteger.ONE) return Pair(0, BigInteger.ONE)
 
     var power = 0
-    var t = 1L
+    var t = BigInteger.ONE
     while (true) {
-        val nextT = t * 3L
-        if (nextT > Integer.MAX_VALUE) return Pair(power, t.toInt()) // overflow
-        if (nextT > value) return Pair(power, t.toInt())
+        val nextT = t * 3.toBigInteger()
+        if (nextT > value) return Pair(power, t)
         power++
         t = nextT
     }

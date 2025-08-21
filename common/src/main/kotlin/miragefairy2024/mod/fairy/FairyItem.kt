@@ -21,6 +21,8 @@ import miragefairy2024.mod.passiveskill.effects.ManaBoostPassiveSkillEffect
 import miragefairy2024.mod.passiveskill.findPassiveSkillProviders
 import miragefairy2024.util.AdvancementCard
 import miragefairy2024.util.AdvancementCardType
+import miragefairy2024.util.BIG_INTEGER_CODEC
+import miragefairy2024.util.BIG_INTEGER_STREAM_CODEC
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.ItemGroupCard
 import miragefairy2024.util.Model
@@ -66,10 +68,10 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import java.math.BigInteger
 import kotlin.math.log
 import kotlin.math.roundToInt
 
@@ -179,7 +181,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
     override fun getName(stack: ItemStack): Component {
         val originalName = stack.getFairyMotif()?.displayName ?: super.getName(stack)
         val condensation = stack.getFairyCondensation()
-        return if (condensation != 1) text { originalName + " x$condensation"() } else originalName
+        return if (condensation != BigInteger.ONE) text { originalName + " x$condensation"() } else originalName
     }
 
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
@@ -242,7 +244,7 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
                 ": x${stack.getFairyCondensation()}"(),
                 if (stack.count != 1) " *${stack.count}"() else empty(),
                 *(if (tooltipFlag.isAdvanced) listOf(
-                    "  (History: ${player?.fairyHistoryContainer?.getOrDefault()?.get(motif) ?: 0}, Dream: ${player?.fairyDreamContainer?.getOrDefault()?.entries?.size ?: 0})"(), // TODO もっといい表示に
+                    "  (History: ${player?.fairyHistoryContainer?.getOrDefault()?.get(motif) ?: BigInteger.ZERO}, Dream: ${player?.fairyDreamContainer?.getOrDefault()?.entries?.size ?: 0})"(), // TODO もっといい表示に
                 ) else listOf()).toTypedArray()
             ).join().green
         }
@@ -301,9 +303,9 @@ class FairyItem(settings: Properties) : Item(settings), PassiveSkillProvider {
 
     override fun getBarWidth(stack: ItemStack): Int {
         val condensation = stack.getFairyCondensation()
-        val niceCondensation = getNiceCondensation(condensation).second.toLong()
-        val nextNiceCondensation = niceCondensation * 3L
-        return (13.0 * (condensation.toLong() - niceCondensation).toDouble() / (nextNiceCondensation - niceCondensation).toDouble()).roundToInt()
+        val niceCondensation = getNiceCondensation(condensation).second
+        val nextNiceCondensation = niceCondensation * 3.toBigInteger()
+        return (13.0 * (condensation - niceCondensation).toDouble() / (nextNiceCondensation - niceCondensation).toDouble()).roundToInt()
     }
 
     override fun getBarColor(stack: ItemStack) = 0x00FF00
@@ -330,13 +332,13 @@ val FAIRY_MOTIF_DATA_COMPONENT_TYPE: DataComponentType<Motif> = DataComponentTyp
 fun ItemStack.getFairyMotif(): Motif? = this.get(FAIRY_MOTIF_DATA_COMPONENT_TYPE)
 fun ItemStack.setFairyMotif(motif: Motif?) = this.set(FAIRY_MOTIF_DATA_COMPONENT_TYPE, motif)
 
-val FAIRY_CONDENSATION_DATA_COMPONENT_TYPE: DataComponentType<Int> = DataComponentType.builder<Int>()
-    .persistent(ExtraCodecs.POSITIVE_INT)
-    .networkSynchronized(ByteBufCodecs.VAR_INT)
+val FAIRY_CONDENSATION_DATA_COMPONENT_TYPE: DataComponentType<BigInteger> = DataComponentType.builder<BigInteger>()
+    .persistent(BIG_INTEGER_CODEC)
+    .networkSynchronized(BIG_INTEGER_STREAM_CODEC)
     .build()
 
-fun ItemStack.getFairyCondensation() = this.get(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE) ?: 1
-fun ItemStack.setFairyCondensation(condensation: Int) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
+fun ItemStack.getFairyCondensation(): BigInteger = this.get(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE) ?: BigInteger.ONE
+fun ItemStack.setFairyCondensation(condensation: BigInteger) = this.set(FAIRY_CONDENSATION_DATA_COMPONENT_TYPE, condensation)
 
 
 class FairyMotifItemSubPredicate(val motif: HolderSet<Motif>) : SingleComponentItemPredicate<Motif> {
@@ -396,7 +398,7 @@ val timiaAdvancement = AdvancementCard(
 )
 
 
-fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: Int = 1, count: Int = 1): ItemStack {
+fun Motif?.createFairyItemStack(@Suppress("UNUSED_PARAMETER") vararg dummy: Void, condensation: BigInteger = BigInteger.ONE, count: Int = 1): ItemStack {
     val itemStack = FairyCard.item().createItemStack(count)
     itemStack.setFairyMotif(this)
     itemStack.setFairyCondensation(condensation)

@@ -45,7 +45,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
             world.addFreshEntity(ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, fairyItemStack))
 
             // 妖精召喚履歴に追加
-            player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
+            player.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count.toBigInteger() }
 
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
@@ -62,7 +62,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
             entity.level().addFreshEntity(ItemEntity(entity.level(), entity.x, entity.y, entity.z, fairyItemStack))
 
             // 妖精召喚履歴に追加
-            attacker.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count }
+            attacker.fairyHistoryContainer.mutate { it[result.motif] += result.condensation * result.count.toBigInteger() }
 
         }
     }
