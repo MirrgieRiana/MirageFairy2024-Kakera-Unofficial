@@ -67,7 +67,7 @@ fun initCreativeGeneAmpoule() {
                 0xFFFFFFFF.toInt()
             }
         }
-        card.item.enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命創造の針"))
+        card.item.enJa(EnJa("Creative Gene Ampoule", "アカーシャによる生命設計の針"))
         val poemList = PoemList(null)
             .poem("This allows you to freely edit traits.", "種類に従って球根を持つ草を生えさせよ。")
             .description("description1", "Use: Grant the trait", "使用時、特性を付与")
