@@ -365,6 +365,31 @@ class ToolCard(
             PoemList(4).poem(EnJa("Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。")),
             FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.MINEABLE_WITH_SHOVEL }.areaMining(1, 2, 0),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.CHAOS_STONE.ore!!.tag) }
+        val NOISE_PICKAXE = !ToolCard(
+            "noise_pickaxe", EnJa("Noise Pickaxe", "ノイズのつるはし"),
+            PoemList(5).poem(EnJa("Denial of the Value.", "無価値の創出。")),
+            FairyPickaxeConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).soulStreamContainable(),
+        ) { registerPickaxeRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
+        val NOISE_AXE = !ToolCard(
+            "noise_axe", EnJa("Noise Axe", "ノイズの斧"),
+            PoemList(5).poem(EnJa("What is the value in a work?", "人知れずノイズが現れ、そして消える。")),
+            FairyAxeConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).soulStreamContainable(),
+        ) { registerAxeRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
+        val NOISE_SHOVEL = !ToolCard(
+            "noise_shovel", EnJa("Noise Shovel", "ノイズのシャベル"),
+            PoemList(5).poem(EnJa("A world where everything exists.", "可能なすべての表現の集合。")),
+            FairyShovelConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).soulStreamContainable(),
+        ) { registerShovelRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
+        val NOISE_HOE = !ToolCard(
+            "noise_hoe", EnJa("Noise Hoe", "ノイズのクワ"),
+            PoemList(5).poem(EnJa("Ideational waste.", "哲学的うんこ。")),
+            FairyHoeConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).soulStreamContainable(),
+        ) { registerHoeRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
+        val NOISE_SWORD = !ToolCard(
+            "noise_sword", EnJa("Noise Sword", "ノイズの剣"),
+            PoemList(5).poem(EnJa("Liberation in the name of nonsense.", "意味という名の抑圧。")),
+            FairySwordConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).soulStreamContainable(),
+        ) { registerSwordRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
         val PHANTOM_PICKAXE = !ToolCard(
             "phantom_pickaxe", EnJa("Phantom Pickaxe", "幻想のつるはし"),
             PoemList(4).poem(EnJa("\"Creation\" is the true power.", "人間が手にした唯一の幻想。")),

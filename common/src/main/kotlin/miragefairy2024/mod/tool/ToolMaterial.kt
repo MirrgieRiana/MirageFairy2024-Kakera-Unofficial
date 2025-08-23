@@ -58,6 +58,7 @@ enum class FairyToolMaterials(
     XARPITE(Tiers.IRON, 283, 1.0F, 2.0F, 2.0F, 20, { ingredientOf(Shape.GEM, Material.XARPITE) }),
     MIRANAGITE(Tiers.IRON, 256, 6.5F, 2.0F, 2.5F, 24, { ingredientOf(Shape.GEM, Material.MIRANAGITE) }),
     CHAOS_STONE(Tiers.NETHERITE, 666, 2.0F, 2.0F, 2.0F, 15, { ingredientOf(Shape.GEM, Material.CHAOS_STONE) }),
+    NOISE(Tiers.NETHERITE, 101, 8.9F, 1.1F, 1.3F, 3, { ingredientOf(Shape.GEM, Material.NOISE) }),
     HAIMEVISKA_ROSIN(Tiers.WOOD, 73, 0.5F, 0.0F, 0.0F, 11, { ingredientOf(Shape.GEM, Material.HAIMEVISKA_ROSIN) }),
 
     NEUTRONIUM(Tiers.NETHERITE, Int.MAX_VALUE - 100, 8.0F, 3.0F, 3.0F, 10, { Items.BEDROCK.toIngredient() }),
@@ -117,6 +118,7 @@ enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, val ti
     XARPITE(FairyToolMaterials.XARPITE, "xarpite_tool", EnJa("Xarpite Tool", "紅天石ツール")),
     MIRANAGITE(FairyToolMaterials.MIRANAGITE, "miranagite_tool", EnJa("Miranagite Tool", "蒼天石ツール")),
     CHAOS_STONE(FairyToolMaterials.CHAOS_STONE, "chaos_tool", EnJa("Chaos Tool", "混沌ツール")),
+    NOISE(FairyToolMaterials.NOISE, "noise_tool", EnJa("Noise Tool", "ノイズツール")),
     HAIMEVISKA_ROSIN(FairyToolMaterials.HAIMEVISKA_ROSIN, "haimeviska_rosin_tool", EnJa("Rosin Tool", "涙ツール")),
 
     NEUTRONIUM(FairyToolMaterials.NEUTRONIUM, "neutronium_tool", EnJa("Neutronium Tool", "ニュートロニウムツール")),
