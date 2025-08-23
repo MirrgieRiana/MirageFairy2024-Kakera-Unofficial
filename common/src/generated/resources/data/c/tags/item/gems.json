@@ -17,6 +17,10 @@
       "required": false
     },
     {
+      "id": "#c:gems/noise",
+      "required": false
+    },
+    {
       "id": "#c:gems/fairy_crystal",
       "required": false
     },

@@ -188,6 +188,12 @@ class MaterialCard(
             item.registerSinglePoolChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
 
+        val NOISE: MaterialCard = !MaterialCard(
+            "noise", "Noise", "ノイズ",
+            PoemList(5).poem("An object no one sympathizes with.", "新しい「自由」の形。"),
+            ore = Ore(Shape.GEM, Material.NOISE), soulStreamContainable = true,
+        )
+
         val MIRAGE_LEAVES: MaterialCard = !MaterialCard(
             "mirage_leaves", "Mirage Leaves", "ミラージュの葉",
             PoemList(1).poem("Don't cut your fingers!", "刻まれる、記憶の破片。"),
@@ -1263,6 +1269,7 @@ enum class Material(val path: String, val prefix: EnJa) {
     XARPITE("xarpite", EnJa("Xarpite", "紅天石")),
     MIRANAGITE("miranagite", EnJa("Miranagite", "蒼天石")),
     CHAOS_STONE("chaos_stone", EnJa("Chaos Stone", "混沌の石")),
+    NOISE("noise", EnJa("Noise", "ノイズ")),
     FAIRY_CRYSTAL("fairy_crystal", EnJa("Fairy Crystal", "フェアリークリスタル")),
     PHANTOM_DROP("phantom_drop", EnJa("Phantom Drop", "幻想の雫")),
     MIRAGIUM("miragium", EnJa("Miragium", "ミラジウム")),
