@@ -192,7 +192,18 @@ class MaterialCard(
             "noise", "Noise", "ノイズ",
             PoemList(5).poem("An object no one sympathizes with.", "新しい「自由」の形。"),
             ore = Ore(Shape.GEM, Material.NOISE), soulStreamContainable = true,
-        )
+        ) {
+            registerSimpleMachineRecipeGeneration(
+                FermentationBarrelRecipeCard,
+                inputs = listOf(
+                    Pair({ CALCULITE.item().toIngredient() }, 1),
+                    Pair({ FAIRY_SCALES.item().toIngredient() }, 8),
+                    Pair({ POISON.item().toIngredient() }, 1),
+                ),
+                output = { item().createItemStack() },
+                duration = 20 * 10,
+            ) on CALCULITE.item
+        }
 
         val MIRAGE_LEAVES: MaterialCard = !MaterialCard(
             "mirage_leaves", "Mirage Leaves", "ミラージュの葉",

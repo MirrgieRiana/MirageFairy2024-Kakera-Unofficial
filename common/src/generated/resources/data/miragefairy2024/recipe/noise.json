@@ -1,0 +1,29 @@
+{
+  "type": "miragefairy2024:fermentation_barrel",
+  "duration": 200,
+  "group": "miragefairy2024:noise",
+  "inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "miragefairy2024:calculite"
+      }
+    },
+    {
+      "count": 8,
+      "ingredient": {
+        "item": "miragefairy2024:fairy_scales"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "miragefairy2024:poison"
+      }
+    }
+  ],
+  "output": {
+    "count": 1,
+    "id": "miragefairy2024:noise"
+  }
+}
