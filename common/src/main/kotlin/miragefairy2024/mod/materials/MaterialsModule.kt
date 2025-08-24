@@ -198,14 +198,14 @@ class MaterialCard(
                     context = AdvancementCard.Sub { CALCULITE.advancement!!.await() },
                     icon = { item().createItemStack() },
                     name = EnJa("The Essence of KU", "KUの本質"),
-                    description = EnJa("Produce Noise from Calculite using a Fermentation Barrel", "醸造樽で理天石からノイズを作る"),
+                    description = EnJa("Produce Noise from Calculite using a Aura Reflector Furnace", "オーラ反射炉で理天石からノイズを作る"),
                     criterion = AdvancementCard.hasItem(item),
                     type = AdvancementCardType.GOAL,
                 )
             },
         ) {
             registerSimpleMachineRecipeGeneration(
-                FermentationBarrelRecipeCard,
+                AuraReflectorFurnaceRecipeCard,
                 inputs = listOf(
                     Pair({ CALCULITE.item().toIngredient() }, 1),
                     Pair({ FAIRY_SCALES.item().toIngredient() }, 8),
