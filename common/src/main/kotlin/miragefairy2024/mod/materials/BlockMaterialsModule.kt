@@ -384,6 +384,7 @@ enum class ToolLevel(val tag: TagKey<Block>) {
     STONE(BlockTags.NEEDS_STONE_TOOL),
 }
 
+private fun <T : BlockMaterialCard> T.needTool(type: ToolType) = this.blockProperty { it.requiresCorrectToolForDrops() }.tag(type.tag)
 private fun <T : BlockMaterialCard> T.needTool(type: ToolType, level: ToolLevel) = this.blockProperty { it.requiresCorrectToolForDrops() }.tag(type.tag, level.tag)
 
 private fun <T : BlockMaterialCard> T.beaconBase() = this.tag(BlockTags.BEACON_BASE_BLOCKS)
