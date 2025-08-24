@@ -109,7 +109,8 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                     child(verticalSpace(4))
                     child(Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(18 * 4)).apply { // 特性リスト
                         surface(Surface.TOOLTIP)
-                        padding(Insets.of(5))
+                        padding(Insets.of(4))
+                        allowOverflow(true)
 
                         child(verticalScroll(Sizing.fill(100), Sizing.fill(100), 5).apply {
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
