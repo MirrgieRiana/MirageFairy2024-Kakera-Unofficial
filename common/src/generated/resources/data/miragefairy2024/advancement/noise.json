@@ -1,0 +1,39 @@
+{
+  "parent": "miragefairy2024:calculite",
+  "criteria": {
+    "has_noise": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:noise"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.miragefairy2024.noise.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "miragefairy2024:noise"
+    },
+    "title": {
+      "translate": "advancements.miragefairy2024.noise.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_noise"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "miragefairy2024:jewels_300"
+    ]
+  },
+  "sends_telemetry_event": true
+}

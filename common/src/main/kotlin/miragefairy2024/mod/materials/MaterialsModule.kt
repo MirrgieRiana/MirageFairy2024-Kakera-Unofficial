@@ -192,6 +192,17 @@ class MaterialCard(
             "noise", "Noise", "ノイズ",
             PoemList(5).poem("An object no one sympathizes with.", "新しい「自由」の形。"),
             ore = Ore(Shape.GEM, Material.NOISE), soulStreamContainable = true,
+            advancementCreator = {
+                AdvancementCard(
+                    identifier = it,
+                    context = AdvancementCard.Sub { CALCULITE.advancement!!.await() },
+                    icon = { item().createItemStack() },
+                    name = EnJa("The Essence of KU", "KUの本質"),
+                    description = EnJa("Produce Noise from Calculite using a Fermentation Barrel", "醸造樽で理天石からノイズを作る"),
+                    criterion = AdvancementCard.hasItem(item),
+                    type = AdvancementCardType.GOAL,
+                )
+            },
         ) {
             registerSimpleMachineRecipeGeneration(
                 FermentationBarrelRecipeCard,
