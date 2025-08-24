@@ -21,6 +21,7 @@ import miragefairy2024.mod.initRecipeGroupModule
 import miragefairy2024.mod.initSoundEventModule
 import miragefairy2024.mod.initStatusEffectModule
 import miragefairy2024.mod.initTelescopeModule
+import miragefairy2024.mod.initTooltipViewerModule
 import miragefairy2024.mod.initVanillaModule
 import miragefairy2024.mod.machine.initMachineModule
 import miragefairy2024.mod.magicplant.initMagicPlantModule
@@ -67,4 +68,5 @@ fun initModules() {
     initBagModule()
     initMachineModule()
     initStructureModule()
+    initTooltipViewerModule()
 }

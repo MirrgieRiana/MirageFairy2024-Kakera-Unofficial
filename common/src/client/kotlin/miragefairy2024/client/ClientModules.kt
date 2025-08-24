@@ -12,6 +12,7 @@ import miragefairy2024.client.mod.initMachineClientModule
 import miragefairy2024.client.mod.initMagicPlantClientModule
 import miragefairy2024.client.mod.initPlacedItemClientModule
 import miragefairy2024.client.mod.initSoundEventClientModule
+import miragefairy2024.client.mod.initTooltipViewerClientModule
 import miragefairy2024.client.mod.particle.initParticleClientModule
 
 context(ModContext)
@@ -28,4 +29,5 @@ fun initClientModules() {
     initBagClientModule()
     initMachineClientModule()
     initSoundEventClientModule()
+    initTooltipViewerClientModule()
 }
