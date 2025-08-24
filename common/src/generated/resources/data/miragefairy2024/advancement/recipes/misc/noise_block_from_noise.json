@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_noise": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miragefairy2024:noise"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "miragefairy2024:noise_block_from_noise"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_noise"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "miragefairy2024:noise_block_from_noise"
+    ]
+  }
+}

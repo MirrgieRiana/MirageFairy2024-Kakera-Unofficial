@@ -17,6 +17,7 @@ import miragefairy2024.mod.mirageFairy2024ItemGroupCard
 import miragefairy2024.mod.poem
 import miragefairy2024.mod.registerPoem
 import miragefairy2024.mod.registerPoemGeneration
+import miragefairy2024.mod.tool.MINEABLE_WITH_NOISE_BLOCK_TAG
 import miragefairy2024.util.EnJa
 import miragefairy2024.util.Registration
 import miragefairy2024.util.createItemStack
@@ -150,6 +151,13 @@ open class BlockMaterialCard(
             MapColor.TERRACOTTA_ORANGE, 5.0F, 5.0F,
         ).needTool(ToolType.PICKAXE, ToolLevel.STONE).beaconBase().init {
             registerCompressionRecipeGeneration(MaterialCard.CHAOS_STONE.item, item)
+        }
+        val NOISE_BLOCK = !BlockMaterialCard(
+            "noise_block", EnJa("Noise Block", "ノイズブロック"),
+            PoemList(5).poem(EnJa("It is oppressed by no one.", "誰もその雑音を止めることはできない。")),
+            MapColor.COLOR_GRAY, 8.0F, 8.0F,
+        ).needTool(ToolType.NOISE).soulStream().init {
+            registerCompressionRecipeGeneration(MaterialCard.NOISE.item, item)
         }
         val MIRAGIDIAN_BLOCK = !BlockMaterialCard(
             "miragidian_block", EnJa("Miragidian Block", "ミラジディアンブロック"),
@@ -376,6 +384,7 @@ enum class ToolType(val tag: TagKey<Block>) {
     HOE(BlockTags.MINEABLE_WITH_HOE),
     PICKAXE(BlockTags.MINEABLE_WITH_PICKAXE),
     SHOVEL(BlockTags.MINEABLE_WITH_SHOVEL),
+    NOISE(MINEABLE_WITH_NOISE_BLOCK_TAG),
 }
 
 enum class ToolLevel(val tag: TagKey<Block>) {
