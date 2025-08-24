@@ -17,6 +17,7 @@ import miragefairy2024.mod.registerPoemGeneration
 import miragefairy2024.mod.tool.effects.areaMining
 import miragefairy2024.mod.tool.effects.collection
 import miragefairy2024.mod.tool.effects.cutAll
+import miragefairy2024.mod.tool.effects.effective
 import miragefairy2024.mod.tool.effects.enchantment
 import miragefairy2024.mod.tool.effects.fireResistant
 import miragefairy2024.mod.tool.effects.glint
@@ -363,7 +364,7 @@ class ToolCard(
         val CHAOS_STONE_PICKAXE = !ToolCard(
             "chaos_stone_pickaxe", EnJa("Chaos Stone Pickaxe", "混沌のつるはし"),
             PoemList(4).poem(EnJa("Is this made of metal? Or clay?", "時空結晶の交点に、古代の産業が芽吹く。")),
-            FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).also { it.effectiveBlockTags += BlockTags.MINEABLE_WITH_SHOVEL }.areaMining(1, 2, 0),
+            FairyPickaxeConfiguration(ToolMaterialCard.CHAOS_STONE).effective(BlockTags.MINEABLE_WITH_SHOVEL).areaMining(1, 2, 0),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.CHAOS_STONE.ore!!.tag) }
         val NOISE_PICKAXE = !ToolCard(
             "noise_pickaxe", EnJa("Noise Pickaxe", "ノイズのつるはし"),

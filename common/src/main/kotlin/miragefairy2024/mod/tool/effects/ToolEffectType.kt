@@ -23,6 +23,7 @@ fun initToolEffectType() {
     CollectionToolEffectType.init()
     SoulStreamContainableToolEffectType.init()
     TillingRecipeHoeToolEffectType.init()
+    EffectiveToolEffectType.init()
 
     BlockEvent.BREAK.register { level, pos, state, player, xp ->
         if (level.isClientSide) return@register EventResult.pass()
