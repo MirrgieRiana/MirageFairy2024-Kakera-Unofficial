@@ -49,6 +49,9 @@ repositories {
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-neoforge
     maven("https://maven.blamejared.com") // JEI
     maven("https://maven.terraformersmc.com/releases") // EMI
+    maven("https://www.cursemaven.com") { // Jade
+        content { includeGroup("curse.maven") }
+    }
 }
 
 dependencies {
@@ -81,6 +84,9 @@ dependencies {
 
     modCompileOnly("dev.emi:emi-neoforge:1.1.22+1.21.1:api")
     modRuntimeOnly("dev.emi:emi-neoforge:1.1.22+1.21.1")
+
+    modCompileOnly("curse.maven:jade-324717:6853386")
+    modRuntimeOnly("curse.maven:jade-324717:6853386")
 
     modImplementation("io.wispforest:owo-lib-neoforge:0.12.15.1-beta.3+1.21")// { isTransitive = true }
     forgeRuntimeLibrary(include(api("io.wispforest:endec:0.1.5.1")!!)!!)

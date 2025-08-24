@@ -52,6 +52,9 @@ repositories {
     maven("https://maven.shedaniel.me") // RoughlyEnoughItems
     maven("https://maven.wispforest.io/releases/") // owo-lib
     maven("https://maven.minecraftforge.net/") // com.github.glitchfiend:TerraBlender-fabric
+    maven("https://www.cursemaven.com") { // Jade
+        content { includeGroup("curse.maven") }
+    }
 }
 
 loom {
@@ -104,6 +107,9 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.799")
     modCompileOnly("me.shedaniel.cloth:basic-math:0.6.1")
+
+    modCompileOnly("curse.maven:jade-324717:6738760")
+    modRuntimeOnly("curse.maven:jade-324717:6738760")
 
     modImplementation("io.wispforest:owo-lib:0.12.15.4+1.21")
 
