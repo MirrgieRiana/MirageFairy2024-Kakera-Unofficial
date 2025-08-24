@@ -61,8 +61,11 @@ import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.data.models.model.ModelTemplates as Models
 
+val MINEABLE_WITH_NOISE_BLOCK_TAG = MirageFairy2024.identifier("mineable/noise").toBlockTag()
+
 context(ModContext)
 fun initToolCard() {
+    MINEABLE_WITH_NOISE_BLOCK_TAG.enJa(EnJa("Mineable with noise", "ノイズで採掘可能"))
     ToolCard.entries.forEach {
         it.init()
     }
