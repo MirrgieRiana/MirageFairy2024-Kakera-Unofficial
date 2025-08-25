@@ -10,20 +10,20 @@ import miragefairy2024.mod.placeditem.RemovePlacedItemChannel
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.minecraft.client.KeyMapping
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.lwjgl.glfw.GLFW
-import net.minecraft.client.KeyMapping as KeyBinding
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.util.Mth as MathHelper
 
-lateinit var placeItemKey: KeyBinding
+lateinit var placeItemKey: KeyMapping
 
 context(ModContext)
 fun initPlacedItemClientModule() {
 
-    placeItemKey = KeyBinding(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyBinding.CATEGORY_GAMEPLAY)
+    placeItemKey = KeyMapping(PLACE_ITEM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_Z, KeyMapping.CATEGORY_GAMEPLAY)
     inputEventsHandlers += {
         while (placeItemKey.consumeClick()) run {
 

@@ -33,15 +33,15 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
+import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
-import net.minecraft.client.KeyMapping as KeyBinding
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
 
-lateinit var soulStreamKey: KeyBinding
+lateinit var soulStreamKey: KeyMapping
 
 var lastMousePositionInInventory: Pair<Double, Double>? = null
 
@@ -71,7 +71,7 @@ fun initFairyClientModule() {
     }
 
     // ソウルストリームのキーバインド
-    soulStreamKey = KeyBinding(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyBinding.CATEGORY_INVENTORY)
+    soulStreamKey = KeyMapping(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyMapping.CATEGORY_INVENTORY)
     inputEventsHandlers += {
         while (soulStreamKey.consumeClick()) {
             lastMousePositionInInventory = null
