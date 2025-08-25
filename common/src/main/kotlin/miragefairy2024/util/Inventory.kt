@@ -7,11 +7,11 @@ import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.Container
+import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import kotlin.experimental.and
-import net.minecraft.world.WorldlyContainer as SidedInventory
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 operator fun Container.get(slot: Int): ItemStack = this.getItem(slot)
 operator fun Container.set(slot: Int, stack: ItemStack) = this.setItem(slot, stack)
@@ -149,11 +149,11 @@ class SimpleInventoryDelegate(private val inventory: Container) : InventoryDeleg
 fun Container.toInventoryDelegate() = SimpleInventoryDelegate(this)
 
 class SidedInventoryDelegate(private val inventory: Container, private val side: Direction) : InventoryDelegate {
-    override fun getIndices() = if (inventory is SidedInventory) inventory.getSlotsForFace(side).asIterable() else inventory.indices
+    override fun getIndices() = if (inventory is WorldlyContainer) inventory.getSlotsForFace(side).asIterable() else inventory.indices
     override fun getItemStack(index: Int) = inventory[index]
     override fun setItemStack(index: Int, itemStack: ItemStack) = unit { inventory[index] = itemStack }
-    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is SidedInventory) inventory.canTakeItemThroughFace(index, itemStack, side) else true
-    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is SidedInventory) inventory.canPlaceItemThroughFace(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
+    override fun canExtract(index: Int, itemStack: ItemStack) = if (inventory is WorldlyContainer) inventory.canTakeItemThroughFace(index, itemStack, side) else true
+    override fun canInsert(index: Int, itemStack: ItemStack) = (if (inventory is WorldlyContainer) inventory.canPlaceItemThroughFace(index, itemStack, side) else true) && inventory.canPlaceItem(index, itemStack)
     override fun getMaxCountPerStack(index: Int) = inventory.maxStackSize
     override fun markDirty() = inventory.setChanged()
 }
@@ -180,7 +180,7 @@ interface InventoryAccessor {
     fun markDirty(index: Int)
 }
 
-val ScreenHandler.inventoryAccessor: InventoryAccessor
+val AbstractContainerMenu.inventoryAccessor: InventoryAccessor
     get() = object : InventoryAccessor {
         override val size: Int get() = this@inventoryAccessor.slots.size
         override fun getItemStack(index: Int) = this@inventoryAccessor.slots[index].item
@@ -200,7 +200,7 @@ val Container.inventoryAccessor: InventoryAccessor
         override fun markDirty(index: Int) = this@inventoryAccessor.setChanged()
     }
 
-/** @see ScreenHandler.insertItem */
+/** @see AbstractContainerMenu.insertItem */
 fun InventoryAccessor.insertItem(insertItemStack: ItemStack, indices: Iterable<Int>): Boolean {
     var moved = false
 

@@ -16,13 +16,13 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Tier
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 open class FairyKnifeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
@@ -67,8 +67,8 @@ class FairyKnifeItem(override val configuration: FairyKnifeConfiguration, settin
 
 }
 
-open class KnifeItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, settings.attributes(createAttributes(material, attackDamage, attackSpeed))) {
-    override fun useOn(context: ItemUsageContext?) = InteractionResult.PASS
+open class KnifeItem(material: Tier, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(material, settings.attributes(createAttributes(material, attackDamage, attackSpeed))) {
+    override fun useOn(context: UseOnContext?) = InteractionResult.PASS
     override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
         stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND)
     }

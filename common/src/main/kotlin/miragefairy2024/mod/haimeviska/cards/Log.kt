@@ -35,12 +35,12 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
 
 abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = createBaseWoodSetting().strength(2.0F)
@@ -86,7 +86,7 @@ abstract class AbstractHaimeviskaLogBlockCard(configuration: HaimeviskaBlockConf
 }
 
 class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
-    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { if (it.getValue(PillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
+    override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { if (it.getValue(RotatedPillarBlock.AXIS) === Direction.Axis.Y) MapColor.RAW_IRON else MapColor.TERRACOTTA_ORANGE }
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = HaimeviskaLogBlock(properties)
 
     context(ModContext)
@@ -99,7 +99,7 @@ class HaimeviskaLogBlockCard(configuration: HaimeviskaBlockConfiguration) : Abst
 
 class HaimeviskaStrippedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.RAW_IRON }
-    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = RotatedPillarBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -111,7 +111,7 @@ class HaimeviskaStrippedLogBlockCard(configuration: HaimeviskaBlockConfiguration
 
 class HaimeviskaWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.TERRACOTTA_ORANGE }
-    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = RotatedPillarBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -123,7 +123,7 @@ class HaimeviskaWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : Abs
 
 class HaimeviskaStrippedWoodBlockCard(configuration: HaimeviskaBlockConfiguration) : AbstractHaimeviskaLogBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings().mapColor { MapColor.RAW_IRON }
-    override suspend fun createBlock(properties: BlockBehaviour.Properties) = PillarBlock(properties)
+    override suspend fun createBlock(properties: BlockBehaviour.Properties) = RotatedPillarBlock(properties)
 
     context(ModContext)
     override fun init() {
@@ -135,7 +135,7 @@ class HaimeviskaStrippedWoodBlockCard(configuration: HaimeviskaBlockConfiguratio
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
+class HaimeviskaLogBlock(settings: Properties) : RotatedPillarBlock(settings) {
     companion object {
         val CODEC: MapCodec<HaimeviskaLogBlock> = simpleCodec(::HaimeviskaLogBlock)
     }
@@ -150,7 +150,7 @@ class HaimeviskaLogBlock(settings: Properties) : PillarBlock(settings) {
 
         // 加工
         stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand))
-        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
+        level.setBlock(pos, HaimeviskaBlockCard.INCISED_LOG.block().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction), UPDATE_ALL or UPDATE_IMMEDIATE)
         player.awardStat(Stats.ITEM_USED.get(stack.item))
 
         // エフェクト

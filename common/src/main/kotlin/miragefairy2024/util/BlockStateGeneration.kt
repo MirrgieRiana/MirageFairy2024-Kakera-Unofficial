@@ -9,18 +9,18 @@ import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
 import mirrg.kotlin.hydrogen.join
 import mirrg.kotlin.hydrogen.or
 import net.minecraft.core.Direction
+import net.minecraft.data.models.BlockModelGenerators
+import net.minecraft.data.models.blockstates.BlockStateGenerator
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.Property
-import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
-import net.minecraft.data.models.blockstates.BlockStateGenerator as BlockStateSupplier
 
 
 // registerBlockStateGeneration
 
 context(ModContext)
 fun (() -> Block).registerBlockStateGeneration(creator: () -> JsonElement) = DataGenerationEvents.onGenerateBlockModel {
-    it.blockStateOutput.accept(object : BlockStateSupplier {
+    it.blockStateOutput.accept(object : BlockStateGenerator {
         override fun get() = creator()
         override fun getBlock() = this@registerBlockStateGeneration()
     })
@@ -47,7 +47,7 @@ fun (() -> Block).registerVariantsBlockStateGeneration(entriesGetter: VariantsBl
 
 context(ModContext)
 fun (() -> Block).registerSingletonBlockStateGeneration() = DataGenerationEvents.onGenerateBlockModel {
-    it.blockStateOutput.accept(BlockStateModelGenerator.createSimpleBlock(this(), "block/" * this().getIdentifier()))
+    it.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(this(), "block/" * this().getIdentifier()))
 }
 
 

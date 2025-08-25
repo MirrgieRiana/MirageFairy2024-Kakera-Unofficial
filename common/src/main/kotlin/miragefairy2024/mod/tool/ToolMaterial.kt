@@ -17,11 +17,10 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.Tier
 import net.minecraft.world.item.Tiers
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.world.item.Tiers as ToolMaterials
 
 enum class FairyToolMaterials(
     private val miningLevel: Tiers,
@@ -31,7 +30,7 @@ enum class FairyToolMaterials(
     val axeAttackDamage: Float,
     private val enchantability: Int,
     private val repairIngredient: () -> Ingredient,
-) : ToolMaterial {
+) : Tier {
     COPPER(Tiers.IRON, 196, 5.0F, 1.0F, 2.0F, 18, { ingredientOf(Shape.INGOT, Material.COPPER) }),
     GLASS(Tiers.STONE, 8, 6.0F, 4.0F, 3.5F, 14, { ConventionalItemTags.GLASS_BLOCKS.toIngredient() }),
     AMETHYST(Tiers.IRON, 218, 5.5F, 2.0F, 2.5F, 23, { ingredientOf(Shape.SHARD, Material.AMETHYST) }),
@@ -72,25 +71,25 @@ enum class FairyToolMaterials(
     override fun getRepairIngredient() = repairIngredient()
 }
 
-val ToolMaterial.axeAttackDamageBonus
+val Tier.axeAttackDamageBonus
     get() = when (this) {
-        ToolMaterials.WOOD -> 0.0F
-        ToolMaterials.STONE -> 2.0F
-        ToolMaterials.IRON -> 2.0F
-        ToolMaterials.DIAMOND -> 2.0F
-        ToolMaterials.GOLD -> 0.0F
-        ToolMaterials.NETHERITE -> 3.0F
+        Tiers.WOOD -> 0.0F
+        Tiers.STONE -> 2.0F
+        Tiers.IRON -> 2.0F
+        Tiers.DIAMOND -> 2.0F
+        Tiers.GOLD -> 0.0F
+        Tiers.NETHERITE -> 3.0F
         is FairyToolMaterials -> this.axeAttackDamage
         else -> throw IllegalArgumentException("Unsupported tool material: $this")
     }
 
-enum class ToolMaterialCard(val toolMaterial: ToolMaterial, path: String, val title: EnJa) {
-    WOOD(ToolMaterials.WOOD, "wooden_tool", EnJa("Wooden Tool", "木ツール")),
-    STONE(ToolMaterials.STONE, "stone_tool", EnJa("Stone Tool", "石ツール")),
-    IRON(ToolMaterials.IRON, "iron_tool", EnJa("Iron Tool", "鉄ツール")),
-    GOLD(ToolMaterials.GOLD, "golden_tool", EnJa("Golden Tool", "金ツール")),
-    DIAMOND(ToolMaterials.DIAMOND, "diamond_tool", EnJa("Diamond Tool", "ダイヤモンドツール")),
-    NETHERITE(ToolMaterials.NETHERITE, "netherite_tool", EnJa("Netherite Tool", "ネザライトツール")),
+enum class ToolMaterialCard(val toolMaterial: Tier, path: String, val title: EnJa) {
+    WOOD(Tiers.WOOD, "wooden_tool", EnJa("Wooden Tool", "木ツール")),
+    STONE(Tiers.STONE, "stone_tool", EnJa("Stone Tool", "石ツール")),
+    IRON(Tiers.IRON, "iron_tool", EnJa("Iron Tool", "鉄ツール")),
+    GOLD(Tiers.GOLD, "golden_tool", EnJa("Golden Tool", "金ツール")),
+    DIAMOND(Tiers.DIAMOND, "diamond_tool", EnJa("Diamond Tool", "ダイヤモンドツール")),
+    NETHERITE(Tiers.NETHERITE, "netherite_tool", EnJa("Netherite Tool", "ネザライトツール")),
 
     COPPER(FairyToolMaterials.COPPER, "copper_tool", EnJa("Copper Tool", "銅ツール")),
     GLASS(FairyToolMaterials.GLASS, "glass_tool", EnJa("Glass Tool", "ガラスツール")),

@@ -13,13 +13,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val traitListScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("trait_list")) {
     ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-        TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.NULL, buf.first, buf.second)
+        TraitListScreenHandler(syncId, playerInventory, ContainerLevelAccess.NULL, buf.first, buf.second)
     }, TraitListScreenHandler.STREAM_CODEC)
 }
 
@@ -31,7 +31,7 @@ fun initTraitListScreenHandler() {
     traitListScreenTranslation.enJa()
 }
 
-class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ScreenHandlerContext, val traitStacks: TraitStacks, val blockPos: BlockPos) : ScreenHandler(traitListScreenHandlerType(), syncId) {
+class TraitListScreenHandler(syncId: Int, val playerInventory: Inventory, val context: ContainerLevelAccess, val traitStacks: TraitStacks, val blockPos: BlockPos) : AbstractContainerMenu(traitListScreenHandlerType(), syncId) {
     companion object {
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Pair<TraitStacks, BlockPos>> = StreamCodec.composite(
             TraitStacks.STREAM_CODEC,

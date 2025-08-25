@@ -12,16 +12,16 @@ import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
-import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
-import net.minecraft.world.entity.ai.attributes.AttributeModifier as EntityAttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
 
 object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttributePassiveSkillEffect.Value>("entity_attribute") {
-    val FORMATTERS = mutableMapOf<Holder<EntityAttribute>, (Double) -> String>()
+    val FORMATTERS = mutableMapOf<Holder<Attribute>, (Double) -> String>()
 
     private val defaultFormatter: (Double) -> String = { it formatAs "%+.2f" }
     private val ATTRIBUTE_MODIFIER_IDENTIFIER = MirageFairy2024.identifier("passive_skill")
 
-    class Value(val map: Map<Holder<EntityAttribute>, Double>)
+    class Value(val map: Map<Holder<Attribute>, Double>)
 
     override fun getText(value: Value): Component {
         return value.map.map { (attribute, value) ->
@@ -54,11 +54,11 @@ object EntityAttributePassiveSkillEffect : AbstractPassiveSkillEffect<EntityAttr
             val customInstance = context.player.attributes.getInstance(attribute) ?: return@forEach
             val oldModifier = customInstance.getModifier(ATTRIBUTE_MODIFIER_IDENTIFIER)
             if (oldModifier == null) {
-                val modifier = EntityAttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, EntityAttributeModifier.Operation.ADD_VALUE)
+                val modifier = AttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, AttributeModifier.Operation.ADD_VALUE)
                 customInstance.addTransientModifier(modifier)
             } else if (oldModifier.amount != value) {
                 customInstance.removeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER)
-                val modifier = EntityAttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, EntityAttributeModifier.Operation.ADD_VALUE)
+                val modifier = AttributeModifier(ATTRIBUTE_MODIFIER_IDENTIFIER, value, AttributeModifier.Operation.ADD_VALUE)
                 customInstance.addTransientModifier(modifier)
             }
         }

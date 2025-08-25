@@ -2,13 +2,13 @@ package miragefairy2024.client.lib
 
 import miragefairy2024.lib.MachineCard
 import miragefairy2024.lib.MachineScreenHandler
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import java.util.Optional
-import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
 
-open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard<*, *, *>, arguments: Arguments<H>) : HandledScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
+open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard<*, *, *>, arguments: Arguments<H>) : AbstractContainerScreen<H>(arguments.handler, arguments.playerInventory, arguments.title) {
 
     class Arguments<H>(val handler: H, val playerInventory: Inventory, val title: Component)
 
@@ -23,17 +23,17 @@ open class MachineScreen<H : MachineScreenHandler>(private val card: MachineCard
         titleLabelX = (imageWidth - font.width(title)) / 2
     }
 
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(context, mouseX, mouseY, delta)
         super.render(context, mouseX, mouseY, delta)
         renderTooltip(context, mouseX, mouseY)
     }
 
-    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: GuiGraphics, delta: Float, mouseX: Int, mouseY: Int) {
         context.blit(card.backgroundTexture, leftPos, topPos, 0, 0, imageWidth, imageHeight)
     }
 
-    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+    override fun renderTooltip(context: GuiGraphics, x: Int, y: Int) {
         super.renderTooltip(context, x, y)
         run {
             val slot = hoveredSlot ?: return@run

@@ -1,5 +1,6 @@
 package miragefairy2024.client.mod.fairy
 
+import com.mojang.blaze3d.platform.InputConstants
 import io.wispforest.owo.ui.base.BaseOwoHandledScreen
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
@@ -17,20 +18,19 @@ import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
 import miragefairy2024.util.size
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
-import com.mojang.blaze3d.platform.InputConstants as InputUtil
-import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, SoulStreamScreenHandler>(handler, playerInventory, title) {
 
     // カーソルをインベントリ画面での位置に戻す
     private var isFirst = true
-    override fun render(vanillaContext: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(vanillaContext: GuiGraphics?, mouseX: Int, mouseY: Int, delta: Float) {
         if (isFirst) {
             isFirst = false
             if (lastMousePositionInInventory != null) {
-                InputUtil.grabOrReleaseMouse(this.minecraft!!.window.window, InputUtil.CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
+                InputConstants.grabOrReleaseMouse(this.minecraft!!.window.window, InputConstants.CURSOR_NORMAL, lastMousePositionInInventory!!.first, lastMousePositionInInventory!!.second)
             }
         }
         super.render(vanillaContext, mouseX, mouseY, delta)
@@ -109,7 +109,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Invent
         }
     }
 
-    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: GuiGraphics, mouseX: Int, mouseY: Int) = Unit
 
     // キー入力で閉じる
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

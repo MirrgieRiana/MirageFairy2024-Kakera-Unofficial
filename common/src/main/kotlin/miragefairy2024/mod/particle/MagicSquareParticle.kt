@@ -6,13 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.util.Channel
 import mirrg.kotlin.hydrogen.unit
+import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec3
-import net.minecraft.core.particles.ParticleOptions as ParticleEffect
-import net.minecraft.world.phys.Vec3 as Vec3d
 
 class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquareParticleEffect>(alwaysSpawn) {
     companion object {
@@ -24,7 +23,7 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
         val CODEC: MapCodec<MagicSquareParticleEffect> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 Codec.INT.fieldOf("layer").forGetter(MagicSquareParticleEffect::layer),
-                Vec3d.CODEC.fieldOf("targetPosition").forGetter(MagicSquareParticleEffect::targetPosition),
+                Vec3.CODEC.fieldOf("targetPosition").forGetter(MagicSquareParticleEffect::targetPosition),
                 Codec.FLOAT.fieldOf("delay").forGetter(MagicSquareParticleEffect::delay),
             ).apply(instance, ::MagicSquareParticleEffect)
         }
@@ -43,7 +42,7 @@ class MagicSquareParticleType(alwaysSpawn: Boolean) : ParticleType<MagicSquarePa
     override fun streamCodec() = STREAM_CODEC
 }
 
-class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3d, val delay: Float) : ParticleEffect {
+class MagicSquareParticleEffect(val layer: Int, val targetPosition: Vec3, val delay: Float) : ParticleOptions {
     override fun getType() = ParticleTypeCard.MAGIC_SQUARE.particleType
 }
 
@@ -64,8 +63,8 @@ object MagicSquareParticleChannel : Channel<MagicSquareParticlePacket>(MirageFai
         val targetPositionX = buf.readDouble()
         val targetPositionY = buf.readDouble()
         val targetPositionZ = buf.readDouble()
-        return MagicSquareParticlePacket(Vec3d(positionX, positionY, positionZ), Vec3d(targetPositionX, targetPositionY, targetPositionZ))
+        return MagicSquareParticlePacket(Vec3(positionX, positionY, positionZ), Vec3(targetPositionX, targetPositionY, targetPositionZ))
     }
 }
 
-class MagicSquareParticlePacket(val position: Vec3d, val targetPosition: Vec3d)
+class MagicSquareParticlePacket(val position: Vec3, val targetPosition: Vec3)

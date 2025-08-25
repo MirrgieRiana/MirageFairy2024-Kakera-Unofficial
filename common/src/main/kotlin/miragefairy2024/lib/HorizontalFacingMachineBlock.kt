@@ -8,18 +8,18 @@ import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.MenuProvider
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.MenuProvider as NamedScreenHandlerFactory
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
 
-abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), BlockEntityProvider {
+abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, *>) : SimpleHorizontalFacingBlock(card.createBlockSettings()), EntityBlock {
     companion object {
         fun getActualSide(blockState: BlockState, side: Direction): Direction {
             return when (side) {
@@ -71,7 +71,7 @@ abstract class HorizontalFacingMachineBlock(private val card: MachineCard<*, *, 
     // Gui
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getMenuProvider(state: BlockState, world: Level, pos: BlockPos) = world.getBlockEntity(pos) as? NamedScreenHandlerFactory
+    override fun getMenuProvider(state: BlockState, world: Level, pos: BlockPos) = world.getBlockEntity(pos) as? MenuProvider
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {

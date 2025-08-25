@@ -46,6 +46,7 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.tags.BlockTags
@@ -62,8 +63,6 @@ import net.minecraft.world.level.block.WallBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
 
 open class BlockMaterialCard(
     path: String,
@@ -137,7 +136,7 @@ open class BlockMaterialCard(
             PoemList(2).poem(EnJa("An unreachable domain", "二度と踏み入ることの許されぬ地。")),
             MapColor.LAPIS, 3.0F, 3.0F,
         ) {
-            override fun createBlockProperties(): AbstractBlock.Properties = super.createBlockProperties().forceSolidOn()
+            override fun createBlockProperties(): BlockBehaviour.Properties = super.createBlockProperties().forceSolidOn()
             override suspend fun createBlock(properties: BlockBehaviour.Properties) = WallBlock(properties)
             context(ModContext) override fun initBlockStateGeneration() = Unit
             context(ModContext) override fun initModelGeneration() = Unit
@@ -171,8 +170,8 @@ open class BlockMaterialCard(
             PoemList(4).poem(EnJa("Catalytic digestion of astral vortices", "光り輝く魂のエネルギー。")),
             MapColor.DIAMOND, 6.0F, 6.0F,
         ) {
-            override fun createBlockProperties(): AbstractBlock.Properties = super.createBlockProperties().noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }
-            override suspend fun createBlock(properties: AbstractBlock.Properties) = SemiOpaqueTransparentBlock(properties)
+            override fun createBlockProperties(): BlockBehaviour.Properties = super.createBlockProperties().noOcclusion().lightLevel { 15 }.isRedstoneConductor { _, _, _ -> false }
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = SemiOpaqueTransparentBlock(properties)
         }.translucent().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.IRON).beaconBase().init {
             registerCompressionRecipeGeneration(MaterialCard.LUMINITE.item, item)
         }
@@ -186,7 +185,7 @@ open class BlockMaterialCard(
             PoemList(99).poem(EnJa("Stable instability due to anti-entropy", "これが秩序の究極の形だというのか？")),
             MapColor.COLOR_BLACK, -1.0F, 3600000.0F,
         ) {
-            override suspend fun createBlock(properties: AbstractBlock.Properties) = LocalVacuumDecayBlock(properties)
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = LocalVacuumDecayBlock(properties)
             context(ModContext) override fun initModelGeneration() = block.registerModelGeneration(localVacuumDecayTexturedModelFactory)
         }.cutout().sound(SoundType.SLIME_BLOCK).invincible().speed(0.5F)
         val AURA_STONE = !BlockMaterialCard(
@@ -210,8 +209,8 @@ open class BlockMaterialCard(
             PoemList(2).poem(EnJa("It is displaying the scene behind it.", "家の外を映し出す鏡。")),
             MapColor.DIAMOND, 1.5F, 1.5F,
         ) {
-            override fun createBlockProperties(): AbstractBlock.Properties = super.createBlockProperties().instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)
-            override suspend fun createBlock(properties: AbstractBlock.Properties) = FairyCrystalGlassBlock(properties)
+            override fun createBlockProperties(): BlockBehaviour.Properties = super.createBlockProperties().instrument(NoteBlockInstrument.HAT).noOcclusion().isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)
+            override suspend fun createBlock(properties: BlockBehaviour.Properties) = FairyCrystalGlassBlock(properties)
 
             context(ModContext)
             override fun initBlockStateGeneration() {
@@ -243,11 +242,11 @@ open class BlockMaterialCard(
         }.cutout().sound(SoundType.GLASS).needTool(ToolType.PICKAXE, ToolLevel.STONE).soulStream().beaconBase().noSpawn().tag(BlockTags.IMPERMEABLE).init {
             // インベントリ内のモデル
             registerModelGeneration({ "block/" * identifier }) {
-                fairyCrystalGlassBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
+                fairyCrystalGlassBlockModel.with(TextureSlot.TEXTURE to "block/" * identifier * "_frame")
             }
             // 枠パーツモデル
             registerModelGeneration({ "block/" * identifier * "_frame" }) {
-                fairyCrystalGlassFrameBlockModel.with(TextureKey.TEXTURE to "block/" * identifier * "_frame")
+                fairyCrystalGlassFrameBlockModel.with(TextureSlot.TEXTURE to "block/" * identifier * "_frame")
             }
 
             registerCompressionRecipeGeneration(MaterialCard.FAIRY_CRYSTAL.item, item)
@@ -256,13 +255,13 @@ open class BlockMaterialCard(
 
     val identifier = MirageFairy2024.identifier(path)
 
-    open fun createBlockProperties(): AbstractBlock.Properties = AbstractBlock.Properties.of()
+    open fun createBlockProperties(): BlockBehaviour.Properties = BlockBehaviour.Properties.of()
         .mapColor(mapColor)
         .strength(hardness, resistance)
 
-    val blockPropertiesConverters = mutableListOf<(AbstractBlock.Properties) -> AbstractBlock.Properties>()
+    val blockPropertiesConverters = mutableListOf<(BlockBehaviour.Properties) -> BlockBehaviour.Properties>()
 
-    open suspend fun createBlock(properties: AbstractBlock.Properties) = Block(properties)
+    open suspend fun createBlock(properties: BlockBehaviour.Properties) = Block(properties)
 
     val block = Registration(BuiltInRegistries.BLOCK, identifier) {
         val properties = blockPropertiesConverters.fold(createBlockProperties()) { properties, converter -> converter(properties) }
@@ -331,7 +330,7 @@ fun initBlockMaterialsModule() {
 }
 
 
-private fun <T : BlockMaterialCard> T.blockProperty(converter: (AbstractBlock.Properties) -> AbstractBlock.Properties) = this.also { it.blockPropertiesConverters += converter }
+private fun <T : BlockMaterialCard> T.blockProperty(converter: (BlockBehaviour.Properties) -> BlockBehaviour.Properties) = this.also { it.blockPropertiesConverters += converter }
 private fun <T : BlockMaterialCard> T.itemProperty(converter: (Item.Properties) -> Item.Properties) = this.also { it.itemPropertiesConverters += converter }
 
 private fun <T : BlockMaterialCard> T.noDrop() = this.blockProperty { it.noLootTable() }

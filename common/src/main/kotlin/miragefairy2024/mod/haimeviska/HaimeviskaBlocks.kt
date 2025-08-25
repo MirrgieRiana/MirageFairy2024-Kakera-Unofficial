@@ -52,9 +52,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.block.state.properties.WoodType
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 
 class HaimeviskaBlockConfiguration(
     val path: String,
@@ -160,7 +159,7 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
     }
 
     val identifier = MirageFairy2024.identifier(configuration.path)
-    open fun createSettings(): BlockBehaviour.Properties = AbstractBlock.Properties.of()
+    open fun createSettings(): BlockBehaviour.Properties = BlockBehaviour.Properties.of()
     abstract suspend fun createBlock(properties: BlockBehaviour.Properties): Block
     val block = Registration(BuiltInRegistries.BLOCK, identifier) { createBlock(createSettings()) }
     open suspend fun createItem(block: Block, properties: Item.Properties) = BlockItem(block, properties)
@@ -184,8 +183,8 @@ abstract class HaimeviskaBlockCard(val configuration: HaimeviskaBlockConfigurati
     }
 }
 
-fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = AbstractBlock.Properties.of()
-    .instrument(Instrument.BASS)
+fun createBaseWoodSetting(sound: Boolean = true): BlockBehaviour.Properties = BlockBehaviour.Properties.of()
+    .instrument(NoteBlockInstrument.BASS)
     .let { if (sound) it.sound(SoundType.WOOD) else it }
     .ignitedByLava()
 

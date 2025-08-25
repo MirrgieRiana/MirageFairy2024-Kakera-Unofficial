@@ -17,14 +17,14 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import kotlin.math.log
-import net.minecraft.util.StringRepresentable as StringIdentifiable
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
 abstract class FairyFactoryCard<B : FairyFactoryBlock, E : FairyFactoryBlockEntity<E>, H : FairyFactoryScreenHandler> : FairyBuildingCard<B, E, H>() {
     companion object {
@@ -50,7 +50,7 @@ abstract class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildin
         val STATUS: EnumProperty<Status> = EnumProperty.create("status", Status::class.java)
     }
 
-    enum class Status(private val string: String, val isLit: Boolean, val doMovePosition: Boolean) : StringIdentifiable {
+    enum class Status(private val string: String, val isLit: Boolean, val doMovePosition: Boolean) : StringRepresentable {
         OFFLINE("offline", false, false),
         IDLE("idle", true, false),
         PROCESSING("processing", true, true),
@@ -63,7 +63,7 @@ abstract class FairyFactoryBlock(card: FairyFactoryCard<*, *, *>) : FairyBuildin
         registerDefaultState(defaultBlockState().setValue(STATUS, Status.OFFLINE))
     }
 
-    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(STATUS)
     }

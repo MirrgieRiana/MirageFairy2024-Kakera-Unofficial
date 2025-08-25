@@ -32,13 +32,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.Container
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 private val SOUL_STREAM_TRANSLATION = Translation({ "container.${MirageFairy2024.MOD_ID}.soul_stream" }, "Soul Stream", "ソウルストリーム")
 val OPEN_SOUL_STREAM_KEY_TRANSLATION = Translation({ "key.${MirageFairy2024.MOD_ID}.open_soul_stream" }, "Open Soul Stream", "ソウルストリームを開く")
@@ -55,7 +55,7 @@ fun initSoulStream() {
     ModEvents.onInitialize {
         OpenSoulStreamChannel.registerServerPacketReceiver { player, _ ->
             player.openMenu(object : ExtendedScreenHandlerFactory<Unit> {
-                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
                     return SoulStreamScreenHandler(syncId, playerInventory, player.soulStream.getOrCreate())
                 }
 
@@ -88,7 +88,7 @@ val SOUL_STREAM_ATTACHMENT_TYPE: AttachmentType<SoulStream> = AttachmentRegistry
 
 val Entity.soulStream get() = this[SOUL_STREAM_ATTACHMENT_TYPE]
 
-class SoulStream() : SimpleInventory(SLOT_COUNT) {
+class SoulStream() : SimpleContainer(SLOT_COUNT) {
     companion object {
         const val SLOT_COUNT = 9 * 31
         const val PASSIVE_SKILL_SLOT_COUNT = 9
@@ -124,7 +124,7 @@ val soulStreamScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFai
     }, dummyUnitStreamCodec())
 }
 
-class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : ScreenHandler(soulStreamScreenHandlerType(), syncId) {
+class SoulStreamScreenHandler(syncId: Int, val playerInventory: Inventory, val soulStream: Container) : AbstractContainerMenu(soulStreamScreenHandlerType(), syncId) {
     init {
         repeat(3) { r ->
             repeat(9) { c ->
