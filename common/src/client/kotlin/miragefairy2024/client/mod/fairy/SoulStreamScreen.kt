@@ -2,6 +2,7 @@ package miragefairy2024.client.mod.fairy
 
 import com.mojang.blaze3d.platform.InputConstants
 import io.wispforest.owo.ui.base.BaseOwoHandledScreen
+import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.container.ScrollContainer
@@ -11,13 +12,20 @@ import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
+import miragefairy2024.client.util.CompressionHorizontalFlow
 import miragefairy2024.client.util.SlotType
 import miragefairy2024.client.util.inventoryNameLabel
 import miragefairy2024.client.util.slotContainer
+import miragefairy2024.client.util.tooltipContainer
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.fairy.SoulStreamScreenHandler
+import miragefairy2024.util.blue
+import miragefairy2024.util.darkGray
+import miragefairy2024.util.gold
+import miragefairy2024.util.invoke
 import miragefairy2024.util.size
+import miragefairy2024.util.text
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
@@ -44,12 +52,32 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Invent
             horizontalAlignment(HorizontalAlignment.CENTER)
 
             // GUIパネル外枠
-            child(Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+            child(CompressionHorizontalFlow(Sizing.fixed(356)).apply {
                 surface(Surface.PANEL)
                 padding(Insets.of(7))
 
+                // 絞り込み欄
+                child(Containers.verticalFlow(Sizing.expand(30), Sizing.fill()).apply {
+                    padding(Insets.of(0, 0, 0, 4))
+
+                    // TODO
+                    child(Components.label(text { "条件"().darkGray }))
+                    child(Components.label(text { " 条件1"().darkGray }))
+                    child(Components.label(text { " 条件2"().darkGray }))
+                    child(Components.label(text { " 条件3"().darkGray }))
+                    child(Components.label(text { " 条件4"().blue }))
+                    child(Components.label(text { " 条件5"().darkGray }))
+                    child(Components.label(text { "効果"().darkGray }))
+                    child(Components.label(text { " 効果1"().darkGray }))
+                    child(Components.label(text { " 効果2"().blue }))
+                    child(Components.label(text { " 効果3"().darkGray }))
+                    child(Components.label(text { " 効果4"().blue }))
+                    child(Components.label(text { " 効果5"().darkGray }))
+
+                })
+
                 // メインコンテナ
-                child(Containers.verticalFlow(Sizing.fixed(18 * 9 + 18), Sizing.content()).apply {
+                leader(Containers.verticalFlow(Sizing.fixed(18 * 9 + 18), Sizing.content()).apply {
 
                     child(inventoryNameLabel(title))
 
@@ -102,6 +130,21 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Invent
                         }
                     })
 
+                })
+
+                // 効果欄
+                child(Containers.verticalFlow(Sizing.expand(70), Sizing.fill()).apply {
+                    padding(Insets.of(0, 0, 4, 0))
+                    child(tooltipContainer(Sizing.fill(), Sizing.fill()).apply {
+
+                        // TODO
+                        child(Components.label(text { "効果1"().gold }))
+                        child(Components.label(text { "効果2"().gold }))
+                        child(Components.label(text { "効果3"().gold }))
+                        child(Components.label(text { "効果4"().gold }))
+                        child(Components.label(text { "効果5"().gold }))
+
+                    })
                 })
 
             })
