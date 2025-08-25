@@ -4,32 +4,32 @@ import miragefairy2024.mod.SoundEventCard
 import mirrg.kotlin.hydrogen.max
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.FarmBlock as FarmlandBlock
-import net.minecraft.world.level.block.GameMasterBlock as OperatorBlock
-import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
-import net.minecraft.world.phys.AABB as Box
+import net.minecraft.world.level.block.FarmBlock
+import net.minecraft.world.level.block.GameMasterBlock
+import net.minecraft.world.level.levelgen.structure.BoundingBox
+import net.minecraft.world.phys.AABB
 
 val Level.isServer get() = !this.isClientSide
 
-fun BlockView.getMoisture(blockPos: BlockPos): Double {
+fun BlockGetter.getMoisture(blockPos: BlockPos): Double {
     val blockState = this.getBlockState(blockPos)
-    if (blockState.`is`(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.getValue(FarmlandBlock.MOISTURE) / 7.0)
+    if (blockState.`is`(Blocks.FARMLAND)) return 0.5 + 0.5 * (blockState.getValue(FarmBlock.MOISTURE) / 7.0)
     if (blockState.`is`(BlockTags.DIRT)) return 0.5
     if (blockState.`is`(BlockTags.SAND)) return 0.25
     return 0.0
 }
 
-fun BlockView.getCrystalErg(blockPos: BlockPos): Double {
+fun BlockGetter.getCrystalErg(blockPos: BlockPos): Double {
     // TODO 妖精の継承を使って判定
     return when (getBlockState(blockPos).block) {
 
@@ -137,14 +137,14 @@ fun blockVisitor(
  * [ServerPlayerInteractionManager.tryBreakBlock]とは以下の点で異なります。
  * - ブロックの硬度が無限の場合、無効になる。
  */
-fun breakBlock(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
+fun breakBlock(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayer): Boolean {
     val blockState = world.getBlockState(blockPos)
     if (!itemStack.item.canAttackBlock(blockState, world, blockPos, player)) return false // このツールは採掘そのものができない
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
     if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
+    if (block is GameMasterBlock && !player.canUseGameMasterBlocks()) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
@@ -169,13 +169,13 @@ fun breakBlock(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: S
  * - 専用のツールが必要なブロックを、ツールの種類にかかわらず回収可能です。
  * - [Item.mineBlock]を起動せず、アイテムの耐久値の減少などが発生しません。
  */
-fun breakBlockByMagic(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayerEntity): Boolean {
+fun breakBlockByMagic(itemStack: ItemStack, world: Level, blockPos: BlockPos, player: ServerPlayer): Boolean {
     val blockState = world.getBlockState(blockPos)
     val blockEntity = world.getBlockEntity(blockPos)
     val block = blockState.block
 
     if (blockState.getDestroySpeed(world, blockPos) < 0F) return false // このブロックは破壊不能
-    if (block is OperatorBlock && !player.canUseGameMasterBlocks()) {
+    if (block is GameMasterBlock && !player.canUseGameMasterBlocks()) {
         world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL)
         return false // コマンドブロックを破壊しようとした
     }
@@ -194,16 +194,16 @@ fun collectItem(
     world: Level,
     originalBlockPos: BlockPos,
     reach: Int = Int.MAX_VALUE,
-    region: BlockBox? = null,
+    region: BoundingBox? = null,
     maxCount: Int = Int.MAX_VALUE,
     ignoreOriginalWall: Boolean = false,
     predicate: (ItemEntity) -> Boolean = { true },
     process: (ItemEntity) -> Boolean,
 ) {
     val box = when {
-        region != null -> Box.of(region)
-        reach != Int.MAX_VALUE -> Box(originalBlockPos).inflate(reach.toDouble())
-        else -> Box.of(BlockBox.infinite())
+        region != null -> AABB.of(region)
+        reach != Int.MAX_VALUE -> AABB(originalBlockPos).inflate(reach.toDouble())
+        else -> AABB.of(BoundingBox.infinite())
     }
     val targetTable = world.getEntitiesOfClass(ItemEntity::class.java, box) {
         !it.isSpectator && predicate(it) // スペクテイターモードであるアイテムには無反応

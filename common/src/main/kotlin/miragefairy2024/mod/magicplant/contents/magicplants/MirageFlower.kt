@@ -28,17 +28,17 @@ import miragefairy2024.util.surface
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
     override fun getBlockPath() = "mirage_flower"
@@ -113,14 +113,14 @@ object MirageFlowerCard : AbstractMirageFlowerCard<MirageFlowerBlock>() {
         super.init()
         Registration(BuiltInRegistries.FEATURE, MirageFairy2024.identifier("fairy_ring")) { FAIRY_RING_FEATURE }.register() // Fairy Ring
         Feature.FLOWER {
-            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
-                placedFeature("cluster", { per(16) + flower(square, surface) }) { (overworld + end * !+BiomeKeys.THE_END) * defaultTraits }  // 地上・エンド外縁の島々に通常クラスタ
+            configuredFeature("cluster", { RandomPatchConfiguration(6, 6, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) { // 小さな塊
+                placedFeature("cluster", { per(16) + flower(square, surface) }) { (overworld + end * !+Biomes.THE_END) * defaultTraits }  // 地上・エンド外縁の島々に通常クラスタ
                 placedFeature("nether_cluster", { per(64) + flower(square, nether) }) { nether * defaultTraits } // ネザーにネザー用クラスタ
                 placedFeature("fairy_forest_cluster", { count(4) + flower(square, surface) }) { (+BiomeCards.FAIRY_FOREST.registryKey + +BiomeCards.DEEP_FAIRY_FOREST.registryKey) * defaultTraits } // 妖精の森
             }
         }
         FAIRY_RING_FEATURE {
-            configuredFeature("fairy_ring", { FairyRingFeatureConfig(100, 6F, 8F, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // Fairy Ring
+            configuredFeature("fairy_ring", { FairyRingFeatureConfig(100, 6F, 8F, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) { // Fairy Ring
                 placedFeature("fairy_ring", { per(600) + flower(center, surface) }) { overworld * defaultTraits }  // 地上にFairy Ring
             }
         }
@@ -134,5 +134,5 @@ class MirageFlowerBlock(settings: Properties) : SimpleMagicPlantBlock(MirageFlow
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 }

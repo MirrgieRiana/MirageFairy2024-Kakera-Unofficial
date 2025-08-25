@@ -19,19 +19,19 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.util.valueproviders.ConstantInt
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType
+import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer
 import java.util.OptionalInt
-import net.minecraft.util.valueproviders.ConstantInt as ConstantIntProvider
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.RotatedPillarBlock as PillarBlock
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration as TreeFeatureConfig
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer as LargeOakFoliagePlacer
-import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer as LargeOakTrunkPlacer
 
 object HaimeviskaTreeDecoratorCard {
     val identifier = MirageFairy2024.identifier("haimeviska")
@@ -53,11 +53,11 @@ fun initHaimeviskaWorldGens() {
 
     // ConfiguredFeatureの登録
     registerDynamicGeneration(HAIMEVISKA_CONFIGURED_FEATURE_KEY) {
-        Feature.TREE with TreeFeatureConfig.TreeConfigurationBuilder(
+        Feature.TREE with TreeConfiguration.TreeConfigurationBuilder(
             BlockStateProvider.simple(HaimeviskaBlockCard.LOG.block()),
-            LargeOakTrunkPlacer(22, 10, 0), // 最大32
+            FancyTrunkPlacer(22, 10, 0), // 最大32
             BlockStateProvider.simple(HaimeviskaBlockCard.LEAVES.block()),
-            LargeOakFoliagePlacer(ConstantIntProvider.of(2), ConstantIntProvider.of(2), 4),
+            FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(2), 4),
             TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
         ).ignoreVines().decorators(listOf(HaimeviskaTreeDecoratorCard.treeDecorator)).build()
     }
@@ -89,14 +89,14 @@ class HaimeviskaTreeDecorator : TreeDecorator() {
     override fun type() = HaimeviskaTreeDecoratorCard.type
     override fun place(generator: Context) {
         generator.logs().forEach { blockPos ->
-            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block().defaultBlockState().setValue(PillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
+            if (!generator.level().isStateAtPosition(blockPos) { it == HaimeviskaBlockCard.LOG.block().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y) }) return@forEach // 垂直の幹のみ
             val direction = Direction.from2DDataValue(generator.random().nextInt(4))
             if (!generator.isAir(blockPos.relative(direction))) return@forEach // 正面が空気の場合のみ
             val r = generator.random().nextInt(100)
             if (r < 25) {
-                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction))
             } else if (r < 35) {
-                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block().defaultBlockState().setValue(HorizontalFacingBlock.FACING, direction))
+                generator.setBlock(blockPos, HaimeviskaBlockCard.HOLLOW_LOG.block().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction))
             }
         }
     }

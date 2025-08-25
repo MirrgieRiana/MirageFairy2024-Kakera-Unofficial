@@ -1,22 +1,22 @@
 package miragefairy2024.client.mod.particle
 
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.particle.ParticleRenderType
+import net.minecraft.client.particle.SpriteSet
+import net.minecraft.client.particle.TextureSheetParticle
+import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
-import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.SpriteSet as SpriteProvider
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
-import net.minecraft.core.particles.ParticleOptions as ParticleEffect
 
 @Suppress("LeakingThis")
-open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Double) : SpriteBillboardParticle(world, x, y, z) {
+open class HaimeviskaSapParticle(world: ClientLevel, x: Double, y: Double, z: Double) : TextureSheetParticle(world, x, y, z) {
     init {
         setSize(0.01F, 0.01F)
         gravity = 0.06F
         setColor(255 / 255F, 159 / 255F, 50 / 255F)
     }
 
-    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getRenderType(): ParticleRenderType = ParticleRenderType.PARTICLE_SHEET_OPAQUE
 
     override fun tick() {
         xo = x
@@ -48,7 +48,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
 
     }
 
-    class Dripping(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
+    class Dripping(world: ClientLevel, x: Double, y: Double, z: Double, spriteProvider: SpriteSet, private val particleEffect: ParticleOptions) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
             gravity *= 0.01F
@@ -66,7 +66,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
         }
     }
 
-    class Falling(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider, private val particleEffect: ParticleEffect) : HaimeviskaSapParticle(world, x, y, z) {
+    class Falling(world: ClientLevel, x: Double, y: Double, z: Double, spriteProvider: SpriteSet, private val particleEffect: ParticleOptions) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
             gravity = 0.01F
@@ -82,7 +82,7 @@ open class HaimeviskaSapParticle(world: ClientWorld, x: Double, y: Double, z: Do
         }
     }
 
-    class Landing(world: ClientWorld, x: Double, y: Double, z: Double, spriteProvider: SpriteProvider) : HaimeviskaSapParticle(world, x, y, z) {
+    class Landing(world: ClientLevel, x: Double, y: Double, z: Double, spriteProvider: SpriteSet) : HaimeviskaSapParticle(world, x, y, z) {
         init {
             pickSprite(spriteProvider)
             lifetime = (128.0 / (world.random.nextDouble() * 0.8 + 0.2)).toInt()

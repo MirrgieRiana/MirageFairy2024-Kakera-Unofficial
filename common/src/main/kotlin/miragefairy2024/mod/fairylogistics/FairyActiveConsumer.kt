@@ -23,20 +23,20 @@ import miragefairy2024.util.toSidedInventoryDelegate
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.SectionPos
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.entity.projectile.Arrow
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.core.SectionPos as ChunkSectionPos
-import net.minecraft.world.entity.projectile.Arrow as ArrowEntity
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 // TODO WIP
 object FairyActiveConsumerCard : FairyLogisticsCard<FairyActiveConsumerBlock, FairyActiveConsumerBlockEntity, FairyActiveConsumerScreenHandler>() {
@@ -126,7 +126,7 @@ class FairyActiveConsumerBlock(card: FairyActiveConsumerCard) : FairyLogisticsBl
     override fun codec() = CODEC
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPES[4 * state.getValue(VERTICAL_FACING).id + state.getValue(FACING).get2DDataValue()]
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext) = SHAPES[4 * state.getValue(VERTICAL_FACING).id + state.getValue(FACING).get2DDataValue()]
 }
 
 class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, pos: BlockPos, state: BlockState) : FairyLogisticsBlockEntity<FairyActiveConsumerBlockEntity>(card, pos, state) {
@@ -175,8 +175,8 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
         if (availableDestIndices.isEmpty()) return
 
         // 対象範囲の配送所を列挙する
-        val centerChunkX = ChunkSectionPos.blockToSectionCoord(pos.x)
-        val centerChunkZ = ChunkSectionPos.blockToSectionCoord(pos.z)
+        val centerChunkX = SectionPos.blockToSectionCoord(pos.x)
+        val centerChunkZ = SectionPos.blockToSectionCoord(pos.z)
         val neighbourChunksSuppliers = (centerChunkX - 1..centerChunkX + 1).flatMap { chunkX ->
             (centerChunkZ - 1..centerChunkZ + 1).flatMap { chunkZ ->
                 world.getChunk(chunkX, chunkZ).blockEntities.values.mapNotNull { it as? FairyPassiveSupplierBlockEntity } // TODO interface
@@ -186,10 +186,10 @@ class FairyActiveConsumerBlockEntity(private val card: FairyActiveConsumerCard, 
 
         // 視線判定
         val posD = pos.center
-        val entity = ArrowEntity(world, posD.x, posD.y, posD.z, Items.ARROW.createItemStack(), null)
+        val entity = Arrow(world, posD.x, posD.y, posD.z, Items.ARROW.createItemStack(), null)
         val unblockedSuppliers = reachingSuppliers.filter { supplier ->
             val supplierPosD = supplier.blockPos.center
-            val hitResult = world.clip(RaycastContext(posD, supplierPosD, RaycastContext.Block.COLLIDER, RaycastContext.Fluid.NONE, entity))
+            val hitResult = world.clip(ClipContext(posD, supplierPosD, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity))
             hitResult.type == HitResult.Type.MISS
         }
 

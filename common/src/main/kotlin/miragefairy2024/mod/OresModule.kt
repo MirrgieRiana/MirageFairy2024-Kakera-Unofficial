@@ -35,21 +35,21 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.DropExperienceBlock
 import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
-import net.minecraft.world.level.block.DropExperienceBlock as ExperienceDroppingBlock
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration as OreFeatureConfig
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest as TagMatchRuleTest
 
 enum class BaseStoneType {
     STONE,
@@ -103,18 +103,18 @@ enum class OreCard(
         val settings = when (baseStoneType) {
             BaseStoneType.STONE -> FabricBlockSettings.create()
                 .mapColor(MapColor.STONE)
-                .instrument(Instrument.BASEDRUM)
+                .instrument(NoteBlockInstrument.BASEDRUM)
                 .requiresTool()
                 .strength(3.0F, 3.0F)
 
             BaseStoneType.DEEPSLATE -> FabricBlockSettings.create()
                 .mapColor(MapColor.DEEPSLATE)
-                .instrument(Instrument.BASEDRUM)
+                .instrument(NoteBlockInstrument.BASEDRUM)
                 .requiresTool()
                 .strength(4.5F, 3.0F)
                 .sound(SoundType.DEEPSLATE)
         }
-        ExperienceDroppingBlock(UniformIntProvider.of(experience.first, experience.second), settings)
+        DropExperienceBlock(UniformInt.of(experience.first, experience.second), settings)
     }
     val item = Registration(BuiltInRegistries.ITEM, identifier) { BlockItem(block.await(), Item.Properties()) }
     val texturedModelFactory = TexturedModel.Provider {
@@ -123,8 +123,8 @@ enum class OreCard(
             BaseStoneType.DEEPSLATE -> ResourceLocation.fromNamespaceAndPath("minecraft", "block/deepslate")
         }
         OreModelCard.model.with(
-            TextureKey.BACK to baseStoneTexture,
-            TextureKey.FRONT to "block/" * MirageFairy2024.identifier(texturePath),
+            TextureSlot.BACK to baseStoneTexture,
+            TextureSlot.FRONT to "block/" * MirageFairy2024.identifier(texturePath),
         )
     }
 }
@@ -132,7 +132,7 @@ enum class OreCard(
 object OreModelCard {
     val parentModel = createOreModel()
     val identifier = MirageFairy2024.identifier("block/ore")
-    val model = Model(identifier, TextureKey.BACK, TextureKey.FRONT)
+    val model = Model(identifier, TextureSlot.BACK, TextureSlot.FRONT)
 }
 
 context(ModContext)
@@ -169,10 +169,10 @@ fun initOresModule() {
 
         val configuredKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, card.identifier) {
             val targets = when (card.baseStoneType) {
-                BaseStoneType.STONE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES), card.block().defaultBlockState()))
-                BaseStoneType.DEEPSLATE -> listOf(OreFeatureConfig.target(TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block().defaultBlockState()))
+                BaseStoneType.STONE -> listOf(OreConfiguration.target(TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), card.block().defaultBlockState()))
+                BaseStoneType.DEEPSLATE -> listOf(OreConfiguration.target(TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES), card.block().defaultBlockState()))
             }
-            Feature.ORE with OreFeatureConfig(targets, size)
+            Feature.ORE with OreConfiguration(targets, size)
         }
 
         registerDynamicGeneration(Registries.PLACED_FEATURE, card.identifier) {
@@ -196,31 +196,31 @@ fun createOreModel() = Model {
     ModelData(
         parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
         textures = ModelTexturesData(
-            TextureKey.PARTICLE.id to TextureKey.BACK.string,
+            TextureSlot.PARTICLE.id to TextureSlot.BACK.string,
         ),
         elements = ModelElementsData(
             ModelElementData(
                 from = listOf(0, 0, 0),
                 to = listOf(16, 16, 16),
                 faces = ModelFacesData(
-                    down = ModelFaceData(texture = TextureKey.BACK.string, cullface = "down"),
-                    up = ModelFaceData(texture = TextureKey.BACK.string, cullface = "up"),
-                    north = ModelFaceData(texture = TextureKey.BACK.string, cullface = "north"),
-                    south = ModelFaceData(texture = TextureKey.BACK.string, cullface = "south"),
-                    west = ModelFaceData(texture = TextureKey.BACK.string, cullface = "west"),
-                    east = ModelFaceData(texture = TextureKey.BACK.string, cullface = "east"),
+                    down = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "down"),
+                    up = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "up"),
+                    north = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureSlot.BACK.string, cullface = "east"),
                 ),
             ),
             ModelElementData(
                 from = listOf(0, 0, 0),
                 to = listOf(16, 16, 16),
                 faces = ModelFacesData(
-                    down = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "down"),
-                    up = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "up"),
-                    north = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "north"),
-                    south = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "south"),
-                    west = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "west"),
-                    east = ModelFaceData(texture = TextureKey.FRONT.string, cullface = "east"),
+                    down = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "down"),
+                    up = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "up"),
+                    north = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureSlot.FRONT.string, cullface = "east"),
                 ),
             ),
         ),

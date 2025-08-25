@@ -43,9 +43,15 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.Container
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.SlotAccess
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -54,12 +60,6 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.ItemContainerContents
 import net.minecraft.world.level.Level
 import kotlin.math.roundToInt
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.entity.SlotAccess as StackReference
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ClickAction as ClickType
 
 enum class BagCard(
     path: String,
@@ -213,18 +213,18 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
         return if (count >= card.inventorySize) 0xFF0000 else 0x00FF00
     }
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = user.getItemInHand(hand)
-        if (world.isClientSide) return TypedActionResult.success(itemStack)
-        val slotIndex = if (hand == Hand.MAIN_HAND) {
+        if (world.isClientSide) return InteractionResultHolder.success(itemStack)
+        val slotIndex = if (hand == InteractionHand.MAIN_HAND) {
             val selectedSlot = user.inventory.selected
-            if (!Inventory.isHotbarSlot(selectedSlot)) return TypedActionResult.fail(itemStack)
+            if (!Inventory.isHotbarSlot(selectedSlot)) return InteractionResultHolder.fail(itemStack)
             selectedSlot
         } else {
             -1
         }
         user.openMenu(object : ExtendedScreenHandlerFactory<Int> {
-            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
                 return createBagScreenHandler(syncId, playerInventory, slotIndex)
             }
 
@@ -232,19 +232,19 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
             override fun getScreenOpeningData(player: ServerPlayer) = slotIndex
         })
-        return TypedActionResult.consume(itemStack)
+        return InteractionResultHolder.consume(itemStack)
     }
 
     // カバンを持って種子のスロットを右クリックした場合の処理
     // slot = 種子のスロット（操作後、マージが完了した場合は除去、そうでない場合は部分的除去が行われる）
     // カバンは常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun overrideStackedOnOther(stack: ItemStack, slot: Slot, clickType: ClickType, player: Player): Boolean {
-        if (clickType != ClickType.SECONDARY) return false
+    override fun overrideStackedOnOther(stack: ItemStack, slot: Slot, clickType: ClickAction, player: Player): Boolean {
+        if (clickType != ClickAction.SECONDARY) return false
 
         if (!slot.mayPickup(player)) return false // そもそもスロットからアイテムを回収できない場合はキャンセル
 
         // シミュレーション用のインベントリを作成
-        val srcInventory = SimpleInventory(1)
+        val srcInventory = SimpleContainer(1)
         srcInventory[0] = slot.item.copy()
         val destInventory = stack.getBagInventory() ?: return false
 
@@ -269,13 +269,13 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
     // 種子を持ってカバンに突っ込んだ場合の処理
     // slot = カバンのスロット（操作後、変更が行われる）
     // 種子は常にカーソルが保持しているので、アイテムの入出力制限は無い
-    override fun overrideOtherStackedOnMe(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickType, player: Player, cursorStackReference: StackReference): Boolean {
-        if (clickType != ClickType.SECONDARY) return false
+    override fun overrideOtherStackedOnMe(stack: ItemStack, otherStack: ItemStack, slot: Slot, clickType: ClickAction, player: Player, cursorStackReference: SlotAccess): Boolean {
+        if (clickType != ClickAction.SECONDARY) return false
 
         if (!slot.allowModification(player)) return false // そもそもカバンのスロットが変更を受け付けない場合はキャンセル
 
         // シミュレーション用のインベントリを作成
-        val srcInventory = SimpleInventory(1)
+        val srcInventory = SimpleContainer(1)
         srcInventory[0] = cursorStackReference.get().copy()
         val destInventory = stack.getBagInventory() ?: return false
 
@@ -308,7 +308,7 @@ class BagItem(val card: BagCard, settings: Properties) : Item(settings) {
 
 }
 
-class BagInventory(private val card: BagCard) : SimpleInventory(card.inventorySize) {
+class BagInventory(private val card: BagCard) : SimpleContainer(card.inventorySize) {
     override fun canPlaceItem(slot: Int, stack: ItemStack) = card.isValid(stack) && stack.item.canFitInsideContainerItems()
 }
 
@@ -388,7 +388,7 @@ fun createBagScreenHandler(syncId: Int, playerInventory: Inventory, slotIndex: I
     }
 }
 
-open class BagScreenHandler(syncId: Int) : ScreenHandler(BagCard.screenHandlerType(), syncId) {
+open class BagScreenHandler(syncId: Int) : AbstractContainerMenu(BagCard.screenHandlerType(), syncId) {
     override fun stillValid(player: Player) = false
     override fun quickMoveStack(player: Player, slot: Int) = EMPTY_ITEM_STACK
     open val card: BagCard? = null

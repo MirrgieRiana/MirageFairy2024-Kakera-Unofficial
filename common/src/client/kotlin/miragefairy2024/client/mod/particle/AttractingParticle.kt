@@ -1,18 +1,18 @@
 package miragefairy2024.client.mod.particle
 
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.Particle
-import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
-import net.minecraft.client.particle.ParticleProvider as ParticleFactory
-import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.SpriteSet as SpriteProvider
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
-import net.minecraft.core.particles.SimpleParticleType as DefaultParticleType
+import net.minecraft.client.particle.ParticleProvider
+import net.minecraft.client.particle.ParticleRenderType
+import net.minecraft.client.particle.SpriteSet
+import net.minecraft.client.particle.TextureSheetParticle
+import net.minecraft.core.particles.SimpleParticleType
 
 class AttractingParticle internal constructor(
-    clientWorld: ClientWorld,
+    clientWorld: ClientLevel,
     fromX: Double, fromY: Double, fromZ: Double,
     toX: Double, toY: Double, toZ: Double,
-) : SpriteBillboardParticle(clientWorld, fromX, fromY, fromZ, 0.0, 0.0, 0.0) {
+) : TextureSheetParticle(clientWorld, fromX, fromY, fromZ, 0.0, 0.0, 0.0) {
     private val aX: Double
     private val aY: Double
     private val aZ: Double
@@ -28,7 +28,7 @@ class AttractingParticle internal constructor(
         quadSize *= 0.3F
     }
 
-    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getRenderType(): ParticleRenderType = ParticleRenderType.PARTICLE_SHEET_OPAQUE
 
     override fun move(dx: Double, dy: Double, dz: Double) {
         boundingBox = boundingBox.move(dx, dy, dz)
@@ -42,8 +42,8 @@ class AttractingParticle internal constructor(
         super.tick()
     }
 
-    class Factory(private val spriteProvider: SpriteProvider) : ParticleFactory<DefaultParticleType> {
-        override fun createParticle(defaultParticleType: DefaultParticleType, clientWorld: ClientWorld, d: Double, e: Double, f: Double, g: Double, h: Double, i: Double): Particle {
+    class Factory(private val spriteProvider: SpriteSet) : ParticleProvider<SimpleParticleType> {
+        override fun createParticle(defaultParticleType: SimpleParticleType, clientWorld: ClientLevel, d: Double, e: Double, f: Double, g: Double, h: Double, i: Double): Particle {
             val particle = AttractingParticle(clientWorld, d, e, f, g, h, i)
             particle.pickSprite(spriteProvider)
             return particle

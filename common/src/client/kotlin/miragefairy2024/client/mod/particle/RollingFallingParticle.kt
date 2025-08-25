@@ -2,28 +2,28 @@ package miragefairy2024.client.mod.particle
 
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
-import net.minecraft.client.particle.ParticleProvider as ParticleFactory
-import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.SpriteSet as SpriteProvider
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
-import net.minecraft.core.particles.SimpleParticleType as DefaultParticleType
-import net.minecraft.util.Mth as MathHelper
+import net.minecraft.client.particle.ParticleProvider
+import net.minecraft.client.particle.ParticleRenderType
+import net.minecraft.client.particle.SpriteSet
+import net.minecraft.client.particle.TextureSheetParticle
+import net.minecraft.core.particles.SimpleParticleType
+import net.minecraft.util.Mth
 
-fun createRollingFallingParticleFactory(velocityAngleFactor: Float) = { spriteProvider: SpriteProvider ->
-    ParticleFactory<DefaultParticleType> { _, world, x, y, z, _, _, _ ->
-        object : SpriteBillboardParticle(world, x, y, z) {
+fun createRollingFallingParticleFactory(velocityAngleFactor: Float) = { spriteProvider: SpriteSet ->
+    ParticleProvider<SimpleParticleType> { _, world, x, y, z, _, _, _ ->
+        object : TextureSheetParticle(world, x, y, z) {
 
             private var velocityAngle = 0F
 
             init {
                 quadSize *= 0.675F
                 lifetime = (32.0 / (0.2 + 0.8 * Math.random()) * 0.9).toInt() atLeast 1
-                roll = if (velocityAngleFactor != 0F) Math.random().toFloat() * MathHelper.PI * 2F else 0F
-                velocityAngle = MathHelper.PI * 0.1F * (Math.random().toFloat() * 2F - 1F) * velocityAngleFactor
+                roll = if (velocityAngleFactor != 0F) Math.random().toFloat() * Mth.PI * 2F else 0F
+                velocityAngle = Mth.PI * 0.1F * (Math.random().toFloat() * 2F - 1F) * velocityAngleFactor
                 setSpriteFromAge(spriteProvider)
             }
 
-            override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+            override fun getRenderType(): ParticleRenderType = ParticleRenderType.PARTICLE_SHEET_OPAQUE
             override fun getQuadSize(tickDelta: Float): Float {
                 val actualAge = age.toFloat() + tickDelta
                 val lifeRate = actualAge / lifetime.toFloat()

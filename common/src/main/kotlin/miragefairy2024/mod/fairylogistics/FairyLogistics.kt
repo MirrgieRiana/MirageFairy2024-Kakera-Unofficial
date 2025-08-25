@@ -32,15 +32,15 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.Container
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.EnumProperty
-import net.minecraft.util.StringRepresentable as StringIdentifiable
-import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.material.PushReaction
 
 abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlockEntity<E>, H : FairyLogisticsScreenHandler> : MachineCard<B, E, H>() {
 
@@ -57,7 +57,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PistonBehavior.DESTROY)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().strength(1.0F).pistonBehavior(PushReaction.DESTROY)
 
 
     context(ModContext)
@@ -70,7 +70,7 @@ abstract class FairyLogisticsCard<B : FairyLogisticsBlock, E : FairyLogisticsBlo
             fun f(verticalFacing: FairyLogisticsBlock.VerticalFacing, direction: Direction, suffix: String, y: BlockStateVariantRotation): BlockStateVariantEntry {
                 return propertiesOf(
                     FairyLogisticsBlock.VERTICAL_FACING with verticalFacing,
-                    HorizontalFacingBlock.FACING with direction,
+                    HorizontalDirectionalBlock.FACING with direction,
                 ) with BlockStateVariant(model = "block/" * block().getIdentifier() * suffix).with(y = y)
             }
             listOf(
@@ -108,7 +108,7 @@ abstract class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : Horizont
         val VERTICAL_FACING: EnumProperty<VerticalFacing> = EnumProperty.create("vertical_facing", VerticalFacing::class.java)
     }
 
-    enum class VerticalFacing(val string: String, val id: Int) : StringIdentifiable {
+    enum class VerticalFacing(val string: String, val id: Int) : StringRepresentable {
         UP("up", 0),
         SIDE("side", 1),
         DOWN("down", 2),
@@ -124,12 +124,12 @@ abstract class FairyLogisticsBlock(card: FairyLogisticsCard<*, *, *>) : Horizont
         registerDefaultState(defaultBlockState().setValue(VERTICAL_FACING, VerticalFacing.SIDE))
     }
 
-    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(VERTICAL_FACING)
     }
 
-    override fun getStateForPlacement(ctx: ItemPlacementContext): BlockState {
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
         val verticalFacing = when (ctx.clickedFace) {
             Direction.UP -> VerticalFacing.DOWN
             Direction.DOWN -> VerticalFacing.UP
@@ -156,7 +156,7 @@ abstract class FairyLogisticsBlockEntity<E : FairyLogisticsBlockEntity<E>>(card:
         }
         return when (blockState.getValue(FairyLogisticsBlock.VERTICAL_FACING)) {
             FairyLogisticsBlock.VerticalFacing.UP -> f(worldPosition.above(), Direction.DOWN)
-            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState.getValue(HorizontalFacingBlock.FACING)) {
+            FairyLogisticsBlock.VerticalFacing.SIDE -> when (blockState.getValue(HorizontalDirectionalBlock.FACING)) {
                 Direction.NORTH -> f(worldPosition.north(), Direction.SOUTH)
                 Direction.SOUTH -> f(worldPosition.south(), Direction.NORTH)
                 Direction.WEST -> f(worldPosition.west(), Direction.EAST)

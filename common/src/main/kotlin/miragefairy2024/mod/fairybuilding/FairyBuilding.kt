@@ -31,19 +31,19 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockEntity<E>, H : FairyBuildingScreenHandler> : MachineCard<B, E, H>() {
     companion object {
@@ -87,7 +87,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
     // Block
 
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(Instrument.BASS).sounds(SoundType.WOOD).mapColor(MapColor.RAW_IRON)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().nonOpaque().strength(2.0F).instrument(NoteBlockInstrument.BASS).sounds(SoundType.WOOD).mapColor(MapColor.RAW_IRON)
 
 
     // Slot
@@ -123,7 +123,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalDirectionalBlock.FACING) }
         block.registerCutoutRenderLayer()
         blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
 
@@ -160,7 +160,7 @@ abstract class FairyBuildingCard<B : FairyBuildingBlock, E : FairyBuildingBlockE
 
 abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) : HorizontalFacingMachineBlock(card) {
     companion object {
-        private val SHAPE = VoxelShapes.or(
+        private val SHAPE = Shapes.or(
             box(0.0, 0.0, 0.0, 16.0, 16.0, 0.1),
             box(0.0, 0.0, 0.0, 16.0, 0.1, 16.0),
             box(0.0, 0.0, 0.0, 0.1, 16.0, 16.0),
@@ -171,7 +171,7 @@ abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) 
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getLightBlock(state: BlockState, world: BlockView, pos: BlockPos) = 6
+    override fun getLightBlock(state: BlockState, world: BlockGetter, pos: BlockPos) = 6
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun hasAnalogOutputSignal(state: BlockState) = true
@@ -183,7 +183,7 @@ abstract class FairyBuildingBlock(private val card: FairyBuildingCard<*, *, *>) 
     override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape = SHAPE
 
 }
 
@@ -207,7 +207,7 @@ abstract class FairyBuildingBlockEntity<E : FairyBuildingBlockEntity<E>>(private
         val world = level ?: return
         val blockState = world.getBlockState(worldPosition)
         if (!blockState.`is`(card.block())) return
-        val direction = blockState.getOrNull(HorizontalFacingBlock.FACING) ?: return
+        val direction = blockState.getOrNull(HorizontalDirectionalBlock.FACING) ?: return
 
         renderingProxy.stack {
             renderingProxy.translate(0.5, 0.5, 0.5)
@@ -304,17 +304,17 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
         val cPitch = pitch + pitchSpeed * tickDelta
         val yawOffset = when (animation.motion) {
             Motion.NONE -> 0F
-            Motion.FAIRY -> MathHelper.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F
+            Motion.FAIRY -> Mth.sin((ticks.toFloat() + tickDelta) * 0.03F) * 3F
         }
         val pitchOffset = when (animation.motion) {
             Motion.NONE -> 0F
-            Motion.FAIRY -> MathHelper.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F
+            Motion.FAIRY -> Mth.sin((ticks.toFloat() + tickDelta) * 0.08F) * 5F
         }
 
         renderingProxy.stack {
             renderingProxy.translate(cX / 16.0, cY / 16.0, cZ / 16.0) // 移動
-            renderingProxy.rotateY(-cYaw / 180F * MathHelper.PI) // 横回転
-            renderingProxy.rotateX(-cPitch / 180F * MathHelper.PI) // 足元を起点にして縦回転
+            renderingProxy.rotateY(-cYaw / 180F * Mth.PI) // 横回転
+            renderingProxy.rotateX(-cPitch / 180F * Mth.PI) // 足元を起点にして縦回転
             renderingProxy.scale(0.5F, 0.5F, 0.5F) // 縮小
 
             when (animation.motion) {
@@ -322,8 +322,8 @@ class FairyAnimation(private val inventorySlotIndex: Int, private val animation:
 
                 Motion.FAIRY -> {
                     renderingProxy.translate(0.0, 0.25, 0.0)
-                    renderingProxy.rotateY(-yawOffset / 180F * MathHelper.PI) // 横回転
-                    renderingProxy.rotateZ(-pitchOffset / 180F * MathHelper.PI) // 上下回転
+                    renderingProxy.rotateY(-yawOffset / 180F * Mth.PI) // 横回転
+                    renderingProxy.rotateZ(-pitchOffset / 180F * Mth.PI) // 上下回転
                     renderingProxy.translate(0.0, -0.25, 0.0)
                 }
             }
