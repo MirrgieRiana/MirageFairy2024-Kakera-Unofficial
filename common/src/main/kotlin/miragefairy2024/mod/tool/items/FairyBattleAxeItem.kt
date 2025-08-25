@@ -16,11 +16,11 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Tier
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.item.Tier as ToolMaterial
 
 open class FairyBattleAxeConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
@@ -67,7 +67,7 @@ class FairyBattleAxeItem(override val configuration: FairyBattleAxeConfiguration
 
 }
 
-open class BattleAxeItem(toolMaterial: ToolMaterial, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, settings.attributes(createAttributes(toolMaterial, attackDamage, attackSpeed))) {
+open class BattleAxeItem(toolMaterial: Tier, attackDamage: Float, attackSpeed: Float, settings: Properties) : AxeItem(toolMaterial, settings.attributes(createAttributes(toolMaterial, attackDamage, attackSpeed))) {
     override fun postHurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
         stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND)
     }

@@ -12,15 +12,15 @@ import io.wispforest.owo.util.Observable
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
+import net.minecraft.util.FormattedCharSequence
 import java.util.function.Function
 import kotlin.math.min
-import net.minecraft.util.FormattedCharSequence as OrderedText
 
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java
 open class LimitedLabelComponent(protected var text: Component) : BaseComponent() {
     protected val textRenderer = Minecraft.getInstance().font
-    protected var wrappedText: List<OrderedText>
+    protected var wrappedText: List<FormattedCharSequence>
     protected var verticalTextAlignment = VerticalAlignment.TOP
     protected var horizontalTextAlignment = HorizontalAlignment.LEFT
     protected val color = AnimatableProperty.of(Color.WHITE)
@@ -144,7 +144,7 @@ open class LimitedLabelComponent(protected var text: Component) : BaseComponent(
                 false
             }
             wrappedText = if (style != null) {
-                listOf(OrderedText.composite(wrappedText[0], OrderedText.forward("...", style!!)))
+                listOf(FormattedCharSequence.composite(wrappedText[0], FormattedCharSequence.forward("...", style!!)))
             } else {
                 listOf(wrappedText[0])
             }

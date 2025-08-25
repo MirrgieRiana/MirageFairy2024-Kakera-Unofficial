@@ -26,12 +26,12 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument as Instrument
 
 object FermentationBarrelCard : SimpleMachineCard<FermentationBarrelBlock, FermentationBarrelBlockEntity, FermentationBarrelScreenHandler, FermentationBarrelRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("fermentation_barrel")
-    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(Instrument.BASS).sounds(SoundType.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
+    override fun createBlockSettings(): FabricBlockSettings = FabricBlockSettings.create().instrument(NoteBlockInstrument.BASS).sounds(SoundType.WOOD).strength(3.0F).mapColor(MapColor.TERRACOTTA_ORANGE)
     override fun createBlock() = FermentationBarrelBlock(this)
     override fun createBlockEntityAccessor() = BlockEntityAccessor(::FermentationBarrelBlockEntity)
     override fun createScreenHandler(arguments: MachineScreenHandler.Arguments) = FermentationBarrelScreenHandler(this, arguments)

@@ -33,12 +33,12 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.IntegerProperty
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.material.PushReaction
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class MagicPlantCard<B : MagicPlantBlock> {
     companion object {
-        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PistonBehavior.DESTROY)
+        fun createCommonSettings(): FabricBlockSettings = FabricBlockSettings.create().noCollision().ticksRandomly().pistonBehavior(PushReaction.DESTROY)
     }
 
     abstract fun getBlockPath(): String

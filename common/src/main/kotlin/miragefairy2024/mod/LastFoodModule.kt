@@ -18,12 +18,12 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import java.time.Instant
 import java.util.Optional
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 context(ModContext)
 fun initLastFoodModule() {
@@ -31,7 +31,7 @@ fun initLastFoodModule() {
     EatFoodCallback.EVENT.register { entity, world, stack, foodProperties ->
         if (world.isClientSide) return@register
         if (entity !is Player) return@register
-        entity as ServerPlayerEntity
+        entity as ServerPlayer
         entity.lastFood.set(LastFood(stack.copy(), Instant.now()))
     }
 }

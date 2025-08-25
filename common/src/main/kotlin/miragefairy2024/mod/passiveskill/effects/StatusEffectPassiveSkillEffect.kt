@@ -12,7 +12,7 @@ import miragefairy2024.util.toRomanText
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
 import net.minecraft.world.effect.MobEffect
-import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
+import net.minecraft.world.effect.MobEffectInstance
 
 object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectPassiveSkillEffect.Value>("status_effect") {
     class Value(val map: Map<Holder<MobEffect>, Entry>)
@@ -39,7 +39,7 @@ object StatusEffectPassiveSkillEffect : AbstractPassiveSkillEffect<StatusEffectP
 
     override fun update(context: PassiveSkillContext, oldValue: Value, newValue: Value) {
         newValue.map.forEach { (statusEffect, entry) ->
-            context.player.addEffect(StatusEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
+            context.player.addEffect(MobEffectInstance(statusEffect, 20 * (1 + 1 + entry.additionalSeconds), entry.level - 1, true, false, true))
         }
     }
 }

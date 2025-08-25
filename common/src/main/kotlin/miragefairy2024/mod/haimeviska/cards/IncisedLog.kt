@@ -10,10 +10,10 @@ import miragefairy2024.util.LootPool
 import miragefairy2024.util.LootTable
 import miragefairy2024.util.registerLootTableGeneration
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.server.level.ServerLevel as ServerWorld
 
 class HaimeviskaIncisedLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = IncisedHaimeviskaLogBlock(properties)
@@ -47,7 +47,7 @@ class IncisedHaimeviskaLogBlock(settings: Properties) : SimpleHorizontalFacingBl
     override fun codec() = CODEC
 
     override fun isRandomlyTicking(state: BlockState) = true
-    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) {
+    override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         if (random.nextInt(100) == 0) {
             world.setBlock(pos, HaimeviskaBlockCard.DRIPPING_LOG.block().defaultBlockState().setValue(FACING, state.getValue(FACING)), UPDATE_ALL)
         }

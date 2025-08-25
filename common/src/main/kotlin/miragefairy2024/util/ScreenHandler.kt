@@ -1,9 +1,9 @@
 package miragefairy2024.util
 
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
-fun ScreenHandler.quickMove(slotIndex: Int, destinationIndices: Iterable<Int>): ItemStack {
+fun AbstractContainerMenu.quickMove(slotIndex: Int, destinationIndices: Iterable<Int>): ItemStack {
     if (slotIndex < 0 || slotIndex >= slots.size) return EMPTY_ITEM_STACK
     if (!slots[slotIndex].hasItem()) return EMPTY_ITEM_STACK // そこに何も無い場合は何もしない
 

@@ -12,9 +12,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.ja
 import miragefairy2024.util.text
 import miragefairy2024.util.translate
+import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.Item
-import net.minecraft.ChatFormatting as Formatting
 
 val itemPoemListTable = mutableMapOf<Item, PoemList>()
 
@@ -47,9 +47,9 @@ fun initPoemModule() {
 
 // Poem
 
-enum class PoemType(val color: Formatting) {
-    POEM(Formatting.DARK_AQUA),
-    DESCRIPTION(Formatting.YELLOW),
+enum class PoemType(val color: ChatFormatting) {
+    POEM(ChatFormatting.DARK_AQUA),
+    DESCRIPTION(ChatFormatting.YELLOW),
 }
 
 interface Poem {

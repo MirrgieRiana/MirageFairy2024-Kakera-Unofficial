@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
 object GoldProminariaCard : AbstractProminariaCard<GoldProminariaBlock>() {
     override fun getBlockPath() = "gold_prominaria"
@@ -76,5 +76,5 @@ class GoldProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(GoldProm
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 }

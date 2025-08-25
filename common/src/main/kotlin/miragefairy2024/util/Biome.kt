@@ -1,8 +1,8 @@
 package miragefairy2024.util
 
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.Holder
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.core.Holder as RegistryEntry
 
 enum class TemperatureCategory {
     HIGH,
@@ -10,7 +10,7 @@ enum class TemperatureCategory {
     LOW,
 }
 
-val RegistryEntry<Biome>.temperatureCategory
+val Holder<Biome>.temperatureCategory
     get() = when {
         this.`is`(ConventionalBiomeTags.IS_HOT) -> TemperatureCategory.HIGH
         this.`is`(ConventionalBiomeTags.IS_COLD) -> TemperatureCategory.LOW
@@ -24,7 +24,7 @@ enum class HumidityCategory {
     LOW,
 }
 
-val RegistryEntry<Biome>.humidityCategory
+val Holder<Biome>.humidityCategory
     get() = when {
         this.`is`(ConventionalBiomeTags.IS_WET) -> HumidityCategory.HIGH
         this.`is`(ConventionalBiomeTags.IS_DRY) -> HumidityCategory.LOW

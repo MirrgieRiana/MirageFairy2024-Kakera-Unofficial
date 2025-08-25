@@ -7,12 +7,12 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.CreativeModeTab as ItemGroup
 
 context(ModContext)
-fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<CreativeModeTab>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         it.accept(this())
     }
@@ -20,7 +20,7 @@ fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>) {
 
 context(ModContext)
 @Suppress("UnusedReceiverParameter")
-fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<ItemGroup>, supplier: () -> List<ItemStack>) {
+fun (() -> Item).registerItemGroup(itemGroup: ResourceKey<CreativeModeTab>, supplier: () -> List<ItemStack>) {
     ItemGroupEvents.modifyEntriesEvent(itemGroup).register {
         supplier().forEach { itemStack ->
             it.accept(itemStack)
@@ -37,7 +37,7 @@ class ItemGroupCard(
 ) {
     val translation = Translation({ "itemGroup.${identifier.toLanguageKey()}" }, enName, jaName)
     val itemGroupKey = Registries.CREATIVE_MODE_TAB with identifier
-    val itemGroup: ItemGroup = FabricItemGroup.builder()
+    val itemGroup: CreativeModeTab = FabricItemGroup.builder()
         .icon(icon)
         .title(text { translation() })
         .build()

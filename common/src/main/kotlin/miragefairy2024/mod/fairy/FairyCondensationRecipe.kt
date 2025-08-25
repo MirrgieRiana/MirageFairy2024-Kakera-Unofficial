@@ -5,9 +5,9 @@ import miragefairy2024.util.EMPTY_ITEM_STACK
 import miragefairy2024.util.SpecialRecipeResult
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.registerSpecialRecipe
+import net.minecraft.core.NonNullList
 import net.minecraft.world.item.ItemStack
 import java.math.BigInteger
-import net.minecraft.core.NonNullList as DefaultedList
 
 context(ModContext)
 fun initFairyCondensationRecipe() {
@@ -67,9 +67,9 @@ fun initFairyCondensationRecipe() {
 
         object : SpecialRecipeResult {
             override fun craft() = motif.createFairyItemStack(condensation = dividedCondensation, count = division)
-            override fun getRemainder(): DefaultedList<ItemStack>? {
+            override fun getRemainder(): NonNullList<ItemStack>? {
                 return if (remainingCondensation > BigInteger.ZERO) {
-                    val list = DefaultedList.withSize(inventory.size(), EMPTY_ITEM_STACK)
+                    val list = NonNullList.withSize(inventory.size(), EMPTY_ITEM_STACK)
                     list[index] = motif.createFairyItemStack(condensation = remainingCondensation)
                     list
                 } else {

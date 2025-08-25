@@ -11,6 +11,7 @@ import miragefairy2024.util.ModelTexturesData
 import miragefairy2024.util.string
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.LevelAccessor
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.TransparentBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.data.models.model.TextureSlot as TextureKey
 
 class FairyCrystalGlassBlock(properties: Properties) : TransparentBlock(properties) {
     companion object {
@@ -71,18 +71,18 @@ val fairyCrystalGlassFrameBlockModel = Model { textureMap ->
     ModelData(
         parent = ResourceLocation.withDefaultNamespace("block/block"),
         textures = ModelTexturesData(
-            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
-            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
+            TextureSlot.PARTICLE.id to textureMap.get(TextureSlot.TEXTURE).string,
+            TextureSlot.TEXTURE.id to textureMap.get(TextureSlot.TEXTURE).string,
         ),
         elements = ModelElementsData(
             ModelElementData(
                 from = listOf(0, 0, 0),
                 to = listOf(16, 16, 16),
                 faces = ModelFacesData(
-                    north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north"),
-                    south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south"),
-                    west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west"),
-                    east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east"),
+                    north = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "north"),
+                    south = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "south"),
+                    west = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "west"),
+                    east = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "east"),
                 ),
             ),
         ),
@@ -94,19 +94,19 @@ val fairyCrystalGlassBlockModel = Model { textureMap ->
         from = listOf(0, 0, 0),
         to = listOf(16, 16, 16),
         faces = ModelFacesData(
-            north = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "north", rotation = rotation),
-            south = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "south", rotation = rotation),
-            west = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "west", rotation = rotation),
-            east = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "east", rotation = rotation),
-            up = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "up", rotation = rotation),
-            down = ModelFaceData(texture = TextureKey.TEXTURE.string, cullface = "down", rotation = rotation),
+            north = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "north", rotation = rotation),
+            south = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "south", rotation = rotation),
+            west = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "west", rotation = rotation),
+            east = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "east", rotation = rotation),
+            up = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "up", rotation = rotation),
+            down = ModelFaceData(texture = TextureSlot.TEXTURE.string, cullface = "down", rotation = rotation),
         ),
     )
     ModelData(
         parent = ResourceLocation.withDefaultNamespace("block/block"),
         textures = ModelTexturesData(
-            TextureKey.PARTICLE.id to textureMap.get(TextureKey.TEXTURE).string,
-            TextureKey.TEXTURE.id to textureMap.get(TextureKey.TEXTURE).string,
+            TextureSlot.PARTICLE.id to textureMap.get(TextureSlot.TEXTURE).string,
+            TextureSlot.TEXTURE.id to textureMap.get(TextureSlot.TEXTURE).string,
         ),
         elements = ModelElementsData(
             createPart(0),

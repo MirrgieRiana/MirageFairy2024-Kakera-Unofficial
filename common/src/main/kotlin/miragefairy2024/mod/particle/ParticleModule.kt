@@ -11,19 +11,19 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
+import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.core.particles.ParticleOptions as ParticleEffect
 
-class ParticleTypeCard<P : ParticleType<T>, T : ParticleEffect>(
+class ParticleTypeCard<P : ParticleType<T>, T : ParticleOptions>(
     path: String,
     textureNames: List<String>,
     creator: () -> P,
 ) {
     companion object {
         val entries = mutableListOf<ParticleTypeCard<*, *>>()
-        private operator fun <P : ParticleType<T>, T : ParticleEffect> ParticleTypeCard<P, T>.not() = this.also { entries.add(this) }
+        private operator fun <P : ParticleType<T>, T : ParticleOptions> ParticleTypeCard<P, T>.not() = this.also { entries.add(this) }
 
         val MISSION = !ParticleTypeCard("mission", listOf("mission")) { FabricParticleTypes.simple(true) }
         val COLLECTING_MAGIC = !ParticleTypeCard("collecting_magic", listOf("magic")) { FabricParticleTypes.simple(false) }

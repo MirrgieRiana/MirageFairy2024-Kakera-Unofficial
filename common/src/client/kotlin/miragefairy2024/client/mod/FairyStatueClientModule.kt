@@ -7,7 +7,7 @@ import miragefairy2024.mod.fairy.FairyStatueBlockItem
 import miragefairy2024.mod.fairy.createFairyItemStack
 import miragefairy2024.mod.fairy.getFairyMotif
 import net.minecraft.client.Minecraft
-import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
+import net.minecraft.world.item.ItemDisplayContext
 
 context(ModContext)
 fun initFairyStatueClientModule() {
@@ -21,7 +21,7 @@ fun initFairyStatueClientModule() {
             matrices.stack {
                 matrices.scale(0.5F, 0.5F, 0.5F)
                 val resultModel = Minecraft.getInstance().itemRenderer.getModel(itemStack, null, null, 0)
-                Minecraft.getInstance().itemRenderer.render(itemStack, ModelTransformationMode.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
+                Minecraft.getInstance().itemRenderer.render(itemStack, ItemDisplayContext.GUI, false, matrices, vertexConsumers, light, overlay, resultModel)
             }
         }
     }

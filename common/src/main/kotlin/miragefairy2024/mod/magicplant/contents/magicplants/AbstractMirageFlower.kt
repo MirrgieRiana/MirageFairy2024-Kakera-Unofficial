@@ -9,12 +9,12 @@ import miragefairy2024.util.randomInt
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 
 abstract class AbstractMirageFlowerCard<B : SimpleMagicPlantBlock> : SimpleMagicPlantCard<B>() {
     override val classification = EnJa("Order Miragales, family Miragaceae", "妖花目ミラージュ科")
 
-    override val ageProperty: IntProperty = BlockStateProperties.AGE_3
+    override val ageProperty: IntegerProperty = BlockStateProperties.AGE_3
 
     override val outlineShapes = listOf(
         createCuboidShape(3.0, 5.0),

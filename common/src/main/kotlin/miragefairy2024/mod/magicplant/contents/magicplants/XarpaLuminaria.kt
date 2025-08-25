@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
 
 object XarpaLuminariaCard : AbstractLuminariaCard<XarpaLuminariaBlock>() {
     override fun getBlockPath() = "xarpa_luminaria"
@@ -76,5 +76,5 @@ class XarpaLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(XarpaLum
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 }

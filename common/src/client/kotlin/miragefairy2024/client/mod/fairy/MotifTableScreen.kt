@@ -21,10 +21,10 @@ import miragefairy2024.util.plus
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
-import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
@@ -91,5 +91,5 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Invent
         }
     }
 
-    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) = Unit
+    override fun renderLabels(context: GuiGraphics, mouseX: Int, mouseY: Int) = Unit
 }

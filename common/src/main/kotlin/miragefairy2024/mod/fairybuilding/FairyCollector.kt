@@ -31,7 +31,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.levelgen.structure.BoundingBox as BlockBox
+import net.minecraft.world.level.levelgen.structure.BoundingBox
 
 object FairyCollectorCard : FairyFactoryCard<FairyCollectorBlock, FairyCollectorBlockEntity, FairyCollectorScreenHandler>() {
     override fun getPath() = "fairy_collector"
@@ -177,7 +177,7 @@ class FairyCollectorBlockEntity(card: FairyCollectorCard, pos: BlockPos, state: 
 
                 folia -= 1000
 
-                val region = BlockBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
+                val region = BoundingBox(pos.x - 10, pos.y - 4, pos.z - 10, pos.x + 10, pos.y, pos.z + 10)
                 collectItem(world, pos, region = region, ignoreOriginalWall = true) {
 
                     folia -= 500 + 30 * it.item.count

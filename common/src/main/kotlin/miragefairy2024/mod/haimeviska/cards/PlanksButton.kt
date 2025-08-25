@@ -13,13 +13,13 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.ButtonBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockSetType
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.material.PushReaction
 
 class HaimeviskaPlanksButtonBlockCard(configuration: HaimeviskaBlockConfiguration, private val blockSetType: () -> BlockSetType, private val parent: () -> Block) : HaimeviskaBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
         .noCollission()
         .strength(0.5F)
-        .pushReaction(PistonBehavior.DESTROY)
+        .pushReaction(PushReaction.DESTROY)
 
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = ButtonBlock(blockSetType(), 30, properties)
 

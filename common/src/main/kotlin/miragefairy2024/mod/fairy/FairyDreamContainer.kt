@@ -17,8 +17,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 val FAIRY_DREAM_CONTAINER_ATTACHMENT_TYPE: AttachmentType<FairyDreamContainer> = AttachmentRegistry.create(MirageFairy2024.identifier("fairy_dream")) {
     it.persistent(FairyDreamContainer.CODEC)
@@ -80,7 +80,7 @@ class FairyDreamContainer {
         }
     }
 
-    fun gain(player: ServerPlayerEntity, motifs: Set<Motif>): Int {
+    fun gain(player: ServerPlayer, motifs: Set<Motif>): Int {
         val actualAdditionalMotifs = motifs - map
         actualAdditionalMotifs.forEach { motif ->
             set(motif, true)

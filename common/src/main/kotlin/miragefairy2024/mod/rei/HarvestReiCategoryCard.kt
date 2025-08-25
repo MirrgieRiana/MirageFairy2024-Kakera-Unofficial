@@ -13,7 +13,7 @@ import miragefairy2024.util.wrapper
 import mirrg.kotlin.hydrogen.Single
 import mirrg.kotlin.hydrogen.castOrThrow
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag as NbtList
+import net.minecraft.nbt.ListTag
 
 object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>("harvest", "Harvest", "収穫") {
     override val serializer: Single<BasicDisplay.Serializer<Display>> by lazy {
@@ -26,7 +26,7 @@ object HarvestReiCategoryCard : ReiCategoryCard<HarvestReiCategoryCard.Display>(
             )
         }, { display, tag ->
             tag.wrapper["Seed"].set(display.recipe.seed.toNbt(BasicDisplay.registryAccess()))
-            tag.wrapper["Crops"].set(display.recipe.crops.mapTo(NbtList()) { it.toNbt(BasicDisplay.registryAccess()) })
+            tag.wrapper["Crops"].set(display.recipe.crops.mapTo(ListTag()) { it.toNbt(BasicDisplay.registryAccess()) })
         }))
     }
 

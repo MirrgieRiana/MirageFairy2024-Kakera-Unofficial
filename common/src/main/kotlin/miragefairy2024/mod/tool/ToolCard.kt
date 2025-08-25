@@ -53,6 +53,7 @@ import miragefairy2024.util.toBlockTag
 import mirrg.kotlin.hydrogen.toUpperCamelCase
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -60,7 +61,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.enchantment.Enchantments
-import net.minecraft.data.models.model.ModelTemplates as Models
 
 val MINEABLE_WITH_NOISE_BLOCK_TAG = MirageFairy2024.identifier("mineable/noise").toBlockTag()
 
@@ -476,7 +476,7 @@ class ToolCard(
 
         item.registerItemGroup(mirageFairy2024ItemGroupCard.itemGroupKey)
 
-        item.registerModelGeneration(Models.FLAT_HANDHELD_ITEM)
+        item.registerModelGeneration(ModelTemplates.FLAT_HANDHELD_ITEM)
 
         item.enJa(name)
 

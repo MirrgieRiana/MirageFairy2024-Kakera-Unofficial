@@ -6,11 +6,11 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.BlockGetter as BlockView
 
 var clientProxy: ClientProxy? = null
 
@@ -29,7 +29,7 @@ interface ClientProxy {
 }
 
 fun interface BlockColorProvider {
-    operator fun invoke(blockState: BlockState, world: BlockView?, blockPos: BlockPos?, tintIndex: Int): Int
+    operator fun invoke(blockState: BlockState, world: BlockGetter?, blockPos: BlockPos?, tintIndex: Int): Int
 }
 
 fun interface ItemColorProvider {

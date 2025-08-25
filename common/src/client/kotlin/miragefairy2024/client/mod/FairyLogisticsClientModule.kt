@@ -12,7 +12,7 @@ import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierCard
 import miragefairy2024.mod.fairylogistics.FairyPassiveSupplierScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
-import net.minecraft.client.gui.GuiGraphics as DrawContext
+import net.minecraft.client.gui.GuiGraphics
 
 context(ModContext)
 fun initFairyLogisticsClientModule() {
@@ -29,7 +29,7 @@ class FairyPassiveSupplierScreen(private val card: FairyPassiveSupplierCard, arg
         return FairyPassiveSupplierBlockEntity.getLogisticsPower(fairyItemStack)
     }
 
-    override fun renderLabels(context: DrawContext, mouseX: Int, mouseY: Int) {
+    override fun renderLabels(context: GuiGraphics, mouseX: Int, mouseY: Int) {
         super.renderLabels(context, mouseX, mouseY)
         context.drawString(font, text { "${getLogisticsPower()}/min"() }, 102, 23, 0x373737, false) // TODO 表示を改善
     }

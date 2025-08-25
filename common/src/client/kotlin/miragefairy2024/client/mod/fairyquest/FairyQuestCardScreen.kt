@@ -28,15 +28,15 @@ import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.text
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
-import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, FairyQuestCardScreenHandler>(handler, playerInventory, title) {
     override fun createAdapter(): OwoUIAdapter<FlowLayout> = OwoUIAdapter.create(this, Containers::verticalFlow)
 
     private val onScreenUpdate = mutableListOf<() -> Unit>()
-    private val onDrawTooltip = mutableListOf<(vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float) -> Unit>()
+    private val onDrawTooltip = mutableListOf<(vanillaContext: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) -> Unit>()
 
     override fun build(rootComponent: FlowLayout) {
         rootComponent.apply {
@@ -119,7 +119,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                             else -> false
                                         }
                                     }
-                                    onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
+                                    onDrawTooltip += { vanillaContext: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float ->
                                         drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, Minecraft.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
@@ -142,7 +142,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                     onScreenUpdate += { showItemStack = menu.getSlot(index).item.isEmpty }
                                     overlayColor = 0x2000FF00
                                     onScreenUpdate += { showOverlay = outputItemStack?.invoke().orEmpty.isNotEmpty && menu.getSlot(index).item.isEmpty }
-                                    onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
+                                    onDrawTooltip += { vanillaContext: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float ->
                                         drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, Minecraft.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
@@ -189,7 +189,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
         }
     }
 
-    override fun render(vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(vanillaContext: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(vanillaContext, mouseX, mouseY, delta)
         onDrawTooltip.forEach {
             it(vanillaContext, mouseX, mouseY, delta)

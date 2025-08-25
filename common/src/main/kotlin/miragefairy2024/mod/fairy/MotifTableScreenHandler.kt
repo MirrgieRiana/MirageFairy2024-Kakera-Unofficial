@@ -14,8 +14,8 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 val MOTIF_TABLE_STREAM_CODEC = object : StreamCodec<RegistryFriendlyByteBuf, List<CondensedMotifChance>> {
     override fun encode(`object`: RegistryFriendlyByteBuf, object2: List<CondensedMotifChance>) {
@@ -53,7 +53,7 @@ fun initMotifTableScreenHandler() {
     motifTableScreenHandlerType.register()
 }
 
-class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : ScreenHandler(motifTableScreenHandlerType(), syncId) {
+class MotifTableScreenHandler(syncId: Int, val chanceTable: List<CondensedMotifChance>) : AbstractContainerMenu(motifTableScreenHandlerType(), syncId) {
     override fun stillValid(player: Player) = true
     override fun quickMoveStack(player: Player, slot: Int) = EMPTY_ITEM_STACK
 }

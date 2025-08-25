@@ -13,10 +13,10 @@ import miragefairy2024.mod.machine.SimpleMachineScreenHandler
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.Rect2i
 import java.util.Optional
 import kotlin.math.roundToInt
-import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 context(ModContext)
 fun initMachineClientModule() {
@@ -31,7 +31,7 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
 
     abstract val arrowBound: Rect2i
 
-    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: GuiGraphics, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
 
         if (menu.progressMax > 0) {
@@ -50,7 +50,7 @@ abstract class SimpleMachineScreen<H : SimpleMachineScreenHandler>(card: SimpleM
         }
     }
 
-    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+    override fun renderTooltip(context: GuiGraphics, x: Int, y: Int) {
         super.renderTooltip(context, x, y)
         run {
             val bound = Rect2i(
@@ -78,7 +78,7 @@ class AuraReflectorFurnaceScreen(card: AuraReflectorFurnaceCard, arguments: Argu
     override val arrowBound = Rect2i(89, 35, 22, 15)
     val fuelBound = Rect2i(48, 37, 13, 13)
 
-    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: GuiGraphics, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
 
         if (menu.fuelMax > 0) {

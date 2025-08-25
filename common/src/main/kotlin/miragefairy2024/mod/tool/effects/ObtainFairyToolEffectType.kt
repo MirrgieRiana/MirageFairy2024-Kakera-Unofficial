@@ -15,8 +15,8 @@ import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.mutate
 import miragefairy2024.util.text
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
 
 fun <T : ToolConfiguration> T.obtainFairy(appearanceRateBonus: Double) = this.merge(ObtainFairyToolEffectType, appearanceRateBonus)
 
@@ -32,7 +32,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
         if (value <= 0.0) return
         configuration.descriptions += TextPoem(PoemType.DESCRIPTION, text { TRANSLATION() })
         configuration.onAfterBreakBlockListeners += fail@{ _, world, player, pos, state, _, _ ->
-            if (player !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
+            if (player !is ServerPlayer) return@fail // 使用者がプレイヤーでない
 
             // モチーフの判定
             val motifSet = FairyDreamRecipes.BLOCK.test(state.block)
@@ -49,7 +49,7 @@ object ObtainFairyToolEffectType : DoubleAddToolEffectType<ToolConfiguration>() 
 
         }
         configuration.onKilledListeners += fail@{ _, entity, attacker, _ ->
-            if (attacker !is ServerPlayerEntity) return@fail // 使用者がプレイヤーでない
+            if (attacker !is ServerPlayer) return@fail // 使用者がプレイヤーでない
 
             // モチーフの判定
             val motifSet = FairyDreamRecipes.ENTITY_TYPE.test(entity.type)

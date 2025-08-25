@@ -18,9 +18,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.atMost
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
+import net.minecraft.client.gui.GuiGraphics
 import java.util.Optional
 import kotlin.math.roundToInt
-import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 context(ModContext)
 fun initFairyBuildingClientModule() {
@@ -41,13 +41,13 @@ open class FairyBuildingScreen<H : FairyBuildingScreenHandler>(card: FairyBuildi
 }
 
 open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: FairyFactoryCard<*, *, *>, arguments: Arguments<H>) : FairyBuildingScreen<H>(card, arguments) {
-    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: GuiGraphics, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
         val h = (9.0 * (menu.folia / card.maxFolia.toDouble() atMost 1.0)).roundToInt()
         context.blit(SPRITES_TEXTURE, leftPos + 164, topPos + imageHeight - 94 + (9 - h), 32F, 0F + (9 - h).toFloat(), 5, h, 64, 64)
     }
 
-    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+    override fun renderTooltip(context: GuiGraphics, x: Int, y: Int) {
         super.renderTooltip(context, x, y)
         run {
             if (x in this.leftPos + 164 until this.leftPos + 164 + 5 && y in this.topPos + imageHeight - 94 until this.topPos + imageHeight - 94 + 9) {
@@ -64,13 +64,13 @@ open class FairyFactoryScreen<H : FairyFactoryScreenHandler>(private val card: F
 class FairyHouseScreen(card: FairyHouseCard, arguments: Arguments<FairyHouseScreenHandler>) : FairyFactoryScreen<FairyHouseScreenHandler>(card, arguments)
 
 class FairyCollectorScreen(card: FairyCollectorCard, arguments: Arguments<FairyCollectorScreenHandler>) : FairyFactoryScreen<FairyCollectorScreenHandler>(card, arguments) {
-    override fun renderBg(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun renderBg(context: GuiGraphics, delta: Float, mouseX: Int, mouseY: Int) {
         super.renderBg(context, delta, mouseX, mouseY)
         context.blit(SPRITES_TEXTURE, leftPos + 14, topPos + 28, 0F, 0F, (18.0 * (menu.collectionProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
         context.blit(SPRITES_TEXTURE, leftPos + 80, topPos + 28, 0F, 0F, (18.0 * (menu.sortProgress / 10000.0 atMost 1.0)).roundToInt(), 4, 64, 64)
     }
 
-    override fun renderTooltip(context: DrawContext, x: Int, y: Int) {
+    override fun renderTooltip(context: GuiGraphics, x: Int, y: Int) {
         super.renderTooltip(context, x, y)
         run {
             if (x in this.leftPos + 19 until this.leftPos + 19 + 18 && y in this.topPos + 28 until this.topPos + 28 + 4) {

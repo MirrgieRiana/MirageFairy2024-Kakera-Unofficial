@@ -10,8 +10,8 @@ import miragefairy2024.util.Translation
 import miragefairy2024.util.enJa
 import miragefairy2024.util.invoke
 import miragefairy2024.util.text
+import net.minecraft.world.entity.ExperienceOrb
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.ExperienceOrb as ExperienceOrbEntity
 
 fun <T : ToolConfiguration> T.collection() = this.merge(CollectionToolEffectType, true)
 
@@ -32,7 +32,7 @@ object CollectionToolEffectType : BooleanToolEffectType<ToolConfiguration>() {
                 it.teleportTo(attacker.x, attacker.y, attacker.z)
                 it.setNoPickUpDelay()
             }
-            entity.level().getEntitiesOfClass(ExperienceOrbEntity::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
+            entity.level().getEntitiesOfClass(ExperienceOrb::class.java, entity.boundingBox) { !it.isSpectator }.forEach {
                 it.teleportTo(attacker.x, attacker.y, attacker.z)
             }
         }
