@@ -372,7 +372,7 @@ class ToolCard(
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.CHAOS_STONE.ore!!.tag) }
         val NOISE_PICKAXE = !ToolCard(
             "noise_pickaxe", EnJa("Noise Pickaxe", "ノイズのつるはし"),
-            PoemList(5).poem(EnJa("Denial of the Value.", "無価値の創出。")),
+            PoemList(5).poem(EnJa("Demolish the Value.", "無価値の創出。")),
             FairyPickaxeConfiguration(ToolMaterialCard.NOISE).selfMending(100).enchantment(Enchantments.UNBREAKING, 7).enchantment(Enchantments.MENDING).enchantment(Enchantments.INFINITY).effective(MINEABLE_WITH_NOISE_BLOCK_TAG).soulStreamContainable(),
         ) { registerPickaxeRecipeGeneration(item, MaterialCard.NOISE.ore!!.tag) }
         val NOISE_AXE = !ToolCard(
