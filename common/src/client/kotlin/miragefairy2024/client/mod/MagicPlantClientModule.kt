@@ -17,6 +17,7 @@ import miragefairy2024.client.mixins.api.RenderingEvent
 import miragefairy2024.client.util.ClickableContainer
 import miragefairy2024.client.util.inventoryNameLabel
 import miragefairy2024.client.util.registerHandledScreen
+import miragefairy2024.client.util.tooltipContainer
 import miragefairy2024.client.util.topBorderLayout
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
@@ -107,11 +108,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                     }
                     child(traitCardContainer)
                     child(verticalSpace(4))
-                    child(Containers.verticalFlow(Sizing.fill(100), Sizing.fixed(18 * 4)).apply { // 特性リスト
-                        surface(Surface.TOOLTIP)
-                        padding(Insets.of(4))
-                        allowOverflow(true)
-
+                    child(tooltipContainer(Sizing.fill(100), Sizing.fixed(18 * 4)).apply { // 特性リスト
                         child(verticalScroll(Sizing.fill(100), Sizing.fill(100), 5).apply {
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 

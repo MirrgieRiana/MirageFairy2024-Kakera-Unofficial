@@ -55,3 +55,11 @@ fun horizontalScroll(horizontalSizing: Sizing, verticalSizing: Sizing, scrollbar
         scrollbarThiccness(scrollbarThiccness)
     }
 }
+
+fun tooltipContainer(horizontalSizing: Sizing, verticalSizing: Sizing): FlowLayout {
+    return Containers.verticalFlow(horizontalSizing, verticalSizing).apply {
+        surface(Surface.TOOLTIP)
+        padding(Insets.of(4))
+        allowOverflow(true)
+    }
+}

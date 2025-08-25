@@ -16,6 +16,7 @@ import miragefairy2024.ModContext
 import miragefairy2024.client.util.KeyMappingCard
 import miragefairy2024.client.util.SlotType
 import miragefairy2024.client.util.horizontalSpace
+import miragefairy2024.client.util.tooltipContainer
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
 import miragefairy2024.mod.OPEN_TOOLTIP_VIEWER_KEY_TRANSLATION
@@ -99,11 +100,7 @@ class TooltipViewerScreen() : BaseOwoScreen<FlowLayout>(text { TOOLTIP_VIEWER_KE
                                         child(horizontalSpace(2))
 
                                         // ツールチップ
-                                        child(Containers.verticalFlow(Sizing.expand(100), Sizing.content()).apply {
-                                            surface(Surface.TOOLTIP)
-                                            padding(Insets.of(4))
-                                            allowOverflow(true)
-
+                                        child(tooltipContainer(Sizing.expand(100), Sizing.content()).apply {
                                             fun f() {
                                                 val allowIndices = filter.get().split(",").mapNotNull { it.toIntOrNull() }.toSet().ifEmpty { null }
                                                 fun isAllowedIndex(index: Int) = allowIndices == null || index in allowIndices
