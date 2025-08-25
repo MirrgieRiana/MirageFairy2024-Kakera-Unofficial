@@ -59,16 +59,16 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.effect.MobEffects as StatusEffects
-import net.minecraft.world.entity.ai.attributes.Attribute as EntityAttribute
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
 
 val motifRegistryKey: ResourceKey<Registry<Motif>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("motif"))
 val motifRegistry: Registry<Motif> = FabricRegistryBuilder.createSimple(motifRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -133,11 +133,11 @@ enum class MotifCard(
         "vacuum_decay", 13, "Vacuume Decia", "真空崩壊精ヴァツーメデーツャ", 0x00003B, 0x000012, 0x000012, 0x000078,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.DAMAGE_BOOST(2)
+            + MobEffects.DAMAGE_BOOST(2)
             + overall.attack(0.4)
             + miningSpeed(0.3)
-            + StatusEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
-            + StatusEffects.UNLUCK(3), // TODO MOBドロップを減らす効果
+            + MobEffects.WITHER() // TODO 真空浸蝕：死ぬまで徐々にダメージ、近接攻撃時に感染
+            + MobEffects.UNLUCK(3), // TODO MOBドロップを減らす効果
         MotifCardRecipes().SR.end.block(BlockMaterialCard.LOCAL_VACUUM_DECAY.block),
     ),
 
@@ -246,7 +246,7 @@ enum class MotifCard(
             + overall.attack(0.4) * light.atMost(5)
             + magic.attack(0.4) * indoor
             + miningSpeed(0.4) * indoor,
-        MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK).block { Blocks.SCULK },
+        MotifCardRecipes().R.common(Biomes.DEEP_DARK).block { Blocks.SCULK },
     ),
 
     // 岩石
@@ -256,8 +256,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + overall.defence(0.8)
             + miningSpeed(0.4)
-            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.STONE()
-            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
+            + MobEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.STONE()
+            + MobEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.STONE() * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld.block { Blocks.STONE },
     ),
     DRIPSTONE(
@@ -267,7 +267,7 @@ enum class MotifCard(
             + shooting.attack(0.8)
             + overall.defence(0.3)
             + miningSpeed(0.2),
-        MotifCardRecipes().R.common(BiomeKeys.DRIPSTONE_CAVES).block { Blocks.DRIPSTONE_BLOCK }.block { Blocks.POINTED_DRIPSTONE },
+        MotifCardRecipes().R.common(Biomes.DRIPSTONE_CAVES).block { Blocks.DRIPSTONE_BLOCK }.block { Blocks.POINTED_DRIPSTONE },
     ),
     DEEPSLATE(
         "deepslate", 5, "Deepslatia", "深層岩精デープスラーチャ", 0x74747A, 0x54545C, 0x54545C, 0x212129,
@@ -295,8 +295,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + overall.defence(0.6)
-            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
-            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
+            + MobEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.COPPER() // TODO 魔法？電気？にちなんだステータス効果
+            + MobEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.COPPER() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R.block { Blocks.COPPER_BLOCK }.item { Items.COPPER_INGOT } + BlockTags.COPPER_ORES,
     ),
     IRON(
@@ -305,8 +305,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + miningSpeed(0.5)
-            + StatusEffects.DAMAGE_BOOST() * ToolMaterialCard.IRON()
-            + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
+            + MobEffects.DAMAGE_BOOST() * ToolMaterialCard.IRON()
+            + MobEffects.DAMAGE_BOOST(2) * ToolMaterialCard.IRON() * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R.block { Blocks.IRON_BLOCK }.item { Items.IRON_INGOT } + BlockTags.IRON_ORES,
     ),
     GOLD(
@@ -315,8 +315,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.8)
             + miningSpeed(0.6)
-            + StatusEffects.LUCK() * ToolMaterialCard.GOLD()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
+            + MobEffects.LUCK() * ToolMaterialCard.GOLD()
+            + MobEffects.LUCK(2) * ToolMaterialCard.GOLD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R.block { Blocks.GOLD_BLOCK }.item { Items.GOLD_INGOT } + BlockTags.GOLD_ORES,
     ),
     NETHERITE(
@@ -325,8 +325,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.6)
             + luck(0.4)
-            + StatusEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
-            + StatusEffects.DAMAGE_BOOST(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
+            + MobEffects.FIRE_RESISTANCE() * ToolMaterialCard.NETHERITE()
+            + MobEffects.DAMAGE_BOOST(2) * ToolMaterialCard.NETHERITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R.block { Blocks.NETHERITE_BLOCK }.item { Items.NETHERITE_INGOT },
     ),
 
@@ -346,8 +346,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.7)
             + mana(0.4)
-            + StatusEffects.DIG_SPEED() * ToolMaterialCard.XARPITE()
-            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
+            + MobEffects.DIG_SPEED() * ToolMaterialCard.XARPITE()
+            + MobEffects.DIG_SPEED(2) * ToolMaterialCard.XARPITE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R.block(BlockMaterialCard.XARPITE_BLOCK.block).item(MaterialCard.XARPITE.item),
     ),
     MIRANAGITE(
@@ -356,8 +356,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.7)
             + mana(0.4)
-            + StatusEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
+            + MobEffects.LUCK() * ToolMaterialCard.MIRANAGITE()
+            + MobEffects.LUCK(2) * ToolMaterialCard.MIRANAGITE() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R.block(BlockMaterialCard.MIRANAGITE_BLOCK.block).item(MaterialCard.MIRANAGITE.item).block(OreCard.MIRANAGITE_ORE.block).block(OreCard.DEEPSLATE_MIRANAGITE_ORE.block), // TODO タグ化
     ),
     CHAOS_STONE(
@@ -366,8 +366,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + shooting.attack(0.4)
             + miningSpeed(0.8)
-            + StatusEffects.DIG_SPEED() * ToolMaterialCard.CHAOS_STONE()
-            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
+            + MobEffects.DIG_SPEED() * ToolMaterialCard.CHAOS_STONE()
+            + MobEffects.DIG_SPEED(2) * ToolMaterialCard.CHAOS_STONE() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R.item(MaterialCard.CHAOS_STONE.item),
     ),
 
@@ -385,8 +385,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.6)
             + luck(0.4)
-            + StatusEffects.LUCK() * ToolMaterialCard.FLUORITE()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.FLUORITE() * fairyLevel.atLeast(12.0),
+            + MobEffects.LUCK() * ToolMaterialCard.FLUORITE()
+            + MobEffects.LUCK(2) * ToolMaterialCard.FLUORITE() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R.item(MaterialCard.FLUORITE.item).block(OreCard.FLUORITE_ORE.block).block(OreCard.DEEPSLATE_FLUORITE_ORE.block), // TODO タグ化
     ),
     AMETHYST(
@@ -404,8 +404,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + miningSpeed(0.5)
-            + StatusEffects.DIG_SPEED() * ToolMaterialCard.DIAMOND()
-            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
+            + MobEffects.DIG_SPEED() * ToolMaterialCard.DIAMOND()
+            + MobEffects.DIG_SPEED(2) * ToolMaterialCard.DIAMOND() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R.block { Blocks.DIAMOND_BLOCK }.item { Items.DIAMOND } + BlockTags.DIAMOND_ORES,
     ),
     EMERALD(
@@ -413,8 +413,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + luck(1.0)
-            + StatusEffects.LUCK() * ToolMaterialCard.EMERALD()
-            + StatusEffects.LUCK(2) * ToolMaterialCard.EMERALD() * fairyLevel.atLeast(12.0),
+            + MobEffects.LUCK() * ToolMaterialCard.EMERALD()
+            + MobEffects.LUCK(2) * ToolMaterialCard.EMERALD() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R.block { Blocks.EMERALD_BLOCK }.item { Items.EMERALD } + BlockTags.EMERALD_ORES,
     ),
 
@@ -455,7 +455,7 @@ enum class MotifCard(
             + fall.defence(3.0) * food.atLeast(12)
             + fall.defence(3.0) * food { Items.WHEAT }
             + fall.defence(6.0) * food { Items.CHICKEN }
-            + StatusEffects.SLOW_FALLING() * food { Items.WHEAT } * fairyLevel.atLeast(11.0),
+            + MobEffects.SLOW_FALLING() * food { Items.WHEAT } * fairyLevel.atLeast(11.0),
         MotifCardRecipes().R.overworld + EntityType.CHICKEN,
     ),
     EGG(
@@ -474,7 +474,7 @@ enum class MotifCard(
             + luck(0.4) * food.atLeast(12)
             + luck(0.4) * food { Items.CARROT }
             + luck(0.8) * food { Items.RABBIT }
-            + StatusEffects.JUMP(2) * food { Items.CARROT } * fairyLevel.atLeast(14.0),
+            + MobEffects.JUMP(2) * food { Items.CARROT } * fairyLevel.atLeast(14.0),
         MotifCardRecipes().R.overworld + EntityType.RABBIT,
     ),
     WOLF(
@@ -533,8 +533,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0) * health.atLeast(18.0)
-            + StatusEffects.SLOW_FALLING() * health.atLeast(18.0)
-            + StatusEffects.JUMP(5) * health.atLeast(18.0),
+            + MobEffects.SLOW_FALLING() * health.atLeast(18.0)
+            + MobEffects.JUMP(5) * health.atLeast(18.0),
         MotifCardRecipes().SSR,
     ),
     ENDERMAN(
@@ -574,8 +574,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + melee.attack(0.7) * light.atMost(5)
             + magic.attack(0.7) * light.atMost(5)
-            + StatusEffects.DAMAGE_BOOST(2) * light.atMost(5),
-        MotifCardRecipes().R.common(BiomeKeys.DEEP_DARK) + EntityType.WARDEN,
+            + MobEffects.DAMAGE_BOOST(2) * light.atMost(5),
+        MotifCardRecipes().R.common(Biomes.DEEP_DARK) + EntityType.WARDEN,
     ),
 
     // アンデッド
@@ -627,9 +627,9 @@ enum class MotifCard(
             + shooting.attack(1.0) * food.atMost(6)
             + shooting.defence(1.0) * food.atMost(6)
             + miningSpeed(0.5) * food.atMost(6)
-            + StatusEffects.SLOW_FALLING() * food.atMost(6)
-            + StatusEffects.JUMP(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
-            + StatusEffects.MOVEMENT_SLOWDOWN(3) * food.atMost(6) * fairyLevel.atMost(16.0),
+            + MobEffects.SLOW_FALLING() * food.atMost(6)
+            + MobEffects.JUMP(2) * food.atMost(6) * fairyLevel.atLeast(12.0)
+            + MobEffects.MOVEMENT_SLOWDOWN(3) * food.atMost(6) * fairyLevel.atMost(16.0),
         MotifCardRecipes().R.nether + EntityType.WITHER,
     ),
     NETHER_STAR(
@@ -638,8 +638,8 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + luck(0.6)
             + magic.attack(0.4)
-            + StatusEffects.DIG_SPEED() * ToolMaterialCard.NETHER_STAR()
-            + StatusEffects.DIG_SPEED(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
+            + MobEffects.DIG_SPEED() * ToolMaterialCard.NETHER_STAR()
+            + MobEffects.DIG_SPEED(2) * ToolMaterialCard.NETHER_STAR() * fairyLevel.atLeast(16.0),
         MotifCardRecipes().R.item { Items.NETHER_STAR },
     ),
 
@@ -649,7 +649,7 @@ enum class MotifCard(
         ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + shooting.attack(2.0) * onFire
-            + ignition * StatusEffects.FIRE_RESISTANCE,
+            + ignition * MobEffects.FIRE_RESISTANCE,
         MotifCardRecipes().R.nether + EntityType.BLAZE,
     ),
     MAGMA_CUBE(
@@ -657,7 +657,7 @@ enum class MotifCard(
         ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + melee.attack(2.0) * onFire
-            + ignition * StatusEffects.FIRE_RESISTANCE,
+            + ignition * MobEffects.FIRE_RESISTANCE,
         MotifCardRecipes().R.nether + EntityType.MAGMA_CUBE,
     ),
     GOLEM(
@@ -683,8 +683,8 @@ enum class MotifCard(
         "red_mushroom", 3, "Rede Mushroomia", "赤茸精レーデムシュローミャ", 0xE6DBA8, 0xFF0A0A, 0xFF0A0A, 0xBFD7D9,
         ParentMotifs() + { MUSHROOM },
         PassiveSkillBuilder()
-            + StatusEffects.HEALTH_BOOST(1) * food { Items.RED_MUSHROOM }
-            + StatusEffects.HEALTH_BOOST(2) * food { Items.RED_MUSHROOM } * fairyLevel.atLeast(10.0)
+            + MobEffects.HEALTH_BOOST(1) * food { Items.RED_MUSHROOM }
+            + MobEffects.HEALTH_BOOST(2) * food { Items.RED_MUSHROOM } * fairyLevel.atLeast(10.0)
             + magic.attack(0.6) * food.atLeast(12),
         MotifCardRecipes().R.overworld.nether.block { Blocks.RED_MUSHROOM }.item { Items.RED_MUSHROOM },
     ),
@@ -710,8 +710,8 @@ enum class MotifCard(
         "carrot", 4, "Carrotia", "人参精ツァッローチャ", 0xF98D10, 0xFD7F11, 0xE3710F, 0x248420,
         ParentMotifs() + { FOOD },
         PassiveSkillBuilder()
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.GOLDEN_CARROT }
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.CARROT } * fairyLevel.atLeast(10.0),
+            + MobEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.GOLDEN_CARROT }
+            + MobEffects.NIGHT_VISION(additionalSeconds = 10) * food { Items.CARROT } * fairyLevel.atLeast(10.0),
         MotifCardRecipes().R.overworld.block { Blocks.CARROTS }.item { Items.CARROT },
     ),
     POTATO(
@@ -777,7 +777,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.4) * indoor
             + magic.attack(0.8) * food { Items.GLOW_BERRIES },
-        MotifCardRecipes().R.common(BiomeKeys.LUSH_CAVES).item { Items.GLOW_BERRIES }.block { Blocks.CAVE_VINES }.block { Blocks.CAVE_VINES_PLANT },
+        MotifCardRecipes().R.common(Biomes.LUSH_CAVES).item { Items.GLOW_BERRIES }.block { Blocks.CAVE_VINES }.block { Blocks.CAVE_VINES_PLANT },
     ),
     MIRAGE(
         "mirage", 5, "Miragia", "妖精ミラージャ", 0x6DE3BE, 0x43FAFA, 0x43FAFA, 0x00F5F5,
@@ -818,8 +818,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + overall.defence(1.0)
-            + StatusEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.LUMINITE()
-            + StatusEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
+            + MobEffects.DAMAGE_RESISTANCE() * ToolMaterialCard.LUMINITE()
+            + MobEffects.DAMAGE_RESISTANCE(2) * ToolMaterialCard.LUMINITE() * fairyLevel.atLeast(10.0), // TODO 発光効果
         MotifCardRecipes().R.item(MaterialCard.LUMINITE.item),
     ),
     GLOW_LICHEN(
@@ -852,8 +852,8 @@ enum class MotifCard(
         ParentMotifs(),
         PassiveSkillBuilder()
             + shooting.attack(1.0)
-            + StatusEffects.MOVEMENT_SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
-            + StatusEffects.MOVEMENT_SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
+            + MobEffects.MOVEMENT_SPEED() * ToolMaterialCard.WOOD() // TODO 射撃攻撃力増加ステータス効果
+            + MobEffects.MOVEMENT_SPEED(2) * ToolMaterialCard.WOOD() * fairyLevel.atLeast(12.0)
             + mending(1.0, ToolMaterialCard.WOOD.tag),
         MotifCardRecipes().SR.overworld + BlockTags.LOGS + BlockTags.PLANKS,
     ),
@@ -871,7 +871,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + magic.attack(0.4)
             + health(0.6),
-        MotifCardRecipes().R.common(BiomeKeys.DARK_FOREST).block { Blocks.DARK_OAK_SAPLING }.block { Blocks.DARK_OAK_LOG },
+        MotifCardRecipes().R.common(Biomes.DARK_FOREST).block { Blocks.DARK_OAK_SAPLING }.block { Blocks.DARK_OAK_LOG },
     ),
     HAIMEVISKA(
         "haimeviska", 3, "Haimeviskia", "精樹精ハイメヴィスキャ", 0x8A4C16, 0xB85CC4, 0x3E5918, 0x3C7A4D,
@@ -930,7 +930,7 @@ enum class MotifCard(
             + regeneration(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
             + health(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
             + overall.defence(0.8) * food { Items.ENCHANTED_GOLDEN_APPLE }
-            + StatusEffects.FIRE_RESISTANCE() * food { Items.ENCHANTED_GOLDEN_APPLE },
+            + MobEffects.FIRE_RESISTANCE() * food { Items.ENCHANTED_GOLDEN_APPLE },
         MotifCardRecipes().R.item { Items.ENCHANTED_GOLDEN_APPLE },
     ),
     COOKIE(
@@ -990,7 +990,7 @@ enum class MotifCard(
         ParentMotifs() + { FIRE },
         PassiveSkillBuilder()
             + overall.attack(1.2) * onFire
-            + ignition * StatusEffects.FIRE_RESISTANCE,
+            + ignition * MobEffects.FIRE_RESISTANCE,
         MotifCardRecipes().R.item { Items.FLINT_AND_STEEL },
     ),
     SHIELD(
@@ -1021,10 +1021,10 @@ enum class MotifCard(
         "glass", 3, "Glassia", "硝子精グラッシャ", 0xFFFFFF, 0xEFF5FF, 0xE8EDF5, 0xADE0E9,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.INVISIBILITY() * health.atMost(1.0) * notInNether
-            + StatusEffects.INVISIBILITY() * fairyLevel.atLeast(12.0)
-            + StatusEffects.GLOWING() * health.atMost(1.0) * notInNether
-            + StatusEffects.GLOWING() * fairyLevel.atLeast(12.0),
+            + MobEffects.INVISIBILITY() * health.atMost(1.0) * notInNether
+            + MobEffects.INVISIBILITY() * fairyLevel.atLeast(12.0)
+            + MobEffects.GLOWING() * health.atMost(1.0) * notInNether
+            + MobEffects.GLOWING() * fairyLevel.atLeast(12.0),
         MotifCardRecipes().R.block { Blocks.GLASS },
     ),
     MAGENTA_GLAZED_TERRACOTTA(
@@ -1120,17 +1120,17 @@ enum class MotifCard(
         "beacon", 11, "Beaconia", "信標精ベアツォーニャ", 0x97FFE3, 0x6029B3, 0x2E095E, 0xD4EAE6,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.MOVEMENT_SPEED() * skyVisible
-            + StatusEffects.DAMAGE_RESISTANCE() * skyVisible
-            + StatusEffects.JUMP() * skyVisible
-            + StatusEffects.DAMAGE_BOOST() * skyVisible
-            + StatusEffects.DIG_SPEED() * skyVisible
+            + MobEffects.MOVEMENT_SPEED() * skyVisible
+            + MobEffects.DAMAGE_RESISTANCE() * skyVisible
+            + MobEffects.JUMP() * skyVisible
+            + MobEffects.DAMAGE_BOOST() * skyVisible
+            + MobEffects.DIG_SPEED() * skyVisible
             + regeneration(0.1) * skyVisible * fairyLevel.atLeast(12.0)
-            + StatusEffects.MOVEMENT_SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
-            + StatusEffects.DAMAGE_RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
-            + StatusEffects.JUMP(2) * skyVisible * fairyLevel.atLeast(15.0)
-            + StatusEffects.DAMAGE_BOOST(2) * skyVisible * fairyLevel.atLeast(16.0)
-            + StatusEffects.DIG_SPEED(2) * skyVisible * fairyLevel.atLeast(17.0),
+            + MobEffects.MOVEMENT_SPEED(2) * skyVisible * fairyLevel.atLeast(13.0)
+            + MobEffects.DAMAGE_RESISTANCE(2) * skyVisible * fairyLevel.atLeast(14.0)
+            + MobEffects.JUMP(2) * skyVisible * fairyLevel.atLeast(15.0)
+            + MobEffects.DAMAGE_BOOST(2) * skyVisible * fairyLevel.atLeast(16.0)
+            + MobEffects.DIG_SPEED(2) * skyVisible * fairyLevel.atLeast(17.0),
         MotifCardRecipes().R.block { Blocks.BEACON },
     ),
 
@@ -1161,7 +1161,7 @@ enum class MotifCard(
         "time", 14, "Timia", "時精ティーミャ", 0xCDFFBF, 0xD5DEBC, 0xD8DEA7, 0x8DD586,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.MOVEMENT_SPEED(2)
+            + MobEffects.MOVEMENT_SPEED(2)
             + speed(0.5) * fairyLevel.atLeast(16.0)
             + mana(5.0) { TIME },
         MotifCardRecipes().SR.always,
@@ -1172,7 +1172,7 @@ enum class MotifCard(
         PassiveSkillBuilder()
             + speed(0.4) * overworld * night * skyVisible
             + regeneration(0.4) * overworld * night * skyVisible
-            + StatusEffects.NIGHT_VISION(additionalSeconds = 10) * overworld * night * skyVisible,
+            + MobEffects.NIGHT_VISION(additionalSeconds = 10) * overworld * night * skyVisible,
         MotifCardRecipes().SR.overworld,
     ),
 
@@ -1209,7 +1209,7 @@ enum class MotifCard(
         "gravity", 12, "Gravitia", "重力精グラヴィーチャ", 0xC2A7F2, 0x3600FF, 0x2A00B1, 0x110047,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.SLOW_FALLING()
+            + MobEffects.SLOW_FALLING()
             + overall.attack(0.8) * fairyLevel.atLeast(16.0),
         MotifCardRecipes().SR.item { Items.APPLE },
     ),
@@ -1217,7 +1217,7 @@ enum class MotifCard(
         "anti_entropy", 13, "Ante Entropia", "秩序精アンテエントローピャ", 0xD4FCFF, 0x9EECFF, 0x9EECFF, 0x54C9FF,
         ParentMotifs(),
         PassiveSkillBuilder()
-            + StatusEffects.LUCK(2)
+            + MobEffects.LUCK(2)
             + luck(0.5) * fairyLevel.atLeast(16.0),
         MotifCardRecipes().SR.always,
     ),
@@ -1333,10 +1333,10 @@ private operator fun ToolMaterialCard.invoke() = ToolMaterialCardPassiveSkillCon
 private operator fun <T : Any> PassiveSkillSpecification<T>.times(statusEffect: Holder<MobEffect>) = this * StatusEffectPassiveSkillCondition(statusEffect)
 
 private fun mana(factor: Double, motifGetter: () -> Motif? = { null }) = ManaBoostPassiveSkillEffect { ManaBoostPassiveSkillEffect.Value(mapOf(motifGetter() to it * factor * 0.02)) }
-private fun attribute(attribute: Holder<EntityAttribute>, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
-private fun speed(factor: Double) = attribute(EntityAttributes.MOVEMENT_SPEED, factor * 0.002)
-private fun health(factor: Double) = attribute(EntityAttributes.MAX_HEALTH, factor * 0.4)
-private fun luck(factor: Double) = attribute(EntityAttributes.LUCK, factor * 0.1)
+private fun attribute(attribute: Holder<Attribute>, factor: Double) = EntityAttributePassiveSkillEffect { EntityAttributePassiveSkillEffect.Value(mapOf(attribute to it * factor)) }
+private fun speed(factor: Double) = attribute(Attributes.MOVEMENT_SPEED, factor * 0.002)
+private fun health(factor: Double) = attribute(Attributes.MAX_HEALTH, factor * 0.4)
+private fun luck(factor: Double) = attribute(Attributes.LUCK, factor * 0.1)
 private operator fun Holder<MobEffect>.invoke(level: Int = 1, additionalSeconds: Int = 0): PassiveSkillSpecification<StatusEffectPassiveSkillEffect.Value> {
     return StatusEffectPassiveSkillEffect { StatusEffectPassiveSkillEffect.Value(mapOf(this@invoke to StatusEffectPassiveSkillEffect.Entry(level, additionalSeconds))) }
 }

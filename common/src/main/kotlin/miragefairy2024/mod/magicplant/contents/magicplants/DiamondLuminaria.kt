@@ -19,17 +19,17 @@ import miragefairy2024.util.surface
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override fun getBlockPath() = "diamond_luminaria"
@@ -88,7 +88,7 @@ object DiamondLuminariaCard : AbstractLuminariaCard<DiamondLuminariaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            configuredFeature("cluster", { RandomPatchFeatureConfig(1, 0, 0, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+            configuredFeature("cluster", { RandomPatchConfiguration(1, 0, 0, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
                 placedFeature("cluster", { per(128) + flower(square, surface) }) { (+ConventionalBiomeTags.IS_SNOWY + +ConventionalBiomeTags.IS_ICY) * defaultTraits }
             }
         }
@@ -102,5 +102,5 @@ class DiamondLuminariaBlock(settings: Properties) : SimpleMagicPlantBlock(Diamon
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 }

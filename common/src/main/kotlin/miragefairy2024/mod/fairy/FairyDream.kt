@@ -26,21 +26,21 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.world.Container
+import net.minecraft.world.WorldlyContainerHolder
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.HitResult
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.WorldlyContainerHolder as InventoryProvider
-import net.minecraft.world.level.ClipContext as RaycastContext
-import net.minecraft.world.phys.AABB as Box
 
 private val identifier = MirageFairy2024.identifier("fairy_dream")
 val GAIN_FAIRY_DREAM_TRANSLATION = Translation({ "gui.${identifier.toLanguageKey()}.gain" }, "Dreamed of a new fairy!", "新たな妖精の夢を見た！")
@@ -117,7 +117,7 @@ fun initFairyDream() {
                         if (block is FairyDreamProviderBlock) motifs += block.getFairyDreamMotifs(world, blockPos)
 
                         run noInventory@{
-                            val inventory = if (block is InventoryProvider) {
+                            val inventory = if (block is WorldlyContainerHolder) {
                                 block.getContainer(blockState, world, blockPos)
                             } else if (blockState.hasBlockEntity()) {
                                 val blockEntity = world.getBlockEntity(blockPos)
@@ -154,16 +154,16 @@ fun initFairyDream() {
                     val start = player.eyePosition
                     val pitch = player.xRot
                     val yaw = player.yRot
-                    val d = MathHelper.cos(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
-                    val a = MathHelper.sin(-yaw * (MathHelper.PI / 180) - MathHelper.PI)
-                    val e = -MathHelper.cos(-pitch * (MathHelper.PI / 180))
-                    val c = MathHelper.sin(-pitch * (MathHelper.PI / 180))
+                    val d = Mth.cos(-yaw * (Mth.PI / 180) - Mth.PI)
+                    val a = Mth.sin(-yaw * (Mth.PI / 180) - Mth.PI)
+                    val e = -Mth.cos(-pitch * (Mth.PI / 180))
+                    val c = Mth.sin(-pitch * (Mth.PI / 180))
                     val end = start.add(a * e * 32.0, c * 32.0, d * e * 32.0)
-                    val raycastResult = world.clip(RaycastContext(start, end, RaycastContext.Block.OUTLINE, RaycastContext.Fluid.NONE, player))
+                    val raycastResult = world.clip(ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player))
                     if (raycastResult.type == HitResult.Type.BLOCK) insertBlockPos(raycastResult.blockPos)
 
                     // 周辺エンティティ判定
-                    val entities = world.getEntities(player, Box(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
+                    val entities = world.getEntities(player, AABB(player.eyePosition.add(-8.0, -8.0, -8.0), player.eyePosition.add(8.0, 8.0, 8.0)))
                     entities.forEach {
                         entityTypes += it.type
                     }

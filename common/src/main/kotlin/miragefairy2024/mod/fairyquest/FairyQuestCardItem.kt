@@ -40,16 +40,16 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 object FairyQuestCardCard {
     val enName = "Broken Fairy Quest Card"
@@ -123,20 +123,20 @@ class FairyQuestCardItem(settings: Properties) : Item(settings) {
         }
     }
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = user.getItemInHand(hand)
-        val recipe = itemStack.getFairyQuestRecipe() ?: return TypedActionResult.fail(itemStack)
-        if (world.isClientSide) return TypedActionResult.success(itemStack)
+        val recipe = itemStack.getFairyQuestRecipe() ?: return InteractionResultHolder.fail(itemStack)
+        if (world.isClientSide) return InteractionResultHolder.success(itemStack)
         user.openMenu(object : ExtendedScreenHandlerFactory<ResourceLocation> {
-            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
-                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ScreenHandlerContext.create(world, player.blockPosition()))
+            override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
+                return FairyQuestCardScreenHandler(syncId, playerInventory, recipe, ContainerLevelAccess.create(world, player.blockPosition()))
             }
 
             override fun getDisplayName() = recipe.title
 
             override fun getScreenOpeningData(player: ServerPlayer) = fairyQuestRecipeRegistry.getKey(recipe)!!
         })
-        return TypedActionResult.consume(itemStack)
+        return InteractionResultHolder.consume(itemStack)
     }
 }
 

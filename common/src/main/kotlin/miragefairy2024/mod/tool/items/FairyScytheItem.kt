@@ -19,6 +19,8 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
@@ -26,19 +28,17 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.SwordItem
+import net.minecraft.world.item.Tier
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.ItemEnchantments
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CaveVines
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.item.Tier as ToolMaterial
-import net.minecraft.world.level.ClipContext as RaycastContext
 
 open class FairyScytheConfiguration(
     override val toolMaterialCard: ToolMaterialCard,
@@ -86,7 +86,7 @@ class FairyScytheItem(override val configuration: FairyScytheConfiguration, rang
 
 }
 
-open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, settings.attributes(createAttributes(material, attackDamage.toInt(), attackSpeed))), PostTryPickHandlerItem {
+open class ScytheItem(material: Tier, attackDamage: Float, attackSpeed: Float, private val range: Int, settings: Properties) : SwordItem(material, settings.attributes(createAttributes(material, attackDamage.toInt(), attackSpeed))), PostTryPickHandlerItem {
     companion object {
         val DESCRIPTION_TRANSLATION = Translation({ "item.${MirageFairy2024.identifier("scythe").toLanguageKey()}.description" }, "Perform area harvesting when used %s", "使用時、範囲収穫 %s")
     }
@@ -96,11 +96,11 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
         tooltipComponents += text { DESCRIPTION_TRANSLATION(range.toRomanText()).yellow }
     }
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
 
         if (!user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
-            val blockHitResult = getPlayerPOVHitResult(world, user, RaycastContext.Fluid.NONE)
+            val blockHitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.NONE)
             val blockPos = blockHitResult.blockPos
             var effective = false
             // TODO 貫通判定
@@ -123,7 +123,7 @@ open class ScytheItem(material: ToolMaterial, attackDamage: Float, attackSpeed: 
                     }
                 }
             }
-            if (effective) return TypedActionResult.success(itemStack)
+            if (effective) return InteractionResultHolder.success(itemStack)
         }
 
         return super.use(world, user, hand)

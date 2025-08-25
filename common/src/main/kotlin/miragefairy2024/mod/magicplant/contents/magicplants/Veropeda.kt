@@ -20,16 +20,16 @@ import miragefairy2024.util.surface
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     override fun getBlockPath() = "veropeda"
@@ -90,10 +90,10 @@ object VeropedaCard : AbstractVeropedaCard<VeropedaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 小さな塊
+            configuredFeature("cluster", { RandomPatchConfiguration(6, 6, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) { // 小さな塊
                 placedFeature("cluster", { per(16) + flower(square, surface) }) { (+ConventionalBiomeTags.IS_DESERT + +ConventionalBiomeTags.IS_SAVANNA + +ConventionalBiomeTags.IS_BADLANDS) * defaultTraits } // 地上用クラスタ
             }
-            configuredFeature("large_cluster", { RandomPatchFeatureConfig(40, 8, 3, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) { // 大きな塊
+            configuredFeature("large_cluster", { RandomPatchConfiguration(40, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) { // 大きな塊
                 placedFeature("nether_cluster", { per(8) + flower(center, nether) }) { nether * defaultTraits } // ネザー用クラスタ
             }
         }
@@ -107,5 +107,5 @@ class VeropedaBlock(settings: Properties) : SimpleMagicPlantBlock(VeropedaCard, 
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 }

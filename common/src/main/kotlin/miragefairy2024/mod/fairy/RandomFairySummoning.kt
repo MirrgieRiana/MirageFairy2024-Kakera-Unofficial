@@ -34,20 +34,19 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 import java.math.BigInteger
 import java.math.RoundingMode
 import kotlin.math.pow
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.item.UseAnim as UseAction
 
 private val identifier = MirageFairy2024.identifier("mirage_flour")
 val MIRAGE_FLOUR_DESCRIPTION_USE_TRANSLATION = Translation({ "item.${identifier.toLanguageKey()}.description.use" }, "Use and hold to summon fairies", "使用時、長押しで妖精を連続召喚")
@@ -68,19 +67,19 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
         tooltipComponents += text { MIRAGE_FLOUR_DESCRIPTION_SNEAKING_USE_TRANSLATION().yellow }
     }
 
-    override fun getUseAnimation(stack: ItemStack) = UseAction.BOW
+    override fun getUseAnimation(stack: ItemStack) = UseAnim.BOW
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity) = 72000 // 1時間
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = user.getItemInHand(hand)
         if (!user.isShiftKeyDown) {
 
             // 使用開始
             user.startUsingItem(hand)
 
-            return TypedActionResult.consume(itemStack)
+            return InteractionResultHolder.consume(itemStack)
         } else {
-            if (world.isClientSide) return TypedActionResult.success(itemStack)
+            if (world.isClientSide) return InteractionResultHolder.success(itemStack)
 
             val motifSet: Set<Motif> = getCommonMotifSet(user) + user.fairyDreamContainer.getOrCreate().entries
             val chanceTable = motifSet.toChanceTable(appearanceRateBonus)
@@ -93,13 +92,13 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
                 override fun getDisplayName() = itemStack.hoverName
                 override fun getScreenOpeningData(player: ServerPlayer) = chanceTable
             })
-            return TypedActionResult.consume(itemStack)
+            return InteractionResultHolder.consume(itemStack)
         }
     }
 
     override fun onUseTick(world: Level, user: LivingEntity, stack: ItemStack, remainingUseTicks: Int) {
         if (world.isClientSide) return
-        if (user !is ServerPlayerEntity) return
+        if (user !is ServerPlayer) return
 
         run {
             var t = 72000 - remainingUseTicks
@@ -134,7 +133,7 @@ class RandomFairySummoningItem(val appearanceRateBonus: Double, settings: Proper
 
     }
 
-    private fun craft(player: ServerPlayerEntity, itemStack: ItemStack) {
+    private fun craft(player: ServerPlayer, itemStack: ItemStack) {
         val world = player.level()
 
         // 消費

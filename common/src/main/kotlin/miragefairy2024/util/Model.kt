@@ -7,6 +7,10 @@ import mirrg.kotlin.gson.hydrogen.jsonArray
 import mirrg.kotlin.gson.hydrogen.jsonElement
 import mirrg.kotlin.gson.hydrogen.jsonObject
 import mirrg.kotlin.gson.hydrogen.jsonObjectNotNull
+import net.minecraft.data.models.model.ModelTemplate
+import net.minecraft.data.models.model.ModelTemplates
+import net.minecraft.data.models.model.TextureMapping
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
@@ -15,24 +19,20 @@ import net.minecraft.world.level.block.Blocks
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Supplier
-import net.minecraft.data.models.model.ModelTemplate as Model
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureMapping as TextureMap
-import net.minecraft.data.models.model.TextureSlot as TextureKey
 
 
 // Model Builder
 
-fun Model(creator: (TextureMap) -> ModelData): Model = object : Model(Optional.empty(), Optional.empty()) {
-    override fun create(id: ResourceLocation, textures: TextureMap, modelCollector: BiConsumer<ResourceLocation, Supplier<JsonElement>>): ResourceLocation {
+fun Model(creator: (TextureMapping) -> ModelData): ModelTemplate = object : ModelTemplate(Optional.empty(), Optional.empty()) {
+    override fun create(id: ResourceLocation, textures: TextureMapping, modelCollector: BiConsumer<ResourceLocation, Supplier<JsonElement>>): ResourceLocation {
         modelCollector.accept(id) { creator(textures).toJsonElement() }
         return id
     }
 }
 
-fun Model(parent: ResourceLocation, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.empty(), *textureKeys)
+fun Model(parent: ResourceLocation, vararg textureKeys: TextureSlot) = ModelTemplate(Optional.of(parent), Optional.empty(), *textureKeys)
 
-fun Model(parent: ResourceLocation, variant: String, vararg textureKeys: TextureKey) = Model(Optional.of(parent), Optional.of(variant), *textureKeys)
+fun Model(parent: ResourceLocation, variant: String, vararg textureKeys: TextureSlot) = ModelTemplate(Optional.of(parent), Optional.of(variant), *textureKeys)
 
 class ModelData(
     val parent: ResourceLocation,
@@ -107,8 +107,8 @@ class ModelFaceData(
 
 // Util
 
-fun TextureMap(vararg entries: Pair<TextureKey, ResourceLocation>, initializer: TextureMap.() -> Unit = {}): TextureMap {
-    val textureMap = TextureMap()
+fun TextureMap(vararg entries: Pair<TextureSlot, ResourceLocation>, initializer: TextureMapping.() -> Unit = {}): TextureMapping {
+    val textureMap = TextureMapping()
     entries.forEach {
         textureMap.put(it.first, it.second)
     }
@@ -116,10 +116,10 @@ fun TextureMap(vararg entries: Pair<TextureKey, ResourceLocation>, initializer: 
     return textureMap
 }
 
-val TextureKey.string get() = this.toString()
+val TextureSlot.string get() = this.toString()
 
-infix fun Model.with(textureMap: TextureMap): TexturedModel = TexturedModel.createDefault({ textureMap }, this).get(Blocks.AIR)
-fun Model.with(vararg textureEntries: Pair<TextureKey, ResourceLocation>) = this with TextureMap(*textureEntries)
+infix fun ModelTemplate.with(textureMap: TextureMapping): TexturedModel = TexturedModel.createDefault({ textureMap }, this).get(Blocks.AIR)
+fun ModelTemplate.with(vararg textureEntries: Pair<TextureSlot, ResourceLocation>) = this with TextureMap(*textureEntries)
 
 
 // registerModelGeneration
@@ -136,15 +136,15 @@ fun (() -> Item).registerModelGeneration(texturedModelCreator: () -> TexturedMod
 
 context(ModContext)
 @JvmName("registerItemModelGeneration")
-fun (() -> Item).registerModelGeneration(model: Model, textureMapCreator: () -> TextureMap = { TextureMap.layer0(this()) }) = this.registerModelGeneration { model with textureMapCreator() }
+fun (() -> Item).registerModelGeneration(model: ModelTemplate, textureMapCreator: () -> TextureMapping = { TextureMapping.layer0(this()) }) = this.registerModelGeneration { model with textureMapCreator() }
 
 context(ModContext)
 @JvmName("registerItemGeneratedModelGeneration")
-fun (() -> Item).registerGeneratedModelGeneration() = this.registerModelGeneration(Models.FLAT_ITEM)
+fun (() -> Item).registerGeneratedModelGeneration() = this.registerModelGeneration(ModelTemplates.FLAT_ITEM)
 
 context(ModContext)
 @JvmName("registerItemBlockGeneratedModelGeneration")
-fun (() -> Item).registerBlockGeneratedModelGeneration(block: () -> Block) = this.registerModelGeneration(Models.FLAT_ITEM) { TextureMap.layer0(block()) }
+fun (() -> Item).registerBlockGeneratedModelGeneration(block: () -> Block) = this.registerModelGeneration(ModelTemplates.FLAT_ITEM) { TextureMapping.layer0(block()) }
 
 context(ModContext)
 @JvmName("registerBlockModelGeneration")

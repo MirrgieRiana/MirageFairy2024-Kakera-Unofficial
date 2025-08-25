@@ -6,11 +6,11 @@ import miragefairy2024.mod.entity.AntimatterBoltCard
 import miragefairy2024.mod.entity.ChaosCubeCard
 import miragefairy2024.mod.entity.EtheroballisticBoltCard
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
+import net.minecraft.client.model.geom.ModelLayerLocation
+import net.minecraft.client.model.geom.builders.LayerDefinition
+import net.minecraft.client.model.geom.builders.MeshDefinition
+import net.minecraft.client.model.geom.builders.PartDefinition
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.client.model.geom.ModelLayerLocation as EntityModelLayer
-import net.minecraft.client.model.geom.builders.LayerDefinition as TexturedModelData
-import net.minecraft.client.model.geom.builders.MeshDefinition as ModelData
-import net.minecraft.client.model.geom.builders.PartDefinition as ModelPartData
 
 context(ModContext)
 fun initEntityClientModule() {
@@ -27,12 +27,12 @@ class EntityModelLayerCard(
     layerName: String,
     private val textureWidth: Int,
     private val textureHeight: Int,
-    private val configurator: (ModelPartData) -> Unit,
+    private val configurator: (PartDefinition) -> Unit,
 ) {
-    val entityModelLayer = EntityModelLayer(identifier, layerName)
+    val entityModelLayer = ModelLayerLocation(identifier, layerName)
     val provider = EntityModelLayerRegistry.TexturedModelDataProvider {
-        val modelData = ModelData()
+        val modelData = MeshDefinition()
         configurator(modelData.root)
-        TexturedModelData.create(modelData, textureWidth, textureHeight)
+        LayerDefinition.create(modelData, textureWidth, textureHeight)
     }
 }

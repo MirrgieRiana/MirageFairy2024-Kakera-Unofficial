@@ -27,8 +27,10 @@ import miragefairy2024.util.times
 import miragefairy2024.util.with
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
+import net.minecraft.util.ParticleUtils
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -37,12 +39,10 @@ import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.util.ParticleUtils as ParticleUtil
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
+import net.minecraft.world.level.material.PushReaction
 
 class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
@@ -55,7 +55,7 @@ class HaimeviskaLeavesBlockCard(configuration: HaimeviskaBlockConfiguration) : H
         .isSuffocating(Blocks::never)
         .isViewBlocking(Blocks::never)
         .ignitedByLava()
-        .pushReaction(PistonBehavior.DESTROY)
+        .pushReaction(PushReaction.DESTROY)
         .isRedstoneConductor(Blocks::never)
 
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = HaimeviskaLeavesBlock(properties)
@@ -108,7 +108,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         registerDefaultState(defaultBlockState().setValue(CHARGED, true))
     }
 
-    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(CHARGED)
     }
@@ -116,7 +116,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
     override fun isRandomlyTicking(state: BlockState) = super.isRandomlyTicking(state) || !state.getValue(CHARGED)
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) {
+    override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         super.randomTick(state, world, pos, random)
         if (!state.getValue(CHARGED)) {
             if (random.randomBoolean(15, world.lightProxy.getLightLevel(pos))) {
@@ -130,7 +130,7 @@ class HaimeviskaLeavesBlock(settings: Properties) : LeavesBlock(settings) {
         if (random.nextInt(20) == 0) {
             val blockPos = pos.below()
             if (!isFaceFull(world.getBlockState(blockPos).getCollisionShape(world, blockPos), Direction.UP)) {
-                ParticleUtil.spawnParticleBelow(world, pos, random, ParticleTypeCard.HAIMEVISKA_BLOSSOM.particleType)
+                ParticleUtils.spawnParticleBelow(world, pos, random, ParticleTypeCard.HAIMEVISKA_BLOSSOM.particleType)
             }
         }
     }

@@ -22,6 +22,7 @@ import miragefairy2024.util.square
 import miragefairy2024.util.times
 import miragefairy2024.util.unaryPlus
 import net.minecraft.core.BlockPos
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -35,13 +36,12 @@ import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.data.worldgen.placement.PlacementUtils as PlacedFeatures
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration as RandomPatchFeatureConfig
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration as SimpleBlockFeatureConfig
 
 object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun getBlockPath() = "prominaria"
@@ -95,7 +95,7 @@ object ProminariaCard : AbstractProminariaCard<ProminariaBlock>() {
     override fun init() {
         super.init()
         Feature.FLOWER {
-            configuredFeature("cluster", { RandomPatchFeatureConfig(6, 6, 2, PlacedFeatures.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockFeatureConfig(it))) }) {
+            configuredFeature("cluster", { RandomPatchConfiguration(6, 6, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, SimpleBlockConfiguration(it))) }) {
                 placedFeature("cluster", { per(4) + flower(square, rangedNether(32, 45)) }) { (+Biomes.NETHER_WASTES + +Biomes.CRIMSON_FOREST) * defaultTraits }
             }
         }
@@ -109,7 +109,7 @@ class ProminariaBlock(settings: Properties) : SimpleMagicPlantBlock(ProminariaCa
 
     override fun codec() = CODEC
 
-    override fun getAgeProperty(): IntProperty = BlockStateProperties.AGE_3
+    override fun getAgeProperty(): IntegerProperty = BlockStateProperties.AGE_3
 
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
         val blockEntity = level.getBlockEntity(pos)

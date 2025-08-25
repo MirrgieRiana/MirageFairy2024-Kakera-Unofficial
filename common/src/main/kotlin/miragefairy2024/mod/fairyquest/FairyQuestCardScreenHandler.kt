@@ -17,18 +17,18 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerData
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerData as PropertyDelegate
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
 val fairyQuestCardScreenHandlerType = Registration(BuiltInRegistries.MENU, MirageFairy2024.identifier("fairy_quest_card")) {
     ExtendedScreenHandlerType({ syncId, playerInventory, buf ->
-        FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ScreenHandlerContext.NULL)
+        FairyQuestCardScreenHandler(syncId, playerInventory, fairyQuestRecipeRegistry.get(buf)!!, ContainerLevelAccess.NULL)
     }, ResourceLocation.STREAM_CODEC)
 }
 
@@ -40,14 +40,14 @@ fun initFairyQuestCardScreenHandler() {
     guiFairyQuestCardFullScreenTranslation.enJa()
 }
 
-class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ScreenHandlerContext) : ScreenHandler(fairyQuestCardScreenHandlerType(), syncId) {
-    private val inputInventory = SimpleInventory(4)
-    private var processingInventory = SimpleInventory(0)
-    private var resultInventory = SimpleInventory(0)
-    private val outputInventory = SimpleInventory(4)
+class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, val recipe: FairyQuestRecipe, val context: ContainerLevelAccess) : AbstractContainerMenu(fairyQuestCardScreenHandlerType(), syncId) {
+    private val inputInventory = SimpleContainer(4)
+    private var processingInventory = SimpleContainer(0)
+    private var resultInventory = SimpleContainer(0)
+    private val outputInventory = SimpleContainer(4)
     var progress = 0
 
-    private val propertyDelegate = object : PropertyDelegate {
+    private val propertyDelegate = object : ContainerData {
         override fun get(index: Int) = when (index) {
             0 -> progress
             else -> 0
@@ -125,7 +125,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             }
 
             // 処理中アイテムの格納
-            if (processingInventory.size < processingItemStacks.size) processingInventory = SimpleInventory(processingItemStacks.size)
+            if (processingInventory.size < processingItemStacks.size) processingInventory = SimpleContainer(processingItemStacks.size)
             processingItemStacks.forEachIndexed { index, itemStack ->
                 processingInventory[index] = itemStack
             }
@@ -144,7 +144,7 @@ class FairyQuestCardScreenHandler(syncId: Int, val playerInventory: Inventory, v
             processingInventory.clearContent()
 
             // 成果物の生成
-            if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleInventory(recipe.outputs.size)
+            if (resultInventory.size < recipe.outputs.size) resultInventory = SimpleContainer(recipe.outputs.size)
             recipe.outputs.forEachIndexed { index, itemStack ->
                 resultInventory[index] = itemStack().copy()
             }

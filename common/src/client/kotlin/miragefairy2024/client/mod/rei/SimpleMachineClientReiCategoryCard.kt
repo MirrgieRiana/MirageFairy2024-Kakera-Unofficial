@@ -27,12 +27,12 @@ import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.translate
 import mirrg.kotlin.hydrogen.formatAs
 import mirrg.kotlin.hydrogen.stripTrailingZeros
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.renderer.Rect2i
+import net.minecraft.world.inventory.AbstractContainerMenu
 import kotlin.math.roundToInt
-import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.components.events.GuiEventListener as Element
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen as HandledScreen
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
 
 abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(private val card: SimpleMachineReiCategoryCard<R>) : ClientReiCategoryCard<SimpleMachineReiCategoryCard.Display<R>>(card) {
     override fun registerDisplays(registry: DisplayRegistry) {
@@ -85,7 +85,7 @@ abstract class SimpleMachineClientReiCategoryCard<R : SimpleMachineRecipe>(priva
 
     override fun getWorkstations() = listOf(listOf(card.getMachine().toEntryStack()).toEntryIngredient())
 
-    fun <C : ScreenHandler, T : HandledScreen<C>> registerScreen(registry: ScreenRegistry, screenClass: Class<out T>, rectangle: Rectangle) {
+    fun <C : AbstractContainerMenu, T : AbstractContainerScreen<C>> registerScreen(registry: ScreenRegistry, screenClass: Class<out T>, rectangle: Rectangle) {
         registry.registerContainerClickArea(Rectangle(rectangle.x - 1, rectangle.y - 1, rectangle.width + 2, rectangle.height + 1 + 2), screenClass, card.identifier.first)
     }
 }
@@ -125,9 +125,9 @@ object AuraReflectorFurnaceClientReiCategoryCard : SimpleMachineClientReiCategor
 }
 
 class BlueFuelWidget(private val rectangle: Rectangle) : WidgetWithBounds() {
-    override fun children() = listOf<Element>()
+    override fun children() = listOf<GuiEventListener>()
     override fun getBounds() = rectangle
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val fuelMax = 20 * 10
         val fuel = fuelMax - (System.currentTimeMillis() / 50) % fuelMax - 1
         val fuelRate = fuel.toDouble() / fuelMax.toDouble()
