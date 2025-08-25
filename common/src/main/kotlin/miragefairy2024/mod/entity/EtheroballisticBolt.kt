@@ -15,27 +15,26 @@ import miragefairy2024.util.setValue
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.EntityTypeTags
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityEvent
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
-import net.minecraft.network.syncher.EntityDataAccessor as TrackedData
-import net.minecraft.network.syncher.EntityDataSerializers as TrackedDataHandlerRegistry
-import net.minecraft.network.syncher.SynchedEntityData as DataTracker
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.entity.EntityEvent as EntityStatuses
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.entity.projectile.Projectile as ProjectileEntity
-import net.minecraft.world.phys.Vec3 as Vec3d
+import net.minecraft.world.phys.Vec3
 
 object EtheroballisticBoltCard {
-    val spawnGroup = SpawnGroup.MISC
+    val spawnGroup = MobCategory.MISC
     val width = 0.5F
     val height = 0.5F
     fun createEntity(entityType: EntityType<EtheroballisticBoltEntity>, world: Level) = EtheroballisticBoltEntity(entityType, world)
@@ -53,10 +52,10 @@ object EtheroballisticBoltCard {
     }
 }
 
-class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEntity>, world: Level) : ProjectileEntity(entityType, world) {
+class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEntity>, world: Level) : Projectile(entityType, world) {
     companion object {
-        val DAMAGE: TrackedData<Float> = DataTracker.defineId(EtheroballisticBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
-        val MAX_DISTANCE: TrackedData<Float> = DataTracker.defineId(EtheroballisticBoltEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
+        val DAMAGE: EntityDataAccessor<Float> = SynchedEntityData.defineId(EtheroballisticBoltEntity::class.java, EntityDataSerializers.FLOAT)
+        val MAX_DISTANCE: EntityDataAccessor<Float> = SynchedEntityData.defineId(EtheroballisticBoltEntity::class.java, EntityDataSerializers.FLOAT)
     }
 
 
@@ -79,7 +78,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
     }
 
 
-    private var prevPos: Vec3d? = null
+    private var prevPos: Vec3? = null
     override fun tick() {
         super.tick()
 
@@ -120,8 +119,8 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
 
         // 向き更新
         if (xRotO == 0F && yRotO == 0F) {
-            yRot = (MathHelper.atan2(vec3d.x, vec3d.z) * 180F / MathHelper.PI).toFloat()
-            xRot = (MathHelper.atan2(vec3d.y, vec3d.horizontalDistance()) * 180F / MathHelper.PI).toFloat()
+            yRot = (Mth.atan2(vec3d.x, vec3d.z) * 180F / Mth.PI).toFloat()
+            xRot = (Mth.atan2(vec3d.y, vec3d.horizontalDistance()) * 180F / Mth.PI).toFloat()
             yRotO = yRot
             xRotO = xRot
         }
@@ -133,7 +132,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
         if (level().isServer) {
-            level().broadcastEntityEvent(this, EntityStatuses.DEATH)
+            level().broadcastEntityEvent(this, EntityEvent.DEATH)
             discard()
         }
     }
@@ -146,7 +145,7 @@ class EtheroballisticBoltEntity(entityType: EntityType<out EtheroballisticBoltEn
 
     override fun handleEntityEvent(status: Byte) {
         super.handleEntityEvent(status)
-        if (status == EntityStatuses.DEATH) {
+        if (status == EntityEvent.DEATH) {
             level().playLocalSound(x, y, z, SoundEventCard.ENTITY_ETHEROBALLISTIC_BOLT_HIT.soundEvent, SoundSource.NEUTRAL, 0.5F, 0.90F + (level().random.nextFloat() - 0.5F) * 0.3F, true)
             // TODO パーティクル
         }

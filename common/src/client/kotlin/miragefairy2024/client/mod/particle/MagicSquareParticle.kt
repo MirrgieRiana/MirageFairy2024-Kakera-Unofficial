@@ -8,16 +8,16 @@ import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.particle.ParticleProvider
+import net.minecraft.client.particle.ParticleRenderType
+import net.minecraft.client.particle.SpriteSet
+import net.minecraft.client.particle.TextureSheetParticle
+import net.minecraft.util.Mth
+import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.roundToInt
-import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
-import net.minecraft.client.particle.ParticleProvider as ParticleFactory
-import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
-import net.minecraft.client.particle.SpriteSet as SpriteProvider
-import net.minecraft.client.particle.TextureSheetParticle as SpriteBillboardParticle
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.phys.Vec3 as Vec3d
 
 fun initMagicSquareParticle() {
     MagicSquareParticleChannel.registerClientPacketReceiver { packet ->
@@ -36,8 +36,8 @@ fun initMagicSquareParticle() {
     }
 }
 
-fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
-    ParticleFactory<MagicSquareParticleEffect> { parameters, world, x, y, z, _, _, _ ->
+fun createMagicSquareParticleFactory() = { spriteProvider: SpriteSet ->
+    ParticleProvider<MagicSquareParticleEffect> { parameters, world, x, y, z, _, _, _ ->
         MagicSquareParticle(world, x, y, z, parameters.layer, parameters.targetPosition, spriteProvider).also {
             it.alphaTicks[0] = parameters.delay
             it.alphaTicks[1] = parameters.delay + 20F
@@ -47,7 +47,7 @@ fun createMagicSquareParticleFactory() = { spriteProvider: SpriteProvider ->
     }
 }
 
-class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, layer: Int, private val targetPosition: Vec3d, spriteProvider: SpriteProvider) : SpriteBillboardParticle(world, x, y, z) {
+class MagicSquareParticle(world: ClientLevel, x: Double, y: Double, z: Double, layer: Int, private val targetPosition: Vec3, spriteProvider: SpriteSet) : TextureSheetParticle(world, x, y, z) {
 
     var delay = 0
     var color1 = 0xFFF4D3
@@ -120,18 +120,18 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         val offsetY = (targetPosition.y - y).toFloat()
         val offsetZ = (targetPosition.z - z).toFloat()
 
-        val yaw = MathHelper.atan2(offsetX.toDouble(), offsetZ.toDouble()).toFloat()
-        val pitch = MathHelper.atan2(-offsetY.toDouble(), MathHelper.sqrt(offsetX * offsetX + offsetZ * offsetZ).toDouble()).toFloat()
+        val yaw = Mth.atan2(offsetX.toDouble(), offsetZ.toDouble()).toFloat()
+        val pitch = Mth.atan2(-offsetY.toDouble(), Mth.sqrt(offsetX * offsetX + offsetZ * offsetZ).toDouble()).toFloat()
 
-        val quaternionf = Quaternionf().rotationYXZ(yaw, pitch, MathHelper.lerp(tickDelta, oRoll, roll))
-        if (flip) quaternionf.rotateY(-MathHelper.PI)
+        val quaternionf = Quaternionf().rotationYXZ(yaw, pitch, Mth.lerp(tickDelta, oRoll, roll))
+        if (flip) quaternionf.rotateY(-Mth.PI)
 
         val size = getQuadSize(tickDelta)
 
         val cameraPos = camera.position
-        val translateX = (MathHelper.lerp(tickDelta.toDouble(), xo, x) - cameraPos.x()).toFloat()
-        val translateY = (MathHelper.lerp(tickDelta.toDouble(), yo, y) - cameraPos.y()).toFloat()
-        val translateZ = (MathHelper.lerp(tickDelta.toDouble(), zo, z) - cameraPos.z()).toFloat()
+        val translateX = (Mth.lerp(tickDelta.toDouble(), xo, x) - cameraPos.x()).toFloat()
+        val translateY = (Mth.lerp(tickDelta.toDouble(), yo, y) - cameraPos.y()).toFloat()
+        val translateZ = (Mth.lerp(tickDelta.toDouble(), zo, z) - cameraPos.z()).toFloat()
 
         val vector3fs = arrayOf(
             Vector3f(-1.0F, -1.0F, 0.0F),
@@ -167,12 +167,12 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         if (age >= lifetime) remove()
 
         oRoll = roll
-        roll += MathHelper.TWO_PI / 60F
+        roll += Mth.TWO_PI / 60F
 
         // TODO 魔方陣の周りのパーティクル
     }
 
-    override fun getQuadSize(tickDelta: Float) = quadSize * (1F - 0.2F * MathHelper.cos((age.toFloat() + tickDelta) / 80F * MathHelper.TWO_PI))
+    override fun getQuadSize(tickDelta: Float) = quadSize * (1F - 0.2F * Mth.cos((age.toFloat() + tickDelta) / 80F * Mth.TWO_PI))
 
     override fun getLightColor(tint: Float): Int {
         val brightness = super.getLightColor(tint)
@@ -183,6 +183,6 @@ class MagicSquareParticle(world: ClientWorld, x: Double, y: Double, z: Double, l
         return (skyLight shl 20) or (blockLight shl 4)
     }
 
-    override fun getRenderType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
+    override fun getRenderType(): ParticleRenderType = ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT
 
 }

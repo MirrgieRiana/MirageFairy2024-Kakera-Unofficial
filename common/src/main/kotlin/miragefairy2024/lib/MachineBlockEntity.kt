@@ -14,24 +14,24 @@ import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.Container
+import net.minecraft.world.ContainerHelper
+import net.minecraft.world.Containers
+import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerData
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.world.ContainerHelper as Inventories
-import net.minecraft.world.Containers as ItemScatterer
-import net.minecraft.world.WorldlyContainer as SidedInventory
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerData as PropertyDelegate
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity as LockableContainerBlockEntity
 
-abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(card.blockEntityType(), pos, state), SidedInventory, RenderingProxyBlockEntity {
+abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: MachineCard<*, E, *>, pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(card.blockEntityType(), pos, state), WorldlyContainer, RenderingProxyBlockEntity {
 
     interface InventorySlotConfiguration {
         fun isValid(itemStack: ItemStack): Boolean
@@ -59,7 +59,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registries) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
-    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? = ClientboundBlockEntityDataPacket.create(this) // TODO スロットの更新はカスタムパケットに分けるのでこちらはオーバーライドしない
 
 
     // Container
@@ -98,13 +98,13 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
     override fun removeItem(slot: Int, amount: Int): ItemStack {
         onStackChange(slot)
         setChanged()
-        return Inventories.removeItem(inventory, slot, amount)
+        return ContainerHelper.removeItem(inventory, slot, amount)
     }
 
     override fun removeItemNoUpdate(slot: Int): ItemStack {
         onStackChange(slot)
         setChanged()
-        return Inventories.takeItem(inventory, slot)
+        return ContainerHelper.takeItem(inventory, slot)
     }
 
     override fun canPlaceItem(slot: Int, stack: ItemStack) = card.inventorySlotConfigurations[slot].isValid(stack)
@@ -125,7 +125,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     open fun dropItems() {
         inventory.forEachIndexed { index, itemStack ->
-            if (card.inventorySlotConfigurations[index].dropItem) ItemScatterer.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), itemStack)
+            if (card.inventorySlotConfigurations[index].dropItem) Containers.dropItemStack(level, worldPosition.x.toDouble(), worldPosition.y.toDouble(), worldPosition.z.toDouble(), itemStack)
         }
         onStackChange(null)
         setChanged()
@@ -169,7 +169,7 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     // Gui
 
-    private val propertyDelegate = object : PropertyDelegate {
+    private val propertyDelegate = object : ContainerData {
         override fun getCount() = card.propertyConfigurations.size
         override fun get(index: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.encode(it.get(getThis())).toInt() } ?: 0
         override fun set(index: Int, value: Int) = card.propertyConfigurations.getOrNull(index)?.let { it.set(getThis(), it.decode(value.toShort())) } ?: Unit
@@ -179,13 +179,13 @@ abstract class MachineBlockEntity<E : MachineBlockEntity<E>>(private val card: M
 
     override fun getDefaultName(): Component = card.block().name
 
-    override fun createMenu(syncId: Int, playerInventory: Inventory): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: Inventory): AbstractContainerMenu {
         val arguments = MachineScreenHandler.Arguments(
             syncId,
             playerInventory,
             this,
             propertyDelegate,
-            ScreenHandlerContext.create(level, worldPosition),
+            ContainerLevelAccess.create(level, worldPosition),
         )
         return card.createScreenHandler(arguments)
     }

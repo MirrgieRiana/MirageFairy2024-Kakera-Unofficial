@@ -1,31 +1,31 @@
 package miragefairy2024.client.mod.entity
 
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
 import miragefairy2024.client.util.stack
 import miragefairy2024.mod.entity.EtheroballisticBoltCard
 import miragefairy2024.mod.entity.EtheroballisticBoltEntity
 import miragefairy2024.util.times
+import net.minecraft.client.model.HierarchicalModel
 import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.model.geom.PartPose
+import net.minecraft.client.model.geom.builders.CubeListBuilder
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRenderer
+import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
-import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
-import com.mojang.math.Axis as RotationAxis
-import net.minecraft.client.model.HierarchicalModel as SinglePartEntityModel
-import net.minecraft.client.model.geom.PartPose as ModelTransform
-import net.minecraft.client.model.geom.builders.CubeListBuilder as ModelPartBuilder
-import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
-import net.minecraft.client.renderer.entity.EntityRendererProvider as EntityRendererFactory
-import net.minecraft.util.Mth as MathHelper
+import net.minecraft.util.Mth
 
-class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) : EntityRenderer<EtheroballisticBoltEntity>(context) {
+class EtheroballisticBoltEntityRenderer(context: EntityRendererProvider.Context) : EntityRenderer<EtheroballisticBoltEntity>(context) {
     companion object {
         val MAIN = EntityModelLayerCard(EtheroballisticBoltCard.identifier, "main", 16, 16) {
-            it.addOrReplaceChild("main", ModelPartBuilder.create().texOffs(0, 0).addBox(-1F, -6F, -1F, 2F, 12F, 2F), ModelTransform.ZERO)
+            it.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-1F, -6F, -1F, 2F, 12F, 2F), PartPose.ZERO)
         }
     }
 
     private val texture = "textures/entity/" * EtheroballisticBoltCard.identifier * ".png"
 
-    private val model = object : SinglePartEntityModel<EtheroballisticBoltEntity>() {
+    private val model = object : HierarchicalModel<EtheroballisticBoltEntity>() {
         private val modelPart: ModelPart = context.bakeLayer(MAIN.entityModelLayer)
         override fun setupAnim(entity: EtheroballisticBoltEntity, limbAngle: Float, limbDistance: Float, animationProgress: Float, headYaw: Float, headPitch: Float) = Unit
         override fun root() = modelPart
@@ -33,10 +33,10 @@ class EtheroballisticBoltEntityRenderer(context: EntityRendererFactory.Context) 
 
     override fun getTextureLocation(entity: EtheroballisticBoltEntity) = texture
 
-    override fun render(entity: EtheroballisticBoltEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
+    override fun render(entity: EtheroballisticBoltEntity, yaw: Float, tickDelta: Float, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int) {
         matrices.stack {
-            matrices.mulPose(RotationAxis.YP.rotation((MathHelper.lerp(tickDelta, entity.yRotO, entity.yRot) - 90.0F) / 180F * MathHelper.PI))
-            matrices.mulPose(RotationAxis.ZP.rotation((MathHelper.lerp(tickDelta, entity.xRotO, entity.xRot) / 180F - 0.5F) * MathHelper.PI))
+            matrices.mulPose(Axis.YP.rotation((Mth.lerp(tickDelta, entity.yRotO, entity.yRot) - 90.0F) / 180F * Mth.PI))
+            matrices.mulPose(Axis.ZP.rotation((Mth.lerp(tickDelta, entity.xRotO, entity.xRot) / 180F - 0.5F) * Mth.PI))
 
             model.setupAnim(entity, tickDelta, 0.0F, -0.1F, 0.0F, 0.0F)
             val vertexConsumer = vertexConsumers.getBuffer(model.renderType(texture))

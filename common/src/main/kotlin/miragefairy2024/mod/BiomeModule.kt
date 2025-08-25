@@ -20,15 +20,27 @@ import miragefairy2024.util.registerDynamicGeneration
 import miragefairy2024.util.toBiomeTag
 import miragefairy2024.util.with
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags
+import net.minecraft.core.HolderGetter
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.worldgen.BiomeDefaultFeatures
+import net.minecraft.data.worldgen.placement.AquaticPlacements
+import net.minecraft.data.worldgen.placement.VegetationPlacements
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.BiomeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.BiomeGenerationSettings
+import net.minecraft.world.level.biome.BiomeSpecialEffects
+import net.minecraft.world.level.biome.Climate
+import net.minecraft.world.level.biome.MobSpawnSettings
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.Noises
+import net.minecraft.world.level.levelgen.SurfaceRules
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
 import terrablender.api.ParameterUtils
 import terrablender.api.Region
@@ -36,18 +48,6 @@ import terrablender.api.RegionType
 import terrablender.api.Regions
 import terrablender.api.SurfaceRuleManager
 import java.util.function.Consumer
-import net.minecraft.core.HolderGetter as RegistryEntryLookup
-import net.minecraft.data.worldgen.BiomeDefaultFeatures as DefaultBiomeFeatures
-import net.minecraft.data.worldgen.placement.AquaticPlacements as OceanPlacedFeatures
-import net.minecraft.data.worldgen.placement.VegetationPlacements as VegetationPlacedFeatures
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.level.biome.BiomeGenerationSettings as GenerationSettings
-import net.minecraft.world.level.biome.BiomeSpecialEffects as BiomeEffects
-import net.minecraft.world.level.biome.Climate as MultiNoiseUtil
-import net.minecraft.world.level.biome.MobSpawnSettings as SpawnSettings
-import net.minecraft.world.level.levelgen.Noises as NoiseParametersKeys
-import net.minecraft.world.level.levelgen.SurfaceRules as MaterialRules
-import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver as ConfiguredCarver
 
 val FAIRY_BIOME_TAG = MirageFairy2024.identifier("fairy").toBiomeTag()
 
@@ -65,16 +65,16 @@ abstract class BiomeCard(
     ja: String,
     val regionType: RegionType,
     val weight: Int,
-    val temperature: MultiNoiseUtil.Parameter,
-    val humidity: MultiNoiseUtil.Parameter,
-    val continentalness: MultiNoiseUtil.Parameter,
-    val erosion: MultiNoiseUtil.Parameter,
-    val weirdness: MultiNoiseUtil.Parameter,
-    val depth: MultiNoiseUtil.Parameter,
+    val temperature: Climate.Parameter,
+    val humidity: Climate.Parameter,
+    val continentalness: Climate.Parameter,
+    val erosion: Climate.Parameter,
+    val weirdness: Climate.Parameter,
+    val depth: Climate.Parameter,
     val offset: Float,
     vararg val tags: TagKey<Biome>,
 ) {
-    abstract fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome
+    abstract fun createBiome(placedFeatureLookup: HolderGetter<PlacedFeature>, configuredCarverLookup: HolderGetter<ConfiguredWorldCarver<*>>): Biome
 
     context(ModContext)
     open fun init() = Unit
@@ -109,7 +109,7 @@ fun initBiomeModule() {
 
             // バイオームをTerraBlenderに登録
             Regions.register(object : Region(card.identifier, card.regionType, card.weight) {
-                override fun addBiomes(registry: Registry<Biome>, mapper: Consumer<Pair<MultiNoiseUtil.ParameterPoint, ResourceKey<Biome>>>) {
+                override fun addBiomes(registry: Registry<Biome>, mapper: Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>>) {
                     addBiome(mapper, card.temperature, card.humidity, card.continentalness, card.erosion, card.weirdness, card.depth, card.offset, card.registryKey)
                 }
             })
@@ -141,13 +141,13 @@ object FairyForestBiomeCard : BiomeCard(
         type = AdvancementCardType.TOAST_ONLY,
     )
 
-    override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
+    override fun createBiome(placedFeatureLookup: HolderGetter<PlacedFeature>, configuredCarverLookup: HolderGetter<ConfiguredWorldCarver<*>>): Biome {
         return Biome.BiomeBuilder()
             .hasPrecipitation(true)
             .temperature(0.4F)
             .downfall(0.6F)
             .specialEffects(
-                BiomeEffects.Builder()
+                BiomeSpecialEffects.Builder()
                     .waterColor(0xF3D9FF)
                     .waterFogColor(0xF3D9FF)
                     .fogColor(0xD3C9FF)
@@ -156,46 +156,46 @@ object FairyForestBiomeCard : BiomeCard(
                     .foliageColorOverride(0xCDAFFF)
                     .build()
             )
-            .mobSpawnSettings(SpawnSettings.Builder().also { spawnSettings ->
+            .mobSpawnSettings(MobSpawnSettings.Builder().also { spawnSettings ->
 
-                DefaultBiomeFeatures.caveSpawns(spawnSettings)
+                BiomeDefaultFeatures.caveSpawns(spawnSettings)
 
-                spawnSettings.addSpawn(SpawnGroup.CREATURE, SpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3))
-                spawnSettings.addSpawn(SpawnGroup.CREATURE, SpawnSettings.SpawnerData(EntityType.FOX, 8, 2, 4))
+                spawnSettings.addSpawn(MobCategory.CREATURE, MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3))
+                spawnSettings.addSpawn(MobCategory.CREATURE, MobSpawnSettings.SpawnerData(EntityType.FOX, 8, 2, 4))
 
-                spawnSettings.addSpawn(SpawnGroup.MONSTER, SpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4))
+                spawnSettings.addSpawn(MobCategory.MONSTER, MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4))
 
                 // River Mobs
-                spawnSettings.addSpawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnerData(EntityType.SQUID, 2, 1, 4))
-                spawnSettings.addSpawn(SpawnGroup.WATER_AMBIENT, SpawnSettings.SpawnerData(EntityType.SALMON, 5, 1, 5))
+                spawnSettings.addSpawn(MobCategory.WATER_CREATURE, MobSpawnSettings.SpawnerData(EntityType.SQUID, 2, 1, 4))
+                spawnSettings.addSpawn(MobCategory.WATER_AMBIENT, MobSpawnSettings.SpawnerData(EntityType.SALMON, 5, 1, 5))
 
             }.build())
-            .generationSettings(GenerationSettings.Builder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
+            .generationSettings(BiomeGenerationSettings.Builder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
 
                 // BasicFeatures
-                DefaultBiomeFeatures.addDefaultCarversAndLakes(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultCrystalFormations(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultMonsterRoom(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultUndergroundVariety(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultSprings(lookupBackedBuilder)
-                DefaultBiomeFeatures.addSurfaceFreezing(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultCarversAndLakes(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultCrystalFormations(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultMonsterRoom(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultUndergroundVariety(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultSprings(lookupBackedBuilder)
+                BiomeDefaultFeatures.addSurfaceFreezing(lookupBackedBuilder)
 
-                DefaultBiomeFeatures.addFerns(lookupBackedBuilder)
+                BiomeDefaultFeatures.addFerns(lookupBackedBuilder)
 
-                DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultSoftDisks(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultOres(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultSoftDisks(lookupBackedBuilder)
 
                 lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, HAIMEVISKA_FAIRY_FOREST_PLACED_FEATURE_KEY)
-                DefaultBiomeFeatures.addOtherBirchTrees(lookupBackedBuilder)
+                BiomeDefaultFeatures.addOtherBirchTrees(lookupBackedBuilder)
 
-                DefaultBiomeFeatures.addDefaultFlowers(lookupBackedBuilder)
-                DefaultBiomeFeatures.addMeadowVegetation(lookupBackedBuilder)
-                DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultExtraVegetation(lookupBackedBuilder)
-                DefaultBiomeFeatures.addCommonBerryBushes(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultFlowers(lookupBackedBuilder)
+                BiomeDefaultFeatures.addMeadowVegetation(lookupBackedBuilder)
+                BiomeDefaultFeatures.addTaigaGrass(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultMushrooms(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultExtraVegetation(lookupBackedBuilder)
+                BiomeDefaultFeatures.addCommonBerryBushes(lookupBackedBuilder)
 
-                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
+                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AquaticPlacements.SEAGRASS_RIVER)
 
             }.build()).build()
     }
@@ -228,13 +228,13 @@ object DeepFairyForestBiomeCard : BiomeCard(
         type = AdvancementCardType.TOAST_ONLY,
     )
 
-    override fun createBiome(placedFeatureLookup: RegistryEntryLookup<PlacedFeature>, configuredCarverLookup: RegistryEntryLookup<ConfiguredCarver<*>>): Biome {
+    override fun createBiome(placedFeatureLookup: HolderGetter<PlacedFeature>, configuredCarverLookup: HolderGetter<ConfiguredWorldCarver<*>>): Biome {
         return Biome.BiomeBuilder()
             .hasPrecipitation(true)
             .temperature(0.4F)
             .downfall(0.6F)
             .specialEffects(
-                BiomeEffects.Builder()
+                BiomeSpecialEffects.Builder()
                     .waterColor(0xD1FCFF)
                     .waterFogColor(0xD1FCFF)
                     .fogColor(0xB7C9FF)
@@ -243,64 +243,64 @@ object DeepFairyForestBiomeCard : BiomeCard(
                     .foliageColorOverride(0xB2A8FF)
                     .build()
             )
-            .mobSpawnSettings(SpawnSettings.Builder().also { spawnSettings ->
+            .mobSpawnSettings(MobSpawnSettings.Builder().also { spawnSettings ->
 
-                DefaultBiomeFeatures.commonSpawns(spawnSettings)
-                spawnSettings.addSpawn(SpawnGroup.MONSTER, SpawnSettings.SpawnerData(EntityType.WITCH, 100, 1, 4))
+                BiomeDefaultFeatures.commonSpawns(spawnSettings)
+                spawnSettings.addSpawn(MobCategory.MONSTER, MobSpawnSettings.SpawnerData(EntityType.WITCH, 100, 1, 4))
 
-                spawnSettings.addSpawn(SpawnGroup.CREATURE, SpawnSettings.SpawnerData(EntityType.WOLF, 8, 4, 4))
+                spawnSettings.addSpawn(MobCategory.CREATURE, MobSpawnSettings.SpawnerData(EntityType.WOLF, 8, 4, 4))
 
                 // River Mobs
-                spawnSettings.addSpawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnerData(EntityType.SQUID, 2, 1, 4))
-                spawnSettings.addSpawn(SpawnGroup.WATER_AMBIENT, SpawnSettings.SpawnerData(EntityType.SALMON, 5, 1, 5))
+                spawnSettings.addSpawn(MobCategory.WATER_CREATURE, MobSpawnSettings.SpawnerData(EntityType.SQUID, 2, 1, 4))
+                spawnSettings.addSpawn(MobCategory.WATER_AMBIENT, MobSpawnSettings.SpawnerData(EntityType.SALMON, 5, 1, 5))
 
             }.build())
-            .generationSettings(GenerationSettings.Builder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
+            .generationSettings(BiomeGenerationSettings.Builder(placedFeatureLookup, configuredCarverLookup).also { lookupBackedBuilder ->
 
                 // BasicFeatures
-                DefaultBiomeFeatures.addDefaultCarversAndLakes(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultCrystalFormations(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultMonsterRoom(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultUndergroundVariety(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultSprings(lookupBackedBuilder)
-                DefaultBiomeFeatures.addSurfaceFreezing(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultCarversAndLakes(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultCrystalFormations(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultMonsterRoom(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultUndergroundVariety(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultSprings(lookupBackedBuilder)
+                BiomeDefaultFeatures.addSurfaceFreezing(lookupBackedBuilder)
 
-                DefaultBiomeFeatures.addMossyStoneBlock(lookupBackedBuilder)
-                DefaultBiomeFeatures.addForestFlowers(lookupBackedBuilder)
-                DefaultBiomeFeatures.addFerns(lookupBackedBuilder)
+                BiomeDefaultFeatures.addMossyStoneBlock(lookupBackedBuilder)
+                BiomeDefaultFeatures.addForestFlowers(lookupBackedBuilder)
+                BiomeDefaultFeatures.addFerns(lookupBackedBuilder)
 
-                DefaultBiomeFeatures.addDefaultOres(lookupBackedBuilder)
-                DefaultBiomeFeatures.addDefaultSoftDisks(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultOres(lookupBackedBuilder)
+                BiomeDefaultFeatures.addDefaultSoftDisks(lookupBackedBuilder)
 
                 lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, HAIMEVISKA_DEEP_FAIRY_FOREST_PLACED_FEATURE_KEY)
 
-                DefaultBiomeFeatures.addTaigaGrass(lookupBackedBuilder)
-                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_DEAD_BUSH)
-                DefaultBiomeFeatures.addDefaultMushrooms(lookupBackedBuilder)
+                BiomeDefaultFeatures.addTaigaGrass(lookupBackedBuilder)
+                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_DEAD_BUSH)
+                BiomeDefaultFeatures.addDefaultMushrooms(lookupBackedBuilder)
 
-                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, OceanPlacedFeatures.SEAGRASS_RIVER)
+                lookupBackedBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AquaticPlacements.SEAGRASS_RIVER)
 
             }.build()).build()
     }
 
     context(ModContext)
     override fun init() = ModEvents.onTerraBlenderInitialized {
-        val rule = MaterialRules.ifTrue(
-            MaterialRules.abovePreliminarySurface(),
-            MaterialRules.ifTrue(
-                MaterialRules.ON_FLOOR,
-                MaterialRules.ifTrue(
-                    MaterialRules.waterBlockCheck(-1, 0),
-                    MaterialRules.ifTrue(
-                        MaterialRules.isBiome(BiomeCards.DEEP_FAIRY_FOREST.registryKey),
-                        MaterialRules.sequence(
-                            MaterialRules.ifTrue(
-                                MaterialRules.noiseCondition(NoiseParametersKeys.SURFACE, 1.75 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.state(Blocks.COARSE_DIRT.defaultBlockState())
+        val rule = SurfaceRules.ifTrue(
+            SurfaceRules.abovePreliminarySurface(),
+            SurfaceRules.ifTrue(
+                SurfaceRules.ON_FLOOR,
+                SurfaceRules.ifTrue(
+                    SurfaceRules.waterBlockCheck(-1, 0),
+                    SurfaceRules.ifTrue(
+                        SurfaceRules.isBiome(BiomeCards.DEEP_FAIRY_FOREST.registryKey),
+                        SurfaceRules.sequence(
+                            SurfaceRules.ifTrue(
+                                SurfaceRules.noiseCondition(Noises.SURFACE, 1.75 / 8.25, Double.MAX_VALUE),
+                                SurfaceRules.state(Blocks.COARSE_DIRT.defaultBlockState())
                             ),
-                            MaterialRules.ifTrue(
-                                MaterialRules.noiseCondition(NoiseParametersKeys.SURFACE, -0.95 / 8.25, Double.MAX_VALUE),
-                                MaterialRules.state(Blocks.PODZOL.defaultBlockState())
+                            SurfaceRules.ifTrue(
+                                SurfaceRules.noiseCondition(Noises.SURFACE, -0.95 / 8.25, Double.MAX_VALUE),
+                                SurfaceRules.state(Blocks.PODZOL.defaultBlockState())
                             ),
                         ),
                     ),

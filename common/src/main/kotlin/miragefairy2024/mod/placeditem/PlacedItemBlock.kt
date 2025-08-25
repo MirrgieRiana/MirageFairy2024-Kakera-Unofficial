@@ -34,33 +34,33 @@ import mirrg.kotlin.hydrogen.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.Mth
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.PushReaction
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.RenderShape as BlockRenderType
-import net.minecraft.world.level.block.state.BlockBehaviour as AbstractBlock
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
-import net.minecraft.world.phys.shapes.Shapes as VoxelShapes
 
 object PlacedItemCard {
     val identifier = MirageFairy2024.identifier("placed_item")
-    val block = Registration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(AbstractBlock.Properties.of().noCollission().strength(0.2F).pushReaction(PistonBehavior.DESTROY)) }
+    val block = Registration(BuiltInRegistries.BLOCK, identifier) { PlacedItemBlock(BlockBehaviour.Properties.of().noCollission().strength(0.2F).pushReaction(PushReaction.DESTROY)) }
     val blockEntityType = Registration(BuiltInRegistries.BLOCK_ENTITY_TYPE, identifier) { BlockEntityType(::PlacedItemBlockEntity, setOf(block.await()), null) }
 }
 
@@ -78,7 +78,7 @@ fun initPlacedItemBlock() {
                 ModelData(
                     parent = ResourceLocation.fromNamespaceAndPath("minecraft", "block/block"),
                     textures = ModelTexturesData(
-                        TextureKey.PARTICLE.id to ResourceLocation.fromNamespaceAndPath("minecraft", "block/glass").string,
+                        TextureSlot.PARTICLE.id to ResourceLocation.fromNamespaceAndPath("minecraft", "block/glass").string,
                     ),
                     elements = ModelElementsData(),
                 )
@@ -91,7 +91,7 @@ fun initPlacedItemBlock() {
 }
 
 @Suppress("OVERRIDE_DEPRECATION")
-class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvider {
+class PlacedItemBlock(settings: Properties) : Block(settings), EntityBlock {
     companion object {
         val CODEC: MapCodec<PlacedItemBlock> = simpleCodec(::PlacedItemBlock)
     }
@@ -108,10 +108,10 @@ class PlacedItemBlock(settings: Properties) : Block(settings), BlockEntityProvid
     }
 
     // レンダリング
-    override fun getRenderShape(state: BlockState) = BlockRenderType.ENTITYBLOCK_ANIMATED
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
-        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return VoxelShapes.block()
-        return blockEntity.shapeCache ?: VoxelShapes.block()
+    override fun getRenderShape(state: BlockState) = RenderShape.ENTITYBLOCK_ANIMATED
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+        val blockEntity = world.getBlockEntity(pos) as? PlacedItemBlockEntity ?: return Shapes.block()
+        return blockEntity.shapeCache ?: Shapes.block()
     }
 
     // 格納されているアイテムをドロップする
@@ -138,7 +138,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     var itemX = 8.0 / 16.0
     var itemY = 0.5 / 16.0
     var itemZ = 8.0 / 16.0
-    var itemRotateX = -MathHelper.TWO_PI * 0.25
+    var itemRotateX = -Mth.TWO_PI * 0.25
     var itemRotateY = 0.0
     var shapeCache: VoxelShape? = null
 
@@ -180,15 +180,15 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
                 var z2 = z
 
                 run {
-                    val y3 = MathHelper.sin(-itemRotateX.toFloat()).toDouble() * z2 + MathHelper.cos(-itemRotateX.toFloat()).toDouble() * y2
-                    val z3 = MathHelper.cos(-itemRotateX.toFloat()).toDouble() * z2 - MathHelper.sin(-itemRotateX.toFloat()).toDouble() * y2
+                    val y3 = Mth.sin(-itemRotateX.toFloat()).toDouble() * z2 + Mth.cos(-itemRotateX.toFloat()).toDouble() * y2
+                    val z3 = Mth.cos(-itemRotateX.toFloat()).toDouble() * z2 - Mth.sin(-itemRotateX.toFloat()).toDouble() * y2
                     y2 = y3
                     z2 = z3
                 }
 
                 run {
-                    val x3 = MathHelper.sin(itemRotateY.toFloat()).toDouble() * z2 + MathHelper.cos(itemRotateY.toFloat()).toDouble() * x2
-                    val z3 = MathHelper.cos(itemRotateY.toFloat()).toDouble() * z2 - MathHelper.sin(itemRotateY.toFloat()).toDouble() * x2
+                    val x3 = Mth.sin(itemRotateY.toFloat()).toDouble() * z2 + Mth.cos(itemRotateY.toFloat()).toDouble() * x2
+                    val z3 = Mth.cos(itemRotateY.toFloat()).toDouble() * z2 - Mth.sin(itemRotateY.toFloat()).toDouble() * x2
                     x2 = x3
                     z2 = z3
                 }
@@ -222,7 +222,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
     }
 
     override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registries)
-    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? = ClientboundBlockEntityDataPacket.create(this)
 
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
@@ -231,7 +231,7 @@ class PlacedItemBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Plac
             renderingProxy.rotateY(itemRotateY.toFloat())
             renderingProxy.rotateX(itemRotateX.toFloat())
             renderingProxy.scale(0.5F, 0.5F, 0.5F)
-            renderingProxy.rotateY(MathHelper.PI)
+            renderingProxy.rotateY(Mth.PI)
             renderingProxy.renderFixedItemStack(if (itemStack.isEmpty) INVALID_ITEM_STACK else itemStack)
         }
     }

@@ -19,22 +19,22 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerLevelAccess
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.world.item.ItemNameBlockItem as AliasedBlockItem
-import net.minecraft.world.item.context.BlockPlaceContext as ItemPlacementContext
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
-class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(block, settings) {
+class MagicPlantSeedItem(block: Block, settings: Properties) : ItemNameBlockItem(block, settings) {
     override fun getName(stack: ItemStack): Component = if (stack.isRare()) text { super.getName(stack) + " "() + Emoji.MUTATION() } else super.getName(stack)
 
     override fun appendHoverText(stack: ItemStack, context: TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: TooltipFlag) {
@@ -135,12 +135,12 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     }
 
-    override fun useOn(context: ItemUsageContext): InteractionResult {
+    override fun useOn(context: UseOnContext): InteractionResult {
         if (context.player?.isShiftKeyDown == true) return InteractionResult.PASS
         return super.useOn(context)
     }
 
-    override fun place(context: ItemPlacementContext): InteractionResult {
+    override fun place(context: BlockPlaceContext): InteractionResult {
         if (context.itemInHand.getTraitStacks() != null) {
             return super.place(context)
         } else {
@@ -152,21 +152,21 @@ class MagicPlantSeedItem(block: Block, settings: Properties) : AliasedBlockItem(
 
     override fun isFoil(stack: ItemStack) = stack.isRare() || super.isFoil(stack)
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user.isShiftKeyDown) {
             val itemStack = user.getItemInHand(hand)
-            if (world.isClientSide) return TypedActionResult.success(itemStack)
+            if (world.isClientSide) return InteractionResultHolder.success(itemStack)
             val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
             user.openMenu(object : ExtendedScreenHandlerFactory<Pair<TraitStacks, BlockPos>> {
-                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
-                    return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, player.blockPosition()), traitStacks, player.position().add(0.0, 0.5, 0.0).toBlockPos())
+                override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
+                    return TraitListScreenHandler(syncId, playerInventory, ContainerLevelAccess.create(world, player.blockPosition()), traitStacks, player.position().add(0.0, 0.5, 0.0).toBlockPos())
                 }
 
                 override fun getDisplayName() = text { traitListScreenTranslation() }
 
                 override fun getScreenOpeningData(player: ServerPlayer) = Pair(traitStacks, player.position().add(0.0, 0.5, 0.0).toBlockPos())
             })
-            return TypedActionResult.consume(itemStack)
+            return InteractionResultHolder.consume(itemStack)
         }
         return super.use(world, user, hand)
     }

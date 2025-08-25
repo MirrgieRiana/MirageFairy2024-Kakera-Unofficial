@@ -26,22 +26,20 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.util.RandomSource
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.IntegerProperty
+import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
-import net.minecraft.world.level.block.state.properties.IntegerProperty as IntProperty
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<B>() {
 
@@ -71,7 +69,7 @@ abstract class SimpleMagicPlantCard<B : SimpleMagicPlantBlock> : MagicPlantCard<
         block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()) with ageProperty }
         ageProperty.possibleValues.forEach { age ->
             registerModelGeneration({ "block/" * block().getIdentifier() * "_age$age" }) {
-                Models.CROSS.with(TextureKey.CROSS to "block/magic_plant/" * block().getIdentifier() * "_age$age")
+                ModelTemplates.CROSS.with(TextureSlot.CROSS to "block/magic_plant/" * block().getIdentifier() * "_age$age")
             }
         }
         iconItem.registerModelGeneration(ModelTemplates.FLAT_ITEM) {
@@ -85,7 +83,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
 
     // Property
 
-    abstract fun getAgeProperty(): IntProperty
+    abstract fun getAgeProperty(): IntegerProperty
 
     @Suppress("LeakingThis") // 親クラスのコンストラクタでappendPropertiesが呼ばれるため回避不可能
     private val agePropertyCache = getAgeProperty()
@@ -96,7 +94,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         registerDefaultState(defaultBlockState().setValue(agePropertyCache, 0))
     }
 
-    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(getAgeProperty()/* この関数は親クラスのinitで呼ばれるのでフィールドを参照できない */)
     }
 
@@ -110,7 +108,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
     private val outlineShapesCache = card.outlineShapes.toTypedArray()
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = outlineShapesCache[getAge(state)]
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext) = outlineShapesCache[getAge(state)]
 
 
     // Magic Plant
@@ -125,7 +123,7 @@ abstract class SimpleMagicPlantBlock(private val card: SimpleMagicPlantCard<*>, 
         val drops = mutableListOf<ItemStack>()
 
         val fortune = if (tool != null) EnchantmentHelper.getItemEnchantmentLevel(world.registryAccess()[Registries.ENCHANTMENT, Enchantments.FORTUNE], tool).toDouble() else 0.0
-        val luck = player?.getAttributeValue(EntityAttributes.LUCK) ?: 0.0
+        val luck = player?.getAttributeValue(Attributes.LUCK) ?: 0.0
 
         val seedGeneration = traitEffects[TraitEffectKeyCard.SEEDS_PRODUCTION.traitEffectKey]
         val fruitGeneration = traitEffects[TraitEffectKeyCard.FRUITS_PRODUCTION.traitEffectKey]
