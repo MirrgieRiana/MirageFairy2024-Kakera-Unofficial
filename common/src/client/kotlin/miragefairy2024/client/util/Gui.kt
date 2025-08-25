@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.ScrollContainer
 import io.wispforest.owo.ui.core.Color
 import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Insets
+import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.Surface
 import miragefairy2024.MirageFairy2024
@@ -61,5 +62,37 @@ fun tooltipContainer(horizontalSizing: Sizing, verticalSizing: Sizing): FlowLayo
         surface(Surface.TOOLTIP)
         padding(Insets.of(4))
         allowOverflow(true)
+    }
+}
+
+class CompressionHorizontalFlow(horizontalSizing: Sizing) : FlowLayout(horizontalSizing, Sizing.content(), Algorithm.HORIZONTAL) {
+    private lateinit var leaderComponent: OwoComponent
+
+    fun leader(component: OwoComponent) {
+        this.leaderComponent = component
+        child(component)
+    }
+
+    override fun layout(space: Size) {
+        leaderComponent.inflate(space)
+        verticalSizing(Sizing.fixed(leaderComponent.fullSize().height + padding.get().top + padding.get().bottom))
+        applySizing()
+        super.layout(space)
+    }
+}
+
+class CompressionVerticalFlow(verticalSizing: Sizing) : FlowLayout(Sizing.content(), verticalSizing, Algorithm.VERTICAL) {
+    private lateinit var leaderComponent: OwoComponent
+
+    fun leader(component: OwoComponent) {
+        this.leaderComponent = component
+        child(component)
+    }
+
+    override fun layout(space: Size) {
+        leaderComponent.inflate(space)
+        horizontalSizing(Sizing.fixed(leaderComponent.fullSize().width + padding.get().left + padding.get().right))
+        applySizing()
+        super.layout(space)
     }
 }
