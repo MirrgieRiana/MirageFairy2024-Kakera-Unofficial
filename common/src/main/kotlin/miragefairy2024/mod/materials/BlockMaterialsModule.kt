@@ -154,7 +154,7 @@ open class BlockMaterialCard(
         }
         val NOISE_BLOCK = !BlockMaterialCard(
             "noise_block", EnJa("Noise Block", "ノイズブロック"),
-            PoemList(5).poem(EnJa("It is oppressed by no one.", "誰もその雑音を止めることはできない。")),
+            PoemList(5).poem(EnJa("No one can block that noise.", "誰もその雑音を止めることはできない。")),
             MapColor.COLOR_GRAY, 8.0F, 8.0F,
         ).needTool(ToolType.NOISE).soulStream().init {
             registerCompressionRecipeGeneration(MaterialCard.NOISE.item, item)
