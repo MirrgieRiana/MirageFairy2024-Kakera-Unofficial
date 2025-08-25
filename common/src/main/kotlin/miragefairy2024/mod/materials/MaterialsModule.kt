@@ -190,7 +190,7 @@ class MaterialCard(
 
         val NOISE: MaterialCard = !MaterialCard(
             "noise", "Noise", "ノイズ",
-            PoemList(5).poem("An object no one sympathizes with.", "新しい「自由」の形。"),
+            PoemList(5).poem("An object no one sympathizes with.", "新しい「自由」の形。"), // TODO ポエム: かしましい
             ore = Ore(Shape.GEM, Material.NOISE), soulStreamContainable = true,
             advancementCreator = {
                 AdvancementCard(
